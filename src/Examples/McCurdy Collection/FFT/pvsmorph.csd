@@ -181,7 +181,7 @@ pvsmorph allows the user to continuously and separately morph between the amplit
 Typically one of the signals is harmonic or resonant and dynamically steady, such as a synthesizer pad sound or a held organ chord, and the other is dynamically active and possibly noise based, such as a drum loop or speech.
 The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders crossfade between the amplitude and frequency influence upon the output sound of the two source signals. Typically these are set to opposite points - when F.I.P. is low, A.I.P. is high and vice versa. In this example the first source signal is selectable between the computer's live input, a busy town soundscape and a drum loop. The second signal is a synthesizer pad sequence which can be transposed in octaves and semitones. The user can select between a variety of combinations of parameters for the FFT analysis. Larger values for FFT size will give better harmonic reproduction but greater time smearing effects and higher computational cost. Lower values will result in less time smearing but greater harmonic distortion.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -229,7 +229,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -258,7 +258,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -322,7 +322,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>Frequency Interpolation Point</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -369,7 +369,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -398,7 +398,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -445,7 +445,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>Amplitude Interpolation Point</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -474,7 +474,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>fsig2 Input</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -503,7 +503,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>fsig1 Transpose</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -576,7 +576,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>Songpan.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -603,7 +603,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>Semitones</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -631,7 +631,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -660,7 +660,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -690,7 +690,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>Octaves</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -719,7 +719,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <label>SynthPad.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -342,7 +342,7 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -390,7 +390,7 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <midicc>0</midicc>
   <label>808loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

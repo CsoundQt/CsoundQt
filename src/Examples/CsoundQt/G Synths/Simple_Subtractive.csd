@@ -124,7 +124,7 @@ i 99 0 3600
   <label>Filter</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -185,7 +185,7 @@ i 99 0 3600
   <label>Cut Freq</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -246,7 +246,7 @@ i 99 0 3600
   <label>Resonance</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -313,7 +313,7 @@ i 99 0 3600
   <label>Opcode </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -420,7 +420,7 @@ i 99 0 3600
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -451,7 +451,7 @@ i 99 0 3600
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -482,7 +482,7 @@ i 99 0 3600
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -513,7 +513,7 @@ i 99 0 3600
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -544,7 +544,7 @@ i 99 0 3600
   <label>Amp Env</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -575,7 +575,7 @@ i 99 0 3600
   <label>Oscillator</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -718,7 +718,7 @@ i 99 0 3600
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -749,7 +749,7 @@ i 99 0 3600
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -780,7 +780,7 @@ i 99 0 3600
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -811,7 +811,7 @@ i 99 0 3600
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -842,7 +842,7 @@ i 99 0 3600
   <label>Simple subtractive synth</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -925,7 +925,7 @@ i 99 0 3600
   <label>Hz</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -986,7 +986,7 @@ i 99 0 3600
   <label>Level</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1015,7 +1015,7 @@ i 99 0 3600
   <midicc>-3</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1101,7 +1101,7 @@ i 99 0 3600
   <label>Env Amount</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1148,7 +1148,7 @@ i 99 0 3600
   <label>Continuous notes</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -5690,6 +5690,18 @@ void CsoundQt::fillFileMenu()
     }
 }
 
+void CsoundQt::addToRecentFiles(const QString &fileName)
+{
+    if (fileName.isEmpty() || fileName.startsWith(":/"))
+        return;
+    // Avoid duplicates while keeping the most recently used file first.
+    recentFiles.removeAll(fileName);
+    recentFiles.prepend(fileName);
+    while (recentFiles.size() > CSQT_MAX_RECENT_FILES)
+        recentFiles.removeLast();
+    fillFileMenu();
+}
+
 void CsoundQt::fillFavoriteMenu()
 {
     favoriteMenu->clear();
@@ -5908,6 +5920,15 @@ void CsoundQt::readSettings()
         m_options->language = 0;
     recentFiles.clear();
     recentFiles = settings.value("recentFiles").toStringList();
+    // Drop duplicates left behind by older versions, keeping the first
+    // (most recent) occurrence so the ordering is preserved.
+    QStringList uniqueRecentFiles;
+    for (const QString &recentFile : recentFiles) {
+        if (!uniqueRecentFiles.contains(recentFile)) {
+            uniqueRecentFiles.append(recentFile);
+        }
+    }
+    recentFiles = uniqueRecentFiles;
     setDefaultKeyboardShortcuts();
     QHash<QString, QVariant> actionList = settings.value("shortcuts").toHash();
 
@@ -6701,12 +6722,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
         lastUsedDir = fileName;
         lastUsedDir.resize(fileName.lastIndexOf(QRegularExpression("[/]")) + 1);
     }
-    if (fileName != "" && !fileName.startsWith(":/") && recentFiles.count(fileName)) {
-        recentFiles.prepend(fileName);
-        if (recentFiles.size() > CSQT_MAX_RECENT_FILES)
-            recentFiles.removeLast();
-        fillFileMenu();
-    }
+    addToRecentFiles(fileName);
     documentTabs->insertTab(curPage, page->getView(),"");
     documentTabs->setCurrentIndex(curPage);
 
@@ -6776,11 +6792,7 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
     }
     lastUsedDir = fileName;
     lastUsedDir.resize(fileName.lastIndexOf("/") + 1);
-    if (recentFiles.count(fileName) == 0) {
-        recentFiles.prepend(fileName);
-        recentFiles.removeLast();
-        fillFileMenu();
-    }
+    addToRecentFiles(fileName);
     // Stop watching the old path while we write to avoid a self-triggered reload.
     // For saveAs the old path differs from fileName, so we remove both.
     const QString oldWatchedPath = documentPages[curPage]->getFileName();

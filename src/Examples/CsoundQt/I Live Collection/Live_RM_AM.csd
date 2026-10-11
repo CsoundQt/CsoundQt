@@ -139,7 +139,7 @@ e
   <label>LIVE RING MODULATION / AMPLITUDE MODULATION</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -171,7 +171,7 @@ e
 </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -202,7 +202,7 @@ e
   <label> INPUT</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -381,7 +381,7 @@ e
   <label>Live in Pre</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -412,7 +412,7 @@ e
   <label>Live in Post</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -443,7 +443,7 @@ e
   <label>Input Gain</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -474,7 +474,7 @@ e
   <label> OUTPUT</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -609,7 +609,7 @@ e
   <label>dB-Range</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -640,7 +640,7 @@ e
   <label>Show LED's as</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -717,7 +717,7 @@ e
   <label>RING-/ AMPLITUDE MODULATION</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -748,7 +748,7 @@ e
   <label>Output Gain</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -798,7 +798,7 @@ e
   <label>Modulation Frequency</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -859,7 +859,7 @@ e
   <label>RM/AM Mix (0 = pure RM, 1 = unmodified Input)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -909,7 +909,7 @@ e
   <label>0.073</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -938,7 +938,7 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -970,7 +970,7 @@ e
   <label>Input Channel</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1020,7 +1020,7 @@ e
   <label>dB</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1100,7 +1100,7 @@ e
   <label>dB</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

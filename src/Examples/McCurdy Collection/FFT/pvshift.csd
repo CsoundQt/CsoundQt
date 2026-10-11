@@ -182,7 +182,7 @@ i 10		0	   3600	;GUI
 Pvshift shifts all frequency values of an fsig by a constant cycles-per-second value. As frequency values are shifted upwards the spectrum of the sound is also compressed as, relatively speaking, higher frequencies will be transposed by less than lower frequencies. The next example appends the pvscale opcode in the fsig processing chain to allow the user to allow the user to compensate for this overall raising of frequencies and to restore the fundemental to its original value by giving the frequency rescale parameter a value less than 1.
 (See example '03pvscale.csd' for info on pvscale opcode.) Pvshift also includes three modes of dealing with formants of the original signal in the frequency shift. These modes are the same as those used by the pvscale opcode - see the 'pvscale.csd' example (or the Csound Reference Manual) for further information about these modes. The parameter controlled by the 'Lowest Frequency' slider defines a frequency beneath which frequencies of the fsig will be unaffected by pvshift. A variety of combinations of FFT analysis attributes are selectable using radio button selectors. It can be observed that smaller FFT size and window sizes result in less time smearing but greater harmonic distortion whereas larger FFT sizes and window sizes result in greater time smearing but less harmonic distortion.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -260,7 +260,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -289,7 +289,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -336,7 +336,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>Frequency Shift</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -365,7 +365,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>1.872</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -412,7 +412,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>Gain Rescale</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -471,7 +471,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>Mode</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -500,7 +500,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -529,7 +529,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -593,7 +593,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -640,7 +640,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>0.370</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -669,7 +669,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>Lowest Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -716,7 +716,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>1464.783</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -764,7 +764,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -791,7 +791,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>Voice</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -820,7 +820,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>Drum Loop</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -849,7 +849,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <label>loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -179,7 +179,7 @@ i 1		0	   3600		;GUI
   <label>------------------------------------------------------------------------------------------------------
 vlowres is an implementation of a resonant low-pass filter. Its input arguments are for filter cutoff frequency, resonance, number of parallel iterations of the filter (1 to 10) and cutoff frequency separation between the first and last filters. Cutoff frequency is not in hertz and resonance is not in decibels so experimentation is needed. Use of high levels of resonance can cause significant increases in the overall output amplitude. It may be desired to make use of the balance opcode to control these fluctuations in amplitude. Alternatively a control to scale the output amplitude can be implemented (as has been done in this example). vlowres is equivalent to multiple iterations of the lowres opcode connected in parallel with cutoff frequencies spaced according to a combination of the Separation and the Number of Ordinates arguments. Separation defines the interval in hertz between the first and last filters, intervening filter cutoff frequencies are spaced evenly.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -227,7 +227,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>29.194</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -274,7 +274,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>Filter Cutoff (Not in Hertz!)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -321,7 +321,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>0.111</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -369,7 +369,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -396,7 +396,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -425,7 +425,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>Resonance</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -453,7 +453,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -483,7 +483,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>Number of Ordinates</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -512,7 +512,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -541,7 +541,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>0.432</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -588,7 +588,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>Separation (in oct)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -635,7 +635,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <midicc>0</midicc>
   <label>59.200</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>

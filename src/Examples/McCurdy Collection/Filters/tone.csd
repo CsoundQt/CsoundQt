@@ -171,7 +171,7 @@ i 1		0	   3600		;GUI
   <label>----------------------------------------------------------------------------------------------------
 tone is an implementation of a second-order low-pass filter Its input arguments are for cutoff frequency (half-power point) and a 2-way switch selecting whether the data space for feedback within the filter is initially cleared or allowed to retain previously held information. As its name suggests, the audible effect of the tone opcode on an audio signal is similar to that of a tone control. Multiple iterations of the tone opcode applied to the signal path in series can be used to create a sharper cutoff curve.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -219,7 +219,7 @@ tone is an implementation of a second-order low-pass filter Its input arguments 
   <midicc>0</midicc>
   <label>389.991</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -266,7 +266,7 @@ tone is an implementation of a second-order low-pass filter Its input arguments 
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -313,7 +313,7 @@ tone is an implementation of a second-order low-pass filter Its input arguments 
   <midicc>0</midicc>
   <label>0.692</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -380,7 +380,7 @@ tone is an implementation of a second-order low-pass filter Its input arguments 
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -407,7 +407,7 @@ tone is an implementation of a second-order low-pass filter Its input arguments 
   <midicc>0</midicc>
   <label>File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -436,7 +436,7 @@ tone is an implementation of a second-order low-pass filter Its input arguments 
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

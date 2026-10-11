@@ -505,7 +505,7 @@ e
   <label>1</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -536,7 +536,7 @@ e
   <label>2</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -567,7 +567,7 @@ e
   <label>3</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -598,7 +598,7 @@ e
   <label>4</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -629,7 +629,7 @@ e
   <label>5</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -660,7 +660,7 @@ e
   <label>6</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -691,7 +691,7 @@ e
   <label>7</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -722,7 +722,7 @@ e
   <label>8</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -753,7 +753,7 @@ e
   <label>9</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -784,7 +784,7 @@ e
   <label>10</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -815,7 +815,7 @@ e
   <label>11</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -846,7 +846,7 @@ e
   <label>12</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -907,7 +907,7 @@ e
   <label>440.000</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -938,7 +938,7 @@ e
   <label>Base Freq</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -989,7 +989,7 @@ e
   <label>Freq. (Hz)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1020,7 +1020,7 @@ e
   <label>440.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1051,7 +1051,7 @@ e
   <label>880.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1082,7 +1082,7 @@ e
   <label>1320.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1113,7 +1113,7 @@ e
   <label>1760.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1144,7 +1144,7 @@ e
   <label>2200.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1175,7 +1175,7 @@ e
   <label>2640.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1206,7 +1206,7 @@ e
   <label>3080.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1237,7 +1237,7 @@ e
   <label>3520.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1268,7 +1268,7 @@ e
   <label>3960.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1299,7 +1299,7 @@ e
   <label>4400.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1330,7 +1330,7 @@ e
   <label>4840.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1361,7 +1361,7 @@ e
   <label>5280.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1422,7 +1422,7 @@ e
   <label>Level</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1453,7 +1453,7 @@ e
   <label>Additive syntheziser</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -1484,7 +1484,7 @@ e
   <label>Partial relationship:</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1515,7 +1515,7 @@ e
   <label>Freq. Factor</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1544,7 +1544,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1574,7 +1574,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1604,7 +1604,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1634,7 +1634,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1664,7 +1664,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1694,7 +1694,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1724,7 +1724,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1754,7 +1754,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1784,7 +1784,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1814,7 +1814,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1844,7 +1844,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1874,7 +1874,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1926,7 +1926,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1956,7 +1956,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1986,7 +1986,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -2016,7 +2016,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -2046,7 +2046,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -2076,7 +2076,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -2106,7 +2106,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -2136,7 +2136,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -2166,7 +2166,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -2196,7 +2196,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -2226,7 +2226,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -2256,7 +2256,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>

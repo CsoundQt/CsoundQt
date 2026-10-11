@@ -113,7 +113,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <midicc>0</midicc>
   <label>dconv</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -179,7 +179,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -208,7 +208,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <midicc>0</midicc>
   <label>0.358</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -237,7 +237,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <midicc>0</midicc>
   <label>dconv</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -298,7 +298,7 @@ With long impulse files dconv will struggle to perform at all. The two impulse f
   <midicc>0</midicc>
   <label>0.588</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -327,7 +327,7 @@ With long impulse files dconv will struggle to perform at all. The two impulse f
   <midicc>0</midicc>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -424,7 +424,7 @@ With long impulse files dconv will struggle to perform at all. The two impulse f
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -453,7 +453,7 @@ With long impulse files dconv will struggle to perform at all. The two impulse f
   <midicc>0</midicc>
   <label>Convolution file</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -501,7 +501,7 @@ With long impulse files dconv will struggle to perform at all. The two impulse f
   <midicc>0</midicc>
   <label>808loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -247,7 +247,7 @@ e
   <label>GRANULAR</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -278,7 +278,7 @@ e
   <label> INPUT</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -309,7 +309,7 @@ e
   <label>1</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -340,7 +340,7 @@ e
   <label>0</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -403,7 +403,7 @@ e
   <label>0.139</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -453,7 +453,7 @@ e
   <label>Playback Speed</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -484,7 +484,7 @@ e
   <label>wide</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -515,7 +515,7 @@ e
   <label>narrow</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -565,7 +565,7 @@ e
   <label>Panning</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -637,7 +637,7 @@ e
   <description/>
   <label>fox.wav</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -666,7 +666,7 @@ e
   <label>Select window function ...</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -697,7 +697,7 @@ e
   <label>... and see its shape</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -816,7 +816,7 @@ e
   <label>Window Shape</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -847,7 +847,7 @@ e
   <label>scattered</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -878,7 +878,7 @@ e
   <label>periodic</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -909,7 +909,7 @@ e
   <label>Transposition Randomness (Cent)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -940,7 +940,7 @@ e
   <label>0.000</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -990,7 +990,7 @@ e
   <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1040,7 +1040,7 @@ e
   <label>Position Randomness (ms)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1090,7 +1090,7 @@ e
   <label>Distribution</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1121,7 +1121,7 @@ e
   <label>100.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1171,7 +1171,7 @@ e
   <label>100.000</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1221,7 +1221,7 @@ e
   <label>Grainsize (ms)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1252,7 +1252,7 @@ e
   <label>0.000</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1302,7 +1302,7 @@ e
   <label>Transposition (Cent)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1333,7 +1333,7 @@ e
   <label>Grains per Second</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1410,7 +1410,7 @@ e
   <label>Show LED's as</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1441,7 +1441,7 @@ e
   <label>dB-Range</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1470,7 +1470,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1502,7 +1502,7 @@ e
   <label>Granulates a stored sound. You can use either a mono or stereo soundfile (from the latter just channel 1 is used).</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1533,7 +1533,7 @@ e
   <label>GRANULAR SYNTHESIS OF A SOUNDFILE</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -1564,7 +1564,7 @@ e
   <label> OUTPUT</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1669,7 +1669,7 @@ e
   <label>Output Gain</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1719,7 +1719,7 @@ e
   <label>-20.166</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1861,7 +1861,7 @@ e
   <label>Position in the soundfile</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1892,7 +1892,7 @@ e
   <label>plus random deviation</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1921,7 +1921,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1997,7 +1997,7 @@ e
   <label>dB</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2028,7 +2028,7 @@ e
   <label>PRESETS</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -2057,7 +2057,7 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -2089,7 +2089,7 @@ e
   <label>natural</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2121,7 +2121,7 @@ e
 http://joachimheintz.de/soft/softsamps/BratscheMono.wav</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2152,7 +2152,7 @@ http://joachimheintz.de/soft/softsamps/BratscheMono.wav</label>
   <label>set larger values here</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2181,7 +2181,7 @@ http://joachimheintz.de/soft/softsamps/BratscheMono.wav</label>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -2213,7 +2213,7 @@ http://joachimheintz.de/soft/softsamps/BratscheMono.wav</label>
   <label>or set here</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2242,7 +2242,7 @@ http://joachimheintz.de/soft/softsamps/BratscheMono.wav</label>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -2274,7 +2274,7 @@ http://joachimheintz.de/soft/softsamps/BratscheMono.wav</label>
   <label>Note that the actual grain size is smaller than the value above because of multiple enveloping.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

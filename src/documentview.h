@@ -169,9 +169,6 @@ public slots:
 	void opcodeFromMenu();
 
 
-	void insertChn_k(QString channel);
-
-
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent *event);
 

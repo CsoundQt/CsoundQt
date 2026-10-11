@@ -71,7 +71,7 @@ f 0 3600
   <label>Keyboard Input</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -102,7 +102,7 @@ f 0 3600
   <label>The "sensekey" opcode can receive keyboard input. You must make sure that either the widget panel or the console panel have focus for this to work!</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -131,7 +131,7 @@ f 0 3600
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>

@@ -26,6 +26,7 @@
 #include <QSplashScreen>
 #endif
 #include "csoundqt.h"
+#include "bundledfonts.h"
 #include <QLocalSocket>
 
 #ifdef Q_OS_WIN
@@ -111,6 +112,9 @@ int main(int argc, char *argv[])
 
     QStringList fileNames;
     QApplication qapp(argc, argv);
+
+    // Make the bundled widget fonts available (used only by the widget panel).
+    BundledFonts::registerFonts();
 
 #ifdef Q_OS_OSX
        if (csoundGetVersion()<6090) { // this build does not work with older Csound on OSX

@@ -90,7 +90,7 @@ e
   <midicc>-3</midicc>
   <label>Nothing here...</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

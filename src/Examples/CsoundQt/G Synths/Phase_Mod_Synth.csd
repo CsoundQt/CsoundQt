@@ -437,7 +437,7 @@ e
   <label>Phase ModulationSynth</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>40</fontsize>
   <precision>3</precision>
   <color>
@@ -468,7 +468,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -499,7 +499,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -530,7 +530,7 @@ e
   <label>OP3</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -686,7 +686,7 @@ e
   <label>OP5</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -842,7 +842,7 @@ e
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -873,7 +873,7 @@ e
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -904,7 +904,7 @@ e
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -935,7 +935,7 @@ e
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -966,7 +966,7 @@ e
   <label>Amp</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -997,7 +997,7 @@ e
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1028,7 +1028,7 @@ e
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1059,7 +1059,7 @@ e
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1090,7 +1090,7 @@ e
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1121,7 +1121,7 @@ e
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1152,7 +1152,7 @@ e
   <label>Amp</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1183,7 +1183,7 @@ e
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1214,7 +1214,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1245,7 +1245,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1276,7 +1276,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1307,7 +1307,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1338,7 +1338,7 @@ e
   <label>OP2</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1494,7 +1494,7 @@ e
   <label>OP1</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1650,7 +1650,7 @@ e
   <label>OP4</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1806,7 +1806,7 @@ e
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1837,7 +1837,7 @@ e
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1868,7 +1868,7 @@ e
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1899,7 +1899,7 @@ e
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1930,7 +1930,7 @@ e
   <label>Amp</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1961,7 +1961,7 @@ e
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1992,7 +1992,7 @@ e
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2023,7 +2023,7 @@ e
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2054,7 +2054,7 @@ e
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2085,7 +2085,7 @@ e
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2116,7 +2116,7 @@ e
   <label>Amp</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2147,7 +2147,7 @@ e
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2178,7 +2178,7 @@ e
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2209,7 +2209,7 @@ e
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2240,7 +2240,7 @@ e
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2271,7 +2271,7 @@ e
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2302,7 +2302,7 @@ e
   <label>Amp</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2333,7 +2333,7 @@ e
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2364,7 +2364,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2395,7 +2395,7 @@ e
   <label>OP7</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2551,7 +2551,7 @@ e
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2582,7 +2582,7 @@ e
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2613,7 +2613,7 @@ e
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2644,7 +2644,7 @@ e
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2675,7 +2675,7 @@ e
   <label>Amp</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2706,7 +2706,7 @@ e
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2737,7 +2737,7 @@ e
   <label>OP6</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2893,7 +2893,7 @@ e
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2924,7 +2924,7 @@ e
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2955,7 +2955,7 @@ e
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2986,7 +2986,7 @@ e
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -3017,7 +3017,7 @@ e
   <label>Amp</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -3048,7 +3048,7 @@ e
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -3079,7 +3079,7 @@ e
   <label>Control</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -3184,7 +3184,7 @@ e
   <label>Default</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3215,7 +3215,7 @@ e
   <label>Presets</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -3246,7 +3246,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -3277,7 +3277,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -3308,7 +3308,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -3369,7 +3369,7 @@ e
   <label>Feedback</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

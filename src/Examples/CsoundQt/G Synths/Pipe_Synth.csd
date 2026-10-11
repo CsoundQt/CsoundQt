@@ -731,6 +731,35 @@ i 99 0 3600
 
 
 
+
+
+<EventPanel name="New" tempo="100.00000000" loop="8.00000000" x="0" y="0" width="582" height="720" visible="false" loopStart="0" loopEnd="0">i 1 0 0.4 40 
+i 1 0.5 0.4 44 
+i 1 1 0.4 47 
+i 1 1.5 0.4 45 
+i 1 2 0.4 36 
+i 1 2.5 0.4 37 
+i 1 3 0.4 37 
+i 1 3.5 0.4 44 
+i 1 4 0.4 37 
+i 1 4.5 0.4 43 
+i 1 5 0.4 44 
+i 1 5.5 0.1 73 
+i 1 6 0.1 36 
+i 1 6.5 0.1 49 
+i 1 7 0.1 42 
+i 1 7.5 0.1 37 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="118" y="351" width="655" height="346" visible="true" loopStart="0" loopEnd="0">i 1 0 0.1 73 </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -745,13 +774,14 @@ i 99 0 3600
   <g>102</g>
   <b>102</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>5</y>
   <width>948</width>
   <height>42</height>
   <uuid>{f83c8ed4-8272-4a39-bad4-3c33ba26d04c}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -759,7 +789,7 @@ i 99 0 3600
   <label>SYNTH PIPE</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -772,17 +802,23 @@ i 99 0 3600
    <g>194</g>
    <b>144</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>4</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>125</x>
   <y>395</y>
   <width>665</width>
   <height>163</height>
   <uuid>{f376f702-0fc4-49ee-b31d-2d81d753a714}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -790,7 +826,7 @@ i 99 0 3600
   <label>REVERB</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -803,17 +839,23 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>50</y>
   <width>299</width>
   <height>166</height>
   <uuid>{2ca39be8-1821-4dec-996a-f569b84a3e69}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -821,7 +863,7 @@ i 99 0 3600
   <label>AIR ENVELOPPE</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -834,36 +876,43 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC1</objectName>
   <x>23</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{7fd81566-d369-4ff6-9521-5075574ef5f4}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>-20.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>-20.00000000</value>
+  <value>29.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>19</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{47f7f726-dea9-4e8a-9d9e-e8a59afed0e2}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -871,7 +920,7 @@ i 99 0 3600
   <label>Att</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -884,17 +933,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC2</objectName>
   <x>68</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{bff2ae19-cec4-450c-810d-c6488d7eb3db}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -907,13 +962,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>64</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{27a88303-354c-4d1f-bab0-07164d6017a8}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -921,7 +977,7 @@ i 99 0 3600
   <label>Dec</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -934,17 +990,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC2</objectName>
   <x>56</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{0fea90fb-ac1c-4925-bcd8-2b1e85d94751}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -952,7 +1014,7 @@ i 99 0 3600
   <label>20.800</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -965,17 +1027,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC3</objectName>
   <x>114</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{466c1f2d-3d92-45cb-9c78-0e7e7c2e0e51}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -988,13 +1056,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>110</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{b7c3c7b2-2fe4-4a71-98ae-f10bdceb0f09}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1002,7 +1071,7 @@ i 99 0 3600
   <label>Sus</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1015,17 +1084,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC3</objectName>
   <x>106</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{ffbc0ada-d2d6-4b6c-9ae3-6451f3049a70}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1033,7 +1108,7 @@ i 99 0 3600
   <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1046,17 +1121,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC4</objectName>
   <x>159</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{43be06ea-c25a-46b0-af06-752d2cff8551}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1069,13 +1150,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>156</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{58df6e7c-5ff7-4b2b-8036-5e504d393732}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1083,7 +1165,7 @@ i 99 0 3600
   <label>Rel</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1096,17 +1178,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC4</objectName>
   <x>147</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{0694c706-5d4e-4014-93d9-33d327a25321}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1114,7 +1202,7 @@ i 99 0 3600
   <label>10.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1127,17 +1215,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC5</objectName>
   <x>207</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{28520397-fba4-4c4b-8150-b52fa58d9b99}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1150,13 +1244,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>204</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{ab510ca9-6b0f-4398-bae2-946baaf02990}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1164,7 +1259,7 @@ i 99 0 3600
   <label>Vel</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1177,17 +1272,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC5</objectName>
   <x>199</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{f50669c7-e80c-4bb2-b167-0c5c274ced7f}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1195,7 +1296,7 @@ i 99 0 3600
   <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1208,17 +1309,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC6</objectName>
   <x>253</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{24c1b37e-83f8-4b0b-9b02-3b9def7ecfa5}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1231,13 +1338,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>249</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{8fce4f81-f2b3-4852-8d5d-3da6fab154cf}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1245,7 +1353,7 @@ i 99 0 3600
   <label>Scal</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1258,17 +1366,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC6</objectName>
   <x>245</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{5b929364-1b98-42bf-ba22-52e4fda9cf68}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1276,7 +1390,7 @@ i 99 0 3600
   <label>-0.250</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1289,20 +1403,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC38</objectName>
-  <x>158</x>
-  <y>409</y>
+  <x>164</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{a986b8e4-01de-477e-85b6-714e13688232}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>240.00000000</maximum>
@@ -1312,13 +1432,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>151</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{a6bccc4b-946b-4dd5-8242-cf08451d345c}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1326,7 +1447,7 @@ i 99 0 3600
   <label>Time</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1339,17 +1460,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC38</objectName>
   <x>145</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{8aaae027-8c7a-49af-b6b1-a8a4b15683f8}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1357,7 +1484,7 @@ i 99 0 3600
   <label>24.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1370,20 +1497,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC39</objectName>
-  <x>211</x>
-  <y>409</y>
+  <x>217</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{671ab614-13de-4602-8709-f5db18fa64bc}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -1393,13 +1526,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>209</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{50922850-f5bf-48ba-a12d-a25b93ca44e3}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1407,7 +1541,7 @@ i 99 0 3600
   <label>L/R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1420,17 +1554,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC39</objectName>
   <x>202</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{92d0f455-e73b-450a-afb0-739549eda08b}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1438,7 +1578,7 @@ i 99 0 3600
   <label>-0.580</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1451,20 +1591,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC40</objectName>
-  <x>264</x>
-  <y>409</y>
+  <x>271</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{4e074954-5881-4b46-a89e-301e06cae77f}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>60.00000000</maximum>
@@ -1474,13 +1620,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>258</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{ade400d8-b038-4d5d-b1c7-7d27ed612351}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1488,7 +1635,7 @@ i 99 0 3600
   <label>Size</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1501,17 +1648,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC40</objectName>
   <x>253</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{44966c39-c062-4957-abc1-566fcf18a13e}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1519,7 +1672,7 @@ i 99 0 3600
   <label>16.800</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1532,20 +1685,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC41</objectName>
-  <x>317</x>
-  <y>409</y>
+  <x>323</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{0eb610ed-724e-4bb9-b114-c02de5747bf9}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
@@ -1555,13 +1714,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>316</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{9f27fb2a-695c-4038-bba7-a9345a833c52}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1569,7 +1729,7 @@ i 99 0 3600
   <label>RT</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1582,17 +1742,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC41</objectName>
   <x>305</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{b07cec19-c077-4b0c-b28a-a5aa4974fc6d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1600,7 +1766,7 @@ i 99 0 3600
   <label>45.600</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1613,20 +1779,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC42</objectName>
-  <x>370</x>
-  <y>409</y>
+  <x>376</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{99c0b327-ffcd-4bc9-a90e-1fe3bda7b065}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>24.00000000</minimum>
   <maximum>144.00000000</maximum>
@@ -1636,13 +1808,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>369</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{c4e3ac8f-beb5-45f5-876d-bd0be2ca0c53}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1650,7 +1823,7 @@ i 99 0 3600
   <label>LP</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1663,17 +1836,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC42</objectName>
   <x>360</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{a6d6103e-8402-4e90-8e9f-0380c19e2bb6}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1681,7 +1860,7 @@ i 99 0 3600
   <label>144.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1694,20 +1873,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC43</objectName>
-  <x>423</x>
-  <y>409</y>
+  <x>429</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{1fa0c649-a386-4006-992a-a95697f3f7c0}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>30.00000000</maximum>
@@ -1717,13 +1902,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>422</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{ff8cc24f-4dca-42f0-9cc4-20f58dd80000}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1731,7 +1917,7 @@ i 99 0 3600
   <label>LD</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1744,17 +1930,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC43</objectName>
   <x>415</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{38537cf0-ab8b-48a9-85a7-e4e73e3bb7f3}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1762,7 +1954,7 @@ i 99 0 3600
   <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1775,20 +1967,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC44</objectName>
-  <x>476</x>
-  <y>409</y>
+  <x>482</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{90efec9c-f402-4cfd-8904-fa607901e247}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>30.00000000</maximum>
@@ -1798,13 +1996,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>473</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{6fa8d1b1-b823-4bb2-8340-8bf9634cd545}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1812,7 +2011,7 @@ i 99 0 3600
   <label>HD</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1825,17 +2024,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC44</objectName>
   <x>466</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{3566ce76-d79b-4d9e-a03f-dc1ac9e01743}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1843,7 +2048,7 @@ i 99 0 3600
   <label>1.800</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1856,20 +2061,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC45</objectName>
-  <x>529</x>
-  <y>409</y>
+  <x>535</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{9de7cc67-9fc7-471e-8145-8d1a6d6eeff6}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
@@ -1879,13 +2090,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{f5bd7ffe-9f49-44d7-848a-34e16cced6d0}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1893,7 +2105,7 @@ i 99 0 3600
   <label>Freq</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1906,17 +2118,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC45</objectName>
   <x>520</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{2e81a519-a4b9-41f6-a608-3e11683ae600}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1924,7 +2142,7 @@ i 99 0 3600
   <label>0.420</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1937,20 +2155,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC46</objectName>
-  <x>582</x>
-  <y>409</y>
+  <x>588</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{374207f4-395f-42d7-8882-eedb7adb808a}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
@@ -1960,13 +2184,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>576</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{b2306a7e-a0c2-42b9-a738-d434b1f2810d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1974,7 +2199,7 @@ i 99 0 3600
   <label>Spin</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1987,17 +2212,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC46</objectName>
   <x>574</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{f435a121-b76c-4a37-a0a7-ad0325e77ac9}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2005,7 +2236,7 @@ i 99 0 3600
   <label>0.300</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2018,20 +2249,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC47</objectName>
-  <x>635</x>
-  <y>409</y>
+  <x>641</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{8d683189-6b51-44c6-a767-893da9e946ff}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
@@ -2041,13 +2278,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>626</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{85b73678-5e18-49e3-b3f7-d1bc396173a8}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2055,7 +2293,7 @@ i 99 0 3600
   <label>Dizzy</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2068,17 +2306,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC47</objectName>
   <x>626</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{96f462d5-ac3f-4af8-96b4-9eea077e7e79}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2086,7 +2330,7 @@ i 99 0 3600
   <label>0.500</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2099,20 +2343,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC48</objectName>
-  <x>688</x>
-  <y>409</y>
+  <x>694</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{10e3f36f-cc25-415a-a68a-e91700369291}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -2122,13 +2372,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>684</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{10977936-78d2-4edf-b15a-b5810cb6278e}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2136,7 +2387,7 @@ i 99 0 3600
   <label>Pos</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2149,17 +2400,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC48</objectName>
   <x>678</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{675f8a7e-27b7-4890-90d5-847e16a649ad}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2167,7 +2424,7 @@ i 99 0 3600
   <label>0.510</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2180,20 +2437,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC49</objectName>
-  <x>741</x>
-  <y>409</y>
+  <x>747</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{724ee7ed-0664-4d23-8c8f-8a838961033e}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -2203,13 +2466,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>737</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{b376e3fd-8e78-4618-a80a-06cc32951b6b}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2217,7 +2481,7 @@ i 99 0 3600
   <label>Mix</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2230,17 +2494,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC49</objectName>
   <x>730</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{f5c8b864-c25d-4794-95a5-f3375afe7441}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2248,7 +2518,7 @@ i 99 0 3600
   <label>0.340</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2261,17 +2531,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>306</x>
   <y>50</y>
   <width>316</width>
   <height>166</height>
   <uuid>{21e2b54c-b094-4c9d-a216-e8584b0d1b41}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2279,7 +2555,7 @@ i 99 0 3600
   <label>AIR GENERATOR</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2292,17 +2568,23 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC7</objectName>
   <x>320</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{0ecb0018-3c93-4429-a1a2-2b24b39abb2b}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2315,13 +2597,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>313</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{12c18cce-24ba-4c8d-aecb-6e4fdc2579d2}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2329,7 +2612,7 @@ i 99 0 3600
   <label>Noise</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2342,17 +2625,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC7</objectName>
   <x>313</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{24473f93-644e-4ba6-b546-985061bed64f}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2360,7 +2649,7 @@ i 99 0 3600
   <label>1.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2373,17 +2662,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC8</objectName>
   <x>374</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{030982cd-2ca9-4d8c-a4c5-bd52986694fc}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2396,13 +2691,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>370</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{4edba405-eb55-4bef-a2e1-69bda2bfde3c}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2410,7 +2706,7 @@ i 99 0 3600
   <label>Cut</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2423,17 +2719,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC8</objectName>
   <x>363</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{352c09d0-6a36-485b-888a-8061baa98105}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2441,7 +2743,7 @@ i 99 0 3600
   <label>78.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2454,17 +2756,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC9</objectName>
   <x>427</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{b0b80165-f444-46ab-b910-2460e89832ca}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2477,13 +2785,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>423</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{7a78a651-b2b6-4a33-bb8b-58bab6661e9d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2491,7 +2800,7 @@ i 99 0 3600
   <label>Res</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2504,17 +2813,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC9</objectName>
   <x>420</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{d7c5a314-9ce5-4f1c-90c6-9a5d024c32b6}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2522,7 +2837,7 @@ i 99 0 3600
   <label>0.340</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2535,17 +2850,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC10</objectName>
   <x>480</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{786c1d28-38eb-4413-a727-f694abd512c1}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2558,13 +2879,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>477</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{a63a2bfa-1f65-4bef-bf63-debe1fbeb04f}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2572,7 +2894,7 @@ i 99 0 3600
   <label>KTr</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2585,17 +2907,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC10</objectName>
   <x>471</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{4c91aaa7-9fe5-445c-969f-56ed424b5d6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2603,7 +2931,7 @@ i 99 0 3600
   <label>0.320</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2616,17 +2944,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC11</objectName>
   <x>533</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{fa7b7b5d-9826-4a5c-b7a4-bb79e9b8a1cd}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2639,13 +2973,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>530</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{2271d147-cdea-4598-b60c-6f83e5602e71}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2653,7 +2988,7 @@ i 99 0 3600
   <label>VTr</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2666,17 +3001,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC11</objectName>
   <x>525</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{941dbfd1-06be-4cae-a2ac-2379813d77fa}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2684,7 +3025,7 @@ i 99 0 3600
   <label>0.400</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2697,17 +3038,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>575</x>
   <y>141</y>
   <width>50</width>
   <height>30</height>
   <uuid>{978bad4d-b77d-4dd2-b12d-cc56aae66b1c}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2715,7 +3062,7 @@ i 99 0 3600
   <label>1P</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2728,17 +3075,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>kC12</objectName>
   <x>579</x>
   <y>121</y>
   <width>20</width>
   <height>20</height>
   <uuid>{ffd14281-62ce-4b97-aa29-6e0011faffdd}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2748,13 +3101,14 @@ i 99 0 3600
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>625</x>
   <y>222</y>
   <width>325</width>
   <height>166</height>
   <uuid>{eed781d9-7cf6-4c73-bc9a-a1a9c7c814e7}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2762,7 +3116,7 @@ i 99 0 3600
   <label>FILTER</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2775,17 +3129,23 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC32</objectName>
   <x>643</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{489e07b5-3656-4234-90e3-4a624792042a}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2798,13 +3158,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>638</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{f002643f-2c79-4320-9c60-cf34f7fafd19}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2812,7 +3173,7 @@ i 99 0 3600
   <label>HP0</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2825,17 +3186,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC32</objectName>
   <x>632</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{8eca1bef-7a98-4291-a154-6f6ea920ae32}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2843,7 +3210,7 @@ i 99 0 3600
   <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2856,17 +3223,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC33</objectName>
   <x>696</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{ea8d2f19-8b05-4949-9475-f5c979385b29}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2879,13 +3252,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>692</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{e485397d-a0a0-4ecf-81de-2cdcd695b472}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2893,7 +3267,7 @@ i 99 0 3600
   <label>HP1</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2906,17 +3280,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC33</objectName>
   <x>685</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{5fddf5db-b5d0-4efd-a334-f6c5b777a1cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2924,7 +3304,7 @@ i 99 0 3600
   <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2937,17 +3317,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC34</objectName>
   <x>750</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{dec2259d-53e8-4816-8889-79df24673d63}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2960,13 +3346,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>745</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{1569ca4d-b17c-452b-a846-6c55515b3c13}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2974,7 +3361,7 @@ i 99 0 3600
   <label>KTrH</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2987,17 +3374,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC34</objectName>
   <x>742</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{c36e748b-b4fe-4542-ba69-86bf429e82c5}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3005,7 +3398,7 @@ i 99 0 3600
   <label>1.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3018,17 +3411,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC35</objectName>
   <x>802</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{d5d6958b-3384-4309-b3c2-32bb51af3b54}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3041,13 +3440,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>799</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{6345b7f7-fc94-4ade-9834-05696fe7e127}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3055,7 +3455,7 @@ i 99 0 3600
   <label>LP0</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3068,17 +3468,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC35</objectName>
   <x>790</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{4a1d3c47-18aa-49f7-ac8c-93d35233cafc}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3086,7 +3492,7 @@ i 99 0 3600
   <label>79.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3099,17 +3505,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC36</objectName>
   <x>855</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{c0341d29-c062-4ea0-9eba-bc3506bac638}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3122,13 +3534,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>852</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{6e8ea7c5-2371-4454-9b4f-9f9f39d6619d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3136,7 +3549,7 @@ i 99 0 3600
   <label>LP1</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3149,17 +3562,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC36</objectName>
   <x>844</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{445be958-7d5d-4191-8242-a1baefd9d08d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3167,7 +3586,7 @@ i 99 0 3600
   <label>60.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3180,17 +3599,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC37</objectName>
   <x>908</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{4e745abf-a50b-4f6b-9116-83e74d208f0d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3203,13 +3628,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>904</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{17ca2efd-c799-4615-b631-7241b5d31820}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3217,7 +3643,7 @@ i 99 0 3600
   <label>KTrL</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3230,17 +3656,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC37</objectName>
   <x>898</x>
   <y>361</y>
   <width>50</width>
   <height>30</height>
   <uuid>{42ac1c06-8b9d-40a8-832b-43ed222d4f55}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3248,7 +3680,7 @@ i 99 0 3600
   <label>1.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3261,17 +3693,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>625</x>
   <y>50</y>
   <width>98</width>
   <height>166</height>
   <uuid>{70f0e897-7c06-49d8-9372-01a92d8fc58e}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3279,7 +3717,7 @@ i 99 0 3600
   <label>PIPE</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3292,17 +3730,23 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC13</objectName>
   <x>642</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{ff8df6e8-8296-44ae-b47f-4557ed73739c}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3315,13 +3759,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>637</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{158f7499-dbf4-4ba2-b8e0-dca3f1d39d6f}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3329,7 +3774,7 @@ i 99 0 3600
   <label>MW</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3342,17 +3787,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC13</objectName>
   <x>633</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{ad63500e-7fa6-48a7-8e4f-cbc819b7bc06}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3360,7 +3811,7 @@ i 99 0 3600
   <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3373,17 +3824,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>679</x>
   <y>141</y>
   <width>50</width>
   <height>30</height>
   <uuid>{062f98cd-fdee-4488-9bd7-7029e85e1ebf}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3391,7 +3848,7 @@ i 99 0 3600
   <label>Pol</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3404,17 +3861,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>kC14</objectName>
   <x>683</x>
   <y>121</y>
   <width>20</width>
   <height>20</height>
   <uuid>{4d779359-0ae9-4707-a90e-f256666535b9}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3424,13 +3887,14 @@ i 99 0 3600
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>726</x>
   <y>50</y>
   <width>225</width>
   <height>166</height>
   <uuid>{33b5032c-d000-46db-b587-52d0b97f2d39}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3438,7 +3902,7 @@ i 99 0 3600
   <label>DELAY TUNE</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3451,17 +3915,23 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC15</objectName>
   <x>746</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{75058e27-8b12-4dc2-a7ae-647dd9de3e49}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3474,13 +3944,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>739</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{cc44bdf5-d32b-4a3f-b4d4-8bc0ae2c7674}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3488,7 +3959,7 @@ i 99 0 3600
   <label>Tune</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3501,17 +3972,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC15</objectName>
   <x>738</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{bb06148d-c105-475b-9e4a-163f8888ce4e}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3519,7 +3996,7 @@ i 99 0 3600
   <label>-12.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3532,17 +4009,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC16</objectName>
   <x>797</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{7780e271-fc33-403c-88cc-3001b50553bb}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3555,13 +4038,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>793</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{b24303a8-a7d5-4a2d-8622-0ee547851769}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3569,7 +4053,7 @@ i 99 0 3600
   <label>Fine</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3582,17 +4066,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC16</objectName>
   <x>790</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{eeac9c7d-9ace-4107-9e35-bdd460e0918c}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3600,7 +4090,7 @@ i 99 0 3600
   <label>0.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3613,17 +4103,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC17</objectName>
   <x>849</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{506f081b-e5c7-4e53-9971-c3764aad174c}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3636,13 +4132,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>846</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{58cfff2d-1172-48ed-9b54-5f9fbb086f89}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3650,7 +4147,7 @@ i 99 0 3600
   <label>Srec</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3663,17 +4160,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC17</objectName>
   <x>841</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{b8dccf73-34ce-48b1-b276-6ad0f407580f}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3681,7 +4184,7 @@ i 99 0 3600
   <label>-0.450</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3694,17 +4197,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC18</objectName>
   <x>902</x>
   <y>71</y>
   <width>19</width>
   <height>100</height>
   <uuid>{b009a56e-e255-4ca5-a236-a8f6a076ed77}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3717,13 +4226,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>899</x>
   <y>171</y>
   <width>50</width>
   <height>30</height>
   <uuid>{a03159ce-b98b-4ae8-b916-17b81353f981}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3731,7 +4241,7 @@ i 99 0 3600
   <label>MW</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3744,17 +4254,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC18</objectName>
   <x>896</x>
   <y>189</y>
   <width>50</width>
   <height>30</height>
   <uuid>{2a1845b5-378c-42cf-a1a9-81aa4e9669b3}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3762,7 +4278,7 @@ i 99 0 3600
   <label>0.240</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3775,17 +4291,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>221</y>
   <width>163</width>
   <height>166</height>
   <uuid>{870a58b1-8c64-4f91-aabc-3a59bffe547b}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3793,7 +4315,7 @@ i 99 0 3600
   <label>FEEDBACK</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3806,17 +4328,23 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC19</objectName>
   <x>17</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{292cb4d1-41a9-44cb-a8fd-bc375600433f}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3829,13 +4357,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>15</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{92e09f8c-3f90-43b8-b56b-b69b753a5f15}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3843,7 +4372,7 @@ i 99 0 3600
   <label>RT</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3856,17 +4385,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC19</objectName>
   <x>7</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{00ca8466-07bc-4875-9d42-49a11a31146e}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3874,7 +4409,7 @@ i 99 0 3600
   <label>-90.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3887,17 +4422,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC20</objectName>
   <x>71</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{53f7ad7e-4353-4adf-b1af-b8668cb8d86d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3910,13 +4451,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>69</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{83d77d3f-e562-4022-b460-6c1c718fa111}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3924,7 +4466,7 @@ i 99 0 3600
   <label>KTr</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3937,17 +4479,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC20</objectName>
   <x>62</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{5cca6723-c3ff-4a76-beb5-2bef0ca8f941}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3955,7 +4503,7 @@ i 99 0 3600
   <label>1.640</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -3968,17 +4516,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC21</objectName>
   <x>124</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{4147e11e-5c11-41cf-9cc9-a14dbd1b17fa}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3991,13 +4545,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{cd4e8717-d18a-4c75-a626-17654a30c9c4}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4005,7 +4560,7 @@ i 99 0 3600
   <label>Damp</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4018,17 +4573,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC21</objectName>
   <x>112</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{13745bf8-e49a-4773-a561-39c17e1ac831}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4036,7 +4597,7 @@ i 99 0 3600
   <label>79.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4049,17 +4610,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>170</x>
   <y>221</y>
   <width>210</width>
   <height>166</height>
   <uuid>{d182f4f9-356c-4df6-b1ee-efb4f1c18a10}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4067,7 +4634,7 @@ i 99 0 3600
   <label>ALLPASS TUNE</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4080,17 +4647,23 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC22</objectName>
   <x>184</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{7fd7515c-a091-4d27-955d-5a6e08c44e0b}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4103,13 +4676,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{e565f62b-1916-43ff-9ae6-d13f772204ca}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4117,7 +4691,7 @@ i 99 0 3600
   <label>Tune</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4130,17 +4704,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC22</objectName>
   <x>174</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{163a86c6-d25a-4415-a9eb-4669b81b21ef}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4148,7 +4728,7 @@ i 99 0 3600
   <label>-12.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4161,17 +4741,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC23</objectName>
   <x>239</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{ebf38056-f6fe-46de-87ab-89f0b4e5aa81}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4184,13 +4770,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>235</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{d2fce105-f4f9-449a-a4e7-a453ff6142d7}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4198,7 +4785,7 @@ i 99 0 3600
   <label>Fine</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4211,17 +4798,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC23</objectName>
   <x>231</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{194a05f5-61ed-41ed-a89a-2c293dc12af4}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4229,7 +4822,7 @@ i 99 0 3600
   <label>0.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4242,17 +4835,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC24</objectName>
   <x>292</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{2234b84c-6d59-4de2-84a6-486454385684}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4265,13 +4864,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>287</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{1cc6bfce-23cd-4dba-8cfd-11251e7b0766}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4279,7 +4879,7 @@ i 99 0 3600
   <label>Srec</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4292,17 +4892,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC24</objectName>
   <x>283</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{76b958c4-6632-4f56-96cb-d59ebbe7b9fb}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4310,7 +4916,7 @@ i 99 0 3600
   <label>-0.450</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4323,17 +4929,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC25</objectName>
   <x>344</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{72fc9987-a42a-46e8-96f6-0a02f25ae92f}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4346,13 +4958,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>340</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{c34125cd-3519-43df-99d2-a89cdd0bc842}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4360,7 +4973,7 @@ i 99 0 3600
   <label>MW</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4373,17 +4986,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC25</objectName>
   <x>336</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{5ef2257d-81b1-410f-bc1a-ce623b2c6f82}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4391,7 +5010,7 @@ i 99 0 3600
   <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4404,17 +5023,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>383</x>
   <y>221</y>
   <width>120</width>
   <height>166</height>
   <uuid>{6edcb84f-47f9-4648-8332-444296ecdc60}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4422,7 +5047,7 @@ i 99 0 3600
   <label>DELAY + ALLPASS</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4435,17 +5060,23 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC26</objectName>
   <x>453</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{86f9ba4b-d465-4b9c-9401-e96243ae08fa}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4458,13 +5089,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>449</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{c29e0a66-4ef3-4b47-a230-714dc433bbc4}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4472,7 +5104,7 @@ i 99 0 3600
   <label>Diff</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4485,17 +5117,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC26</objectName>
   <x>444</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{e0723488-4eee-47e1-a218-ada83f1ff6af}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4503,7 +5141,7 @@ i 99 0 3600
   <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4516,17 +5154,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>393</x>
   <y>308</y>
   <width>50</width>
   <height>30</height>
   <uuid>{686e1c90-a13a-4955-8526-3260570c3ed8}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4534,7 +5178,7 @@ i 99 0 3600
   <label>On</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4547,17 +5191,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>kC27</objectName>
   <x>396</x>
   <y>288</y>
   <width>20</width>
   <height>20</height>
   <uuid>{d1f6a1c7-6c7e-42cc-90a7-7a775d971ebf}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4567,13 +5217,14 @@ i 99 0 3600
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>506</x>
   <y>222</y>
   <width>116</width>
   <height>166</height>
   <uuid>{2ce49cab-ac19-426f-999a-b9042e94522a}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4581,7 +5232,7 @@ i 99 0 3600
   <label>PUSH PULL</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4594,17 +5245,23 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC28</objectName>
   <x>526</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{69cc53a4-30b2-4a5e-900a-4acc0bddb704}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4617,13 +5274,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{27fbefe4-3f1e-41ac-b4e7-33bd23c4dc69}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4631,7 +5289,7 @@ i 99 0 3600
   <label>Offset</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4644,17 +5302,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC28</objectName>
   <x>518</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{fdb58dea-80dc-4bed-8d1e-26b911fc19ae}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4662,7 +5326,7 @@ i 99 0 3600
   <label>1.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4675,17 +5339,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC29</objectName>
   <x>580</x>
   <y>243</y>
   <width>19</width>
   <height>100</height>
   <uuid>{49df04c2-baac-4801-80dc-1dc7ee81b0f0}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4698,13 +5368,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>574</x>
   <y>343</y>
   <width>50</width>
   <height>30</height>
   <uuid>{4640cf8e-419b-48f3-a8e3-5d62af7389fb}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4712,7 +5383,7 @@ i 99 0 3600
   <label>Push</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4725,17 +5396,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC29</objectName>
   <x>573</x>
   <y>361</y>
   <width>60</width>
   <height>30</height>
   <uuid>{76447115-2a94-4b39-a237-2f2be5022e0e}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4743,7 +5420,7 @@ i 99 0 3600
   <label>0.360</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4756,17 +5433,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>395</y>
   <width>116</width>
   <height>163</height>
   <uuid>{16f0808c-2bc4-4e19-ac21-6746f6110cd4}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4774,7 +5457,7 @@ i 99 0 3600
   <label>SATURATION</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4787,20 +5470,26 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC30</objectName>
-  <x>22</x>
-  <y>409</y>
+  <x>28</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{03ca5ad6-5038-43dd-aab6-1ff801b9a819}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -4810,13 +5499,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{ac2ce990-042e-453e-9792-e125e244eb1b}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4824,7 +5514,7 @@ i 99 0 3600
   <label>S / H</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4837,17 +5527,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC30</objectName>
   <x>14</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{faefc165-edb5-408b-a710-5c628066cc15}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4855,7 +5551,7 @@ i 99 0 3600
   <label>1.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4868,20 +5564,26 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>kC31</objectName>
-  <x>76</x>
-  <y>409</y>
+  <x>82</x>
+  <y>423</y>
   <width>19</width>
-  <height>100</height>
+  <height>80</height>
   <uuid>{e0f63106-0a7d-46cd-8200-f9e62336cf10}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -4891,13 +5593,14 @@ i 99 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>70</x>
   <y>509</y>
   <width>50</width>
   <height>30</height>
   <uuid>{cfd899a5-b433-4e5a-b3d0-e8c1116bb2d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4905,7 +5608,7 @@ i 99 0 3600
   <label>Sym</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4918,17 +5621,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC31</objectName>
   <x>68</x>
   <y>527</y>
   <width>60</width>
   <height>30</height>
   <uuid>{242cde03-7d61-492e-95fb-0f618c381ba2}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4936,7 +5645,7 @@ i 99 0 3600
   <label>0.190</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4949,17 +5658,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>795</x>
   <y>395</y>
   <width>159</width>
   <height>304</height>
   <uuid>{1e61f964-13f2-4645-b869-89571c89516d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4967,7 +5682,7 @@ i 99 0 3600
   <label>MAIN</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4980,17 +5695,23 @@ i 99 0 3600
    <g>194</g>
    <b>144</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>kC50</objectName>
   <x>815</x>
   <y>454</y>
   <width>60</width>
   <height>60</height>
   <uuid>{d1d11f9a-d929-4b2d-bf8e-a057790e14f2}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
@@ -5014,13 +5735,14 @@ i 99 0 3600
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>819</x>
   <y>525</y>
   <width>100</width>
   <height>35</height>
   <uuid>{15d2b8f3-a681-489c-84c8-8cfdf3391aa2}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5028,7 +5750,7 @@ i 99 0 3600
   <label>Volume</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5041,17 +5763,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC50</objectName>
   <x>824</x>
   <y>543</y>
   <width>80</width>
   <height>30</height>
   <uuid>{f1edd2c7-0b12-4fd9-a6e1-67d43da336a7}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5059,7 +5787,7 @@ i 99 0 3600
   <label>5.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5072,17 +5800,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor210</objectName>
   <x>899</x>
   <y>411</y>
   <width>14</width>
   <height>146</height>
   <uuid>{62b015b8-119a-4016-8372-b47f22d0a073}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5092,7 +5826,7 @@ i 99 0 3600
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.42857099</xValue>
+  <xValue>0.00272315</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -5105,7 +5839,7 @@ i 99 0 3600
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -5113,13 +5847,14 @@ i 99 0 3600
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor210</objectName>
   <x>916</x>
   <y>411</y>
   <width>14</width>
   <height>146</height>
   <uuid>{b076f37e-0a9e-4351-bd25-7a00befe5542}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5129,7 +5864,7 @@ i 99 0 3600
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.42857099</xValue>
+  <xValue>0.00272315</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -5142,7 +5877,7 @@ i 99 0 3600
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -5150,13 +5885,14 @@ i 99 0 3600
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>898</x>
   <y>557</y>
   <width>30</width>
   <height>30</height>
   <uuid>{185aa014-45f3-4492-902c-bb1a2932f484}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5164,7 +5900,7 @@ i 99 0 3600
   <label>L</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5177,17 +5913,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>914</x>
   <y>557</y>
   <width>30</width>
   <height>30</height>
   <uuid>{7bcfd5cc-868d-4cd8-9b06-7e9fb33cfc48}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5195,7 +5937,7 @@ i 99 0 3600
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5208,17 +5950,23 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>839</x>
   <y>399</y>
   <width>10</width>
   <height>10</height>
   <uuid>{148f2aec-4b3e-4dd6-87ab-4ff2f32a5b6f}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5229,7 +5977,7 @@ i 99 0 3600
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.27777800</xValue>
-  <yValue>-1.00000000</yValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -5241,7 +5989,7 @@ i 99 0 3600
    <g>232</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -5249,13 +5997,14 @@ i 99 0 3600
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>560</y>
   <width>784</width>
   <height>140</height>
   <uuid>{e017f23d-c316-4143-9c96-3c867dc2d2b9}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5263,7 +6012,7 @@ i 99 0 3600
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5276,25 +6025,31 @@ i 99 0 3600
    <g>170</g>
    <b>127</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kC1</objectName>
   <x>10</x>
   <y>189</y>
   <width>60</width>
   <height>30</height>
   <uuid>{115f6545-8b1e-4026-9b27-fecb23726c6b}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-20.000</label>
+  <label>29.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5307,21 +6062,28 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>16</x>
   <y>564</y>
   <width>375</width>
   <height>120</height>
   <uuid>{17dcb866-30bb-4dac-bdf1-126e885d668b}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
+  <objectName2/>
   <value>1.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -5331,17 +6093,19 @@ i 99 0 3600
   <mode>0.00000000</mode>
   <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>401</x>
   <y>564</y>
   <width>375</width>
   <height>120</height>
   <uuid>{0065ae48-aaaa-4992-9c61-42342bd369a8}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
+  <objectName2/>
   <value>2.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -5351,13 +6115,14 @@ i 99 0 3600
   <mode>0.00000000</mode>
   <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>_GetPresetName</objectName>
   <x>735</x>
   <y>9</y>
   <width>213</width>
   <height>34</height>
   <uuid>{4868e68a-6bc0-4401-b7d3-978bdfba9fae}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5365,7 +6130,7 @@ i 99 0 3600
   <label>Bass + Reverb 4</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
@@ -5378,23 +6143,29 @@ i 99 0 3600
    <g>220</g>
    <b>162</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>4</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>_SetPresetIndex</objectName>
   <x>686</x>
   <y>12</y>
   <width>45</width>
   <height>28</height>
   <uuid>{80352a97-9fc4-45d7-81c2-e60673aaa267}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
    <r>0</r>
@@ -5412,13 +6183,14 @@ i 99 0 3600
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Pause</objectName>
   <x>822</x>
   <y>615</y>
   <width>100</width>
   <height>25</height>
   <uuid>{0de26e96-b126-4753-8fba-13e3ddb3a1c2}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5433,14 +6205,27 @@ i 99 0 3600
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>102</r>
+   <g>102</g>
+   <b>102</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#444444</borderColor>
+  <textColor>#ffffff</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Stop</objectName>
   <x>822</x>
   <y>648</y>
   <width>100</width>
   <height>25</height>
   <uuid>{3c5cfd97-9bf2-45c7-b66d-8026870f0a92}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5455,14 +6240,27 @@ i 99 0 3600
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>102</r>
+   <g>102</g>
+   <b>102</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#444444</borderColor>
+  <textColor>#ffffff</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>822</x>
   <y>581</y>
   <width>100</width>
   <height>25</height>
   <uuid>{768a8172-bac8-4099-aa9b-7c382b00502d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5477,6 +6275,18 @@ i 99 0 3600
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>102</r>
+   <g>102</g>
+   <b>102</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#444444</borderColor>
+  <textColor>#ffffff</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
@@ -8757,30 +9567,3 @@ i 99 0 3600
 <value id="{4868e68a-6bc0-4401-b7d3-978bdfba9fae}" mode="4" >Synth2 + Reverb 3</value>
 </preset>
 </bsbPresets>
-<EventPanel name="New" tempo="100.00000000" loop="8.00000000" x="0" y="0" width="582" height="720" visible="false" loopStart="0" loopEnd="0">i 1 0 0.4 40 
-i 1 0.5 0.4 44 
-i 1 1 0.4 47 
-i 1 1.5 0.4 45 
-i 1 2 0.4 36 
-i 1 2.5 0.4 37 
-i 1 3 0.4 37 
-i 1 3.5 0.4 44 
-i 1 4 0.4 37 
-i 1 4.5 0.4 43 
-i 1 5 0.4 44 
-i 1 5.5 0.1 73 
-i 1 6 0.1 36 
-i 1 6.5 0.1 49 
-i 1 7 0.1 42 
-i 1 7.5 0.1 37 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    </EventPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="118" y="351" width="655" height="346" visible="true" loopStart="0" loopEnd="0">i 1 0 0.1 73 </EventPanel>

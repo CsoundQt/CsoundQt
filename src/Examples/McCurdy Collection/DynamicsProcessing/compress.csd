@@ -573,7 +573,7 @@ i 10		0	   3600	;GUI
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

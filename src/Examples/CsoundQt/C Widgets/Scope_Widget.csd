@@ -108,7 +108,7 @@ i 2 0 1000
   <label>Scope Widget</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -145,7 +145,7 @@ i 2 0 1000
   <label>The Scope widget is an oscilloscope which can show the output of Csound. The oscilloscope can show individual channels or a sum of all output channels. Clicking on a Scope widget freezes it.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -373,7 +373,7 @@ i 2 0 1000
   <label>The Scope widget can also show Lissajou and Poincare graphs. The decimation parameter in these cases determines the "zoom".</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

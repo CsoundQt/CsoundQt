@@ -229,7 +229,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>0.003</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -276,7 +276,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>Threshold</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -324,7 +324,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -351,7 +351,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>Min. Points</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -379,7 +379,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -408,7 +408,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -438,7 +438,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>Max. No. Tracks</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -496,7 +496,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>0.500</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -543,7 +543,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -572,7 +572,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -619,7 +619,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>Transposition</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -648,7 +648,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>3.006</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -695,7 +695,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <midicc>0</midicc>
   <label>Maximum Gap</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

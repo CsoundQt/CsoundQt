@@ -26,6 +26,8 @@ f 1 0 1024 10 1
 i 2 0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -40,13 +42,14 @@ i 2 0 3600
   <g>224</g>
   <b>230</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>85</x>
   <y>5</y>
   <width>218</width>
   <height>41</height>
   <uuid>{2cb4b857-9f1f-4eff-8058-11ce0a604257}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -54,7 +57,7 @@ i 2 0 3600
   <label>Button Widget</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans [urw]</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -67,17 +70,23 @@ i 2 0 3600
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>45</y>
   <width>375</width>
   <height>69</height>
   <uuid>{a9056c84-91e8-4a49-9e7d-666460fb2b8a}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -98,17 +107,23 @@ i 2 0 3600
    <g>195</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>542</y>
   <width>377</width>
   <height>64</height>
   <uuid>{a7da460d-cfe1-487c-8ec1-6fc05692d212}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -129,17 +144,23 @@ i 2 0 3600
    <g>195</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>205</x>
   <y>120</y>
   <width>179</width>
   <height>266</height>
   <uuid>{f43311a3-c5f0-4368-925a-3ab5324658ac}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -160,17 +181,23 @@ i 2 0 3600
    <g>195</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>120</y>
   <width>188</width>
   <height>266</height>
   <uuid>{16f25933-2318-4091-ab37-b57f1a656ab9}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -192,17 +219,23 @@ Buttons can be set to "latch".</label>
    <g>195</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>15</x>
   <y>507</y>
   <width>167</width>
   <height>29</height>
   <uuid>{3e9f4268-b2f7-496f-94ea-a22e8f68736c}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -210,7 +243,7 @@ Buttons can be set to "latch".</label>
   <label>Pict buttons</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
@@ -223,17 +256,23 @@ Buttons can be set to "latch".</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>392</y>
   <width>375</width>
   <height>109</height>
   <uuid>{2767b528-7849-4306-85be-7b0aeeffccef}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -254,17 +293,23 @@ Buttons can be set to "latch".</label>
    <g>195</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>value</objectName>
   <x>55</x>
   <y>280</y>
   <width>100</width>
   <height>30</height>
   <uuid>{03723e12-b763-4641-b1ab-3ffdee02428d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -279,14 +324,27 @@ Buttons can be set to "latch".</label>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>212</r>
+   <g>224</g>
+   <b>230</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#8d9599</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
   <x>245</x>
   <y>290</y>
   <width>100</width>
   <height>30</height>
   <uuid>{e2702106-c0b8-47b9-8754-d87a2480b056}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -301,14 +359,27 @@ Buttons can be set to "latch".</label>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>212</r>
+   <g>224</g>
+   <b>230</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#8d9599</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>260</x>
   <y>457</y>
   <width>100</width>
   <height>30</height>
   <uuid>{9a1f4b9d-3757-4fb5-b522-0b6981bb9b4d}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -323,14 +394,27 @@ Buttons can be set to "latch".</label>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>212</r>
+   <g>224</g>
+   <b>230</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#8d9599</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>value</objectName>
   <x>30</x>
   <y>315</y>
   <width>150</width>
   <height>30</height>
   <uuid>{7df9afbe-0376-4602-8cb8-40a1877c4be3}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -345,14 +429,27 @@ Buttons can be set to "latch".</label>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>212</r>
+   <g>224</g>
+   <b>230</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#8d9599</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7730</objectName>
   <x>30</x>
   <y>350</y>
   <width>150</width>
   <height>30</height>
   <uuid>{56eae0d9-14f8-40b9-9378-b80e731b8b41}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -367,6 +464,18 @@ Buttons can be set to "latch".</label>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>212</r>
+   <g>224</g>
+   <b>230</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#8d9599</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -375,6 +484,7 @@ Buttons can be set to "latch".</label>
   <width>250</width>
   <height>29</height>
   <uuid>{b1a2c3d4-1111-2222-3333-444455556666}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -382,7 +492,7 @@ Buttons can be set to "latch".</label>
   <label>Flat buttons</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
@@ -395,6 +505,11 @@ Buttons can be set to "latch".</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -404,8 +519,9 @@ Buttons can be set to "latch".</label>
   <x>10</x>
   <y>640</y>
   <width>375</width>
-  <height>68</height>
+  <height>80</height>
   <uuid>{b1a2c3d4-7777-8888-9999-aaaabbbbcccc}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -426,14 +542,19 @@ Buttons can be set to "latch".</label>
    <g>195</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>flatevent</objectName>
-  <x>30</x>
-  <y>716</y>
+  <x>29</x>
+  <y>737</y>
   <width>150</width>
   <height>34</height>
   <uuid>{c2b3d4e5-1234-5678-9abc-def012345678}</uuid>
@@ -467,8 +588,8 @@ Buttons can be set to "latch".</label>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>flatlatch</objectName>
-  <x>200</x>
-  <y>716</y>
+  <x>199</x>
+  <y>737</y>
   <width>160</width>
   <height>34</height>
   <uuid>{d3c4e5f6-2345-6789-abcd-ef0123456789}</uuid>

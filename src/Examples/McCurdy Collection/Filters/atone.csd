@@ -171,7 +171,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <label>--------------------------------------------------------------
 atone is an implementation of a second-order high-pass filter Its input arguments are for cutoff frequency (half-power point) and a 2-way switch selecting whether the data space for feedback within the filter is initially cleared or allowed to retain previously held information. Multiple iterations of the atone opcode applied to the signal path in series can be used to create a sharper cutoff slope.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -219,7 +219,7 @@ atone is an implementation of a second-order high-pass filter Its input argument
   <midicc>0</midicc>
   <label>582.355</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -266,7 +266,7 @@ atone is an implementation of a second-order high-pass filter Its input argument
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -314,7 +314,7 @@ atone is an implementation of a second-order high-pass filter Its input argument
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -341,7 +341,7 @@ atone is an implementation of a second-order high-pass filter Its input argument
   <midicc>0</midicc>
   <label>Audio File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -370,7 +370,7 @@ atone is an implementation of a second-order high-pass filter Its input argument
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -417,7 +417,7 @@ atone is an implementation of a second-order high-pass filter Its input argument
   <midicc>0</midicc>
   <label>0.604</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>

@@ -177,7 +177,7 @@ i 1		0	   3600		;GUI
   <label>------------------------------------------------------------------------------------------------------
 lowres is an implementation of a resonant low-pass filter. Its input arguments are for filter cutoff frequency, resonance and an optional 2-way switch (default=0) to select whether the data space for feedback within the filter is initially cleared or allowed to retain previously held information. Cutoff frequency is not in hertz and resonance is not in decibels so experimentation is recommended. Use of high levels of resonance can cause significant increases in the overall output amplitude. It may be desired to make use of the balance opcode to control these fluctuations in amplitude. Alternatively a control to scale the output amplitude can be implemented (as has been done in this example).</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -225,7 +225,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <midicc>0</midicc>
   <label>59.668</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -272,7 +272,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <midicc>0</midicc>
   <label>Filter Cutoff (Not in Hertz!)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -301,7 +301,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <midicc>0</midicc>
   <label>Resonance</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -348,7 +348,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <midicc>0</midicc>
   <label>0.827</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -377,7 +377,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <midicc>0</midicc>
   <label>Audio File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -406,7 +406,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -452,7 +452,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <midicc>0</midicc>
   <label>0.336</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -499,7 +499,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -226,7 +226,7 @@ schedule("IO",0,-1)
   <label>1</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -331,7 +331,7 @@ schedule("IO",0,-1)
   <label>2</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -467,7 +467,7 @@ schedule("IO",0,-1)
   <label>3</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -572,7 +572,7 @@ schedule("IO",0,-1)
   <label>4</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -677,7 +677,7 @@ schedule("IO",0,-1)
   <label>5</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -782,7 +782,7 @@ schedule("IO",0,-1)
   <label>6</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -887,7 +887,7 @@ schedule("IO",0,-1)
   <label>7</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -992,7 +992,7 @@ schedule("IO",0,-1)
   <label>8</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1128,7 +1128,7 @@ schedule("IO",0,-1)
   <label>1</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1233,7 +1233,7 @@ schedule("IO",0,-1)
   <label>2</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1338,7 +1338,7 @@ schedule("IO",0,-1)
   <label>3</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1443,7 +1443,7 @@ schedule("IO",0,-1)
   <label>4</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1548,7 +1548,7 @@ schedule("IO",0,-1)
   <label>5</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1653,7 +1653,7 @@ schedule("IO",0,-1)
   <label>6</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1758,7 +1758,7 @@ schedule("IO",0,-1)
   <label>7</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1863,7 +1863,7 @@ schedule("IO",0,-1)
   <label>8</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

@@ -202,7 +202,7 @@ i 10		0	   3600	;GUI
 pvsbuffer writes an fsig into a circular buffer (of user definable duration using the 'Buffer Length' slider). Progress of writing into the buffer is displayed by the moving red bar. pvsbufread reads the fsig from this buffer using a k-rate pointer. This pointer can be moved freely so playback can be slower, faster, frozen or backwards. In this example a moving phase pointer has been created using the oscilktp opcode to read from the buffer. The user can vary the range, speed and offset of the pointer. The progress of the read pointer is displayed by the moving green bar. Clicking the 'Freeze' button is simply an easy way of setting 'Read Phasor Speed' to zero. Selecting 'Sync To Write' will synchronise the read pointer to the write pointer. Adjusting 'Read Phasor Offset' will shift the read pointer's location with respect to the write pointer. 'Read Phasor Speed' and 'Read Phasor Range' will have no effect when this mode is active. De-selecting the 'Write To Buffer' button will deactivate writing to the buffer.
 This will therefore prevent overwriting of the buffer allowing the user to manipulate a fixed chunk of sound. This switch needs to initially be active in order to first fill the buffer. The output fsig from the pvsbufread is passed through a pvscale opcode which allows the pitch to be rescaled before being resynthesized and sent to the outputs. Additionally a feedback loop permits some or all of the output signal to be fed back into the input. The user can select between a variety of combinations of parameters for the FFT analysis. Larger values for FFT size will give better harmonic reproduction but greater time smearing effects and higher computational cost. Lower values will result in less time smearing but greater harmonic distortion. This example uses the computer's live input (channel 1/left) as input.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -250,7 +250,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>0.190</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -297,7 +297,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -326,7 +326,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>7.006</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -373,7 +373,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Buffer Length (i-rate)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -402,7 +402,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -431,7 +431,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -500,7 +500,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Read Phasor Speed</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -547,7 +547,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>2.200</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -576,7 +576,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Read Phasor Range</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -623,7 +623,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>0.906</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -728,7 +728,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>0.256</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -775,7 +775,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Read Phasor Offset</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -804,7 +804,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -851,7 +851,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Pitch Rescale (octaves)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -899,7 +899,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Feedback Ratio</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -946,7 +946,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -975,7 +975,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1022,7 +1022,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Direct</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1051,7 +1051,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1098,7 +1098,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1127,7 +1127,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Write Pointer</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1156,7 +1156,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1251,7 +1251,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>5.424</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1280,7 +1280,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <label>Read Pointer</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

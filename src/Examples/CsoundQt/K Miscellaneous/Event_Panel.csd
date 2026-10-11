@@ -84,7 +84,7 @@ e 3600
 4. Try the "Send events" action when standing over one of the event lines
 </label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -132,7 +132,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Event Panels</label>
   <alignment>center</alignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -162,7 +162,7 @@ e 3600
   <label>Note that you can send individual events, setting independent tempos for each panel.
 You can also set a loop range for each panel, and loop each panel independently.</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

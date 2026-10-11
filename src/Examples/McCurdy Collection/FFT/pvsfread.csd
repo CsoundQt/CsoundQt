@@ -153,7 +153,7 @@ In the second mode 'Pointer Speed' controls the speed at which a moving phase va
 A value of '1' here indicates normal playback speed, 2 = double speed, -2 = double speed in reverse and so on.
 The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -226,7 +226,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -255,7 +255,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>0.286</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -302,7 +302,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>File Pointer</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -331,7 +331,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>0.800</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -378,7 +378,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>Pointer Speed</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -407,7 +407,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>0.520</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -454,7 +454,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -508,7 +508,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>Ptr Mode</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -556,7 +556,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>AndItsAll.pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -583,7 +583,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>Voice pvx File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -612,7 +612,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>loop.pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -658,7 +658,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <label>Drum pvx File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

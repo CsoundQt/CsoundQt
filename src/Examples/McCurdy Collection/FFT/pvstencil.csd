@@ -229,7 +229,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -276,7 +276,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -324,7 +324,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <midicc>0</midicc>
   <label>sample.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -351,7 +351,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <midicc>0</midicc>
   <label>10.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -398,7 +398,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <midicc>0</midicc>
   <label>Level</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -427,7 +427,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -474,7 +474,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <midicc>0</midicc>
   <label>Dry/Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -503,7 +503,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <midicc>0</midicc>
   <label>1.004</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -550,7 +550,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

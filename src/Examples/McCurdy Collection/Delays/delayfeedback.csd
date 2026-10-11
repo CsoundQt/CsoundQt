@@ -189,7 +189,7 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
   <midicc>0</midicc>
   <label>Live input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -218,7 +218,7 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
   <midicc>0</midicc>
   <label>0.286</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -311,7 +311,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>0.026</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -340,7 +340,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Delay Time (sec)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -412,7 +412,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -459,7 +459,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Output Amplitude Rescaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -488,7 +488,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>0.714</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -517,7 +517,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>0.256</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -546,7 +546,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -593,7 +593,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>0.848</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -622,7 +622,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Portamento Time</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -687,7 +687,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Feedback Ratio</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -716,7 +716,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>0.672</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -764,7 +764,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>808loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

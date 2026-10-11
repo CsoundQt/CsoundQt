@@ -22,6 +22,35 @@
 
 #include "qutewidget.h"
 #include "widgetlayout.h"
+#include "bundledfonts.h"
+
+// Copied widget styles, keyed by widget type. A copied style holds all dynamic
+// "CSQT_*" properties except position, size, channel(s), text and identity, so
+// it can be applied to another widget of the same type.
+static QHash<int, QVariantMap> widgetStyleClipboard;
+
+static bool isStylePropertyExcluded(const QString &name)
+{
+	// Position and size
+	if (name == "CSQT_x" || name == "CSQT_y"
+		|| name == "CSQT_width" || name == "CSQT_height") {
+		return true;
+	}
+	// Channel(s)
+	if (name == "CSQT_objectName" || name == "CSQT_objectName2"
+		|| name == "CSQT_channel2" || name == "CSQT_channels") {
+		return true;
+	}
+	// Text content
+	if (name == "CSQT_text" || name == "CSQT_label") {
+		return true;
+	}
+	// Widget identity (defensive; these are static properties, not dynamic)
+	if (name == "CSQT_uuid" || name == "CSQT_widgetName") {
+		return true;
+	}
+	return false;
+}
 
 QuteWidget::
 QuteWidget(QWidget *parent):
@@ -31,9 +60,15 @@ QuteWidget(QWidget *parent):
 	propertiesAct->setStatusTip(tr("Open widget properties"));
 	connect(propertiesAct, SIGNAL(triggered()), this, SLOT(openProperties()));
 
-	addChn_kAct = new QAction(tr("Add chn_k to csd"),this);
-	addChn_kAct->setStatusTip(tr("Add chn_k definitionto ;;channels section in editor"));
-	connect(addChn_kAct, SIGNAL(triggered()), this, SLOT(addChn_k()));
+	copyStyleAct = new QAction(tr("Copy Style"), this);
+	copyStyleAct->setStatusTip(tr("Copy the appearance of this widget (everything except "
+								  "position, size, channel and text)"));
+	connect(copyStyleAct, SIGNAL(triggered()), this, SLOT(copyStyle()));
+
+	applyStyleAct = new QAction(tr("Apply Style"), this);
+	applyStyleAct->setStatusTip(tr("Apply the previously copied appearance of a widget "
+								   "of the same type"));
+	connect(applyStyleAct, SIGNAL(triggered()), this, SLOT(applyStyle()));
 
 	m_value = 0.0;
 	m_value2 = 0.0;
@@ -441,6 +476,18 @@ void QuteWidget::showAvailableProperties()
 void QuteWidget::applyInternalProperties()
 {
 	//  qDebug() << "QuteWidget::applyInternalProperties()";
+	// Normalize the font family to a bundled one (widgets only). This keeps a
+	// panel deterministic across platforms regardless of what the file (or a
+	// runtime message) specified, and makes the resolved name persist on save.
+	if (property("CSQT_font").isValid()) {
+		const QString requested = property("CSQT_font").toString();
+		if (!requested.isEmpty()) {
+			const QString resolved = BundledFonts::resolveFamily(requested);
+			if (resolved != requested) {
+				setProperty("CSQT_font", resolved);
+			}
+		}
+	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -565,13 +612,29 @@ void QuteWidget::popUpMenu(QPoint pos)
 		return;
 	}
 	QMenu menu(this);
-	menu.addAction(propertiesAct);
-	menu.addSeparator();
 
-	if (!m_channel.isEmpty() || !m_channel2.isEmpty()) {
-		menu.addAction(addChn_kAct);
-		menu.addSeparator();
+    WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
+	QList<QuteWidget *> selection = layout ? layout->getSelectedWidgets()
+										   : QList<QuteWidget *>();
+	const bool multipleSelected = selection.size() > 1;
+	// Apply Style only makes sense when every selected widget has this type.
+	bool sameTypeSelection = true;
+	for (QuteWidget *w : selection) {
+		if (w->getWidgetTypeID() != getWidgetTypeID()) {
+			sameTypeSelection = false;
+			break;
+		}
 	}
+
+	menu.addAction(propertiesAct);
+	if (!multipleSelected) {
+		menu.addAction(copyStyleAct);
+	}
+	if (hasCopiedStyle(getWidgetTypeID())
+			&& (selection.isEmpty() || sameTypeSelection)) {
+		menu.addAction(applyStyleAct);
+	}
+	menu.addSeparator();
 
 	if (acceptsMidi()) {
         menu.addAction(tr("MIDI learn"), this, SLOT(openMidiDialog()) );
@@ -590,7 +653,6 @@ void QuteWidget::popUpMenu(QPoint pos)
 
 	menu.addSeparator();
 
-    WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
     layout->setCurrentPosition(layout->mapFromGlobal(pos));
 
     menu.addAction(layout->storePresetAct);
@@ -633,6 +695,62 @@ void QuteWidget::popUpMenu(QPoint pos)
 	menu.exec(pos);
 }
 
+bool QuteWidget::hasCopiedStyle(QuteWidgetType type)
+{
+	auto it = widgetStyleClipboard.constFind(static_cast<int>(type));
+	return it != widgetStyleClipboard.constEnd() && !it->isEmpty();
+}
+
+void QuteWidget::copyStyle()
+{
+	QVariantMap style;
+	const QList<QByteArray> names = dynamicPropertyNames();
+	for (const QByteArray &name : names) {
+		const QString propertyName = QString::fromLatin1(name);
+		if (isStylePropertyExcluded(propertyName)) {
+			continue;
+		}
+		style.insert(propertyName, property(name.constData()));
+	}
+	widgetStyleClipboard.insert(static_cast<int>(getWidgetTypeID()), style);
+	emit logMessage(tr("CsoundQt: copied style of \"%1\".\n").arg(m_channel),
+					static_cast<int>(MessageRole::Info));
+}
+
+void QuteWidget::applyStyleMap(const QVariantMap &style)
+{
+	for (auto p = style.constBegin(); p != style.constEnd(); ++p) {
+		setPropertyIfExists(p.key(), p.value());
+	}
+	applyInternalProperties();
+	emit widgetChanged(this);
+	m_valueChanged = true;
+}
+
+void QuteWidget::applyStyle()
+{
+	auto it = widgetStyleClipboard.constFind(static_cast<int>(getWidgetTypeID()));
+	if (it == widgetStyleClipboard.constEnd() || it->isEmpty()) {
+		return;
+	}
+	WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
+	QList<QuteWidget *> targets;
+	if (layout) {
+		targets = layout->getSelectedWidgets();
+	}
+	if (targets.isEmpty()) {
+		targets << this;
+	}
+	for (QuteWidget *w : targets) {
+		if (w->getWidgetTypeID() != getWidgetTypeID()) {
+			continue;
+		}
+		w->applyStyleMap(*it);
+	}
+	// One undo entry / history update for the whole operation.
+	emit propertiesAccepted();
+}
+
 void QuteWidget::openProperties()
 {
 	createPropertiesDialog();
@@ -663,17 +781,6 @@ void QuteWidget::openMidiDialog()
 {
 	//createPropertiesDialog(); <- tryout for midi learn from context menu
 	emit showMidiLearn(this);
-}
-
-void QuteWidget::addChn_k()
-{
-	//qDebug()<<Q_FUNC_INFO << m_channel << m_channel2;
-	if (!m_channel.isEmpty()) {
-		emit addChn_kSignal(m_channel);
-	}
-	if (!m_channel2.isEmpty()) {
-		emit addChn_kSignal(m_channel2);
-	}
 }
 
 void QuteWidget::createPropertiesDialog()
@@ -873,7 +980,6 @@ QList<QAction *> QuteWidget::getParentActionList()
     actionList.append(layout->copyAct);
     actionList.append(layout->pasteAct);
     actionList.append(layout->cutAct);
-    actionList.append(layout->deleteAct);
     actionList.append(layout->duplicateAct);
 
     // FIXME put edit action in menu

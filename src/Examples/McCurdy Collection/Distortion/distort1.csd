@@ -140,7 +140,7 @@ i 1		0	   3600	;GUI
   <midicc>0</midicc>
   <label>Pregain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -169,7 +169,7 @@ i 1		0	   3600	;GUI
   <midicc>0</midicc>
   <label>49.800</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -257,7 +257,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <midicc>0</midicc>
   <label>Postgain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -304,7 +304,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <midicc>0</midicc>
   <label>0.089</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -352,7 +352,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <midicc>0</midicc>
   <label>0.656</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -381,7 +381,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <midicc>0</midicc>
   <label>Shape 2</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -446,7 +446,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <midicc>0</midicc>
   <label>Shape 1</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -475,7 +475,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <midicc>0</midicc>
   <label>0.430</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -523,7 +523,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <midicc>0</midicc>
   <label>/media/jh/61b896a3-f371-4f01-8429-8ab6a56dd7a2/home/jh/Joachim/Stuecke/40scp/samples/edge.aif</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

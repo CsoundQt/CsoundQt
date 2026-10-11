@@ -187,7 +187,7 @@ i 10		0	   3600	;GUI
 The opcode pvscale performs rescaling of the frequency values of an f-signal. If the 'Frequency Rescale' slider is given a value of 2, frequency values will be transposed up by one octave, if it is given a value of .5, frequency values will be transposed down 1 octave and so on. Pvscale also offers three transposition modes of dealing with formants of the original spectrum. This is an optional argument and it defaults to 0. In mode 0 no attempt is made to retain formants.
 In mode 1 formants are retained by imposing the original amplitude values. In mode 2 formants are retained through filtering the output according to the spectral envelope of the original signal. A variety of combination of FFT analysis attributes are selectable using radio button selectors. It can be observed that smaller FFT size and window sizes results in less time smearing but greater harmonic distortion whereas larger FFT sizes and window sizes results in greater time smearing but less harmonic distortion. This example can also be activated from a MIDI keyboard (if the 'GUI / MIDI' switch is set to off (MIDI). In this mode frequency rescaling values are derived from notes played on the keyboard. Each MIDI note pressed begins another frequency rescaling voice thus permitting polyphony.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -266,7 +266,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -295,7 +295,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>0.699</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -342,7 +342,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>Frequency Rescale</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -371,7 +371,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -418,7 +418,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>Gain Rescale</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -477,7 +477,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>Mode</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -506,7 +506,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -535,7 +535,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -618,7 +618,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -645,7 +645,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>Voice</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -674,7 +674,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>Drum Loop</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -703,7 +703,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <midicc>0</midicc>
   <label>loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

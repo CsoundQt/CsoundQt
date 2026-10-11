@@ -97,7 +97,7 @@ endin
   <description/>
   <label>ClassicalGuitar.wav</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -192,7 +192,7 @@ endin
   <label>loop start</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -223,7 +223,7 @@ endin
   <label>PLAY SOUNDFILE FROM BUFFER: LOOPING</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
@@ -294,7 +294,7 @@ endin
   <label>loop end</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -385,7 +385,7 @@ endin
   <label>speed</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -446,7 +446,7 @@ endin
   <label>dB</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

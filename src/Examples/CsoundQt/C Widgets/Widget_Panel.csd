@@ -419,7 +419,7 @@ e
   <label>The Widget Panel</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Nimbus Sans [urw]</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>

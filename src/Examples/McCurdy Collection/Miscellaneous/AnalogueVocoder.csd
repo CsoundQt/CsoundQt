@@ -611,7 +611,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <midicc>0</midicc>
   <label>Modulator</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -739,7 +739,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -797,7 +797,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -855,7 +855,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -885,7 +885,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <midicc>0</midicc>
   <label>Carrier</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

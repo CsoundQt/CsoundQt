@@ -209,7 +209,7 @@ i 1		0	   3600		;GUI
   <label>------------------------------------------------------------------------------------------------------------------------------------------------
 hilbert is an infinite impulse response (IIR) filter that outputs two signals that are in quadrature (i.e. are 90 out of phase with each other). Listened to on their own, these output signals will sound almost unchanged from the original but with further manipulation a variety of effects are possible. Internally the hilbert filter consists of two parallel 6th order allpass filters that induce a phase lag that increases with frequency but the phase difference between the two outputs for any given input frequency is always 90. Hilbert's output can be used to create a frequency shifting effect. A frequency shifter adds a specified number of cycles-per-second to every frequency of an input signal (as opposed to a pitch shifter which *multiplies* every frequency of an input signal by a specified amount). To complete the frequency shifting procedure the two signals are ring-modulated. The modulating waveforms used should also be in quadrature (90 out of phase with each other). The two resulting signals are either summed or one is subtracted from the other. If the signals are summed the resulting side-bands will be above the original frequency, if one has been subtracted from the other the resulting side-bands will be below the original frequency. In this example the gain of these two signals can be independently controlled using the 'Up-Shift Gain' and 'Down-Shift Gain' sliders. If equal gain is applied to both signals the result is the same as a ring-modulation effect. Frequency shift values can be negative. Applying negative values produces the effect of creating side-bands in the opposite direction of the frequency shift. This interface includes a slider which multiplies the frequency shift value by a value within the range 0 to -1. This can be useful for fine-tuning small frequency shift values and switching its polarity. A 'barber-pole' endlessly rising (or falling) phaser effect can be created by mixing the input signal with the output signal (use the 'Dry/Wet Mix' control) with small frequency shift amounts (typically less that 10 Hz). Fine control of the rate of the phaser effect can be executed using the 'Frequency Shift Multiplier' control. The effect can be intensified using the 'Feedback Gain' control which controls how much of the output signal is fed back into the input. Care should be taken when using the feature as dynamic resonances can be created which can overload and damage speakers (and ears!). When using feedback only one of the frequency shifters outputs should be used (controlled using Up/Down Shift Gain controls) and 'Dry/Wet Mix' should be kept at around 0.5. As the frequency shift value flips into the negative domain the phaser sweeps change direction from upwards to downwards. To explore the sonic possibilities of the frequency shifter a variety of source sound inputs are available in this example including the computer's live input.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -257,7 +257,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>147.200</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -304,7 +304,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Frequency Shift</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -333,7 +333,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Frequency Shift Multiplier</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -380,7 +380,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>0.368</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -409,7 +409,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Source</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -468,7 +468,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Mixer</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -497,7 +497,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>260.762</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -544,7 +544,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Saw Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -573,7 +573,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -620,7 +620,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -649,7 +649,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Audio File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -678,7 +678,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>808loopMono.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -724,7 +724,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>0.664</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -771,7 +771,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Up-Shift Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -800,7 +800,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Down-Shift Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -847,7 +847,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>0.586</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -876,7 +876,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>0.630</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -923,7 +923,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Feedback Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -952,7 +952,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -999,7 +999,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1028,7 +1028,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>0.582</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1075,7 +1075,7 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

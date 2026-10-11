@@ -135,7 +135,7 @@ f 0	   3600		;DUMMY SCORE EVENT - KEEPS REALTIME PERFORMANCE GOING FOR ONE HOUR
   <label>------------------------------------------------------------------------------------------------------------------------
 This example demonstrates the phenomenon of side bands upon which FM (frequency modulation) synthesis relies. A vibrato function is applied to the frequency control of an oscillator. Gradually the amplitude (depth) and the frequency (speed/rate) of the vibrato are increased. The amplitude (depth) of the vibrato moves from a value of .001 to a final value of 3000. These amplitude values will be added to the frequency of the oscillator. The frequency (speed/rate) of the value rises from a value of 2 Hz to a final value of 3000 Hz. At the beginning of the transformation vibrato is heard but as the frequency (speed/rate) of the vibrato increases we lose the ability to perceive individual pitch fluctuations and instead side bands (additional spectral artefacts) emerge. As the frequency of the vibrato function continues to increase the nature of the spectrum of the new sound continually evolves. As the amplitude of the vibrato function increases beyond the stage where we were still able to perceive vibrato the intensity of the sidebands and therefore the brightness of the new timbre increases.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -183,7 +183,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <midicc>0</midicc>
   <label>Vibrato Depth</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -212,7 +212,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <midicc>0</midicc>
   <label>Vibrato Rate (Hz)</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -241,7 +241,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <midicc>0</midicc>
   <label>93.768</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -270,7 +270,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <midicc>0</midicc>
   <label>5.012</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

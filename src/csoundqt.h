@@ -343,6 +343,7 @@ private:
 	void fillExampleMenu();
     void fillExampleSubmenu(QDir dir, QMenu *m, int depth);
 	void fillFileMenu();
+	void addToRecentFiles(const QString &fileName);
 	void fillFavoriteMenu();
 	void fillFavoriteSubMenu(QDir dir, QMenu *m, int depth);
 	void fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth);

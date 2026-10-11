@@ -255,7 +255,7 @@ i 11 0 0.01	;init
   <midicc>0</midicc>
   <label>vibrato</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -892,7 +892,7 @@ i 11 0 0.01	;init
   <midicc>0</midicc>
   <label>jitter</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1149,7 +1149,7 @@ i 11 0 0.01	;init
   <midicc>0</midicc>
   <label>jitter2</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1710,7 +1710,7 @@ i 11 0 0.01	;init
   <midicc>0</midicc>
   <label>jspline</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1967,7 +1967,7 @@ i 11 0 0.01	;init
   <midicc>0</midicc>
   <label>gauss</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2388,7 +2388,7 @@ i 11 0 0.01	;init
   <midicc>0</midicc>
   <label>vibr</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

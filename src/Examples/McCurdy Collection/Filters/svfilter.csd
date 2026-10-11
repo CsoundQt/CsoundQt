@@ -184,7 +184,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
 
 **WARNING** AT THE TIME OF WRITING SVFILTER APPEARS TO BE RATHER UNSTABLE AND HAS A TENDENCY TO 'BLOW UP' WITH HIGHER CUTOFF FREQUENCY (STILL BELOW THE NYQUIST FREQUENCY). THIS PROBLEM IS WORSE WHEN LOWER Q VALUES ARE EMPLOYED.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -232,7 +232,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>746.574</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -279,7 +279,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -326,7 +326,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>8.275</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -393,7 +393,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -420,7 +420,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -449,7 +449,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>Q</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -478,7 +478,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>Global Amplitude Rescale</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -507,7 +507,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>0.492</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -554,7 +554,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>Filter Output Gains</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -583,7 +583,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>0.552</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -630,7 +630,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>Band</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -659,7 +659,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>0.518</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -706,7 +706,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>Low</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -753,7 +753,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>0.760</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -782,7 +782,7 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <midicc>0</midicc>
   <label>High</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

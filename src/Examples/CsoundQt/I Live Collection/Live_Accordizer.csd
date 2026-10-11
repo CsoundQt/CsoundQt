@@ -186,7 +186,7 @@ e
   <label>LIVE ACCORDIZER</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -218,7 +218,7 @@ e
 </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -249,7 +249,7 @@ e
   <label> INPUT</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -428,7 +428,7 @@ e
   <label>Live in Pre</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -459,7 +459,7 @@ e
   <label>Live in Post</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -490,7 +490,7 @@ e
   <label>Input Gain</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -521,7 +521,7 @@ e
   <label> OUTPUT</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -624,7 +624,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -656,7 +656,7 @@ e
   <label>dB-Range</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -687,7 +687,7 @@ e
   <label>Show LED's as</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -764,7 +764,7 @@ e
   <label>ACCORDIZER</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -795,7 +795,7 @@ e
   <label>Output Gain</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -824,7 +824,7 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -856,7 +856,7 @@ e
   <label>Input Channel</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -887,7 +887,7 @@ e
   <label>Accord Structure at high Threshold</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -918,7 +918,7 @@ e
   <label>Distance between adjacent tones (Cent)</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -947,7 +947,7 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -979,7 +979,7 @@ e
   <label>Threshold (= at which dB level or higher to reach his situation)</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1008,7 +1008,7 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1040,7 +1040,7 @@ e
   <label>Accord Structure at low Threshold</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1071,7 +1071,7 @@ e
   <label>Distance between adjacent tones (Cent)</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1100,7 +1100,7 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1132,7 +1132,7 @@ e
   <label>Threshold (= at which dB level or lower to reach his situation)</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1161,7 +1161,7 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1193,7 +1193,7 @@ e
   <label>Time to determine an rms value (sec)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1222,7 +1222,7 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1254,7 +1254,7 @@ e
   <label>Current RMS</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1285,7 +1285,7 @@ e
   <label>-54.061</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1316,7 +1316,7 @@ e
   <label>The Live Input is transformed to an accord of six tones: three above and three below the live input. The distance of the notes depends on the rms level of the live input. You can set the values in the ACCORDIZER section.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1366,7 +1366,7 @@ e
   <label>dB</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1395,7 +1395,7 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1446,7 +1446,7 @@ e
   <label>dB</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1475,7 +1475,7 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>

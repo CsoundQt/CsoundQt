@@ -148,7 +148,7 @@ i 1		0	   3600		;GUI
   <label>----------------------------------------------------------------------------------------------------------------------------
 This example also employs a simple modulator carrier pairing. This time, however, the FM implementation and the parameters presented to the user are more typical (and more usable). The 'Index of Modulation' is used to control the spectral intensity (brightness) of the FM timbre. This value is used in the formula: 'Peak Deviation = Index * Base Frequency' to calculate the Peak Deviation (amplitude) of the modulator within the code. A value box for peak deviation is provided to inform the user how its value changes in relation to changes made to the base frequency and the index of modulation. The value for peak deviation can not be directly modified by the user, its value box in the interface is for display purposes only. The frequencies of the carrier and modulator are calculated in relation to 'Base Frequency' using a ratio between the carrier frequency and the modulator frequency. This practice makes it easier for the user to see when the two frequencies are in a simple ratio with respect to each other. Although the code for this example makes use of two separate 'oscili' (oscillator) opcodes for the modulator and carrier an opcode exists that will allow the FM carrier modulator pair to be implemented in a single line (foscil/foscili). The advantage of emplying separate 'oscili's is that a better understanding of the innards of FM synthesis is gained and also that the algorithm can easily be expanded to create more complex multi-modulator and multi-carrier algorithms.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -196,7 +196,7 @@ This example also employs a simple modulator carrier pairing. This time, however
   <midicc>0</midicc>
   <label>0.254</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -243,7 +243,7 @@ This example also employs a simple modulator carrier pairing. This time, however
   <midicc>0</midicc>
   <label>Carrier Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -272,7 +272,7 @@ This example also employs a simple modulator carrier pairing. This time, however
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -301,7 +301,7 @@ This example also employs a simple modulator carrier pairing. This time, however
   <midicc>0</midicc>
   <label>:</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>27</fontsize>
   <precision>3</precision>
   <color>
@@ -329,7 +329,7 @@ This example also employs a simple modulator carrier pairing. This time, however
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -358,7 +358,7 @@ This example also employs a simple modulator carrier pairing. This time, however
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -389,7 +389,7 @@ This example also employs a simple modulator carrier pairing. This time, however
   <label>Modulator
 Frequency</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -419,7 +419,7 @@ Frequency</label>
   <label>Carrier
 Frequency</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -481,7 +481,7 @@ Frequency</label>
   <midicc>0</midicc>
   <label>X - Base Freq     Y - Index</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -539,7 +539,7 @@ Frequency</label>
   <midicc>0</midicc>
   <label>Pointer</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -568,7 +568,7 @@ Frequency</label>
   <midicc>0</midicc>
   <label>Density</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -627,7 +627,7 @@ Frequency</label>
   <label>Peak
 Deviation</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

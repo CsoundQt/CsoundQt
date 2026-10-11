@@ -912,7 +912,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>01</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -959,7 +959,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>02</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1006,7 +1006,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>03</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1053,7 +1053,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>04</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1100,7 +1100,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>05</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1147,7 +1147,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>06</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1194,7 +1194,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>07</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1241,7 +1241,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>08</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1288,7 +1288,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>09</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1335,7 +1335,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>10</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1382,7 +1382,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>11</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1429,7 +1429,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>12</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1505,7 +1505,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>01</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1552,7 +1552,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>02</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1599,7 +1599,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>03</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1646,7 +1646,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>04</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1693,7 +1693,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>05</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1740,7 +1740,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>06</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1787,7 +1787,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>07</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1834,7 +1834,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>08</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1881,7 +1881,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>09</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1928,7 +1928,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>10</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -1975,7 +1975,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>11</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -2022,7 +2022,7 @@ i 4 0 3600			;REVERB
   <midicc>20</midicc>
   <label>12</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>

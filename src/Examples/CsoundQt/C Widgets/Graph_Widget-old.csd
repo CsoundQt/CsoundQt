@@ -110,7 +110,7 @@ ioText {188, 395} {111, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0}
   <label>Graph Widget</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -142,7 +142,7 @@ ioText {188, 395} {111, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0}
 Graph widgets can also show the spectrum from signals using the dispfft opcode, or time varying signals (a-rate and k-rate) using the display opcode.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -171,7 +171,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
@@ -203,7 +203,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <label>Use f-table</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -234,7 +234,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <label>Note that the numbers in the lower section will only have effect if Csound is running as they pass through Csound, while the ones on the top are connected directly by channel number.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -281,7 +281,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <label>Show spectrum</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -337,7 +337,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
@@ -367,7 +367,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
@@ -399,7 +399,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <label>Index</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -430,7 +430,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <label>F-table number</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

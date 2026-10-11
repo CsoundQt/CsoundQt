@@ -167,7 +167,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <label>Frequency of Rotation (Hertz)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -198,7 +198,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <label>0.200</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -292,7 +292,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <label>0.702</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -323,7 +323,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <label>Orientation (radians)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -373,7 +373,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <label>0.500</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -423,7 +423,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <label>Central / Edge</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -473,7 +473,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <label>0.518</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -504,7 +504,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <label>Panning Width</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -535,7 +535,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <label>Output Gain</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -585,7 +585,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <label>0.700</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -616,7 +616,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <label>0.042</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -647,7 +647,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <label>Doppler Depth</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -131,7 +131,7 @@ e
   <label>1. Run Csound</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -162,7 +162,7 @@ e
   <label>Read out the point position and print it to the console.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -193,7 +193,7 @@ e
   <label>Send random position data to the point.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -224,7 +224,7 @@ e
   <label>Use point position data to control an oscils amplitude and frequency.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -252,7 +252,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <font>Courier</font>
+  <font>Liberation Mono</font>
   <fontsize>8</fontsize>
   <color>
    <r>0</r>
@@ -279,7 +279,7 @@ e
   <label>2. Press one of these three buttons and move the point.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

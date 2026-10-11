@@ -85,7 +85,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Instr 1001 receives OSC messages from port:</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -114,7 +114,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Instr 1000 send values via OSC to port:</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -142,7 +142,7 @@ e 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -194,7 +194,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Send this value</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -222,7 +222,7 @@ e 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -256,7 +256,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Receive the value</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -285,7 +285,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Send this value</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -314,7 +314,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Receive the value</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -343,7 +343,7 @@ e 3600
   <midicc>-3</midicc>
   <label>47120</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -372,7 +372,7 @@ e 3600
   <midicc>-3</midicc>
   <label>47120</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -401,7 +401,7 @@ e 3600
   <midicc>-3</midicc>
   <label>You can set the send port in the orc, by changing the macro S_PORT. The messages can be received by other OSC software like Pd, Max/Msp or SuperCollider, if Csound is not receiving the same port.</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -430,7 +430,7 @@ e 3600
   <midicc>-3</midicc>
   <label>You can set the receive port in the orc by the macro R_PORT. Pay attention that no other software (like Pd or SuperCollider) is already bound to the same Port, otherwhise Csound will crash.</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -459,7 +459,7 @@ e 3600
   <midicc>-3</midicc>
   <label>0.480</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -488,7 +488,7 @@ e 3600
   <midicc>-3</midicc>
   <label>0.480</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -535,7 +535,7 @@ e 3600
   <midicc>-3</midicc>
   <label>-> Channel "sendNumber"</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -564,7 +564,7 @@ e 3600
   <midicc>-3</midicc>
   <label>-> Channel "sendSlider"</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -593,7 +593,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Channel "rcvSlider"</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -622,7 +622,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Channel "rcvNumber"</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

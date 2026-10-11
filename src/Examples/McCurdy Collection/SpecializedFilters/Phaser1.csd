@@ -413,7 +413,7 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -461,7 +461,7 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <midicc>0</midicc>
   <label>808loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

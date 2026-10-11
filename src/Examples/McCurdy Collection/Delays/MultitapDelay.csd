@@ -147,7 +147,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>4 Tap Delay with Feedback</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -213,7 +213,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Live Input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -242,7 +242,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -272,7 +272,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <label>Multitap Delay
  (using delayw, delayr &amp; deltap3)</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -305,7 +305,7 @@ Input for this example can be either the computers live input (raise the input g
 The feedback signal for the feedback loop is taken from the fourth delay tap. For this reason the delay time for the fourth tap must be longest.
 In the design of this GUI, the fourth tap is the only one where the user specifies a delay time in seconds, the other three are expressed as percentages of the fourth, thus ensuring that they can not exceed the fourth.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -334,7 +334,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>0.840</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -363,7 +363,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>Feedback Ratio</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -410,7 +410,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>0.872</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -457,7 +457,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>Dry / Wet Ratio</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -504,7 +504,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -533,7 +533,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>Master Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -634,7 +634,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>Delay Times</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -663,7 +663,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>31.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -692,7 +692,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>39.016</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -721,7 +721,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>36.046</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -750,7 +750,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>1.730</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -779,7 +779,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>%</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -808,7 +808,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>%</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -837,7 +837,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>%</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -866,7 +866,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>secs</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -895,7 +895,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>0.374</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -924,7 +924,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>0.402</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -953,7 +953,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>0.416</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -982,7 +982,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>0.404</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1011,7 +1011,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>Taps Gains</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1112,7 +1112,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>0.286</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1141,7 +1141,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>0.678</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1170,7 +1170,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>0.118</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1199,7 +1199,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>0.598</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1228,7 +1228,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midicc>0</midicc>
   <label>Taps Pans</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

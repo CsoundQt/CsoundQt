@@ -103,7 +103,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>&lt;-- Select waveform from this menu</label>
   <alignment>center</alignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -150,7 +150,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>Frequency</label>
   <alignment>left</alignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -198,7 +198,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>Push this button to generate notes</label>
   <alignment>center</alignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -227,7 +227,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -256,7 +256,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>Values for waveform and frequency are only applied during the init pass so they remain constant for every note. Changes only apply for new notes</label>
   <alignment>center</alignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -285,7 +285,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>No Reinit</label>
   <alignment>left</alignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>

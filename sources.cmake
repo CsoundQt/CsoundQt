@@ -3,6 +3,7 @@ set(PROJECT_SOURCES
   "src/application.qrc"
   "src/pythonscripts.qrc"
   "src/icons.qrc"
+  "src/fonts.qrc"
   "src/qml_resources.qrc"
 
   # Forms
@@ -29,6 +30,8 @@ set(PROJECT_SOURCES
   "src/about.h"
   "src/configdialog.h"
   "src/configlists.h"
+  "src/bundledfonts.h"
+  "src/notification.h"
   "src/console.h"
   "src/csoundengine.h"
   "src/csoundoptions.h"
@@ -94,6 +97,8 @@ set(PROJECT_SOURCES
   "src/about.cpp"
   "src/configdialog.cpp"
   "src/configlists.cpp"
+  "src/bundledfonts.cpp"
+  "src/notification.cpp"
   "src/console.cpp"
   "src/csoundengine.cpp"
   "src/csoundoptions.cpp"

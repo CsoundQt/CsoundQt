@@ -383,7 +383,7 @@ returns:
   <label>What's New in Csound 7: For-Loop</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lato Heavy</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>

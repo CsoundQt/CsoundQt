@@ -249,7 +249,7 @@ e 3600
   <label>Transposition Interval 1</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -278,7 +278,7 @@ e 3600
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -326,7 +326,7 @@ e 3600
   <label>Output Level</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -392,7 +392,7 @@ e 3600
   <label>Enable</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -444,7 +444,7 @@ e 3600
   <label>Autotuner</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
   <color>
@@ -475,7 +475,7 @@ e 3600
   <label>Autotuner</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
   <color>
@@ -506,7 +506,7 @@ e 3600
   <label>Autotuner</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
   <color>
@@ -537,7 +537,7 @@ e 3600
   <label>Transposition method</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -594,7 +594,7 @@ e 3600
   <label>Tracking opcode</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -656,7 +656,7 @@ e 3600
   <label>Transposition Interval 2</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -685,7 +685,7 @@ e 3600
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>

@@ -175,7 +175,7 @@ i 1		0	   3600		;GUI
   <label>--------------------------------------------------------------------
 rezzy is an implementation of a resonant low or high-pass filter. Its input arguments are for filter cutoff frequency, amount of resonance, a two-way switch selecting filter mode and a 2-way switch selecting whether the data space for feedback within the filter is initially cleared or allowed to retain previously held information. Use of resonance can create large increases in amplitude in the output signal. In may be necessary, therefore, to rescale the amplitude of the output signal. In this example a slider has been provided to achieve this.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -223,7 +223,7 @@ rezzy is an implementation of a resonant low or high-pass filter. Its input argu
   <midicc>0</midicc>
   <label>2114.752</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -270,7 +270,7 @@ rezzy is an implementation of a resonant low or high-pass filter. Its input argu
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -317,7 +317,7 @@ rezzy is an implementation of a resonant low or high-pass filter. Its input argu
   <midicc>0</midicc>
   <label>42.580</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -384,7 +384,7 @@ rezzy is an implementation of a resonant low or high-pass filter. Its input argu
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -411,7 +411,7 @@ rezzy is an implementation of a resonant low or high-pass filter. Its input argu
   <midicc>0</midicc>
   <label>File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -440,7 +440,7 @@ rezzy is an implementation of a resonant low or high-pass filter. Its input argu
   <midicc>0</midicc>
   <label>Amplitude Rescaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -487,7 +487,7 @@ rezzy is an implementation of a resonant low or high-pass filter. Its input argu
   <midicc>0</midicc>
   <label>0.670</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -516,7 +516,7 @@ rezzy is an implementation of a resonant low or high-pass filter. Its input argu
   <midicc>0</midicc>
   <label>Resonance</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -570,7 +570,7 @@ rezzy is an implementation of a resonant low or high-pass filter. Its input argu
   <midicc>0</midicc>
   <label>Type</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

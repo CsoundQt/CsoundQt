@@ -113,7 +113,7 @@ endin
   <label>Adjust the nchnls in the header if you have less input channels!</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
@@ -144,7 +144,7 @@ endin
   <label>24 CHANNEL INPUT TESTER</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -1951,7 +1951,7 @@ endin
   <label>1</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1982,7 +1982,7 @@ endin
   <label>2</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2013,7 +2013,7 @@ endin
   <label>3</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2044,7 +2044,7 @@ endin
   <label>4</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2075,7 +2075,7 @@ endin
   <label>5</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2106,7 +2106,7 @@ endin
   <label>6</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2137,7 +2137,7 @@ endin
   <label>7</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2168,7 +2168,7 @@ endin
   <label>8</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2199,7 +2199,7 @@ endin
   <label>9</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2230,7 +2230,7 @@ endin
   <label>10</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2261,7 +2261,7 @@ endin
   <label>11</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2292,7 +2292,7 @@ endin
   <label>12</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2323,7 +2323,7 @@ endin
   <label>13</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2354,7 +2354,7 @@ endin
   <label>14</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2385,7 +2385,7 @@ endin
   <label>15</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2416,7 +2416,7 @@ endin
   <label>16</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2447,7 +2447,7 @@ endin
   <label>17</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2478,7 +2478,7 @@ endin
   <label>18</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2509,7 +2509,7 @@ endin
   <label>19</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2540,7 +2540,7 @@ endin
   <label>20</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2571,7 +2571,7 @@ endin
   <label>21</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2602,7 +2602,7 @@ endin
   <label>22</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2633,7 +2633,7 @@ endin
   <label>23</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2664,7 +2664,7 @@ endin
   <label>24</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2695,7 +2695,7 @@ endin
   <label>-64</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -2726,7 +2726,7 @@ endin
   <label>dB</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2831,7 +2831,7 @@ endin
   <label>-64</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>0</precision>
   <color>
@@ -2863,7 +2863,7 @@ endin
 one channel</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2892,7 +2892,7 @@ one channel</label>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
    <r>0</r>
@@ -2924,7 +2924,7 @@ one channel</label>
   <label>-81</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -2955,7 +2955,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -2986,7 +2986,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3017,7 +3017,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3048,7 +3048,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3079,7 +3079,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3110,7 +3110,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3141,7 +3141,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3172,7 +3172,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3203,7 +3203,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3234,7 +3234,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3265,7 +3265,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3296,7 +3296,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3327,7 +3327,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3358,7 +3358,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3389,7 +3389,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3420,7 +3420,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3451,7 +3451,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3482,7 +3482,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3513,7 +3513,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3544,7 +3544,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3575,7 +3575,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>
@@ -3606,7 +3606,7 @@ one channel</label>
   <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
   <color>

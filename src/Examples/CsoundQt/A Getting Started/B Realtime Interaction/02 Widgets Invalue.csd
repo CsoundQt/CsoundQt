@@ -65,7 +65,7 @@ e
   <label>Using Widgets</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -96,7 +96,7 @@ e
   <label>You can receive Widget values in the Csound orchestra using "channels". You use channel names to identify them, and you must set the channel name in the Widget and in the orchestra's invalue opcode.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -128,7 +128,7 @@ e
 Now run Csound, and notice how the widget is controlling the frequency of the oscillator!</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans [urw]</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -178,7 +178,7 @@ Now run Csound, and notice how the widget is controlling the frequency of the os
   <label>You can change a slider's range in its properties dialog, if you want a broader or smaller range.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans [urw]</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

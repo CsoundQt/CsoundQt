@@ -138,7 +138,7 @@ i 1		0	   3600		;GUI
   <label>---------------------------------------------------------------------------------------------
 lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers to the statistic that states that amplitude drops off at 18 decibels per octave beyond the cutoff frequency. The opcode's input arguments include cutoff frequency, resonance and distortion. Use of resonance and distortion can cause an increase in amplitude. To accomodate this phenomenon this example includes a control to scale down the output amplitude. An alternative approach would be to make use of the balance opcode to dynamically control the output signal. The input signal used in this example is a sawtooth waveform, the frequency of which is adjustable using an on-screen slider.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -186,7 +186,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <midicc>0</midicc>
   <label>431.710</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -233,7 +233,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -262,7 +262,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <midicc>0</midicc>
   <label>Resonance</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -309,7 +309,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <midicc>0</midicc>
   <label>0.178</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -338,7 +338,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <midicc>0</midicc>
   <label>2.860</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -385,7 +385,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <midicc>0</midicc>
   <label>Distortion</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -414,7 +414,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <midicc>0</midicc>
   <label>0.494</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -461,7 +461,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -490,7 +490,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <midicc>0</midicc>
   <label>Oscillator Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -537,7 +537,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <midicc>0</midicc>
   <label>247.276</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>

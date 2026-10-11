@@ -113,7 +113,7 @@ i 10		0	   3600		;GUI
   <midicc>0</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -142,7 +142,7 @@ i 10		0	   3600		;GUI
   <midicc>0</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>

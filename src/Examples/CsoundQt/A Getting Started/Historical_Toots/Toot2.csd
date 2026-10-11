@@ -61,7 +61,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>Toot 2</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -90,7 +90,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>The first instrument was not interesting because it could play only one note at one amplitude level. We can make things more interesting by allowing the pitch and amplitude to be defined by parameters in the score. Each column in the score constitutes a parameter field, numbered from the left. The first three parameter fields of the i statement have a reserved function:</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -137,7 +137,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>p1 = instrument number</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -166,7 +166,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>All other parameter fields are determined by the way the sound designer defines his instrument. In the instrument below, the oscillator's amplitude argument is replaced by p4 and the frequency argument by p5. Now we can change these values at i-time, i.e. with each note in the score. </label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -195,7 +195,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>p2 = start time</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -224,7 +224,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>p3 = duration</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

@@ -27,6 +27,8 @@
 
 #include "widgetlayout.h"
 #include "qutewidget.h"
+#include "bundledfonts.h"
+#include "notification.h"
 #include "quteslider.h"
 #include "qutetext.h"
 #include "qutespinbox.h"
@@ -141,8 +143,6 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
     duplicateAct = new QAction(tr("Duplicate Selected"), this);
     connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
-    deleteAct = new QAction(tr("Delete Selected"), this);
-    connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteSelected()));
     clearAct = new QAction(tr("Clear all widgets"), this);
     connect(clearAct, SIGNAL(triggered()), this, SLOT(clearWidgets()));
     selectAllAct = new QAction(tr("Select all widgets"), this);
@@ -268,6 +268,7 @@ QuteWidgetType WidgetLayout::widgetNameToType(QString widgetName) {
 void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 {
     m_xmlFormat = true;
+    m_unknownWidgetFonts.clear();
     clearWidgetLayout();
     QDomDocument doc;
     if (!doc.setContent(xmlWidgets)) {
@@ -329,6 +330,31 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     //		//    setOuterGeometry();
     //	}
     qDebug() << "Finished loading xml widgets";
+    reportUnknownWidgetFonts();
+}
+
+void WidgetLayout::reportUnknownWidgetFonts()
+{
+    if (m_unknownWidgetFonts.isEmpty()) {
+        return;
+    }
+    QStringList replacements;
+    for (auto it = m_unknownWidgetFonts.constBegin();
+         it != m_unknownWidgetFonts.constEnd(); ++it) {
+        replacements << QStringLiteral("* %1 \u2192 %2").arg(it.key(), it.value());
+    }
+    QString details = replacements.join(QStringLiteral("<br>"));
+    if (details.size() > 300) {
+        details = details.left(297) + QStringLiteral("...");
+    }
+    // A transient banner is enough: this is informational, not something the
+    // user has to act on. The headline is bold; details are escaped.
+    const QString message =
+        QStringLiteral("<b>%1</b><br>%2")
+            .arg(tr("Unknown fonts were replaced").toHtmlEscaped(),
+                 details.toHtmlEscaped());
+    Notification::showTransient(this, message, 8000, true);
+    m_unknownWidgetFonts.clear();
 }
 
 void WidgetLayout::loadXmlPresets(QString xmlPresets)
@@ -377,6 +403,7 @@ void WidgetLayout::loadXmlPresets(QString xmlPresets)
 void WidgetLayout::loadMacWidgets(QString macWidgets)
 {
     //  m_xmlFormat = false;
+    m_unknownWidgetFonts.clear();
     clearWidgetLayout();
     QStringList widgetLines = macWidgets.split(QRegularExpression("[\n\r]"), SKIP_EMPTY_PARTS);
     foreach (QString line, widgetLines) {
@@ -394,6 +421,7 @@ void WidgetLayout::loadMacWidgets(QString macWidgets)
         setEditMode(true);
     }
     widgetChanged();
+    reportUnknownWidgetFonts();
 }
 
 QString WidgetLayout::getWidgetsText()
@@ -994,6 +1022,16 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         }
     }
 
+    // A widget font that is neither bundled nor a known equivalent will be
+    // replaced by a bundled one (see QuteWidget::applyInternalProperties()).
+    // Remember it so the user can be told when the file has finished loading.
+    if (widget->property("CSQT_font").isValid()) {
+        const QString requested = widget->property("CSQT_font").toString().trimmed();
+        if (!requested.isEmpty() && !BundledFonts::isKnownEquivalent(requested)) {
+            m_unknownWidgetFonts.insert(requested, BundledFonts::resolveFamily(requested));
+        }
+    }
+
     widget->applyInternalProperties();
     registerWidget(widget);
 
@@ -1180,8 +1218,6 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
             this, SLOT(markHistory()));
     connect(widget, SIGNAL(showMidiLearn(QuteWidget *)),
             this, SIGNAL(showMidiLearn(QuteWidget *)));
-    connect(widget, SIGNAL(addChn_kSignal(QString)),
-            this, SIGNAL(addChn_kSignal(QString)) );
     // Forward user facing messages from widgets to the Csound console
     connect(widget, SIGNAL(logMessage(QString,int)),
             this, SIGNAL(logMessage(QString,int)) );
@@ -1194,6 +1230,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
     connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
             this, SLOT(newValue(QPair<QString,QString>)));
     m_widgets.append(widget);
+    channelNameToWidgets.clear();
     if (!widget->getWidgetName().isEmpty()) {
         m_widgetNameToWidget.insert(widget->getWidgetName(), widget);
     }
@@ -1857,7 +1894,6 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
     editMenu.addAction(selectAllAct);
     // Shortcut from the duplicate action is not working from some reason...
     //  menu.addAction(duplicateAct);
-    editMenu.addAction(deleteAct);
     editMenu.addAction(clearAct);
     menu.addMenu(&editMenu);
 
@@ -1895,6 +1931,20 @@ void WidgetLayout::selectAll()
     for (int i = 0; i< editWidgets.size(); i++) {
         editWidgets[i]->select();
     }
+}
+
+QList<QuteWidget *> WidgetLayout::getSelectedWidgets()
+{
+    // m_widgets and editWidgets are kept parallel; a widget is selected when its
+    // edit frame is. Returns an empty list when not in edit mode.
+    QList<QuteWidget *> selected;
+    const int count = qMin(editWidgets.size(), m_widgets.size());
+    for (int i = 0; i < count; i++) {
+        if (editWidgets[i]->isSelected()) {
+            selected.append(m_widgets[i]);
+        }
+    }
+    return selected;
 }
 
 void WidgetLayout::widgetMoved(QPair<int, int> delta)
@@ -2423,6 +2473,7 @@ void WidgetLayout::clearWidgetLayout()
         delete widget;
     }
     m_widgets.clear();
+    channelNameToWidgets.clear();
     m_widgetNameToWidget.clear();
     foreach (FrameWidget *widget, editWidgets) {
         //     qDebug("WidgetLayout::clearWidgetLayout() removed editWidget");
@@ -3626,6 +3677,7 @@ QString WidgetLayout::createDummy(int x, int y, int width, int height, QString w
     widget->show();
     widgetsMutex.lock();
     m_widgets.append(widget);
+    channelNameToWidgets.clear();
     if (m_editMode) {
         createEditFrame(widget);
         editWidgets.last()->select();
@@ -4234,6 +4286,7 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
     m_activeWidgets = index;  // Allow all widgets before this one to be active
     widget->close();
     m_widgets.remove(index);
+    channelNameToWidgets.clear();
     if (!widget->getWidgetName().isEmpty()
             && m_widgetNameToWidget.value(widget->getWidgetName()) == widget) {
         m_widgetNameToWidget.remove(widget->getWidgetName());

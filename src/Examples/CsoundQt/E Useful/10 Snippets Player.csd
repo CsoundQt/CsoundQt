@@ -284,7 +284,7 @@ i 1 0 10000
   <description/>
   <label>fox.wav|bell.aiff|808loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -358,7 +358,7 @@ i 1 0 10000
 'fox.wav'.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -535,7 +535,7 @@ i 1 0 10000
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -567,7 +567,7 @@ i 1 0 10000
   <label>Play next file</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -598,7 +598,7 @@ i 1 0 10000
   <label>Next file</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -629,7 +629,7 @@ i 1 0 10000
   <label>SOUNDFILE SNIPPETS PLAYER</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -660,7 +660,7 @@ i 1 0 10000
   <label>Load the sound snippets. Press START. Push the NEXT! button or the space bar (make sure the focus is in this panel). You can reset the number of the next file by typing in the spin box, or by the 'p'/'n' keys.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -754,7 +754,7 @@ i 1 0 10000
   <label>Gain</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -785,7 +785,7 @@ i 1 0 10000
   <label>dB</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -816,7 +816,7 @@ i 1 0 10000
   <label>-2.045</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

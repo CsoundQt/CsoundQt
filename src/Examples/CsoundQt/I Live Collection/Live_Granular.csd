@@ -240,7 +240,7 @@ e
   <label>LIVE GRANULAR SYNTHESIS</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -273,7 +273,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
 </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -304,7 +304,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label> INPUT</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -483,7 +483,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Live in Pre</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -514,7 +514,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Live in Post</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -545,7 +545,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Input Gain</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -595,7 +595,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label> OUTPUT</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -720,7 +720,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>GRANULAR</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -751,7 +751,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Output Gain</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -801,7 +801,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Grains per Second</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -832,7 +832,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Transposition (Cent)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -882,7 +882,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Grainsize (ms)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -951,7 +951,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Distribution</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1001,7 +1001,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Position Randomness (ms)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1070,7 +1070,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Transposition Randomness (Cent)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1101,7 +1101,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>periodic</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1132,7 +1132,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>scattered</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1163,7 +1163,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Window Shape</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1282,7 +1282,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>... and see its shape</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1313,7 +1313,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Select window function ...</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1344,7 +1344,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>dB</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1405,7 +1405,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>dB</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1668,7 +1668,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>dB-Range</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1699,7 +1699,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Show LED's as</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1754,7 +1754,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1786,7 +1786,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <label>Input Channel</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans L</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

@@ -153,7 +153,7 @@ i 1		0	   3600	;GUI
   <midicc>0</midicc>
   <label>Distortion Amount</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -182,7 +182,7 @@ i 1		0	   3600	;GUI
   <midicc>0</midicc>
   <label>0.778</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -244,7 +244,7 @@ In this example I have provided six waveform functions to provide some ideas.
 'Half Point' provides the half point of an internal low-pass filter in cycles per second.
 An output gain control can be used to compensate for a loss in power when half point is low and distortion level is high.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -273,7 +273,7 @@ An output gain control can be used to compensate for a loss in power when half p
   <midicc>0</midicc>
   <label>Half Point (i-rate)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -320,7 +320,7 @@ An output gain control can be used to compensate for a loss in power when half p
   <midicc>0</midicc>
   <label>7.319</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -413,7 +413,7 @@ An output gain control can be used to compensate for a loss in power when half p
   <midicc>0</midicc>
   <label>Function</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -442,7 +442,7 @@ An output gain control can be used to compensate for a loss in power when half p
   <midicc>0</midicc>
   <label>1.984</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -471,7 +471,7 @@ An output gain control can be used to compensate for a loss in power when half p
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -537,7 +537,7 @@ An output gain control can be used to compensate for a loss in power when half p
   <midicc>0</midicc>
   <label>808loopMono.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

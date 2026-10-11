@@ -57,7 +57,7 @@ e
   <midicc>-3</midicc>
   <label>Rms values for the complete signal and for two separate parts of the spectrum. Use the knob to select crossover frequency</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -119,7 +119,7 @@ e
   <midicc>-3</midicc>
   <label>Rms</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -214,7 +214,7 @@ e
   <midicc>-3</midicc>
   <label>Lo</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -243,7 +243,7 @@ e
   <midicc>-3</midicc>
   <label>Hi</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -290,7 +290,7 @@ e
   <midicc>-3</midicc>
   <label>Crossover</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -319,7 +319,7 @@ e
   <midicc>-3</midicc>
   <label>600.0000</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

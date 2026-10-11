@@ -227,7 +227,7 @@ i  3		0 		3600		;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERFO
 Pvsvoc combines the spectral envelope of one signal (referred to as the input signal) with the frequencies of another signal (referred to as the excitation signal). This capability can be used to imitate the functioning of the traditional vocoder. This is what has been implemented in this example. An input signal of either a stored analysis file (voice or drum loop) or a live input can be combined with a variety of synthesized tones. This signal generator can also be triggered from a connected MIDI keyboard thus allowing the playing of chords of excitation signals. When playing from a MIDI keyboard the 'Signal Generator' switch should be deactivated. Pitch bend is also implemented. The 'Gate Amplitude' switch forces the output sound to follow the amplitude of the excitation sound.
 The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cross synthesis that will be applied. If this control is at zero then the output signal of pvsvoc will be simply the 'input' signal, if 'Depth...' is at 1 then the frequencies in the output signal will be entirely those of the excitation signal. The 'Mixer' slider allows the user to crossfade between the excitation signal and the output of pvsvoc. When using a stored analysis file (either voice or drums) as input the speed of playback can be varied using the 'Speed' slider. A value of 1 represents normal playback speed, 2 represents double speed and so on. File pointer movement is monitored by the 'File Pointer' slider. Manual file pointer adjustment is possible by first reducing 'Speed' to zero by clicking the 'Speed to Zero' button and then using the 'File Pointer' slider.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -256,7 +256,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -315,7 +315,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Signal Generator</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -344,7 +344,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>CPS (if No MIDI)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -391,7 +391,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>200.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -420,7 +420,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Wave</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -508,7 +508,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Source Signal</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -570,7 +570,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>0.430</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -599,7 +599,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>File Pointer</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -628,7 +628,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -675,7 +675,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Speed</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -723,7 +723,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Pvsvoc Vocoder</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -771,7 +771,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Exitation Signal &lt;--- Mixer ---> Source Signal</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -818,7 +818,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -847,7 +847,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>1.020</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -894,7 +894,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -923,7 +923,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -970,7 +970,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Depth of Cross Synthesis</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1018,7 +1018,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>AndItsAll.pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1045,7 +1045,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Vocal pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1074,7 +1074,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>Drump Loop pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1103,7 +1103,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <label>loop.pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -734,7 +734,7 @@ gifn is the table number containing the pluck wave form. The file mandpluk.aiff 
   <midicc>0</midicc>
   <label>mandpluk.aiff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

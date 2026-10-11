@@ -264,7 +264,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -314,7 +314,7 @@ e
   <label>1.009</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -364,7 +364,7 @@ e
   <label>1.032</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -395,7 +395,7 @@ e
   <label>File 1</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -426,7 +426,7 @@ e
   <label>File 2</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -600,7 +600,7 @@ e
   <label>0.5709</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -631,7 +631,7 @@ e
   <label>File 1</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -662,7 +662,7 @@ e
   <label>Amplitudes from </label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -693,7 +693,7 @@ e
   <label>File 2</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -743,7 +743,7 @@ e
   <label>0.2364</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -774,7 +774,7 @@ e
   <label>File 1</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -836,7 +836,7 @@ e
   <label>File 2</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -953,7 +953,7 @@ e
   <label>1.000</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -984,7 +984,7 @@ e
   <label>low</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1015,7 +1015,7 @@ e
   <label>Depth of filtering</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1046,7 +1046,7 @@ e
   <label>high</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1096,7 +1096,7 @@ e
   <label>0.942</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1127,7 +1127,7 @@ e
   <label>low</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1158,7 +1158,7 @@ e
   <label>Depth of vocoding</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1189,7 +1189,7 @@ e
   <label>high</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1239,7 +1239,7 @@ e
   <label>0.7236</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1270,7 +1270,7 @@ e
   <label>File 1</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1332,7 +1332,7 @@ e
   <label>File 2</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1363,7 +1363,7 @@ e
   <label>For Method "Phasor": Set Speed</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1394,7 +1394,7 @@ e
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1494,7 +1494,7 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1576,7 +1576,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>0.4000</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1626,7 +1626,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>0.070</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1657,7 +1657,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>File 1</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1688,7 +1688,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>File 2</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1719,7 +1719,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1750,7 +1750,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>2.663</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1812,7 +1812,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>0.728</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1843,7 +1843,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>Position (sec) in File 2</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1946,7 +1946,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1978,7 +1978,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>dB-Range</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2009,7 +2009,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>Show LED as</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2085,7 +2085,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>Volume</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2153,7 +2153,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>1.338</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2215,7 +2215,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2245,7 +2245,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <description/>
   <label>fox.wav</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2295,7 +2295,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <description/>
   <label>wave.wav</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2346,7 +2346,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>Let File 1 be File 2 and vice versa</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2424,7 +2424,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>CROSS SYNTHESIS</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -2457,7 +2457,7 @@ First, choose two files you want to cross. Second, select a method of cross synt
 Third, select a method of time reading: phasor (constant speed), mouse input or random. </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

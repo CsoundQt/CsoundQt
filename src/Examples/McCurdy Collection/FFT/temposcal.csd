@@ -244,7 +244,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <label>FFT Size</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -318,7 +318,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -366,7 +366,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <label>SynthPad.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -412,7 +412,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <label>Time Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -459,7 +459,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -488,7 +488,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <label>Pitch</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -535,7 +535,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -564,7 +564,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <label>Amp</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -611,7 +611,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <label>0.500</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>

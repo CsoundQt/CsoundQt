@@ -196,7 +196,7 @@ schedule(Monitor,0,-1)
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
@@ -266,7 +266,7 @@ schedule(Monitor,0,-1)
   <label>00</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>0</precision>
   <color>
@@ -328,7 +328,7 @@ schedule(Monitor,0,-1)
   <label>:</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -359,7 +359,7 @@ schedule(Monitor,0,-1)
   <label>skiptime</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -390,7 +390,7 @@ schedule(Monitor,0,-1)
   <label>loop</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -421,7 +421,7 @@ schedule(Monitor,0,-1)
   <label>volume</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -455,7 +455,7 @@ FILE INFO:
 Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -486,7 +486,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>Messages</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -681,7 +681,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>convert</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -712,7 +712,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>00</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>0</precision>
   <color>
@@ -774,7 +774,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>:</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -805,7 +805,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>:</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -836,7 +836,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>hh</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -867,7 +867,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>min</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -898,7 +898,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>sec</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -929,7 +929,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>ms</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -960,7 +960,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>(sample rate conversion if the sr of the file doesn't match the sr of the orchestra)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -991,7 +991,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>SOUNDFILE PLAYER</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -1022,7 +1022,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>(playing from hard disk)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -1052,7 +1052,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <description/>
   <label>ClassicalGuitar.wav</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1111,7 +1111,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <label>dB</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

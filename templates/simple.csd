@@ -55,7 +55,7 @@ endin
   <midicc>-3</midicc>
   <label>997.7670</label>
   <alignment>center</alignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -102,7 +102,7 @@ endin
   <midicc>-3</midicc>
   <label>This label displays the current frequency:</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -131,7 +131,7 @@ endin
   <midicc>-3</midicc>
   <label>The scope shows the current output-waveform.</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -180,7 +180,7 @@ endin
   <midicc>-3</midicc>
   <label>The pure waveform used by the oscillator is visable in the Graph display.</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

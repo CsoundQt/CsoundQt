@@ -50,7 +50,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>Toot 1</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -79,7 +79,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>This first toot, contains a single instrument which uses an oscil unit to play a 440Hz sine wave (defined by f1 in the score) at an amplitude of 0.2.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

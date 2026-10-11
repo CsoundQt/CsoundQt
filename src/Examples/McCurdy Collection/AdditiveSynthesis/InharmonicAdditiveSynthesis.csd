@@ -235,7 +235,7 @@ i 3 0 0		;INIT
   <label>Inharmonic Additive Synthesis</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -303,7 +303,7 @@ i 3 0 0		;INIT
   <label>Partial Strength:    1      2      3      4      5      6      7      8      9     10 </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -709,7 +709,7 @@ i 3 0 0		;INIT
   <label>Fundamental (Hertz)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -740,7 +740,7 @@ i 3 0 0		;INIT
   <label>436.998</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -790,7 +790,7 @@ i 3 0 0		;INIT
   <label>Global Amplitude</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -821,7 +821,7 @@ i 3 0 0		;INIT
   <label>0.300</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -852,7 +852,7 @@ i 3 0 0		;INIT
   <label>Inharmonic Additive Synthesis</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -886,7 +886,7 @@ The fundemental is actually 1 octave below the 3rd partial. The frequencies of s
 Notice how, in general, the higher partials tend to decay quicker. Also when damped, i.e. if the envelopes enter their release stages, the higher partials tend to decay quicker. The data for the default sound in this example was derived from a sonogram sound analysis program. This example also allow pitch control from a MIDI keyboard by first activating the 'MIDI switch in the interface. In this mode the instrument will also respond to key velocity.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -917,7 +917,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -948,7 +948,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <label>Attack</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -979,7 +979,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <label>Decay</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1010,7 +1010,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <label>Release</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1039,7 +1039,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1069,7 +1069,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1099,7 +1099,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1129,7 +1129,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1159,7 +1159,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1189,7 +1189,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1219,7 +1219,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1249,7 +1249,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1279,7 +1279,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1309,7 +1309,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1339,7 +1339,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1369,7 +1369,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1399,7 +1399,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1429,7 +1429,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1459,7 +1459,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1489,7 +1489,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1519,7 +1519,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1549,7 +1549,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1579,7 +1579,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1609,7 +1609,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1639,7 +1639,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1669,7 +1669,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1699,7 +1699,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1729,7 +1729,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1759,7 +1759,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1789,7 +1789,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1819,7 +1819,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1849,7 +1849,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1879,7 +1879,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1909,7 +1909,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1939,7 +1939,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1969,7 +1969,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -1999,7 +1999,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -2029,7 +2029,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -2059,7 +2059,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -2089,7 +2089,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -2119,7 +2119,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -2149,7 +2149,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -2179,7 +2179,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -2209,7 +2209,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>

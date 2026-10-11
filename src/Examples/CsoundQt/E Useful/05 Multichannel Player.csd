@@ -317,7 +317,7 @@ e
   <label>Skiptime (sec)</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -415,7 +415,7 @@ e
 SOUNDFILE PLAYER</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -447,7 +447,7 @@ SOUNDFILE PLAYER</label>
 For mono files, see the Mixdown_Player example.</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1089,7 +1089,7 @@ For mono files, see the Mixdown_Player example.</label>
   <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1120,7 +1120,7 @@ For mono files, see the Mixdown_Player example.</label>
   <label>dB</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1151,7 +1151,7 @@ For mono files, see the Mixdown_Player example.</label>
   <label>Gain</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1182,7 +1182,7 @@ For mono files, see the Mixdown_Player example.</label>
   <label>Time</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1213,7 +1213,7 @@ For mono files, see the Mixdown_Player example.</label>
   <label>00</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1244,7 +1244,7 @@ For mono files, see the Mixdown_Player example.</label>
   <label>09</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1275,7 +1275,7 @@ For mono files, see the Mixdown_Player example.</label>
   <label>:</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1306,7 +1306,7 @@ For mono files, see the Mixdown_Player example.</label>
   <label>min</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1337,7 +1337,7 @@ For mono files, see the Mixdown_Player example.</label>
   <label>sec</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1368,7 +1368,7 @@ For mono files, see the Mixdown_Player example.</label>
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1400,7 +1400,7 @@ For mono files, see the Mixdown_Player example.</label>
 Channels</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1429,7 +1429,7 @@ Channels</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1463,7 +1463,7 @@ Channels</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1497,7 +1497,7 @@ Channels</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1531,7 +1531,7 @@ Channels</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1565,7 +1565,7 @@ Channels</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1599,7 +1599,7 @@ Channels</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1633,7 +1633,7 @@ Channels</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1667,7 +1667,7 @@ Channels</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1704,7 +1704,7 @@ Channels</label>
 </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1751,7 +1751,7 @@ Channels</label>
   <label>Loop</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1782,7 +1782,7 @@ Channels</label>
   <label>07 : 25 </label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1813,7 +1813,7 @@ Channels</label>
   <label>File Length</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

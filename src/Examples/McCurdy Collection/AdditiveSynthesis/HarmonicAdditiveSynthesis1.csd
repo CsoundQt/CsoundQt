@@ -155,7 +155,7 @@ i 10 0 3600	;GUI
   <label>Additive Synthesis 1</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -223,7 +223,7 @@ i 10 0 3600	;GUI
   <label>1      2      3      4      5      6      7      8      9     10 </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -629,7 +629,7 @@ i 10 0 3600	;GUI
   <label>Fundamental (Hertz)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -660,7 +660,7 @@ i 10 0 3600	;GUI
   <label>61.923</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -710,7 +710,7 @@ i 10 0 3600	;GUI
   <label>Global Amplitude</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -741,7 +741,7 @@ i 10 0 3600	;GUI
   <label>0.317</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -791,7 +791,7 @@ i 10 0 3600	;GUI
   <label>Warp Partial Spacings</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -822,7 +822,7 @@ i 10 0 3600	;GUI
   <label>1.000</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -872,7 +872,7 @@ i 10 0 3600	;GUI
   <label>Partial Spacings Random Factor</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -903,7 +903,7 @@ i 10 0 3600	;GUI
   <label>0.000</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -956,7 +956,7 @@ i 10 0 3600	;GUI
   <label>Additive Synthesis 1 - 10 Harmonics</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -988,7 +988,7 @@ i 10 0 3600	;GUI
 Additive synthesis is the technique whereby sine waves of different frequencies are mixed and manipulated in such a way that they are perceived fused and seem to form a new, more complex tone. The inspiration for additive synthesis comes from Fourier theory that states that any sound can be replicated as a composite of sine waves of various frequencies and phases.  In harmonic additive synthesis the sequence of frequencies  followed by the different sine wave oscillators follows that of the harmonic series in that each harmonic is a product of the fundemental. For example: if the fundemental of a harmonic tone is 100 Hz. then its 1st harmonic will be at 200 Hz. its 2nd at 300 Hz and so on. This example offers the user manipulation of the first 10 harmonics but to synthesize bright timbres rich in higher harmonics such as a violin this number will be insufficient. The next example which utilises more partials, demonstrates  ways in which the fusion of partials can be enhanced but also draws attention to the shortcomings of additive synthesis. Note that the fundemental can also be referred to as the 1st partial, the 1 harmonic as the 2nd partial and so on. Partial spacings can be modified in two ways. 'Warp Partial  Spacings' compresses or expands partials spacings depending  upon whether its value is less than or greater than 1. 'Partial Spacings Random Factor' multiplies a unique random value to each partial frequency.                             </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1019,7 +1019,7 @@ Additive synthesis is the technique whereby sine waves of different frequencies 
   <label>Partial Strength</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

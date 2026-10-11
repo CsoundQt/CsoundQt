@@ -152,7 +152,7 @@ tbvcf attempts to emulate the resonant low-pass filter on the Roland TB-303 Bass
 THIS OPCODE HAS A BUG WHICH MANIFESTS AS A TENDENCY TO EXPLODE WHEN FILTER CUTOFF IS SET LOW OR HIGH (THIS IS ALSO DEPENDENT UPON THE SETTING FOR 'DISTORTION'. PROTECT YOUR EARS AND YOUR SPEAKERS!
 The input signal used in this example is a sawtooth waveform, the frequency of which is adjustable using an on-screen slider.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -200,7 +200,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>401.038</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -247,7 +247,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -294,7 +294,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>0.876</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -342,7 +342,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>Resonance</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -371,7 +371,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>Amplitude Rescaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -400,7 +400,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>0.404</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -447,7 +447,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>167.952</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -494,7 +494,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>Oscillator Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -523,7 +523,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>0.484</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -570,7 +570,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>Distortion</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -617,7 +617,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>0.434</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -646,7 +646,7 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <midicc>0</midicc>
   <label>Asymmetry</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

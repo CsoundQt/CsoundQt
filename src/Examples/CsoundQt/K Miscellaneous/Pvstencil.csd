@@ -126,7 +126,7 @@ e
   <label>        dB-limit for Binamps to pass</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -158,7 +158,7 @@ e
 For another application, see the Noise Reduction example.</label>
   <alignment>left</alignment>
   <valignment>bottom</valignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -189,7 +189,7 @@ For another application, see the Noise Reduction example.</label>
   <label>pvstencil simple example</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>

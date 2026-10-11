@@ -240,7 +240,7 @@ This example is also playable from a MIDI keyboard if the 'MIDI' mode is active.
   <midicc>0</midicc>
   <label>0.370</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -287,7 +287,7 @@ This example is also playable from a MIDI keyboard if the 'MIDI' mode is active.
   <midicc>0</midicc>
   <label>Carrier Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -316,7 +316,7 @@ This example is also playable from a MIDI keyboard if the 'MIDI' mode is active.
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -345,7 +345,7 @@ This example is also playable from a MIDI keyboard if the 'MIDI' mode is active.
   <midicc>0</midicc>
   <label>:</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>27</fontsize>
   <precision>3</precision>
   <color>
@@ -433,7 +433,7 @@ This example is also playable from a MIDI keyboard if the 'MIDI' mode is active.
   <label>Modulator
 Frequency</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

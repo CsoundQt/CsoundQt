@@ -115,7 +115,7 @@ e
   <midicc>-3</midicc>
   <label>Frequency: 200-1000 Hz</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -144,7 +144,7 @@ e
   <midicc>-3</midicc>
   <label>Amplitude: 0-1</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>

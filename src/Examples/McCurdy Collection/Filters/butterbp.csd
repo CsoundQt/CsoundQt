@@ -177,7 +177,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <label>----------------------------------------------------------------------------
 butterbp/butbp is an implementation of a second-order IIR Butterworth band-pass filter. Its input arguments are for filter cutoff frequency (in hertz), and bandwidth (also in hertz) of the spectral band that is allowed to pass through the filter. An optional 2-way switch (default=0) is provided to select whether the data space for feedback within the filter is initially cleared or allowed to retain previously held information. butterbp/butbp is slower than the original filters in Csound but provides an almost flat passband (particularly when compared to the reson filter). Multiple iterations of the butterbp/butbp opcode applied to the signal path in series can be used to create a sharper cutoff slope.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -225,7 +225,7 @@ butterbp/butbp is an implementation of a second-order IIR Butterworth band-pass 
   <midicc>0</midicc>
   <label>833.869</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -272,7 +272,7 @@ butterbp/butbp is an implementation of a second-order IIR Butterworth band-pass 
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -320,7 +320,7 @@ butterbp/butbp is an implementation of a second-order IIR Butterworth band-pass 
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -347,7 +347,7 @@ butterbp/butbp is an implementation of a second-order IIR Butterworth band-pass 
   <midicc>0</midicc>
   <label>Audio File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -376,7 +376,7 @@ butterbp/butbp is an implementation of a second-order IIR Butterworth band-pass 
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -423,7 +423,7 @@ butterbp/butbp is an implementation of a second-order IIR Butterworth band-pass 
   <midicc>0</midicc>
   <label>0.916</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -471,7 +471,7 @@ butterbp/butbp is an implementation of a second-order IIR Butterworth band-pass 
   <midicc>0</midicc>
   <label>Bandwidth</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -518,7 +518,7 @@ butterbp/butbp is an implementation of a second-order IIR Butterworth band-pass 
   <midicc>0</midicc>
   <label>731.568</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>

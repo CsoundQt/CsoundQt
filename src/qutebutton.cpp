@@ -720,11 +720,17 @@ void QuteButton::refreshWidget()
 	// runs on the GUI thread (the widget update timer), unlike setValue() which
 	// can be called from the Csound performance thread. Works for both native
 	// and flat buttons: QutePushButton::paintEvent() paints from isChecked().
+	// While the button is held down, leave the checked state alone: QAbstractButton
+	// toggles it relatively on release (nextCheckState() -> setChecked(!isChecked())),
+	// so forcing it here during the press would make the release toggle it back,
+	// producing a visible flicker.
 	if (property("CSQT_latch").toBool()) {
 		auto w = static_cast<QPushButton *>(m_widget);
-		w->blockSignals(true);
-		w->setChecked(m_currentValue != 0);
-		w->blockSignals(false);
+		if (!w->isDown()) {
+			w->blockSignals(true);
+			w->setChecked(m_currentValue != 0);
+			w->blockSignals(false);
+		}
 	}
 	m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX

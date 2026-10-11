@@ -174,7 +174,7 @@ i 1		0	   3600		;GUI
   <label>----------------------------------------------------------------------------------------------------
 tonex is an implementation of a second-order low-pass filter. Its input arguments are for cutoff frequency (half-power point) and a counter selecting the number of series iterations of the low-pass filter it implements. The effect of this is the same as the effect of multiple serially connected tone filters. However, use of the tonex opcode will be computationally much more efficient.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -222,7 +222,7 @@ tonex is an implementation of a second-order low-pass filter. Its input argument
   <midicc>0</midicc>
   <label>845.628</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -269,7 +269,7 @@ tonex is an implementation of a second-order low-pass filter. Its input argument
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -316,7 +316,7 @@ tonex is an implementation of a second-order low-pass filter. Its input argument
   <midicc>0</midicc>
   <label>0.584</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -383,7 +383,7 @@ tonex is an implementation of a second-order low-pass filter. Its input argument
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -410,7 +410,7 @@ tonex is an implementation of a second-order low-pass filter. Its input argument
   <midicc>0</midicc>
   <label>File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -439,7 +439,7 @@ tonex is an implementation of a second-order low-pass filter. Its input argument
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -467,7 +467,7 @@ tonex is an implementation of a second-order low-pass filter. Its input argument
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -497,7 +497,7 @@ tonex is an implementation of a second-order low-pass filter. Its input argument
   <midicc>0</midicc>
   <label>Number of Layers</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

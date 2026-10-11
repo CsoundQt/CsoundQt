@@ -2968,7 +2968,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <midicc>0</midicc>
   <label>Swing</label>
   <alignment>center</alignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

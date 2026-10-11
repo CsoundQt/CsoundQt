@@ -58,7 +58,6 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
         connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)),
                 this, SLOT(passUnselectedWidget(QuteWidget*)));
 		connect(wl,SIGNAL(showMidiLearn(QuteWidget*)),this, SLOT(showMidiLearn(QuteWidget*)));
-		connect(wl, SIGNAL(addChn_kSignal(QString)), m_view, SLOT(insertChn_k(QString)) );
 	}
 }
 

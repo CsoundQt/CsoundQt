@@ -750,7 +750,7 @@ Carrefull, audio file may give loud output !</label>
   <midicc>0</midicc>
   <label>marmstk1.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

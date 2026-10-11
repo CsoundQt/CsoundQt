@@ -189,7 +189,7 @@ The user can choose from a variety of different wave shapes for this LFO and the
 If the 'LFO Depth' is set at minimum the user can then manually select individual bins using the 'LFO Offset' control.
 This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'Composer's Desktop Project' (CDP) suite of of sound design programs.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -237,7 +237,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>0.738</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -284,7 +284,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>Depth</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -313,7 +313,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -360,7 +360,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>19.040</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -389,7 +389,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>LFO Depth</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -436,7 +436,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>0.335</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -465,7 +465,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>LFO Offset</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -512,7 +512,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>0.332</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -586,7 +586,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>LFO Shape</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -615,7 +615,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>0.110</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -662,7 +662,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>LFO Speed</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -691,7 +691,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>Sound File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -720,7 +720,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <label>Songpan.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

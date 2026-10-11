@@ -71,7 +71,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>Toot 4</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -100,7 +100,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>Next we'll animate the basic sound by mixing it with two slightly de-tuned copies of itself. We'll employ Csound's cpspch value converter which will allow us to specify the pitches by octave and pitch-class rather than by frequency, and we'll use the ampdbfs converter to specify loudness in dB FS rather than linearly.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -147,7 +147,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>Since we are adding the outputs of three oscillators, each with the same amplitude envelope, we'll scale the amplitude before we mix them. Both iscale and inote are arbitrary names to make the design a bit easier to read. Each is an i-rate variable, evaluated when the instrument is initialized.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

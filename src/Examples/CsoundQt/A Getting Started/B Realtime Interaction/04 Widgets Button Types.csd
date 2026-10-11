@@ -66,7 +66,7 @@ e 3600
   <midicc>-3</midicc>
   <label>2. Run Csound with the button below!</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -113,7 +113,7 @@ e 3600
   <midicc>-3</midicc>
   <label>0.0000</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -142,7 +142,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Display Values:</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -190,7 +190,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Look into the buttons properties: "Channel name: _Play"</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -238,7 +238,7 @@ e 3600
   <midicc>-3</midicc>
   <label>This button is in event mode. When pressed, it sends a score line. Here it starts instrument 1."i1 0 5"</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -286,7 +286,7 @@ e 3600
   <midicc>-3</midicc>
   <label>Reserved Channel: _Stop</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -315,7 +315,7 @@ e 3600
   <midicc>-3</midicc>
   <label>_Play is a reserved channel to control CsoundQt functionality. (Run Csound) The button has to be in value mode, to send this message. </label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

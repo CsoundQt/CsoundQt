@@ -234,7 +234,7 @@ Reson is an implementation of a resonant second-order band- -pass filter. Its in
   <midicc>0</midicc>
   <label>417.993</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -281,7 +281,7 @@ Reson is an implementation of a resonant second-order band- -pass filter. Its in
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -328,7 +328,7 @@ Reson is an implementation of a resonant second-order band- -pass filter. Its in
   <midicc>0</midicc>
   <label>631.480</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -395,7 +395,7 @@ Reson is an implementation of a resonant second-order band- -pass filter. Its in
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -422,7 +422,7 @@ Reson is an implementation of a resonant second-order band- -pass filter. Its in
   <midicc>0</midicc>
   <label>File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -481,7 +481,7 @@ Reson is an implementation of a resonant second-order band- -pass filter. Its in
   <midicc>0</midicc>
   <label>Scaling Mode</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -510,7 +510,7 @@ Reson is an implementation of a resonant second-order band- -pass filter. Its in
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -557,7 +557,7 @@ Reson is an implementation of a resonant second-order band- -pass filter. Its in
   <midicc>0</midicc>
   <label>0.030</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -586,7 +586,7 @@ Reson is an implementation of a resonant second-order band- -pass filter. Its in
   <midicc>0</midicc>
   <label>Bandwidth</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -645,7 +645,7 @@ Reson is an implementation of a resonant second-order band- -pass filter. Its in
   <midicc>0</midicc>
   <label>Opcode</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

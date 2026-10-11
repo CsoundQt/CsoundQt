@@ -102,7 +102,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>&lt;--Select waveform from this menu</label>
   <alignment>center</alignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -149,7 +149,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>Frequency</label>
   <alignment>left</alignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -197,7 +197,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>Push this button to generate notes</label>
   <alignment>center</alignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -226,7 +226,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -255,7 +255,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>Reinit</label>
   <alignment>left</alignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -284,7 +284,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>Using a reinit pass values for vco2 waveform (which is i-rate) are changed. Values for frequency are no longer used with i() so they change whenever the slider changes</label>
   <alignment>center</alignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

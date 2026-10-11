@@ -192,7 +192,7 @@ e
   <description/>
   <label>/media/jh/Daten/Joachim/Stuecke/57_reza/multichannel/reza_4chnls_16bit.wav</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -243,7 +243,7 @@ e
   <label>SOUNDFILE SPLITTER</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -274,7 +274,7 @@ e
   <label>Splits any stereo or multichannel soundfile in mono files. Just browse your file and press the Split! button. Find the split files in the same folder as the source file.</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

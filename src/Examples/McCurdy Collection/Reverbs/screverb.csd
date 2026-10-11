@@ -350,7 +350,7 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -398,7 +398,7 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <midicc>0</midicc>
   <label>808loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -200,7 +200,7 @@ f0 3600
   <label>Table Index</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -315,7 +315,7 @@ f0 3600
   <label>Freq</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -346,7 +346,7 @@ f0 3600
   <label>Graph Widget</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
   <color>
@@ -395,7 +395,7 @@ f0 3600
   <label>Graph Widget can display STATIC tables</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
   <color>
@@ -489,7 +489,7 @@ Click on a peak to display its frequency</label>
   <label>Signal graph widget, driven by display opcode</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
   <color>

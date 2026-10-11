@@ -1,6 +1,7 @@
 
 RESOURCES += "src/application.qrc" \
     "src/icons.qrc" \
+    "src/fonts.qrc" \
     src/qml_resources.qrc
 
 FORMS = "src/about.ui" \
@@ -24,6 +25,8 @@ HEADERS = "src/about.h" \
     "src/configdialog.h" \
     "src/configlists.h" \
     "src/console.h" \
+    "src/bundledfonts.h" \
+    "src/notification.h" \
     "src/csoundengine.h" \
     "src/csoundoptions.h" \
     "src/curve.h" \
@@ -90,6 +93,8 @@ SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
     "src/configlists.cpp" \
     "src/console.cpp" \
+    "src/bundledfonts.cpp" \
+    "src/notification.cpp" \
     "src/csoundengine.cpp" \
     "src/csoundoptions.cpp" \
     "src/curve.cpp" \

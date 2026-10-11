@@ -323,7 +323,7 @@ eqfil is an implementation of a 2nd order tunable equalization filter with contr
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -350,7 +350,7 @@ eqfil is an implementation of a 2nd order tunable equalization filter with contr
   <midicc>0</midicc>
   <label>Audio File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -379,7 +379,7 @@ eqfil is an implementation of a 2nd order tunable equalization filter with contr
   <midicc>0</midicc>
   <label>Bandwidth</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -502,7 +502,7 @@ eqfil is an implementation of a 2nd order tunable equalization filter with contr
   <midicc>0</midicc>
   <label>0.500</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>

@@ -364,7 +364,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Additive Synthesis Spectrum Sketching</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1416,7 +1416,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>1</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1445,7 +1445,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>2</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1474,7 +1474,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>3</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1503,7 +1503,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>4</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1532,7 +1532,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>5</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1561,7 +1561,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>6</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1590,7 +1590,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>7</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1619,7 +1619,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>8</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1648,7 +1648,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>9</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1677,7 +1677,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>10</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1706,7 +1706,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>11</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1735,7 +1735,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>12</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1764,7 +1764,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>13</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1793,7 +1793,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>14</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1822,7 +1822,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>15</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1851,7 +1851,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>16</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1880,7 +1880,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>17</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1909,7 +1909,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>18</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1938,7 +1938,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>19</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1967,7 +1967,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>20</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1996,7 +1996,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>21</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2025,7 +2025,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>22</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2054,7 +2054,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>23</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2083,7 +2083,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>24</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2112,7 +2112,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>25</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2141,7 +2141,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>26</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2170,7 +2170,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>27</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2199,7 +2199,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>28</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2228,7 +2228,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>29</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2257,7 +2257,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>30</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2525,7 +2525,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2554,7 +2554,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Fundamental Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2583,7 +2583,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Amplitude / Fundamental Portamento</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2612,7 +2612,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Ratios Portamento</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2641,7 +2641,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>0.543</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2670,7 +2670,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>1.450</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2699,7 +2699,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>227.164</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2728,7 +2728,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Attack Time</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2757,7 +2757,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Reverb Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2786,7 +2786,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Reverb Time</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2815,7 +2815,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Release Time</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2844,7 +2844,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Reverb LPF</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2873,7 +2873,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <midicc>0</midicc>
   <label>Instructions and Info</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -2913,7 +2913,7 @@ This example makes extensive use of macros in order to avoid lengthy repetitions
 Reverb is added and is adjustable and also portamento is independently adjustable for partial amplitudes, fundemental and frequency ratios.
 Frequency ratios can be randomized using the on-screen button.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2941,7 +2941,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -2974,7 +2974,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3007,7 +3007,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3040,7 +3040,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3073,7 +3073,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3106,7 +3106,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3139,7 +3139,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3172,7 +3172,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3205,7 +3205,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3238,7 +3238,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3271,7 +3271,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3304,7 +3304,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3337,7 +3337,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3370,7 +3370,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3403,7 +3403,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3436,7 +3436,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3469,7 +3469,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3502,7 +3502,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3535,7 +3535,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3568,7 +3568,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3601,7 +3601,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3634,7 +3634,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3667,7 +3667,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3700,7 +3700,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3733,7 +3733,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3766,7 +3766,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3799,7 +3799,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3832,7 +3832,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3865,7 +3865,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3898,7 +3898,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
    <r>0</r>
@@ -3932,7 +3932,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midicc>0</midicc>
   <label>Freq Ratios</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -3961,7 +3961,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <midicc>0</midicc>
   <label>9.455</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>

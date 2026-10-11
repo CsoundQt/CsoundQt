@@ -111,6 +111,8 @@ public:
 	bool openMidiPort(int port);
 	void closeMidiPort();
 	QVector<QuteWidget *> getWidgets() {return m_widgets;}
+	// Widgets currently selected in the editor (empty when not editing)
+	QList<QuteWidget *> getSelectedWidgets();
 
 	// Data to/from widgets
 	void setValue(QString channelName, double value);
@@ -199,6 +201,10 @@ public:
 
 	void createContextMenu(QContextMenuEvent *event);  // When done outside container widget
 
+	// Show (once) an informational dialog about widget fonts that are not
+	// bundled and were replaced; called after a file is loaded.
+	void reportUnknownWidgetFonts();
+
 	// Edition Actions  (Local edit actions without keyboard shortcuts as the main application handles that)
 	QAction *cutAct;
 	QAction *copyAct;
@@ -207,7 +213,6 @@ public:
 	QAction *clearAct;
 	QAction *selectAllAct;
 	QAction *duplicateAct;
-	QAction *deleteAct;
 	QAction *propertiesAct;
 
 	// Create new widget Actions
@@ -430,6 +435,10 @@ private:
 	QHash<QString, QuteWidget *> m_widgetNameToWidget; // Per file map of user defined widget name -> widget (names are unique, empty names are not stored)
     QVector<FrameWidget *> editWidgets;
 
+	// Widget fonts found while loading that are neither bundled nor known
+	// equivalents (raw -> replacement). Reported once per load, then cleared.
+	QMap<QString, QString> m_unknownWidgetFonts;
+
 	// Deferred outvalue updates (Csound performance thread -> GUI thread)
 	static const unsigned CSQT_MAX_CHANNEL_NAME = 256;
 	static const unsigned CSQT_MAX_STRING_VALUE = 4096;
@@ -510,7 +519,6 @@ signals:
 	void widgetSelectedSignal(QuteWidget *widget);
 	void widgetUnselectedSignal(QuteWidget *widget);
 	void showMidiLearn(QuteWidget *);
-	void addChn_kSignal(QString channel);
 	void logMessage(const QString &message, int role); // User facing message from a widget, forwarded to the Csound console (role: MessageRole)
     void windowStatus(bool);
 	//    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages

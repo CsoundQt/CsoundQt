@@ -178,7 +178,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <label>-----------------------------------------------------------------------------------------------------------------------------
 Pvoc performs FFT resynthesis on a analysis data file that has been previously created using the pvanal utility that comes with Csound. (This example uses a pre-prepared analysis file but you are encouraged to replace it with one of your own.) The input arguments required by the opcode include one for pitch ratio between the resynthesized sound and the original sound, and an argument for time location within the analysis file from which to resynthesise. This example offers two ways in which to control the time location variable according to how the 'Pointer Switch' is counter is set. When on 'Pointer' mode the 'Pointer' slider is simply used to move the variable ('Speed Control' slider is ignored). When 'Pointer Switch' is set to 'Speed Control' then the 'Speed Control' slider is used to control the speed of the movement (and direction) of the pointer through the analysis file. This value is given as a ratio between the resynthesized sound to the original sound. In this mode 'Pointer' slider is ignored. Optional arguments are also used in this example. When 'Spec. Env.' (spectral enveloping) is on the opcode attempts to preserve the spectral envelope of the original sound. The audible upshot of this is most clearly heard when resynthesizing speech in which transpositions up or down are heard as the person speaking higher or lower rather than as a complete transformation of the character of the voice. 'Extract Mode' and 'Frequency Limit' are used in combination and can be set to filter either resonant components of the sound or noise based components of the sound. If 'Extract Mode' is set to '1' (greater than frequency limit) and 'Frequency Limit' is given a value grater than zero then noise aspects of the sound are favoured in the resynthesis and if 'Frequency Limit' is set to '2' (less than frequency limit) and 'Frequency Limit' is given a value greater than zero then resonant aspects of the sound will be favoured. Using a gating function (table) allows spectrally informed dynamic modification of the sound (akin to a complex multi- -band compressor). Two function shapes are offered by this example.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -226,7 +226,7 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <midicc>0</midicc>
   <label>0.518</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -273,7 +273,7 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <midicc>0</midicc>
   <label>Portamento Amount</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -321,7 +321,7 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <midicc>0</midicc>
   <label>loop.pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -348,7 +348,7 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <midicc>0</midicc>
   <label>Analysis File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -378,7 +378,7 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <label>Frequency
 Limit</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -406,7 +406,7 @@ Limit</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -436,7 +436,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Gating Function</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -465,7 +465,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Pitch (portamento applied)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -512,7 +512,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>1.224</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -541,7 +541,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Pointer (portamento applied) (Pointer Mode Only)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -588,7 +588,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>0.500</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -617,7 +617,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Speed (Speed Control Mode Only)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -664,7 +664,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>0.980</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -693,7 +693,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -740,7 +740,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>0.716</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -824,7 +824,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Extract Mode</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

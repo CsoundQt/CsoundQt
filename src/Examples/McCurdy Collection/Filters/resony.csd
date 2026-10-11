@@ -190,7 +190,7 @@ i 1		0	   3600		;GUI
   <label>--------------------------------------------------------------------------------------------------------------------------------
 Resony is an implementation of a stack of second-order band--pass filters whose centre frequencies are arithmetically related. The 'bandwidth', 'scaling mode' and 'skip initialisation' parameters are as they are in the reson opcode. 'inum' (number of filters) defines the number of filters in the stack. 'ksep' (separation) defines the separation between the lowest and highest filter in the stack in octaves. How this relates to what the actual centre frequencies of filters differs depending upon which separation mode has been selected and is explained below. 'kbf' (base frequency) defines the centre frequency of the lowest filter. In 'octave' separation mode the pitch interval between the base frequency and (base frequency + separation) is divided into equal intervals according to the number of filters that have been selected. Note that no filter is created at the frequency of (base frequency + separation). For example: if separation=1 and num.filters=2 filters will be created at the base frequency and a tritone above the base frequency (i.e. a interval of 1/2 and octave). If 'hertz' separation mode is selected behaviour is somewhat curious. A filter is never created at the base frequency, this is probably a bug but a simple workaround would be to create a filter separately using a single instance of the reson opcode. Therefore if num.filters=1 no filters are actually created! num.filters=2 creates a single filter and so on. The frequency relationship between filters in the stack always follows the harmonic series. num.filters defines how many stages up the harmonic series are created - remember the fundemental will always be absent! In 'hertz' mode, 'base frequency' and 'separation' have the same effect of moving the entire stack of filters up and down the frequency domain. Negative values for 'separation' are allowed whenever 'separation mode' is 'octaves' (if this is the case, the stack of frequencies will extend below the base frequency). Negative values for 'separation' when 'separation mode' is 'hertz' will cause filters to 'explode'. The code in this example allows negative values for 'separation' whenever 'separation mode' is 'octaves' but prevents them whenever 'separation mode' is 'hertz'.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -238,7 +238,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>998.129</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -285,7 +285,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>Base Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -332,7 +332,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>30.926</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -399,7 +399,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -426,7 +426,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -485,7 +485,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>Scaling Mode</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -514,7 +514,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -561,7 +561,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>0.990</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -590,7 +590,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>Bandwidth</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -644,7 +644,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>Separation Mode</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -672,7 +672,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -702,7 +702,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>Number of Filters</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -731,7 +731,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>2.728</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -778,7 +778,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <midicc>0</midicc>
   <label>Separation (octaves)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

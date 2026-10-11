@@ -195,7 +195,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Live input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -224,7 +224,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>0.544</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -318,7 +318,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -347,7 +347,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Delay Time (sec)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -419,7 +419,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -466,7 +466,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Output Amplitude Rescaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -495,7 +495,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>0.718</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -524,7 +524,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>0.502</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -553,7 +553,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -600,7 +600,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>0.003</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -629,7 +629,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Flanger Modulation Depth (sec)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -694,7 +694,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Feedback Amount</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -723,7 +723,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>-0.004</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -752,7 +752,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>0.120</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -781,7 +781,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>Flanger Modulation Rate (hz)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -847,7 +847,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <label>loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

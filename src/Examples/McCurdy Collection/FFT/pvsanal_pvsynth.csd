@@ -180,7 +180,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -227,7 +227,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <midicc>0</midicc>
   <label>0.270</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -300,7 +300,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -348,7 +348,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

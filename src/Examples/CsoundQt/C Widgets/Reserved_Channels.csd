@@ -91,7 +91,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <label>File browsing</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -144,7 +144,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <label>_Browse1 channel -></label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -197,7 +197,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <label>_Browse2 channel -></label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -227,7 +227,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <description/>
   <label>/home/em/dev/forks/CsoundQt/src/Examples/CsoundQt/Widgets/Display_Widget.csd</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -255,7 +255,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <description/>
   <label>/home/em/dev/forks/CsoundQt/src/Examples/CsoundQt/Widgets/Menu_Widget.csd</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -284,7 +284,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <label>File A:</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -315,7 +315,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <label>File B:</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -346,7 +346,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <label>Transport</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -569,7 +569,7 @@ Run offline
   <label>Playback counter</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -676,7 +676,7 @@ Run offline
   <label>_MBrowse channel -></label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -706,7 +706,7 @@ Run offline
   <description/>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -735,7 +735,7 @@ Run offline
   <label>Presets</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -766,7 +766,7 @@ Run offline
   <label>Clear</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -797,7 +797,7 @@ Run offline
   <label>_GetPresetNumber channel -></label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -828,7 +828,7 @@ Run offline
   <label>_GetPresetName channel -></label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -857,7 +857,7 @@ Run offline
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -923,7 +923,7 @@ Run offline
   <label>_SetPreset channel:</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -954,7 +954,7 @@ Run offline
   <label>_SetPresetIndex channel:</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

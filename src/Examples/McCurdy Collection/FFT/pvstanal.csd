@@ -257,7 +257,7 @@ i 11		0		0	;INIT
   <midicc>0</midicc>
   <label>-0.720</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -304,7 +304,7 @@ i 11		0		0	;INIT
   <midicc>0</midicc>
   <label>Time Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -352,7 +352,7 @@ i 11		0		0	;INIT
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -379,7 +379,7 @@ i 11		0		0	;INIT
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -426,7 +426,7 @@ i 11		0		0	;INIT
   <midicc>0</midicc>
   <label>Pitch</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -455,7 +455,7 @@ i 11		0		0	;INIT
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -502,7 +502,7 @@ i 11		0		0	;INIT
   <midicc>0</midicc>
   <label>Amp</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

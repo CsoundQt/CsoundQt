@@ -434,7 +434,7 @@ void QuteSpinBox::applyProperties()
 	default:
 		setProperty("CSQT_alignment", "");
 	}
-	setProperty("CSQT_font", font->currentFont().family());
+	setProperty("CSQT_font", font->currentText());
 	setProperty("CSQT_fontsize", fontSize->value());
 	setProperty("CSQT_bgcolor", bgColor->palette().color(QPalette::Window));
 	setProperty("CSQT_bgcolormode", bg->isChecked());

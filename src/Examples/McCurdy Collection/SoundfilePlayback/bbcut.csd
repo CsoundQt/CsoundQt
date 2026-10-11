@@ -660,7 +660,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <label>Input</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

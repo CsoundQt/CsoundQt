@@ -65,7 +65,7 @@ e
   <midicc>-3</midicc>
   <label>2. Run Csound !</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -112,7 +112,7 @@ e
   <midicc>-3</midicc>
   <label>0.4172</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -141,7 +141,7 @@ e
   <midicc>-3</midicc>
   <label>If you hover over a widget, a tooltip will appear displaying the channel, the widget is using.</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -170,7 +170,7 @@ e
   <midicc>-3</midicc>
   <label>Widgets with the same channel, alter each other! This can be used, to display the faders value, or make exact adjustments in a scrollnumber box with the mouse.</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -198,7 +198,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -232,7 +232,7 @@ e
   <midicc>-3</midicc>
   <label>Display the value:</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

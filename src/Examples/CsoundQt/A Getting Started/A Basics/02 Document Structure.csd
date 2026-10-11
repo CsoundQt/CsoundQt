@@ -64,7 +64,7 @@ this will not become compiled :-), so I don't need the comment sign
   <midicc>-3</midicc>
   <label>empty :-)</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

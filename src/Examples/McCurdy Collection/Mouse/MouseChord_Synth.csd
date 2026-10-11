@@ -265,7 +265,7 @@ i 1000	0	   3600	;REVERB
   <midicc>0</midicc>
   <label>I</label>
   <alignment>center</alignment>
-  <font>FreeSerif</font>
+  <font>Liberation Serif</font>
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
@@ -452,7 +452,7 @@ i 1000	0	   3600	;REVERB
   <midicc>0</midicc>
   <label>II</label>
   <alignment>center</alignment>
-  <font>FreeSerif</font>
+  <font>Liberation Serif</font>
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
@@ -481,7 +481,7 @@ i 1000	0	   3600	;REVERB
   <midicc>0</midicc>
   <label>III</label>
   <alignment>center</alignment>
-  <font>FreeSerif</font>
+  <font>Liberation Serif</font>
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
@@ -510,7 +510,7 @@ i 1000	0	   3600	;REVERB
   <midicc>0</midicc>
   <label>IV</label>
   <alignment>center</alignment>
-  <font>FreeSerif</font>
+  <font>Liberation Serif</font>
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
@@ -539,7 +539,7 @@ i 1000	0	   3600	;REVERB
   <midicc>0</midicc>
   <label>V</label>
   <alignment>center</alignment>
-  <font>FreeSerif</font>
+  <font>Liberation Serif</font>
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
@@ -568,7 +568,7 @@ i 1000	0	   3600	;REVERB
   <midicc>0</midicc>
   <label>VI</label>
   <alignment>center</alignment>
-  <font>FreeSerif</font>
+  <font>Liberation Serif</font>
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
@@ -597,7 +597,7 @@ i 1000	0	   3600	;REVERB
   <midicc>0</midicc>
   <label>VII</label>
   <alignment>center</alignment>
-  <font>FreeSerif</font>
+  <font>Liberation Serif</font>
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>

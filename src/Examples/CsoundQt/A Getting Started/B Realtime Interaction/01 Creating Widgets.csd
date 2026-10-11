@@ -63,7 +63,7 @@ endin
   <label>Widgets</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -94,7 +94,7 @@ endin
   <label>You can create Widgets by right-clicking (or control-clicking on OS X) anywhere in the Widget Panel. Try it here:</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Sans Serif</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

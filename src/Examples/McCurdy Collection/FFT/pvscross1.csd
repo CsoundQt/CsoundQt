@@ -233,7 +233,7 @@ When using a stored analysis file (either voice or drums) as input the speed of 
 A value of 1 represents normal playback speed, 2 represents double speed and so on. File pointer movement is monitored by the 'File Pointer' slider.
 Manual file pointer adjustment is possible by first reducing 'Speed' to zero by clicking the 'Speed to Zero' button and then using the 'File Pointer' slider.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -262,7 +262,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -321,7 +321,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>Signal Generator</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -350,7 +350,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>CPS (if No MIDI)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -397,7 +397,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>200.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -426,7 +426,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>Wave</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -514,7 +514,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>Source Signal</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -576,7 +576,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>0.498</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -605,7 +605,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>File Pointer</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -634,7 +634,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -681,7 +681,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>Speed</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -729,7 +729,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>Pvscross Cross Synthesizer</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -777,7 +777,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>0.762</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -824,7 +824,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>Cross Synthesis Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -853,7 +853,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>0.054</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -900,7 +900,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>Excitation Signal Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -948,7 +948,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>Vocal pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -977,7 +977,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>AndItsAll.pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1004,7 +1004,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>loop.pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1031,7 +1031,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <label>Drum Loop pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

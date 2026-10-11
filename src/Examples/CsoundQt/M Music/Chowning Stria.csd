@@ -759,7 +759,7 @@ kevin.dahan@wanadoo.fr
 The basis for this code was the original MUS10 orchestra file with modifications by John Chowning and Kevin Dahan</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

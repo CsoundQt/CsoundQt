@@ -202,7 +202,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Live input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -231,7 +231,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>0.386</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -320,7 +320,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -349,7 +349,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>Delay Time (sec)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -421,7 +421,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -468,7 +468,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>Output Amplitude Rescaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -497,7 +497,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>0.798</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -526,7 +526,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>0.840</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -555,7 +555,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -602,7 +602,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>0.012</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -631,7 +631,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>Flanger Modulation Depth (sec)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -696,7 +696,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>Feedback Amount</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -725,7 +725,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>0.784</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -754,7 +754,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>0.097</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -783,7 +783,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>Flanger Modulation Rate (hz)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -830,7 +830,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>Mode</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -903,7 +903,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <label>808loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

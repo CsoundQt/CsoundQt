@@ -171,7 +171,7 @@ Threshold can be used to define a threshold beneath which sound components will 
   <midicc>0</midicc>
   <label>2.340</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -218,7 +218,7 @@ Threshold can be used to define a threshold beneath which sound components will 
   <midicc>0</midicc>
   <label>Input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -247,7 +247,7 @@ Threshold can be used to define a threshold beneath which sound components will 
   <midicc>0</midicc>
   <label>0.085</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -294,7 +294,7 @@ Threshold can be used to define a threshold beneath which sound components will 
   <midicc>0</midicc>
   <label>Threshold</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -323,7 +323,7 @@ Threshold can be used to define a threshold beneath which sound components will 
   <midicc>0</midicc>
   <label>0.624</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -370,7 +370,7 @@ Threshold can be used to define a threshold beneath which sound components will 
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

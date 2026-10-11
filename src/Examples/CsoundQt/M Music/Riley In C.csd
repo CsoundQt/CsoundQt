@@ -1228,7 +1228,7 @@ i 401	0	$OPEN
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1719,7 +1719,7 @@ i 401	0	$OPEN
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1954,7 +1954,7 @@ Start / Next</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2445,7 +2445,7 @@ Start / Next</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2936,7 +2936,7 @@ Start / Next</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -3427,7 +3427,7 @@ Start / Next</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -3900,7 +3900,7 @@ Start / Next</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -4391,7 +4391,7 @@ Start / Next</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -4882,7 +4882,7 @@ Start / Next</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -5373,7 +5373,7 @@ Start / Next</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -5864,7 +5864,7 @@ Start / Next</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -5957,7 +5957,7 @@ Start / Next</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>

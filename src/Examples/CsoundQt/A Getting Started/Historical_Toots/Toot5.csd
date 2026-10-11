@@ -68,7 +68,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>Toot 5</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -97,7 +97,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>To add some delayed vibrato to our chorusing instrument we use another oscillator for the vibrato and a line segment generator, linseg, as a means of controlling the delay. linseg is a k-rate or a-rate signal generator which traces a series of straight line segments between any number of specified points.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -144,7 +144,7 @@ e ; indicates the end of the score
   <midicc>-3</midicc>
   <label>Since we intend to use this to slowly scale the amount of signal coming from our vibrato oscillator, we'll choose the k-rate version. The i-rate variables: ia, ib, ic, etc., are the values for the points. The i-rate variables: idur1, idur2, idur3, etc., set the duration, in seconds, between segments.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

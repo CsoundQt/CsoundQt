@@ -311,7 +311,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -359,7 +359,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

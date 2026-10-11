@@ -187,7 +187,7 @@ i 10		0	   3600	;GUI
   <label>--------------------------------------------------------------------------------------------------------------------------------------------------
 pvsadsyn resynthesizes an fsig into an audio signal with some interesting user adjustable parameters that define how that resynthesis is performed. pvsadsyn is quite similar the the opcode pvadd. The principle innovation is that pvsadsyn can operate upon a streaming f-signal and therefore a live stream of audio. Most of pvsadsyn's input parameters must be defined at initialization time. To allow realtime modulation of these parameters I have designed the instrument to perform a re-initialization pass through the relevant code if any of these parameters are changed in the GUI. 'No. Oscs.' (number of oscillators) defines the number of oscillators that will be used in the resynthesis. As this number is reduced the result is simlar to lowering the cutoff frequency of a low-pass filter. 'Bin Offset' defines the lowest FFT bin which will be read from. As this value is increased the result is similar to raising the cutoff frequency of a high-pass filter. Setting 'Bin Increment' to values higher than '1' means that pvsadsyn will not read from every consecutive FFT bin but will instead skip the defined number of bins before reading again for each oscillator. If pvsadsyn is forced to read from a bin that doesn't exist Csound will crash. The highest bin that can be read from is dictated by the number of bins available from the original analysis carried out, in this case, by 'pvsanal'. It will be (FFTsize/2)+1. The highest bin that pvsadsyn will attempt to read from is dependent upon 'No. Oscs.', 'Bin Offset' and 'Bin Increment'. To prevent the annoyance of crashes while modulating these parameters I have included a line of code that limits the actual number of oscillators to prevent read attempts from non existant FFT bins. The actual number of oscillators used by pvsadsyn is output to the terminal each time it changes. 'Rescale Frequencies' modulates the frequencies of all FFT bins at k-rate. The user can select between a variety of combinations of parameters for the FFT analysis. Larger values for FFT size will give better harmonic reproduction but greater time smearing effects and higher computational cost. Lower values will result in less time smearing but greater harmonic distortion.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -235,7 +235,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -264,7 +264,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -328,7 +328,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midicc>0</midicc>
   <label>1.003</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -375,7 +375,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midicc>0</midicc>
   <label>Rescale Frequencies</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -404,7 +404,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -477,7 +477,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midicc>0</midicc>
   <label>Songpan.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -504,7 +504,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midicc>0</midicc>
   <label>Bin Offset</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -532,7 +532,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -561,7 +561,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -591,7 +591,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midicc>0</midicc>
   <label>No. Oscs</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -620,7 +620,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midicc>0</midicc>
   <label>Bin Increment</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -648,7 +648,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>

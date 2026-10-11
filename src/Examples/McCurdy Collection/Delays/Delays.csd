@@ -166,7 +166,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <midicc>0</midicc>
   <label>Delays</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -213,7 +213,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <midicc>0</midicc>
   <label>Input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -242,7 +242,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <midicc>0</midicc>
   <label>0.502</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -271,7 +271,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <midicc>0</midicc>
   <label>Delays</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -303,7 +303,7 @@ This example implements a multitap delay in which the number of taps can be rede
 This curve is created using GEN 16. If displays are enabled you can view changes made to this table (table number 1) in real time. Using this feature 'bounce' delay effects and 'reverse bounce' delay effects can be created. In a similar way, an envelope that is applied across all of delay taps is created and modified using the controls 'Amp. Env.' and 'Amp. Curve' controls. 'Amp. Env' defines whether the envelope is building, decaying or flat. Once again the results are visible as table 2 if table displays are not suppressed. Thirdly a resonant lowpass filter with envelope control can be applied across the entire delay sequence. Its shape can be viewed as 'ftable 3'. A panning effect is implemented in which delay taps are alternately sent to the left and right channels in ping-pong delay fashion. The depth of this effect is controllable using the 'Pan Depth' slider. To test the effect short percussive noise 'blips' are generated, one for each delay cycle. It would be a simple operation to adapt this example to read live audio or a sound file as input. Alternatively the computer's live input can also be used.
 Use of the resonant lowpass filter feature in this example can be rather CPU intensive, particularly if many delay taps are being employed. For this reason the filter section can be bypassed with its on/off switch if realtime operation glitches.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -332,7 +332,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>0.478</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -361,7 +361,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>Dry Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -408,7 +408,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>0.066</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -455,7 +455,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>Pan Depth</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -502,7 +502,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>0.944</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -531,7 +531,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>Delays Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -560,7 +560,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -589,7 +589,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>Total Time</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -636,7 +636,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>2.674</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -665,7 +665,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>0.358</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -712,7 +712,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>Amp. Env.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -741,7 +741,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>-2.432</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -770,7 +770,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>Time Curve</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -817,7 +817,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>-3.520</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -846,7 +846,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>Amp. Curve</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -911,7 +911,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>LPF Offset</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -940,7 +940,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>19.560</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -987,7 +987,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>0.506</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1016,7 +1016,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>-3.296</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1063,7 +1063,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>LPF Curve</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1092,7 +1092,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>0.164</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1121,7 +1121,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>LPF Env.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1186,7 +1186,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <color>
    <r>0</r>
@@ -1216,7 +1216,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>No of Taps</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1270,7 +1270,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>Inputs</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1299,7 +1299,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <midicc>0</midicc>
   <label>LPF Resonance</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

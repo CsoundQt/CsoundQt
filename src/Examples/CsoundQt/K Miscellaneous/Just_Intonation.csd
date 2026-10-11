@@ -116,7 +116,7 @@ e
 This file shows the difference for a few intervals with Equal temperament and Just Intonation. One note of the interval is placed on the left channel and the other note on the right. The lissajous scope on the left shows the correlation between the channels. Since just intonation intervals are more closely related the graphic display is cleaner.</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>TeX Gyre Heros</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

@@ -203,7 +203,7 @@ The input parameter 'type' define the shape of the cutoff slope. A value of zero
 The user can select between a variety of combinations of parameters for the FFT analysis. Larger values for FFT size will give better harmonic reproduction but greater time smearing effects and higher computational cost. Lower values will result in less time smearing but greater harmonic distortion.
 The user can choose between different input sources which includes the computer's live input.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -251,7 +251,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -305,7 +305,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -334,7 +334,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -398,7 +398,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>312.653</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -445,7 +445,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>Low Cut</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -474,7 +474,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>Low Full</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -521,7 +521,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>163.335</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -550,7 +550,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>High Cut</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -597,7 +597,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>247.276</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -626,7 +626,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>High Full</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -673,7 +673,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>736.417</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -721,7 +721,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>Sound File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -750,7 +750,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -777,7 +777,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>0.020</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -824,7 +824,7 @@ The user can choose between different input sources which includes the computer'
   <midicc>0</midicc>
   <label>Curve Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

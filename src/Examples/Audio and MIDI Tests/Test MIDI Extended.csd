@@ -144,7 +144,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>Note events:</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Courier 10 Pitch</font>
+  <font>Liberation Mono</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -175,7 +175,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>Control Change:</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Courier 10 Pitch</font>
+  <font>Liberation Mono</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -206,7 +206,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>0</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -237,7 +237,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>0</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -268,7 +268,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>0</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -337,7 +337,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>Generate continuously</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -368,7 +368,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>Controller number CC#</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -399,7 +399,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>Value</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -430,7 +430,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>Channel</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -461,7 +461,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>Note On: chan = 0 note#  = 0 velocity = 0</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -492,7 +492,7 @@ ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {
   <label>MIDI I/O</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans Mono</font>
+  <font>Liberation Mono</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>

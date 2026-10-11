@@ -263,7 +263,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -310,7 +310,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>Scale</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -358,7 +358,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>808loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -385,7 +385,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -432,7 +432,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>Shift</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -461,7 +461,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -508,7 +508,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>Lowest Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -537,7 +537,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>0.500</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -584,7 +584,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -667,7 +667,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>Num. Coefs :</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -721,7 +721,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -750,7 +750,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

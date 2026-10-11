@@ -178,7 +178,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <label>-------------------------------------------------------------------------------
 areson is an implementation of a resonant second-order notch filter. Its input arguments are for filter centre frequency (in hertz), bandwidth of the notch (also in hertz) a 3-way switch offering a choice 3 methods by which the output amplitude will be dynamically scaled and a 2-way switch selecting whether the data space for feedback within the filter is initially cleared or allowed to retain previously held information. The audible results of the areson filter are not dissimilar to those of a phaser effect. Setting 'Scaling Mode' to 0 will provide the most dynamically transparent effect but some manual rescaling of the amplitude of the output signal may be necessary. In this example this can be performed using the 'Output Amplitude Scaling' slider. Settings for 'Scaling Mode' of 1 or 2 force dynamic containment of the output signal similar to the effect of a compressor.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -226,7 +226,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <midicc>0</midicc>
   <label>623.949</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -273,7 +273,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <midicc>0</midicc>
   <label>Filter Centre Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -321,7 +321,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -348,7 +348,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <midicc>0</midicc>
   <label>Audio File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -377,7 +377,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <midicc>0</midicc>
   <label>Bandwidth</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -424,7 +424,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <midicc>0</midicc>
   <label>58.903</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -453,7 +453,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -500,7 +500,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <midicc>0</midicc>
   <label>0.182</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -559,7 +559,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <midicc>0</midicc>
   <label>Scaling Modes</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

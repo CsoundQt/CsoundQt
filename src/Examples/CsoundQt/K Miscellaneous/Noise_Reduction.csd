@@ -130,7 +130,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>ratio</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -159,7 +159,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -203,7 +203,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>Learn</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -266,7 +266,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>Bypass</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -295,7 +295,7 @@ f 0 3600
   <midicc>-3</midicc>
   <label>This noise reduction unit can sample a noise print and then remove it through spectral masking. First clear the mask then activate the learn while the noise is playing. Deactivate the learn button and the noise will be removed.</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

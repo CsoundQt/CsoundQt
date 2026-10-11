@@ -248,7 +248,7 @@ Three options are provided for the input source sound. The user can select betwe
 Larger values for FFT size will give better harmonic reproduction but greater time smearing effects and higher computational cost.
 Lower values will result in less time smearing but greater harmonic distortion.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -296,7 +296,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -325,7 +325,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -389,7 +389,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Filtering Template Signal</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -418,7 +418,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>No of Partials</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -446,7 +446,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -475,7 +475,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -505,7 +505,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Offset</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -533,7 +533,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -563,7 +563,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Mode</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -592,7 +592,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>1.099</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -639,7 +639,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Mult Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -668,7 +668,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -715,7 +715,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>246.331</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -744,7 +744,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>1.009</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -791,7 +791,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Power</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -820,7 +820,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Mixer</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -849,7 +849,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Dry Signal</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -896,7 +896,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -925,7 +925,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -972,7 +972,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Filter Signal</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1001,7 +1001,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>5.240</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1048,7 +1048,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Resultant Signal</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1077,7 +1077,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1150,7 +1150,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <label>loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -353,7 +353,7 @@ ioText {10, 10} {999, 70} label 0.000000 0.00100 "" center "Liberation Sans" 24 
   <label>Channels</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -384,7 +384,7 @@ ioText {10, 10} {999, 70} label 0.000000 0.00100 "" center "Liberation Sans" 24 
   <label>FFT Size</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -431,7 +431,7 @@ ioText {10, 10} {999, 70} label 0.000000 0.00100 "" center "Liberation Sans" 24 
   <label>Play peak</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -492,7 +492,7 @@ ioText {10, 10} {999, 70} label 0.000000 0.00100 "" center "Liberation Sans" 24 
   <label>Input Gain (dB)</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -553,7 +553,7 @@ ioText {10, 10} {999, 70} label 0.000000 0.00100 "" center "Liberation Sans" 24 
   <label>Peak Gain (dB)</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -584,7 +584,7 @@ ioText {10, 10} {999, 70} label 0.000000 0.00100 "" center "Liberation Sans" 24 
   <label>Filter low freqs</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -682,7 +682,7 @@ ioText {10, 10} {999, 70} label 0.000000 0.00100 "" center "Liberation Sans" 24 
   <label>Refresh Rate</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>

@@ -369,7 +369,7 @@ e
   <label>Audio Output</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -400,7 +400,7 @@ e
   <label>-22</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
@@ -431,7 +431,7 @@ e
   <label>MIDI I/O</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -493,7 +493,7 @@ e
   <label>Audio Input</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -598,7 +598,7 @@ e
   <label>1</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -627,7 +627,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <color>
    <r>125</r>
@@ -661,7 +661,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <color>
    <r>125</r>
@@ -792,7 +792,7 @@ e
   <label>2</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -897,7 +897,7 @@ e
   <label>3</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -926,7 +926,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <color>
    <r>125</r>
@@ -960,7 +960,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <color>
    <r>125</r>
@@ -996,7 +996,7 @@ e
   <label>4</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1101,7 +1101,7 @@ e
   <label>5</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1130,7 +1130,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <color>
    <r>125</r>
@@ -1164,7 +1164,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <color>
    <r>125</r>
@@ -1200,7 +1200,7 @@ e
   <label>6</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1305,7 +1305,7 @@ e
   <label>7</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1334,7 +1334,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <color>
    <r>125</r>
@@ -1368,7 +1368,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <color>
    <r>125</r>
@@ -1404,7 +1404,7 @@ e
   <label>8</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1457,7 +1457,7 @@ e
   <label>Level (dB)</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1938,7 +1938,7 @@ e
   <label>Note received</label>
   <alignment>left</alignment>
   <valignment>bottom</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1996,7 +1996,7 @@ e
   <label>...</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2064,7 +2064,7 @@ e
   <label>CC received</label>
   <alignment>left</alignment>
   <valignment>bottom</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2095,7 +2095,7 @@ e
   <label>...</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2156,7 +2156,7 @@ e
   <label>44100</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -2187,7 +2187,7 @@ e
   <label>2</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -2368,7 +2368,7 @@ e
   <label>Signal Type</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2397,7 +2397,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <color>
    <r>245</r>
@@ -2433,7 +2433,7 @@ e
   <label>Hz</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

@@ -198,7 +198,7 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <midicc>0</midicc>
   <label>808loopMono.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

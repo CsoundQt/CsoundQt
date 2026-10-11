@@ -190,7 +190,7 @@ sizes and window sizes results in greater time smearing but less harmonic distor
 Changing FFT attributes while a note is playing can have unexpected results.
 If this happens just cycle the 'On/Off' switch.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -273,7 +273,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -332,7 +332,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <label>Mode</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -361,7 +361,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -390,7 +390,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -454,7 +454,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <label>0.344</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -501,7 +501,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -549,7 +549,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -576,7 +576,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <label>Voice</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -605,7 +605,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <label>Drum Loop</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -634,7 +634,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <label>loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

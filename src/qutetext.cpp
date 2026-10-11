@@ -22,6 +22,7 @@
 */
 
 #include "qutetext.h"
+#include "bundledfonts.h"
 #include <math.h>
 
 #define USEFONTPIXELSIZE
@@ -70,7 +71,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_label", "");
 	setProperty("CSQT_alignment", "left");
     setProperty("CSQT_valignment", "top");
-    setProperty("CSQT_font", "Arial");
+    setProperty("CSQT_font", BundledFonts::defaultFamily());
 	setProperty("CSQT_fontsize", 12.0);
 	setProperty("CSQT_bgcolor", qApp->palette().color(QPalette::Window));
 	setProperty("CSQT_bgcolormode", false);
@@ -597,8 +598,41 @@ void QuteText::createPropertiesDialog()
     layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["font"] = label;
 
-    font = new QFontComboBox(dialog);
+    font = new QComboBox(dialog);
     font->setMaximumWidth(200);
+    // Give the dropdown enough room for the larger samples.
+    font->view()->setMinimumWidth(220);
+    // Only the fonts bundled with CsoundQt are offered, so a widget panel looks
+    // the same on every platform. Group them by category with separators.
+    auto addFamilyGroup = [this](const QStringList &families) {
+        if (font->count() > 0) {
+            font->insertSeparator(font->count());
+        }
+        // Use a larger size for the samples so the typefaces are easy to tell apart.
+        const int baseSize = font->font().pointSize();
+        const int previewSize = baseSize > 0 ? qMax(14, baseSize + 4) : 14;
+        for (const QString &family : families) {
+            font->addItem(family);
+            // Render each entry in its own typeface, like QFontComboBox did.
+            QFont preview(family);
+            preview.setPointSize(previewSize);
+            font->setItemData(font->count() - 1, preview, Qt::FontRole);
+        }
+    };
+    addFamilyGroup(BundledFonts::sansFamilies());
+    addFamilyGroup(BundledFonts::serifFamilies());
+    addFamilyGroup(BundledFonts::monoFamilies());
+    // Also preview the selected family in the closed combo box.
+    connect(font, &QComboBox::currentTextChanged, this, [this](const QString &family) {
+        if (family.isEmpty()) {
+            return;
+        }
+        QFont preview(family);
+        if (font->font().pointSize() > 0) {
+            preview.setPointSize(font->font().pointSize());
+        }
+        font->setFont(preview);
+    });
     layout->addWidget(font, 8, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
@@ -674,7 +708,7 @@ void QuteText::createPropertiesDialog()
     */
     bg->setChecked(property("CSQT_bgcolormode").toBool());
     // border->setChecked(property("CSQT_bordermode").toString() == "border");
-	font->setCurrentFont(QFont(property("CSQT_font").toString()));
+	font->setCurrentText(BundledFonts::resolveFamily(property("CSQT_font").toString()));
 	fontSize->setValue(property("CSQT_fontsize").toInt());
 	borderRadius->setValue(property("CSQT_borderradius").toInt());
 	borderWidth->setValue(property("CSQT_borderwidth").toInt());
@@ -742,7 +776,7 @@ void QuteText::applyProperties()
         setProperty("CSQT_valignment", "");
     }
 
-    setProperty("CSQT_font", font->currentFont().family());
+    setProperty("CSQT_font", font->currentText());
 	setProperty("CSQT_fontsize", fontSize->value());
     setProperty("CSQT_bgcolor", bgColor->getColor());
     setProperty("CSQT_bgcolormode", bg->isChecked());

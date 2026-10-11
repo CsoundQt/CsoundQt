@@ -116,7 +116,7 @@ e
   <label>409.663</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Sans Serif</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>

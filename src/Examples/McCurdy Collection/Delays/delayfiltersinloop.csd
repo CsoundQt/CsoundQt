@@ -200,7 +200,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Live input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -229,7 +229,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>0.372</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -321,7 +321,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>2.411</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -350,7 +350,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>Delay Time (sec)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -422,7 +422,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -469,7 +469,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>Output Amplitude Rescaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -498,7 +498,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>0.508</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -527,7 +527,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>0.528</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -556,7 +556,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -603,7 +603,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>1.016</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -632,7 +632,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>Portamento Time</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -697,7 +697,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>Feedback Amount</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -726,7 +726,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>1.008</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -773,7 +773,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>Low Pass Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -802,7 +802,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>6716.435</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -831,7 +831,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>4376.368</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -860,7 +860,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>High Pass Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -926,7 +926,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <midicc>0</midicc>
   <label>808loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

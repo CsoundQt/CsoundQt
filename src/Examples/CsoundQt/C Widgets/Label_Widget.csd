@@ -44,7 +44,7 @@ endin
   <label>Label Widget</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -106,7 +106,7 @@ endin
   <label>With border</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -137,7 +137,7 @@ endin
   <label>Large Times font with right alignment</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Times New Roman</font>
+  <font>Liberation Serif</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -168,7 +168,7 @@ endin
   <label>Text color centered</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Nimbus Sans [urw]</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -199,7 +199,7 @@ endin
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>6</fontsize>
   <precision>3</precision>
   <color>
@@ -230,7 +230,7 @@ endin
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>6</fontsize>
   <precision>3</precision>
   <color>
@@ -261,7 +261,7 @@ endin
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>6</fontsize>
   <precision>3</precision>
   <color>
@@ -292,7 +292,7 @@ endin
   <label>Labels can be used as colored blocks</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -323,7 +323,7 @@ endin
   <label>With Border and Background</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -354,7 +354,7 @@ endin
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>6</fontsize>
   <precision>3</precision>
   <color>
@@ -385,7 +385,7 @@ endin
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>6</fontsize>
   <precision>3</precision>
   <color>
@@ -416,7 +416,7 @@ endin
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
+  <font>Liberation Sans</font>
   <fontsize>6</fontsize>
   <precision>3</precision>
   <color>
@@ -447,7 +447,7 @@ endin
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>6</fontsize>
   <precision>3</precision>
   <color>

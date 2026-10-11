@@ -407,7 +407,7 @@ e
   <label>Drone 1</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -468,7 +468,7 @@ e
   <label>:</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -559,7 +559,7 @@ e
   <label>:</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -620,7 +620,7 @@ e
   <label>Drone 2</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -681,7 +681,7 @@ e
   <label>:</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -742,7 +742,7 @@ e
   <label>Drone 3</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -773,7 +773,7 @@ e
   <label>Drone 4</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -834,7 +834,7 @@ e
   <label>:</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -969,7 +969,7 @@ e
   <label>Base (Hz)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -1066,7 +1066,7 @@ e
   <label>Wave</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -1097,7 +1097,7 @@ e
   <label>Feedback</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -1248,7 +1248,7 @@ e
   <label>Ratio</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -1279,7 +1279,7 @@ e
   <label>8ve</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -1310,7 +1310,7 @@ e
   <label>BPS</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -1341,7 +1341,7 @@ e
   <label>Level</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -1432,7 +1432,7 @@ e
   <label>Harmonic Arpeggio</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1463,7 +1463,7 @@ e
   <label>Wet</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -1492,7 +1492,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <color>
    <r>0</r>
@@ -1526,7 +1526,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <color>
    <r>0</r>
@@ -1581,7 +1581,7 @@ e
   <label>Dry</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -1650,7 +1650,7 @@ e
   <label>Binaural Beats</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1681,7 +1681,7 @@ e
   <label>Reverb</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1712,7 +1712,7 @@ e
   <label>Sruti/Drone Box 2.7 - Dave Seidel &lt;mysterybear.net/></label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
   <color>
@@ -1803,7 +1803,7 @@ e
   <label>Offset</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -1832,7 +1832,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <color>
    <r>0</r>
@@ -1898,7 +1898,7 @@ e
   <label>Level</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -2081,7 +2081,7 @@ e
   <label>Notes</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
@@ -2112,7 +2112,7 @@ e
   <label>.</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>

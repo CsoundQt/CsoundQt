@@ -137,7 +137,7 @@ e
   <midicc>-3</midicc>
   <label>Reverb Mix</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -184,7 +184,7 @@ e
   <midicc>-3</midicc>
   <label>Delay Mix</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -249,7 +249,7 @@ e
   <midicc>-3</midicc>
   <label>Time</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -278,7 +278,7 @@ e
   <midicc>-3</midicc>
   <label>Feedback</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -307,7 +307,7 @@ e
   <midicc>-3</midicc>
   <label>DELAY SECTION</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -336,7 +336,7 @@ e
   <midicc>-3</midicc>
   <label>Dry</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -365,7 +365,7 @@ e
   <midicc>-3</midicc>
   <label>Wet</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -394,7 +394,7 @@ e
   <midicc>-3</midicc>
   <label>Dry</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -423,7 +423,7 @@ e
   <midicc>-3</midicc>
   <label>Wet</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -452,7 +452,7 @@ e
   <midicc>-3</midicc>
   <label>REVERB SECTION</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -481,7 +481,7 @@ e
   <midicc>-3</midicc>
   <label>50-1000 ms</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -510,7 +510,7 @@ e
   <midicc>-3</midicc>
   <label>0-100 %</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -539,7 +539,7 @@ e
   <midicc>-3</midicc>
   <label>LP-Filter Cutoff-frequency</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -568,7 +568,7 @@ e
   <midicc>-3</midicc>
   <label>SYNTH SECTION</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -615,7 +615,7 @@ e
   <midicc>-3</midicc>
   <label>CONTROLLER NUMBERS FOR THE DIFFERENT SLIDERS</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -643,7 +643,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -673,7 +673,7 @@ e
   <midicc>-3</midicc>
   <label>----------></label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -701,7 +701,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -731,7 +731,7 @@ e
   <midicc>-3</midicc>
   <label>----------------></label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -759,7 +759,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -789,7 +789,7 @@ e
   <midicc>-3</midicc>
   <label>----------></label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -817,7 +817,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -847,7 +847,7 @@ e
   <midicc>-3</midicc>
   <label>----------></label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -875,7 +875,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -905,7 +905,7 @@ e
   <midicc>-3</midicc>
   <label>----------></label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -934,7 +934,7 @@ e
   <midicc>-3</midicc>
   <label>CHANNEL NUMBER FOR ALL SLIDERS</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -963,7 +963,7 @@ e
   <midicc>-3</midicc>
   <label>MIDI KEYBOARD MUST SEND ON MIDI CHANNEL 1!</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -991,7 +991,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -1021,7 +1021,7 @@ e
   <midicc>-3</midicc>
   <label>(or you must change the massign statement in the orc header)</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

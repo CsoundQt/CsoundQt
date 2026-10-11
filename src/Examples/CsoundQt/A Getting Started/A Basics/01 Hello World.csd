@@ -63,7 +63,7 @@ e 							; e - ends the score
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <font>Courier</font>
+  <font>Liberation Mono</font>
   <fontsize>8</fontsize>
   <color>
    <r>0</r>
@@ -88,7 +88,7 @@ e 							; e - ends the score
   <midicc>-3</midicc>
   <label>This is a widget window. In this case, the Console Output is also visible here. More information about widgets can be found in the menu: Examples-> Widgets</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>

@@ -21,6 +21,7 @@
 */
 
 #include "quteconsole.h"
+#include "bundledfonts.h"
 
 QuteConsole::QuteConsole(QWidget *parent) : QuteWidget(parent)
 {
@@ -28,7 +29,7 @@ QuteConsole::QuteConsole(QWidget *parent) : QuteWidget(parent)
 	m_widget->setAutoFillBackground(true);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 	canFocus(false);
-    setProperty("CSQT_font", "Courier");
+    setProperty("CSQT_font", BundledFonts::monoFamilies().value(0, BundledFonts::defaultFamily()));
 	setProperty("CSQT_fontsize", 8.0);
 	setProperty("CSQT_bgcolor", QColor(Qt::white));
 	setProperty("CSQT_bgcolormode", false);

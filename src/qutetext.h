@@ -85,7 +85,7 @@ protected:
 	QSpinBox *borderRadius;
 	QSpinBox *borderWidth;
     QSpinBox *precisionSpinBox;
-	QFontComboBox  *font;
+	QComboBox  *font;
 	QSpinBox * fontSize;
 	QComboBox * alignment;
     QComboBox * vertAlignmentComboBox;

@@ -250,7 +250,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <label>Additive Synthesis 2</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -318,7 +318,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <label>1      2      3      4      5      6      7      8      9     10     11    12    13    14    15    16    17    18    19    20     21    22    23    24    25    26    27    28    29    30</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -724,7 +724,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <label>Fundamental (Hertz)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -755,7 +755,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <label>400.852</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -805,7 +805,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <label>Global Amplitude</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -836,7 +836,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <label>0.447</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -867,7 +867,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <label>Additive Synthesis 2 - 30 Harmonics</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -902,7 +902,7 @@ Perhaps an alternative approach would be to borrow aspects of subtractive synthe
 This example also allows control from a MIDI keyboard by setting the 'On (GUI) / Off (MIDI)' switch to Off (MIDI). The instrument will respond to note number, velocity and pitch bend.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1783,7 +1783,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <label>Amplitude Envelope</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1814,7 +1814,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <label>Modulation</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1875,7 +1875,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <label>Attack</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1906,7 +1906,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <label>0.081</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1968,7 +1968,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
 Level</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1999,7 +1999,7 @@ Level</label>
   <label>0.910</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2061,7 +2061,7 @@ Level</label>
 1</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2092,7 +2092,7 @@ Level</label>
   <label>0.600</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2154,7 +2154,7 @@ Level</label>
 Level</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2185,7 +2185,7 @@ Level</label>
   <label>0.530</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2247,7 +2247,7 @@ Level</label>
 2</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2278,7 +2278,7 @@ Level</label>
   <label>4.200</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2339,7 +2339,7 @@ Level</label>
   <label>Sustain</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2370,7 +2370,7 @@ Level</label>
   <label>0.530</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2431,7 +2431,7 @@ Level</label>
   <label>Release</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2462,7 +2462,7 @@ Level</label>
   <label>0.100</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2524,7 +2524,7 @@ Level</label>
 Rate</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2555,7 +2555,7 @@ Rate</label>
   <label>4.601</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2617,7 +2617,7 @@ Rate</label>
 Depth</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2648,7 +2648,7 @@ Depth</label>
   <label>0.004</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2710,7 +2710,7 @@ Depth</label>
 Depth</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2741,7 +2741,7 @@ Depth</label>
   <label>0.170</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2803,7 +2803,7 @@ Depth</label>
 Time</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2834,7 +2834,7 @@ Time</label>
   <label>0.450</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2896,7 +2896,7 @@ Time</label>
 Time</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2927,7 +2927,7 @@ Time</label>
   <label>0.870</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -2958,7 +2958,7 @@ Time</label>
   <label>Partial Strength</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

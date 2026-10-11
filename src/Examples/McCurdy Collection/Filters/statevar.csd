@@ -180,7 +180,7 @@ i 1		0	   3600		;GUI
   <label>-----------------------------------------------------------------------
 Statevar is a digital implmentation of an analogue state variable filter. The user is able to select the number of oversampling routines employed. Employing more oversampling will sharpen the cutoff slope. The opcode produces four output signals, a highpass filtered signal, a lowpass filtered signal, a bandpass filtered signal and a band reject filtered signal. Rather than send all four signals to the outputs simultaneously it would be more typical for the user to select one or perhaps two of the outputs either by switches or, as in this example, by sliders. The user is also offered control of the Q or resonance of the filter. A built in resonance limiter prevents the filter from becoming unstable.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -228,7 +228,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>481.774</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -275,7 +275,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -322,7 +322,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>7080.646</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -389,7 +389,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -416,7 +416,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -445,7 +445,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>Resonance</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -474,7 +474,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>Oversampling</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -502,7 +502,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -532,7 +532,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>Low Pass Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -561,7 +561,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -608,7 +608,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>High Pass Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -655,7 +655,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -684,7 +684,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>Band Reject Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -713,7 +713,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -760,7 +760,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>Band Pass Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -807,7 +807,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>

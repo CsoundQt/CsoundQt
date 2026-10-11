@@ -84,7 +84,7 @@ i 1 0 3600
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -113,7 +113,7 @@ i 1 0 3600
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -143,7 +143,7 @@ i 1 0 3600
   <midicc>0</midicc>
   <label>loop start</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -172,7 +172,7 @@ i 1 0 3600
   <midicc>0</midicc>
   <label>loop end</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -216,7 +216,7 @@ i 1 0 3600
   <midicc>0</midicc>
   <label>backwards</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -262,7 +262,7 @@ i 1 0 3600
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -309,7 +309,7 @@ i 1 0 3600
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -356,7 +356,7 @@ i 1 0 3600
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -401,7 +401,7 @@ i 1 0 3600
   <midicc>0</midicc>
   <label>phase lock</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -430,7 +430,7 @@ i 1 0 3600
   <midicc>0</midicc>
   <label>LOOPING WITH MINCER</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -478,7 +478,7 @@ i 1 0 3600
   <midicc>0</midicc>
   <label>speed</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -507,7 +507,7 @@ i 1 0 3600
   <midicc>0</midicc>
   <label>transposition (semitones)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -536,7 +536,7 @@ i 1 0 3600
   <midicc>0</midicc>
   <label>volume</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

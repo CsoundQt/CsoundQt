@@ -371,7 +371,7 @@ This example uses five 'reson' bandpass filters to imitate the filtering effect 
 Bandwidths can be warped in a similar fashion with the 'Bandwidths Multiply' control. The user can choose between three different input sources: the computer's live input, a 'buzz' tone and a soundfile. The 'buzz' tone provides a good imitation of the tone provided by the human vocal chords.
 When unpitched noise-like sounds (like the soundfile option) are used the resulting output resembles a whisper. The live audio input is stereo, reading from both channels. A matrix of 15 values boxes at the bottom of the GUI provides the user with information about current frequency, intensity and bandwidth values for the five formants. These boxes are displaying values only.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -419,7 +419,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>0.997</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -466,7 +466,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Bandwidths Multiply</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -514,7 +514,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -541,7 +541,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Audio File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -570,7 +570,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -617,7 +617,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -646,7 +646,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>2.744</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -693,7 +693,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Global Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -810,7 +810,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Live Input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -857,7 +857,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>1.634</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -958,7 +958,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>f1     f2     f3     f4     f5</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -987,7 +987,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Formant Gain</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1016,7 +1016,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>79.463</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1063,7 +1063,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Buzz Freq</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1092,7 +1092,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Frequencies Multiply</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1139,7 +1139,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1201,7 +1201,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>A</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1230,7 +1230,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>U</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1259,7 +1259,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>I</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1288,7 +1288,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>O</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1317,7 +1317,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>E</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1346,7 +1346,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Vowel</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1375,7 +1375,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>410.073</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1404,7 +1404,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>1301.296</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1433,7 +1433,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>3016.402</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1462,7 +1462,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>2723.888</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1491,7 +1491,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>3342.619</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1520,7 +1520,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>-25.958</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1549,7 +1549,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>-21.050</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1578,7 +1578,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>-23.981</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1607,7 +1607,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>-15.551</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1636,7 +1636,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1665,7 +1665,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>119.581</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1694,7 +1694,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>99.651</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1723,7 +1723,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>119.581</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1752,7 +1752,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>74.402</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1781,7 +1781,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>54.753</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1810,7 +1810,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Formant:</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1839,7 +1839,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Freq:</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1868,7 +1868,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>dB:</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1897,7 +1897,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>Bandwidth:</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1926,7 +1926,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>1</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1955,7 +1955,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>2</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1984,7 +1984,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>3</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2013,7 +2013,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>4</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2042,7 +2042,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <midicc>0</midicc>
   <label>5</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

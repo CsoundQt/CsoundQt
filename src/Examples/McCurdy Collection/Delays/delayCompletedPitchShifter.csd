@@ -204,7 +204,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -233,7 +233,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>0.476</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -323,7 +323,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <label>2.304</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -352,7 +352,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <label>Delay Time</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -399,7 +399,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <label>0.101</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -446,7 +446,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <label>Transposition (semitones)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -475,7 +475,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <label>Source</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -547,7 +547,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <label>0.182</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -576,7 +576,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <label>Feedback</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -624,7 +624,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -698,7 +698,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

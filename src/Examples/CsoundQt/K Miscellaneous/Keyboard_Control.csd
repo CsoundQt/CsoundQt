@@ -100,7 +100,7 @@ i 1 0 3600
   <midicc>-3</midicc>
   <label>The sensekey opcode can be used to receive keyboard action. It is VERY  IMPORTANT to click on the Dock Console or the Widget Panel to give it focus, otherwise key events will NOT be passed to Csound.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -129,7 +129,7 @@ i 1 0 3600
   <midicc>-3</midicc>
   <label>Keyboard control</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -158,7 +158,7 @@ i 1 0 3600
   <midicc>-3</midicc>
   <label>Key released. Code = 115</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

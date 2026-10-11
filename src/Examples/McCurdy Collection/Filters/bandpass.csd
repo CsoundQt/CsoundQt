@@ -261,7 +261,7 @@ i   2      0.1       0		;INIT
 This example is an implementation of a bandpass filter using Csound's butterworth bandpass filter (butterbp/butbp) but with some extra options added. Cutoff frequency and bandwidth can be controlled via the on-screen x-y panel. The actual value used for bandwidth is proportional to the current value of the cutoff frequency, this gives a slightly more musical response. The normal cutoff slope for a butterworth bandpass filter is 24 decibels per octave (dB/oct). By activating the slope switch the steepness of this slope is doubled to 48dB/oct by engaging another iteration of the butbp opcode. Activating the 'Balance' switch applies Csound's 'balance' opcode to the output of the filter, this opcode modifies the dynamics of the signal given to it to match those of the signal pre-filtering. The half-point of the smoothing of its response - effectively the response speed - can be adjusted. This is an i-rate variable so realtime adjustments causes discontinuities in the realtime audio output. Cutoff frequency, bandwidth and playback speed of the input sound file can also be modulated using MIDI controllers 1, 2 and 3 respectively. MIDI controller modulation is  reflected in the on screen sliders. If the instrument is activated by MIDI notes, MIDI pitch is interpretted as cutoff frequency, in this mode the GUI and MIDI controller assignment for cutoff frequency is ignored.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -313,7 +313,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>0.000</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -363,7 +363,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>Live Input Gain</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -414,7 +414,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <description/>
   <label>SynthPad.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -443,7 +443,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>Audio File</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -474,7 +474,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>Balance Half Point (Hz)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -524,7 +524,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>7.997</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -623,7 +623,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>Input</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -691,7 +691,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>1.000</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -741,7 +741,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>Playback Speed (CC#3)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -772,7 +772,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>X - Frequency (CC#1) Y - Bandwidth (CC#2)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -803,7 +803,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>0.224</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -834,7 +834,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>Bandwidth</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -865,7 +865,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>Frequency</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -896,7 +896,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>547.723</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -927,7 +927,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>1.160</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -977,7 +977,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1008,7 +1008,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>4.154</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1058,7 +1058,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>Release</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1089,7 +1089,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>Attack Time</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1139,7 +1139,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <label>0.050</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>

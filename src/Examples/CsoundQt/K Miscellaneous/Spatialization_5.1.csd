@@ -620,7 +620,7 @@ e
   <midicc>0</midicc>
   <label>Surround Panning Examples</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -682,7 +682,7 @@ e
   <midicc>0</midicc>
   <label>L</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -711,7 +711,7 @@ e
   <midicc>0</midicc>
   <label>SL</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -740,7 +740,7 @@ e
   <midicc>0</midicc>
   <label>R</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -769,7 +769,7 @@ e
   <midicc>0</midicc>
   <label>SR</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -798,7 +798,7 @@ e
   <midicc>0</midicc>
   <label>C</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -827,7 +827,7 @@ e
   <midicc>0</midicc>
   <label>0.011</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -856,7 +856,7 @@ e
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -885,7 +885,7 @@ e
   <midicc>0</midicc>
   <label>4.1</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -914,7 +914,7 @@ e
   <midicc>0</midicc>
   <label>x = </label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -943,7 +943,7 @@ e
   <midicc>0</midicc>
   <label>y =</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -972,7 +972,7 @@ e
   <midicc>0</midicc>
   <label>RMS Weighted Estimate on # of Active Speakers:</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1199,7 +1199,7 @@ e
   <midicc>0</midicc>
   <label>L</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1228,7 +1228,7 @@ e
   <midicc>0</midicc>
   <label>R</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1257,7 +1257,7 @@ e
   <midicc>0</midicc>
   <label>C</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1286,7 +1286,7 @@ e
   <midicc>0</midicc>
   <label>LFE</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1315,7 +1315,7 @@ e
   <midicc>0</midicc>
   <label>SL</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1344,7 +1344,7 @@ e
   <midicc>0</midicc>
   <label>SR</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1498,7 +1498,7 @@ e
   <midicc>0</midicc>
   <label>Panning Method</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1527,7 +1527,7 @@ e
   <midicc>0</midicc>
   <label>Movement</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1556,7 +1556,7 @@ e
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1585,7 +1585,7 @@ e
   <midicc>0</midicc>
   <label>label30</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1614,7 +1614,7 @@ e
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1643,7 +1643,7 @@ e
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1690,7 +1690,7 @@ e
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1719,7 +1719,7 @@ e
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1748,7 +1748,7 @@ e
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1777,7 +1777,7 @@ e
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1806,7 +1806,7 @@ e
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1835,7 +1835,7 @@ e
   <midicc>0</midicc>
   <label>-60</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1864,7 +1864,7 @@ e
   <midicc>0</midicc>
   <label>-40</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1893,7 +1893,7 @@ e
   <midicc>0</midicc>
   <label>-20</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1922,7 +1922,7 @@ e
   <midicc>0</midicc>
   <label>0</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1951,7 +1951,7 @@ e
   <midicc>0</midicc>
   <label>dB</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1980,7 +1980,7 @@ e
   <midicc>0</midicc>
   <label>-0.4 dB</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2009,7 +2009,7 @@ e
   <midicc>0</midicc>
   <label>RMS</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2037,7 +2037,7 @@ e
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
@@ -2066,7 +2066,7 @@ e
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
@@ -2096,7 +2096,7 @@ e
   <midicc>0</midicc>
   <label>x :</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2125,7 +2125,7 @@ e
   <midicc>0</midicc>
   <label>y :</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2154,7 +2154,7 @@ e
   <midicc>0</midicc>
   <label>Distance from Origin</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2183,7 +2183,7 @@ e
   <midicc>0</midicc>
   <label>0.00</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2212,7 +2212,7 @@ e
   <midicc>0</midicc>
   <label>generated</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2241,7 +2241,7 @@ e
   <midicc>0</midicc>
   <label>0.01</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2270,7 +2270,7 @@ e
   <midicc>0</midicc>
   <label>observed</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2299,7 +2299,7 @@ e
   <midicc>0</midicc>
   <label>-31.5 dB</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2328,7 +2328,7 @@ e
   <midicc>0</midicc>
   <label>-31.5 dB</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2357,7 +2357,7 @@ e
   <midicc>0</midicc>
   <label>-31.5 dB</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2386,7 +2386,7 @@ e
   <midicc>0</midicc>
   <label>-31.5 dB</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2415,7 +2415,7 @@ e
   <midicc>0</midicc>
   <label>-99.8 dB</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2444,7 +2444,7 @@ e
   <midicc>0</midicc>
   <label>Sound</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2488,7 +2488,7 @@ e
   <midicc>0</midicc>
   <label>Noise - or sound file:</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2551,7 +2551,7 @@ e
   <midicc>0</midicc>
   <label>Loop</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2613,7 +2613,7 @@ e
   <midicc>0</midicc>
   <label>L</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2642,7 +2642,7 @@ e
   <midicc>0</midicc>
   <label>SL</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2671,7 +2671,7 @@ e
   <midicc>0</midicc>
   <label>R</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2700,7 +2700,7 @@ e
   <midicc>0</midicc>
   <label>SR</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2729,7 +2729,7 @@ e
   <midicc>0</midicc>
   <label>C</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -2758,7 +2758,7 @@ e
   <midicc>0</midicc>
   <label>Selected / Generated Position</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -2787,7 +2787,7 @@ e
   <midicc>0</midicc>
   <label>Reconstructed Position</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2816,7 +2816,7 @@ e
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2845,7 +2845,7 @@ e
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2874,7 +2874,7 @@ e
   <midicc>0</midicc>
   <label>For "select position.." from the menu "Movement" the right controller below allows selecting a position by clicking onto the controller field. The panning follows any mouse movement as long as the mouse will be kept pressed. For other selections from the menue "Movement" the red dot in this field reflects the generated postion used for the panning while the green dot in the left field shows the position reconstructed from the amplitudes.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
   <color>

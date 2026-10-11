@@ -754,7 +754,7 @@ This instrument can be triggered either from the GUI button or via a connected M
   <midicc>0</midicc>
   <label>marmstk1.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -178,7 +178,7 @@ e
   <midicc>-3</midicc>
   <label>Back</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -207,7 +207,7 @@ e
   <midicc>-3</midicc>
   <label>Up</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -236,7 +236,7 @@ e
   <midicc>-3</midicc>
   <label>Down</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -265,7 +265,7 @@ e
   <midicc>-3</midicc>
   <label>Front</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -294,7 +294,7 @@ e
   <midicc>-3</midicc>
   <label>Back</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -323,7 +323,7 @@ e
   <midicc>-3</midicc>
   <label>Right</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -352,7 +352,7 @@ e
   <midicc>-3</midicc>
   <label>Left</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -439,7 +439,7 @@ e
   <midicc>-3</midicc>
   <label>212.1212</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -486,7 +486,7 @@ e
   <midicc>-3</midicc>
   <label>357.921</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -515,7 +515,7 @@ e
   <midicc>-3</midicc>
   <label>6.888</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -580,7 +580,7 @@ e
   <midicc>-3</midicc>
   <label>Azimuth</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -609,7 +609,7 @@ e
   <midicc>-3</midicc>
   <label>Elevation</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -706,7 +706,7 @@ e
   <midicc>-3</midicc>
   <label>Method</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -735,7 +735,7 @@ e
   <midicc>-3</midicc>
   <label>Signal</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -764,7 +764,7 @@ e
   <midicc>-3</midicc>
   <label>Binaural panning</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
   <color>
@@ -793,7 +793,7 @@ e
   <midicc>-3</midicc>
   <label>Level</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -822,7 +822,7 @@ e
   <midicc>-3</midicc>
   <label>Listen on headphones!</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -851,7 +851,7 @@ e
   <midicc>-3</midicc>
   <label>Front</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -880,7 +880,7 @@ e
   <midicc>-3</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
   <color>
@@ -909,7 +909,7 @@ e
   <midicc>-3</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
   <color>
@@ -938,7 +938,7 @@ e
   <midicc>-3</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
   <color>
@@ -967,7 +967,7 @@ e
   <midicc>-3</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -178,7 +178,7 @@ ATSadd performs additive synthesis based on analysis data stored in a file that 
 'Partials' defines the number of partials that will be used in the resysnthesis. Reducing this value significantly will limit the number of higher frequencies that can be reproduced and will therefore function as a lowpass filter. 'P.Offset' raises a threshold below which partials will not be reproduced. This will have the effect of removing lower frequencies and the effect will be that of a highpass filter. The time domain of the resynthesis is controlled using a time pointer. In this implementation the user can choose between manual manipulation of the time pointer or control of the speed of an automated moving pointer. 'P.Incr' defines the counter increment between subsequent partials that will be resynthesized. In a straight resynthesis this value should be 1 so that all partials are included. Values greater than 1 will result in partials being omitted in the resynthesis.
 The maximum partial number that can be with this example is 311. Certain combinations of 'Partials', 'P.Offset' and 'P.Incr' will demand partial numbers beyond this limit. These will not be reproduced so the user should anticipate this situation nby observing warnings given in the console output. Crashes can also occur if combinations of values are demanded that the opcode is not happy with.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -226,7 +226,7 @@ The maximum partial number that can be with this example is 311. Certain combina
   <midicc>0</midicc>
   <label>No of Partials</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -254,7 +254,7 @@ The maximum partial number that can be with this example is 311. Certain combina
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -283,7 +283,7 @@ The maximum partial number that can be with this example is 311. Certain combina
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -314,7 +314,7 @@ The maximum partial number that can be with this example is 311. Certain combina
   <label>Partials
 Offset</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -342,7 +342,7 @@ Offset</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -373,7 +373,7 @@ Offset</label>
   <label>Partials
 Increment</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -402,7 +402,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>0.500</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -449,7 +449,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>Pointer</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -478,7 +478,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>AndItsAll.ats</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -559,7 +559,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>Pointer Mode :</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -588,7 +588,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>0.500</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -635,7 +635,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>Pitch Modulation</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -664,7 +664,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>0.100</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -711,7 +711,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>Speed</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -740,7 +740,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>0.010</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -787,7 +787,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>Portamento Time</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -816,7 +816,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>0.926</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -863,7 +863,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>Reverb Amount</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -892,7 +892,7 @@ Increment</label>
   <midicc>0</midicc>
   <label>Analysis File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

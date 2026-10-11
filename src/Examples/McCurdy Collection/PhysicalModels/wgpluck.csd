@@ -1200,7 +1200,7 @@ I have included gain controls on the exitation signal and on the output signal o
   <midicc>0</midicc>
   <label>Songpan.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

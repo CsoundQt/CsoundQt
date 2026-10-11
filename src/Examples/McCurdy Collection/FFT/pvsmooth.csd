@@ -177,7 +177,7 @@ The two filters are given fractional values to represent their cutoff frequencie
 A variety of combinations of FFT analysis attributes are selectable using radio button selectors.
 It can be observed that smaller FFT size and window sizes result in less time smearing but greater harmonic distortion whereas larger FFT sizes and window sizes result in greater time smearing but less harmonic distortion.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -225,7 +225,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -284,7 +284,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -313,7 +313,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -377,7 +377,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>0.618</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -424,7 +424,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>Amplitude Cutoff Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -453,7 +453,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>Frequencies Cutoff Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -500,7 +500,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>0.478</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -529,7 +529,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -576,7 +576,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>1.536</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -605,7 +605,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>Dry Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -652,7 +652,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>0.854</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -700,7 +700,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>Voice</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -729,7 +729,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -756,7 +756,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -783,7 +783,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <label>Drum Loop</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -148,7 +148,7 @@ Or see:
 http://en.wikipedia.org/wiki/Printf#printf_format_placeholders
 In the Csound Manual you find some information under: printks </label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

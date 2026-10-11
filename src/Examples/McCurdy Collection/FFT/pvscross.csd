@@ -166,7 +166,7 @@ i 10		0	   3600	;GUI
   <label>---------------------------------------------------------------------------------------
 pvscross performs cross synthesis between two fsigs (streaming phase vocoding analysis signals). The harmonic content of a source signal will be imposed upon the dynamic contour of a destination signal. Typically the source signal should be dynamically steady and a harmonic or resonant, signal. The destination should be dynamically transient - a drum pattern or speech is typical. In this example the source sound is a rather cliched synthesizer pad sequence (but should give a good illustration of the typical usage of this opcode). The destination sound in this example is either the computer's live input or a drum loop. The source sound can be transposed in octave and in semitone steps. The two amplitude sliders control the amount of influence the source and destination sounds have on the amplitude contour of the output signal. The frequency envelope is always that of the source therefore the impact of raising the source amplitude is to increase the sense of the source in the output mix.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -214,7 +214,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <label>0.256</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -261,7 +261,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <label>Source Amplitude (amp 1)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -290,7 +290,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <label>Destination Amplitude (amp 2)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -337,7 +337,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <label>0.250</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -395,7 +395,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <label>Source Transpose</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -424,7 +424,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <label>loop.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -495,7 +495,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -543,7 +543,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <label>SynthPad.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -570,7 +570,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <label>Octaves</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -599,7 +599,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <label>Semitones</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -627,7 +627,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -656,7 +656,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>

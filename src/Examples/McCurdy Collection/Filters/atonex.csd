@@ -172,7 +172,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <label>--------------------------------------------------------------
 atonex is an implementation of a second-order high-pass filter. Its input arguments are for cutoff frequency (half-power point) and a counter selecting the number of series iterations of the high-pass filter it implements. The effect of this is the same as the effect of multiple serially connected atone filters. However, use of the atonex opcode will be computationally much more efficient.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -220,7 +220,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <midicc>0</midicc>
   <label>212.392</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -267,7 +267,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -315,7 +315,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -342,7 +342,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <midicc>0</midicc>
   <label>Audio File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -371,7 +371,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -418,7 +418,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <midicc>0</midicc>
   <label>0.536</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -466,7 +466,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <midicc>0</midicc>
   <label>Number of Layers</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -494,7 +494,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>

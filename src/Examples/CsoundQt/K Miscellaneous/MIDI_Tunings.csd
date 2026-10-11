@@ -828,7 +828,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>Scale Pool</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -857,7 +857,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>57</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -886,7 +886,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>Key Pressed</label>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -915,7 +915,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>-312.0</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -944,7 +944,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>Cent Difference in Relation to the Reference Frequency</label>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -973,7 +973,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>218.478</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1002,7 +1002,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>Frequency of this Key</label>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1031,7 +1031,7 @@ i "init" 0 1
   <midicc>0</midicc>
   <label>jh &amp;&amp; rb 2010/2012/2014</label>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1060,7 +1060,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>220.000</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1089,7 +1089,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>Usual Frequency of this Key</label>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1118,7 +1118,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>-12.0</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1147,7 +1147,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>Cent Difference Real Frequency to Usual Frequency</label>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1178,7 +1178,7 @@ i "init" 0 1
 0, 90, 192, 294, 390, 498, 588, 696, 792, 888, 996, 1092
 (after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 97)</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1263,7 +1263,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>Volume</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1424,7 +1424,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>0.5480</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1453,7 +1453,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>PLAYING SCALES WITH A MIDI KEYBOARD</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -1482,7 +1482,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>This CSD was designed to let you play virtually any scale with a standard MIDI keyboard. </label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1511,7 +1511,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>PLAYING</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1540,7 +1540,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>Just connect your MIDI keyboard (see the Configuration panel to select the MIDI input). Press START, select a scale from one of the menus on the left, and select a sound. If you wish, you can associate and trigger up to 8 scales with specific MIDI keys thereby allowing for fast switching and easy comparison.</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1569,7 +1569,7 @@ i "init" 0 1
   <midicc>-3</midicc>
   <label>ADDING USER DEFINED or NEW SCALES</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1603,7 +1603,7 @@ The SECOND VALUE lets you choose between three cases:
 2) if you type 1 you are giving a list of PROPORTIONS;
 3) any other value indicates an Equal Tempered Scale and gives as the second value the number of steps per Unit Multiplier.</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1632,7 +1632,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>NOTE: When you select a BP mode, it consists of 9 pitches (a unique subset of the 13 BP chromatic tones) and it is played on a MIDI keyboard chromatically starting from the REFERENCE KEY.  The 10th pitch is the "tritave" - a pure perfect 12th (an octave plus 5th) or a 3:1 frequency ratio.</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1661,7 +1661,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1730,7 +1730,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Select Sound</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1857,7 +1857,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1887,7 +1887,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Related Pitch</label>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1916,7 +1916,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>(Hertz)</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2010,7 +2010,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Select Scale By Menu</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -2038,7 +2038,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -2068,7 +2068,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Reference Key</label>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2097,7 +2097,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>(Midi-Number)</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2127,7 +2127,7 @@ The SECOND VALUE lets you choose between three cases:
   <label>Equal Tempered
 (1-10)</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2222,7 +2222,7 @@ The SECOND VALUE lets you choose between three cases:
   <label>Various
 (11-20)</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2317,7 +2317,7 @@ The SECOND VALUE lets you choose between three cases:
   <label>Bohlen-Pierce
 (21-30)</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2346,7 +2346,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -2539,7 +2539,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -2568,7 +2568,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -2598,7 +2598,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Scale</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2627,7 +2627,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Key</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2656,7 +2656,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Channel</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2849,7 +2849,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -2878,7 +2878,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3072,7 +3072,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3101,7 +3101,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3295,7 +3295,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3324,7 +3324,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3518,7 +3518,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3547,7 +3547,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3741,7 +3741,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3770,7 +3770,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3964,7 +3964,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3993,7 +3993,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -4187,7 +4187,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -4216,7 +4216,7 @@ The SECOND VALUE lets you choose between three cases:
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -4246,7 +4246,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Select Scale By MIDI Keys</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -4275,7 +4275,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Reverb (freeverb)</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4322,7 +4322,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Dry</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4351,7 +4351,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Wet</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4380,7 +4380,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Mix</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4427,7 +4427,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Small</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4456,7 +4456,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Large</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4485,7 +4485,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Room Size</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4532,7 +4532,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>No</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4561,7 +4561,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Yes</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4590,7 +4590,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>High Frequency Attenuation</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -4619,7 +4619,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 12</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4646,7 +4646,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>1 Halftones</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4675,7 +4675,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 18</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4702,7 +4702,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 Thirdtones</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4731,7 +4731,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 24</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4758,7 +4758,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>3 Quartertones</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4787,7 +4787,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 30</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4814,7 +4814,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>4 Fifthtones</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4843,7 +4843,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 36</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4870,7 +4870,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>5 Sixthtones</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4899,7 +4899,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 48</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4926,7 +4926,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>6 Eighttones</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -4955,7 +4955,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 72</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4982,7 +4982,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>7 Twelfthtones</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5011,7 +5011,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 96</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5038,7 +5038,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>8 Sixteenthtones</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5067,7 +5067,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>5 25</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5094,7 +5094,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>9 Stockhausen Studie II</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5123,7 +5123,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 0 76 193 310 386 503 579 697 773 890 1007 1083</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5150,7 +5150,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>10 User Defined</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5179,7 +5179,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 1 2187/2048 9/8 32/27 81/64 4/3 729/512 3/2 6561/4096 27/16 16/9 243/128</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5206,7 +5206,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>11 Pythagorean</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5235,7 +5235,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 0 76 193 310 386 503 579 697 773 890 1007 1083</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5262,7 +5262,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>12 Zarlino 1/4 Comma</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5291,7 +5291,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 0 90 192 294 390 498 588 696 792 888 996 1092</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5318,7 +5318,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>13 Werckmeister III</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5347,7 +5347,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 0 90 204 294 386 498 590 702 792 895 996 1088</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5374,7 +5374,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>14 Kirnberger II</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5403,7 +5403,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 0 90 112 182 204 294 316 386 408 498 520 590 610 702 792 814 884 906 996 1018 1088 1110</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5430,7 +5430,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>15 Indian Sruti I</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5459,7 +5459,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>0</midicc>
   <label>2 0 68 135 200 263 325 385 444 501 557 612 666 719 771 822 872 921 969 1017 1064 1110 1155</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5486,7 +5486,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>16 Indian Sruti II</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5515,7 +5515,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 1 2^1/12 2^1/11 2^1/10 2^1/9 2^1/8 2^1/7 2^1/6 2^1/5 2^1/4 2^1/3 2^1/2 </label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5542,7 +5542,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>17 User Defined</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5571,7 +5571,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 13</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5598,7 +5598,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>18 User Defined</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5627,7 +5627,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 12</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5654,7 +5654,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>19 User Defined</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5683,7 +5683,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>2 12</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5710,7 +5710,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>20 User Defined</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5739,7 +5739,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>3 13</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5766,7 +5766,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>21 BP Equal Tempered</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5795,7 +5795,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>3 1 27/25 25/21 9/7 7/5 75/49 5/3 9/5 49/25 15/7 7/3 63/25 25/9</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5822,7 +5822,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>22 BP Ratios</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5851,7 +5851,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>3 1 27/25 9/7 7/5 5/3 9/5 49/25 7/3 63/25</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5878,7 +5878,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>23 BP Dur I Mode</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5907,7 +5907,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>3 1 25/21 9/7 7/5 5/3 9/5 15/7 7/3 63/25</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5934,7 +5934,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>24 BP Dur II Mode</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -5963,7 +5963,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>3 1 25/21 9/7 75/49 5/3 9/5 15/7 7/3 25/9</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -5990,7 +5990,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>25 BP Moll I (Pierce) Mode </label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -6019,7 +6019,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>3 1 27/25 9/7 7/5 5/3 9/5 15/7 7/3 25/9</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -6046,7 +6046,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>26 BP Moll II (Delta) Mode</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -6075,7 +6075,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>3 1 27/25 9/7 7/5 5/3 9/5 49/25 7/3 25/9</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -6102,7 +6102,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>27 BP Gamma Mode</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -6131,7 +6131,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>3 1 27/25 9/7 7/5 5/3 9/5 15/7 7/3 63/25</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -6158,7 +6158,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>28 BP Harmonic Mode</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -6187,7 +6187,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>3 1 25/21 9/7 7/5 5/3 9/5 15/7 7/3 25/9</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -6214,7 +6214,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>29 BP Lambda Mode</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -6243,7 +6243,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>0</midicc>
   <label>3 13</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -6270,7 +6270,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>30 User Defined</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -6299,7 +6299,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -6328,7 +6328,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>0</midicc>
   <label>Push here if you changed scales while Csound is running</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -6376,7 +6376,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -6405,7 +6405,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <label>Current MIDI Event</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -6437,7 +6437,7 @@ Velocity = 101
 Channel = 1
 </label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

@@ -125,7 +125,7 @@ e
   <label>See how the SAW output-waveform changes, because of the used LP filter and the modulation.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

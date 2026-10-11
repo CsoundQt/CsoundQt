@@ -191,7 +191,7 @@ schedule 10, 0, 100
   <label>Table Plot Widget</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>36</fontsize>
   <precision>3</precision>
   <color>

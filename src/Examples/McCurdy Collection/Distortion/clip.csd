@@ -146,7 +146,7 @@ i 1		0	   3600	;GUI
   <midicc>0</midicc>
   <label>Limit</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -175,7 +175,7 @@ i 1		0	   3600	;GUI
   <midicc>0</midicc>
   <label>0.009</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -237,7 +237,7 @@ The 'clip' opcode provides audio signal soft clipping using one of three differe
 'Clipping Point' defines the point at which clipping starts and is only ised in the Bram de Jong method.
 A 'Post Gain' control is included so that the user can compensate for the loss of gain that occurs when the signal is clipped.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -266,7 +266,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <midicc>0</midicc>
   <label>Clipping Point (B.d.J Method only)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -313,7 +313,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <midicc>0</midicc>
   <label>0.164</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -391,7 +391,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <midicc>0</midicc>
   <label>Method</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -420,7 +420,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <midicc>0</midicc>
   <label>12.707</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -449,7 +449,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <midicc>0</midicc>
   <label>Post Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -515,7 +515,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <midicc>0</midicc>
   <label>808loopMono.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

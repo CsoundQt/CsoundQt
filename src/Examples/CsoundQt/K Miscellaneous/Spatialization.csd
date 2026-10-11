@@ -426,7 +426,7 @@ e
   <midicc>-3</midicc>
   <label>48.311</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -455,7 +455,7 @@ e
   <midicc>-3</midicc>
   <label>0.000</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -484,7 +484,7 @@ e
   <midicc>-3</midicc>
   <label>Azimuth</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -513,7 +513,7 @@ e
   <midicc>-3</midicc>
   <label>Spread (VBAP)</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -543,7 +543,7 @@ e
   <label>Speaker
 Configuration</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -611,7 +611,7 @@ Note that for Ambisonics the theoretical minimum for speakers are 4 (1st order),
 
 The Stereo configuration is more for fun. In general, use pan2 for this case.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -639,7 +639,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -669,7 +669,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <midicc>-3</midicc>
   <label>Output </label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -697,7 +697,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -726,7 +726,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -755,7 +755,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -784,7 +784,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -813,7 +813,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -842,7 +842,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -871,7 +871,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -1430,7 +1430,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <label>Spatialization
 Method</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1494,7 +1494,7 @@ Method</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1523,7 +1523,7 @@ Method</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1552,7 +1552,7 @@ Method</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1581,7 +1581,7 @@ Method</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1610,7 +1610,7 @@ Method</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1639,7 +1639,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>1</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1668,7 +1668,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>2</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1697,7 +1697,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>3</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1726,7 +1726,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>4</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1755,7 +1755,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>6</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1784,7 +1784,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>5</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1813,7 +1813,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>8</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1842,7 +1842,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>7</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1871,7 +1871,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>Routing</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1900,7 +1900,7 @@ Method</label>
   <midicc>0</midicc>
   <label>Logical Channel</label>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1929,7 +1929,7 @@ Method</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1958,7 +1958,7 @@ Method</label>
   <midicc>-3</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -1987,7 +1987,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>1</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2016,7 +2016,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>2</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2045,7 +2045,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>3</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2074,7 +2074,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>4</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2103,7 +2103,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>5</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2132,7 +2132,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>6</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2161,7 +2161,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>7</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2190,7 +2190,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>8</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2238,7 +2238,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>Sound Input</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2267,7 +2267,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>Loop</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2311,7 +2311,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>Volume</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2340,7 +2340,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>+0 dB</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2369,7 +2369,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>SPATIALIZATION WITH VBAP AND AMBISONICS</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>30</fontsize>
   <precision>3</precision>
   <color>
@@ -2398,7 +2398,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>Live Input</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2427,7 +2427,7 @@ Method</label>
   <midicc>-3</midicc>
   <label>Input Select</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -2487,7 +2487,7 @@ Method</label>
   <label>Input
 Channel</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2515,7 +2515,7 @@ Channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -2563,7 +2563,7 @@ Channel</label>
   <midicc>-3</midicc>
   <label>Gain</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2592,7 +2592,7 @@ Channel</label>
   <midicc>-3</midicc>
   <label>+0 dB</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2705,7 +2705,7 @@ Channel</label>
   <midicc>0</midicc>
   <label>Requires Csound 5.13 or higher because of the filevalid opcode</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

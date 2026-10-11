@@ -203,7 +203,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Live Input Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -232,7 +232,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>0.002</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -320,7 +320,7 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midicc>0</midicc>
   <label>0.218</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -349,7 +349,7 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midicc>0</midicc>
   <label>Dry/Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -396,7 +396,7 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midicc>0</midicc>
   <label>0.502</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -443,7 +443,7 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midicc>0</midicc>
   <label>Delay Time (sec.)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -490,7 +490,7 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midicc>0</midicc>
   <label>0.668</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -519,7 +519,7 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midicc>0</midicc>
   <label>Feedback Amount</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -548,7 +548,7 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midicc>0</midicc>
   <label>0.702</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -577,7 +577,7 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midicc>0</midicc>
   <label>Output Amplitude Rescaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

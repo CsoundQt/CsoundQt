@@ -340,7 +340,7 @@ ioButton {301, 50} {105, 41} value 1.000000 "_Play" "Start" "/" i1 0 10
   <label>Dew</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -371,7 +371,7 @@ ioButton {301, 50} {105, 41} value 1.000000 "_Play" "Start" "/" i1 0 10
   <label>Tom Banados Russell</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -402,7 +402,7 @@ ioButton {301, 50} {105, 41} value 1.000000 "_Play" "Start" "/" i1 0 10
   <label>The piece "Dew" is constantly evolving to different circumstances. This is the code used in all these evolutions.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

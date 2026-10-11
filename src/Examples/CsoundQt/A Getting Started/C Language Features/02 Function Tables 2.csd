@@ -139,7 +139,7 @@ e
   <midicc>-3</midicc>
   <label>In this graph, one can see the result of the  generated F-Table values.</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -168,7 +168,7 @@ e
   <midicc>-3</midicc>
   <label>The output-waveform..</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

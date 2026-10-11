@@ -229,7 +229,7 @@ i 10 0 3600
   <midicc>0</midicc>
   <label>-24.000</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -258,7 +258,7 @@ i 10 0 3600
   <midicc>0</midicc>
   <label>-7.500</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -409,7 +409,7 @@ i 10 0 3600
   <midicc>0</midicc>
   <label>X = Azimuth (Degrees)</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -439,7 +439,7 @@ i 10 0 3600
   <label>Y = Elevation
  (Degrees)</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -508,7 +508,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>hrtfmove</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -537,7 +537,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>Mode :</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -609,7 +609,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>8.981</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -638,7 +638,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>Fade</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -667,7 +667,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>hrtfmove2</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -696,7 +696,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>hrtfstat</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -725,7 +725,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>Overlap</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -754,7 +754,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>4.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -801,7 +801,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>Radius</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -830,7 +830,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>9.036</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -877,7 +877,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>Radius</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -906,7 +906,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>14.966</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -972,7 +972,7 @@ Off and On the instrument after changing Audio file.</label>
   <midicc>0</midicc>
   <label>Bounce.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

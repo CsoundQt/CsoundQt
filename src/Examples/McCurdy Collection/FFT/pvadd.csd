@@ -186,7 +186,7 @@ i  1      0       3600					;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <label>-----------------------------------------------------------------------------------------------------------------------------
 pvadd performs FFT resynthesis on a analysis data file that has been created using the pvanal utility that comes with Csound. Pvadd is very similar to pvoc but offers some additional user control regarding precisely how the resynthesis will be carried out. Additionally it asks for the user to supply the waveform that will be used in the resynthesis. Normally this will be a sine wave but special effects are possible by using other waveforms. The input arguments required by the opcode include one for pitch ratio between the resynthesized sound and the original sound and for time location within the analysis file from which to resynthesise. This example offers two ways in which to control this variable according to how the 'Pointer Switch' is set. When in 'Pointer' mode the 'Pointer' slider is simply used to move the variable ('Speed Control' slider is ignored). When 'Pointer Switch' is set to 'Speed Control' then the 'Speed Control' slider is used to control the speed of the movement of the pointer through the analysis file. This value is given as a ratio between the resynthesized sound to the original sound ('Pointer' slider is ignored). Optional arguments are also used in this example. When 'Spec. Env.' (spectral enveloping) is on the opcode attempts to preserve the spectral envelope of the original sound. The audible upshot of this is most clearly heard when resynthesizing speech in which transpositions up or down are heard as the person speaking higher or lower rather than as a complete transformation of the character of the voice. 'Extract Mode' and 'Frequency Limit' are used in combination and can be set to filter either resonant components of the sound or noise based components of the sound. If 'Extract Mode' is set to '1' (greater than frequency limit) and 'Frequency Limit' is given a value grater than zero then noise aspects of the sound are favoured in the resynthesis and if 'Frequency Limit' is set to '2' (less than frequency limit) and 'Frequency Limit' is given a value greater than zero then resonant aspects of the sound will be favoured. Using a gating function (table) allows spectrally informed dynamic modification of the sound (akin to a complex multi-band compressor). Two function shapes are offered by this example.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -234,7 +234,7 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
   <midicc>0</midicc>
   <label>0.498</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -281,7 +281,7 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
   <midicc>0</midicc>
   <label>Portamento Amount</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -329,7 +329,7 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
   <midicc>0</midicc>
   <label>loop.pvx</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -356,7 +356,7 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
   <midicc>0</midicc>
   <label>Bin Offset</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -384,7 +384,7 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -413,7 +413,7 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -444,7 +444,7 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
   <label>Number
 of Bins</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -473,7 +473,7 @@ of Bins</label>
   <midicc>0</midicc>
   <label>Bin Increment</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -501,7 +501,7 @@ of Bins</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -531,7 +531,7 @@ of Bins</label>
   <midicc>0</midicc>
   <label>Analysis File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -561,7 +561,7 @@ of Bins</label>
   <label>Frequency
 Limit</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -589,7 +589,7 @@ Limit</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -619,7 +619,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Gating Function</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -648,7 +648,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Pitch (portamento applied)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -695,7 +695,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>1.554</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -724,7 +724,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Pointer (portamento applied)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -771,7 +771,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>0.500</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -800,7 +800,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Speed</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -847,7 +847,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>1.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -876,7 +876,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -923,7 +923,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>0.550</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -1007,7 +1007,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Extract Mode</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1036,7 +1036,7 @@ Limit</label>
   <midicc>0</midicc>
   <label>Resynthesis Waveform</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

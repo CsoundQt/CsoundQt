@@ -175,7 +175,7 @@ i 1		0	   3600		;GUI
   <label>---------------------------------------------------------------
 pareq is an implementation of Zoelzer's parametric equalizer filters. The interface presented here reflects pareq's input arguments and their functions should be familiar from parametric equalisers found in the studio. An output amplitude control is included to compenstate for gain peaks caused by high settings of 'Parametric Gain' and 'Q'.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -223,7 +223,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>187.581</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -270,7 +270,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>Cutoff Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -299,7 +299,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>Parametric Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -346,7 +346,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>7.600</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -375,7 +375,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>3.678</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -422,7 +422,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>Q</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -451,7 +451,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>0.712</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -498,7 +498,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>Output Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -565,7 +565,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -592,7 +592,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -651,7 +651,7 @@ pareq is an implementation of Zoelzer's parametric equalizer filters. The interf
   <midicc>0</midicc>
   <label>Mode</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

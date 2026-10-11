@@ -178,7 +178,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <label>------------------------------------------------------------------------------------------------
 clfilt implements low and high-pass filters of various types. Experimentation is needed and care must be taken as certain combinations of setting can crash Csound. The number of poles (an even number between 2 and 80) directly relates to the steepness of the cutoff slope. Four types of filter are offered: Butterworth, Chebyshev Type I, Chebyshev Type II and Elliptical (not implemented yet but included in this example for the future). The filter type argument is optional and defaults to Butterworth. Pass band ripple (optional, defaults to 1dB) controls the amplitude of the ripple at the cutoff frequency. (This is heard as a resonance at the cutoff frequency.) The pass band ripple control is ignored by Butterworth and Chebyshev Type II. Stop Band Attenuation (optional, default -60dB) controls the amount of attenuation (in dBs) that is imposed beyond the cutoff frequency. Stop Band Attenuation is ignored by Butterworth and Chebyshev Type I. An optional 2-way switch (default=0) is used to select whether the data space for feedback within the filter is initially cleared or allowed to retain previously held information.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -226,7 +226,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <midicc>0</midicc>
   <label>140.309</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -273,7 +273,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -321,7 +321,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -348,7 +348,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <midicc>0</midicc>
   <label>Audio File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -377,7 +377,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <midicc>0</midicc>
   <label>Output Amplitude Rescaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -424,7 +424,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <midicc>0</midicc>
   <label>2.220</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -472,7 +472,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <midicc>0</midicc>
   <label>14.471</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -519,7 +519,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <midicc>0</midicc>
   <label>Pass Band Ripple (Chebyshev Type I and Elliptical)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -548,7 +548,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <midicc>0</midicc>
   <label>-44.896</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -595,7 +595,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <midicc>0</midicc>
   <label>Stop Band Attenuation (Chebyshev Type II and Elliptical)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -650,7 +650,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   <label>Number
 of Poles</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -678,7 +678,7 @@ of Poles</label>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -708,7 +708,7 @@ of Poles</label>
   <midicc>0</midicc>
   <label>Type</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -772,7 +772,7 @@ of Poles</label>
   <midicc>0</midicc>
   <label>Design</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

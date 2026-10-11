@@ -111,7 +111,7 @@ e
   <midicc>-3</midicc>
   <label>457.200</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -185,7 +185,7 @@ e
   <midicc>-3</midicc>
   <label>Oscil family</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -304,7 +304,7 @@ e
   <midicc>-3</midicc>
   <label>Vco2 family</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -358,7 +358,7 @@ e
   <midicc>-3</midicc>
   <label>Oscillator family</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -412,7 +412,7 @@ e
   <midicc>-3</midicc>
   <label>Oscil are table oscillators. Vco2 are bandlimited oscillators</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -459,7 +459,7 @@ e
   <midicc>-3</midicc>
   <label>Freq</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -506,7 +506,7 @@ e
   <midicc>-3</midicc>
   <label>0.090</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -535,7 +535,7 @@ e
   <midicc>-3</midicc>
   <label>Level</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

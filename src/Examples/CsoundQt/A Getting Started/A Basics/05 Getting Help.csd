@@ -88,7 +88,7 @@ e
   <label>This is a widget window. More information about widgets can be found in the menu: Examples-> Widgets</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -119,7 +119,7 @@ e
   <label>This label displays the current frequency:</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -150,7 +150,7 @@ e
   <label>674.407</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Nimbus Sans [urw]</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>

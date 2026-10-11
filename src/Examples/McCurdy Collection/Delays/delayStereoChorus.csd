@@ -175,7 +175,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Oscillator Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -204,7 +204,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>0.542</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -268,7 +268,7 @@ This example uses independent LFOs on the left and right channels. The user can 
 Offsetting the phase of the right hand LFO creates a broad stereo effect. Giving it a value of 0 radians will render the effect monophonic.
 If the Dry/Wet control is set at 100% wet, and the phase of right hand channel LFO is set at 0 radians then a simple vibrato effect results.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -297,7 +297,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>101.430</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -326,7 +326,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>Tone</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -391,7 +391,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>0.617</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -420,7 +420,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>0.438</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -467,7 +467,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>0.584</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -532,7 +532,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>0.011</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -579,7 +579,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>0.714</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -608,7 +608,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>1114.777</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -655,7 +655,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>Oscillator Freq</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -684,7 +684,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>Resonance</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -713,7 +713,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>Right Channel Phase (radians)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -742,7 +742,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -771,7 +771,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>Chorus Modulation Depth</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -800,7 +800,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <label>Chorus Modulation Rate</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -136,7 +136,7 @@ i 99 0 3600
   <label>Widget Animation Demo</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>

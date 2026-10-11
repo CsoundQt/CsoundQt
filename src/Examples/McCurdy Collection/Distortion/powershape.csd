@@ -144,7 +144,7 @@ i 1		0	   3600	;GUI
   <label>Waveshaping Amount</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -175,7 +175,7 @@ i 1		0	   3600	;GUI
   <label>0.808</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -240,7 +240,7 @@ The opcode is given a value for the maximum expected amplitude of the input sign
 An output gain control is added to allow for compensating for gain increase or decrease depending on waveshaping amount.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -271,7 +271,7 @@ An output gain control is added to allow for compensating for gain increase or d
   <label>Output Gain</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -321,7 +321,7 @@ An output gain control is added to allow for compensating for gain increase or d
   <label>0.880</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -395,7 +395,7 @@ An output gain control is added to allow for compensating for gain increase or d
   <description/>
   <label>808loopMono.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

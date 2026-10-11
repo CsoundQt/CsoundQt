@@ -172,7 +172,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <label>---------------------------------------------------------------------------------
 butterlp/butlp is an implementation of a second-order IIR Butterworth low-pass filter. Its input arguments are for filter cutoff frequency (in hertz) and an optional 2-way switch (default=0) to select whether the data space for feedback within the filter is initially cleared or allowed to retain previously held information. butterlp/butlp are slower than the original filters in Csound but provide an almost flat passband and very good precision and stopband attenuation Multiple iterations of the butterlp/butlp opcode applied to the signal path in series can be used to create a sharper cutoff slope.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -220,7 +220,7 @@ butterlp/butlp is an implementation of a second-order IIR Butterworth low-pass f
   <midicc>0</midicc>
   <label>551.044</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -267,7 +267,7 @@ butterlp/butlp is an implementation of a second-order IIR Butterworth low-pass f
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -315,7 +315,7 @@ butterlp/butlp is an implementation of a second-order IIR Butterworth low-pass f
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -342,7 +342,7 @@ butterlp/butlp is an implementation of a second-order IIR Butterworth low-pass f
   <midicc>0</midicc>
   <label>Audio File</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -371,7 +371,7 @@ butterlp/butlp is an implementation of a second-order IIR Butterworth low-pass f
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -418,7 +418,7 @@ butterlp/butlp is an implementation of a second-order IIR Butterworth low-pass f
   <midicc>0</midicc>
   <label>1.072</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>

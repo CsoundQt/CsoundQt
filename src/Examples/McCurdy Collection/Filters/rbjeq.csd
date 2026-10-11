@@ -203,7 +203,7 @@ i 1		0	   3600		;GUI
   <label>----------------------------------------------------------------------------------------
 rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an algorithm by Robert Bristow-Johnson, which was subsequently written in Csound orchestra code by Josep M Comajuncosas and converted into C and into an opcode by Istvan Varga. Two source signal inputs are offered in this example, either a sound file or a sawtooth waveform. 'Gain' controls the amount of boost or cut that the filter applies. A value of 1 specifies no boost or cut. Values lower than 1 attenuate and values above 1 boost amplitude according to the filter or EQ mode selected. This parameter should not be zero. 'Slope' defines the steepness of the filter at the cutoff frequency. The function of 'Q' varies depending upon which filter/EQ type has been selected: When 'lowpass' or 'highpass' is selected 'Q' controls resonance. When 'bandpass', 'band-reject' or 'peaking EQ' is selected 'Q' controls bandwidth. When 'low shelf; or 'high shelf' is selected 'Q' is ignored. The Csound Manual goes into greater detail about this opcode and is recomended for further reading.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -251,7 +251,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>1371.425</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -298,7 +298,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>Cutoff Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -327,7 +327,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -374,7 +374,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>0.069</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -403,7 +403,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>0.622</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -450,7 +450,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>Slope</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -479,7 +479,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>0.178</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -526,7 +526,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -593,7 +593,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>Seashore.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -620,7 +620,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -699,7 +699,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>Mode</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -753,7 +753,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>0.006</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -800,7 +800,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>Q</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -829,7 +829,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>Sawtooth Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -876,7 +876,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>262.156</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -905,7 +905,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -144,7 +144,7 @@ i 1		0	   3600	;GUI
   <midicc>0</midicc>
   <label>Bit Depth</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -173,7 +173,7 @@ i 1		0	   3600	;GUI
   <midicc>0</midicc>
   <label>04</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -233,7 +233,7 @@ i 1		0	   3600	;GUI
 This example uses a mathematical quantizing procedure upon an audio signal to create the effect of lower bit depth sample storage.
 The example is designed to work with 16 bit samples but could easily be adapted to work with samples of other depths.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -262,7 +262,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <midicc>0</midicc>
   <label>Output Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -309,7 +309,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <midicc>0</midicc>
   <label>0.392</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -387,7 +387,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <midicc>0</midicc>
   <label>Inputs</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -435,7 +435,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -462,7 +462,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <midicc>0</midicc>
   <label>Voice File select</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -491,7 +491,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <midicc>0</midicc>
   <label>Drums File select</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -520,7 +520,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <midicc>0</midicc>
   <label>808loopMono.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

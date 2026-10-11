@@ -461,7 +461,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Lauridsen method</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -490,7 +490,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>ms</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -519,7 +519,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Delay time</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -584,7 +584,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Level</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -613,7 +613,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>4.156</label>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -642,7 +642,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Schroeder method</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -671,7 +671,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>ms</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -700,7 +700,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Delay time</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -747,7 +747,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>3.483</label>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -831,7 +831,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Orban method</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -860,7 +860,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Width gain</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -932,7 +932,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Second filter mode</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -980,7 +980,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Gerzon method</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1009,7 +1009,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Width</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1143,7 +1143,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Second filter mode</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1172,7 +1172,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>ADT method</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1201,7 +1201,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>ms</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1230,7 +1230,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Delay time</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1277,7 +1277,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>4.382</label>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1336,7 +1336,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Flutter type</label>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1395,7 +1395,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Wow type</label>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1460,7 +1460,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>0.100</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1507,7 +1507,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>0.052</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1536,7 +1536,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>4.879</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1583,7 +1583,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>0.090</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1612,7 +1612,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Freq</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1641,7 +1641,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Amt</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1670,7 +1670,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Freq</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1699,7 +1699,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Amt</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1728,7 +1728,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Inverted Chorus method</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -1757,7 +1757,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>ms</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1786,7 +1786,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Delay time</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1833,7 +1833,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>3.905</label>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1892,7 +1892,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>-3</midicc>
   <label>Flutter type</label>
   <alignment>right</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1921,7 +1921,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Freq</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1950,7 +1950,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>0.793</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2015,7 +2015,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Width</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2044,7 +2044,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Kendall method</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -2137,7 +2137,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>FIlter length</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2166,7 +2166,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>Method</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -2214,7 +2214,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <midicc>0</midicc>
   <label>/home/andres/Music/The Tallis Scholars/Missa Et ecce terrae motus/05-Agnus Dei.flac</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

@@ -156,7 +156,7 @@ i 1		0	   3600		;GUI
   <label>----------------------------------------------------------------------------------------------------------------------------
 This example demonstrates FM (frequency modulation) synthesis in its simplest form. Two oscillators are used (one will be referred to as the 'carrier' and the other as the 'modulator'). Both oscillators employ a sine wave shape (as is most often the case in FM synthesis). The frequency (pitch) of the carrier is modulated (through addition) by the audio output of the modulator. Only the audio output of the carrier will be present at the final audio outputs of the FM synthesis algorithm. (The modulator is heard indirectly through its influence upon the frequency of the carrier.) In this example the user is given direct control over the amplitudes and frequencies of the modulator and carrier oscillators. This is probably not the most useful design for FM synthesis but should provide a clearer idea of how the modulator and carrier interact. First of all adjust the carrier amplitude. Notice how this functions as a simple volume control. It has no effect on timbre. Next adjust the modulator amplitude. Notice how this varies the brightness or spectral intensity of the sound. When this is set at zero we are left with a pure sine tone (not silence!). When we vary the modulator and carrier frequencies this changes the nature of the timbre. (These parameters are adjusted by either clicking and dragging left and right on the values displayed or by clicking a cursor into the box and typing in a new value.) Notice how when the modulator and carrier frequencies are in simple ratio with one another harmonic spectra are produced. For example when M.F. (modulator frequency) is 300 Hz and when C.F. (carrier frequency) is 200. Notice how when M.F. and C.F. are not in simple ratio with one another inharmonic spectra are produced. For example when M.F. is 277 and C.F. is 200. Notice how when one frequency is slowly detuned away from a simple ratio with respect to the other a kind of timbral 'beating' is heard. As the amount of detuning increases the rate of beating increases until it is no longer perceivable. In general the modulator amplitude should be quite low in order to produce more interesting timbres that are not excessively shrill. As M.F. and C.F. are lowered the modulator amplitude should be also be lowered to maintain a constant spectral intensity. This is why in conventionally implemented FM synthesis a new parameter called 'the index of modulation' is derived that is directly proportional to the peak deviation (amplitude) of the modulator and inversely proportional to carrier modulator frequency. The next example makes use of the 'index of modulation' formula.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -204,7 +204,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <midicc>0</midicc>
   <label>668.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -251,7 +251,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <midicc>0</midicc>
   <label>Modulator Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -280,7 +280,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <midicc>0</midicc>
   <label>Carrier Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -327,7 +327,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <midicc>0</midicc>
   <label>3360.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -356,7 +356,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <midicc>0</midicc>
   <label>Carrier Frequency</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -385,7 +385,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <midicc>0</midicc>
   <label>Modulator Frequency</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -442,7 +442,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>

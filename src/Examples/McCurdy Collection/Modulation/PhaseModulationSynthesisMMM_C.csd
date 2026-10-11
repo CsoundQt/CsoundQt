@@ -148,7 +148,7 @@ i 2	     0.1		 0		;INIT
   <midicc>0</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -177,7 +177,7 @@ i 2	     0.1		 0		;INIT
   <midicc>0</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -255,7 +255,7 @@ An implementation of phase modulation synthesis in which 3 parallel modulators m
   <midicc>0</midicc>
   <label>0.300</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -302,7 +302,7 @@ An implementation of phase modulation synthesis in which 3 parallel modulators m
   <midicc>0</midicc>
   <label>Carrier Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -360,7 +360,7 @@ An implementation of phase modulation synthesis in which 3 parallel modulators m
   <midicc>0</midicc>
   <label>:</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>27</fontsize>
   <precision>3</precision>
   <color>
@@ -765,7 +765,7 @@ Frequency</label>
   <midicc>0</midicc>
   <label>:</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>27</fontsize>
   <precision>3</precision>
   <color>
@@ -1015,7 +1015,7 @@ Frequency</label>
   <midicc>0</midicc>
   <label>:</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>27</fontsize>
   <precision>3</precision>
   <color>

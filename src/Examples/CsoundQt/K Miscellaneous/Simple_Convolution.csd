@@ -141,7 +141,7 @@ i 1 0 1; plays the whole soundfile
   <description/>
   <label>fox.wav</label>
   <alignment>left</alignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -192,7 +192,7 @@ i 1 0 1; plays the whole soundfile
   <label>SIMPLE CONVOLUTION</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -222,7 +222,7 @@ i 1 0 1; plays the whole soundfile
   <description/>
   <label>impulse_big_hall.wav</label>
   <alignment>left</alignment>
-  <font>Bitstream Vera Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -292,7 +292,7 @@ i 1 0 1; plays the whole soundfile
   <label>Wet-Dry Mix</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -323,7 +323,7 @@ i 1 0 1; plays the whole soundfile
   <label>Dry</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -354,7 +354,7 @@ i 1 0 1; plays the whole soundfile
   <label>Wet</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -552,7 +552,7 @@ i 1 0 1; plays the whole soundfile
   <label>Gain</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -583,7 +583,7 @@ i 1 0 1; plays the whole soundfile
   <label>dB</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -614,7 +614,7 @@ i 1 0 1; plays the whole soundfile
   <label>-14.148</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

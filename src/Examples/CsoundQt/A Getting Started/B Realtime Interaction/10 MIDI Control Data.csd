@@ -127,7 +127,7 @@ e
   <midicc>-3</midicc>
   <label>Reverb Mix</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -174,7 +174,7 @@ e
   <midicc>-3</midicc>
   <label>Delay Mix</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -239,7 +239,7 @@ e
   <midicc>-3</midicc>
   <label>Time</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -268,7 +268,7 @@ e
   <midicc>-3</midicc>
   <label>Feedback</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -297,7 +297,7 @@ e
   <midicc>-3</midicc>
   <label>DELAY SECTION</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -326,7 +326,7 @@ e
   <midicc>-3</midicc>
   <label>Dry</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -355,7 +355,7 @@ e
   <midicc>-3</midicc>
   <label>Wet</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -384,7 +384,7 @@ e
   <midicc>-3</midicc>
   <label>Dry</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -413,7 +413,7 @@ e
   <midicc>-3</midicc>
   <label>Wet</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -442,7 +442,7 @@ e
   <midicc>-3</midicc>
   <label>REVERB SECTION</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -471,7 +471,7 @@ e
   <midicc>-3</midicc>
   <label>50-1000 ms</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -500,7 +500,7 @@ e
   <midicc>-3</midicc>
   <label>0-100 %</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -529,7 +529,7 @@ e
   <midicc>-3</midicc>
   <label>Filterfrequency Control with CC 01 (Modulation)</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -558,7 +558,7 @@ e
   <midicc>-3</midicc>
   <label>SYNTH SECTION</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>

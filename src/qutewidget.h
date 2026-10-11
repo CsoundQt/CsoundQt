@@ -178,8 +178,12 @@ protected slots:
 
 private:
 
+	static bool hasCopiedStyle(QuteWidgetType type);
+	void applyStyleMap(const QVariantMap &style);
+
 	QAction *propertiesAct;
-	QAction *addChn_kAct;
+	QAction *copyStyleAct;
+	QAction *applyStyleAct;
 
 
 	QPushButton *applyButton;
@@ -187,8 +191,9 @@ private:
 	QPushButton *acceptButton;
 
 private slots:
-    void addChn_k();
     void showAvailableProperties(); // Opens a filterable list of the widget's addressable properties
+    void copyStyle();
+    void applyStyle();
 
 signals:
 	void newValue(QPair<QString,double> channelValue);
@@ -197,7 +202,6 @@ signals:
 	void deleteThisWidget(QuteWidget *thisWidget);
 	void propertiesAccepted();
 	void showMidiLearn(QuteWidget* widget);
-	void addChn_kSignal(QString channel);
 	void logMessage(const QString &message, int role); // User facing message forwarded to the Csound console (role: MessageRole)
 	void widgetPropertyChanged(QuteWidget *widget, const QString &property); // Focused notification for a runtime property change
 

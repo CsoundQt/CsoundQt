@@ -145,7 +145,7 @@ i 1		0	   3600		;GUI
   <label>---------------------------------------------------------------
 Moogladder is an emulation of the moog ladder resonant low-pass filter. The opcode's input arguments include cutoff frequency and resonance. An optional 2-way switch (default=0) is provided to select whether the data space for feedback within the filter is initially cleared or allowed to retain previously held information. The input signal used in this example is a sawtooth waveform, the frequency of which is adjustable using an on-screen slider.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -193,7 +193,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <midicc>0</midicc>
   <label>254.150</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -240,7 +240,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <midicc>0</midicc>
   <label>Filter Cutoff</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -269,7 +269,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <midicc>0</midicc>
   <label>Resonance</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -316,7 +316,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <midicc>0</midicc>
   <label>0.630</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -345,7 +345,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <midicc>0</midicc>
   <label>412.163</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -392,7 +392,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <midicc>0</midicc>
   <label>Oscillator Frequency</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -421,7 +421,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <midicc>0</midicc>
   <label>0.650</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -468,7 +468,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <midicc>0</midicc>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

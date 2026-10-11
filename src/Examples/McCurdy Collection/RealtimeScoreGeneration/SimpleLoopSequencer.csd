@@ -223,7 +223,7 @@ This method is less flexible than the method using timedseq but for simple rhyth
   <midichan>0</midichan>
   <midicc>0</midicc>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>

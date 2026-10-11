@@ -2872,7 +2872,7 @@ Att</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>75</r>
@@ -4181,7 +4181,7 @@ Att</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>75</r>
@@ -4961,7 +4961,7 @@ Att</label>
   <midicc>-3</midicc>
   <description/>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>75</r>

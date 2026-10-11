@@ -1165,7 +1165,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1196,7 +1196,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>OP 1</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1246,7 +1246,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1277,7 +1277,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1327,7 +1327,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1377,7 +1377,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1427,7 +1427,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1458,7 +1458,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>OP 2</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1508,7 +1508,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1539,7 +1539,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1589,7 +1589,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1639,7 +1639,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1689,7 +1689,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1720,7 +1720,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1751,7 +1751,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>OP 3</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1801,7 +1801,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1832,7 +1832,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1882,7 +1882,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1932,7 +1932,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1982,7 +1982,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>OP 4</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2032,7 +2032,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2063,7 +2063,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2113,7 +2113,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2163,7 +2163,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2213,7 +2213,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2244,7 +2244,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2275,7 +2275,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>OP 5</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2325,7 +2325,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2356,7 +2356,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2406,7 +2406,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2456,7 +2456,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2506,7 +2506,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>OP 6</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2556,7 +2556,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>A</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2587,7 +2587,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>D</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2637,7 +2637,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>S</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2687,7 +2687,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>R</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2737,7 +2737,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2768,7 +2768,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Lev</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2816,7 +2816,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -2848,7 +2848,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2901,7 +2901,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2954,7 +2954,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -2983,7 +2983,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3034,7 +3034,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Lev</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3065,7 +3065,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3096,7 +3096,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3127,7 +3127,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3158,7 +3158,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3189,7 +3189,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Lev</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3269,7 +3269,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3322,7 +3322,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Lev</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3370,7 +3370,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3402,7 +3402,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3455,7 +3455,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Lev</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3503,7 +3503,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -3535,7 +3535,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3588,7 +3588,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Lev</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3668,7 +3668,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Ratio</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3721,7 +3721,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Transform</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -3928,7 +3928,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -3959,7 +3959,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Algorithm</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -3991,7 +3991,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
 </label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -4022,7 +4022,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Notes</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -4053,7 +4053,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Presets</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -4101,7 +4101,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <midicc>-3</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
    <r>0</r>
@@ -4133,7 +4133,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Algo Nb</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4164,7 +4164,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Feedback</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -4414,7 +4414,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -4448,7 +4448,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -4484,7 +4484,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>MIDI note</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -4515,7 +4515,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>MIDI velocity</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -4566,7 +4566,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <midicc>-3</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
    <r>0</r>
@@ -4602,7 +4602,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>Duration</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -4633,7 +4633,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <label>An FM synthesizer emulating the DX7's operator algorithm chains</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

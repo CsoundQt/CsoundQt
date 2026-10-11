@@ -181,7 +181,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Gain</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -210,7 +210,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>0.502</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -270,7 +270,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 If the delay time is moved in a continuous cycle using a sawtooth waveform then a steady pitch shifting effect can be achieved. By using a sawtooth up waveform (1.) downward transpositions are achieved. By using a sawtooth down waveform (2.) upward transpoisitions are achieved. The 'Delay Time' slider controls the amplitude of the sawtooth waveform that modulates the delay time.
 Very short settings of this parameter can lead to harmonic distortions of the input signal but whilst longer 'Delay Time' settings give smoother pitch shifing effects, the temporal distortion of the source material becomes more marked. This is an extremely basic demonstration of this technique and glitches in the audio stream are heard each time the waveform jumps back to the beginning of its cycle. In real pitch shifters (and in the next example) each cycle of the delay time oscillation is amplitude enveloped to mute these glitches.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -299,7 +299,7 @@ Very short settings of this parameter can lead to harmonic distortions of the in
   <midicc>0</midicc>
   <label>3.264</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -328,7 +328,7 @@ Very short settings of this parameter can lead to harmonic distortions of the in
   <midicc>0</midicc>
   <label>Delay Time</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -375,7 +375,7 @@ Very short settings of this parameter can lead to harmonic distortions of the in
   <midicc>0</midicc>
   <label>0.063</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -422,7 +422,7 @@ Very short settings of this parameter can lead to harmonic distortions of the in
   <midicc>0</midicc>
   <label>Transposition (semitones)</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -451,7 +451,7 @@ Very short settings of this parameter can lead to harmonic distortions of the in
   <midicc>0</midicc>
   <label>Source</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -524,7 +524,7 @@ Very short settings of this parameter can lead to harmonic distortions of the in
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

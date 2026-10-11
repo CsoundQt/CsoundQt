@@ -130,7 +130,7 @@ i 10		0	   3600		;GUI
   <midicc>0</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -159,7 +159,7 @@ i 10		0	   3600		;GUI
   <midicc>0</midicc>
   <label/>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -238,7 +238,7 @@ modulator -> carrier pairing.</label>
   <midicc>0</midicc>
   <label>0.178</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -285,7 +285,7 @@ modulator -> carrier pairing.</label>
   <midicc>0</midicc>
   <label>Carrier Amplitude</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -314,7 +314,7 @@ modulator -> carrier pairing.</label>
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -343,7 +343,7 @@ modulator -> carrier pairing.</label>
   <midicc>0</midicc>
   <label>:</label>
   <alignment>center</alignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>27</fontsize>
   <precision>3</precision>
   <color>

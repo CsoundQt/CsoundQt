@@ -248,7 +248,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -302,7 +302,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>FFT Attributes</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -331,7 +331,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>FFT Size - Overlap - Window Size - Window Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -395,7 +395,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>500.234</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -442,7 +442,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>Low Cut</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -471,7 +471,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>Low Full</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -518,7 +518,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>606.937</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -547,7 +547,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>High Cut</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -594,7 +594,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>606.937</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -623,7 +623,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>High Full</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -670,7 +670,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>970.660</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -718,7 +718,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>Sound File Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -747,7 +747,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>AndItsAll.wav</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -774,7 +774,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>0.000</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -821,7 +821,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <label>Curve Type</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>

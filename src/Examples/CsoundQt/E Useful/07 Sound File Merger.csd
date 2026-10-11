@@ -155,7 +155,7 @@ i "Main" 0 .1
   <description/>
   <label>chn_1.wav|chn_2.wav|chn_3.wav|chn_4.wav|chn_5.wav|chn_6.wav|chn_7.wav</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -206,7 +206,7 @@ i "Main" 0 .1
   <label>SOUNDFILE MERGER</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
@@ -289,7 +289,7 @@ i "Main" 0 .1
   <description/>
   <label>merge.wav</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>

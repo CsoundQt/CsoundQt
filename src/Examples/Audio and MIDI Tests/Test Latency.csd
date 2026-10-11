@@ -99,7 +99,7 @@ schedule("Latency",0,-1)
   <label>AUDIO LATENCY TEST</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
@@ -130,7 +130,7 @@ schedule("Latency",0,-1)
   <label>(Be careful - feedback is likely!)</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
@@ -161,7 +161,7 @@ schedule("Latency",0,-1)
   <label>This example connects one input of your audio device to one output, to measure the latency.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -196,7 +196,7 @@ schedule("Latency",0,-1)
 4. Restart this example to hear the difference.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -301,7 +301,7 @@ schedule("Latency",0,-1)
   <label>Select Output Channel</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -392,7 +392,7 @@ schedule("Latency",0,-1)
   <label>Select Input Channel</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>DejaVu Sans</font>
+  <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>

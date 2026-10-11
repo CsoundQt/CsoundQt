@@ -129,7 +129,7 @@ e 3600
   <midicc>0</midicc>
   <label>Attack</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -176,7 +176,7 @@ e 3600
   <midicc>0</midicc>
   <label>Release</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -205,7 +205,7 @@ e 3600
   <midicc>0</midicc>
   <label>Slow</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -234,7 +234,7 @@ e 3600
   <midicc>0</midicc>
   <label>Fast</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -263,7 +263,7 @@ e 3600
   <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -310,7 +310,7 @@ e 3600
   <midicc>0</midicc>
   <label>Glide</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
