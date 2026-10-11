@@ -620,11 +620,14 @@ jobs:
           arch: linux_gcc_64
           cache: true
 
+      # Qt >= 6.10 is required on macOS: older versions use __yield() without
+      # including <arm_acle.h> in qyieldcpu.h, which Xcode 26's clang rejects
+      # with -Werror,-Wimplicit-function-declaration.
       - name: Install Qt in macOS
         if: runner.os == 'macOS'
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.7.0'
+          version: '6.10.*'
           host: mac
           target: desktop
           arch: clang_64
@@ -674,7 +677,18 @@ jobs:
           mkdir -p tests-build
           cd tests-build
           qmake ../tests/tests.pro CONFIG+=release
-          nmake
+          # MSYS/Git-bash puts /usr/bin first, where `link` is GNU coreutils'
+          # link, not MSVC's link.exe. Filter those entries out before nmake,
+          # as the main windows build job does.
+          NMAKE_PATH=""
+          while IFS= read -r p; do
+            case "${p}" in
+              */usr/bin|/usr/bin|*/bin|/bin|*/mingw*/bin) ;;
+              *) NMAKE_PATH="${NMAKE_PATH}:${p}" ;;
+            esac
+          done < <(printf '%s' "${PATH}" | tr ':' '\n')
+          NMAKE_PATH="${NMAKE_PATH#:}"
+          env PATH="${NMAKE_PATH}" nmake
           EXE=$(find . -maxdepth 2 -iname 'test_externallauncher*.exe' -type f | head -1)
           test -n "${EXE}" || { echo "test executable not found"; ls -R .; exit 1; }
           "${EXE}" -v2
