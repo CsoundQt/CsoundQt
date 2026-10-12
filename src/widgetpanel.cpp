@@ -108,6 +108,30 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 	emit Close(false);
 }
 
+void WidgetPanel::showEvent(QShowEvent *event)
+{
+	QDockWidget::showEvent(event);
+	// The widget layout is populated while this panel is still hidden (e.g. when
+	// a document is opened or restored), so the scroll area viewport is only
+	// provisional at that point and the contained layout is never re-sized once
+	// the panel becomes visible. Re-synchronise here, otherwise the layout can be
+	// shown with a stale size/position until some other event forces a relayout.
+	QScrollArea *s = qobject_cast<QScrollArea *>(m_stack->currentWidget());
+	if (s == nullptr) {
+		return;
+	}
+	if (WidgetLayout *w = qobject_cast<WidgetLayout *>(s->widget())) {
+		w->adjustLayoutSize();
+		w->show();
+	}
+	s->show();
+	// Drop any scroll offset left over from the hidden state so the layout is
+	// displayed from its origin.
+	s->horizontalScrollBar()->setValue(0);
+	s->verticalScrollBar()->setValue(0);
+	s->viewport()->update();
+}
+
 void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 {
 	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();

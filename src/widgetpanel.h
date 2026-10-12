@@ -59,6 +59,7 @@ protected:
 	virtual void mouseMoveEvent (QMouseEvent * event);
 
 	virtual void closeEvent(QCloseEvent * event);
+	virtual void showEvent(QShowEvent * event);
 
 private:
 	QStackedWidget *m_stack;

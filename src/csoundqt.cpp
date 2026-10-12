@@ -2313,10 +2313,13 @@ void CsoundQt::play(bool realtime, int index)
                 qDebug() << "Page uses FLTK, CsoundQt's widgets will not be shown";
             } else {
                 if (!m_options->widgetsIndependent) {
-                    if (widgetPanel->isFloating()) {
-                        widgetPanel->setVisible(true);
-                        showWidgetsAct->setChecked(true);
-                    }
+                    // Show and raise the panel even when docked: if it was hidden
+                    // or its tab sits behind another dock (e.g. Help), it must be
+                    // brought forward, otherwise the widgets stay hidden until the
+                    // user interacts with the panel.
+                    widgetPanel->show();
+                    widgetPanel->raise();
+                    showWidgetsAct->setChecked(true);
                 }
                 else {
                     page->widgetsVisible(true);

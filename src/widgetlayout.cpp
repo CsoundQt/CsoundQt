@@ -2031,7 +2031,13 @@ void WidgetLayout::adjustLayoutSize()
 
 void WidgetLayout::adjustWidgetSize()
 {
-    if (!m_contained) {
+    if (m_contained) {
+        // Contained in the widget panel's scroll area: the effective size is
+        // derived from the children (the containing scroll area owns the
+        // geometry otherwise). adjustWidgetSize() is called when a document is
+        // shown, so make it a no-op only for the standalone-window case.
+        adjustLayoutSize();
+    } else {
         this->resize(m_w, m_h);
         this->move(m_posx, m_posy);
     }
