@@ -377,6 +377,15 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     terminalLabel->setEnabled(false);
 #endif
 	browserLineEdit->setText(m_options->browser);
+#if defined(FLATPAK_BUILD)
+    // Inside a flatpak URLs are always opened through the freedesktop portal;
+    // a browser configured here cannot be launched from the sandbox. Disable
+    // the widgets to make it obvious that this setting has no effect.
+    browserLineEdit->setText(QString());
+    browserLineEdit->setEnabled(false);
+    browserToolButton->setEnabled(false);
+    label_20->setEnabled(false);
+#endif
 	dotLineEdit->setText(m_options->dot);
 	WaveEditorLineEdit->setText(m_options->waveeditor);
 	WavePlayerLineEdit->setText(m_options->waveplayer);

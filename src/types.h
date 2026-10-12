@@ -50,7 +50,7 @@
 // Terminal bundled with the flatpak, always used for "Run in Terminal"
 #define FLATPAK_TERM_EXECUTABLE "/app/bin/foot"
 #endif
-#define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
+#define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
@@ -59,7 +59,7 @@
 #endif
 #ifdef Q_OS_SOLARIS
 #define DEFAULT_TERM_EXECUTABLE "/usr/openwin/bin/xterm"
-#define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
+#define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/local/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/jmplay"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
@@ -68,7 +68,7 @@
 #endif
 #ifdef Q_OS_MAC
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
-#define DEFAULT_BROWSER_EXECUTABLE "/Applications/Safari.app"  // Safary is installed by default so let's use that
+#define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/Applications/Preview.app"
@@ -86,7 +86,7 @@
 #endif
 #ifdef Q_OS_HAIKU
 #define DEFAULT_TERM_EXECUTABLE "Terminal"
-#define DEFAULT_BROWSER_EXECUTABLE "/boot/apps/WebPositive/WebPositive"
+#define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/boot/system/apps/MediaPlayer"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/boot/apps/BePDF/BePDF"
@@ -95,7 +95,7 @@
 #endif
 #ifdef Q_OS_OPENBSD
 #define DEFAULT_TERM_EXECUTABLE "xterm"
-#define DEFAULT_BROWSER_EXECUTABLE "firefox"
+#define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "paplay"
 #define DEFAULT_PDFVIEWER_EXECUTABLE ""

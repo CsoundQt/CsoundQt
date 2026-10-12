@@ -33,10 +33,15 @@ bool launchExecutable(const QString &executable,
 /**
  * Open \a url in a browser.
  *
- * If \a configuredBrowser is empty, or if it cannot be launched (for instance
- * the macOS default "/Applications/Safari.app", which is an application bundle
- * - a directory - and not an executable file), the system default browser is
- * used via QDesktopServices::openUrl().
+ * When running from an AppImage or a Flatpak (and whenever \a configuredBrowser
+ * is empty) the URL is handed to the system URL handler via
+ * QDesktopServices::openUrl(); a configured browser executable cannot be
+ * launched in those packaging formats.
+ *
+ * Otherwise, if \a configuredBrowser is a launchable executable it is used
+ * directly and the system default browser is only a fallback. A configured
+ * macOS ".app" bundle (a directory, not an executable file) always falls back
+ * to the system default browser.
  *
  * Returns true if the URL was handed to a browser. On failure returns false
  * and, if \a errorString is not null, stores a description of what was tried.

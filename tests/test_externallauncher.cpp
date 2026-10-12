@@ -68,6 +68,7 @@ class TestExternalLauncher : public QObject
 
 private slots:
     void initTestCase();
+    void init();
 
     void launchExecutableStartsProgram();
     void openBrowserUsesConfiguredBrowser();
@@ -75,6 +76,7 @@ private slots:
     void openBrowserFallsBackWhenBrowserIsAppBundle();
     void openBrowserFallsBackWhenBrowserMissing();
     void openBrowserUsesDefaultWhenNoneConfigured();
+    void openBrowserUsesSystemHandlerInAppImage();
     void openWithDefaultApplicationUsesHandler();
     void openBrowserReportsFailureWhenEverythingFails();
 
@@ -89,6 +91,15 @@ private:
 void TestExternalLauncher::initTestCase()
 {
     QVERIFY2(m_dir.isValid(), "Could not create temporary directory");
+}
+
+void TestExternalLauncher::init()
+{
+    // Keep the AppImage/Flatpak detection in openBrowser() from leaking
+    // between tests.
+    qunsetenv("APPIMAGE");
+    qunsetenv("APPDIR");
+    qunsetenv("FLATPAK_ID");
 }
 
 QString TestExternalLauncher::markerPath(const QString &name) const
@@ -193,6 +204,30 @@ void TestExternalLauncher::openBrowserUsesDefaultWhenNoneConfigured()
     QVERIFY2(ExternalLauncher::openBrowser(QString(), url, &error), qPrintable(error));
     QCOMPARE(catcher.count, 1);
     QCOMPARE(catcher.lastUrl, url);
+    QDesktopServices::unsetUrlHandler(QStringLiteral("csoundqt-test"));
+}
+
+void TestExternalLauncher::openBrowserUsesSystemHandlerInAppImage()
+{
+    // Inside an AppImage a configured browser executable must be ignored: the
+    // launched child would inherit the bundled LD_LIBRARY_PATH and fail
+    // silently. The system URL handler is used instead.
+    const QString marker = markerPath("marker-appimage.txt");
+    const QString browser = createFakeBrowser(marker);
+    QVERIFY(!browser.isEmpty());
+
+    UrlCatcher catcher;
+    QDesktopServices::setUrlHandler(QStringLiteral("csoundqt-test"), &catcher, "handleUrl");
+    const QUrl url(QStringLiteral("csoundqt-test://appimage"));
+
+    qputenv("APPIMAGE", QByteArrayLiteral("/tmp/CsoundQt-x86_64.AppImage"));
+    QString error;
+    QVERIFY2(ExternalLauncher::openBrowser(browser, url, &error), qPrintable(error));
+
+    QCOMPARE(catcher.count, 1);
+    QCOMPARE(catcher.lastUrl, url);
+    QVERIFY2(!QFile::exists(marker),
+             "the configured browser must not be launched from an AppImage");
     QDesktopServices::unsetUrlHandler(QStringLiteral("csoundqt-test"));
 }
 
