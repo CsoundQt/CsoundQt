@@ -45,12 +45,12 @@ TOOLS_DIR="$WORK_DIR/tools"
 DOWNLOADS_DIR="$WORK_DIR/downloads"
 JOBS="${JOBS:-$(nproc)}"
 
-# --- versions, pinned to the same commits as the Flatpak manifest -----------
+# --- pinned versions, see util/latest-commits.sh -----------
 LIBLO_VERSION="0.35"
 LIBLO_URL="https://github.com/radarsat1/liblo/releases/download/$LIBLO_VERSION/liblo-$LIBLO_VERSION.tar.gz"
 LIBLO_SHA256="9acc4f7e5a24f33472e9acd7e409b7bd6810a46f0a1f3cfeecea22d60f3aae13"
 
-CSOUND_COMMIT="${CSOUND_COMMIT:-e0870510ba80e792ebd6fe200b5d2e0eec3b7775}"
+CSOUND_COMMIT="${CSOUND_COMMIT:-7c01f441bcb25c8ad22aa6b7308b37ab4e915b87}"
 CSOUND_REPO="https://github.com/csound/csound.git"
 
 CSOUND_PLUGINS_COMMIT="${CSOUND_PLUGINS_COMMIT:-398d785b046e3f5c9c121a2ec28559c330195740}"
@@ -59,7 +59,7 @@ JSUSFX_COMMIT="${JSUSFX_COMMIT:-bcc9cd7b910ee7bba5b4cd2649448ade2ec15712}"
 JSUSFX_REPO="https://github.com/asb2m10/jsusfx"
 
 MANUAL_URL="https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip"
-MANUAL_SHA256="a1eb732942a651635ae838e142f339cde5c3822e33236ffea7c9afca613e932d"
+MANUAL_SHA256="17b6daeeeaf87efc60be27d1960e1a01e337d5d1ed879749e4e3a0afca26c882"
 
 # --- Qt ---------------------------------------------------------------------
 QT_VERSION="${QT_VERSION:-6.11.2}"
