@@ -71,6 +71,7 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	rtAudioModule = "";
 	rtInputDevice = "adc";
 	rtOutputDevice = "dac";
+	connectSuccessiveJackPorts = true;
 	rtJackName = "*";
 	rtMidiModule = "";
 	rtMidiInputDevice = "0";
@@ -141,10 +142,18 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 		if (m_configlists->rtAudioNames.indexOf(rtAudioModule) >= 0
 				&& rtAudioModule != "none") {
             opts << "-+rtaudio=" + rtAudioModule;
-			if (rtInputDevice != "") {
-                opts << "-i" + rtInputDevice;
+            QString inputDevice = rtInputDevice;
+            QString outputDevice = rtOutputDevice;
+            if (rtAudioModule == "jack") {
+                inputDevice = m_configlists->resolveJackDevice(inputDevice, false,
+                                                               connectSuccessiveJackPorts);
+                outputDevice = m_configlists->resolveJackDevice(outputDevice, true,
+                                                                connectSuccessiveJackPorts);
+            }
+			if (inputDevice != "") {
+                opts << "-i" + inputDevice;
 			}
-            opts << "-o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
+            opts << "-o" + (outputDevice == "" ? "dac":outputDevice);
 			if (rtJackName != "" && rtAudioModule == "jack") {
 				QString jackName = rtJackName;
 				if (jackName.contains("*")) {
@@ -243,4 +252,16 @@ int CsoundOptions::generateCmdLine(char **argv)
 void CsoundOptions::setJackNameSize(int size)
 {
 	m_jackNameSize = size;
+}
+
+bool CsoundOptions::hasFixedSamplerateBackend() const
+{
+	return m_configlists && m_configlists->isFixedSamplerateBackend(rtAudioModule);
+}
+
+int CsoundOptions::backendSamplerate() const
+{
+	if (!m_configlists)
+		return -1;
+	return m_configlists->backendSamplerate(rtAudioModule);
 }

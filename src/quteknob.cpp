@@ -123,9 +123,7 @@ void QVdial::paintEvent(QPaintEvent *event) {
     drawKnob(painter, m_border, m_color, bgcolor, m_bordercolor);
 
     if(m_draw_value && r >= 8) {
-        double fvalue = static_cast<double>(this->value());
-        double display_value = (fvalue/this->maximum()) *
-                               (m_display_max - m_display_min) + m_display_min;
+        double display_value = displayValue();
         int decimals = m_intDisplay ? 0 : m_decimals;
         QString strValue = QString::number(display_value, 'f', decimals);
         double numChars = static_cast<double>( strValue.size() );
@@ -187,6 +185,7 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
     setProperty("CSQT_showvalue", true);
     setProperty("CSQT_flatstyle", true);
     setProperty("CSQT_integerMode", false);
+    setProperty("CSQT_exponent", 1.0);
     connect(w, SIGNAL(valueChanged(int)),
             this, SLOT(knobChanged(int)));
     connect(w, SIGNAL(doubleClick()),
@@ -218,9 +217,10 @@ void QuteKnob::setRange(double min, double max)
 
 void QuteKnob::setMidiValue(int value)
 {
-	double max = property("CSQT_maximum").toDouble();
-    double min = property("CSQT_minimum").toDouble();
-	double newval= min + ((value / 127.0)* (max - min));
+	auto w = static_cast<QVdial *>(m_widget);
+	// MIDI maps linearly onto the GUI position, then the exponent curve maps
+	// that position to the real value.
+	double newval = w->mapping().toValue(value / 127.0);
 	setValue(newval);
 	QPair<QString, double> channelValue(m_channel, newval);
 	emit newValue(channelValue);
@@ -232,11 +232,7 @@ void QuteKnob::refreshWidget()
 	widgetLock.lockForRead();
 #endif
     auto w = static_cast<QVdial *>(m_widget);
-    double min = w->displayMin();
-    double max = w->displayMax();
-    // double max = property("CSQT_maximum").toDouble();
-    // double min = property("CSQT_minimum").toDouble();
-    int val = (int)(w->maximum() * (m_value - min)/(max-min));
+    int val = qRound((double)w->maximum() * w->mapping().toPosition(m_value));
     m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -283,6 +279,10 @@ bool QuteKnob::applyProperty(const QString &name)
 		             property("CSQT_borderColor").toString());
 		return true;
 	}
+	if (name == "CSQT_exponent") {
+		w->setExponent(property("CSQT_exponent").toDouble());
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
@@ -300,6 +300,7 @@ void QuteKnob::applyInternalProperties()
     w->setIntegerMode(property("CSQT_integerMode").toBool());
     w->setDisplayRange(property("CSQT_minimum").toDouble(),
                        property("CSQT_maximum").toDouble());
+    w->setExponent(property("CSQT_exponent").toDouble());
     w->setBorder(property("CSQT_border").toInt(), property("CSQT_borderColor").toString());
 }
 
@@ -401,7 +402,8 @@ QString QuteKnob::getWidgetXmlText()
 
     s.writeTextElement("minimum", QString::number(property("CSQT_minimum").toDouble(), 'f', 8));
     s.writeTextElement("maximum", QString::number(property("CSQT_maximum").toDouble(), 'f', 8));
-	s.writeTextElement("value", QString::number(m_value, 'f', 8));
+    s.writeTextElement("exponent", QString::number(property("CSQT_exponent").toDouble(), 'f', 8));
+    s.writeTextElement("value", QString::number(m_value, 'f', 8));
 	s.writeTextElement("mode", property("CSQT_mode").toString());
 	s.writeStartElement("mouseControl");
 	s.writeAttribute("act", property("CSQT_mouseControlAct").toString());
@@ -495,6 +497,19 @@ void QuteKnob::createPropertiesDialog()
 	maxSpinBox->setRange(-99999.0, 99999.0);
 	maxSpinBox->setValue(property("CSQT_maximum").toDouble());
     layout->addWidget(maxSpinBox, 2, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel("Exponent =", dialog);
+    layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    exponentSpinBox = new QDoubleSpinBox(dialog);
+    exponentSpinBox->setDecimals(4);
+    exponentSpinBox->setRange(0.001, 100.0);
+    exponentSpinBox->setSingleStep(0.1);
+    exponentSpinBox->setValue(property("CSQT_exponent").toDouble());
+    exponentSpinBox->setToolTip("Skew of the value curve: 1 is linear, "
+                                "values > 1 give finer control near the minimum, "
+                                "values < 1 finer control near the maximum");
+    layout->addWidget(exponentSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     // label->setText("Resolution");
     // layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
@@ -593,6 +608,10 @@ void QuteKnob::applyProperties()
 
     w->setDisplayRange(minSpinBox->value(), maxSpinBox->value());
 
+    double exponent = exponentSpinBox->value();
+    setProperty("CSQT_exponent", exponent);
+    w->setExponent(exponent);
+
     bool showvalue = displayValueCheckBox->checkState();
     setProperty("CSQT_showvalue", showvalue);
     w->setDrawValue(showvalue);
@@ -623,12 +642,10 @@ void QuteKnob::knobChanged(int value)
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
-	double min = property("CSQT_minimum").toDouble();
-    double max = property("CSQT_maximum").toDouble();
-	QDial *knob = static_cast<QDial *>(m_widget);
-	double normalized = (double) (value - knob->minimum())
-            / (double) (knob->maximum() - knob->minimum());
-	m_value =  min + (normalized * (max-min));
+	auto w = static_cast<QVdial *>(m_widget);
+	double normalized = (double) (value - w->minimum())
+            / (double) (w->maximum() - w->minimum());
+	m_value = w->mapping().toValue(normalized);
     // setInternalValue(scaledValue);
     m_valueChanged = true;
 	QPair<QString, double> channelValue(m_channel, m_value);

@@ -169,7 +169,7 @@ private:
     double m_lastTextMarkerY;
     double m_lastTextMarkerX;
     QString m_getPeakChannel;
-    MYFLT *m_peakChannelPtr;
+    cs_float *m_peakChannelPtr;
     bool m_mouseDragging;
     double m_showPeakTempFrequency;
     double m_dbRange;
@@ -268,7 +268,7 @@ private:
     CsoundUserData *m_ud;
     bool m_running;
     QColor m_color;
-    MYFLT *m_data;
+    cs_float *m_data;
     int m_tabsize;
     int m_margin;
     double m_maxy;

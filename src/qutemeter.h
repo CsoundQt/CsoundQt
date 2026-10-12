@@ -25,6 +25,7 @@
 
 #include "qutewidget.h"
 #include "selectcolorbutton.h"
+#include "valuemapping.h"
 
 // This class is named "meter" internally, following MacCsound's name
 // It is called "Controller" for the user of CsoundQt
@@ -97,6 +98,7 @@ private:
     QCheckBox *flatCheckBox;
     QCheckBox *borderCheckBox;
     QCheckBox *bgColorCheckBox;
+    QDoubleSpinBox *exponentSpinBox;
 
 	double m_xMin = 0.0;
 	double m_xMax = 1.0;
@@ -148,6 +150,15 @@ public:
 	int getPointSize() {return m_pointSize;}
 	bool m_vertical;
 
+	// The widget behaves like a slider (a single active axis) for fill/llif/line.
+	// The exponent then applies to that active axis; it is ignored for the
+	// two-dimensional crosshair/point types.
+	bool isSlider() const;
+	ValueMapping xMapping() const;
+	ValueMapping yMapping() const;
+	void setExponent(double exponent);
+	double getExponent() const { return m_exponent; }
+
 protected:
 	virtual void mouseMoveEvent(QMouseEvent* event);
 	virtual void mousePressEvent(QMouseEvent* event);
@@ -165,6 +176,7 @@ private:
 
 	double m_value, m_value2;  // value1 is vertical, value2 is horizontal
 	double m_xmin, m_xmax, m_ymin, m_ymax;
+	double m_exponent = 1.0;
     MeterWidgetType m_metertype;
 	QString m_type;
 	int m_pointSize;

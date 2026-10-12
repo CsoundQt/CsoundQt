@@ -66,9 +66,9 @@ public slots:
 	void stopAll();
 	void record(int index = -1);
 	//void recordAll();
-	void setCsChannel(QString channel, double value, int index = -1); // sends value directly to Csound channel
+	void setCsChannel(QString channel, cs_float value, int index = -1); // sends value directly to Csound channel
 	void setCsChannel(QString channel, QString value, int index = -1);
-	double getCsChannel(QString channel, int index = -1);
+	cs_float getCsChannel(QString channel, int index = -1);
 	QString getCsStringChannel(QString channel, int index = -1);
 	//Csound Language
 	bool opcodeExists(QString opcodeName);
@@ -141,10 +141,10 @@ public slots:
 
 	// To/From Csound
 	CSOUND* getCurrentCsound();
-	double getSampleRate(int index = -1);
+	cs_float getSampleRate(int index = -1);
 	int getKsmps(int index = -1);
 	int getNumChannels(int index = -1);
-	MYFLT *getTableArray(int ftable, int index = -1);
+	cs_float *getTableArray(int ftable, int index = -1);
 
 	void evaluateCsound(QString code=QString());
 
@@ -164,7 +164,7 @@ public slots:
 
 private:
 	CsoundQt *m_qcs;
-	MYFLT **m_tablePtr;
+	cs_float **m_tablePtr;
 };
 
 #endif // PYQCSOBJECT_H

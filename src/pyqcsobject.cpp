@@ -33,7 +33,7 @@
 PyQcsObject::PyQcsObject():QObject(NULL)
 {
 	m_qcs = 0;
-	m_tablePtr = (MYFLT **) malloc(sizeof(MYFLT *));
+	m_tablePtr = (cs_float **) malloc(sizeof(cs_float *));
 }
 
 PyQcsObject::~PyQcsObject()
@@ -253,10 +253,10 @@ QString PyQcsObject::getChannelString(QString channel, int index)
 	return m_qcs->getChannelString(channel, index);
 }
 
-void PyQcsObject::setCsChannel(QString channel, double value, int index)
+void PyQcsObject::setCsChannel(QString channel, cs_float value, int index)
 {
 	CsoundEngine *e = m_qcs->getEngine(index);
-	MYFLT *p;
+	cs_float *p;
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
 
@@ -264,7 +264,7 @@ void PyQcsObject::setCsChannel(QString channel, double value, int index)
             controlChannelHints_t hints;  // this does not work with csound5
 			int ret = csoundGetControlChannelHints(cs, channel.toLocal8Bit(), &hints);
 			if (ret == 0) {
-				csoundSetControlChannel(cs, channel.toLocal8Bit(), (MYFLT) value);
+				csoundSetControlChannel(cs, channel.toLocal8Bit(), (cs_float) value);
 				return;
 			}
 		}
@@ -278,10 +278,10 @@ void PyQcsObject::setCsChannel(QString channel, double value, int index)
 void PyQcsObject::setCsChannel(QString channel, QString stringValue, int index)
 {
 	CsoundEngine *e = m_qcs->getEngine(index);
-	MYFLT *p;
+	cs_float *p;
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
-		if (cs != NULL && !(csoundGetChannelPtr(cs, &p, channel.toLocal8Bit().constData(), CSOUND_STRING_CHANNEL | CSOUND_INPUT_CHANNEL))) {
+		if (cs != NULL && !(csoundGetChannelPtr(cs, (void **) &p, channel.toLocal8Bit().constData(), CSOUND_STRING_CHANNEL | CSOUND_INPUT_CHANNEL))) {
 			// FIXME not thread safe and not checking string bounds.
 			strcpy((char*) p,stringValue.toLocal8Bit().constData() );
 			return;
@@ -293,17 +293,17 @@ void PyQcsObject::setCsChannel(QString channel, QString stringValue, int index)
 }
 
 
-double PyQcsObject::getCsChannel(QString channel, int index)
+cs_float PyQcsObject::getCsChannel(QString channel, int index)
 {
 	CsoundEngine *e = m_qcs->getEngine(index);
-	MYFLT *value =  new MYFLT;
+	cs_float *value =  new cs_float;
 	//*value = 0;
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
 		if (cs != NULL ) {
-			if ( !( csoundGetChannelPtr(cs,&value,channel.toLocal8Bit(),
+			if ( !( csoundGetChannelPtr(cs,(void **) &value,channel.toLocal8Bit(),
 										CSOUND_CONTROL_CHANNEL | CSOUND_OUTPUT_CHANNEL)))
-				return (double) *value;
+				return (cs_float) *value;
 		}
 	}
 
@@ -325,7 +325,7 @@ QString PyQcsObject::getCsStringChannel(QString channel, int index)
 		if (cs != NULL) {
 			int maxlen = csoundGetChannelDatasize(cs, channel.toLocal8Bit());
 			char *value = new char[maxlen];
-			if ( !( csoundGetChannelPtr(cs,(MYFLT **) &value,channel.toLocal8Bit(),
+			if ( !( csoundGetChannelPtr(cs,(void **) &value,channel.toLocal8Bit(),
 										CSOUND_STRING_CHANNEL | CSOUND_OUTPUT_CHANNEL))) {
 				return QString(value);
 			}
@@ -514,14 +514,14 @@ CSOUND* PyQcsObject::getCurrentCsound()
 }
 
 
-double PyQcsObject::getSampleRate(int index)
+cs_float PyQcsObject::getSampleRate(int index)
 {
-	double sr = -1.0;
+	cs_float sr = -1.0;
 	CsoundEngine *e = m_qcs->getEngine(index);
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
 		if (cs != NULL) {
-			sr = (double) csoundGetSr (cs);
+			sr = csoundGetSr (cs);
 		}
 	}
 	return sr;
@@ -547,13 +547,13 @@ int PyQcsObject::getNumChannels(int index)
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
 		if (cs != NULL) {
-			nchnls = csoundGetNchnls (cs);
+			nchnls = csoundGetChannels(cs, 0);
 		}
 	}
 	return nchnls;
 }
 
-MYFLT *PyQcsObject::getTableArray(int ftable, int index)
+cs_float *PyQcsObject::getTableArray(int ftable, int index)
 {
 	CsoundEngine *e = m_qcs->getEngine(index);
 	if (e != NULL) {
@@ -589,7 +589,7 @@ void PyQcsObject::evaluateCsound(QString code)
 //    mainContext.evalScript("print '''readTableToList(): Invalid table " + QString::number(ftable) + "'''");
 ////    return QVariantList();
 //  }
-//  MYFLT **tablePtr = 0;
+//  cs_float **tablePtr = 0;
 //  int ret = csoundGetTable(cs, tablePtr, ftable);
 ////  qDebug() << "PyQcsObject::readTableToList " << tablePtr << "--" << tabLen;
 ////  while (offset < tabLen && count > 0) {

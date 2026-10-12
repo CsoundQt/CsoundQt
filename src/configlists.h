@@ -60,7 +60,11 @@ public:
 
 	void refreshModules();
     bool isJackRunning();
-    int jackSamplerate();
+    bool isPipeWireRunning();
+    bool isFixedSamplerateBackend(const QString &module);
+    int backendSamplerate(const QString &module);
+    QString jackHardwarePattern(bool isOutput);
+    QString resolveJackDevice(const QString &device, bool isOutput, bool connectSuccessive);
 
 	QHash<QString, QString> getMidiInputDevices(QString module);
 	QList<QPair<QString, QString> > getMidiOutputDevices(QString module);
@@ -71,6 +75,7 @@ public:
 
 private:
 	QString m_messages;
+	QHash<QString, int> m_backendSamplerates;
 };
 
 #endif

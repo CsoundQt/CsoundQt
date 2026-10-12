@@ -44,18 +44,18 @@ public slots:
     int compileCsd(const QString &filename);
     int compileCsdText(const QString &text);
     int compileOrc(const QString &text);
-    double evalCode(const QString &text);
-    double get0dBFS();
+    cs_float evalCode(const QString &text);
+    cs_float get0dBFS();
     //int getApiVersion(); // not present in Csound7
-    double getControlChannel(const QString &name);
+    cs_float getControlChannel(const QString &name);
     qint64 getCurrentTimeSamples();
     QString getEnv(const QString &name);
     int getKsmps();
     int getNchnls();
     int getNchnlsInput();
     QString getOutputName();
-    double getScoreOffsetSeconds();
-    double getScoreTime();
+    cs_float getScoreOffsetSeconds();
+    cs_double getScoreTime();
     int getSr();
     QString getStringChannel(const QString &name);
     int getVersion();
@@ -67,19 +67,19 @@ public slots:
     void reset();
     void rewindScore();
     int runUtility(const QString &command, int argc, char **argv);
-    int scoreEvent(char type, double *pFields, long numFields);
-    void setControlChannel(const QString &name, double value);
+    int scoreEvent(char type, cs_float *pFields, long numFields);
+    void setControlChannel(const QString &name, cs_double value);
     int setGlobalEnv(const QString &name, const QString &value);
     void setMessageCallback(QObject *callback);
     int setOption(const QString &name);
-    void setScoreOffsetSeconds(double value);
+    void setScoreOffsetSeconds(cs_double value);
     void setScorePending(bool value);
     void setStringChannel(const QString &name, const QString &value);
     int start();
     void stop();
-    double tableGet(int table_number, int index);
+    cs_float tableGet(int table_number, int index);
     int tableLength(int table_number);
-    void tableSet(int table_number, int index, double value);
+    void tableSet(int table_number, int index, cs_float value);
 public:
     static void csoundMessageCallback_(CSOUND *csound,
                                              int attributes,

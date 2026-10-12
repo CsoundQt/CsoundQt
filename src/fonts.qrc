@@ -22,5 +22,7 @@
     <file>fonts/Mono/IBMPlexMono/OFL.txt</file>
     <file>fonts/Mono/LiberationMono/LiberationMono-Regular.ttf</file>
     <file>fonts/Mono/LiberationMono/LICENSE</file>
+    <file>fonts/Mono/ProggyClean/ProggyClean.ttf</file>
+    <file>fonts/Mono/ProggyClean/Licence.txt</file>
 </qresource>
 </RCC>

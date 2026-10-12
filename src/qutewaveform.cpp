@@ -138,7 +138,7 @@ double WaveformView::sampleRate() const
 		return m_tableSampleRate;
 	}
 	if (m_ud != nullptr && m_ud->csound != nullptr) {
-		const double sr = csoundGetSr(m_ud->csound);
+		const cs_float sr = csoundGetSr(m_ud->csound);
 		if (sr > 0.0) {
 			return sr;
 		}
@@ -263,7 +263,7 @@ void WaveformView::queryTableInfo()
 	m_ud->playMutex->unlock();
 }
 
-void WaveformView::channelQueryCallback(MYFLT out, void *userdata)
+void WaveformView::channelQueryCallback(cs_float out, void *userdata)
 {
 	// Runs on the performance thread; only touch atomics here.
 	auto *view = static_cast<WaveformView *>(userdata);
@@ -274,7 +274,7 @@ void WaveformView::channelQueryCallback(MYFLT out, void *userdata)
 	view->m_tableInfoReadyCount.fetch_add(1, std::memory_order_release);
 }
 
-void WaveformView::sampleRateQueryCallback(MYFLT out, void *userdata)
+void WaveformView::sampleRateQueryCallback(cs_float out, void *userdata)
 {
 	// Runs on the performance thread; only touch atomics here.
 	auto *view = static_cast<WaveformView *>(userdata);
@@ -319,7 +319,7 @@ void WaveformView::persistTable(CSOUND *cs)
 		return;
 	}
 	const int len = csoundTableLength(cs, tabnum);
-	MYFLT *data = nullptr;
+	cs_float *data = nullptr;
 	if (len > 0) {
 		csoundGetTable(cs, &data, tabnum);
 	}
@@ -327,7 +327,7 @@ void WaveformView::persistTable(CSOUND *cs)
 		return;
 	}
 	m_snapshot.resize(len);
-	memcpy(m_snapshot.data(), data, size_t(len) * sizeof(MYFLT));
+	memcpy(m_snapshot.data(), data, size_t(len) * sizeof(cs_float));
 }
 
 void WaveformView::showSnapshot()
@@ -420,7 +420,7 @@ void WaveformView::refresh()
 		}
 	}
 	const int len = csoundTableLength(m_ud->csound, m_tabnum);
-	MYFLT *data = nullptr;
+	cs_float *data = nullptr;
 	int result = 0;
 	if (len > 0) {
 		result = csoundGetTable(m_ud->csound, &data, m_tabnum);

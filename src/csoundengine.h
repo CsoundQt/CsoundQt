@@ -97,7 +97,7 @@ struct CsoundUserData {
 	// These should not be changed while Csound is running,
 	PerfFlags flags;
 	// Store some values to avoid function calls
-	MYFLT zerodBFS; //0dBFS value
+	cs_float zerodBFS; //0dBFS value
 	int numChnls;
 	int sampleRate;
 	long outputBufferSize;
@@ -111,7 +111,7 @@ struct CsoundUserData {
 	QList<QVariant> previousOutputValues;
 	// QList<QVariant> stringChannelValues;
 	QHash<QString, QString> stringChannelValues;
-	QHash<QString, MYFLT*> channelPointers;
+	QHash<QString, cs_float*> channelPointers;
     QString lastRecordingOutfile;
     QSet<QString> outputChannelNamesSet;
     
@@ -264,7 +264,7 @@ private:
 
 	QHash<QString, AudioChannelMonitor *> m_audioMonitors;
 	QMutex m_audioMonitorsMutex;
-	QVector<MYFLT> m_audioMonitorScratch;
+	QVector<cs_float> m_audioMonitorScratch;
 
 	QList <int> getAnsiKeySequence(int key);
 
@@ -297,6 +297,7 @@ private slots:
 
 signals:
 	void errorLines(QList<QPair<int, QString> >);
+	void sampleRateMismatch(int orchestraSr, int backendSr, const QString &backendName);
 	void passMessages(QString msg);
 	void stopSignal(); // Sent when performance has stopped internally to inform others.playFromParent()
 	void breakpointReached();

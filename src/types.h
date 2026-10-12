@@ -159,7 +159,7 @@ public:
 		currentReadPos = 0;
     }
     ~RingBuffer() = default;
-    QList<MYFLT> buffer;
+    QList<cs_float> buffer;
 	long currentPos;
 	long currentReadPos;
 	int size;
@@ -185,7 +185,7 @@ public:
                 currentPos - currentReadPos + size);
     }
 
-	void put(MYFLT value) {
+	void put(cs_float value) {
         mutex.lock();
         // qDebug() << "RingBuffer::put currentPos " << currentPos << " value " << value;
 		buffer[currentPos] = value;
@@ -198,7 +198,7 @@ public:
 		mutex.unlock();
 	}
 
-    void putManyScaled(const MYFLT *data, long dataSize, MYFLT scaleFactor) { // csound7 added const
+    void putManyScaled(const cs_float *data, long dataSize, cs_float scaleFactor) { // csound7 added const
         long space = availableWriteSpace();
         if(dataSize >= space) {
             // qDebug("RingBuffer: Buffer overflow, only writing %ld elements!", space);
@@ -226,7 +226,7 @@ public:
         mutex.unlock();
     }
 
-	bool copyAvailableBuffer(MYFLT *data, int saveSize) {
+	bool copyAvailableBuffer(cs_float *data, int saveSize) {
 		//		qDebug() << "RingBuffer::copyAvailableBuffer saveSize " << saveSize << " currentPos " << currentPos << " currentReadPos " << currentReadPos ;
 		mutex.lock();
         int available = availableReadSpace();

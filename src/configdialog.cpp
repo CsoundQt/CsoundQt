@@ -311,6 +311,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     numChannelsSpinBox->setMinimum(1);
     numChannelsSpinBox->setMaximum(64);
 
+    const bool jackSelected = RtModuleComboBox->currentText() == "jack";
+    connectSuccessivePortsCheckBox->setChecked(m_options->connectSuccessiveJackPorts);
+    connectSuccessivePortsCheckBox->setEnabled(jackSelected);
+
     numInputChannelsSpinBox->setValue(m_options->numInputChannels);
     numInputChannelsSpinBox->setMinimum(1);
     numInputChannelsSpinBox->setMaximum(64);
@@ -448,6 +452,8 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
     // Todo: remember the settings for each backend in a hash table, and set it to the last
     // known value when changed back. Otherwise set it to the default adc/dac
     auto currentText = this->RtModuleComboBox->currentText();
+    const bool jackSelected = currentText == "jack";
+    connectSuccessivePortsCheckBox->setEnabled(jackSelected);
     //auto currentOperatingSystem = QOperatingSystemVersion::current();
     //qDebug() << "module: " << currentText << "Op.system type is: " << QSysInfo::productType() ;
     if(currentText == "null") {
@@ -585,6 +591,7 @@ void ConfigDialog::accept()
                 RtModuleComboBox->currentIndex()).toString();
 	m_options->rtInputDevice = RtInputLineEdit->text();
 	m_options->rtOutputDevice = RtOutputLineEdit->text();
+	m_options->connectSuccessiveJackPorts = connectSuccessivePortsCheckBox->isChecked();
 	m_options->rtJackName = JackNameLineEdit->text();
     // m_options->useSystemSamplerate = useSystemSamplerateCheckBox->isChecked();
     int srmenu = samplerateComboBox->currentIndex();
@@ -817,7 +824,10 @@ void ConfigDialog::selectAudioInput()
     if(module == "jack") {
         deviceList.prepend(QStringPair("adc", "adc"));
         deviceList.prepend(QStringPair("Do Not Autoconnect", "adc:null"));
-        // deviceList.prepend(QStringPair("System Inputs", "adc:system:capture_"));
+        if(m_configlists->isPipeWireRunning())
+            deviceList.prepend(QStringPair("All Hardware Inputs", "adc:.*:capture_.*"));
+        else
+            deviceList.prepend(QStringPair("System Inputs", "adc:system:capture_"));
     } else {
         deviceList.prepend(QStringPair("Default", "adc"));
     }
@@ -838,7 +848,7 @@ void ConfigDialog::selectAudioInput()
     auto pos = audioInputToolButton->mapToGlobal(QPoint(0, audioInputToolButton->height()));
     int index = actions.indexOf(menu.exec(pos));
     if (index >= 0)
-		RtInputLineEdit->setText(deviceList[index].second);
+        RtInputLineEdit->setText(deviceList[index].second);
 }
 
 void ConfigDialog::selectAudioOutput()
@@ -853,7 +863,10 @@ void ConfigDialog::selectAudioOutput()
     if(module == "jack") {
         deviceList.prepend(QStringPair("dac", "dac"));
         deviceList.prepend(QStringPair("Do Not Autoconnect", "dac:null"));
-        deviceList.prepend(QStringPair("System Outputs", "dac:system:playback_"));
+        if(m_configlists->isPipeWireRunning())
+            deviceList.prepend(QStringPair("All Hardware Outputs", "dac:.*:playback_.*"));
+        else
+            deviceList.prepend(QStringPair("System Outputs", "dac:system:playback_"));
     } else {
         deviceList.prepend(QStringPair("Default", "dac"));
     }
@@ -873,9 +886,8 @@ void ConfigDialog::selectAudioOutput()
 
     auto pos = audioOutputToolButton->mapToGlobal(QPoint(0, audioOutputToolButton->height()));
     int index = actions.indexOf(menu.exec(pos));
-    if (index >= 0) {
-		RtOutputLineEdit->setText(deviceList[index].second);
-    }
+    if (index >= 0)
+        RtOutputLineEdit->setText(deviceList[index].second);
 }
 
 void ConfigDialog::selectMidiInput()

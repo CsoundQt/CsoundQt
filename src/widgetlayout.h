@@ -76,6 +76,7 @@ class QuteButton;
 class FrameWidget;
 class QuteTable;
 class QuteWaveform;
+class QuteVUMeter;
 
 class RegisteredController {
 public:
@@ -232,6 +233,7 @@ public:
 	QAction *createScopeAct;
     QAction *createTableDisplayAct;
 	QAction *createWaveformAct;
+	QAction *createVUMeterAct;
 
 	// Alignment Actions
 	QAction *alignLeftAct;
@@ -285,6 +287,7 @@ public slots:
 	QString createNewScope(int x = -1, int y = -1, QString channel = QString());
     QString createNewTableDisplay(int x= -1, int y= -1, QString channel = QString());
     QString createNewWaveform(int x = -1, int y = -1, QString channel = QString());
+    QString createNewVUMeter(int x = -1, int y = -1, QString channel = QString());
 
 	void clearWidgets();
 	void clearWidgetLayout();
@@ -480,6 +483,7 @@ private:
 	QString createDummy(int x, int y, int width, int height, QString widgetLine);
     QString createTableDisplay(int x, int y, int width, int height, QString widgetLine);
     QString createWaveform(int x, int y, int width, int height, QString widgetLine);
+    QString createVUMeter(int x, int y, int width, int height, QString widgetLine);
 
 
 	void setBackground(bool bg, QColor bgColor);

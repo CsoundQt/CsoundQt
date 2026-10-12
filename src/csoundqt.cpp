@@ -3522,7 +3522,7 @@ void CsoundQt::about()
     text += "<h3>" + tr("Released under the LGPLv2 or GPLv3") + "</h3>";
     text += tr("Using Csound version: <strong>%1</strong>, precision: <strong>%2</strong><br/>").arg(
                 QString::number(csoundGetVersion()),
-                csoundGetSizeOfMYFLT() == 8 ? "double (64-bit)" : "float (32-bit)");
+                csoundGetSizeOfCsFloat() == 8 ? "double (64-bit)" : "float (32-bit)");
     initRisset();
     if(m_rissetReady && risset->isInstalled) {
         text += "<hr>";
@@ -5854,7 +5854,7 @@ void CsoundQt::createStatusBar()
 void CsoundQt::readSettings()
 {
     QSettings settings("csoundqt", "csoundqt");
-    int settingsVersion = settings.value("settingsVersion", 4).toInt();
+    int settingsVersion = settings.value("settingsVersion", 5).toInt();
     // Version 1 to remove "-d" from additional command line flags
     // Version 2 to save default keyboard shortcuts (weren't saved previously)
     // Version 2 to add "*" to jack client name
@@ -6072,6 +6072,9 @@ void CsoundQt::readSettings()
     if (m_options->rtAudioModule.isEmpty()) { m_options->rtAudioModule = "pa_cb"; }
     m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
     m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
+    m_options->connectSuccessiveJackPorts = settings.value("connectSuccessiveJackPorts", true).toBool();
+    if (settingsVersion < 5)
+        m_options->connectSuccessiveJackPorts = true;
     m_options->rtJackName = settings.value("rtJackName", "").toString();
     if (settingsVersion < 2) {
         if (!m_options->rtJackName.endsWith("*"))
@@ -6176,7 +6179,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     QSettings settings("csoundqt", "csoundqt");
     QDEBUG << "writing settings";
 
-    settings.setValue("settingsVersion", 4);
+    settings.setValue("settingsVersion", 5);
 
     QHash<QString, QVariant> shortcuts;
     foreach (QAction *act, m_keyActions) {
@@ -6322,6 +6325,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("rtAudioModule", m_options->rtAudioModule);
         settings.setValue("rtInputDevice", m_options->rtInputDevice);
         settings.setValue("rtOutputDevice", m_options->rtOutputDevice);
+        settings.setValue("connectSuccessiveJackPorts", m_options->connectSuccessiveJackPorts);
         settings.setValue("rtJackName", m_options->rtJackName);
         settings.setValue("rtMidiModule", m_options->rtMidiModule);
         settings.setValue("rtMidiInputDevice", m_options->rtMidiInputDevice);
@@ -6806,6 +6810,33 @@ QString CsoundQt::strippedName(const QString &fullFileName)
     return QFileInfo(fullFileName).fileName();
 }
 
+static QString shellQuoteArg(const QString &arg)
+{
+#ifdef Q_OS_WIN32
+    if (arg.contains(QLatin1Char(' ')) || arg.contains(QLatin1Char('"'))) {
+        QString quoted = arg;
+        quoted.replace(QLatin1Char('"'), QLatin1String("\\\""));
+        return QLatin1Char('"') + quoted + QLatin1Char('"');
+    }
+    return arg;
+#else
+    static const QString safe = QStringLiteral(
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_@%+=:,./-");
+    bool needsQuote = false;
+    for (const QChar c : arg) {
+        if (!safe.contains(c)) {
+            needsQuote = true;
+            break;
+        }
+    }
+    if (!needsQuote)
+        return arg;
+    QString quoted = arg;
+    quoted.replace(QLatin1Char('\''), QLatin1String("'\\''"));
+    return QLatin1Char('\'') + quoted + QLatin1Char('\'');
+#endif
+}
+
 QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString executable)
 {
 #ifndef Q_OS_WIN32
@@ -6846,7 +6877,9 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
         qDebug()<<"Command line: " << cmdLine;
         m_options->rt = (realtime && m_options->rtUseOptions)
                 || (!realtime && m_options->fileUseOptions);
-        cmdLine += m_options->generateCmdLineFlags() + " ";
+        const QStringList flags = m_options->generateCmdLineFlagsList();
+        for (const QString &flag : flags)
+            cmdLine += shellQuoteArg(flag) + " ";
     }
     else {
         cmdLine = executable + " ";

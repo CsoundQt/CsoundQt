@@ -53,6 +53,12 @@ const BundledFont monoFonts[] = {
 	{"JetBrains Mono",  ":/fonts/Mono/JetBrainsMono/JetBrainsMono[wght].ttf"},
 };
 
+// Registered but not offered in the widget font picker: ProggyCleanTT is a
+// pixel-style font used only at a fixed size for meter rulers.
+const BundledFont rulerFonts[] = {
+	{"ProggyCleanTT", ":/fonts/Mono/ProggyClean/ProggyClean.ttf"},
+};
+
 bool isBundledFamily(const QString &family)
 {
 	const auto test = [&family](const BundledFont *table, size_t count) {
@@ -101,14 +107,15 @@ namespace BundledFonts {
 
 int registerFonts()
 {
-	const BundledFont *tables[] = {sansFonts, serifFonts, monoFonts};
+	const BundledFont *tables[] = {sansFonts, serifFonts, monoFonts, rulerFonts};
 	const size_t counts[] = {
 		sizeof(sansFonts) / sizeof(sansFonts[0]),
 		sizeof(serifFonts) / sizeof(serifFonts[0]),
 		sizeof(monoFonts) / sizeof(monoFonts[0]),
+		sizeof(rulerFonts) / sizeof(rulerFonts[0]),
 	};
 	int registered = 0;
-	for (int t = 0; t < 3; ++t) {
+	for (int t = 0; t < 4; ++t) {
 		for (size_t i = 0; i < counts[t]; ++i) {
 			const int id = QFontDatabase::addApplicationFont(QString::fromLatin1(tables[t][i].resource));
 			if (id == -1) {
@@ -156,6 +163,16 @@ QStringList allFamilies()
 QString defaultFamily()
 {
 	return QStringLiteral("Liberation Sans");
+}
+
+QString rulerFamily()
+{
+	return QString::fromLatin1(rulerFonts[0].family);
+}
+
+int rulerPixelSize()
+{
+	return 16;
 }
 
 bool isBundled(const QString &family)

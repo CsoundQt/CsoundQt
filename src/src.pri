@@ -61,12 +61,14 @@ HEADERS = "src/about.h" \
     "src/qutemeter.h" \
     "src/qutescope.h" \
     "src/qutewaveform.h" \
+    "src/qutevumeter.h" \
     "src/quteslider.h" \
     "src/qutespinbox.h" \
     "src/qutetext.h" \
     "src/qutewidget.h" \
     "src/texteditor.h" \
     "src/types.h" \
+    "src/valuemapping.h" \
     "src/utilitiesdialog.h" \
     "src/widgetlayout.h" \
     "src/widgetpanel.h" \
@@ -131,6 +133,7 @@ SOURCES = "src/about.cpp" \
     "src/qutemeter.cpp" \
     "src/qutescope.cpp" \
     "src/qutewaveform.cpp" \
+    "src/qutevumeter.cpp" \
     "src/quteslider.cpp" \
     "src/qutespinbox.cpp" \
     "src/qutetext.cpp" \

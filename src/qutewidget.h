@@ -34,7 +34,7 @@
 
 enum QuteWidgetType { UNKNOWN=0, SPINBOX=1, LINEEDIT, CHECKBOX, SLIDER, KNOB, SCROLLNUMBER,
                       BUTTON, DROPDOWN, CONTROLLER, GRAPH, SCOPE, CONSOLE,
-                      TABLEDISPLAY, LABEL, DISPLAY, WAVEFORM };
+                      TABLEDISPLAY, LABEL, DISPLAY, WAVEFORM, VUMETER };
 
 // Special channel names that are driven by the mouse position/buttons.
 // Parsed once when the channel names are applied, so the per-frame refresh
@@ -103,7 +103,7 @@ public:
     static bool isDarkTheme() {
         return qApp->palette().color(QPalette::Window).lightness() < 128;
     }
-    double getSr(double defaultSr=0.0) {
+    cs_float getSr(cs_float defaultSr=0.0) {
         if(m_csoundUserData == nullptr) {
             QDEBUG << "csoundUserData: null";
             return defaultSr;

@@ -25,6 +25,7 @@
 
 #include "qutewidget.h"
 #include "selectcolorbutton.h"
+#include "valuemapping.h"
 
 /* QVdial: A knob with vertical dragging instead of circular
  *
@@ -42,6 +43,7 @@ public:
     , m_decimals(2)
     , m_display_min(0.0)
     , m_display_max(1.0)
+    , m_exponent(1.0)
     , m_color(QColor(245, 124, 0))
     , m_textcolor(QColor(81, 41, 0))
     , m_bordercolor(QColor(245, 124, 0))
@@ -91,15 +93,23 @@ public:
     }
 
     void setValueFromDisplayValue(double display_value) {
-        double delta = (display_value - m_display_min) / (m_display_max-m_display_min);
-        double minval = (double)this->minimum();
-        double flvalue = delta * (this->maximum() - minval) + minval;
-        setValue((int)flvalue);
+        double position = mapping().toPosition(display_value);
+        setValue(qRound(position * (double)this->maximum()));
     }
 
-    double displayValue() {
-        return ((double)this->value()/(double)this->maximum()) *
-                (m_display_max - m_display_min) + m_display_min;
+    // The mapping between the dial position and the real (channel) value.
+    ValueMapping mapping() const {
+        return ValueMapping{ m_display_min, m_display_max, m_exponent };
+    }
+
+    void setExponent(double exponent) {
+        m_exponent = ValueMapping::validExponent(exponent);
+        update();
+    }
+    double getExponent() const { return m_exponent; }
+
+    double displayValue() const {
+        return mapping().toValue((double)this->value() / (double)this->maximum());
     }
     
     int getDegreeRange() {
@@ -137,6 +147,7 @@ private:
     int    m_decimals;
     double m_display_min;
     double m_display_max;
+    double m_exponent;
     QColor m_color;
     QColor m_textcolor;
     QColor m_bordercolor;
@@ -203,6 +214,7 @@ private:
 	void setInternalValue(double value);
 	QDoubleSpinBox *minSpinBox;
     QDoubleSpinBox *maxSpinBox;
+    QDoubleSpinBox *exponentSpinBox;
 	QDoubleSpinBox *resolutionSpinBox;
     QCheckBox      *displayValueCheckBox;
     QCheckBox      *flatStyleCheckBox;

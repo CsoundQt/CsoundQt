@@ -487,7 +487,7 @@ void QuteGraph::setValue(QString text)
     else if(parts[0] == QLatin1String("@getPeak")) {
         m_getPeakChannel = parts[1].toString();
         qDebug() << "@getPeak channel: " << m_getPeakChannel;
-        MYFLT *ptr;
+        cs_float *ptr;
         csoundGetChannelPtr(m_ud->csound, (void **) &ptr,
                             m_getPeakChannel.toLocal8Bit().constData(),
                             CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL);
@@ -1365,7 +1365,7 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         }
         peakFreq = m_lastPeakFreq <= 0 ? peakFreq : peakFreq * 0.2 + m_lastPeakFreq * 0.8;
         m_lastPeakFreq = peakFreq;
-        double a4 = csoundGetA4(this->m_ud->csound);
+        cs_float a4 = csoundGetA4(this->m_ud->csound);
         double midinote;
         QString notename;
         if(peakFreq > 10) {
@@ -1660,7 +1660,7 @@ void QuteTableWidget::updatePath() {
 
     // data = new double[tabsize]();  // <--- no need to allocate memory, we get a pointer to the table
     // old: csoundTableCopyOut(m_ud->csound, m_tabnum, data, 0);
-    MYFLT *data = nullptr;
+    cs_float *data = nullptr;
     int result = csoundGetTable(m_ud->csound, &data, m_tabnum);
     if (result <= 0 || data == nullptr) {
         QDEBUG << "Table could not be read: " << m_tabnum;

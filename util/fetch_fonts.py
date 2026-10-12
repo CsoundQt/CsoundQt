@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-# Populates src/fonts with the open source (SIL OFL 1.1) fonts that CsoundQt
-# bundles for the widget panel, together with their license files.
+# Populates src/fonts with the open source fonts that CsoundQt bundles for the
+# widget panel, together with their license files.
+#
+# Most fonts are SIL OFL 1.1; ProggyClean (used only for meter rulers) is MIT.
 #
 # The fonts are vendored in the repository; this script only exists to make
 # that reproducible and to verify the checked-in files (--check).
@@ -29,6 +31,10 @@ GOOGLE_COMMIT = "51303ca9e8ac9dcea7b12d307ba568fd0e6fcfca"
 GOOGLE_RAW = "https://raw.githubusercontent.com/google/fonts/%s/ofl" % GOOGLE_COMMIT
 LIBERATION_TARBALL = ("https://github.com/liberationfonts/liberation-fonts/"
                       "files/7261482/liberation-fonts-ttf-2.1.5.tar.gz")
+# ProggyClean (MIT license) is used only for meter rulers, at a fixed pixel
+# size. Pinned to the Nerd Fonts release tag that carries the unpatched font.
+PROGGY_BASE = ("https://raw.githubusercontent.com/ryanoasis/nerd-fonts/"
+               "v3.3.0/src/unpatched-fonts/ProggyClean")
 
 # Each family: category, directory, font files and license file.
 # A "source" is either "google" (path relative to ofl/) or "liberation"
@@ -169,6 +175,19 @@ FAMILIES = [
                     "path": "liberation-fonts-ttf-2.1.5/LICENSE",
                     "sha256": "93fed46019c38bbe566b479d22148e2e8a1e85ada614accb0211c37b2c61c19b"},
     },
+    {
+        # Registered but not shown in the widget font picker (see bundledfonts).
+        "category": "Mono", "family": "ProggyClean",
+        "files": [{
+            "name": "ProggyClean.ttf",
+            "source": "raw",
+            "path": PROGGY_BASE + "/Regular/ProggyClean.ttf",
+            "sha256": "527d2a443ce051f93f7e77b855609722b8cb220a9f104b4aa037be5c90b71324",
+        }],
+        "license": {"name": "Licence.txt", "source": "raw",
+                    "path": PROGGY_BASE + "/Licence.txt",
+                    "sha256": "ce7ef48de5d83aab86075215ef163a5cc97f3cdb281881a30749f70144aac4be"},
+    },
 ]
 
 
@@ -195,6 +214,8 @@ class Sources:
     def get(self, source, path):
         if source == "google":
             return fetch("%s/%s" % (GOOGLE_RAW, path))
+        if source == "raw":
+            return fetch(path)
         if source == "liberation":
             member = self._liberation().extractfile(path)
             if member is None:

@@ -25,7 +25,7 @@
 
 // Curve is a straightforward abstract data type for a curve
 
-void Curve::copy(size_t size, MYFLT *data)
+void Curve::copy(size_t size, cs_float *data)
 {
 	// set_size must be called prior to this, as bounds are not checked.
 	for (size_t i = 0; i < size; i++)
@@ -39,9 +39,9 @@ void Curve::destroy()
 	}
 }
 
-Curve::Curve(MYFLT *data, size_t size, const QString& caption,
-			 Polarity polarity, MYFLT max, MYFLT min, MYFLT absmax,
-			 MYFLT y_scale, bool dotted_divider, WINDAT *original)
+Curve::Curve(cs_float *data, size_t size, const QString& caption,
+			 Polarity polarity, cs_float max, cs_float min, cs_float absmax,
+			 cs_float y_scale, bool dotted_divider, WINDAT *original)
 	: m_caption(caption)
 {
 	m_size = 0;
@@ -118,15 +118,15 @@ size_t Curve::get_size() const
 //  return m_id;
 //}
 
-// MYFLT *Curve::get_data() const
+// cs_float *Curve::get_data() const
 // {
 //   return m_data;
 // }
 
-MYFLT Curve::get_data(int index)
+cs_float Curve::get_data(int index)
 {
 	//   mutex.lock();
-	MYFLT out = m_data[index];
+	cs_float out = m_data[index];
 	//   mutex.unlock();
 	return out;
 }
@@ -141,22 +141,22 @@ Polarity Curve::get_polarity() const
 	return m_polarity;
 }
 
-MYFLT Curve::get_max() const
+cs_float Curve::get_max() const
 {
 	return m_max;
 }
 
-MYFLT Curve::get_min() const
+cs_float Curve::get_min() const
 {
 	return m_min;
 }
 
-MYFLT Curve::get_absmax() const
+cs_float Curve::get_absmax() const
 {
 	return m_absmax;
 }
 
-MYFLT Curve::get_y_scale() const
+cs_float Curve::get_y_scale() const
 {
 	return m_y_scale;
 }
@@ -171,7 +171,7 @@ WINDAT * Curve::getOriginal()
 //  m_id = id;
 //}
 
-void Curve::set_data(MYFLT * data)
+void Curve::set_data(cs_float * data)
 {
 	copy(m_size, data);
 }
@@ -182,7 +182,7 @@ void Curve::set_size(size_t size)
 		if (m_size != 0) {
 			free(m_data);
 		}
-		m_data = (MYFLT *) calloc(size, sizeof(MYFLT));
+		m_data = (cs_float *) calloc(size, sizeof(cs_float));
 	}
 	m_size = size;
 }
@@ -197,21 +197,21 @@ void Curve::set_polarity(Polarity polarity)
 	m_polarity = polarity;
 }
 
-void Curve::set_max(MYFLT max)
+void Curve::set_max(cs_float max)
 {
 	m_max = max;
 }
-void Curve::set_min(MYFLT min)
+void Curve::set_min(cs_float min)
 {
 	m_min = min;
 }
 
-void Curve::set_absmax(MYFLT absmax)
+void Curve::set_absmax(cs_float absmax)
 {
 	m_absmax = absmax;
 }
 
-void Curve::set_y_scale(MYFLT y_scale)
+void Curve::set_y_scale(cs_float y_scale)
 {
 	m_y_scale = y_scale;
 }

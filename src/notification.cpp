@@ -23,14 +23,78 @@
 #include "notification.h"
 
 #include <QApplication>
+#include <QGraphicsBlurEffect>
 #include <QGraphicsOpacityEffect>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
+#include <QKeyEvent>
 #include <QLabel>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPixmap>
 #include <QPointer>
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QWidget>
 
 namespace {
+
+// Blurs an image with QGraphicsBlurEffect (there is no public QImage blur API).
+static QImage blurredImage(const QImage &source, int radius)
+{
+	if (source.isNull() || radius <= 0)
+		return source;
+	QGraphicsScene scene;
+	scene.setSceneRect(0, 0, source.width(), source.height());
+	QGraphicsPixmapItem item(QPixmap::fromImage(source));
+	QGraphicsBlurEffect blur;
+	blur.setBlurRadius(radius);
+	item.setGraphicsEffect(&blur);
+	scene.addItem(&item);
+	QImage result(source.size(), QImage::Format_ARGB32_Premultiplied);
+	result.fill(Qt::transparent);
+	QPainter painter(&result);
+	scene.render(&painter, QRectF(0, 0, source.width(), source.height()),
+				 QRectF(0, 0, source.width(), source.height()));
+	return result;
+}
+
+// The banner itself: paints a frosted (blurred, tinted) rounded background
+// behind the rich text provided by the QLabel base class.
+class BannerLabel : public QLabel
+{
+public:
+	explicit BannerLabel(QWidget *parent = nullptr) : QLabel(parent) {}
+
+	void setBlurredBackground(const QPixmap &background)
+	{
+		m_background = background;
+		update();
+	}
+
+protected:
+	void paintEvent(QPaintEvent *event) override
+	{
+		if (!m_background.isNull()) {
+			QPainter painter(this);
+			painter.setRenderHint(QPainter::Antialiasing);
+			QPainterPath path;
+			path.addRoundedRect(rect(), 8, 8);
+			painter.setClipPath(path);
+			painter.drawPixmap(rect(), m_background);
+			painter.fillRect(rect(), QColor(30, 30, 30, 165));
+			painter.setClipping(false);
+			painter.setPen(QColor(255, 255, 255, 70));
+			painter.setBrush(Qt::NoBrush);
+			painter.drawRoundedRect(rect().adjusted(0, 0, -1, -1), 8, 8);
+		}
+		QLabel::paintEvent(event);
+	}
+
+private:
+	QPixmap m_background;
+};
 
 // Shows one transient banner at a time. If the context widget is not on screen
 // yet (e.g. a widget layout that is still a hidden top-level before it is added
@@ -45,16 +109,39 @@ public:
 		return manager;
 	}
 
-	void show(QWidget *context, const QString &text, int durationMs, bool richText)
+	void show(QWidget *context, const QString &text, const QString &title, int durationMs,
+			  bool richText, Notification::Horizontal horizontal, Notification::Vertical vertical)
 	{
 		m_context = context;
 		m_text = text;
+		m_title = title;
 		m_duration = durationMs;
 		m_richText = richText;
+		m_horizontal = horizontal;
+		m_vertical = vertical;
 		m_waited = 0;
 		m_pending = true;
+		m_dismissing = false;
 		m_poll.start();
 		tryShow();
+	}
+
+protected:
+	bool eventFilter(QObject *obj, QEvent *event) override
+	{
+		if (obj == m_banner.data() && event->type() == QEvent::MouseButtonRelease) {
+			dismiss();
+			return true;
+		}
+		if (event->type() == QEvent::KeyPress) {
+			auto *keyEvent = static_cast<QKeyEvent *>(event);
+			if (keyEvent->key() == Qt::Key_Escape
+					&& !m_banner.isNull() && m_banner->isVisible()) {
+				dismiss();
+				return true;
+			}
+		}
+		return QObject::eventFilter(obj, event);
 	}
 
 private:
@@ -62,6 +149,7 @@ private:
 	{
 		m_poll.setInterval(150);
 		connect(&m_poll, &QTimer::timeout, this, &BannerManager::tryShow);
+		qApp->installEventFilter(this);
 	}
 
 	void tryShow()
@@ -122,35 +210,78 @@ private:
 			m_banner = nullptr;
 		}
 
-		auto *banner = new QLabel(top);
+		auto *banner = new BannerLabel(top);
 		m_banner = banner;
+		m_dismissing = false;
 		banner->setWordWrap(true);
 		banner->setAlignment(Qt::AlignLeft);
 		banner->setTextFormat(Qt::RichText);
 		// QSS has no line-height, so use rich text for a roomier line spacing.
-		QString html = m_richText ? text : text.toHtmlEscaped();
-		html.replace(QLatin1Char('\n'), QStringLiteral("<br>"));
-		banner->setText(QStringLiteral("<div style=\"line-height:150%;\">%1</div>").arg(html));
+		QString html;
+		if (!m_title.isEmpty()) {
+			QString title = m_title.toHtmlEscaped();
+			title.replace(QLatin1Char('\n'), QStringLiteral("<br>"));
+			html += QStringLiteral("<div style=\"font-size:16px; font-weight:bold; "
+								   "line-height:140%;\">%1</div>").arg(title);
+		}
+		QString body = m_richText ? text : text.toHtmlEscaped();
+		body.replace(QLatin1Char('\n'), QStringLiteral("<br>"));
+		html += QStringLiteral("<div style=\"line-height:150%;%1\">%2</div>")
+				.arg(m_title.isEmpty() ? QString() : QStringLiteral("margin-top:4px;"), body);
+		banner->setText(html);
 		banner->setTextInteractionFlags(Qt::NoTextInteraction);
-		// Do not swallow clicks: the banner is purely informational.
-		banner->setAttribute(Qt::WA_TransparentForMouseEvents);
+		banner->setCursor(Qt::PointingHandCursor);
 		banner->setAttribute(Qt::WA_DeleteOnClose);
+		banner->installEventFilter(this);
 		banner->setStyleSheet(QStringLiteral(
 			"QLabel {"
-			" background-color: rgba(40, 40, 40, 235);"
 			" color: #f2f2f2;"
-			" border: 1px solid rgba(255, 255, 255, 60);"
-			" border-radius: 8px;"
-			" padding: 10px 18px;"
+			" padding: 14px 18px;"
 			" font-size: 13px;"
 			"}"));
 		const int margin = 16;
 		const int available = qMax(200, top->width() - 2 * margin);
-		banner->setMinimumWidth(qMin(360, available));
+		banner->setMinimumWidth(qMin(400, available));
 		banner->setMaximumWidth(qMin(640, available));
 		banner->adjustSize();
-		const int x = top->width() - banner->width() - margin;
-		banner->move(qMax(margin, x), margin);
+		int x;
+		switch (m_horizontal) {
+		case Notification::Horizontal::Left:
+			x = margin;
+			break;
+		case Notification::Horizontal::Center:
+			x = (top->width() - banner->width()) / 2;
+			break;
+		case Notification::Horizontal::Right:
+		default:
+			x = top->width() - banner->width() - margin;
+			break;
+		}
+		int y;
+		switch (m_vertical) {
+		case Notification::Vertical::Top:
+			y = margin;
+			break;
+		case Notification::Vertical::Center:
+			y = (top->height() - banner->height()) / 2;
+			break;
+		case Notification::Vertical::Bottom:
+		default:
+			y = top->height() - banner->height() - margin;
+			break;
+		}
+		const int posX = qMax(margin, x);
+		const int posY = qMax(margin, y);
+		banner->move(posX, posY);
+		// Frosted background: snapshot the window region the banner will cover,
+		// blur it, and paint it behind the text. Grabbing before show() ensures
+		// the banner itself is not part of the snapshot.
+		const QPixmap snapshot = top->grab(QRect(posX, posY, banner->width(), banner->height()));
+		if (!snapshot.isNull()) {
+			QPixmap background = QPixmap::fromImage(blurredImage(snapshot.toImage(), 14));
+			background.setDevicePixelRatio(snapshot.devicePixelRatio());
+			banner->setBlurredBackground(background);
+		}
 		banner->show();
 		banner->raise();
 
@@ -158,27 +289,41 @@ private:
 			m_banner = nullptr;
 		});
 
-		// Fade out just before closing.
-		QTimer::singleShot(qMax(0, durationMs - 400), banner, [banner]() {
-			auto *effect = new QGraphicsOpacityEffect; // banner takes ownership
-			banner->setGraphicsEffect(effect);
-			auto *animation = new QPropertyAnimation(effect, "opacity", banner);
-			animation->setDuration(400);
-			animation->setStartValue(1.0);
-			animation->setEndValue(0.0);
-			QObject::connect(animation, &QPropertyAnimation::finished,
-							 banner, &QWidget::close);
-			animation->start();
+		QTimer::singleShot(qMax(0, durationMs - 400), banner, [this]() {
+			dismiss();
 		});
 	}
 
+	// Starts the fade-out animation. Called on timeout, click or Escape.
+	void dismiss()
+	{
+		BannerLabel *banner = m_banner.data();
+		if (banner == nullptr || m_dismissing) {
+			return;
+		}
+		m_dismissing = true;
+		auto *effect = new QGraphicsOpacityEffect; // banner takes ownership
+		banner->setGraphicsEffect(effect);
+		auto *animation = new QPropertyAnimation(effect, "opacity", banner);
+		animation->setDuration(400);
+		animation->setStartValue(1.0);
+		animation->setEndValue(0.0);
+		QObject::connect(animation, &QPropertyAnimation::finished,
+						 banner, &QWidget::close);
+		animation->start();
+	}
+
 	QPointer<QWidget> m_context;
-	QPointer<QLabel> m_banner;
+	QPointer<BannerLabel> m_banner;
 	QString m_text;
+	QString m_title;
 	int m_duration = 6000;
 	int m_waited = 0;
 	bool m_pending = false;
 	bool m_richText = false;
+	bool m_dismissing = false;
+	Notification::Horizontal m_horizontal = Notification::Horizontal::Right;
+	Notification::Vertical m_vertical = Notification::Vertical::Top;
 	QTimer m_poll;
 };
 
@@ -186,12 +331,24 @@ private:
 
 namespace Notification {
 
-void showTransient(QWidget *context, const QString &text, int durationMs, bool richText)
+void showTransient(QWidget *context, const QString &text, int durationMs, bool richText,
+				   Horizontal horizontal, Vertical vertical)
 {
 	if (context == nullptr) {
 		return;
 	}
-	BannerManager::instance().show(context, text, durationMs, richText);
+	BannerManager::instance().show(context, text, QString(), durationMs, richText,
+								   horizontal, vertical);
+}
+
+void showTransient(QWidget *context, const QString &text, const QString &title,
+				   int durationMs, bool richText, Horizontal horizontal, Vertical vertical)
+{
+	if (context == nullptr) {
+		return;
+	}
+	BannerManager::instance().show(context, text, title, durationMs, richText,
+								   horizontal, vertical);
 }
 
 } // namespace Notification

@@ -29,6 +29,8 @@ i 1 0 1000
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -50,6 +52,7 @@ i 1 0 1000
   <width>202</width>
   <height>41</height>
   <uuid>{c5f4063e-4a46-4f9d-96db-839bea9a983f}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -70,6 +73,11 @@ i 1 0 1000
    <g>204</g>
    <b>234</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -81,6 +89,7 @@ i 1 0 1000
   <width>373</width>
   <height>78</height>
   <uuid>{7650f5b0-e83a-46a4-ba7f-45a47f71997e}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -101,6 +110,11 @@ i 1 0 1000
    <g>204</g>
    <b>234</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -112,6 +126,7 @@ i 1 0 1000
   <width>20</width>
   <height>150</height>
   <uuid>{a99d91b7-f92c-4044-a927-70a2943b968e}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
@@ -131,6 +146,7 @@ i 1 0 1000
   <width>300</width>
   <height>23</height>
   <uuid>{dfc109a0-ff5a-40e4-9a56-bb67e10acb6a}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
@@ -150,6 +166,7 @@ i 1 0 1000
   <width>198</width>
   <height>41</height>
   <uuid>{6b918bc4-f76f-460e-8f7b-5054495f2143}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -170,6 +187,11 @@ i 1 0 1000
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -181,6 +203,7 @@ i 1 0 1000
   <width>86</width>
   <height>86</height>
   <uuid>{baae2608-4500-4d99-99f3-941f5e2b5a84}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -201,6 +224,11 @@ i 1 0 1000
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -212,10 +240,12 @@ i 1 0 1000
   <width>300</width>
   <height>150</height>
   <uuid>{9d18e25d-d310-4e60-9109-541fdad0d7df}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
+  <objectName2/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>

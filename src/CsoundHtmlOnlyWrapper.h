@@ -53,12 +53,12 @@ public slots:
 	int CompileCsdText(const QString &text) { return compileCsdText(text);}
     int compileOrc(const QString &text);
     int CompileOrc(const QString &text) { return compileOrc(text);}
-    double evalCode(const QString &text);
-    double EvalCode(const QString &text) { return evalCode(text); }
-    double get0dBFS();
-	double Get0dBFS() {return get0dBFS();}
+    cs_float evalCode(const QString &text);
+    cs_float EvalCode(const QString &text) { return evalCode(text); }
+    cs_float get0dBFS();
+	cs_float Get0dBFS() {return get0dBFS();}
     //int getApiVersion(); // not present in Csound7 any more
-    double getControlChannel(const QString &name);
+    cs_float getControlChannel(const QString &name);
 	//double RequestChannel(const QString &name) { return getControlChannel(const QString &name)  } // NB! this works differently, better do not provide this alias!
     qint64 getCurrentTimeSamples();
     QString getEnv(const QString &name);
@@ -66,9 +66,9 @@ public slots:
     int getNchnls();
     int getNchnlsInput();
     QString getOutputName();
-    double getScoreOffsetSeconds();
-    double getScoreTime();
-	double GetScoreTime() {return getScoreTime();}
+    cs_float getScoreOffsetSeconds();
+    cs_double getScoreTime();
+	cs_double GetScoreTime() {return getScoreTime();}
     int getSr();
     QString getStringChannel(const QString &name);
     int getVersion();
@@ -82,9 +82,9 @@ public slots:
     void reset();
 	void Reset() {reset();}
     void rewindScore();
-    int scoreEvent(char type, const double *pFields, long numFields);
-    void setControlChannel(const QString &name, double value);
-	void SetChannel(const QString &name, double value) {setControlChannel(name, value);}
+    int scoreEvent(char type, const cs_float *pFields, long numFields);
+    void setControlChannel(const QString &name, cs_double value);
+	void SetChannel(const QString &name, cs_double value) {setControlChannel(name, value);}
     int setGlobalEnv(const QString &name, const QString &value);
 
     //csound 7 comment out// void setInput(const QString &name);
@@ -92,7 +92,7 @@ public slots:
     void setMessageCallback(QObject *callback);
     int setOption(const QString &name);
     //csound7 // void setOutput(const QString &name, const QString &type, const QString &format);
-    void setScoreOffsetSeconds(double value);
+    void setScoreOffsetSeconds(cs_double value);
     void setScorePending(bool value);
     void setStringChannel(const QString &name, const QString &value);
 	void SetStringChannel(const QString &name, const QString &value) { setStringChannel(name, value); }
@@ -103,10 +103,10 @@ public slots:
     void stop();
 	void Stop() { stop();}
 	//TODO: void Pause();
-    double tableGet(int table_number, int index);
+    cs_float tableGet(int table_number, int index);
     int tableLength(int table_number);
-    void tableSet(int table_number, int index, double value);
-	void SetTable(int table_number, int index, double value) { tableSet(table_number, index, value); }
+    void tableSet(int table_number, int index, cs_float value);
+	void SetTable(int table_number, int index, cs_float value) { tableSet(table_number, index, value); }
     void setOptions(CsoundOptions * options);
 signals:
     void passMessages(QString message);

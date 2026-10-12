@@ -45,6 +45,7 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 
     setProperty("CSQT_type", "fill");
     setProperty("CSQT_pointsize", 1);
+    setProperty("CSQT_exponent", 1.0);
     setProperty("CSQT_fadeSpeed", 1.0);
     setProperty("CSQT_mouseControl", "jump");
     setProperty("CSQT_mouseControlAct", "press");
@@ -76,23 +77,12 @@ QuteWidgetType QuteMeter::getWidgetTypeID() { return QuteWidgetType::CONTROLLER;
 
 void QuteMeter::setMidiValue(int value)
 {
-    double max, min;
-    bool vertical;
-    if (m_widget->width() > m_widget->height()) {
-        vertical = false;
-    }
-    else {
-        vertical = true;
-    }
-    if (vertical) {
-        max = property("CSQT_yMax").toDouble();
-        min = property("CSQT_yMin").toDouble();
-    }
-    else {
-        max = property("CSQT_xMax").toDouble();
-        min = property("CSQT_xMin").toDouble();
-    }
-    double newval = min + ((value / 127.0)* (max - min));
+    auto meter = static_cast<MeterWidget *>(m_widget);
+    // MIDI maps linearly onto the GUI position; the exponent then maps the
+    // position to the real value of the active axis.
+    const bool vertical = !(meter->width() > meter->height());
+    const ValueMapping mapping = vertical ? meter->yMapping() : meter->xMapping();
+    double newval = mapping.toValue(value / 127.0);
     setValue(newval);
     QPair<QString, double> channelValue(m_channel, newval);
     emit newValue(channelValue);
@@ -141,6 +131,7 @@ QString QuteMeter::getWidgetXmlText()
 
     s.writeTextElement("type", property("CSQT_type").toString());
     s.writeTextElement("pointsize", QString::number(property("CSQT_pointsize").toInt()));
+    s.writeTextElement("exponent", QString::number(property("CSQT_exponent").toDouble(), 'f', 8));
     s.writeTextElement("fadeSpeed",QString::number(property("CSQT_fadeSpeed").toDouble(),'f',8));
     s.writeStartElement("mouseControl");
     s.writeAttribute("act", property("CSQT_mouseControlAct").toString());
@@ -469,6 +460,23 @@ void QuteMeter::createPropertiesDialog()
     m_yMaxBox->setValue(property("CSQT_yMax").toDouble());
     layout->addWidget(m_yMaxBox, 10,3, Qt::AlignLeft|Qt::AlignVCenter);
 
+    label = new QLabel("Exponent =", dialog);
+    layout->addWidget(label, 11, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    exponentSpinBox = new QDoubleSpinBox(dialog);
+    exponentSpinBox->setDecimals(4);
+    exponentSpinBox->setRange(0.001, 100.0);
+    exponentSpinBox->setSingleStep(0.1);
+    exponentSpinBox->setValue(property("CSQT_exponent").toDouble());
+    exponentSpinBox->setToolTip("Skew of the value curve for the active axis: 1 is linear, "
+                                "values > 1 give finer control near the minimum, "
+                                "values < 1 finer control near the maximum. "
+                                "Applies only to slider-like controllers (fill, llif, line)");
+    layout->addWidget(exponentSpinBox, 11, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    // The exponent only applies to slider-like types (a single active axis).
+    exponentSpinBox->setEnabled(w->isSlider());
+    label->setEnabled(w->isSlider());
+
     setProperty("CSQT_xValue", m_value);
     setProperty("CSQT_yValue", m_value2);
 #ifdef  USE_WIDGET_MUTEX
@@ -484,6 +492,11 @@ void QuteMeter::checkTypeComboBox() {
         pointSizeSpinBox->setEnabled(true);
     else {
         pointSizeSpinBox->setEnabled(false);
+    }
+    // The exponent is only meaningful for slider-like (single axis) types.
+    if(exponentSpinBox != nullptr) {
+        exponentSpinBox->setEnabled(metertype == "fill" || metertype == "llif"
+                                    || metertype == "line");
     }
 }
 
@@ -525,6 +538,7 @@ void QuteMeter::applyProperties()
     setProperty("CSQT_bgcolormode", bgColorCheckBox->isChecked());
     setProperty("CSQT_type", typeComboBox->currentText());
     setProperty("CSQT_pointsize", pointSizeSpinBox->value());
+    setProperty("CSQT_exponent", exponentSpinBox->value());
     setProperty("CSQT_fadeSpeed", fadeSpeedSpinBox->value());
     setProperty("CSQT_mouseControl", behaviorComboBox->currentText());
     setProperty("CSQT_xMin", m_xMinBox->value());
@@ -570,6 +584,10 @@ bool QuteMeter::applyProperty(const QString &name)
 		setValue2(m_value2);
 		return true;
 	}
+	if (name == "CSQT_exponent") {
+		meter->setExponent(property("CSQT_exponent").toDouble());
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
@@ -586,6 +604,7 @@ void QuteMeter::applyInternalProperties()
                      property("CSQT_xMax").toDouble(),
                      property("CSQT_yMin").toDouble(),
                      property("CSQT_yMax").toDouble());
+    meter->setExponent(property("CSQT_exponent").toDouble());
     meter->showBorder(property("CSQT_bordermode").toString()=="border");
     meter->setBorderColor(QColor(property("CSQT_borderColor").toString()));
 
@@ -654,6 +673,18 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
 
     setScene(m_scene);
     m_mouseDown = false;
+    // Defaults, so updateGeometry() is safe before setType()/setRanges() run.
+    m_value = 0.0;
+    m_value2 = 0.0;
+    m_xmin = 0.0;
+    m_xmax = 1.0;
+    m_ymin = 0.0;
+    m_ymax = 1.0;
+    m_metertype = MeterWidgetType::Fill;
+    m_type = "fill";
+    m_pointSize = 1;
+    m_vertical = false;
+    m_exponent = 1.0;
     auto borderPen = QPen(QColor(Qt::green).darker(150), 2);
     auto blockPen = Qt::NoPen;
     m_block = m_scene->addRect(0, 0, 0, 0, blockPen, QBrush(Qt::green));
@@ -691,8 +722,8 @@ QColor MeterWidget::getBorderColor()
 template <MeterWidget::Axis axis>
 void MeterWidget::updateGeometry()
 {
-    const double portionx = (m_value  - m_xmin) / (m_xmax - m_xmin);
-    const double portiony = (m_value2 - m_ymin) / (m_ymax - m_ymin);
+    const double portionx = xMapping().toPosition(m_value);
+    const double portiony = yMapping().toPosition(m_value2);
     const double w = width();
     const double h = height();
     const double px = portionx * w;
@@ -809,6 +840,32 @@ void MeterWidget::setRanges(double xmin, double xmax, double ymin, double ymax)
     m_ymax = ymax;
 }
 
+bool MeterWidget::isSlider() const
+{
+    return m_metertype == MeterWidgetType::Fill
+        || m_metertype == MeterWidgetType::Llif
+        || m_metertype == MeterWidgetType::Line;
+}
+
+// The exponent applies to the active axis, and only while the widget behaves
+// like a slider (fill/llif/line). For the 2D crosshair/point types the mapping
+// stays linear.
+ValueMapping MeterWidget::xMapping() const
+{
+    return ValueMapping{ m_xmin, m_xmax, isSlider() ? m_exponent : 1.0 };
+}
+
+ValueMapping MeterWidget::yMapping() const
+{
+    return ValueMapping{ m_ymin, m_ymax, isSlider() ? m_exponent : 1.0 };
+}
+
+void MeterWidget::setExponent(double exponent)
+{
+    m_exponent = ValueMapping::validExponent(exponent);
+    updateGeometry<Axis::Both>();
+}
+
 void MeterWidget::setPointSize(int size)
 {
     m_pointSize = size;
@@ -874,8 +931,8 @@ void MeterWidget::handlePointerEvent(const QPointF& pos, bool clamp)
     const double w = width();
     const double h = height();
 
-    double newhor  = m_xmin + (m_xmax - m_xmin) * (pos.x() / w);
-    double newvert = m_ymin + (m_ymax - m_ymin) * (1.0 - pos.y() / h);
+    double newhor  = xMapping().toValue(pos.x() / w);
+    double newvert = yMapping().toValue(1.0 - pos.y() / h);
 
     if (clamp) {
         newhor  = qBound(m_xmin, newhor,  m_xmax);

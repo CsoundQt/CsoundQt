@@ -104,14 +104,14 @@ int CsoundHtmlWrapper::compileOrc(const QString &text) {
     return csoundCompileOrc(getCsound(), text.toLocal8Bit(),0);
 }
 
-double CsoundHtmlWrapper::evalCode(const QString &text) {
+cs_float CsoundHtmlWrapper::evalCode(const QString &text) {
     if (!m_csoundEngine) {
         return -1;
     }
     return csoundEvalCode(getCsound(), text.toLocal8Bit());
 }
 
-double CsoundHtmlWrapper::get0dBFS() {
+cs_float CsoundHtmlWrapper::get0dBFS() {
     if (!m_csoundEngine) {
         return -1;
     }
@@ -125,12 +125,12 @@ double CsoundHtmlWrapper::get0dBFS() {
 //    return csoundGetAPIVersion();
 //}
 
-double CsoundHtmlWrapper::getControlChannel(const QString &name) {
+cs_float CsoundHtmlWrapper::getControlChannel(const QString &name) {
     if (!m_csoundEngine) {
         return -1;
     }
     int result = 0;
-    double value = csoundGetControlChannel(getCsound(), name.toLocal8Bit(), &result);
+    cs_float value = csoundGetControlChannel(getCsound(), name.toLocal8Bit(), &result);
     return value;
 }
 
@@ -176,14 +176,14 @@ QString CsoundHtmlWrapper::getOutputName() {
     return QString(); // csound7 comment out QString(csoundGetOutputName(getCsound()));
 }
 
-double CsoundHtmlWrapper::getScoreOffsetSeconds() {
+cs_float CsoundHtmlWrapper::getScoreOffsetSeconds() {
     if (!m_csoundEngine) {
         return -1;
     }
     return csoundGetScoreOffsetSeconds(getCsound());
 }
 
-double CsoundHtmlWrapper::getScoreTime() {
+cs_double CsoundHtmlWrapper::getScoreTime() {
     if (!m_csoundEngine) {
         return -1;
     }
@@ -285,7 +285,7 @@ int CsoundHtmlWrapper::runUtility(const QString &command, int argc, char **argv)
     return csoundRunUtility(getCsound(), command.toLocal8Bit(), argc, argv); // probably does not work from JS due char **
 }
 
-int CsoundHtmlWrapper::scoreEvent(char type, double *pFields, long numFields) {
+int CsoundHtmlWrapper::scoreEvent(char type, cs_float *pFields, long numFields) {
     if (!m_csoundEngine) {
         return -1;
     }
@@ -293,7 +293,7 @@ int CsoundHtmlWrapper::scoreEvent(char type, double *pFields, long numFields) {
     return 0;
 }
 
-void CsoundHtmlWrapper::setControlChannel(const QString &name, double value) {
+void CsoundHtmlWrapper::setControlChannel(const QString &name, cs_double value) {
     if (!m_csoundEngine) {
         return;
     }
@@ -321,7 +321,7 @@ int CsoundHtmlWrapper::setOption(const QString &name){
 }
 
 
-void CsoundHtmlWrapper::setScoreOffsetSeconds(double value){
+void CsoundHtmlWrapper::setScoreOffsetSeconds(cs_double value){
     if (!m_csoundEngine) {
         return;
     }
@@ -358,11 +358,11 @@ void CsoundHtmlWrapper::stop(){
     // csoundReset(getCsound()); // crash happens here...
 }
 
-double CsoundHtmlWrapper::tableGet(int table_number, int index){
+cs_float CsoundHtmlWrapper::tableGet(int table_number, int index){
     if (!m_csoundEngine) {
         return -1;
     }
-    MYFLT *data;
+    cs_float *data;
     int tableLength = csoundGetTable(getCsound(), &data, table_number);
     if (tableLength>0 && index<tableLength) {
         return data[index];
@@ -379,11 +379,11 @@ int CsoundHtmlWrapper::tableLength(int table_number){
     return csoundTableLength(getCsound(), table_number);
 }
 
-void CsoundHtmlWrapper::tableSet(int table_number, int index, double value){
+void CsoundHtmlWrapper::tableSet(int table_number, int index, cs_float value){
     if (!m_csoundEngine) {
         return;
     }
-    MYFLT *data;
+    cs_float *data;
     int tableLength = csoundGetTable(getCsound(), &data, table_number);
     if (tableLength>0 && index<tableLength) {
         data[index] = value;

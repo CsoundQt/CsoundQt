@@ -48,6 +48,12 @@ QStringList allFamilies();
 // Family assigned to anything that is not bundled (Liberation Sans).
 QString defaultFamily();
 
+// Family used for dense numeric rulers (VU meter etc.). This is a pixel-style
+// monospaced font used at a fixed pixel size rather than for widget text, so it
+// is registered but not offered in the widget font picker.
+QString rulerFamily();
+int rulerPixelSize();
+
 // True if the family is one of the bundled families (case-insensitive).
 bool isBundled(const QString &family);
 

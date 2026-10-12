@@ -74,12 +74,12 @@ int CsoundHtmlOnlyWrapper::compileOrc(const QString &text) {
     return csound.CompileOrc(text.toLocal8Bit());
 }
 
-double CsoundHtmlOnlyWrapper::evalCode(const QString &text) {
+cs_float CsoundHtmlOnlyWrapper::evalCode(const QString &text) {
     return csound.EvalCode(text.toLocal8Bit());
 }
 
 
-double CsoundHtmlOnlyWrapper::get0dBFS() {
+cs_float CsoundHtmlOnlyWrapper::get0dBFS() {
     return csound.Get0dBFS(); //cs->Get0dBFS();
 }
 
@@ -87,9 +87,9 @@ double CsoundHtmlOnlyWrapper::get0dBFS() {
 //    return csound.GetAPIVersion();
 //}
 
-double CsoundHtmlOnlyWrapper::getControlChannel(const QString &name) {
+cs_float CsoundHtmlOnlyWrapper::getControlChannel(const QString &name) {
     int result = 0;
-    double value = csound.GetControlChannel(name.toLocal8Bit(), &result);
+    cs_float value = csound.GetControlChannel(name.toLocal8Bit(), &result);
     return value;
 }
 
@@ -117,11 +117,11 @@ QString CsoundHtmlOnlyWrapper::getOutputName() {
     return QString(); // QString(csound.GetOutputName()); // gone in csound7, needs other solution
 }
 
-double CsoundHtmlOnlyWrapper::getScoreOffsetSeconds() {
+cs_float CsoundHtmlOnlyWrapper::getScoreOffsetSeconds() {
     return csound.GetScoreOffsetSeconds();
 }
 
-double CsoundHtmlOnlyWrapper::getScoreTime() {
+cs_double CsoundHtmlOnlyWrapper::getScoreTime() {
     return csound.GetScoreTime();
 }
 
@@ -170,12 +170,12 @@ void CsoundHtmlOnlyWrapper::rewindScore() {
 }
 
 
-int CsoundHtmlOnlyWrapper::scoreEvent(char opcode, const double *pfields, long field_count) {
+int CsoundHtmlOnlyWrapper::scoreEvent(char opcode, const cs_float *pfields, long field_count) {
     csound.ScoreEvent(opcode, pfields, field_count);
     return 0;
 }
 
-void CsoundHtmlOnlyWrapper::setControlChannel(const QString &name, double value) {
+void CsoundHtmlOnlyWrapper::setControlChannel(const QString &name, cs_double value) {
     csound.SetControlChannel(name.toLocal8Bit(), value);
 }
 
@@ -204,7 +204,7 @@ int CsoundHtmlOnlyWrapper::setOption(const QString &name){
 //     csound.SetOutput(name.toLocal8Bit(), type.toLocal8Bit(), format.toLocal8Bit());
 // }
 
-void CsoundHtmlOnlyWrapper::setScoreOffsetSeconds(double value){
+void CsoundHtmlOnlyWrapper::setScoreOffsetSeconds(cs_double value){
     csound.SetScoreOffsetSeconds(value);
 }
 
@@ -247,8 +247,8 @@ void CsoundHtmlOnlyWrapper::stop(){
 	csound.Reset(); // DOES THIS PERHAPS changes options, so that jack is not any more used as audio driver
 }
 
-double CsoundHtmlOnlyWrapper::tableGet(int table_number, int index){
-    MYFLT *data;
+cs_float CsoundHtmlOnlyWrapper::tableGet(int table_number, int index){
+    cs_float *data;
     int tableLength = csound.GetTable(&data, table_number);
     if (tableLength>0 && index<tableLength) {
         return data[index];
@@ -262,9 +262,9 @@ int CsoundHtmlOnlyWrapper::tableLength(int table_number){
     return csound.TableLength(table_number);
 }
 
-void CsoundHtmlOnlyWrapper::tableSet(int table_number, int index, double value){
+void CsoundHtmlOnlyWrapper::tableSet(int table_number, int index, cs_float value){
     //csound.TableSet(table_number, index, value);
-    MYFLT *data;
+    cs_float *data;
     int tableLength = csound.GetTable(&data, table_number);
     if (tableLength>0 && index<tableLength) {
         data[index] = value;

@@ -34,7 +34,7 @@ class SelectColorButton;
 // The actual drawing/zooming/scrolling widget. It lives inside a QuteWaveform
 // (m_widget) and reads the samples of a Csound f-table directly.
 //
-// A Csound table is a flat array of MYFLT, but soundfile tables (gen 1) are
+// A Csound table is a flat array of cs_float, but soundfile tables (gen 1) are
 // interleaved. The number of interleaved channels is either set explicitly
 // with setChannels(> 0) or auto-detected with the ftchnls opcode when
 // setChannels(0) is used; channels > 1 are drawn stacked in distinct colours,
@@ -111,8 +111,8 @@ private:
 	void applyTableSampleRate(int sampleRate);
 	void showSnapshot();
 	void queryTableInfo();
-	static void channelQueryCallback(MYFLT out, void *userdata);
-	static void sampleRateQueryCallback(MYFLT out, void *userdata);
+	static void channelQueryCallback(cs_float out, void *userdata);
+	static void sampleRateQueryCallback(cs_float out, void *userdata);
 	// Vertical lane occupied by the given channel when channels are stacked.
 	QRect channelRect(const QRect &waveRect, int channel) const;
 	void computeAmplitudes(QVector<double> &miny, QVector<double> &maxy) const;
@@ -124,8 +124,8 @@ private:
 	CsoundUserData *m_ud = nullptr;
 	bool m_running = false;
 	int m_tabnum = 0;
-	MYFLT *m_data = nullptr;
-	int m_tabsize = 0;    // raw number of MYFLT values
+	cs_float *m_data = nullptr;
+	int m_tabsize = 0;    // raw number of cs_float values
 	int m_channelsProperty = 0; // requested channels, 0 = auto-detect
 	int m_channels = 1;   // effective interleaved channels used for drawing
 	int m_tableInfoTable = -1; // table whose properties have been resolved
@@ -136,7 +136,7 @@ private:
 	std::atomic<int> m_tableInfoReadyCount{0};
 	double m_tableSampleRate = 0.0;
 	bool m_forceRedraw = true;
-	QVector<MYFLT> m_snapshot;          // table copy kept after stop
+	QVector<cs_float> m_snapshot;          // table copy kept after stop
 	std::atomic<int> m_snapshotTabnum{0};
 	QElapsedTimer m_tableTimer;
 	int m_cursor = 0;     // frame

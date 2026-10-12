@@ -190,6 +190,7 @@ public slots:
 	void stop();
 	int record(int format);
 	void perfEnded();
+	void sampleRateMismatch(int orchestraSr, int backendSr, const QString &backendName);
 	void setHelp();
 	int runPython();  // Called when file is a python file
 	void showWidgets(bool show = true);

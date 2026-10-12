@@ -102,7 +102,7 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
         ud->wl->enqueueOutputString(channelName, (const char *) channelValuePtr);
     }
     else if (vartype == 'k' || vartype == 'K') {
-        ud->wl->enqueueOutputValue(channelName, *((MYFLT *) channelValuePtr));
+        ud->wl->enqueueOutputValue(channelName, *((cs_float *) channelValuePtr));
     }
 }
 
@@ -132,31 +132,31 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
     }
     else if ( vartype == 'k' || vartype == 'K') {  // Not a string channel
         //FIXME check if mouse tracking is active, and move this from here
-        MYFLT *value = (MYFLT *) channelValuePtr;
+        cs_float *value = (cs_float *) channelValuePtr;
         if(!strcmp(channelName, "_Mouse")) {
             const char *suffix = &channelName[6];
             if (!strcmp(suffix, "X")) {
-                *value = (MYFLT) ud->mouseValues[0];
+                *value = (cs_float) ud->mouseValues[0];
             }
             else if (!strcmp(suffix, "Y")) {
-                *value = (MYFLT) ud->mouseValues[1];
+                *value = (cs_float) ud->mouseValues[1];
             }
             else if(!strcmp(suffix, "RelX")) {
-                *value = (MYFLT) ud->mouseValues[2];
+                *value = (cs_float) ud->mouseValues[2];
             }
             else if(!strcmp(suffix, "RelY")) {
-                *value = (MYFLT) ud->mouseValues[3];
+                *value = (cs_float) ud->mouseValues[3];
             }
             else if(!strcmp(suffix, "But1")) {
-                *value = (MYFLT) ud->mouseValues[4];
+                *value = (cs_float) ud->mouseValues[4];
             }
             else if(!strcmp(suffix, "But2")) {
-                *value = (MYFLT) ud->mouseValues[5];
+                *value = (cs_float) ud->mouseValues[5];
             }
         }
         else {
             // QString name(channelName);
-            *value = (MYFLT) ud->wl->getValueForChannel(channelName);
+            *value = (cs_float) ud->wl->getValueForChannel(channelName);
         }
     } else {
         QDEBUG << "Unsupported type";
@@ -320,7 +320,7 @@ void CsoundEngine::csThread(void *data)
     // This is called at each cycle
     CsoundUserData* udata = (CsoundUserData*)data;
     if (!(udata->flags & CSQT_NO_COPY_BUFFER)) {
-        MYFLT const *outputBuffer = csoundGetSpout(udata->csound);
+        cs_float const *outputBuffer = csoundGetSpout(udata->csound);
         // outputBufferSize == ksmps
         long numSamples = udata->outputBufferSize * udata->numChnls;
         udata->audioOutputBuffer.putManyScaled(outputBuffer, numSamples,
@@ -342,7 +342,7 @@ void CsoundEngine::csThread(void *data)
 void CsoundEngine::readWidgetValues(CsoundUserData *ud)
 {
     // This is called every cycle, sends values from csoundqt to csound
-    MYFLT* pvalue;
+    cs_float* pvalue;
 
     if (!ud->wl->newValues.isEmpty() && ud->wl->valueMutex.tryLock(1)) {
         QHash<QString, double>::const_iterator i;
@@ -355,7 +355,7 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
             } else {
                 if (csoundGetChannelPtr(ud->csound, (void **)&pvalue, i.key().toLocal8Bit().constData(),
                                       CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-                    *pvalue = (MYFLT) i.value();
+                    *pvalue = (cs_float) i.value();
                     ud->channelPointers.insert(i.key(), pvalue);
                 }
             
@@ -382,7 +382,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
     // sends values from csound to csoundqt
     // NB: during a performance there are no changes in the widgetlayout (wl)
     // and also no changes in outputChannelNames or displayChannelNames, etc.
-    MYFLT* pvalue;
+    cs_float* pvalue;
     // QSet<QString>seenChannels;
     for(int i = 0; i < ud->outputChannelNames.size(); i++) {
         const QString &name= ud->outputChannelNames[i];
@@ -391,7 +391,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
         auto ptr = ud->channelPointers.constFind(name);
         if(ptr != ud->channelPointers.end()) {
             pvalue = ptr.value();
-            MYFLT value = *pvalue;
+            cs_float value = *pvalue;
             if(ud->previousOutputValues[i] != value) {
                 ud->wl->setValue(name, value);
                 ud->previousOutputValues[i] = value;
@@ -979,6 +979,15 @@ int CsoundEngine::runCsound()
             return -3;
         }
 
+        if (m_options.rt && m_options.rtUseOptions
+                && !m_options.useSystemSamplerate && m_options.samplerate == 0
+                && m_options.hasFixedSamplerateBackend()) {
+            const int orchestraSr = int(csoundGetSr(ud->csound) + 0.5);
+            const int backendSr = m_options.backendSamplerate();
+            if (orchestraSr > 0 && backendSr > 0 && orchestraSr != backendSr)
+                emit sampleRateMismatch(orchestraSr, backendSr, m_options.rtAudioModule);
+        }
+
         int startResult = csoundStart(ud->csound); // must be after compilation check, otherwise unneeded messages are printed to console
         if (startResult != CSOUND_SUCCESS) {
             //just for testing to see, if it ever comes out
@@ -1158,7 +1167,7 @@ void CsoundEngine::setupChannels()
     // Csound -> widget direction (chnset) also works automatically because all
     // widget channels are added to outputChannelNames.
 
-    MYFLT *pvalue;
+    cs_float *pvalue;
     QVector<QuteWidget *> widgets = ud->wl->getWidgets();
     foreach (QuteWidget *w, widgets) {
         QuteWidgetType wtype = w->getWidgetTypeID();
@@ -1200,12 +1209,18 @@ void CsoundEngine::setupChannels()
             }        
         }
         
-        if (wtype == QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY) {
+        if (wtype == QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY
+                || wtype == QuteWidgetType::VUMETER) {
             // display widgets accept both numeric and string chnset/outvalue.
             // Don't pre-create any channel — the type is determined by the
             // first chnset/outvalue call in the orchestra, and creating the
             // wrong type here would cause an "incompatible type" error.
             ud->displayChannelNames << channel;
+            // A VU meter's optional second channel is a cursor in the same dB
+            // space; poll it the same way.
+            if (wtype == QuteWidgetType::VUMETER && !channel2.isEmpty()) {
+                ud->displayChannelNames << channel2;
+            }
         }
         else if (wtype == QuteWidgetType::LINEEDIT) {
             // String channel: create + initialise with widget's current value.
@@ -1229,7 +1244,7 @@ void CsoundEngine::setupChannels()
                                     CSOUND_INPUT_CHANNEL | CSOUND_OUTPUT_CHANNEL
                                     | CSOUND_CONTROL_CHANNEL);
                     if(pvalue != NULL)
-                        *pvalue = (MYFLT) w->getValue();
+                        *pvalue = (cs_float) w->getValue();
                 }   
             } else {
                 int res = csoundGetChannelPtr(ud->csound, (void **) &pvalue,
@@ -1237,12 +1252,12 @@ void CsoundEngine::setupChannels()
                                     CSOUND_INPUT_CHANNEL | CSOUND_OUTPUT_CHANNEL
                                     | CSOUND_CONTROL_CHANNEL);
                 if(res >= 0) {
-                    *pvalue = (MYFLT) w->getValue();
+                    *pvalue = (cs_float) w->getValue();
                 }
             }
             if(!seenChannelNames.contains(channel)) {
                 ud->outputChannelNames << channel;
-                ud->previousOutputValues << (MYFLT) w->getValue();
+                ud->previousOutputValues << (cs_float) w->getValue();
             }   
             
             if (wtype == QuteWidgetType::CONTROLLER || wtype == QuteWidgetType::WAVEFORM) {
@@ -1252,11 +1267,11 @@ void CsoundEngine::setupChannels()
                                             channel2.toLocal8Bit().constData(),
                                             CSOUND_INPUT_CHANNEL | CSOUND_OUTPUT_CHANNEL
                                             | CSOUND_CONTROL_CHANNEL) == 0) {
-                        *pvalue = (MYFLT) w->getValue2();
+                        *pvalue = (cs_float) w->getValue2();
                     }
                     if(!seenChannelNames.contains(channel2)) {
                         ud->outputChannelNames << channel2;
-                        ud->previousOutputValues << (MYFLT) w->getValue2();
+                        ud->previousOutputValues << (cs_float) w->getValue2();
                     }
                 }
             }
@@ -1396,11 +1411,11 @@ void CsoundEngine::breakpointCallback(CSOUND *csound, debug_bkpt_info_t *bkpt_in
             if (strcmp(vp->typeName, "i") == 0
                     || strcmp(vp->typeName, "k") == 0
                     || strcmp(vp->typeName, "r") == 0) {
-                varDetails << *((MYFLT *) vp->data);
+                varDetails << *((cs_float *) vp->data);
             } else if(strcmp(vp->typeName, "S") == 0) {
                 varDetails << (char *) vp->data;
             } else if (strcmp(vp->typeName, "a") == 0) {
-                MYFLT *data = (MYFLT *) vp->data;
+                cs_float *data = (cs_float *) vp->data;
                 varDetails << *data << *(data + 1)
                            << *(data + 2)<< *(data + 3);
             } else {

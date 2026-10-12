@@ -107,6 +107,8 @@ i 99 0 3600
 
 
 
+
+
 <bsbPanel>
  <label>Widget Animation</label>
  <objectName/>

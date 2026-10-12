@@ -460,7 +460,7 @@ void ScopeData::updateData(RingBuffer *buffer, int numChnls, int channel,
 	if (freeze)
 		return;
 	double value;
-	MYFLT newValue;
+	cs_float newValue;
     if (channel == 0 || channel > numChnls ) {
         return;
 	}
@@ -473,7 +473,7 @@ void ScopeData::updateData(RingBuffer *buffer, int numChnls, int channel,
     // FIXME how to make sure the buffer is read before it is flushed when recorded?
     // Have another buffer?
 	buffer->lock();
-	QList<MYFLT> list = buffer->buffer;
+	QList<cs_float> list = buffer->buffer;
 	buffer->unlock();
 	long listSize = list.size();
 	double factor = numChnls * zoomx;
@@ -639,7 +639,7 @@ void LissajouData::updateData(RingBuffer *buffer, int numChnls, int channel,
 	mutex->lockForWrite();
 #endif
 	buffer->lock();
-	QList<MYFLT> list = buffer->buffer;
+	QList<cs_float> list = buffer->buffer;
 	buffer->unlock();
 	long listSize = list.size();
 	// Anchor at the newest samples (see ScopeData::updateData).
@@ -710,7 +710,7 @@ void PoincareData::updateData(RingBuffer *buffer, int numChnls, int channel,
 	mutex->lockForWrite();
 #endif
 	buffer->lock();
-	QList<MYFLT> list = buffer->buffer;
+	QList<cs_float> list = buffer->buffer;
 	buffer->unlock();
 	long listSize = list.size();
 	// Anchor at the newest samples (see ScopeData::updateData).

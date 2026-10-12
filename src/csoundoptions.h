@@ -38,6 +38,9 @@ public:
 
 	void setJackNameSize(int size);
 
+	bool hasFixedSamplerateBackend() const;
+	int backendSamplerate() const;
+
     // this is used to identify a document indenpendently of its filename (which might
     // be a temporary name)
     QString docName;
@@ -77,6 +80,7 @@ public:
 	QString rtAudioModule;
 	QString rtInputDevice;
 	QString rtOutputDevice;
+	bool connectSuccessiveJackPorts;
 	QString rtJackName;
 	QString rtMidiModule;
 	QString rtMidiInputDevice;

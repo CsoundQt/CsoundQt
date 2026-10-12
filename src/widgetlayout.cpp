@@ -41,6 +41,7 @@
 #include "qutegraph.h"
 #include "qutescope.h"
 #include "qutewaveform.h"
+#include "qutevumeter.h"
 #include "qutedummy.h"
 #include "framewidget.h"
 
@@ -125,6 +126,9 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 
     createWaveformAct = new QAction(tr("Waveform"), this);
     connect(createWaveformAct, SIGNAL(triggered()), this, SLOT(createNewWaveform()));
+
+    createVUMeterAct = new QAction(tr("VU Meter"), this);
+    connect(createVUMeterAct, SIGNAL(triggered()), this, SLOT(createNewVUMeter()));
 
     propertiesAct = new QAction(tr("Properties"),this);
     connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
@@ -234,6 +238,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     m_widgetNameToType["BSBConsole"] = QuteWidgetType::CONSOLE;
     m_widgetNameToType["BSBTableDisplay"] = QuteWidgetType::TABLEDISPLAY;
     m_widgetNameToType["BSBWaveform"] = QuteWidgetType::WAVEFORM;
+    m_widgetNameToType["BSBVUMeter"] = QuteWidgetType::VUMETER;
     m_widgetNameToType["BSBDisplay"] = QuteWidgetType::DISPLAY;
     m_widgetNameToType["BSBLabel"] = QuteWidgetType::LABEL;
 }
@@ -535,7 +540,22 @@ void WidgetLayout::setDisplayValue(QString channelName, double value)
 {
     // ensures unlock even on exception
     QMutexLocker locker(&widgetsMutex);
-    
+
+    // A VU meter's second channel is a cursor; anything else matching the
+    // second channel must go through setValue2().
+    auto applyValue = [&](QuteWidget *w) {
+        const auto wtype = w->getWidgetTypeID();
+        if (wtype != QuteWidgetType::DISPLAY && wtype != QuteWidgetType::TABLEDISPLAY
+                && wtype != QuteWidgetType::VUMETER) {
+            return;
+        }
+        if (!channelName.isEmpty() && w->getChannel2Name() == channelName) {
+            w->setValue2(value);
+        } else {
+            w->setValue(value);
+        }
+    };
+
     auto it = channelNameToWidgets.find(channelName);
     
     if (it == channelNameToWidgets.end()) {
@@ -544,8 +564,9 @@ void WidgetLayout::setDisplayValue(QString channelName, double value)
         
         for (const auto widget : m_widgets) {
             auto wtype = widget->getWidgetTypeID();
-            if (wtype == QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY) {
-                widget->setValue(value);
+            if (wtype == QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY
+                    || wtype == QuteWidgetType::VUMETER) {
+                applyValue(widget);
                 matchingWidgets.append(widget);
                 QDEBUG << "Setting unknown display channel:" << channelName 
                        << "to" << value << "UUID: " << widget->getUuid();
@@ -556,10 +577,7 @@ void WidgetLayout::setDisplayValue(QString channelName, double value)
     } else {
         const auto& widgets = it.value();
         for (const auto& w : widgets) {
-            auto wtype = w->getWidgetTypeID();
-            if (wtype == QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY) {
-                w->setValue(value);
-            }
+            applyValue(w);
         }
     }
 }
@@ -894,6 +912,9 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         widget = static_cast<QuteWidget *>(w);
         waveformWidgets.append(w);
         emit requestCsoundUserData(widget);
+    }
+    else if (type == "BSBVUMeter") {
+        widget = static_cast<QuteWidget *>(new QuteVUMeter(this));
     }
     else {
         qDebug() << type << " not implemented";
@@ -1877,6 +1898,7 @@ void WidgetLayout::addCreateWidgetActionsToMenu(QMenu &menu) {
     menu.addAction(createScopeAct);
     menu.addAction(createTableDisplayAct);
     menu.addAction(createWaveformAct);
+    menu.addAction(createVUMeterAct);
 }
 
 void WidgetLayout::createContextMenu(QContextMenuEvent *event)
@@ -2431,6 +2453,26 @@ QString WidgetLayout::createNewWaveform(int x, int y, QString channel)
     const int posy = y >= 0 ? y : currentPosition.y();
     deselectAll();
     QString uuid = createWaveform(posx, posy, 500, 160, QString());
+    widgetChanged();
+    if (getOpenProperties()) {
+        m_widgets.last()->openProperties();
+    }
+    markHistory();
+    return uuid;
+}
+
+QString WidgetLayout::createNewVUMeter(int x, int y, QString channel)
+{
+    Q_UNUSED(channel);
+    const int posx = x >= 0 ? x : currentPosition.x();
+    const int posy = y >= 0 ? y : currentPosition.y();
+    deselectAll();
+    // Default: vertical meter with a 20x100 bar, plus room for the ruler
+    // labels (to the right) and the value (below), so nothing is cropped.
+    QFontMetrics fm(font());
+    const int width = 20 + fm.horizontalAdvance(QStringLiteral("-000")) + 10;
+    const int height = 100 + fm.height() + 2;
+    QString uuid = createVUMeter(posx, posy, width, height, QString());
     widgetChanged();
     if (getOpenProperties()) {
         m_widgets.last()->openProperties();
@@ -3721,6 +3763,18 @@ QString WidgetLayout::createWaveform(int x, int y, int width, int height, QStrin
     emit requestCsoundUserData(widget);
     registerWidget(widget);
     waveformWidgets.append(widget);
+    widget->applyInternalProperties();
+    return widget->getUuid();
+}
+
+QString WidgetLayout::createVUMeter(int x, int y, int width, int height, QString widgetLine) {
+    Q_UNUSED(widgetLine);
+    auto *widget = new QuteVUMeter(this);
+    widget->setProperty("CSQT_x", x);
+    widget->setProperty("CSQT_y", y);
+    widget->setProperty("CSQT_width", width);
+    widget->setProperty("CSQT_height", height);
+    registerWidget(widget);
     widget->applyInternalProperties();
     return widget->getUuid();
 }

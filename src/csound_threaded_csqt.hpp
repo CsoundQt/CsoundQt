@@ -123,8 +123,8 @@ struct CsoundEvent
 struct CsoundScoreEvent : public CsoundEvent
 {
     char opcode;
-    std::vector<MYFLT> pfields;
-    CsoundScoreEvent(char opcode_, const MYFLT *pfields_, long pfield_count)
+    std::vector<cs_float> pfields;
+    CsoundScoreEvent(char opcode_, const cs_float *pfields_, long pfield_count)
     {
         opcode = opcode_;
         for (long i = 0; i < pfield_count; i++) {
@@ -283,7 +283,7 @@ public:
      * Enqueues a low-level score event with raw pfields for dispatch from
      * the performance thread routine.
      */
-    virtual int ScoreEvent(char opcode, const MYFLT *pfields, long pfield_count)
+    virtual int ScoreEvent(char opcode, const cs_float *pfields, long pfield_count)
     {
         int result = 0;
         CsoundScoreEvent *event = new CsoundScoreEvent(opcode, pfields, pfield_count);
