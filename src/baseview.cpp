@@ -723,42 +723,51 @@ void BaseView::insertPathAtCursor(const QString &path)
 
 void BaseView::insertOrchestraGlobal(QString text)
 {
-	// Insert among the global orchestra code: after the header, before the
-	// first instrument or opcode definition.
-	QTextCursor cursor;
-	QString document;
+	// Global orchestra code (the implicit "instr 0") lives after the header and
+	// before the first instr/opcode definition. If the cursor is already in
+	// that region, insert there; otherwise insert just before the first
+	// definition so the code still ends up in the global region.
+	auto insertAt = [](QTextCursor &cursor, const QString &document, int pos, QString text) {
+		if (pos > 0 && pos <= document.size()
+				&& document.at(pos - 1) != QLatin1Char('\n')) {
+			text.prepend(QLatin1Char('\n'));
+		}
+		cursor.setPosition(pos);
+		cursor.insertText(text);
+	};
 	if (m_viewMode < 2) { // Unified view: the whole document lives in the main editor
-		cursor = m_mainEditor->textCursor();
-		document = m_mainEditor->toPlainText();
+		QTextCursor cursor = m_mainEditor->textCursor();
+		const QString document = m_mainEditor->toPlainText();
 		const int orcStart = document.indexOf(QStringLiteral("<CsInstruments>"));
 		const int orcEnd = document.indexOf(QStringLiteral("</CsInstruments>"));
-		int insertPos;
+		int globalStart;
+		int globalEnd;
 		if (orcStart >= 0 && orcEnd > orcStart) {
+			globalStart = orcStart;
 			const int defPos = firstDefinitionPosition(document, orcStart);
-			insertPos = (defPos >= 0 && defPos < orcEnd) ? defPos : orcEnd;
+			globalEnd = (defPos >= 0 && defPos < orcEnd) ? defPos : orcEnd;
 		}
 		else {
 			// Orchestra-only file (or no tags): the whole text is the orchestra.
+			globalStart = 0;
 			const int defPos = firstDefinitionPosition(document, 0);
-			insertPos = defPos >= 0 ? defPos : document.size();
+			globalEnd = defPos >= 0 ? defPos : document.size();
 		}
-		if (insertPos > 0 && document.at(insertPos - 1) != QLatin1Char('\n'))
-			text.prepend(QLatin1Char('\n'));
-		cursor.setPosition(insertPos);
-		cursor.insertText(text);
+		const int cursorPos = cursor.position();
+		const int insertPos = (cursorPos >= globalStart && cursorPos <= globalEnd)
+				? cursorPos : globalEnd;
+		insertAt(cursor, document, insertPos, text);
 		m_mainEditor->setTextCursor(cursor);
 	}
 	else { // Split view: the orchestra has its own editor.
-		cursor = m_orcEditor->textCursor();
-		document = m_orcEditor->toPlainText();
+		QTextCursor cursor = m_orcEditor->textCursor();
+		const QString document = m_orcEditor->toPlainText();
 		const int defPos = firstDefinitionPosition(document, 0);
-		if (defPos >= 0)
-			cursor.setPosition(defPos);
-		else
-			cursor.movePosition(QTextCursor::End);
-		if (cursor.position() > 0 && document.at(cursor.position() - 1) != QLatin1Char('\n'))
-			text.prepend(QLatin1Char('\n'));
-		cursor.insertText(text);
+		const int globalEnd = defPos >= 0 ? defPos : document.size();
+		const int cursorPos = cursor.position();
+		const int insertPos = (cursorPos >= 0 && cursorPos <= globalEnd)
+				? cursorPos : globalEnd;
+		insertAt(cursor, document, insertPos, text);
 		m_orcEditor->setTextCursor(cursor);
 	}
 }
