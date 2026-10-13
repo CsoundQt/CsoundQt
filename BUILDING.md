@@ -14,8 +14,7 @@ Please help improving these instructions and report any issue to
 <https://github.com/CsoundQt/CsoundQt/issues>. Thanks!
 
 > **Note:** These instructions are for the `csoundqt7` branch (CsoundQt 7),
-> which requires **Csound 7** and **Qt 6**. For CsoundQt 1.x (Csound 6,
-> Qt 5), see the `develop` branch.
+> which requires **Csound 7** and **Qt 6**. 
 
 ## Getting the sources
 
@@ -28,9 +27,6 @@ Clone the repository and check out the `csoundqt7` branch:
     $ git clone https://github.com/CsoundQt/CsoundQt.git
     $ cd CsoundQt
     $ git checkout csoundqt7
-
-If you want RtMidi support (recommended), also pull the `rtmidi` submodule:
-
     $ git submodule update --init --recursive
 
 ## Requirements
@@ -39,27 +35,16 @@ If you want RtMidi support (recommended), also pull the `rtmidi` submodule:
   can use the prebuilt installers from <https://csound.com/download.html>;
   on Linux it is often preferable to build it yourself, see
   <https://github.com/csound/csound/blob/develop/BUILD.md>.
-- **Qt 6** (tested with Qt 6.5) — with the modules `widgets`, `concurrent`,
+- **Qt 6** — with the modules `widgets`, `concurrent`,
   `network`, `printsupport`, `quickwidgets`, `quickcontrols2` and, for HTML
-  support, `webenginewidgets` and `webchannel`. You can use the Qt
-  installation from your system's package manager or the Qt online installer
+  support, `webenginewidgets` and `webchannel`.Use the Qt online installer
   from <https://www.qt.io/download-open-source/>.
-- **RtMidi** (optional, recommended) — improves MIDI I/O stability and
-  allows associating widgets with MIDI controllers. The sources are included
-  as a git submodule (`rtmidi/`); on Linux a system-installed RtMidi is
-  used if found.
 - **libsndfile** (optional) — allows recording the realtime output of
   Csound to a file.
 
-PythonQt support was **removed** in CsoundQt 7 and is no longer a build
-option.
-
 ## Building with qmake
 
-The easiest way to build CsoundQt is to open `qcs.pro` in **Qt Creator**
-and build it there. On the command line:
-
-    $ qmake6 qcs.pro   # or just qmake, if it points to Qt 6
+    $ qmake6 qcs.pro   # or just qmake, if `qmake --version` >= 6.7
     $ make
 
 The qmake project files search for the Csound headers and library in

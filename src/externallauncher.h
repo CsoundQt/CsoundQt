@@ -28,7 +28,8 @@ namespace ExternalLauncher {
 bool launchExecutable(const QString &executable,
                       const QStringList &args = QStringList(),
                       const QString &workingDirectory = QString(),
-                      QString *errorString = nullptr);
+                      QString *errorString = nullptr,
+                      const QString &feature = QStringLiteral("external"));
 
 /**
  * Open \a url in a browser.
@@ -47,14 +48,19 @@ bool launchExecutable(const QString &executable,
  * and, if \a errorString is not null, stores a description of what was tried.
  */
 bool openBrowser(const QString &configuredBrowser,
-                 const QUrl &url,
-                 QString *errorString = nullptr);
+                  const QUrl &url,
+                  QString *errorString = nullptr,
+                  const QString &feature = QStringLiteral("browser"));
 
 /**
  * Open \a url (a web URL or a local file) with the system default application
  * via QDesktopServices::openUrl().
  */
-bool openWithDefaultApplication(const QUrl &url, QString *errorString = nullptr);
+bool openWithDefaultApplication(const QUrl &url, QString *errorString = nullptr,
+                                const QString &feature = QStringLiteral("external"));
+
+/** Return a privacy-conscious target string suitable for diagnostic logs. */
+QString redactUrlForLog(const QUrl &url);
 
 } // namespace ExternalLauncher
 

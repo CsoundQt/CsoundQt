@@ -272,7 +272,7 @@ build_csoundqt() {
     (
         cd "$src"
         "$QMAKE" qcs.pro \
-            CONFIG+=rtmidi CONFIG+=release CONFIG+=build64 \
+            CONFIG+=rtmidi CONFIG+=no_splash CONFIG+=release CONFIG+=build64 \
             "${ccache_args[@]}" \
             CSOUND_API_INCLUDE_DIR="$APPDIR/usr/include/csound" \
             CSOUND_LIBRARY_DIR="$APPDIR/usr/lib" \

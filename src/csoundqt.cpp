@@ -86,6 +86,15 @@
 #include "RtMidi.h"
 #endif
 
+namespace {
+
+bool openUrlWithDiagnostics(const QString &feature, const QUrl &url)
+{
+    return ExternalLauncher::openWithDefaultApplication(url, nullptr, feature);
+}
+
+}
+
 #ifdef Q_OS_WIN32
 static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.bat";
 #else
@@ -1023,15 +1032,21 @@ void CsoundQt::showTabContextMenu(const QPoint &pos)
 
 #if defined(Q_OS_MACOS)
     // Reveal and select the file in Finder
-    QProcess::startDetached("open", {"-R", filePath});
+    qDebug().noquote() << "External open attempt: feature=open-folder mechanism=direct-exec"
+                       << "program=open args=" << QStringList({"-R", QFileInfo(filePath).fileName()});
+    const bool started = QProcess::startDetached("open", {"-R", filePath});
+    qDebug() << "External open result: feature=open-folder mechanism=direct-exec result=" << started;
 #elif defined(Q_OS_WIN)
     // Select the file in Explorer
-    QProcess::startDetached("explorer.exe",
+    qDebug().noquote() << "External open attempt: feature=open-folder mechanism=direct-exec"
+                       << "program=explorer.exe args=/select," << QFileInfo(filePath).fileName();
+    const bool started = QProcess::startDetached("explorer.exe",
         {"/select,", QDir::toNativeSeparators(filePath)});
+    qDebug() << "External open result: feature=open-folder mechanism=direct-exec result=" << started;
 #else
     const QString dir = QFileInfo(filePath).absolutePath();
     // QDEBUG << "opening " << dir;
-    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(dir))) {
+    if (!openUrlWithDiagnostics(QStringLiteral("open-folder"), QUrl::fromLocalFile(dir))) {
         qDebug() << "Failed to open directory:" << dir;
     }
 #endif
@@ -1313,8 +1328,7 @@ void CsoundQt::tabMoved(int to, int from)  // arguments should be from, but prob
 void CsoundQt::openExamplesFolder()
 {
     QUrl examplePath = QUrl::fromLocalFile(QFileInfo(getExamplePath("")).absoluteFilePath());
-    qDebug() << "Trying to open Examples folder" << examplePath;
-    QDesktopServices::openUrl(examplePath);
+    openUrlWithDiagnostics(QStringLiteral("examples-folder"), examplePath);
 }
 
 void CsoundQt::setLineAndColumn(int line, int column)
@@ -2398,7 +2412,7 @@ void CsoundQt::runInTerm(bool realtime)
 #else
     args << "-e" << scriptFileName;
 #endif
-    if(startProcess(termexe, args)) {
+    if(startProcess(termexe, args, nullptr, QStringLiteral("terminal"))) {
         QMessageBox::critical(this, tr("Error running terminal"),
                               tr("Could not run terminal program: '%1'\nArgs: %2\n"
                                  "Check environment tab in preferences.").arg(termexe, args.join(" ")));
@@ -2631,10 +2645,11 @@ void CsoundQt::openExternalEditor()
         // name = "\"" + name + "\"";
         //QDEBUG << "Opening rendered audiofile: " << name;
         // execute(m_options->waveeditor, name);
-        startProcess(m_options->waveeditor, QStringList() << name);
+        startProcess(m_options->waveeditor, QStringList() << name, nullptr,
+                     QStringLiteral("waveeditor"));
     }
     else {
-        QDesktopServices::openUrl(QUrl::fromLocalFile (name));
+        openUrlWithDiagnostics(QStringLiteral("waveeditor-default"), QUrl::fromLocalFile(name));
     }
 }
 
@@ -2666,10 +2681,11 @@ void CsoundQt::openExternalPlayer()
     if (!m_options->waveplayer.isEmpty()) {
         // name = "\"" + name + "\""; // I doubt if thi is needed with startProcess
         //execute(m_options->waveplayer, name);
-        startProcess(m_options->waveplayer, QStringList() << name);
+        startProcess(m_options->waveplayer, QStringList() << name, nullptr,
+                     QStringLiteral("waveplayer"));
     }
     else {
-        QDesktopServices::openUrl(QUrl::fromLocalFile (name));
+        openUrlWithDiagnostics(QStringLiteral("waveplayer-default"), QUrl::fromLocalFile(name));
     }
 }
 
@@ -3245,10 +3261,11 @@ void CsoundQt::openPdfFile(QString name)
 #endif
         //QString arg = "\"" + name + "\"";
         //execute(m_options->pdfviewer, arg);
-        startProcess(m_options->pdfviewer, QStringList() << name );
+        startProcess(m_options->pdfviewer, QStringList() << name, nullptr,
+                     QStringLiteral("pdfviewer"));
     }
     else {
-        QDesktopServices::openUrl(QUrl::fromLocalFile (name));
+        openUrlWithDiagnostics(QStringLiteral("pdfviewer-default"), QUrl::fromLocalFile(name));
     }
 }
 
@@ -4158,7 +4175,8 @@ void CsoundQt::runUtility(QString flags)
         options = SCRIPT_NAME;
 #endif
         //execute(m_options->terminal, options);
-        startProcess(m_options->terminal, QStringList() << options  );
+        startProcess(m_options->terminal, QStringList() << options, nullptr,
+                     QStringLiteral("terminal"));
     }
 }
 
@@ -6413,13 +6431,14 @@ void CsoundQt::clearSettings()
     settings.sync();
 }
 
-int CsoundQt::startProcess(QString executable, const QStringList &args, QString *errorString) {
+int CsoundQt::startProcess(QString executable, const QStringList &args, QString *errorString,
+                           const QString &feature) {
     QString path = documentPages[curPage]->getFilePath();
     if (path.startsWith(":", Qt::CaseInsensitive) ) {
         // example or other embedded file
         path = QDir::tempPath();   // copy of example is saved there
     }
-    return ExternalLauncher::launchExecutable(executable, args, path, errorString) ? 0 : 1;
+    return ExternalLauncher::launchExecutable(executable, args, path, errorString, feature) ? 0 : 1;
 }
 
 int CsoundQt::execute(QString executable, QString options)

@@ -78,6 +78,8 @@ private slots:
     void openBrowserUsesDefaultWhenNoneConfigured();
     void openBrowserUsesSystemHandlerInAppImage();
     void openWithDefaultApplicationUsesHandler();
+    void redactUrlForLogHidesPrivateUrlParts();
+    void redactUrlForLogShowsLocalBasenameOnly();
     void openBrowserReportsFailureWhenEverythingFails();
 
 private:
@@ -241,6 +243,23 @@ void TestExternalLauncher::openWithDefaultApplicationUsesHandler()
     QVERIFY2(ExternalLauncher::openWithDefaultApplication(url, &error), qPrintable(error));
     QCOMPARE(catcher.count, 1);
     QDesktopServices::unsetUrlHandler(QStringLiteral("csoundqt-test"));
+}
+
+void TestExternalLauncher::redactUrlForLogHidesPrivateUrlParts()
+{
+    const QUrl url(QStringLiteral("https://user:secret@example.com/private/path?token=secret#section"));
+    const QString redacted = ExternalLauncher::redactUrlForLog(url);
+    QCOMPARE(redacted, QStringLiteral("https://example.com"));
+    QVERIFY(!redacted.contains(QStringLiteral("secret")));
+    QVERIFY(!redacted.contains(QStringLiteral("private")));
+}
+
+void TestExternalLauncher::redactUrlForLogShowsLocalBasenameOnly()
+{
+    const QUrl url = QUrl::fromLocalFile(QStringLiteral("/home/user/private/session.wav"));
+    const QString redacted = ExternalLauncher::redactUrlForLog(url);
+    QCOMPARE(redacted, QStringLiteral("file://…/session.wav"));
+    QVERIFY(!redacted.contains(QStringLiteral("/home/user")));
 }
 
 void TestExternalLauncher::openBrowserReportsFailureWhenEverythingFails()

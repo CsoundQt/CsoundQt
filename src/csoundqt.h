@@ -355,7 +355,8 @@ private:
 	void clearSettings();
     void setToolbarIconSize(int size);
     int execute(QString executable, QString options);
-    int startProcess(QString executable, const QStringList &args, QString *errorString = nullptr);
+    int startProcess(QString executable, const QStringList &args, QString *errorString = nullptr,
+                     const QString &feature = QStringLiteral("external"));
     void reportExternalLaunchFailure(const QString &tool, const QString &toolPath,
                                      const QUrl &url, const QString &errorString);
     //    bool saveCurrent();

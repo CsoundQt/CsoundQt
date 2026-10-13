@@ -229,7 +229,7 @@ jobs:
           CSOUND_LIBRARY_DIR="$PWD/csound/csound_install/CsoundLib64.framework/Versions/7.0"
 
           ccache_args=(QMAKE_CC="$(command -v ccache) clang" QMAKE_CXX="$(command -v ccache) clang++")
-          qmake CONFIG+=rtmidi CONFIG+=release \
+          qmake CONFIG+=rtmidi CONFIG+=no_splash CONFIG+=release \
             "CSOUND_INCLUDE_DIR=$CSOUND_FRAMEWORK_HEADERS" \
             "CSOUND_INTERFACES_INCLUDE_DIR=$CSOUND_FRAMEWORK_HEADERS" \
             "CSOUND_LIBRARY_DIR=$CSOUND_LIBRARY_DIR" \
@@ -479,7 +479,7 @@ jobs:
           # never complain about a missing import.
           mkdir -p bin
           cp -f "${CSOUND_DIR}/bin/csound64.dll" bin/ 2>/dev/null || true
-          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro \
+          qmake CONFIG+=rtmidi CONFIG+=no_splash CONFIG+=release qcs.pro \
             "CSOUND_API_INCLUDE_DIR=${CSINC}" \
             "CSOUND_INTERFACES_INCLUDE_DIR=${CSINC}" \
             "CSOUND_LIBRARY_DIR=${CSLIB}"
