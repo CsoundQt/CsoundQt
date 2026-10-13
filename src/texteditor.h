@@ -34,6 +34,14 @@ public:
 	TextEditor(QWidget *parent = 0);
 
 	void setTabIndents(bool indents) {m_tabIndents = indents;}
+	void setTabUseSpaces(bool useSpaces) {m_tabUseSpaces = useSpaces;}
+	void setTabSpaces(int spaces) {m_tabSpaces = spaces > 0 ? spaces : 1;}
+	bool tabUseSpaces() const {return m_tabUseSpaces;}
+	int tabSpaces() const {return m_tabSpaces;}
+	// Text inserted for one indentation step: either a tab or N spaces.
+	QString tabString() const {
+		return m_tabUseSpaces ? QString(m_tabSpaces, QLatin1Char(' ')) : QStringLiteral("\t");
+	}
 	void setParameterMode(bool on) {m_parameterMode = on; setCursorWidth(on ? 8 : 1);}
 	bool getParameterMode() {return m_parameterMode;}
     int getLastKey() {return m_lastkey;}
@@ -47,6 +55,8 @@ protected:
     virtual void dragMoveEvent(QDragMoveEvent *event);
 
 	bool m_tabIndents;
+	bool m_tabUseSpaces;
+	int  m_tabSpaces;
 	bool m_parameterMode;
 	bool m_commaTyped;
     int  m_lastkey;

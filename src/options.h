@@ -46,6 +46,8 @@ public:
 	QColor editorBgColor;
 	int tabWidth;
 	bool tabIndents;
+	bool tabUseSpaces;  // insert spaces instead of a tab character when Tab is pressed
+	int tabSpaces;      // number of spaces per tab (used when tabUseSpaces is true)
 	bool colorVariables;
     QString highlightingTheme;
 	bool autoPlay;

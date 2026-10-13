@@ -33,6 +33,9 @@ TextEditor::TextEditor(QWidget *parent) :
 	setAcceptRichText(false);
     m_parameterMode = false;
     m_commaTyped = false;
+    m_tabIndents = false;
+    m_tabUseSpaces = false;
+    m_tabSpaces = 2;
     //  qDebug() << "TextEditor::TextEditor" << acceptDrops();
 }
 
@@ -49,6 +52,9 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
         } else if(m_tabIndents) {
             // this blocks default behaviour and only tab does not move any further
 			emit requestIndent();
+        } else if (m_tabUseSpaces) {
+            // Insert spaces instead of a tab character.
+            insertPlainText(tabString());
         } else {
             QTextEdit::keyPressEvent(event);
 		}

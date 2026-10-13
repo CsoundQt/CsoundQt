@@ -46,6 +46,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     setMaximumSize(  QGuiApplication::primaryScreen()->geometry().width()  * 0.9,
                    QGuiApplication::primaryScreen()->geometry().height() * 0.9);
 
+    // The number of spaces is only meaningful when spaces are used for tabs.
+    connect(tabUseSpacesCheckBox, &QCheckBox::toggled,
+            tabSpacesSpinBox, &QWidget::setEnabled);
+
 	m_configlists->refreshModules();
 
 	if(m_configlists->rtAudioNames.size() == 1) {
@@ -181,6 +185,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	tabWidthSpinBox->setValue(m_options->tabWidth);
 	tabIndentCheckBox->setChecked(m_options->tabIndents);
+	tabUseSpacesCheckBox->setChecked(m_options->tabUseSpaces);
+	tabSpacesSpinBox->setValue(m_options->tabSpaces);
+	tabSpacesSpinBox->setEnabled(m_options->tabUseSpaces);
 
     // allow translations for highlightingThemeComboBox and themeCombobox
     // NB! make sure that the strings are the same as in configdialog.ui
@@ -520,6 +527,8 @@ void ConfigDialog::accept()
 	m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
 	m_options->tabWidth = tabWidthSpinBox->value();
 	m_options->tabIndents = tabIndentCheckBox->isChecked();
+	m_options->tabUseSpaces = tabUseSpacesCheckBox->isChecked();
+	m_options->tabSpaces = tabSpacesSpinBox->value();
 
     // deal with localized themes:
     m_options->themeMode = themeComboBox->currentData().toString();    // to allow to be translated

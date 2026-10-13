@@ -39,6 +39,8 @@ public slots:
 	void setPlainText(QString text);
 	void setFontPointSize(float size);
 	void setTabStopWidth(int width);
+	void setTabUseSpaces(bool useSpaces);
+	void setTabSpaces(int spaces);
 	void setLineWrapMode(QTextEdit::LineWrapMode mode);
 
 	QString getPlainText();

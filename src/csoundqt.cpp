@@ -3749,6 +3749,8 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setColorVariables(m_options->colorVariables);
     p->setTabStopWidth(m_options->tabWidth);
     p->setTabIndents(m_options->tabIndents);
+    p->setTabUseSpaces(m_options->tabUseSpaces);
+    p->setTabSpaces(m_options->tabSpaces);
     p->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     p->setAutoComplete(m_options->autoComplete, m_options->autoCompleteDelay);
     p->setAutoParameterMode(m_options->autoParameterMode);
@@ -5104,6 +5106,10 @@ void CsoundQt::createActions()
     //   unindentAct->setIconText(tr("Unindent"));
     //   connect(unindentAct, SIGNAL(triggered()), this, SLOT(unindent()));
 
+    tabsToSpacesAct = new QAction(tr("Convert Tabs to Spaces"), this);
+    tabsToSpacesAct->setStatusTip(tr("Replace leading indentation tabs with spaces in the whole document"));
+    tabsToSpacesAct->setShortcutContext(Qt::ApplicationShortcut);
+
     killLineAct = new QAction(tr("Kill Line"), this);
     killLineAct->setStatusTip(tr("Completely delete current line"));
     killLineAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -5236,6 +5242,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(commentAct);
     m_keyActions.append(indentAct);
     m_keyActions.append(unindentAct);
+    m_keyActions.append(tabsToSpacesAct);
     m_keyActions.append(externalPlayerAct);
     m_keyActions.append(externalEditorAct);
     m_keyActions.append(showEditorAct);
@@ -5302,12 +5309,14 @@ void CsoundQt::connectActions()
     disconnect(commentAct, 0, 0, 0);
     disconnect(indentAct, 0, 0, 0);
     disconnect(unindentAct, 0, 0, 0);
+    disconnect(tabsToSpacesAct, 0, 0, 0);
     disconnect(killLineAct, 0, 0, 0);
     disconnect(killToEndAct, 0, 0, 0);
     connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
     //  connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
     connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));
     connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
+    connect(tabsToSpacesAct, SIGNAL(triggered()), doc, SLOT(tabsToSpaces()));
     connect(killLineAct, SIGNAL(triggered()), doc, SLOT(killLine()));
     connect(killToEndAct, SIGNAL(triggered()), doc, SLOT(killToEnd()));
 
@@ -5465,6 +5474,7 @@ void CsoundQt::createMenus()
     //  editMenu->addAction(uncommentAct);
     editMenu->addAction(indentAct);
     editMenu->addAction(unindentAct);
+    editMenu->addAction(tabsToSpacesAct);
     // editMenu->addAction(killLineAct);
     // editMenu->addAction(killToEndAct);
     editMenu->addAction(lineNumbersAct);
@@ -5979,6 +5989,8 @@ void CsoundQt::readSettings()
 
     m_options->tabWidth = settings.value("tabWidth", 24).toInt();
     m_options->tabIndents = settings.value("tabIndents", false).toBool();
+    m_options->tabUseSpaces = settings.value("tabUseSpaces", false).toBool();
+    m_options->tabSpaces = settings.value("tabSpaces", 2).toInt();
     // m_options->colorVariables = settings.value("colorvariables", true).toBool();
 
     // NB! temporary comment out for highlightingTheme
@@ -6251,6 +6263,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         // settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
         settings.setValue("tabWidth", m_options->tabWidth );
         settings.setValue("tabIndents", m_options->tabIndents);
+        settings.setValue("tabUseSpaces", m_options->tabUseSpaces);
+        settings.setValue("tabSpaces", m_options->tabSpaces);
         settings.setValue("colorvariables", m_options->colorVariables);
         settings.setValue("highlightingTheme", m_options->highlightingTheme);
         settings.setValue("autoplay", m_options->autoPlay);

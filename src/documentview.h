@@ -158,6 +158,7 @@ public slots:
 	void uncomment();
 	void indent();
 	void unindent();
+	void tabsToSpaces();
 	void killLine();
 	void killToEnd();
 
@@ -182,6 +183,10 @@ private:
 	void updateFindHighlights(bool moveCursor);
 	void updateFindStatus();
 	void refreshFindAfterEdit();
+
+	// The string used for one indentation step in the current mode: a tab
+	// character, or the configured number of spaces when "use spaces" is on.
+	QString indentString() const;
 
 	MySyntaxMenu *syntaxMenu;
 

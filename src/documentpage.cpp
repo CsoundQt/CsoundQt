@@ -741,6 +741,16 @@ void DocumentPage::setTabIndents(bool indents)
 	m_view->setTabIndents(indents);
 }
 
+void DocumentPage::setTabUseSpaces(bool useSpaces)
+{
+	m_view->setTabUseSpaces(useSpaces);
+}
+
+void DocumentPage::setTabSpaces(int spaces)
+{
+	m_view->setTabSpaces(spaces);
+}
+
 void DocumentPage::setLineWrapMode(QTextEdit::LineWrapMode wrapLines)
 {
 	m_view->setLineWrapMode(wrapLines);
@@ -1178,6 +1188,11 @@ void DocumentPage::indent()
 void DocumentPage::unindent()
 {
 	m_view->unindent();
+}
+
+void DocumentPage::tabsToSpaces()
+{
+	m_view->tabsToSpaces();
 }
 
 void DocumentPage::killToEnd()

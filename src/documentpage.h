@@ -137,6 +137,8 @@ public:
 	void setTextFont(QFont font);
 	void setTabStopWidth(int tabWidth);
 	void setTabIndents(bool indents);
+	void setTabUseSpaces(bool useSpaces);
+	void setTabSpaces(int spaces);
 	void setLineWrapMode(QTextEdit::LineWrapMode wrapLines);
 	void setColorVariables(bool colorVariables);
 	//    void setOpcodeNameList(QStringList opcodeNameList);
@@ -212,6 +214,7 @@ public slots:
 	void uncomment();
 	void indent();
 	void unindent();
+	void tabsToSpaces();
 	void killLine();
 	void killToEnd();
 	void setViewMode(int mode);

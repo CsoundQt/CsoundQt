@@ -47,6 +47,8 @@ Options::Options(ConfigLists *configlists) :
     editorBgColor = Qt::white;
 
     tabWidth = 4;
+    tabUseSpaces = false;
+    tabSpaces = 2;
     colorVariables = true;
     highlightingTheme = "light";
     autoPlay = true;

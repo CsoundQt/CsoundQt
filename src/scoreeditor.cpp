@@ -100,6 +100,16 @@ void ScoreEditor::setTabStopWidth(int width)
     m_textEditor->setTabStopDistance(width);
 }
 
+void ScoreEditor::setTabUseSpaces(bool useSpaces)
+{
+    m_textEditor->setTabUseSpaces(useSpaces);
+}
+
+void ScoreEditor::setTabSpaces(int spaces)
+{
+    m_textEditor->setTabSpaces(spaces);
+}
+
 void ScoreEditor::setLineWrapMode(QTextEdit::LineWrapMode mode)
 {
 	m_textEditor->setLineWrapMode(mode);

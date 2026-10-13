@@ -517,6 +517,7 @@ private:
 	//    QAction *uncommentAct;
 	QAction *indentAct;
 	QAction *unindentAct;
+	QAction *tabsToSpacesAct;
 	QAction *killLineAct;
 	QAction *killToEndAct;
     QAction *gotoLineAct;

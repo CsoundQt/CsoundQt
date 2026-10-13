@@ -1221,7 +1221,7 @@ void DocumentView::indentNewLine()
 		linecursor.select(QTextCursor::LineUnderCursor);
 		QString line = linecursor.selectedText();
 		if (line.endsWith(":")) {
-			m_mainEditor->insertPlainText("    ");
+			m_mainEditor->insertPlainText(indentString());
 		}
 	} else if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
 			   || m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
@@ -2021,6 +2021,17 @@ void DocumentView::uncomment()
 	}
 }
 
+QString DocumentView::indentString() const
+{
+	// When the "use spaces" option is on, indent with the configured number
+	// of spaces. Otherwise keep the historical behaviour: a tab character,
+	// except in Python mode where four spaces were always used.
+	if (m_mainEditor->tabUseSpaces()) {
+		return QString(m_mainEditor->tabSpaces(), QLatin1Char(' '));
+	}
+	return m_mode == EDIT_PYTHON_MODE ? QStringLiteral("    ") : QStringLiteral("\t");
+}
+
 void DocumentView::indent()
 {
 	// TODO implment for multiple views
@@ -2029,11 +2040,9 @@ void DocumentView::indent()
 		internalChange = true;
 		QString indentChar = "";
 		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
-				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
-			indentChar = "\t";
-		}
-		else if (m_mode == EDIT_PYTHON_MODE) { // Python Mode
-			indentChar = "    ";
+				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE
+				|| m_mode == EDIT_PYTHON_MODE) {
+			indentChar = indentString();
 		}
 		QTextCursor cursor = m_mainEditor->textCursor();
 		QTextCursor::MoveMode moveMode = cursor.selectedText().isEmpty() ? QTextCursor::MoveAnchor : QTextCursor::KeepAnchor;
@@ -2069,11 +2078,9 @@ void DocumentView::unindent()
 		internalChange = true;
 		QString indentChar = "";
 		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
-				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
-			indentChar = "\t";
-		}
-		else if (m_mode == EDIT_PYTHON_MODE) { // Python Mode
-			indentChar = "    ";
+				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE
+				|| m_mode == EDIT_PYTHON_MODE) {
+			indentChar = indentString();
 		}
 		QTextCursor cursor = m_mainEditor->textCursor();
 		if (cursor.position() > cursor.anchor()) {
@@ -2086,14 +2093,34 @@ void DocumentView::unindent()
 		}
 		int start = cursor.selectionStart();
 		QString text = cursor.selectedText();
-		while (indentChar == "    "  && text.startsWith("\t")) {
-			text.remove(0,1);
+		if (m_mainEditor->tabUseSpaces() && !indentChar.isEmpty()) {
+			// Remove up to one indentation step from the start of each
+			// selected line: a single leading tab, or as many leading spaces
+			// as the configured tab width.
+			const int tabSpaces = m_mainEditor->tabSpaces();
+			QStringList lines = text.split(QChar(QChar::ParagraphSeparator));
+			for (QString &line : lines) {
+				if (line.startsWith(QLatin1Char('\t'))) {
+					line.remove(0, 1);
+				} else {
+					int removed = 0;
+					while (removed < tabSpaces && line.startsWith(QLatin1Char(' '))) {
+						line.remove(0, 1);
+						++removed;
+					}
+				}
+			}
+			text = lines.join(QStringLiteral("\n"));
+		} else {
+			while (indentChar == "    "  && text.startsWith("\t")) {
+				text.remove(0,1);
+			}
+			if (text.startsWith(indentChar)) {
+				text.remove(0,indentChar.size());
+			}
+			text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
+			text.replace("\n" + indentChar, QString("\n")); //TODO make more robust
 		}
-		if (text.startsWith(indentChar)) {
-			text.remove(0,indentChar.size());
-		}
-		text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
-		text.replace("\n" + indentChar, QString("\n")); //TODO make more robust
 		cursor.insertText(text);
 		cursor.setPosition(start);
 		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
@@ -2102,6 +2129,72 @@ void DocumentView::unindent()
 	else {
 		qDebug() << "Not implemented for split view";
 	}
+}
+
+void DocumentView::tabsToSpaces()
+{
+	// TODO implment for multiple views
+	if (m_viewMode >= 2) {
+		qDebug() << "Not implemented for split view";
+		return;
+	}
+
+	QTextDocument *document = m_mainEditor->document();
+
+	// A tab only counts as indentation when everything before it on the line
+	// is whitespace. Tabs after the first non-whitespace character (tabs
+	// "within" a line) are never touched.
+	auto isIndentationTab = [](const QString &line) {
+		const int tabIndex = line.indexOf(QLatin1Char('\t'));
+		if (tabIndex < 0) {
+			return false;
+		}
+		for (int i = 0; i < tabIndex; ++i) {
+			if (line.at(i) != QLatin1Char(' ') && line.at(i) != QLatin1Char('\t')) {
+				return false;
+			}
+		}
+		return true;
+	};
+
+	bool changed = false;
+	for (QTextBlock block = document->begin(); block.isValid(); block = block.next()) {
+		if (isIndentationTab(block.text())) {
+			changed = true;
+			break;
+		}
+	}
+	if (!changed) {
+		return;
+	}
+
+	internalChange = true;
+	const QString spacesString(m_mainEditor->tabSpaces(), QLatin1Char(' '));
+	QTextCursor cursor(document);
+	cursor.beginEditBlock();
+	for (QTextBlock block = document->begin(); block.isValid(); ) {
+		QTextBlock next = block.next();
+		const QString line = block.text();
+		int i = 0;
+		QString indent;
+		while (i < line.size()
+			   && (line.at(i) == QLatin1Char(' ') || line.at(i) == QLatin1Char('\t'))) {
+			if (line.at(i) == QLatin1Char('\t')) {
+				indent += spacesString;
+			} else {
+				indent += QLatin1Char(' ');
+			}
+			++i;
+		}
+		if (indent != line.left(i)) {  // the indentation contained a tab
+			QTextCursor lineCursor(block);
+			lineCursor.movePosition(QTextCursor::StartOfBlock);
+			lineCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, i);
+			lineCursor.insertText(indent);
+		}
+		block = next;
+	}
+	cursor.endEditBlock();
 }
 
 void DocumentView::killLine()

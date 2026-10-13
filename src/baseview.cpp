@@ -284,6 +284,30 @@ void BaseView::setTabIndents(bool indents)
 	m_mainEditor->setTabIndents(indents);
 }
 
+void BaseView::setTabUseSpaces(bool useSpaces)
+{
+	m_mainEditor->setTabUseSpaces(useSpaces);
+	m_orcEditor->setTabUseSpaces(useSpaces);
+	m_scoreEditor->setTabUseSpaces(useSpaces);
+	m_optionsEditor->setTabUseSpaces(useSpaces);
+	m_otherEditor->setTabUseSpaces(useSpaces);
+	m_otherCsdEditor->setTabUseSpaces(useSpaces);
+	m_widgetEditor->setTabUseSpaces(useSpaces);
+	m_appEditor->setTabUseSpaces(useSpaces);
+}
+
+void BaseView::setTabSpaces(int spaces)
+{
+	m_mainEditor->setTabSpaces(spaces);
+	m_orcEditor->setTabSpaces(spaces);
+	m_scoreEditor->setTabSpaces(spaces);
+	m_optionsEditor->setTabSpaces(spaces);
+	m_otherEditor->setTabSpaces(spaces);
+	m_otherCsdEditor->setTabSpaces(spaces);
+	m_widgetEditor->setTabSpaces(spaces);
+	m_appEditor->setTabSpaces(spaces);
+}
+
 void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
 {
 	m_mainEditor->setLineWrapMode(mode);
