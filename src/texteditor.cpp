@@ -124,11 +124,13 @@ void TextEditor::dragMoveEvent(QDragMoveEvent *event)
 void TextEditor::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasUrls()) {
-        // Report the drop point so the caller can show its menu there. The
-        // text cursor is deliberately left alone: path insertion happens at
-        // the cursor, not at the drop point.
+        // Report the drop point (in global coordinates) so the caller can show
+        // its menu right there. Do not use QCursor::pos(): it is unreliable
+        // during a drag and unusable on Wayland. The text cursor is left
+        // alone: path insertion happens at the cursor, not at the drop point.
         setFocus();
-        emit fileDropped(event->mimeData()->urls(), QCursor::pos());
+        emit fileDropped(event->mimeData()->urls(),
+                         viewport()->mapToGlobal(event->position().toPoint()));
         // Never let the source move/delete the file: we only reference it.
         if (event->possibleActions() & Qt::CopyAction)
             event->setDropAction(Qt::CopyAction);
