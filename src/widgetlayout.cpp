@@ -4535,12 +4535,7 @@ void WidgetLayout::undo()
     // geometry in place instead of reloading (and destroying) the whole panel.
     const bool geometryOnly = m_history[m_historyIndex].geometryOnly;
     m_historyIndex--;
-    if (geometryOnly) {
-        applyHistoryGeometry(m_history[m_historyIndex].geometry);
-    }
-    else {
-        loadXmlWidgets(m_history[m_historyIndex].xml);
-    }
+    applyHistoryEntry(m_historyIndex, geometryOnly);
 }
 
 void WidgetLayout::reloadWidgets() {
@@ -4554,12 +4549,100 @@ void WidgetLayout::redo()
     if (m_historyIndex >= m_history.size() - 1)
         return;
     m_historyIndex++;
-    if (m_history[m_historyIndex].geometryOnly) {
-        applyHistoryGeometry(m_history[m_historyIndex].geometry);
+    applyHistoryEntry(m_historyIndex, m_history[m_historyIndex].geometryOnly);
+}
+
+void WidgetLayout::applyHistoryEntry(int targetIndex, bool geometryOnly)
+{
+    if (geometryOnly) {
+        applyHistoryGeometry(m_history[targetIndex].geometry);
+        return;
     }
-    else {
-        loadXmlWidgets(m_history[m_historyIndex].xml);
+    // If only widgets were added or removed, apply the change incrementally so
+    // that the widgets that stay are neither destroyed nor recreated (undoing a
+    // removal must not disturb the widgets that are still there).
+    if (tryApplyStructuralChange(targetIndex)) {
+        return;
     }
+    loadXmlWidgets(m_history[targetIndex].xml);
+}
+
+bool WidgetLayout::tryApplyStructuralChange(int targetIndex)
+{
+    if (targetIndex < 0 || targetIndex >= m_history.size()) {
+        return false;
+    }
+    const HistoryEntry &target = m_history[targetIndex];
+    if (target.geometry.isEmpty()) {
+        return false;  // no state information; use the full reload
+    }
+
+    QSet<QString> targetUuids;
+    for (auto it = target.geometry.constBegin(); it != target.geometry.constEnd(); ++it) {
+        targetUuids.insert(it.key());
+    }
+    QSet<QString> currentUuids;
+    widgetsMutex.lock();
+    for (QuteWidget *w : m_widgets) {
+        currentUuids.insert(w->getUuid());
+    }
+    widgetsMutex.unlock();
+
+    if (currentUuids == targetUuids) {
+        // Same set of widgets: this was not a structural change (e.g. a
+        // property edit); let the caller do a full reload.
+        return false;
+    }
+
+    const QHash<QString, RuntimeState> runtime = captureRuntimeState();
+
+    // Remove widgets that do not exist in the target state.
+    const QVector<QuteWidget *> live = m_widgets;
+    for (QuteWidget *w : live) {
+        if (!targetUuids.contains(w->getUuid())) {
+            deleteWidget(w);
+        }
+    }
+
+    // Re-create widgets that exist in the target state but are missing now.
+    QSet<QString> liveUuids;
+    widgetsMutex.lock();
+    for (QuteWidget *w : m_widgets) {
+        liveUuids.insert(w->getUuid());
+    }
+    widgetsMutex.unlock();
+    const QSet<QString> missing = targetUuids - liveUuids;
+    if (!missing.isEmpty()) {
+        QDomDocument doc;
+        if (!doc.setContent(target.xml)) {
+            return false;
+        }
+        QDomNodeList panel = doc.elementsByTagName("bsbPanel");
+        QDomNode p = panel.item(0);
+        if (p.isNull()) {
+            return false;
+        }
+        const QDomNodeList children = p.childNodes();
+        for (int i = 0; i < children.size(); ++i) {
+            QDomElement element = children.item(i).toElement();
+            if (element.isNull() || element.tagName() != "bsbObject") {
+                continue;
+            }
+            QString uuid;
+            for (QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
+                if (n.toElement().tagName() == "uuid") {
+                    uuid = n.toElement().text();
+                    break;
+                }
+            }
+            if (missing.contains(uuid)) {
+                newXmlWidget(element);
+            }
+        }
+    }
+
+    restoreRuntimeState(runtime);
+    return true;
 }
 
 

@@ -437,6 +437,11 @@ private:
 	void markHistoryInternal(bool geometryOnly);
 	QHash<QString, QRect> currentWidgetGeometry();
 	void applyHistoryGeometry(const QHash<QString, QRect> &geometry);
+	// Apply a history entry: geometry-only states move widgets in place,
+	// structural changes add/remove only the affected widgets, anything else
+	// falls back to a full reload.
+	void applyHistoryEntry(int targetIndex, bool geometryOnly);
+	bool tryApplyStructuralChange(int targetIndex);
 	bool m_modified;
 	bool m_editMode;
 	//    QString m_clipboard;
