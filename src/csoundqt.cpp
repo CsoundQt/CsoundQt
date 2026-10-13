@@ -6478,12 +6478,135 @@ int CsoundQt::loadFileFromSystem(QString fileName)
     return loadFile(fileName,m_options->autoPlay);
 }
 
-void CsoundQt::handleDroppedFiles(QList<QUrl> urls)
+void CsoundQt::handleDroppedFiles(QList<QUrl> urls, QPoint globalPos)
 {
     for (const QUrl &url : urls) {
-        if (url.isLocalFile())
-            loadFile(url.toLocalFile());
+        if (!url.isLocalFile())
+            continue;
+        const QString fileName = url.toLocalFile();
+        const QString suffix = QFileInfo(fileName).suffix().toLower();
+        // Csound source files are opened directly; any other file is offered
+        // as text/table material to insert at the drop point.
+        if (suffix == QLatin1String("csd")
+                || suffix == QLatin1String("udo")
+                || suffix == QLatin1String("orc")) {
+            loadFile(fileName);
+        }
+        else {
+            // Defer the menu: showing a modal popup directly from inside the
+            // drop event can break the (still active) drag on some platforms.
+            QTimer::singleShot(0, this, [this, fileName, globalPos]() {
+                showDroppedFileMenu(fileName, globalPos);
+            });
+        }
     }
+}
+
+// Path of a dropped file as Csound should see it: absolute or relative to the
+// current document, always with forward slashes.
+QString CsoundQt::droppedFilePath(const QString &fileName, bool absolute) const
+{
+    const QFileInfo info(fileName);
+    QString path;
+    if (absolute) {
+        path = info.absoluteFilePath();
+    }
+    else {
+        QString baseDir;
+        if (curPage >= 0 && curPage < documentPages.size())
+            baseDir = documentPages[curPage]->getFilePath();
+        if (baseDir.isEmpty())
+            baseDir = QDir::currentPath();
+        path = QDir(baseDir).relativeFilePath(info.absoluteFilePath());
+    }
+    return QDir::fromNativeSeparators(path);
+}
+
+void CsoundQt::showDroppedFileMenu(const QString &fileName, const QPoint &globalPos)
+{
+    if (curPage < 0 || curPage >= documentPages.size())
+        return; // No document to insert into.
+
+    const bool soundFile = m_configlists.isSoundFile(fileName);
+
+    QMenu menu(this);
+    QAction *absoluteAct = menu.addAction(tr("Insert absolute path"));
+    QAction *relativeAct = menu.addAction(tr("Insert relative path"));
+    QAction *ftgenAct = nullptr;
+    QAction *scoreTableAct = nullptr;
+    if (soundFile) {
+        menu.addSeparator();
+        ftgenAct = menu.addAction(tr("Read soundfile as ftgen"));
+        scoreTableAct = menu.addAction(tr("Read soundfile as score table"));
+    }
+
+    QAction *selected = menu.exec(globalPos);
+    if (!selected)
+        return;
+
+    if (selected == absoluteAct) {
+        const QString path = droppedFilePath(fileName, true);
+        documentPages[curPage]->insertTextAtCursor(QStringLiteral("\"%1\"").arg(path));
+    }
+    else if (selected == relativeAct) {
+        const QString path = droppedFilePath(fileName, false);
+        documentPages[curPage]->insertTextAtCursor(QStringLiteral("\"%1\"").arg(path));
+    }
+    else if (selected == ftgenAct) {
+        insertDroppedFtgen(fileName);
+    }
+    else if (selected == scoreTableAct) {
+        insertDroppedScoreTable(fileName);
+    }
+}
+
+void CsoundQt::insertDroppedFtgen(const QString &fileName)
+{
+    const QString path = droppedFilePath(fileName, true);
+    QString name = QFileInfo(fileName).completeBaseName();
+    name.replace(QRegularExpression(QStringLiteral("[^A-Za-z0-9_]")),
+                 QStringLiteral("_"));
+    if (name.isEmpty())
+        name = QStringLiteral("soundfile");
+    // GEN01 with a deferred (0) table size, so Csound reads the file length
+    // and format from the soundfile header.
+    const QString line = QStringLiteral("gi_%1 ftgen 0, 0, 0, 1, \"%2\", 0, 0, 0\n")
+            .arg(name, path);
+    documentPages[curPage]->insertAfterOrchestraHeader(line);
+}
+
+void CsoundQt::insertDroppedScoreTable(const QString &fileName)
+{
+    const QString path = droppedFilePath(fileName, true);
+    const int tableNumber = nextFreeTableNumber();
+    // GEN01 read from the score, with a deferred table size.
+    const QString line = QStringLiteral("f %1 0 0 1 \"%2\" 0 0 0\n")
+            .arg(tableNumber).arg(path);
+    documentPages[curPage]->insertAtScoreStart(line);
+}
+
+int CsoundQt::nextFreeTableNumber()
+{
+    int highest = 0;
+    if (curPage >= 0 && curPage < documentPages.size()) {
+        const QString text = documentPages[curPage]->getFullText();
+        static const QRegularExpression scoreRx(
+                    QStringLiteral(R"(^\s*f\s+(\d+))"),
+                    QRegularExpression::MultilineOption);
+        static const QRegularExpression ftgenRx(
+                    QStringLiteral(R"(\bftgen\s+(\d+))"));
+        auto collect = [&highest](const QRegularExpression &rx, const QString &text) {
+            auto it = rx.globalMatch(text);
+            while (it.hasNext()) {
+                const int number = it.next().captured(1).toInt();
+                if (number > highest)
+                    highest = number;
+            }
+        };
+        collect(scoreRx, text);
+        collect(ftgenRx, text);
+    }
+    return highest + 1;
 }
 
 void changeNewLines(QByteArray &line) {

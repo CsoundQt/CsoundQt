@@ -140,6 +140,21 @@ void DocumentPage::insertText(QString text, int section)
 	return m_view->insertText(text, section);
 }
 
+void DocumentPage::insertTextAtCursor(QString text)
+{
+	return m_view->insertTextAtCursor(text);
+}
+
+void DocumentPage::insertAfterOrchestraHeader(QString text)
+{
+	return m_view->insertAfterOrchestraHeader(text);
+}
+
+void DocumentPage::insertAtScoreStart(QString text)
+{
+	return m_view->insertAtScoreStart(text);
+}
+
 void DocumentPage::setFullText(QString text)
 {
 	return m_view->setFullText(text);

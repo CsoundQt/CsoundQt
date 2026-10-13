@@ -56,9 +56,20 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
     editors << m_mainEditor << m_orcEditor << m_scoreEditor << m_optionsEditor << m_filebEditor
 			<< m_otherEditor << m_otherCsdEditor << m_widgetEditor << m_appEditor;
     for (QWidget *w : editors) {
-        if (TextEditor *te = qobject_cast<TextEditor *>(w))
-            connect(te, &TextEditor::fileDropped, this, &BaseView::fileDropped);
+        if (TextEditor *te = qobject_cast<TextEditor *>(w)) {
+            connect(te, &TextEditor::fileDropped, this,
+                    [this, te](QList<QUrl> urls, QPoint pos) {
+                        m_lastDropEditor = te;
+                        emit fileDropped(urls, pos);
+                    });
+        }
     }
+    // The score editor embeds its own text editor; forward its drops too.
+    connect(m_scoreEditor->textEditor(), &TextEditor::fileDropped, this,
+            [this](QList<QUrl> urls, QPoint pos) {
+                m_lastDropEditor = m_scoreEditor->textEditor();
+                emit fileDropped(urls, pos);
+            });
 	splitter = new QSplitter(this); // Deleted with parent
 	splitter->setOrientation(Qt::Vertical);
 	splitter->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -650,6 +661,71 @@ QString BaseView::getBasicText()
 		text = m_orcEditor->toPlainText();
 	}
 	return text;
+}
+
+void BaseView::insertTextAtCursor(QString text)
+{
+	// Insert where the file was dropped. Fall back to the main editor if the
+	// drop target is unknown or not visible.
+	TextEditor *editor = m_lastDropEditor;
+	if (!editor || !editor->isVisible()) {
+		editor = m_mainEditor;
+	}
+	QTextCursor cursor = editor->textCursor();
+	cursor.insertText(text);
+	editor->setTextCursor(cursor);
+}
+
+void BaseView::insertAfterOrchestraHeader(QString text)
+{
+	if (m_viewMode < 2) { // Unified view: the whole document lives in the main editor
+		QTextCursor cursor = m_mainEditor->textCursor();
+		const QString document = m_mainEditor->toPlainText();
+		const int tagIndex = document.indexOf(QStringLiteral("<CsInstruments>"));
+		if (tagIndex >= 0) {
+			int insertPos = document.indexOf(QLatin1Char('\n'), tagIndex);
+			insertPos = insertPos >= 0
+					? insertPos + 1
+					: tagIndex + QStringLiteral("<CsInstruments>").size();
+			cursor.setPosition(insertPos);
+		}
+		else {
+			// Orchestra-only file (or no tags): the header is the top.
+			cursor.setPosition(0);
+		}
+		cursor.insertText(text);
+		m_mainEditor->setTextCursor(cursor);
+	}
+	else { // Split view: the orchestra has its own editor.
+		QTextCursor cursor = m_orcEditor->textCursor();
+		cursor.movePosition(QTextCursor::Start);
+		cursor.insertText(text);
+		m_orcEditor->setTextCursor(cursor);
+	}
+}
+
+void BaseView::insertAtScoreStart(QString text)
+{
+	if (m_viewMode < 2) { // Unified view
+		QTextCursor cursor = m_mainEditor->textCursor();
+		const QString document = m_mainEditor->toPlainText();
+		const int tagIndex = document.indexOf(QStringLiteral("<CsScore"));
+		if (tagIndex >= 0) {
+			const int tagEnd = document.indexOf(QLatin1Char('>'), tagIndex);
+			int insertPos = tagEnd >= 0 ? document.indexOf(QLatin1Char('\n'), tagEnd) : -1;
+			insertPos = insertPos >= 0 ? insertPos + 1 : tagEnd + 1;
+			cursor.setPosition(insertPos);
+		}
+		else {
+			// No score section: append at the end of the document.
+			cursor.movePosition(QTextCursor::End);
+		}
+		cursor.insertText(text);
+		m_mainEditor->setTextCursor(cursor);
+	}
+	else { // Split view: the score has its own editor.
+		m_scoreEditor->insertTextAtStart(text);
+	}
 }
 
 QString BaseView::getFullText()

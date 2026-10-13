@@ -74,7 +74,9 @@ signals:
 	void requestUnindent();
 	void requestParameterModeExit();
     void mouseReleased();
-    void fileDropped(QList<QUrl> urls);
+    // Position is in global coordinates, so the drop menu can be shown at the
+    // point where the files were dropped.
+    void fileDropped(QList<QUrl> urls, QPoint globalPos);
 };
 
 class LineNumberArea;

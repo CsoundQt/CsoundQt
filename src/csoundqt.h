@@ -205,7 +205,7 @@ private slots:
 	void reload();
 	void openFromAction();
 	void openFromAction(QString fileName);
-    void handleDroppedFiles(QList<QUrl> urls);
+    void handleDroppedFiles(QList<QUrl> urls, QPoint globalPos);
 	void runScriptFromAction();
 	void runScript(QString fileName);
 	void createCodeGraph();
@@ -375,6 +375,12 @@ private:
 	void openLogFile();
 	void setupEnvironment();
     void openHtmlHelp(QString fileName, QString entry, bool external);
+    // Drag & drop of non-Csound files
+    void showDroppedFileMenu(const QString &fileName, const QPoint &globalPos);
+    QString droppedFilePath(const QString &fileName, bool absolute) const;
+    void insertDroppedFtgen(const QString &fileName);
+    void insertDroppedScoreTable(const QString &fileName);
+    int nextFreeTableNumber();
 
     ConfigLists m_configlists;
 	QTabWidget *documentTabs;

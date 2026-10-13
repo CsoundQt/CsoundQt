@@ -59,6 +59,9 @@ public:
 	QStringList languageCodes;
 
 	void refreshModules();
+    // True when the file name looks like an audio file that Csound can read
+    // through GEN01 (used for drag & drop actions).
+    bool isSoundFile(const QString &fileName) const;
     bool isJackRunning();
     bool isPipeWireRunning();
     bool isFixedSamplerateBackend(const QString &module);

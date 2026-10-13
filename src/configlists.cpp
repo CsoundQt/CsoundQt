@@ -22,6 +22,7 @@
 
 #include <QProcess>
 #include <QFile>
+#include <QFileInfo>
 #include <QTemporaryFile>
 #include <QTextStream>
 #include <QDir>
@@ -300,6 +301,26 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
 	return m_messages.split("\n");
 }
 
+
+bool ConfigLists::isSoundFile(const QString &fileName) const
+{
+    const QString suffix = QFileInfo(fileName).suffix().toLower();
+    if (suffix.isEmpty()) {
+        return false;
+    }
+    // fileTypeNames holds the formats this Csound build can record; they are
+    // also readable through GEN01.
+    if (fileTypeNames.contains(suffix)) {
+        return true;
+    }
+    // Formats that are commonly read but not offered for recording.
+    static const QStringList extraSoundExtensions = {
+        QStringLiteral("aif"), QStringLiteral("aifc"), QStringLiteral("snd"),
+        QStringLiteral("wave"), QStringLiteral("ogg"), QStringLiteral("oga"),
+        QStringLiteral("mp3")
+    };
+    return extraSoundExtensions.contains(suffix);
+}
 
 bool ConfigLists::isJackRunning() {
     CSOUND *cs = csoundCreate(nullptr, nullptr);

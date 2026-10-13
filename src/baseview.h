@@ -93,6 +93,12 @@ public:
 	//    void setOpcodeTree(OpEntryParser *opcodeTree);
 	void setOrc(QString text);
 	void setSco(QString text);
+	// Drag & drop helpers: insert generated code at the cursor (where the
+	// file was dropped), at the top of the orchestra section, or at the top
+	// of the score section.
+	void insertTextAtCursor(QString text);
+	void insertAfterOrchestraHeader(QString text);
+	void insertAtScoreStart(QString text);
 	void clearFileBText();
 	void appendFileBText(QString text);
 	void setOptionsText(QString text);
@@ -148,7 +154,7 @@ public:
 	QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
 
 signals:
-    void fileDropped(QList<QUrl> urls);
+    void fileDropped(QList<QUrl> urls, QPoint globalPos);
 
 public slots:
 	void toggleLineArea();
@@ -187,6 +193,7 @@ protected:
 	int m_scoStartLine;
 
 	QVector<QWidget *> editors; // A vector to hold pointers for the above for easy processing
+	TextEditor *m_lastDropEditor = nullptr; // Editor that last received a file drop
 };
 
 #endif // BASEVIEW_H

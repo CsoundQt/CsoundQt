@@ -147,6 +147,31 @@ QString ScoreEditor::getSelection()
 	return text;
 }
 
+void ScoreEditor::insertTextAtStart(const QString &text)
+{
+	switch (m_mode) {
+	case 0: {
+		QTextCursor cursor = m_textEditor->textCursor();
+		cursor.movePosition(QTextCursor::Start);
+		cursor.insertText(text);
+		m_textEditor->setTextCursor(cursor);
+		break;
+	}
+	case 1: {
+		// The score is shown as an event sheet: prepend the statement(s) as
+		// new rows at the top, keeping their order.
+		const QStringList lines = text.split('\n', Qt::SkipEmptyParts);
+		for (int i = lines.size() - 1; i >= 0; --i) {
+			m_sheet->insertRow(0);
+			m_sheet->setFromText(lines.at(i), 0, 0, 1, -1, false);
+		}
+		break;
+	}
+	default:
+		break;
+	}
+}
+
 void ScoreEditor::clearUndoRedoStacks()
 {
 	// TODO implement

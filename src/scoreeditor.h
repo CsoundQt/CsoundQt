@@ -46,6 +46,11 @@ public slots:
 	QString getPlainText();
 	QString getSelection();
 
+	// Insert the given text at the very beginning of the score, in whichever
+	// representation is currently shown (text editor or event sheet).
+	void insertTextAtStart(const QString &text);
+	TextEditor *textEditor() const { return m_textEditor; }
+
 	void clearUndoRedoStacks();
 	void modified();
 
