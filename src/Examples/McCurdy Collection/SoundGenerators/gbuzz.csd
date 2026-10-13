@@ -90,7 +90,7 @@ i 10		0.0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -119,7 +119,7 @@ i 10		0.0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8868</objectName>
   <x>8</x>
   <y>10</y>
@@ -138,7 +138,7 @@ i 10		0.0	   3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>138</y>
@@ -167,7 +167,7 @@ i 10		0.0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>138</y>
@@ -196,7 +196,7 @@ i 10		0.0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -225,7 +225,7 @@ i 10		0.0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>17</y>
@@ -255,7 +255,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>122</y>
@@ -273,7 +273,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>176</y>
@@ -302,7 +302,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AmpMult</objectName>
   <x>448</x>
   <y>176</y>
@@ -331,7 +331,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>AmpMult</objectName>
   <x>8</x>
   <y>160</y>
@@ -349,7 +349,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>72</y>
@@ -378,7 +378,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>LowestHarm</objectName>
   <x>168</x>
   <y>68</y>
@@ -407,7 +407,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <randomizable group="0">false</randomizable>
   <value>5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>215</y>
@@ -436,7 +436,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Value</objectName>
   <x>448</x>
   <y>215</y>
@@ -465,7 +465,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency</objectName>
   <x>8</x>
   <y>199</y>
@@ -483,7 +483,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>230</x>
   <y>72</y>
@@ -512,7 +512,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Harmonics</objectName>
   <x>390</x>
   <y>68</y>

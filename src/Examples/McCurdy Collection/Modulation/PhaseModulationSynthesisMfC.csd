@@ -131,7 +131,7 @@ i 10		0	   3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -160,7 +160,7 @@ i 10		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -189,7 +189,7 @@ i 10		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>527</x>
   <y>78</y>
@@ -220,7 +220,7 @@ There is a switch that allows the user to switch between FM synthesis and phase 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2511</objectName>
   <x>8</x>
   <y>6</y>
@@ -239,7 +239,7 @@ There is a switch that allows the user to switch between FM synthesis and phase 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Carrier_Amplitude</objectName>
   <x>448</x>
   <y>272</y>
@@ -268,7 +268,7 @@ There is a switch that allows the user to switch between FM synthesis and phase 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Carrier_Amplitude</objectName>
   <x>8</x>
   <y>249</y>
@@ -286,7 +286,7 @@ There is a switch that allows the user to switch between FM synthesis and phase 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>272</y>
@@ -315,7 +315,7 @@ There is a switch that allows the user to switch between FM synthesis and phase 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>79</x>
   <y>158</y>
@@ -344,7 +344,7 @@ There is a switch that allows the user to switch between FM synthesis and phase 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>179</x>
   <y>160</y>
@@ -373,7 +373,7 @@ There is a switch that allows the user to switch between FM synthesis and phase 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Carrier_Frequency</objectName>
   <x>95</x>
   <y>170</y>
@@ -402,7 +402,7 @@ There is a switch that allows the user to switch between FM synthesis and phase 
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Modulation_Frequency</objectName>
   <x>218</x>
   <y>170</y>
@@ -431,7 +431,7 @@ There is a switch that allows the user to switch between FM synthesis and phase 
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>218</x>
   <y>199</y>
@@ -461,7 +461,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>95</x>
   <y>199</y>
@@ -491,7 +491,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>86</y>
@@ -520,7 +520,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Base_Frequency</objectName>
   <x>8</x>
   <y>63</y>
@@ -538,7 +538,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Base_Frequency_Value</objectName>
   <x>448</x>
   <y>86</y>
@@ -567,7 +567,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>129</y>
@@ -596,7 +596,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Modulation_Index</objectName>
   <x>8</x>
   <y>106</y>
@@ -614,7 +614,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>155</x>
   <y>5</y>
@@ -643,7 +643,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>28</y>
@@ -672,7 +672,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>27</y>
@@ -702,7 +702,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>4</y>
@@ -731,7 +731,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Peak_Dev</objectName>
   <x>397</x>
   <y>170</y>
@@ -760,7 +760,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>328</x>
   <y>166</y>
@@ -790,7 +790,7 @@ Deviation</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Modulation_Index</objectName>
   <x>448</x>
   <y>129</y>
@@ -819,7 +819,7 @@ Deviation</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>317</y>
@@ -848,7 +848,7 @@ Deviation</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>8</x>
   <y>294</y>
@@ -866,7 +866,7 @@ Deviation</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>448</x>
   <y>317</y>
@@ -895,7 +895,7 @@ Deviation</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>
   <x>128</x>
   <y>338</y>
@@ -920,7 +920,7 @@ Deviation</label>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>249</x>
   <y>339</y>

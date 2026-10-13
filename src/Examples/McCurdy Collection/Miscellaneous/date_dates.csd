@@ -52,7 +52,7 @@ i  2 0 0.01
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -81,7 +81,7 @@ i  2 0 0.01
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>22</y>
@@ -114,7 +114,7 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1288</objectName>
   <x>9</x>
   <y>190</y>
@@ -133,7 +133,7 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3016</objectName>
   <x>9</x>
   <y>228</y>
@@ -152,7 +152,7 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>Dates</objectName>
   <x>205</x>
   <y>225</y>
@@ -180,7 +180,7 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>122</x>
   <y>193</y>
@@ -209,7 +209,7 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Date</objectName>
   <x>205</x>
   <y>194</y>
@@ -238,7 +238,7 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>132</x>
   <y>227</y>

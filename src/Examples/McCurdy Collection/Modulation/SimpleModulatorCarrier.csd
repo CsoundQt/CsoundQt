@@ -85,7 +85,7 @@ i 1		0	   3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -114,7 +114,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -143,7 +143,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>20</y>
@@ -173,7 +173,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3793</objectName>
   <x>8</x>
   <y>6</y>
@@ -192,7 +192,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Modulator_Amplitude</objectName>
   <x>448</x>
   <y>63</y>
@@ -221,7 +221,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Modulator_Amplitude</objectName>
   <x>8</x>
   <y>46</y>
@@ -239,7 +239,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>63</y>
@@ -268,7 +268,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>101</y>
@@ -297,7 +297,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Carrier_Amplitude</objectName>
   <x>8</x>
   <y>84</y>
@@ -315,7 +315,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Carrier_Amplitude</objectName>
   <x>448</x>
   <y>101</y>
@@ -344,7 +344,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>47</x>
   <y>187</y>
@@ -373,7 +373,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>47</x>
   <y>149</y>
@@ -402,7 +402,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Modulator_Frequency</objectName>
   <x>198</x>
   <y>150</y>
@@ -431,7 +431,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <randomizable group="0">false</randomizable>
   <value>200</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Carrier_Frequency</objectName>
   <x>198</x>
   <y>188</y>
@@ -460,7 +460,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <randomizable group="0">false</randomizable>
   <value>200</value>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>9</x>
   <y>224</y>
@@ -478,7 +478,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName/>
   <x>10</x>
   <y>391</y>

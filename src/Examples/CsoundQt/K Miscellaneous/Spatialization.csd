@@ -381,7 +381,7 @@ e
   <g>169</g>
   <b>101</b>
  </bgcolor>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>x</objectName>
   <x>36</x>
   <y>115</y>
@@ -407,14 +407,14 @@ e
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>azi</objectName>
   <x>60</x>
   <y>437</y>
@@ -443,7 +443,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>spr</objectName>
   <x>161</x>
   <y>438</y>
@@ -472,7 +472,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>60</x>
   <y>409</y>
@@ -501,7 +501,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>161</x>
   <y>410</y>
@@ -530,7 +530,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>473</x>
   <y>282</y>
@@ -560,7 +560,7 @@ Configuration</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>config</objectName>
   <x>497</x>
   <y>345</y>
@@ -595,7 +595,7 @@ Configuration</label>
   <selectedIndex>3</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>19</x>
   <y>472</y>
@@ -628,7 +628,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>chn1</objectName>
   <x>21</x>
   <y>684</y>
@@ -657,7 +657,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>445</x>
   <y>390</y>
@@ -686,7 +686,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>chn2</objectName>
   <x>75</x>
   <y>685</y>
@@ -715,7 +715,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>chn3</objectName>
   <x>129</x>
   <y>685</y>
@@ -744,7 +744,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <randomizable group="0">false</randomizable>
   <value>3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>chn4</objectName>
   <x>183</x>
   <y>686</y>
@@ -773,7 +773,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <randomizable group="0">false</randomizable>
   <value>4</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>chn5</objectName>
   <x>238</x>
   <y>685</y>
@@ -802,7 +802,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <randomizable group="0">false</randomizable>
   <value>5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>chn6</objectName>
   <x>292</x>
   <y>686</y>
@@ -831,7 +831,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <randomizable group="0">false</randomizable>
   <value>6</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>chn7</objectName>
   <x>346</x>
   <y>686</y>
@@ -860,7 +860,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <randomizable group="0">false</randomizable>
   <value>7</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>chn8</objectName>
   <x>400</x>
   <y>687</y>
@@ -889,7 +889,7 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
   <randomizable group="0">false</randomizable>
   <value>8</value>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>386</x>
   <y>473</y>
@@ -915,14 +915,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out1over</objectName>
   <x>386</x>
   <y>455</y>
@@ -948,14 +948,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>430</x>
   <y>473</y>
@@ -981,14 +981,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out2over</objectName>
   <x>430</x>
   <y>455</y>
@@ -1014,14 +1014,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>474</x>
   <y>473</y>
@@ -1047,14 +1047,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out3over</objectName>
   <x>474</x>
   <y>455</y>
@@ -1080,14 +1080,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>518</x>
   <y>473</y>
@@ -1113,14 +1113,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out4over</objectName>
   <x>518</x>
   <y>455</y>
@@ -1146,14 +1146,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>562</x>
   <y>473</y>
@@ -1179,14 +1179,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out5over</objectName>
   <x>562</x>
   <y>455</y>
@@ -1212,14 +1212,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>606</x>
   <y>473</y>
@@ -1245,14 +1245,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out6over</objectName>
   <x>606</x>
   <y>455</y>
@@ -1278,14 +1278,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>650</x>
   <y>473</y>
@@ -1311,14 +1311,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out7over</objectName>
   <x>650</x>
   <y>455</y>
@@ -1344,14 +1344,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>694</x>
   <y>473</y>
@@ -1377,14 +1377,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out8over</objectName>
   <x>694</x>
   <y>455</y>
@@ -1410,14 +1410,14 @@ The Stereo configuration is more for fun. In general, use pan2 for this case.</l
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>333</x>
   <y>282</y>
@@ -1447,7 +1447,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>method</objectName>
   <x>355</x>
   <y>345</y>
@@ -1482,7 +1482,7 @@ Method</label>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FL</objectName>
   <x>23</x>
   <y>79</y>
@@ -1511,7 +1511,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FR</objectName>
   <x>282</x>
   <y>79</y>
@@ -1540,7 +1540,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RR</objectName>
   <x>286</x>
   <y>376</y>
@@ -1569,7 +1569,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RL</objectName>
   <x>22</x>
   <y>374</y>
@@ -1598,7 +1598,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>C</objectName>
   <x>148</x>
   <y>80</y>
@@ -1627,7 +1627,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>octo1</objectName>
   <x>90</x>
   <y>79</y>
@@ -1656,7 +1656,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>octo2</objectName>
   <x>208</x>
   <y>80</y>
@@ -1685,7 +1685,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>octo3</objectName>
   <x>293</x>
   <y>159</y>
@@ -1714,7 +1714,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>octo4</objectName>
   <x>294</x>
   <y>277</y>
@@ -1743,7 +1743,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>octo6</objectName>
   <x>90</x>
   <y>372</y>
@@ -1772,7 +1772,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>octo5</objectName>
   <x>208</x>
   <y>373</y>
@@ -1801,7 +1801,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>octo8</objectName>
   <x>11</x>
   <y>159</y>
@@ -1830,7 +1830,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>octo7</objectName>
   <x>11</x>
   <y>279</y>
@@ -1859,7 +1859,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>459</x>
   <y>686</y>
@@ -1888,7 +1888,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>268</x>
   <y>424</y>
@@ -1917,7 +1917,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>stL</objectName>
   <x>12</x>
   <y>223</y>
@@ -1946,7 +1946,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>stR</objectName>
   <x>293</x>
   <y>222</y>
@@ -1975,7 +1975,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>384</x>
   <y>422</y>
@@ -2004,7 +2004,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>427</x>
   <y>422</y>
@@ -2033,7 +2033,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>470</x>
   <y>423</y>
@@ -2062,7 +2062,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>513</x>
   <y>423</y>
@@ -2091,7 +2091,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>556</x>
   <y>423</y>
@@ -2120,7 +2120,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>599</x>
   <y>423</y>
@@ -2149,7 +2149,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>642</x>
   <y>423</y>
@@ -2178,7 +2178,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>686</x>
   <y>424</y>
@@ -2207,7 +2207,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>343</x>
   <y>157</y>
@@ -2226,7 +2226,7 @@ Method</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>331</x>
   <y>123</y>
@@ -2255,7 +2255,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>473</x>
   <y>124</y>
@@ -2284,7 +2284,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>loop</objectName>
   <x>498</x>
   <y>159</y>
@@ -2299,7 +2299,7 @@ Method</label>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>550</x>
   <y>124</y>
@@ -2328,7 +2328,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>dbout</objectName>
   <x>620</x>
   <y>124</y>
@@ -2357,7 +2357,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
   <y>2</y>
@@ -2386,7 +2386,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>334</x>
   <y>197</y>
@@ -2415,7 +2415,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>348</x>
   <y>82</y>
@@ -2444,7 +2444,7 @@ Method</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>inputsel</objectName>
   <x>490</x>
   <y>86</y>
@@ -2474,7 +2474,7 @@ Method</label>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>462</x>
   <y>191</y>
@@ -2504,7 +2504,7 @@ Channel</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>inchan</objectName>
   <x>482</x>
   <y>237</y>
@@ -2533,7 +2533,7 @@ Channel</label>
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>gaindb</objectName>
   <x>549</x>
   <y>159</y>
@@ -2551,7 +2551,7 @@ Channel</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>550</x>
   <y>197</y>
@@ -2580,7 +2580,7 @@ Channel</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>dboutlive</objectName>
   <x>620</x>
   <y>197</y>
@@ -2609,7 +2609,7 @@ Channel</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>gaindblive</objectName>
   <x>549</x>
   <y>241</y>
@@ -2627,7 +2627,7 @@ Channel</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>livein</objectName>
   <x>333</x>
   <y>237</y>
@@ -2653,14 +2653,14 @@ Channel</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>liveinover</objectName>
   <x>441</x>
   <y>237</y>
@@ -2686,14 +2686,14 @@ Channel</label>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>15</x>
   <y>44</y>

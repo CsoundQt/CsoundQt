@@ -60,7 +60,7 @@ f 0 600			; THIS LINE FUNCTIONS AS A DUMMY SCORE EVENT AND ALLOWS REALTIME MIDI 
   <g>170</g>
   <b>170</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -89,7 +89,7 @@ f 0 600			; THIS LINE FUNCTIONS AS A DUMMY SCORE EVENT AND ALLOWS REALTIME MIDI 
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>27</y>
@@ -124,7 +124,7 @@ More information on this opcode is given in the actual code of this example. The
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>292</y>
@@ -153,7 +153,7 @@ More information on this opcode is given in the actual code of this example. The
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>301</y>
@@ -182,7 +182,7 @@ More information on this opcode is given in the actual code of this example. The
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>icps</objectName>
   <x>72</x>
   <y>303</y>
@@ -211,7 +211,7 @@ More information on this opcode is given in the actual code of this example. The
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>18</x>
   <y>301</y>
@@ -240,7 +240,7 @@ More information on this opcode is given in the actual code of this example. The
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>iamp</objectName>
   <x>234</x>
   <y>303</y>

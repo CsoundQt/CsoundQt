@@ -135,7 +135,7 @@ i 2	     0.1		 0		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -164,7 +164,7 @@ i 2	     0.1		 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>2</y>
@@ -193,7 +193,7 @@ i 2	     0.1		 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>49</y>
@@ -224,7 +224,7 @@ This four oscillator algorithm has the frequency of a carrier oscillator modulat
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3379</objectName>
   <x>8</x>
   <y>6</y>
@@ -243,7 +243,7 @@ This four oscillator algorithm has the frequency of a carrier oscillator modulat
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Carrier_Amplitude</objectName>
   <x>448</x>
   <y>391</y>
@@ -272,7 +272,7 @@ This four oscillator algorithm has the frequency of a carrier oscillator modulat
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Carrier_Amplitude</objectName>
   <x>8</x>
   <y>368</y>
@@ -290,7 +290,7 @@ This four oscillator algorithm has the frequency of a carrier oscillator modulat
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>391</y>
@@ -319,7 +319,7 @@ This four oscillator algorithm has the frequency of a carrier oscillator modulat
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
   <y>264</y>
@@ -348,7 +348,7 @@ This four oscillator algorithm has the frequency of a carrier oscillator modulat
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>115</x>
   <y>266</y>
@@ -377,7 +377,7 @@ This four oscillator algorithm has the frequency of a carrier oscillator modulat
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Carrier_Frequency</objectName>
   <x>31</x>
   <y>276</y>
@@ -406,7 +406,7 @@ This four oscillator algorithm has the frequency of a carrier oscillator modulat
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Modulator1_Frequency</objectName>
   <x>154</x>
   <y>276</y>
@@ -435,7 +435,7 @@ This four oscillator algorithm has the frequency of a carrier oscillator modulat
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>154</x>
   <y>305</y>
@@ -465,7 +465,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>31</x>
   <y>305</y>
@@ -495,7 +495,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>86</y>
@@ -524,7 +524,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Base_Frequency</objectName>
   <x>8</x>
   <y>63</y>
@@ -542,7 +542,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Base_Frequency_Value</objectName>
   <x>448</x>
   <y>86</y>
@@ -571,7 +571,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>142</y>
@@ -600,7 +600,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Modulation_Index_1</objectName>
   <x>8</x>
   <y>119</y>
@@ -618,7 +618,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Modulation_Index_2</objectName>
   <x>330</x>
   <y>184</y>
@@ -647,7 +647,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Modulation_Index_2</objectName>
   <x>8</x>
   <y>161</y>
@@ -665,7 +665,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>184</y>
@@ -694,7 +694,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>278</x>
   <y>305</y>
@@ -724,7 +724,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Modulator2_Frequency</objectName>
   <x>278</x>
   <y>276</y>
@@ -753,7 +753,7 @@ Frequency</label>
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>239</x>
   <y>266</y>
@@ -782,7 +782,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>155</x>
   <y>5</y>
@@ -811,7 +811,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>28</y>
@@ -840,7 +840,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>28</y>
@@ -869,7 +869,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>530</x>
   <y>5</y>
@@ -898,7 +898,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Peak_Dev_1</objectName>
   <x>447</x>
   <y>119</y>
@@ -927,7 +927,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Peak_Dev_2</objectName>
   <x>447</x>
   <y>161</y>
@@ -956,7 +956,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>378</x>
   <y>123</y>
@@ -985,7 +985,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>378</x>
   <y>164</y>
@@ -1014,7 +1014,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>112</x>
   <y>429</y>
@@ -1043,7 +1043,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>_SetPresetIndex</objectName>
   <x>173</x>
   <y>434</y>
@@ -1072,7 +1072,7 @@ Frequency</label>
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>_GetPresetName</objectName>
   <x>221</x>
   <y>433</y>
@@ -1101,7 +1101,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Modulation_Index_1</objectName>
   <x>330</x>
   <y>142</y>
@@ -1130,7 +1130,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>226</y>
@@ -1159,7 +1159,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Modulation_Index_3</objectName>
   <x>8</x>
   <y>203</y>
@@ -1177,7 +1177,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Modulation_Index_3</objectName>
   <x>330</x>
   <y>226</y>
@@ -1206,7 +1206,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>378</x>
   <y>204</y>
@@ -1235,7 +1235,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Peak_Dev_3</objectName>
   <x>447</x>
   <y>203</y>
@@ -1264,7 +1264,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>363</x>
   <y>267</y>
@@ -1293,7 +1293,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Modulator3_Frequency</objectName>
   <x>402</x>
   <y>277</y>
@@ -1322,7 +1322,7 @@ Frequency</label>
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>402</x>
   <y>306</y>

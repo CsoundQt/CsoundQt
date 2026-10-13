@@ -86,7 +86,7 @@ i 2		0		0.1	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -115,7 +115,7 @@ i 2		0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5502</objectName>
   <x>128</x>
   <y>8</y>
@@ -134,7 +134,7 @@ i 2		0		0.1	;INIT
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>74</y>
@@ -163,7 +163,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Stiffness</objectName>
   <x>8</x>
   <y>57</y>
@@ -181,7 +181,7 @@ i 2		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Stiffness</objectName>
   <x>448</x>
   <y>74</y>
@@ -210,7 +210,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>109</y>
@@ -239,7 +239,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>DT30</objectName>
   <x>8</x>
   <y>92</y>
@@ -257,7 +257,7 @@ i 2		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DT30</objectName>
   <x>448</x>
   <y>109</y>
@@ -286,7 +286,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>143</y>
@@ -315,7 +315,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>HFLoss</objectName>
   <x>8</x>
   <y>126</y>
@@ -333,7 +333,7 @@ i 2		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>HFLoss</objectName>
   <x>448</x>
   <y>143</y>
@@ -362,7 +362,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>178</y>
@@ -391,7 +391,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pos</objectName>
   <x>8</x>
   <y>161</y>
@@ -409,7 +409,7 @@ i 2		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pos</objectName>
   <x>448</x>
   <y>178</y>
@@ -438,7 +438,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>213</y>
@@ -467,7 +467,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Vel</objectName>
   <x>8</x>
   <y>196</y>
@@ -485,7 +485,7 @@ i 2		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Vel</objectName>
   <x>448</x>
   <y>213</y>
@@ -514,7 +514,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>248</y>
@@ -543,7 +543,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Scan</objectName>
   <x>8</x>
   <y>231</y>
@@ -561,7 +561,7 @@ i 2		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Scan</objectName>
   <x>448</x>
   <y>248</y>
@@ -590,7 +590,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>282</y>
@@ -619,7 +619,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Width</objectName>
   <x>8</x>
   <y>265</y>
@@ -637,7 +637,7 @@ i 2		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Width</objectName>
   <x>448</x>
   <y>282</y>
@@ -666,7 +666,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>317</y>
@@ -695,7 +695,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>OutGain</objectName>
   <x>8</x>
   <y>300</y>
@@ -713,7 +713,7 @@ i 2		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>OutGain</objectName>
   <x>448</x>
   <y>317</y>
@@ -742,7 +742,7 @@ i 2		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -771,7 +771,7 @@ i 2		0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>25</y>
@@ -802,7 +802,7 @@ tangent), pivoting (as in a vibraphone bar), or free (as in the lower end of a t
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4986</objectName>
   <x>8</x>
   <y>8</y>
@@ -821,7 +821,7 @@ tangent), pivoting (as in a vibraphone bar), or free (as in the lower end of a t
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>353</y>
@@ -850,7 +850,7 @@ tangent), pivoting (as in a vibraphone bar), or free (as in the lower end of a t
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>236</x>
   <y>353</y>
@@ -879,7 +879,7 @@ tangent), pivoting (as in a vibraphone bar), or free (as in the lower end of a t
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>bcL</objectName>
   <x>140</x>
   <y>353</y>
@@ -909,7 +909,7 @@ tangent), pivoting (as in a vibraphone bar), or free (as in the lower end of a t
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>bcR</objectName>
   <x>376</x>
   <y>353</y>
@@ -939,7 +939,7 @@ tangent), pivoting (as in a vibraphone bar), or free (as in the lower end of a t
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>20</x>
   <y>392</y>

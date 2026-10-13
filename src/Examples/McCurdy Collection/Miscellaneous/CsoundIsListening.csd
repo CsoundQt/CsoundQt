@@ -95,7 +95,7 @@ i 2 0 3600		;REVERB INSTRUMENT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -124,7 +124,7 @@ i 2 0 3600		;REVERB INSTRUMENT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>71</y>
@@ -162,7 +162,7 @@ The example emulates a familiar sound ident. It is for educational purposes and 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>19</x>
   <y>39</y>
@@ -191,7 +191,7 @@ The example emulates a familiar sound ident. It is for educational purposes and 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Voices</objectName>
   <x>161</x>
   <y>39</y>
@@ -220,7 +220,7 @@ The example emulates a familiar sound ident. It is for educational purposes and 
   <randomizable group="0">false</randomizable>
   <value>50</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9674</objectName>
   <x>280</x>
   <y>39</y>

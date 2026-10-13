@@ -89,7 +89,7 @@ e
   <g>255</g>
   <b>255</b>
  </bgcolor>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName/>
   <x>7</x>
   <y>61</y>
@@ -109,7 +109,7 @@ e
   <modey>auto</modey>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>6</x>
   <y>223</y>
@@ -127,7 +127,7 @@ e
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>5</y>
@@ -156,7 +156,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>193</y>

@@ -54,7 +54,7 @@ e 3600
   <g>95</g>
   <b>162</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>34</x>
   <y>3</y>
@@ -83,7 +83,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>movefader</objectName>
   <x>37</x>
   <y>78</y>
@@ -101,7 +101,7 @@ e 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>movefader</objectName>
   <x>33</x>
   <y>235</y>
@@ -130,7 +130,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>32</x>
   <y>215</y>
@@ -159,7 +159,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>35</x>
   <y>37</y>
@@ -178,7 +178,7 @@ e 3600
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName/>
   <x>135</x>
   <y>37</y>
@@ -207,7 +207,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1485</objectName>
   <x>33</x>
   <y>282</y>
@@ -226,7 +226,7 @@ e 3600
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName/>
   <x>138</x>
   <y>282</y>
@@ -255,7 +255,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Stop</objectName>
   <x>33</x>
   <y>410</y>
@@ -274,7 +274,7 @@ e 3600
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName/>
   <x>144</x>
   <y>409</y>
@@ -303,7 +303,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>135</x>
   <y>117</y>

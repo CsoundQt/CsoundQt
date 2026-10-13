@@ -118,7 +118,7 @@ i 10		0	   3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -147,7 +147,7 @@ i 10		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -176,7 +176,7 @@ i 10		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>527</x>
   <y>78</y>
@@ -207,7 +207,7 @@ modulator -> carrier pairing.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5673</objectName>
   <x>8</x>
   <y>6</y>
@@ -226,7 +226,7 @@ modulator -> carrier pairing.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Carrier_Amplitude</objectName>
   <x>448</x>
   <y>272</y>
@@ -255,7 +255,7 @@ modulator -> carrier pairing.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Carrier_Amplitude</objectName>
   <x>8</x>
   <y>249</y>
@@ -273,7 +273,7 @@ modulator -> carrier pairing.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>272</y>
@@ -302,7 +302,7 @@ modulator -> carrier pairing.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>132</x>
   <y>158</y>
@@ -331,7 +331,7 @@ modulator -> carrier pairing.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>232</x>
   <y>160</y>
@@ -360,7 +360,7 @@ modulator -> carrier pairing.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Carrier_Frequency</objectName>
   <x>148</x>
   <y>170</y>
@@ -389,7 +389,7 @@ modulator -> carrier pairing.</label>
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Modulation_Frequency</objectName>
   <x>271</x>
   <y>170</y>
@@ -418,7 +418,7 @@ modulator -> carrier pairing.</label>
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>271</x>
   <y>199</y>
@@ -448,7 +448,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>148</x>
   <y>199</y>
@@ -478,7 +478,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>86</y>
@@ -507,7 +507,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Base_Frequency</objectName>
   <x>8</x>
   <y>63</y>
@@ -525,7 +525,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Base_Frequency_Value</objectName>
   <x>448</x>
   <y>86</y>
@@ -554,7 +554,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>129</y>
@@ -583,7 +583,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Modulation_Index</objectName>
   <x>8</x>
   <y>106</y>
@@ -601,7 +601,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>155</x>
   <y>5</y>
@@ -630,7 +630,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>28</y>
@@ -659,7 +659,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>27</y>
@@ -689,7 +689,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>4</y>
@@ -718,7 +718,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Modulation_Index</objectName>
   <x>448</x>
   <y>129</y>
@@ -747,7 +747,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>317</y>
@@ -776,7 +776,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>8</x>
   <y>294</y>
@@ -794,7 +794,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>448</x>
   <y>317</y>

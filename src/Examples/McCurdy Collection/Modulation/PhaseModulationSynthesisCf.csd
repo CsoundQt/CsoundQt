@@ -101,7 +101,7 @@ i 10		0	   3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -130,7 +130,7 @@ i 10		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>2</y>
@@ -159,7 +159,7 @@ i 10		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>61</y>
@@ -189,7 +189,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9429</objectName>
   <x>8</x>
   <y>6</y>
@@ -208,7 +208,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>448</x>
   <y>179</y>
@@ -237,7 +237,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>8</x>
   <y>157</y>
@@ -255,7 +255,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>179</y>
@@ -284,7 +284,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>90</y>
@@ -313,7 +313,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Base_Frequency</objectName>
   <x>8</x>
   <y>67</y>
@@ -331,7 +331,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Base_Frequency_Value</objectName>
   <x>448</x>
   <y>90</y>
@@ -360,7 +360,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>155</x>
   <y>5</y>
@@ -389,7 +389,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>28</y>
@@ -418,7 +418,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>28</y>
@@ -447,7 +447,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>5</y>
@@ -476,7 +476,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>136</y>
@@ -505,7 +505,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>113</y>
@@ -523,7 +523,7 @@ This example implements phase modulation synthesis with a single oscillator self
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>136</y>

@@ -455,7 +455,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -484,7 +484,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>A_E_I_O_U</objectName>
   <x>8</x>
   <y>41</y>
@@ -502,7 +502,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>64</y>
@@ -531,7 +531,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>X_Fund</objectName>
   <x>83</x>
   <y>431</y>
@@ -557,14 +557,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5872</objectName>
   <x>8</x>
   <y>8</y>
@@ -583,7 +583,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Fundamental_Value</objectName>
   <x>448</x>
   <y>106</y>
@@ -612,7 +612,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Fundamental</objectName>
   <x>8</x>
   <y>83</y>
@@ -630,7 +630,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>106</y>
@@ -659,7 +659,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>446</y>
@@ -688,7 +688,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>X_Fund_Value</objectName>
   <x>24</x>
   <y>476</y>
@@ -717,7 +717,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Y_Vowel</objectName>
   <x>25</x>
   <y>562</y>
@@ -746,7 +746,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>533</y>
@@ -775,7 +775,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>64</y>
@@ -804,7 +804,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>522</x>
   <y>41</y>
@@ -822,7 +822,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>962</x>
   <y>64</y>
@@ -851,7 +851,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>106</y>
@@ -880,7 +880,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Porta_Fund</objectName>
   <x>522</x>
   <y>83</y>
@@ -898,7 +898,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Porta_Fund</objectName>
   <x>712</x>
   <y>106</y>
@@ -927,7 +927,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Porta_Formant</objectName>
   <x>962</x>
   <y>106</y>
@@ -956,7 +956,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Porta_Formant</objectName>
   <x>772</x>
   <y>83</y>
@@ -974,7 +974,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>772</x>
   <y>106</y>
@@ -1003,7 +1003,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>148</y>
@@ -1032,7 +1032,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Octaviation</objectName>
   <x>8</x>
   <y>125</y>
@@ -1050,7 +1050,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Octaviation</objectName>
   <x>448</x>
   <y>148</y>
@@ -1079,7 +1079,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>132</x>
   <y>64</y>
@@ -1108,7 +1108,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>237</x>
   <y>63</y>
@@ -1137,7 +1137,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>366</x>
   <y>64</y>
@@ -1166,7 +1166,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>484</x>
   <y>63</y>
@@ -1195,7 +1195,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>170</y>
@@ -1224,7 +1224,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ModDep</objectName>
   <x>13</x>
   <y>200</y>
@@ -1242,7 +1242,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>250</y>
@@ -1271,7 +1271,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ModDep</objectName>
   <x>8</x>
   <y>269</y>
@@ -1300,7 +1300,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ModFrq</objectName>
   <x>68</x>
   <y>269</y>
@@ -1329,7 +1329,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>68</x>
   <y>250</y>
@@ -1358,7 +1358,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ModFrq</objectName>
   <x>73</x>
   <y>200</y>
@@ -1376,7 +1376,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibDep</objectName>
   <x>128</x>
   <y>269</y>
@@ -1405,7 +1405,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>128</x>
   <y>250</y>
@@ -1434,7 +1434,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>VibDep</objectName>
   <x>133</x>
   <y>200</y>
@@ -1452,7 +1452,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>TrmDep</objectName>
   <x>188</x>
   <y>269</y>
@@ -1481,7 +1481,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>188</x>
   <y>250</y>
@@ -1510,7 +1510,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>TrmDep</objectName>
   <x>193</x>
   <y>200</y>
@@ -1528,7 +1528,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ModDly</objectName>
   <x>248</x>
   <y>269</y>
@@ -1557,7 +1557,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>248</x>
   <y>250</y>
@@ -1586,7 +1586,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ModDly</objectName>
   <x>253</x>
   <y>200</y>
@@ -1604,7 +1604,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ModRis</objectName>
   <x>307</x>
   <y>269</y>
@@ -1633,7 +1633,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>307</x>
   <y>250</y>
@@ -1662,7 +1662,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ModRis</objectName>
   <x>312</x>
   <y>200</y>
@@ -1680,7 +1680,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>370</x>
   <y>170</y>
@@ -1709,7 +1709,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>AmpOSF</objectName>
   <x>443</x>
   <y>200</y>
@@ -1727,7 +1727,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>438</x>
   <y>250</y>
@@ -1756,7 +1756,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AmpOSF</objectName>
   <x>438</x>
   <y>269</y>
@@ -1785,7 +1785,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>AmpOS</objectName>
   <x>383</x>
   <y>200</y>
@@ -1803,7 +1803,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>378</x>
   <y>250</y>
@@ -1832,7 +1832,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AmpOS</objectName>
   <x>378</x>
   <y>269</y>
@@ -1861,7 +1861,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>296</y>
@@ -1890,7 +1890,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RandFrq</objectName>
   <x>73</x>
   <y>325</y>
@@ -1908,7 +1908,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>68</x>
   <y>375</y>
@@ -1937,7 +1937,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RandFrq</objectName>
   <x>68</x>
   <y>394</y>
@@ -1966,7 +1966,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RandAmp</objectName>
   <x>8</x>
   <y>394</y>
@@ -1995,7 +1995,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>375</y>
@@ -2024,7 +2024,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RandAmp</objectName>
   <x>13</x>
   <y>325</y>
@@ -2042,7 +2042,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>137</x>
   <y>364</y>
@@ -2071,7 +2071,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Fund_RndType</objectName>
   <x>137</x>
   <y>341</y>
@@ -2089,7 +2089,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FrqOS</objectName>
   <x>377</x>
   <y>394</y>
@@ -2118,7 +2118,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>377</x>
   <y>375</y>
@@ -2147,7 +2147,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>FrqOS</objectName>
   <x>382</x>
   <y>325</y>
@@ -2165,7 +2165,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FrqOSF</objectName>
   <x>437</x>
   <y>394</y>
@@ -2194,7 +2194,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>437</x>
   <y>375</y>
@@ -2223,7 +2223,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>FrqOSF</objectName>
   <x>442</x>
   <y>325</y>
@@ -2241,7 +2241,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>127</y>
@@ -2270,7 +2270,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Rise</objectName>
   <x>537</x>
   <y>156</y>
@@ -2288,7 +2288,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>532</x>
   <y>206</y>
@@ -2317,7 +2317,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Rise</objectName>
   <x>532</x>
   <y>225</y>
@@ -2346,7 +2346,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Dur</objectName>
   <x>592</x>
   <y>225</y>
@@ -2375,7 +2375,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>592</x>
   <y>206</y>
@@ -2404,7 +2404,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Dur</objectName>
   <x>597</x>
   <y>156</y>
@@ -2422,7 +2422,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Dec</objectName>
   <x>652</x>
   <y>225</y>
@@ -2451,7 +2451,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>652</x>
   <y>206</y>
@@ -2480,7 +2480,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Dec</objectName>
   <x>657</x>
   <y>156</y>
@@ -2498,7 +2498,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>253</y>
@@ -2527,7 +2527,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>LFOmode</objectName>
   <x>532</x>
   <y>293</y>
@@ -2572,7 +2572,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Rate</objectName>
   <x>748</x>
   <y>280</y>
@@ -2590,7 +2590,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>743</x>
   <y>330</y>
@@ -2619,7 +2619,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Rate</objectName>
   <x>743</x>
   <y>349</y>
@@ -2648,7 +2648,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Depth</objectName>
   <x>688</x>
   <y>280</y>
@@ -2666,7 +2666,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>683</x>
   <y>330</y>
@@ -2695,7 +2695,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Depth</objectName>
   <x>683</x>
   <y>349</y>
@@ -2724,7 +2724,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>806</x>
   <y>253</y>
@@ -2753,7 +2753,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RndAmt</objectName>
   <x>857</x>
   <y>301</y>
@@ -2782,7 +2782,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>857</x>
   <y>281</y>
@@ -2811,7 +2811,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RndAmt</objectName>
   <x>810</x>
   <y>280</y>
@@ -2829,7 +2829,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RndFrq</objectName>
   <x>961</x>
   <y>300</y>
@@ -2858,7 +2858,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>961</x>
   <y>281</y>
@@ -2887,7 +2887,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RndFrq</objectName>
   <x>916</x>
   <y>281</y>
@@ -2905,7 +2905,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Random_Fund</objectName>
   <x>883</x>
   <y>145</y>
@@ -2923,7 +2923,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>839</x>
   <y>194</y>
@@ -2952,7 +2952,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Random_Fund</objectName>
   <x>878</x>
   <y>214</y>
@@ -2981,7 +2981,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Voxel_RndType</objectName>
   <x>814</x>
   <y>332</y>
@@ -2999,7 +2999,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>814</x>
   <y>355</y>
@@ -3028,7 +3028,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>379</y>
@@ -3057,7 +3057,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9765</objectName>
   <x>574</x>
   <y>386</y>
@@ -3076,7 +3076,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>EQ_Level</objectName>
   <x>828</x>
   <y>410</y>
@@ -3094,7 +3094,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>823</x>
   <y>460</y>
@@ -3123,7 +3123,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>EQ_Level</objectName>
   <x>823</x>
   <y>479</y>
@@ -3152,7 +3152,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>EQ_LPF</objectName>
   <x>769</x>
   <y>410</y>
@@ -3170,7 +3170,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>764</x>
   <y>460</y>
@@ -3199,7 +3199,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>EQ_LPF_Value</objectName>
   <x>764</x>
   <y>479</y>
@@ -3228,7 +3228,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>EQ_Res</objectName>
   <x>709</x>
   <y>410</y>
@@ -3246,7 +3246,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>704</x>
   <y>460</y>
@@ -3275,7 +3275,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>EQ_Res</objectName>
   <x>704</x>
   <y>479</y>
@@ -3304,7 +3304,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>EQ_Gain</objectName>
   <x>649</x>
   <y>410</y>
@@ -3322,7 +3322,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>644</x>
   <y>460</y>
@@ -3351,7 +3351,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>EQ_Gain</objectName>
   <x>644</x>
   <y>479</y>
@@ -3380,7 +3380,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>EQ_Cutoff</objectName>
   <x>589</x>
   <y>410</y>
@@ -3398,7 +3398,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>584</x>
   <y>460</y>
@@ -3427,7 +3427,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>EQ_Cutoff_Value</objectName>
   <x>584</x>
   <y>479</y>
@@ -3456,7 +3456,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>EQ_HPF_Value</objectName>
   <x>524</x>
   <y>479</y>
@@ -3485,7 +3485,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>524</x>
   <y>460</y>
@@ -3514,7 +3514,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>EQ_HPF</objectName>
   <x>529</x>
   <y>410</y>
@@ -3532,7 +3532,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>884</x>
   <y>379</y>
@@ -3561,7 +3561,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Cho_Rate</objectName>
   <x>898</x>
   <y>410</y>
@@ -3579,7 +3579,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>893</x>
   <y>460</y>
@@ -3608,7 +3608,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Cho_Rate</objectName>
   <x>893</x>
   <y>479</y>
@@ -3637,7 +3637,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Cho_Depth</objectName>
   <x>953</x>
   <y>479</y>
@@ -3666,7 +3666,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>953</x>
   <y>460</y>
@@ -3695,7 +3695,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Cho_Depth</objectName>
   <x>958</x>
   <y>410</y>
@@ -3713,7 +3713,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1528</objectName>
   <x>961</x>
   <y>386</y>
@@ -3732,7 +3732,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>505</y>
@@ -3761,7 +3761,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>707</x>
   <y>505</y>
@@ -3790,7 +3790,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8737</objectName>
   <x>597</x>
   <y>512</y>
@@ -3809,7 +3809,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6495</objectName>
   <x>774</x>
   <y>512</y>
@@ -3828,7 +3828,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DEL_Mix</objectName>
   <x>719</x>
   <y>536</y>
@@ -3846,7 +3846,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>714</x>
   <y>586</y>
@@ -3875,7 +3875,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DEL_Mix</objectName>
   <x>714</x>
   <y>605</y>
@@ -3904,7 +3904,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DEL_Time</objectName>
   <x>774</x>
   <y>605</y>
@@ -3933,7 +3933,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>774</x>
   <y>586</y>
@@ -3962,7 +3962,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DEL_Time</objectName>
   <x>779</x>
   <y>536</y>
@@ -3980,7 +3980,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DEL_FB</objectName>
   <x>834</x>
   <y>605</y>
@@ -4009,7 +4009,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>834</x>
   <y>586</y>
@@ -4038,7 +4038,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DEL_FB</objectName>
   <x>839</x>
   <y>536</y>
@@ -4056,7 +4056,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DEL_ModDep</objectName>
   <x>894</x>
   <y>605</y>
@@ -4085,7 +4085,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>894</x>
   <y>586</y>
@@ -4114,7 +4114,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DEL_ModDep</objectName>
   <x>899</x>
   <y>536</y>
@@ -4132,7 +4132,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DEL_ModFrq</objectName>
   <x>954</x>
   <y>605</y>
@@ -4161,7 +4161,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>954</x>
   <y>586</y>
@@ -4190,7 +4190,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DEL_ModFrq</objectName>
   <x>959</x>
   <y>536</y>
@@ -4208,7 +4208,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>REV_Mix</objectName>
   <x>529</x>
   <y>536</y>
@@ -4226,7 +4226,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>524</x>
   <y>586</y>
@@ -4255,7 +4255,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>REV_Mix</objectName>
   <x>524</x>
   <y>605</y>
@@ -4284,7 +4284,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>REV_Size</objectName>
   <x>584</x>
   <y>605</y>
@@ -4313,7 +4313,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>584</x>
   <y>586</y>
@@ -4342,7 +4342,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>REV_Size</objectName>
   <x>589</x>
   <y>536</y>
@@ -4360,7 +4360,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>REV_HFDiff</objectName>
   <x>644</x>
   <y>605</y>
@@ -4389,7 +4389,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>644</x>
   <y>586</y>
@@ -4418,7 +4418,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>REV_HFDiff</objectName>
   <x>649</x>
   <y>536</y>
@@ -4436,7 +4436,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>631</y>
@@ -4465,7 +4465,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>832</x>
   <y>631</y>
@@ -4494,7 +4494,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Voice</objectName>
   <x>881</x>
   <y>662</y>
@@ -4534,7 +4534,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>IPmode</objectName>
   <x>540</x>
   <y>662</y>
@@ -4564,7 +4564,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>682</x>
   <y>688</y>
@@ -4593,7 +4593,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>748</x>
   <y>687</y>
@@ -4622,7 +4622,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Octave</objectName>
   <x>687</x>
   <y>664</y>
@@ -4651,7 +4651,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <randomizable group="0">false</randomizable>
   <value>7</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>SemiStep</objectName>
   <x>764</x>
   <y>664</y>

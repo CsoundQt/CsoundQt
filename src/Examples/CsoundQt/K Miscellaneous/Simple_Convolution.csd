@@ -128,7 +128,7 @@ i 1 0 1; plays the whole soundfile
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>13</x>
   <y>107</y>
@@ -156,7 +156,7 @@ i 1 0 1; plays the whole soundfile
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>98</x>
   <y>73</y>
@@ -178,7 +178,7 @@ i 1 0 1; plays the whole soundfile
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>17</x>
   <y>19</y>
@@ -209,7 +209,7 @@ i 1 0 1; plays the whole soundfile
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>14</x>
   <y>178</y>
@@ -237,7 +237,7 @@ i 1 0 1; plays the whole soundfile
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>99</x>
   <y>140</y>
@@ -259,7 +259,7 @@ i 1 0 1; plays the whole soundfile
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>wdmix</objectName>
   <x>67</x>
   <y>253</y>
@@ -278,7 +278,7 @@ i 1 0 1; plays the whole soundfile
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>145</x>
   <y>215</y>
@@ -309,7 +309,7 @@ i 1 0 1; plays the whole soundfile
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>27</x>
   <y>253</y>
@@ -340,7 +340,7 @@ i 1 0 1; plays the whole soundfile
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>356</x>
   <y>254</y>
@@ -371,7 +371,7 @@ i 1 0 1; plays the whole soundfile
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outL</objectName>
   <x>2</x>
   <y>289</y>
@@ -408,7 +408,7 @@ i 1 0 1; plays the whole soundfile
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outL_clip</objectName>
   <x>221</x>
   <y>289</y>
@@ -445,7 +445,7 @@ i 1 0 1; plays the whole soundfile
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outR</objectName>
   <x>2</x>
   <y>315</y>
@@ -482,7 +482,7 @@ i 1 0 1; plays the whole soundfile
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outR_clip</objectName>
   <x>221</x>
   <y>315</y>
@@ -519,7 +519,7 @@ i 1 0 1; plays the whole soundfile
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>gaindb</objectName>
   <x>258</x>
   <y>313</y>
@@ -538,7 +538,7 @@ i 1 0 1; plays the whole soundfile
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>258</x>
   <y>286</y>
@@ -569,7 +569,7 @@ i 1 0 1; plays the whole soundfile
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>388</x>
   <y>285</y>
@@ -600,7 +600,7 @@ i 1 0 1; plays the whole soundfile
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>gaindb</objectName>
   <x>305</x>
   <y>286</y>
@@ -631,7 +631,7 @@ i 1 0 1; plays the whole soundfile
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>wdmix</objectName>
   <x>270</x>
   <y>215</y>

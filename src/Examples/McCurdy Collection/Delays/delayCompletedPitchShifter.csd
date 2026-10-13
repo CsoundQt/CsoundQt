@@ -126,7 +126,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>2</y>
@@ -155,7 +155,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7039</objectName>
   <x>5</x>
   <y>5</y>
@@ -174,7 +174,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>9</x>
   <y>60</y>
@@ -192,7 +192,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>78</y>
@@ -221,7 +221,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>449</x>
   <y>77</y>
@@ -250,7 +250,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>2</y>
@@ -279,7 +279,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>524</x>
   <y>19</y>
@@ -311,7 +311,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Transposition</objectName>
   <x>449</x>
   <y>117</y>
@@ -340,7 +340,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>159</y>
@@ -369,7 +369,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Transposition</objectName>
   <x>9</x>
   <y>100</y>
@@ -387,7 +387,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay_Time</objectName>
   <x>448</x>
   <y>157</y>
@@ -416,7 +416,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time</objectName>
   <x>9</x>
   <y>140</y>
@@ -434,7 +434,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>118</y>
@@ -463,7 +463,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>98</x>
   <y>261</y>
@@ -492,7 +492,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>180</x>
   <y>263</y>
@@ -517,7 +517,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback</objectName>
   <x>10</x>
   <y>180</y>
@@ -535,7 +535,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback</objectName>
   <x>449</x>
   <y>197</y>
@@ -564,7 +564,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>199</y>
@@ -593,7 +593,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>10</x>
   <y>302</y>
@@ -612,7 +612,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>182</x>
   <y>302</y>
@@ -639,7 +639,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>182</x>
   <y>332</y>
@@ -668,7 +668,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
   <x>8</x>
   <y>216</y>
@@ -686,7 +686,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>241</y>

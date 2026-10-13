@@ -117,7 +117,7 @@ i 11		0.0     0.01	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -146,7 +146,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>232</y>
@@ -175,7 +175,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Leak</objectName>
   <x>448</x>
   <y>232</y>
@@ -204,7 +204,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Leak</objectName>
   <x>8</x>
   <y>216</y>
@@ -222,7 +222,7 @@ i 11		0.0     0.01	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Waveform</objectName>
   <x>280</x>
   <y>68</y>
@@ -252,7 +252,7 @@ i 11		0.0     0.01	;INIT
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9189</objectName>
   <x>10</x>
   <y>16</y>
@@ -271,7 +271,7 @@ i 11		0.0     0.01	;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>200</x>
   <y>68</y>
@@ -300,7 +300,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -330,7 +330,7 @@ vco</label>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>47</y>
@@ -364,7 +364,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>155</y>
@@ -393,7 +393,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>155</y>
@@ -422,7 +422,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>139</y>
@@ -440,7 +440,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>193</y>
@@ -469,7 +469,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Value</objectName>
   <x>448</x>
   <y>193</y>
@@ -498,7 +498,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency</objectName>
   <x>8</x>
   <y>177</y>
@@ -516,7 +516,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>309</y>
@@ -545,7 +545,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PW</objectName>
   <x>448</x>
   <y>309</y>
@@ -574,7 +574,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>PW</objectName>
   <x>8</x>
   <y>293</y>
@@ -592,7 +592,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>347</y>
@@ -621,7 +621,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>InitPhase</objectName>
   <x>448</x>
   <y>347</y>
@@ -650,7 +650,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>InitPhase</objectName>
   <x>8</x>
   <y>331</y>
@@ -668,7 +668,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>271</y>
@@ -697,7 +697,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Harmonics</objectName>
   <x>448</x>
   <y>271</y>
@@ -726,7 +726,7 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Harmonics</objectName>
   <x>8</x>
   <y>255</y>

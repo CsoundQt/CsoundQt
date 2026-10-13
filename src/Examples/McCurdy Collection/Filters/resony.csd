@@ -119,7 +119,7 @@ i 1		0	   3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -148,7 +148,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -177,7 +177,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>15</y>
@@ -207,7 +207,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8269</objectName>
   <x>8</x>
   <y>6</y>
@@ -226,7 +226,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Base_Frequency_Value</objectName>
   <x>448</x>
   <y>63</y>
@@ -255,7 +255,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Base_Frequency</objectName>
   <x>8</x>
   <y>46</y>
@@ -273,7 +273,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>63</y>
@@ -302,7 +302,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Bandwidth</objectName>
   <x>8</x>
   <y>84</y>
@@ -320,7 +320,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Bandwidth_Value</objectName>
   <x>448</x>
   <y>101</y>
@@ -349,7 +349,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Initialisation</objectName>
   <x>380</x>
   <y>6</y>
@@ -368,7 +368,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>7</x>
   <y>416</y>
@@ -387,7 +387,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>177</x>
   <y>417</y>
@@ -414,7 +414,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>347</y>
@@ -443,7 +443,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Scaling_Mode</objectName>
   <x>184</x>
   <y>142</y>
@@ -473,7 +473,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>85</x>
   <y>142</y>
@@ -502,7 +502,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>214</y>
@@ -531,7 +531,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>8</x>
   <y>197</y>
@@ -549,7 +549,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Gain</objectName>
   <x>448</x>
   <y>214</y>
@@ -578,7 +578,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>101</y>
@@ -607,7 +607,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Separation_Mode</objectName>
   <x>353</x>
   <y>247</y>
@@ -632,7 +632,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>233</x>
   <y>247</y>
@@ -661,7 +661,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Number_Filters</objectName>
   <x>163</x>
   <y>247</y>
@@ -690,7 +690,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <randomizable group="0">false</randomizable>
   <value>10</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>44</x>
   <y>247</y>
@@ -719,7 +719,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Separation_Value</objectName>
   <x>448</x>
   <y>317</y>
@@ -748,7 +748,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Separation</objectName>
   <x>8</x>
   <y>300</y>
@@ -766,7 +766,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>317</y>

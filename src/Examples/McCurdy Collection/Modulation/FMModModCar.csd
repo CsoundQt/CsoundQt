@@ -131,7 +131,7 @@ i 2	     0.1		 0		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -160,7 +160,7 @@ i 2	     0.1		 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>2</y>
@@ -189,7 +189,7 @@ i 2	     0.1		 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>58</y>
@@ -224,7 +224,7 @@ When the 'On/Off' switch is off the instrument can be played from MIDI.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5732</objectName>
   <x>8</x>
   <y>6</y>
@@ -243,7 +243,7 @@ When the 'On/Off' switch is off the instrument can be played from MIDI.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Carrier_Amplitude</objectName>
   <x>448</x>
   <y>328</y>
@@ -272,7 +272,7 @@ When the 'On/Off' switch is off the instrument can be played from MIDI.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Carrier_Amplitude</objectName>
   <x>8</x>
   <y>305</y>
@@ -290,7 +290,7 @@ When the 'On/Off' switch is off the instrument can be played from MIDI.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>328</y>
@@ -319,7 +319,7 @@ When the 'On/Off' switch is off the instrument can be played from MIDI.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>27</x>
   <y>200</y>
@@ -348,7 +348,7 @@ When the 'On/Off' switch is off the instrument can be played from MIDI.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>127</x>
   <y>202</y>
@@ -377,7 +377,7 @@ When the 'On/Off' switch is off the instrument can be played from MIDI.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Carrier_Frequency</objectName>
   <x>43</x>
   <y>212</y>
@@ -406,7 +406,7 @@ When the 'On/Off' switch is off the instrument can be played from MIDI.</label>
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Modulator1_Frequency</objectName>
   <x>166</x>
   <y>212</y>
@@ -435,7 +435,7 @@ When the 'On/Off' switch is off the instrument can be played from MIDI.</label>
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>166</x>
   <y>241</y>
@@ -465,7 +465,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>43</x>
   <y>241</y>
@@ -495,7 +495,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>86</y>
@@ -524,7 +524,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Base_Frequency</objectName>
   <x>8</x>
   <y>63</y>
@@ -542,7 +542,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Base_Frequency_Value</objectName>
   <x>448</x>
   <y>86</y>
@@ -571,7 +571,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>129</y>
@@ -600,7 +600,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Modulation_Index_1</objectName>
   <x>8</x>
   <y>106</y>
@@ -618,7 +618,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Modulation_Index_2</objectName>
   <x>448</x>
   <y>171</y>
@@ -647,7 +647,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Modulation_Index_2</objectName>
   <x>8</x>
   <y>148</y>
@@ -665,7 +665,7 @@ Frequency</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>171</y>
@@ -694,7 +694,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>290</x>
   <y>241</y>
@@ -724,7 +724,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Modulator2_Frequency</objectName>
   <x>290</x>
   <y>212</y>
@@ -753,7 +753,7 @@ Frequency</label>
   <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>251</x>
   <y>202</y>
@@ -782,7 +782,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>155</x>
   <y>5</y>
@@ -811,7 +811,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>28</y>
@@ -840,7 +840,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>562</x>
   <y>27</y>
@@ -869,7 +869,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>578</x>
   <y>4</y>
@@ -898,7 +898,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Peak_Dev_1</objectName>
   <x>444</x>
   <y>210</y>
@@ -927,7 +927,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Peak_Dev_2</objectName>
   <x>444</x>
   <y>242</y>
@@ -956,7 +956,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>375</x>
   <y>212</y>
@@ -985,7 +985,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>375</x>
   <y>243</y>
@@ -1014,7 +1014,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>356</y>
@@ -1043,7 +1043,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>_SetPresetIndex</objectName>
   <x>69</x>
   <y>361</y>
@@ -1072,7 +1072,7 @@ Frequency</label>
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>_GetPresetName</objectName>
   <x>117</x>
   <y>360</y>
@@ -1101,7 +1101,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Modulation_Index_1</objectName>
   <x>427</x>
   <y>128</y>

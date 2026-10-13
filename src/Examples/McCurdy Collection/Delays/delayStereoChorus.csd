@@ -97,7 +97,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -126,7 +126,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6571</objectName>
   <x>5</x>
   <y>5</y>
@@ -145,7 +145,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Oscillator_Gain</objectName>
   <x>10</x>
   <y>50</y>
@@ -163,7 +163,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>68</y>
@@ -192,7 +192,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Oscillator_Gain</objectName>
   <x>450</x>
   <y>67</y>
@@ -221,7 +221,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>2</y>
@@ -250,7 +250,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>525</x>
   <y>36</y>
@@ -285,7 +285,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Oscillator_Freq_Value</objectName>
   <x>450</x>
   <y>107</y>
@@ -314,7 +314,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>149</y>
@@ -343,7 +343,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Oscillator_Freq</objectName>
   <x>10</x>
   <y>90</y>
@@ -361,7 +361,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Chorus_Modulation_Rate</objectName>
   <x>10</x>
   <y>290</y>
@@ -379,7 +379,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Chorus_Modulation_Rate</objectName>
   <x>449</x>
   <y>307</y>
@@ -408,7 +408,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
   <x>450</x>
   <y>227</y>
@@ -437,7 +437,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
   <x>10</x>
   <y>210</y>
@@ -455,7 +455,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Right_Channel_Phase</objectName>
   <x>450</x>
   <y>347</y>
@@ -484,7 +484,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Right_Channel_Phase</objectName>
   <x>10</x>
   <y>330</y>
@@ -502,7 +502,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Chorus_Modulation_Depth</objectName>
   <x>10</x>
   <y>250</y>
@@ -520,7 +520,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Chorus_Modulation_Depth</objectName>
   <x>450</x>
   <y>267</y>
@@ -549,7 +549,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Resonance</objectName>
   <x>10</x>
   <y>170</y>
@@ -567,7 +567,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Resonance</objectName>
   <x>450</x>
   <y>187</y>
@@ -596,7 +596,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tone_Value</objectName>
   <x>450</x>
   <y>147</y>
@@ -625,7 +625,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Tone</objectName>
   <x>10</x>
   <y>130</y>
@@ -643,7 +643,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>108</y>
@@ -672,7 +672,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>188</y>
@@ -701,7 +701,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>348</y>
@@ -730,7 +730,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>228</y>
@@ -759,7 +759,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>268</y>
@@ -788,7 +788,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>308</y>

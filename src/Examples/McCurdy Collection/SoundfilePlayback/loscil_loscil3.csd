@@ -104,7 +104,7 @@ i 11 0 0.01	;INIT
   <g>202</g>
   <b>202</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -133,7 +133,7 @@ i 11 0 0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4180</objectName>
   <x>8</x>
   <y>10</y>
@@ -152,7 +152,7 @@ i 11 0 0.01	;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -181,7 +181,7 @@ i 11 0 0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>18</y>
@@ -211,7 +211,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>157</y>
@@ -240,7 +240,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LoopBeg2</objectName>
   <x>8</x>
   <y>140</y>
@@ -258,7 +258,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LoopBeg2</objectName>
   <x>448</x>
   <y>157</y>
@@ -287,7 +287,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>204</y>
@@ -316,7 +316,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LoopEnd2</objectName>
   <x>8</x>
   <y>187</y>
@@ -334,7 +334,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LoopEnd2</objectName>
   <x>448</x>
   <y>204</y>
@@ -363,7 +363,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>63</y>
@@ -392,7 +392,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LoopBeg1</objectName>
   <x>8</x>
   <y>46</y>
@@ -410,7 +410,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LoopBeg1</objectName>
   <x>448</x>
   <y>63</y>
@@ -439,7 +439,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>110</y>
@@ -468,7 +468,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LoopEnd1</objectName>
   <x>8</x>
   <y>93</y>
@@ -486,7 +486,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LoopEnd1</objectName>
   <x>448</x>
   <y>110</y>
@@ -515,7 +515,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>180</x>
   <y>459</y>
@@ -542,7 +542,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>298</y>
@@ -571,7 +571,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Release</objectName>
   <x>8</x>
   <y>281</y>
@@ -589,7 +589,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Release</objectName>
   <x>448</x>
   <y>298</y>
@@ -618,7 +618,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>251</y>
@@ -647,7 +647,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed</objectName>
   <x>8</x>
   <y>234</y>
@@ -665,7 +665,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed</objectName>
   <x>448</x>
   <y>251</y>
@@ -694,7 +694,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>438</y>
@@ -723,7 +723,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>459</y>
@@ -742,7 +742,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>409</y>
@@ -771,7 +771,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>8</x>
   <y>392</y>
@@ -789,7 +789,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>448</x>
   <y>409</y>
@@ -818,7 +818,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>327</y>
@@ -847,7 +847,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>RelLoop</objectName>
   <x>180</x>
   <y>346</y>
@@ -877,7 +877,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>343</x>
   <y>327</y>
@@ -906,7 +906,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>OscType</objectName>
   <x>343</x>
   <y>346</y>
@@ -931,7 +931,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
   <y>327</y>
@@ -960,7 +960,7 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>SusLoop</objectName>
   <x>16</x>
   <y>346</y>

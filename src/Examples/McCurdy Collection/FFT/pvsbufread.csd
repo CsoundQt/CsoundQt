@@ -130,7 +130,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -159,7 +159,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>2</y>
@@ -188,7 +188,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>19</y>
@@ -219,7 +219,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5383</objectName>
   <x>8</x>
   <y>8</y>
@@ -238,7 +238,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Input_Gain</objectName>
   <x>450</x>
   <y>71</y>
@@ -267,7 +267,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Input_Gain</objectName>
   <x>10</x>
   <y>54</y>
@@ -285,7 +285,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>71</y>
@@ -314,7 +314,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Buffer_Length</objectName>
   <x>450</x>
   <y>112</y>
@@ -343,7 +343,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Buffer_Length</objectName>
   <x>10</x>
   <y>95</y>
@@ -361,7 +361,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>112</y>
@@ -390,7 +390,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>536</y>
@@ -419,7 +419,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>169</x>
   <y>542</y>
@@ -448,7 +448,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>FFTattributes</objectName>
   <x>169</x>
   <y>562</y>
@@ -488,7 +488,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>192</y>
@@ -517,7 +517,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Phasor_Speed</objectName>
   <x>10</x>
   <y>175</y>
@@ -535,7 +535,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Phasor_Speed</objectName>
   <x>450</x>
   <y>192</y>
@@ -564,7 +564,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>152</y>
@@ -593,7 +593,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Phasor_Range</objectName>
   <x>10</x>
   <y>135</y>
@@ -611,7 +611,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Phasor_Range</objectName>
   <x>450</x>
   <y>152</y>
@@ -640,7 +640,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8675</objectName>
   <x>174</x>
   <y>201</y>
@@ -659,7 +659,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Sync_Write</objectName>
   <x>318</x>
   <y>201</y>
@@ -678,7 +678,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Write_Buffer</objectName>
   <x>390</x>
   <y>8</y>
@@ -697,7 +697,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4463</objectName>
   <x>318</x>
   <y>298</y>
@@ -716,7 +716,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Phasor_Offset</objectName>
   <x>450</x>
   <y>242</y>
@@ -745,7 +745,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Phasor_Offset</objectName>
   <x>10</x>
   <y>225</y>
@@ -763,7 +763,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>242</y>
@@ -792,7 +792,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pitch_Rescale</objectName>
   <x>450</x>
   <y>292</y>
@@ -821,7 +821,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pitch_Rescale</objectName>
   <x>10</x>
   <y>275</y>
@@ -839,7 +839,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>292</y>
@@ -868,7 +868,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9681</objectName>
   <x>318</x>
   <y>248</y>
@@ -887,7 +887,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>343</y>
@@ -916,7 +916,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>10</x>
   <y>326</y>
@@ -934,7 +934,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>450</x>
   <y>343</y>
@@ -963,7 +963,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Direct</objectName>
   <x>450</x>
   <y>382</y>
@@ -992,7 +992,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Direct</objectName>
   <x>10</x>
   <y>365</y>
@@ -1010,7 +1010,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>382</y>
@@ -1039,7 +1039,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Gain</objectName>
   <x>450</x>
   <y>422</y>
@@ -1068,7 +1068,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>10</x>
   <y>405</y>
@@ -1086,7 +1086,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>422</y>
@@ -1115,7 +1115,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>466</y>
@@ -1144,7 +1144,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Write_Pointer</objectName>
   <x>450</x>
   <y>465</y>
@@ -1173,7 +1173,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Write_Pointer</objectName>
   <x>10</x>
   <y>451</y>
@@ -1199,14 +1199,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Read_Pointer</objectName>
   <x>10</x>
   <y>488</y>
@@ -1232,14 +1232,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Read_Pointer</objectName>
   <x>450</x>
   <y>503</y>
@@ -1268,7 +1268,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>503</y>

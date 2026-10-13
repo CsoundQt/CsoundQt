@@ -95,7 +95,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -124,7 +124,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>2</y>
@@ -153,7 +153,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>18</y>
@@ -183,7 +183,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5529</objectName>
   <x>8</x>
   <y>8</y>
@@ -202,7 +202,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Source_Amplitude</objectName>
   <x>450</x>
   <y>73</y>
@@ -231,7 +231,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Source_Amplitude</objectName>
   <x>10</x>
   <y>56</y>
@@ -249,7 +249,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>75</y>
@@ -278,7 +278,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>116</y>
@@ -307,7 +307,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Destination_Amplitude</objectName>
   <x>10</x>
   <y>97</y>
@@ -325,7 +325,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Destination_Amplitude</objectName>
   <x>450</x>
   <y>114</y>
@@ -354,7 +354,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>262</y>
@@ -383,7 +383,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>151</y>
@@ -412,7 +412,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>181</x>
   <y>317</y>
@@ -439,7 +439,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>10</x>
   <y>316</y>
@@ -458,7 +458,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>252</x>
   <y>277</y>
@@ -483,7 +483,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>191</x>
   <y>277</y>
@@ -512,7 +512,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>10</x>
   <y>207</y>
@@ -531,7 +531,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>181</x>
   <y>208</y>
@@ -558,7 +558,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>188</x>
   <y>164</y>
@@ -587,7 +587,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>342</x>
   <y>165</y>
@@ -616,7 +616,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Octaves</objectName>
   <x>270</x>
   <y>164</y>
@@ -645,7 +645,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Semitones</objectName>
   <x>423</x>
   <y>165</y>
@@ -674,7 +674,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>181</x>
   <y>236</y>
@@ -703,7 +703,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>181</x>
   <y>345</y>

@@ -73,7 +73,7 @@ i 2 0 0		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -102,7 +102,7 @@ i 2 0 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>64</y>
@@ -131,7 +131,7 @@ i 2 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>8</x>
   <y>41</y>
@@ -149,7 +149,7 @@ i 2 0 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>448</x>
   <y>64</y>
@@ -178,7 +178,7 @@ i 2 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>2</y>
@@ -207,7 +207,7 @@ i 2 0 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>26</y>
@@ -238,7 +238,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>112</y>
@@ -267,7 +267,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Threshold</objectName>
   <x>8</x>
   <y>89</y>
@@ -285,7 +285,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Threshold</objectName>
   <x>448</x>
   <y>112</y>
@@ -314,7 +314,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>160</y>
@@ -343,7 +343,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack</objectName>
   <x>8</x>
   <y>137</y>
@@ -361,7 +361,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack</objectName>
   <x>448</x>
   <y>160</y>
@@ -390,7 +390,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>208</y>
@@ -419,7 +419,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Release</objectName>
   <x>8</x>
   <y>185</y>
@@ -437,7 +437,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Release</objectName>
   <x>448</x>
   <y>208</y>
@@ -466,7 +466,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>256</y>
@@ -495,7 +495,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay</objectName>
   <x>8</x>
   <y>233</y>
@@ -513,7 +513,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay</objectName>
   <x>448</x>
   <y>256</y>
@@ -542,7 +542,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>304</y>
@@ -571,7 +571,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attenuation</objectName>
   <x>8</x>
   <y>281</y>
@@ -589,7 +589,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attenuation</objectName>
   <x>448</x>
   <y>304</y>
@@ -618,7 +618,7 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Meter</objectName>
   <x>8</x>
   <y>343</y>
@@ -644,14 +644,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>367</y>

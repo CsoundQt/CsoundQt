@@ -59,7 +59,7 @@ i 1 0 3600
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -88,7 +88,7 @@ i 1 0 3600
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>23</y>
@@ -118,7 +118,7 @@ This example converts decibel values into amplitude values that Csound uses to p
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>270</y>
@@ -147,7 +147,7 @@ This example converts decibel values into amplitude values that Csound uses to p
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>247</y>
@@ -165,7 +165,7 @@ This example converts decibel values into amplitude values that Csound uses to p
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>270</y>
@@ -194,7 +194,7 @@ This example converts decibel values into amplitude values that Csound uses to p
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>217</y>
@@ -223,7 +223,7 @@ This example converts decibel values into amplitude values that Csound uses to p
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Decibels</objectName>
   <x>8</x>
   <y>194</y>
@@ -241,7 +241,7 @@ This example converts decibel values into amplitude values that Csound uses to p
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Decibels</objectName>
   <x>448</x>
   <y>217</y>

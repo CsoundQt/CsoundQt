@@ -149,7 +149,7 @@ i 10 0 3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>2</y>
@@ -178,7 +178,7 @@ i 10 0 3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>250</y>
@@ -207,7 +207,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>StartNote</objectName>
   <x>50</x>
   <y>215</y>
@@ -236,7 +236,7 @@ i 10 0 3600	;GUI
   <randomizable group="0">false</randomizable>
   <value>59</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>166</y>
@@ -265,7 +265,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>8</x>
   <y>143</y>
@@ -283,7 +283,7 @@ i 10 0 3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>448</x>
   <y>166</y>
@@ -312,7 +312,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>113</y>
@@ -341,7 +341,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Fund_Pitch</objectName>
   <x>8</x>
   <y>90</y>
@@ -359,7 +359,7 @@ i 10 0 3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Fund_Pitch_Value</objectName>
   <x>448</x>
   <y>113</y>
@@ -388,7 +388,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>60</y>
@@ -417,7 +417,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Fund_Rate</objectName>
   <x>8</x>
   <y>37</y>
@@ -435,7 +435,7 @@ i 10 0 3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Fund_Rate</objectName>
   <x>448</x>
   <y>60</y>
@@ -464,7 +464,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>191</y>
@@ -493,7 +493,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>158</x>
   <y>219</y>
@@ -522,7 +522,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Note_Dur</objectName>
   <x>158</x>
   <y>196</y>
@@ -540,7 +540,7 @@ i 10 0 3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Note_Dur</objectName>
   <x>448</x>
   <y>218</y>
@@ -569,7 +569,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Voice</objectName>
   <x>106</x>
   <y>444</y>
@@ -594,7 +594,7 @@ i 10 0 3600	;GUI
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Wave</objectName>
   <x>309</x>
   <y>444</y>
@@ -624,7 +624,7 @@ i 10 0 3600	;GUI
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>24</x>
   <y>444</y>
@@ -653,7 +653,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>227</x>
   <y>444</y>
@@ -682,7 +682,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>612</y>
@@ -711,7 +711,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VCO_Cutoff</objectName>
   <x>8</x>
   <y>589</y>
@@ -729,7 +729,7 @@ i 10 0 3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VCO_Cutoff_Value</objectName>
   <x>448</x>
   <y>612</y>
@@ -758,7 +758,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>559</y>
@@ -787,7 +787,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VCO_Resonance</objectName>
   <x>8</x>
   <y>536</y>
@@ -805,7 +805,7 @@ i 10 0 3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VCO_Resonance</objectName>
   <x>448</x>
   <y>559</y>
@@ -834,7 +834,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>506</y>
@@ -863,7 +863,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pluck_Reflection</objectName>
   <x>8</x>
   <y>483</y>
@@ -881,7 +881,7 @@ i 10 0 3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pluck_Reflection</objectName>
   <x>448</x>
   <y>506</y>
@@ -910,7 +910,7 @@ i 10 0 3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6968</objectName>
   <x>66</x>
   <y>341</y>
@@ -929,7 +929,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4082</objectName>
   <x>106</x>
   <y>341</y>
@@ -948,7 +948,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2146</objectName>
   <x>146</x>
   <y>341</y>
@@ -967,7 +967,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5716</objectName>
   <x>186</x>
   <y>341</y>
@@ -986,7 +986,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4636</objectName>
   <x>226</x>
   <y>341</y>
@@ -1005,7 +1005,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3911</objectName>
   <x>266</x>
   <y>341</y>
@@ -1024,7 +1024,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6846</objectName>
   <x>306</x>
   <y>341</y>
@@ -1043,7 +1043,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8535</objectName>
   <x>346</x>
   <y>341</y>
@@ -1062,7 +1062,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2309</objectName>
   <x>386</x>
   <y>341</y>
@@ -1081,7 +1081,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6513</objectName>
   <x>85</x>
   <y>261</y>
@@ -1100,7 +1100,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3619</objectName>
   <x>125</x>
   <y>261</y>
@@ -1119,7 +1119,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5269</objectName>
   <x>205</x>
   <y>261</y>
@@ -1138,7 +1138,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2809</objectName>
   <x>245</x>
   <y>261</y>
@@ -1157,7 +1157,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6429</objectName>
   <x>285</x>
   <y>261</y>
@@ -1176,7 +1176,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6020</objectName>
   <x>365</x>
   <y>261</y>
@@ -1195,7 +1195,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1452</objectName>
   <x>405</x>
   <y>261</y>

@@ -67,7 +67,7 @@ f 0 86400			;ALLOWS REALTIME MIDI PLAYING FOR 1 DAY
   <g>170</g>
   <b>170</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -96,7 +96,7 @@ f 0 86400			;ALLOWS REALTIME MIDI PLAYING FOR 1 DAY
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>17</y>
@@ -128,7 +128,7 @@ At each note the audio file is loaded (init).</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>195</y>
@@ -147,7 +147,7 @@ At each note the audio file is loaded (init).</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>179</x>
   <y>196</y>
@@ -174,7 +174,7 @@ At each note the audio file is loaded (init).</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>174</y>

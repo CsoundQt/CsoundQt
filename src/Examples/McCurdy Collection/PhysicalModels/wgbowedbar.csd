@@ -102,7 +102,7 @@ i 4		0		0.1	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -131,7 +131,7 @@ i 4		0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>71</y>
@@ -160,7 +160,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amp</objectName>
   <x>8</x>
   <y>54</y>
@@ -178,7 +178,7 @@ i 4		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp</objectName>
   <x>448</x>
   <y>71</y>
@@ -207,7 +207,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>106</y>
@@ -236,7 +236,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Freq</objectName>
   <x>8</x>
   <y>89</y>
@@ -254,7 +254,7 @@ i 4		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Freq_Value</objectName>
   <x>448</x>
   <y>106</y>
@@ -283,7 +283,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>140</y>
@@ -312,7 +312,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>BowPos</objectName>
   <x>8</x>
   <y>123</y>
@@ -330,7 +330,7 @@ i 4		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>BowPos</objectName>
   <x>448</x>
   <y>140</y>
@@ -359,7 +359,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>175</y>
@@ -388,7 +388,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>BowPress</objectName>
   <x>8</x>
   <y>158</y>
@@ -406,7 +406,7 @@ i 4		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>BowPress</objectName>
   <x>448</x>
   <y>175</y>
@@ -435,7 +435,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>210</y>
@@ -464,7 +464,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>GainFilter</objectName>
   <x>8</x>
   <y>193</y>
@@ -482,7 +482,7 @@ i 4		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>GainFilter</objectName>
   <x>448</x>
   <y>210</y>
@@ -511,7 +511,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -540,7 +540,7 @@ i 4		0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>25</y>
@@ -570,7 +570,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6358</objectName>
   <x>8</x>
   <y>16</y>
@@ -589,7 +589,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>246</y>
@@ -618,7 +618,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Integ</objectName>
   <x>8</x>
   <y>229</y>
@@ -636,7 +636,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Integ</objectName>
   <x>448</x>
   <y>246</y>
@@ -665,7 +665,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>BowVel</objectName>
   <x>227</x>
   <y>276</y>
@@ -690,7 +690,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>127</x>
   <y>280</y>
@@ -719,7 +719,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>332</y>
@@ -748,7 +748,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>BowPosVel</objectName>
   <x>8</x>
   <y>315</y>
@@ -766,7 +766,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>BowPosVel</objectName>
   <x>448</x>
   <y>332</y>
@@ -795,7 +795,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>368</y>
@@ -824,7 +824,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LowFreq</objectName>
   <x>8</x>
   <y>351</y>
@@ -842,7 +842,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LowFreq</objectName>
   <x>448</x>
   <y>368</y>

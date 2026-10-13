@@ -124,7 +124,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -153,7 +153,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3876</objectName>
   <x>8</x>
   <y>8</y>
@@ -172,7 +172,7 @@ i 10		0	   3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>10</x>
   <y>103</y>
@@ -191,7 +191,7 @@ i 10		0	   3600	;GUI
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>181</x>
   <y>104</y>
@@ -218,7 +218,7 @@ i 10		0	   3600	;GUI
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>331</x>
   <y>61</y>
@@ -243,7 +243,7 @@ i 10		0	   3600	;GUI
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>78</y>
@@ -272,7 +272,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Gain</objectName>
   <x>8</x>
   <y>61</y>
@@ -290,7 +290,7 @@ i 10		0	   3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Live_Gain</objectName>
   <x>248</x>
   <y>78</y>
@@ -319,7 +319,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>156</y>
@@ -348,7 +348,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Threshold</objectName>
   <x>8</x>
   <y>139</y>
@@ -366,7 +366,7 @@ i 10		0	   3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Threshold_Value</objectName>
   <x>448</x>
   <y>156</y>
@@ -395,7 +395,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>191</y>
@@ -424,7 +424,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Compr_Up</objectName>
   <x>8</x>
   <y>174</y>
@@ -442,7 +442,7 @@ i 10		0	   3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Compr_Up_Value</objectName>
   <x>448</x>
   <y>191</y>
@@ -471,7 +471,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>226</y>
@@ -500,7 +500,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Compr_Low</objectName>
   <x>8</x>
   <y>209</y>
@@ -518,7 +518,7 @@ i 10		0	   3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Compr_Low_Value</objectName>
   <x>448</x>
   <y>226</y>
@@ -547,7 +547,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>261</y>
@@ -576,7 +576,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Rise</objectName>
   <x>8</x>
   <y>244</y>
@@ -594,7 +594,7 @@ i 10		0	   3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Rise_Value</objectName>
   <x>448</x>
   <y>261</y>
@@ -623,7 +623,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>295</y>
@@ -652,7 +652,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Fall</objectName>
   <x>8</x>
   <y>278</y>
@@ -670,7 +670,7 @@ i 10		0	   3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Fall_Value</objectName>
   <x>448</x>
   <y>295</y>
@@ -699,7 +699,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>330</y>
@@ -728,7 +728,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>8</x>
   <y>313</y>
@@ -746,7 +746,7 @@ i 10		0	   3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain_Value</objectName>
   <x>448</x>
   <y>330</y>
@@ -775,7 +775,7 @@ i 10		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -804,7 +804,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>42</y>

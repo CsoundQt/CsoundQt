@@ -124,7 +124,7 @@ i 10		0.0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -153,7 +153,7 @@ i 10		0.0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>129</y>
@@ -182,7 +182,7 @@ i 10		0.0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Rate</objectName>
   <x>448</x>
   <y>129</y>
@@ -211,7 +211,7 @@ i 10		0.0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>2</y>
@@ -240,7 +240,7 @@ i 10		0.0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>17</y>
@@ -270,7 +270,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Rate</objectName>
   <x>8</x>
   <y>113</y>
@@ -288,7 +288,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>167</y>
@@ -317,7 +317,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>167</y>
@@ -346,7 +346,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>151</y>
@@ -364,7 +364,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>284</x>
   <y>66</y>
@@ -393,7 +393,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>BlendRange</objectName>
   <x>455</x>
   <y>63</y>
@@ -422,7 +422,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <randomizable group="0">false</randomizable>
   <value>10</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>81</y>
@@ -451,7 +451,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9624</objectName>
   <x>163</x>
   <y>85</y>
@@ -470,7 +470,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>205</y>
@@ -499,7 +499,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tone</objectName>
   <x>448</x>
   <y>205</y>
@@ -528,7 +528,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Tone</objectName>
   <x>8</x>
   <y>189</y>
@@ -546,7 +546,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>243</y>
@@ -575,7 +575,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Brightness</objectName>
   <x>448</x>
   <y>243</y>
@@ -604,7 +604,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Brightness</objectName>
   <x>8</x>
   <y>227</y>
@@ -622,7 +622,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>281</y>
@@ -651,7 +651,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency</objectName>
   <x>448</x>
   <y>281</y>
@@ -680,7 +680,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency</objectName>
   <x>8</x>
   <y>265</y>
@@ -698,7 +698,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>319</y>
@@ -727,7 +727,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Phase</objectName>
   <x>448</x>
   <y>319</y>
@@ -756,7 +756,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Phase</objectName>
   <x>8</x>
   <y>303</y>
@@ -774,7 +774,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>52</y>
@@ -803,7 +803,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9275</objectName>
   <x>163</x>
   <y>56</y>
@@ -822,7 +822,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>21</y>
@@ -851,7 +851,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>MIDI</objectName>
   <x>163</x>
   <y>25</y>

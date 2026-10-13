@@ -692,7 +692,7 @@ e
   <g>221</g>
   <b>213</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>6</y>
@@ -738,7 +738,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>69</x>
   <y>282</y>
@@ -759,7 +759,7 @@ e
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Pause</objectName>
   <x>189</x>
   <y>282</y>

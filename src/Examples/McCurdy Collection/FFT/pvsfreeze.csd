@@ -113,7 +113,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -142,7 +142,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -171,7 +171,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>34</y>
@@ -207,7 +207,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2388</objectName>
   <x>8</x>
   <y>8</y>
@@ -226,7 +226,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Freeze</objectName>
   <x>245</x>
   <y>114</y>
@@ -261,7 +261,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>114</y>
@@ -290,7 +290,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>66</x>
   <y>114</y>
@@ -320,7 +320,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>184</x>
   <y>114</y>
@@ -349,7 +349,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>291</y>
@@ -378,7 +378,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>166</x>
   <y>297</y>
@@ -407,7 +407,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>FFTattributes</objectName>
   <x>166</x>
   <y>317</y>
@@ -442,7 +442,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Gain</objectName>
   <x>450</x>
   <y>73</y>
@@ -471,7 +471,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>10</x>
   <y>56</y>
@@ -489,7 +489,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>73</y>
@@ -518,7 +518,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>7</x>
   <y>179</y>
@@ -537,7 +537,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>178</x>
   <y>180</y>
@@ -564,7 +564,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>160</y>
@@ -593,7 +593,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>216</y>
@@ -622,7 +622,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>179</x>
   <y>236</y>
@@ -649,7 +649,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>8</x>
   <y>235</y>
@@ -668,7 +668,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>206</y>
@@ -697,7 +697,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>179</x>
   <y>263</y>

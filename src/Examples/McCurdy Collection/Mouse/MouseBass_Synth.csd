@@ -156,7 +156,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <g>255</g>
   <b>255</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>21</x>
   <y>47</y>
@@ -185,7 +185,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>350</x>
   <y>50</y>
@@ -214,7 +214,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>490</x>
   <y>110</y>
@@ -243,7 +243,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>610</x>
   <y>220</y>
@@ -272,7 +272,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>650</x>
   <y>350</y>
@@ -301,7 +301,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>610</x>
   <y>480</y>
@@ -330,7 +330,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>490</x>
   <y>600</y>
@@ -359,7 +359,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>350</x>
   <y>650</y>
@@ -388,7 +388,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>220</x>
   <y>600</y>
@@ -417,7 +417,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>90</x>
   <y>480</y>
@@ -446,7 +446,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>50</x>
   <y>350</y>
@@ -475,7 +475,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>90</x>
   <y>220</y>
@@ -504,7 +504,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>220</x>
   <y>110</y>
@@ -533,7 +533,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>_MouseRelX</objectName>
   <x>122</x>
   <y>105</y>
@@ -562,7 +562,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>_MouseRelY</objectName>
   <x>122</x>
   <y>133</y>
@@ -591,7 +591,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>105</y>
@@ -620,7 +620,7 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>133</y>

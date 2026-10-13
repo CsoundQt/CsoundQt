@@ -66,7 +66,7 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -95,7 +95,7 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>64</y>
@@ -124,7 +124,7 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain_L</objectName>
   <x>8</x>
   <y>47</y>
@@ -142,7 +142,7 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain_L</objectName>
   <x>248</x>
   <y>64</y>
@@ -171,7 +171,7 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>477</x>
   <y>2</y>
@@ -200,7 +200,7 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>481</x>
   <y>21</y>
@@ -233,7 +233,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>103</y>
@@ -262,7 +262,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain_R</objectName>
   <x>8</x>
   <y>86</y>
@@ -280,7 +280,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain_R</objectName>
   <x>248</x>
   <y>103</y>
@@ -309,7 +309,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Pan_L</objectName>
   <x>339</x>
   <y>37</y>
@@ -327,7 +327,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pan_L</objectName>
   <x>339</x>
   <y>110</y>
@@ -356,7 +356,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>339</x>
   <y>95</y>
@@ -385,7 +385,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Pan_R</objectName>
   <x>409</x>
   <y>37</y>
@@ -403,7 +403,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pan_R</objectName>
   <x>409</x>
   <y>110</y>
@@ -432,7 +432,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>409</x>
   <y>95</y>
@@ -461,7 +461,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Meter_L</objectName>
   <x>8</x>
   <y>147</y>
@@ -487,14 +487,14 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Meter_L</objectName>
   <x>422</x>
   <y>140</y>
@@ -523,7 +523,7 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Meter_R</objectName>
   <x>8</x>
   <y>161</y>
@@ -549,14 +549,14 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Meter_R</objectName>
   <x>422</x>
   <y>154</y>

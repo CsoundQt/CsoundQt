@@ -151,7 +151,7 @@ i 4		0		0.1		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -180,7 +180,7 @@ i 4		0		0.1		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>76</y>
@@ -209,7 +209,7 @@ i 4		0		0.1		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amp</objectName>
   <x>8</x>
   <y>54</y>
@@ -227,7 +227,7 @@ i 4		0		0.1		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp</objectName>
   <x>448</x>
   <y>76</y>
@@ -256,7 +256,7 @@ i 4		0		0.1		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -285,7 +285,7 @@ i 4		0		0.1		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>24</y>
@@ -315,7 +315,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8956</objectName>
   <x>8</x>
   <y>16</y>
@@ -334,7 +334,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>121</y>
@@ -363,7 +363,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Freq</objectName>
   <x>8</x>
   <y>99</y>
@@ -381,7 +381,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Freq_Value</objectName>
   <x>448</x>
   <y>121</y>
@@ -410,7 +410,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>166</y>
@@ -439,7 +439,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Stiff</objectName>
   <x>8</x>
   <y>144</y>
@@ -457,7 +457,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Stiff</objectName>
   <x>448</x>
   <y>166</y>
@@ -486,7 +486,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>211</y>
@@ -515,7 +515,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>NoiseGain</objectName>
   <x>8</x>
   <y>189</y>
@@ -533,7 +533,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>NoiseGain</objectName>
   <x>448</x>
   <y>211</y>
@@ -562,7 +562,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>256</y>
@@ -591,7 +591,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack</objectName>
   <x>8</x>
   <y>234</y>
@@ -609,7 +609,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack</objectName>
   <x>448</x>
   <y>256</y>
@@ -638,7 +638,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>301</y>
@@ -667,7 +667,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Decay</objectName>
   <x>8</x>
   <y>279</y>
@@ -685,7 +685,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Decay</objectName>
   <x>448</x>
   <y>301</y>
@@ -714,7 +714,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>345</y>
@@ -743,7 +743,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VibFreq</objectName>
   <x>8</x>
   <y>323</y>
@@ -761,7 +761,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibFreq</objectName>
   <x>448</x>
   <y>345</y>
@@ -790,7 +790,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>390</y>
@@ -819,7 +819,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VibAmp</objectName>
   <x>8</x>
   <y>368</y>
@@ -837,7 +837,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibAmp</objectName>
   <x>448</x>
   <y>390</y>
@@ -866,7 +866,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>435</y>
@@ -895,7 +895,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>MinFreq</objectName>
   <x>8</x>
   <y>413</y>
@@ -913,7 +913,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>MinFreq_Value</objectName>
   <x>448</x>
   <y>435</y>

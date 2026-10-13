@@ -184,7 +184,7 @@ i   2      0.1       0		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -215,7 +215,7 @@ i   2      0.1       0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -246,7 +246,7 @@ i   2      0.1       0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>25</y>
@@ -278,7 +278,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7552</objectName>
   <x>10</x>
   <y>40</y>
@@ -299,7 +299,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Input_Gain</objectName>
   <x>447</x>
   <y>103</y>
@@ -330,7 +330,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Input_Gain</objectName>
   <x>200</x>
   <y>84</y>
@@ -349,7 +349,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>200</x>
   <y>103</y>
@@ -380,7 +380,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>140</y>
@@ -401,7 +401,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>179</x>
   <y>141</y>
@@ -429,7 +429,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>119</y>
@@ -460,7 +460,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>540</y>
@@ -491,7 +491,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Balance_Half_Point</objectName>
   <x>8</x>
   <y>523</y>
@@ -510,7 +510,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Balance_Half_Point_Value</objectName>
   <x>448</x>
   <y>540</y>
@@ -541,7 +541,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Slope</objectName>
   <x>201</x>
   <y>40</y>
@@ -562,7 +562,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Balance</objectName>
   <x>357</x>
   <y>40</y>
@@ -583,7 +583,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>60</x>
   <y>90</y>
@@ -609,7 +609,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>90</y>
@@ -640,7 +640,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>X_Frequency</objectName>
   <x>8</x>
   <y>179</y>
@@ -669,7 +669,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -677,7 +677,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Playback_Speed_Value</objectName>
   <x>448</x>
   <y>503</y>
@@ -708,7 +708,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Playback_Speed</objectName>
   <x>8</x>
   <y>486</y>
@@ -727,7 +727,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>503</y>
@@ -758,7 +758,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>96</x>
   <y>440</y>
@@ -789,7 +789,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Y_Bandwidth_Value</objectName>
   <x>428</x>
   <y>442</y>
@@ -820,7 +820,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>428</x>
   <y>464</y>
@@ -851,7 +851,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>464</y>
@@ -882,7 +882,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>X_Frequency_Value</objectName>
   <x>8</x>
   <y>442</y>
@@ -913,7 +913,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>616</y>
@@ -944,7 +944,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>599</y>
@@ -963,7 +963,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>616</y>
@@ -994,7 +994,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Release</objectName>
   <x>448</x>
   <y>578</y>
@@ -1025,7 +1025,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Release</objectName>
   <x>268</x>
   <y>561</y>
@@ -1044,7 +1044,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>268</x>
   <y>578</y>
@@ -1075,7 +1075,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>578</y>
@@ -1106,7 +1106,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack_Time</objectName>
   <x>8</x>
   <y>561</y>
@@ -1125,7 +1125,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack_Time</objectName>
   <x>188</x>
   <y>578</y>

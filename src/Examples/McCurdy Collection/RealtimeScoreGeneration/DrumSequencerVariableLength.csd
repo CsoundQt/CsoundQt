@@ -506,7 +506,7 @@ i 1001 0.01 0.01		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -535,7 +535,7 @@ i 1001 0.01 0.01		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>287</y>
@@ -564,7 +564,7 @@ i 1001 0.01 0.01		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>RvbSend</objectName>
   <x>8</x>
   <y>265</y>
@@ -582,7 +582,7 @@ i 1001 0.01 0.01		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RvbSend</objectName>
   <x>408</x>
   <y>287</y>
@@ -611,7 +611,7 @@ i 1001 0.01 0.01		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>402</y>
@@ -641,7 +641,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5493</objectName>
   <x>8</x>
   <y>10</y>
@@ -660,7 +660,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_01</objectName>
   <x>8</x>
   <y>66</y>
@@ -679,7 +679,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_02</objectName>
   <x>22</x>
   <y>66</y>
@@ -698,7 +698,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_03</objectName>
   <x>36</x>
   <y>66</y>
@@ -717,7 +717,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_04</objectName>
   <x>50</x>
   <y>66</y>
@@ -736,7 +736,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_05</objectName>
   <x>69</x>
   <y>66</y>
@@ -755,7 +755,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_06</objectName>
   <x>83</x>
   <y>66</y>
@@ -774,7 +774,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_07</objectName>
   <x>97</x>
   <y>66</y>
@@ -793,7 +793,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_08</objectName>
   <x>111</x>
   <y>66</y>
@@ -812,7 +812,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_09</objectName>
   <x>130</x>
   <y>66</y>
@@ -831,7 +831,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_10</objectName>
   <x>144</x>
   <y>66</y>
@@ -850,7 +850,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_11</objectName>
   <x>158</x>
   <y>66</y>
@@ -869,7 +869,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_12</objectName>
   <x>172</x>
   <y>66</y>
@@ -888,7 +888,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_13</objectName>
   <x>191</x>
   <y>66</y>
@@ -907,7 +907,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_14</objectName>
   <x>205</x>
   <y>66</y>
@@ -926,7 +926,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_15</objectName>
   <x>219</x>
   <y>66</y>
@@ -945,7 +945,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_16</objectName>
   <x>233</x>
   <y>66</y>
@@ -964,7 +964,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_17</objectName>
   <x>252</x>
   <y>66</y>
@@ -983,7 +983,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_18</objectName>
   <x>266</x>
   <y>66</y>
@@ -1002,7 +1002,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_19</objectName>
   <x>280</x>
   <y>66</y>
@@ -1021,7 +1021,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_20</objectName>
   <x>294</x>
   <y>66</y>
@@ -1040,7 +1040,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_21</objectName>
   <x>313</x>
   <y>66</y>
@@ -1059,7 +1059,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_22</objectName>
   <x>327</x>
   <y>66</y>
@@ -1078,7 +1078,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_23</objectName>
   <x>341</x>
   <y>66</y>
@@ -1097,7 +1097,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_24</objectName>
   <x>355</x>
   <y>66</y>
@@ -1116,7 +1116,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_25</objectName>
   <x>374</x>
   <y>66</y>
@@ -1135,7 +1135,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_26</objectName>
   <x>388</x>
   <y>66</y>
@@ -1154,7 +1154,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_27</objectName>
   <x>402</x>
   <y>66</y>
@@ -1173,7 +1173,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_28</objectName>
   <x>416</x>
   <y>66</y>
@@ -1192,7 +1192,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_29</objectName>
   <x>435</x>
   <y>66</y>
@@ -1211,7 +1211,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_30</objectName>
   <x>449</x>
   <y>66</y>
@@ -1230,7 +1230,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_31</objectName>
   <x>463</x>
   <y>66</y>
@@ -1249,7 +1249,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_32</objectName>
   <x>477</x>
   <y>66</y>
@@ -1268,7 +1268,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Phase1</objectName>
   <x>8</x>
   <y>85</y>
@@ -1294,14 +1294,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_01</objectName>
   <x>8</x>
   <y>98</y>
@@ -1320,7 +1320,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_02</objectName>
   <x>22</x>
   <y>98</y>
@@ -1339,7 +1339,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_03</objectName>
   <x>36</x>
   <y>98</y>
@@ -1358,7 +1358,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_04</objectName>
   <x>50</x>
   <y>98</y>
@@ -1377,7 +1377,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_05</objectName>
   <x>69</x>
   <y>98</y>
@@ -1396,7 +1396,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_06</objectName>
   <x>83</x>
   <y>98</y>
@@ -1415,7 +1415,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_07</objectName>
   <x>97</x>
   <y>98</y>
@@ -1434,7 +1434,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_08</objectName>
   <x>111</x>
   <y>98</y>
@@ -1453,7 +1453,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_09</objectName>
   <x>130</x>
   <y>98</y>
@@ -1472,7 +1472,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_10</objectName>
   <x>144</x>
   <y>98</y>
@@ -1491,7 +1491,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_11</objectName>
   <x>158</x>
   <y>98</y>
@@ -1510,7 +1510,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_12</objectName>
   <x>172</x>
   <y>98</y>
@@ -1529,7 +1529,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_13</objectName>
   <x>191</x>
   <y>98</y>
@@ -1548,7 +1548,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_14</objectName>
   <x>205</x>
   <y>98</y>
@@ -1567,7 +1567,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_15</objectName>
   <x>219</x>
   <y>98</y>
@@ -1586,7 +1586,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_16</objectName>
   <x>233</x>
   <y>98</y>
@@ -1605,7 +1605,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_17</objectName>
   <x>252</x>
   <y>98</y>
@@ -1624,7 +1624,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_18</objectName>
   <x>266</x>
   <y>98</y>
@@ -1643,7 +1643,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_19</objectName>
   <x>280</x>
   <y>98</y>
@@ -1662,7 +1662,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_20</objectName>
   <x>294</x>
   <y>98</y>
@@ -1681,7 +1681,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_21</objectName>
   <x>313</x>
   <y>98</y>
@@ -1700,7 +1700,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_22</objectName>
   <x>327</x>
   <y>98</y>
@@ -1719,7 +1719,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_23</objectName>
   <x>341</x>
   <y>98</y>
@@ -1738,7 +1738,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_24</objectName>
   <x>355</x>
   <y>98</y>
@@ -1757,7 +1757,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_25</objectName>
   <x>374</x>
   <y>98</y>
@@ -1776,7 +1776,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_26</objectName>
   <x>388</x>
   <y>98</y>
@@ -1795,7 +1795,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_27</objectName>
   <x>402</x>
   <y>98</y>
@@ -1814,7 +1814,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_28</objectName>
   <x>416</x>
   <y>98</y>
@@ -1833,7 +1833,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_29</objectName>
   <x>435</x>
   <y>98</y>
@@ -1852,7 +1852,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_30</objectName>
   <x>449</x>
   <y>98</y>
@@ -1871,7 +1871,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_31</objectName>
   <x>463</x>
   <y>98</y>
@@ -1890,7 +1890,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_32</objectName>
   <x>477</x>
   <y>98</y>
@@ -1909,7 +1909,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Phase2</objectName>
   <x>8</x>
   <y>117</y>
@@ -1935,14 +1935,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_01</objectName>
   <x>8</x>
   <y>130</y>
@@ -1961,7 +1961,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_02</objectName>
   <x>22</x>
   <y>130</y>
@@ -1980,7 +1980,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_03</objectName>
   <x>36</x>
   <y>130</y>
@@ -1999,7 +1999,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_04</objectName>
   <x>50</x>
   <y>130</y>
@@ -2018,7 +2018,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_05</objectName>
   <x>69</x>
   <y>130</y>
@@ -2037,7 +2037,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_06</objectName>
   <x>83</x>
   <y>130</y>
@@ -2056,7 +2056,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_07</objectName>
   <x>97</x>
   <y>130</y>
@@ -2075,7 +2075,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_08</objectName>
   <x>111</x>
   <y>130</y>
@@ -2094,7 +2094,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_09</objectName>
   <x>130</x>
   <y>130</y>
@@ -2113,7 +2113,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_10</objectName>
   <x>144</x>
   <y>130</y>
@@ -2132,7 +2132,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_11</objectName>
   <x>158</x>
   <y>130</y>
@@ -2151,7 +2151,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_12</objectName>
   <x>172</x>
   <y>130</y>
@@ -2170,7 +2170,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_13</objectName>
   <x>191</x>
   <y>130</y>
@@ -2189,7 +2189,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_14</objectName>
   <x>205</x>
   <y>130</y>
@@ -2208,7 +2208,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_15</objectName>
   <x>219</x>
   <y>130</y>
@@ -2227,7 +2227,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_16</objectName>
   <x>233</x>
   <y>130</y>
@@ -2246,7 +2246,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_17</objectName>
   <x>252</x>
   <y>130</y>
@@ -2265,7 +2265,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_18</objectName>
   <x>266</x>
   <y>130</y>
@@ -2284,7 +2284,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_19</objectName>
   <x>280</x>
   <y>130</y>
@@ -2303,7 +2303,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_20</objectName>
   <x>294</x>
   <y>130</y>
@@ -2322,7 +2322,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_21</objectName>
   <x>313</x>
   <y>130</y>
@@ -2341,7 +2341,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_22</objectName>
   <x>327</x>
   <y>130</y>
@@ -2360,7 +2360,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_23</objectName>
   <x>341</x>
   <y>130</y>
@@ -2379,7 +2379,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_24</objectName>
   <x>355</x>
   <y>130</y>
@@ -2398,7 +2398,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_25</objectName>
   <x>374</x>
   <y>130</y>
@@ -2417,7 +2417,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_26</objectName>
   <x>388</x>
   <y>130</y>
@@ -2436,7 +2436,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_27</objectName>
   <x>402</x>
   <y>130</y>
@@ -2455,7 +2455,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_28</objectName>
   <x>416</x>
   <y>130</y>
@@ -2474,7 +2474,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_29</objectName>
   <x>435</x>
   <y>130</y>
@@ -2493,7 +2493,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_30</objectName>
   <x>449</x>
   <y>130</y>
@@ -2512,7 +2512,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_31</objectName>
   <x>463</x>
   <y>130</y>
@@ -2531,7 +2531,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_32</objectName>
   <x>477</x>
   <y>130</y>
@@ -2550,7 +2550,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Phase3</objectName>
   <x>8</x>
   <y>149</y>
@@ -2576,14 +2576,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_01</objectName>
   <x>8</x>
   <y>162</y>
@@ -2602,7 +2602,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_02</objectName>
   <x>22</x>
   <y>162</y>
@@ -2621,7 +2621,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_03</objectName>
   <x>36</x>
   <y>162</y>
@@ -2640,7 +2640,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_04</objectName>
   <x>50</x>
   <y>162</y>
@@ -2659,7 +2659,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_05</objectName>
   <x>69</x>
   <y>162</y>
@@ -2678,7 +2678,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_06</objectName>
   <x>83</x>
   <y>162</y>
@@ -2697,7 +2697,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_07</objectName>
   <x>97</x>
   <y>162</y>
@@ -2716,7 +2716,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_08</objectName>
   <x>111</x>
   <y>162</y>
@@ -2735,7 +2735,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_09</objectName>
   <x>130</x>
   <y>162</y>
@@ -2754,7 +2754,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_10</objectName>
   <x>144</x>
   <y>162</y>
@@ -2773,7 +2773,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_11</objectName>
   <x>158</x>
   <y>162</y>
@@ -2792,7 +2792,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_12</objectName>
   <x>172</x>
   <y>162</y>
@@ -2811,7 +2811,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_13</objectName>
   <x>191</x>
   <y>162</y>
@@ -2830,7 +2830,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_14</objectName>
   <x>205</x>
   <y>162</y>
@@ -2849,7 +2849,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_15</objectName>
   <x>219</x>
   <y>162</y>
@@ -2868,7 +2868,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_16</objectName>
   <x>233</x>
   <y>162</y>
@@ -2887,7 +2887,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_17</objectName>
   <x>252</x>
   <y>162</y>
@@ -2906,7 +2906,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_18</objectName>
   <x>266</x>
   <y>162</y>
@@ -2925,7 +2925,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_19</objectName>
   <x>280</x>
   <y>162</y>
@@ -2944,7 +2944,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_20</objectName>
   <x>294</x>
   <y>162</y>
@@ -2963,7 +2963,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_21</objectName>
   <x>313</x>
   <y>162</y>
@@ -2982,7 +2982,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_22</objectName>
   <x>327</x>
   <y>162</y>
@@ -3001,7 +3001,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_23</objectName>
   <x>341</x>
   <y>162</y>
@@ -3020,7 +3020,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_24</objectName>
   <x>355</x>
   <y>162</y>
@@ -3039,7 +3039,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_25</objectName>
   <x>374</x>
   <y>162</y>
@@ -3058,7 +3058,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_26</objectName>
   <x>388</x>
   <y>162</y>
@@ -3077,7 +3077,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_27</objectName>
   <x>402</x>
   <y>162</y>
@@ -3096,7 +3096,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_28</objectName>
   <x>416</x>
   <y>162</y>
@@ -3115,7 +3115,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_29</objectName>
   <x>435</x>
   <y>162</y>
@@ -3134,7 +3134,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_30</objectName>
   <x>449</x>
   <y>162</y>
@@ -3153,7 +3153,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_31</objectName>
   <x>463</x>
   <y>162</y>
@@ -3172,7 +3172,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_32</objectName>
   <x>477</x>
   <y>162</y>
@@ -3191,7 +3191,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Phase4</objectName>
   <x>8</x>
   <y>181</y>
@@ -3217,14 +3217,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_01</objectName>
   <x>8</x>
   <y>194</y>
@@ -3243,7 +3243,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_02</objectName>
   <x>22</x>
   <y>194</y>
@@ -3262,7 +3262,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_03</objectName>
   <x>36</x>
   <y>194</y>
@@ -3281,7 +3281,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_04</objectName>
   <x>50</x>
   <y>194</y>
@@ -3300,7 +3300,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_05</objectName>
   <x>69</x>
   <y>194</y>
@@ -3319,7 +3319,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_06</objectName>
   <x>83</x>
   <y>194</y>
@@ -3338,7 +3338,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_07</objectName>
   <x>97</x>
   <y>194</y>
@@ -3357,7 +3357,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_08</objectName>
   <x>111</x>
   <y>194</y>
@@ -3376,7 +3376,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_09</objectName>
   <x>130</x>
   <y>194</y>
@@ -3395,7 +3395,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_10</objectName>
   <x>144</x>
   <y>194</y>
@@ -3414,7 +3414,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_11</objectName>
   <x>158</x>
   <y>194</y>
@@ -3433,7 +3433,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_12</objectName>
   <x>172</x>
   <y>194</y>
@@ -3452,7 +3452,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_13</objectName>
   <x>191</x>
   <y>194</y>
@@ -3471,7 +3471,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_14</objectName>
   <x>205</x>
   <y>194</y>
@@ -3490,7 +3490,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_15</objectName>
   <x>219</x>
   <y>194</y>
@@ -3509,7 +3509,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_16</objectName>
   <x>233</x>
   <y>194</y>
@@ -3528,7 +3528,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_17</objectName>
   <x>252</x>
   <y>194</y>
@@ -3547,7 +3547,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_18</objectName>
   <x>266</x>
   <y>194</y>
@@ -3566,7 +3566,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_19</objectName>
   <x>280</x>
   <y>194</y>
@@ -3585,7 +3585,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_20</objectName>
   <x>294</x>
   <y>194</y>
@@ -3604,7 +3604,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_21</objectName>
   <x>313</x>
   <y>194</y>
@@ -3623,7 +3623,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_22</objectName>
   <x>327</x>
   <y>194</y>
@@ -3642,7 +3642,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_23</objectName>
   <x>341</x>
   <y>194</y>
@@ -3661,7 +3661,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_24</objectName>
   <x>355</x>
   <y>194</y>
@@ -3680,7 +3680,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_25</objectName>
   <x>374</x>
   <y>194</y>
@@ -3699,7 +3699,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_26</objectName>
   <x>388</x>
   <y>194</y>
@@ -3718,7 +3718,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_27</objectName>
   <x>402</x>
   <y>194</y>
@@ -3737,7 +3737,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_28</objectName>
   <x>416</x>
   <y>194</y>
@@ -3756,7 +3756,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_29</objectName>
   <x>435</x>
   <y>194</y>
@@ -3775,7 +3775,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_30</objectName>
   <x>449</x>
   <y>194</y>
@@ -3794,7 +3794,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_31</objectName>
   <x>463</x>
   <y>194</y>
@@ -3813,7 +3813,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_32</objectName>
   <x>477</x>
   <y>194</y>
@@ -3832,7 +3832,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Phase5</objectName>
   <x>8</x>
   <y>213</y>
@@ -3858,14 +3858,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_01</objectName>
   <x>8</x>
   <y>226</y>
@@ -3884,7 +3884,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_02</objectName>
   <x>22</x>
   <y>226</y>
@@ -3903,7 +3903,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_03</objectName>
   <x>36</x>
   <y>226</y>
@@ -3922,7 +3922,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_04</objectName>
   <x>50</x>
   <y>226</y>
@@ -3941,7 +3941,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_05</objectName>
   <x>69</x>
   <y>226</y>
@@ -3960,7 +3960,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_06</objectName>
   <x>83</x>
   <y>226</y>
@@ -3979,7 +3979,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_07</objectName>
   <x>97</x>
   <y>226</y>
@@ -3998,7 +3998,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_08</objectName>
   <x>111</x>
   <y>226</y>
@@ -4017,7 +4017,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_09</objectName>
   <x>130</x>
   <y>226</y>
@@ -4036,7 +4036,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_10</objectName>
   <x>144</x>
   <y>226</y>
@@ -4055,7 +4055,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_11</objectName>
   <x>158</x>
   <y>226</y>
@@ -4074,7 +4074,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_12</objectName>
   <x>172</x>
   <y>226</y>
@@ -4093,7 +4093,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_13</objectName>
   <x>191</x>
   <y>226</y>
@@ -4112,7 +4112,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_14</objectName>
   <x>205</x>
   <y>226</y>
@@ -4131,7 +4131,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_15</objectName>
   <x>219</x>
   <y>226</y>
@@ -4150,7 +4150,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_16</objectName>
   <x>233</x>
   <y>226</y>
@@ -4169,7 +4169,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_17</objectName>
   <x>252</x>
   <y>226</y>
@@ -4188,7 +4188,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_18</objectName>
   <x>266</x>
   <y>226</y>
@@ -4207,7 +4207,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_19</objectName>
   <x>280</x>
   <y>226</y>
@@ -4226,7 +4226,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_20</objectName>
   <x>294</x>
   <y>226</y>
@@ -4245,7 +4245,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_21</objectName>
   <x>313</x>
   <y>226</y>
@@ -4264,7 +4264,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_22</objectName>
   <x>327</x>
   <y>226</y>
@@ -4283,7 +4283,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_23</objectName>
   <x>341</x>
   <y>226</y>
@@ -4302,7 +4302,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_24</objectName>
   <x>355</x>
   <y>226</y>
@@ -4321,7 +4321,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_25</objectName>
   <x>374</x>
   <y>226</y>
@@ -4340,7 +4340,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_26</objectName>
   <x>388</x>
   <y>226</y>
@@ -4359,7 +4359,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_27</objectName>
   <x>402</x>
   <y>226</y>
@@ -4378,7 +4378,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_28</objectName>
   <x>416</x>
   <y>226</y>
@@ -4397,7 +4397,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_29</objectName>
   <x>435</x>
   <y>226</y>
@@ -4416,7 +4416,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_30</objectName>
   <x>449</x>
   <y>226</y>
@@ -4435,7 +4435,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_31</objectName>
   <x>463</x>
   <y>226</y>
@@ -4454,7 +4454,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_32</objectName>
   <x>477</x>
   <y>226</y>
@@ -4473,7 +4473,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Phase6</objectName>
   <x>8</x>
   <y>245</y>
@@ -4499,14 +4499,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>41</y>
@@ -4535,7 +4535,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>69</x>
   <y>41</y>
@@ -4564,7 +4564,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>41</y>
@@ -4593,7 +4593,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>191</x>
   <y>42</y>
@@ -4622,7 +4622,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>252</x>
   <y>41</y>
@@ -4651,7 +4651,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>313</x>
   <y>42</y>
@@ -4680,7 +4680,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>374</x>
   <y>41</y>
@@ -4709,7 +4709,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>435</x>
   <y>41</y>
@@ -4738,7 +4738,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7214</objectName>
   <x>90</x>
   <y>10</y>
@@ -4757,7 +4757,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Tempo</objectName>
   <x>230</x>
   <y>10</y>
@@ -4786,7 +4786,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <randomizable group="0">false</randomizable>
   <value>220</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>170</x>
   <y>11</y>
@@ -4815,7 +4815,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain1</objectName>
   <x>503</x>
   <y>67</y>
@@ -4833,7 +4833,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Transpose1</objectName>
   <x>742</x>
   <y>67</y>
@@ -4851,7 +4851,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay1</objectName>
   <x>917</x>
   <y>67</y>
@@ -4869,7 +4869,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Cycle1</objectName>
   <x>678</x>
   <y>67</y>
@@ -4898,7 +4898,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <randomizable group="0">false</randomizable>
   <value>5.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain2</objectName>
   <x>503</x>
   <y>98</y>
@@ -4916,7 +4916,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Transpose2</objectName>
   <x>742</x>
   <y>98</y>
@@ -4934,7 +4934,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay2</objectName>
   <x>917</x>
   <y>98</y>
@@ -4952,7 +4952,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Cycle2</objectName>
   <x>678</x>
   <y>98</y>
@@ -4981,7 +4981,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <randomizable group="0">false</randomizable>
   <value>6.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain3</objectName>
   <x>503</x>
   <y>130</y>
@@ -4999,7 +4999,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Transpose3</objectName>
   <x>742</x>
   <y>130</y>
@@ -5017,7 +5017,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay3</objectName>
   <x>917</x>
   <y>130</y>
@@ -5035,7 +5035,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Cycle3</objectName>
   <x>678</x>
   <y>130</y>
@@ -5064,7 +5064,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <randomizable group="0">false</randomizable>
   <value>6.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain4</objectName>
   <x>503</x>
   <y>162</y>
@@ -5082,7 +5082,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Transpose4</objectName>
   <x>742</x>
   <y>162</y>
@@ -5100,7 +5100,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay4</objectName>
   <x>917</x>
   <y>162</y>
@@ -5118,7 +5118,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Cycle4</objectName>
   <x>678</x>
   <y>162</y>
@@ -5147,7 +5147,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <randomizable group="0">false</randomizable>
   <value>7</value>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain5</objectName>
   <x>503</x>
   <y>194</y>
@@ -5165,7 +5165,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Transpose5</objectName>
   <x>742</x>
   <y>194</y>
@@ -5183,7 +5183,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay5</objectName>
   <x>917</x>
   <y>194</y>
@@ -5201,7 +5201,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Cycle5</objectName>
   <x>678</x>
   <y>194</y>
@@ -5230,7 +5230,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <randomizable group="0">false</randomizable>
   <value>5.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain6</objectName>
   <x>503</x>
   <y>226</y>
@@ -5248,7 +5248,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Transpose6</objectName>
   <x>742</x>
   <y>226</y>
@@ -5266,7 +5266,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay6</objectName>
   <x>917</x>
   <y>226</y>
@@ -5284,7 +5284,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Cycle6</objectName>
   <x>678</x>
   <y>226</y>
@@ -5313,7 +5313,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <randomizable group="0">false</randomizable>
   <value>5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>777</x>
   <y>43</y>
@@ -5342,7 +5342,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>940</x>
   <y>43</y>
@@ -5371,7 +5371,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>540</x>
   <y>43</y>
@@ -5400,7 +5400,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>657</x>
   <y>43</y>
@@ -5429,7 +5429,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>333</y>
@@ -5458,7 +5458,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>RvbTime</objectName>
   <x>8</x>
   <y>311</y>
@@ -5476,7 +5476,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RvbTime</objectName>
   <x>408</x>
   <y>333</y>
@@ -5505,7 +5505,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>378</y>
@@ -5534,7 +5534,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>RvbCutoff</objectName>
   <x>8</x>
   <y>356</y>
@@ -5552,7 +5552,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RvbCutoff</objectName>
   <x>408</x>
   <y>378</y>
@@ -5581,7 +5581,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>503</x>
   <y>287</y>
@@ -5610,7 +5610,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>DelSend</objectName>
   <x>503</x>
   <y>265</y>
@@ -5628,7 +5628,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DelSend</objectName>
   <x>903</x>
   <y>287</y>
@@ -5657,7 +5657,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>503</x>
   <y>333</y>
@@ -5686,7 +5686,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>DelFB</objectName>
   <x>503</x>
   <y>311</y>
@@ -5704,7 +5704,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DelFB</objectName>
   <x>903</x>
   <y>333</y>
@@ -5733,7 +5733,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>DelayL</objectName>
   <x>589</x>
   <y>362</y>
@@ -5762,7 +5762,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <randomizable group="0">false</randomizable>
   <value>12</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>509</x>
   <y>364</y>
@@ -5791,7 +5791,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>DelayR</objectName>
   <x>748</x>
   <y>362</y>
@@ -5820,7 +5820,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <randomizable group="0">false</randomizable>
   <value>20</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>668</x>
   <y>364</y>
@@ -5849,7 +5849,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Master</objectName>
   <x>997</x>
   <y>270</y>
@@ -5867,7 +5867,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>987</x>
   <y>350</y>

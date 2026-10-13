@@ -64,7 +64,7 @@ i 1 0 3600	;THRESHOLD CROSSING TESTING INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS RE
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -93,7 +93,7 @@ i 1 0 3600	;THRESHOLD CROSSING TESTING INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS RE
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>23</y>
@@ -124,7 +124,7 @@ This opcode can be useful in using a MIDI continuous controller to trigger a Cso
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>270</y>
@@ -153,7 +153,7 @@ This opcode can be useful in using a MIDI continuous controller to trigger a Cso
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>TriggerSignal</objectName>
   <x>8</x>
   <y>247</y>
@@ -171,7 +171,7 @@ This opcode can be useful in using a MIDI continuous controller to trigger a Cso
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>TriggerSignal</objectName>
   <x>448</x>
   <y>270</y>
@@ -200,7 +200,7 @@ This opcode can be useful in using a MIDI continuous controller to trigger a Cso
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>217</y>
@@ -229,7 +229,7 @@ This opcode can be useful in using a MIDI continuous controller to trigger a Cso
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Threshold</objectName>
   <x>448</x>
   <y>217</y>
@@ -258,7 +258,7 @@ This opcode can be useful in using a MIDI continuous controller to trigger a Cso
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Threshold</objectName>
   <x>8</x>
   <y>192</y>
@@ -284,14 +284,14 @@ This opcode can be useful in using a MIDI continuous controller to trigger a Cso
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>
   <x>222</x>
   <y>302</y>
@@ -321,7 +321,7 @@ This opcode can be useful in using a MIDI continuous controller to trigger a Cso
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>139</x>
   <y>306</y>

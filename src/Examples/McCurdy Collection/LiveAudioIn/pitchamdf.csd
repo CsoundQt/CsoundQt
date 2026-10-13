@@ -110,7 +110,7 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -139,7 +139,7 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>2</y>
@@ -168,7 +168,7 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>18</y>
@@ -199,7 +199,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>180</y>
@@ -228,7 +228,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Max_Freq</objectName>
   <x>8</x>
   <y>163</y>
@@ -246,7 +246,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Max_Freq_Value</objectName>
   <x>448</x>
   <y>180</y>
@@ -275,7 +275,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>73</y>
@@ -304,7 +304,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Input_Gain</objectName>
   <x>8</x>
   <y>56</y>
@@ -322,7 +322,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Input_Gain</objectName>
   <x>448</x>
   <y>73</y>
@@ -351,7 +351,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>109</y>
@@ -380,7 +380,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gate_Threshold</objectName>
   <x>8</x>
   <y>92</y>
@@ -398,7 +398,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gate_Threshold</objectName>
   <x>448</x>
   <y>109</y>
@@ -427,7 +427,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>145</y>
@@ -456,7 +456,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Min_Freq</objectName>
   <x>8</x>
   <y>128</y>
@@ -474,7 +474,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Min_Freq_Value</objectName>
   <x>448</x>
   <y>145</y>
@@ -503,7 +503,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6458</objectName>
   <x>6</x>
   <y>6</y>
@@ -522,7 +522,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>rms</objectName>
   <x>8</x>
   <y>226</y>
@@ -548,14 +548,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>234</y>
@@ -584,7 +584,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>cps</objectName>
   <x>8</x>
   <y>261</y>
@@ -610,14 +610,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>269</y>
@@ -646,7 +646,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Limit</objectName>
   <x>438</x>
   <y>199</y>
@@ -672,14 +672,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>438</x>
   <y>198</y>

@@ -145,7 +145,7 @@ i 10 0 3600		;GUI
   <g>167</g>
   <b>167</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>301</y>
@@ -174,7 +174,7 @@ i 10 0 3600		;GUI
   <borderradius>10</borderradius>
   <borderwidth>4</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>230</x>
   <y>416</y>
@@ -204,7 +204,7 @@ Mix</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>150</x>
   <y>416</y>
@@ -234,7 +234,7 @@ Feedback</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DelayTime</objectName>
   <x>81</x>
   <y>356</y>
@@ -252,7 +252,7 @@ Feedback</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>70</x>
   <y>416</y>
@@ -282,7 +282,7 @@ Time</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>310</x>
   <y>416</y>
@@ -312,7 +312,7 @@ Size</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>390</x>
   <y>416</y>
@@ -342,7 +342,7 @@ Diffusion</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>470</x>
   <y>416</y>
@@ -372,7 +372,7 @@ Mix</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>550</x>
   <y>416</y>
@@ -402,7 +402,7 @@ Frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>630</x>
   <y>416</y>
@@ -432,7 +432,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>2</y>
@@ -461,7 +461,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>5</y>
@@ -490,7 +490,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>34</x>
   <y>5</y>
@@ -519,7 +519,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>58</x>
   <y>5</y>
@@ -548,7 +548,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>82</x>
   <y>5</y>
@@ -577,7 +577,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>106</x>
   <y>5</y>
@@ -606,7 +606,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>5</y>
@@ -635,7 +635,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>154</x>
   <y>5</y>
@@ -664,7 +664,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>5</y>
@@ -693,7 +693,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>202</x>
   <y>5</y>
@@ -722,7 +722,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>226</x>
   <y>5</y>
@@ -751,7 +751,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>250</x>
   <y>5</y>
@@ -780,7 +780,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>274</x>
   <y>5</y>
@@ -809,7 +809,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>7</y>
@@ -838,7 +838,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>58</x>
   <y>7</y>
@@ -867,7 +867,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>106</x>
   <y>7</y>
@@ -896,7 +896,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>7</y>
@@ -925,7 +925,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>7</y>
@@ -954,7 +954,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>226</x>
   <y>7</y>
@@ -983,7 +983,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>274</x>
   <y>7</y>
@@ -1012,7 +1012,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>298</x>
   <y>5</y>
@@ -1041,7 +1041,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>322</x>
   <y>5</y>
@@ -1070,7 +1070,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>346</x>
   <y>5</y>
@@ -1099,7 +1099,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>370</x>
   <y>5</y>
@@ -1128,7 +1128,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>394</x>
   <y>5</y>
@@ -1157,7 +1157,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>418</x>
   <y>5</y>
@@ -1186,7 +1186,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>442</x>
   <y>5</y>
@@ -1215,7 +1215,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>466</x>
   <y>5</y>
@@ -1244,7 +1244,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>490</x>
   <y>5</y>
@@ -1273,7 +1273,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>5</y>
@@ -1302,7 +1302,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>538</x>
   <y>5</y>
@@ -1331,7 +1331,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>562</x>
   <y>5</y>
@@ -1360,7 +1360,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>298</x>
   <y>7</y>
@@ -1389,7 +1389,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>346</x>
   <y>7</y>
@@ -1418,7 +1418,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>394</x>
   <y>7</y>
@@ -1447,7 +1447,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>418</x>
   <y>7</y>
@@ -1476,7 +1476,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>466</x>
   <y>7</y>
@@ -1505,7 +1505,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>7</y>
@@ -1534,7 +1534,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>562</x>
   <y>7</y>
@@ -1563,7 +1563,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>586</x>
   <y>5</y>
@@ -1592,7 +1592,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>610</x>
   <y>5</y>
@@ -1621,7 +1621,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>634</x>
   <y>5</y>
@@ -1650,7 +1650,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>658</x>
   <y>5</y>
@@ -1679,7 +1679,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>682</x>
   <y>5</y>
@@ -1708,7 +1708,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>706</x>
   <y>5</y>
@@ -1737,7 +1737,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>730</x>
   <y>5</y>
@@ -1766,7 +1766,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>754</x>
   <y>5</y>
@@ -1795,7 +1795,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>778</x>
   <y>5</y>
@@ -1824,7 +1824,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>802</x>
   <y>5</y>
@@ -1853,7 +1853,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>826</x>
   <y>5</y>
@@ -1882,7 +1882,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>850</x>
   <y>5</y>
@@ -1911,7 +1911,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>586</x>
   <y>7</y>
@@ -1940,7 +1940,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>634</x>
   <y>7</y>
@@ -1969,7 +1969,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>683</x>
   <y>7</y>
@@ -1998,7 +1998,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>706</x>
   <y>7</y>
@@ -2027,7 +2027,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>754</x>
   <y>7</y>
@@ -2056,7 +2056,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>802</x>
   <y>7</y>
@@ -2085,7 +2085,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>850</x>
   <y>7</y>
@@ -2114,7 +2114,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>874</x>
   <y>5</y>
@@ -2143,7 +2143,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>898</x>
   <y>5</y>
@@ -2172,7 +2172,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>922</x>
   <y>5</y>
@@ -2201,7 +2201,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>946</x>
   <y>5</y>
@@ -2230,7 +2230,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>970</x>
   <y>5</y>
@@ -2259,7 +2259,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>994</x>
   <y>5</y>
@@ -2288,7 +2288,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>5</y>
@@ -2317,7 +2317,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1042</x>
   <y>5</y>
@@ -2346,7 +2346,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1066</x>
   <y>5</y>
@@ -2375,7 +2375,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1090</x>
   <y>5</y>
@@ -2404,7 +2404,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1114</x>
   <y>5</y>
@@ -2433,7 +2433,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1138</x>
   <y>5</y>
@@ -2462,7 +2462,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>874</x>
   <y>7</y>
@@ -2491,7 +2491,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>922</x>
   <y>7</y>
@@ -2520,7 +2520,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>970</x>
   <y>7</y>
@@ -2549,7 +2549,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>994</x>
   <y>7</y>
@@ -2578,7 +2578,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1042</x>
   <y>7</y>
@@ -2607,7 +2607,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1090</x>
   <y>7</y>
@@ -2636,7 +2636,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1138</x>
   <y>7</y>
@@ -2665,7 +2665,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1162</x>
   <y>5</y>
@@ -2694,7 +2694,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1162</x>
   <y>7</y>
@@ -2723,7 +2723,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>CTRLX</objectName>
   <x>10</x>
   <y>100</y>
@@ -2749,14 +2749,14 @@ Depth</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>710</x>
   <y>416</y>
@@ -2786,7 +2786,7 @@ Depth</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>790</x>
   <y>416</y>
@@ -2816,7 +2816,7 @@ Portamento</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>870</x>
   <y>416</y>
@@ -2846,7 +2846,7 @@ Portamento</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>950</x>
   <y>416</y>
@@ -2876,7 +2876,7 @@ Time</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1030</x>
   <y>416</y>
@@ -2906,7 +2906,7 @@ Amplitude</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DelayFB</objectName>
   <x>161</x>
   <y>356</y>
@@ -2924,7 +2924,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DelayMix</objectName>
   <x>241</x>
   <y>356</y>
@@ -2942,7 +2942,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RoomSize</objectName>
   <x>321</x>
   <y>356</y>
@@ -2960,7 +2960,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>HFDiff</objectName>
   <x>401</x>
   <y>356</y>
@@ -2978,7 +2978,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ReverbMix</objectName>
   <x>481</x>
   <y>356</y>
@@ -2996,7 +2996,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ModFreq</objectName>
   <x>561</x>
   <y>356</y>
@@ -3014,7 +3014,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>VibDepth</objectName>
   <x>641</x>
   <y>356</y>
@@ -3032,7 +3032,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>TremDepth</objectName>
   <x>721</x>
   <y>356</y>
@@ -3050,7 +3050,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>PitchPort</objectName>
   <x>801</x>
   <y>356</y>
@@ -3068,7 +3068,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>AmpPort</objectName>
   <x>881</x>
   <y>356</y>
@@ -3086,7 +3086,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>PortTime</objectName>
   <x>961</x>
   <y>356</y>
@@ -3104,7 +3104,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>OutputAmp</objectName>
   <x>1041</x>
   <y>356</y>
@@ -3122,7 +3122,7 @@ Amplitude</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DelayTime</objectName>
   <x>70</x>
   <y>456</y>
@@ -3151,7 +3151,7 @@ Amplitude</label>
   <borderradius>9</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DelayFB</objectName>
   <x>150</x>
   <y>456</y>
@@ -3180,7 +3180,7 @@ Amplitude</label>
   <borderradius>8</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DelayMix</objectName>
   <x>230</x>
   <y>456</y>
@@ -3209,7 +3209,7 @@ Amplitude</label>
   <borderradius>8</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RoomSize</objectName>
   <x>310</x>
   <y>456</y>
@@ -3238,7 +3238,7 @@ Amplitude</label>
   <borderradius>8</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>HFDiff</objectName>
   <x>390</x>
   <y>456</y>
@@ -3267,7 +3267,7 @@ Amplitude</label>
   <borderradius>8</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ReverbMix</objectName>
   <x>470</x>
   <y>456</y>
@@ -3296,7 +3296,7 @@ Amplitude</label>
   <borderradius>9</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ModFreq</objectName>
   <x>550</x>
   <y>456</y>
@@ -3325,7 +3325,7 @@ Amplitude</label>
   <borderradius>8</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibDepth</objectName>
   <x>630</x>
   <y>456</y>
@@ -3354,7 +3354,7 @@ Amplitude</label>
   <borderradius>8</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>TremDepth</objectName>
   <x>710</x>
   <y>456</y>
@@ -3383,7 +3383,7 @@ Amplitude</label>
   <borderradius>8</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PitchPort</objectName>
   <x>790</x>
   <y>456</y>
@@ -3412,7 +3412,7 @@ Amplitude</label>
   <borderradius>8</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AmpPort</objectName>
   <x>870</x>
   <y>456</y>
@@ -3441,7 +3441,7 @@ Amplitude</label>
   <borderradius>8</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PortTime</objectName>
   <x>950</x>
   <y>456</y>
@@ -3470,7 +3470,7 @@ Amplitude</label>
   <borderradius>8</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>OutputAmp</objectName>
   <x>1030</x>
   <y>456</y>

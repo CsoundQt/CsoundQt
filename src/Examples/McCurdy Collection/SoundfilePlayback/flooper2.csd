@@ -94,7 +94,7 @@ i 11 0 0.01	;INIT
   <g>202</g>
   <b>202</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -123,7 +123,7 @@ i 11 0 0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7928</objectName>
   <x>8</x>
   <y>10</y>
@@ -142,7 +142,7 @@ i 11 0 0.01	;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -171,7 +171,7 @@ i 11 0 0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>18</y>
@@ -201,7 +201,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>223</y>
@@ -230,7 +230,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pitch</objectName>
   <x>8</x>
   <y>206</y>
@@ -248,7 +248,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pitch_Value</objectName>
   <x>448</x>
   <y>223</y>
@@ -277,7 +277,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>270</y>
@@ -306,7 +306,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Crossfade</objectName>
   <x>8</x>
   <y>253</y>
@@ -324,7 +324,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Crossfade</objectName>
   <x>448</x>
   <y>270</y>
@@ -353,7 +353,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>129</y>
@@ -382,7 +382,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LoopStart</objectName>
   <x>8</x>
   <y>112</y>
@@ -400,7 +400,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LoopStart</objectName>
   <x>448</x>
   <y>129</y>
@@ -429,7 +429,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>176</y>
@@ -458,7 +458,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LoopEnd</objectName>
   <x>8</x>
   <y>159</y>
@@ -476,7 +476,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LoopEnd</objectName>
   <x>448</x>
   <y>176</y>
@@ -505,7 +505,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>180</x>
   <y>421</y>
@@ -532,7 +532,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>364</y>
@@ -561,7 +561,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>347</y>
@@ -579,7 +579,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>364</y>
@@ -608,7 +608,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>317</y>
@@ -637,7 +637,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>StartPos</objectName>
   <x>8</x>
   <y>300</y>
@@ -655,7 +655,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>StartPos</objectName>
   <x>448</x>
   <y>317</y>
@@ -684,7 +684,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>43</y>
@@ -713,7 +713,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>LoopMode</objectName>
   <x>9</x>
   <y>63</y>
@@ -743,7 +743,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>400</y>
@@ -772,7 +772,7 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>421</y>

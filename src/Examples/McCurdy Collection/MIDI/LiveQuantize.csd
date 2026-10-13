@@ -132,7 +132,7 @@ i 10 0 3600	;GUI - REAL TIME PERFORMANCE FOR 1 HOUR
   <g>170</g>
   <b>170</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -161,7 +161,7 @@ i 10 0 3600	;GUI - REAL TIME PERFORMANCE FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>21</y>
@@ -191,7 +191,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>263</y>
@@ -220,7 +220,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>331</y>
@@ -249,7 +249,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Metronone</objectName>
   <x>10</x>
   <y>313</y>
@@ -267,7 +267,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Metronone</objectName>
   <x>450</x>
   <y>331</y>
@@ -296,7 +296,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Tempo</objectName>
   <x>175</x>
   <y>272</y>
@@ -325,7 +325,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
   <randomizable group="0">false</randomizable>
   <value>70</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Beat</objectName>
   <x>327</x>
   <y>272</y>
@@ -354,7 +354,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>111</x>
   <y>272</y>
@@ -383,7 +383,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>235</x>
   <y>272</y>
@@ -412,7 +412,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>On_Off</objectName>
   <x>11</x>
   <y>272</y>
@@ -431,7 +431,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>474</x>
   <y>281</y>
@@ -457,14 +457,14 @@ This example quantizes an incoming stream of MIDI notes according to an internal
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>434</x>
   <y>281</y>
@@ -490,14 +490,14 @@ This example quantizes an incoming stream of MIDI notes according to an internal
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>454</x>
   <y>281</y>
@@ -523,14 +523,14 @@ This example quantizes an incoming stream of MIDI notes according to an internal
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>414</x>
   <y>281</y>
@@ -556,7 +556,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>

@@ -90,7 +90,7 @@ i 1 0 3600
   <g>202</g>
   <b>202</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -119,7 +119,7 @@ i 1 0 3600
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>140</y>
@@ -154,7 +154,7 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6743</objectName>
   <x>62</x>
   <y>44</y>
@@ -173,7 +173,7 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Pause</objectName>
   <x>182</x>
   <y>44</y>
@@ -192,7 +192,7 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Play</objectName>
   <x>302</x>
   <y>44</y>
@@ -211,7 +211,7 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>312</x>
   <y>54</y>
@@ -237,14 +237,14 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RecDur</objectName>
   <x>221</x>
   <y>94</y>
@@ -273,7 +273,7 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>86</x>
   <y>94</y>
@@ -302,7 +302,7 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PlayDur</objectName>
   <x>221</x>
   <y>120</y>
@@ -331,7 +331,7 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>86</x>
   <y>120</y>

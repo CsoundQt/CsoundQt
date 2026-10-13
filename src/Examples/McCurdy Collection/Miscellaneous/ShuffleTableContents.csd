@@ -154,7 +154,7 @@ f 0 3600
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -183,7 +183,7 @@ f 0 3600
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4918</objectName>
   <x>221</x>
   <y>42</y>
@@ -202,7 +202,7 @@ f 0 3600
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1</x>
   <y>82</y>
@@ -231,7 +231,7 @@ f 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item1</objectName>
   <x>70</x>
   <y>82</y>
@@ -260,7 +260,7 @@ f 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>141</y>
@@ -290,7 +290,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item2</objectName>
   <x>130</x>
   <y>82</y>
@@ -319,7 +319,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item3</objectName>
   <x>190</x>
   <y>82</y>
@@ -348,7 +348,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item4</objectName>
   <x>250</x>
   <y>82</y>
@@ -377,7 +377,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item5</objectName>
   <x>310</x>
   <y>82</y>
@@ -406,7 +406,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item6</objectName>
   <x>370</x>
   <y>82</y>
@@ -435,7 +435,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item7</objectName>
   <x>430</x>
   <y>82</y>
@@ -464,7 +464,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item8</objectName>
   <x>490</x>
   <y>82</y>
@@ -493,7 +493,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item9</objectName>
   <x>549</x>
   <y>82</y>
@@ -522,7 +522,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item10</objectName>
   <x>609</x>
   <y>82</y>
@@ -551,7 +551,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item11</objectName>
   <x>669</x>
   <y>82</y>
@@ -580,7 +580,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Item12</objectName>
   <x>729</x>
   <y>82</y>
@@ -609,7 +609,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2538</objectName>
   <x>344</x>
   <y>42</y>
@@ -628,7 +628,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6390</objectName>
   <x>467</x>
   <y>42</y>
@@ -647,7 +647,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>70</x>
   <y>112</y>
@@ -676,7 +676,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>112</y>
@@ -705,7 +705,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>190</x>
   <y>112</y>
@@ -734,7 +734,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>250</x>
   <y>112</y>
@@ -764,7 +764,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>310</x>
   <y>112</y>
@@ -793,7 +793,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>370</x>
   <y>112</y>
@@ -822,7 +822,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>430</x>
   <y>112</y>
@@ -851,7 +851,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>490</x>
   <y>112</y>
@@ -880,7 +880,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>549</x>
   <y>112</y>
@@ -909,7 +909,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>608</x>
   <y>112</y>
@@ -938,7 +938,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>669</x>
   <y>112</y>
@@ -967,7 +967,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>729</x>
   <y>112</y>

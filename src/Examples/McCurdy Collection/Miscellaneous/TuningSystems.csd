@@ -235,7 +235,7 @@ i 11 0 0.1	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -264,7 +264,7 @@ i 11 0 0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>
   <x>548</x>
   <y>225</y>
@@ -294,7 +294,7 @@ i 11 0 0.1	;INIT
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>53</y>
@@ -323,7 +323,7 @@ i 11 0 0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>313</y>
@@ -352,7 +352,7 @@ i 11 0 0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>330</y>
@@ -383,7 +383,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8886</objectName>
   <x>54</x>
   <y>47</y>
@@ -402,7 +402,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9104</objectName>
   <x>133</x>
   <y>47</y>
@@ -421,7 +421,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1437</objectName>
   <x>212</x>
   <y>47</y>
@@ -440,7 +440,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7147</objectName>
   <x>291</x>
   <y>47</y>
@@ -459,7 +459,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5121</objectName>
   <x>370</x>
   <y>47</y>
@@ -478,7 +478,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8057</objectName>
   <x>449</x>
   <y>47</y>
@@ -497,7 +497,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3322</objectName>
   <x>528</x>
   <y>47</y>
@@ -516,7 +516,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4241</objectName>
   <x>607</x>
   <y>47</y>
@@ -535,7 +535,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7722</objectName>
   <x>686</x>
   <y>47</y>
@@ -554,7 +554,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2345</objectName>
   <x>765</x>
   <y>47</y>
@@ -573,7 +573,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2344</objectName>
   <x>844</x>
   <y>47</y>
@@ -592,7 +592,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>96</y>
@@ -621,7 +621,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2809</objectName>
   <x>54</x>
   <y>90</y>
@@ -640,7 +640,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1190</objectName>
   <x>133</x>
   <y>90</y>
@@ -660,7 +660,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5470</objectName>
   <x>212</x>
   <y>90</y>
@@ -680,7 +680,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5639</objectName>
   <x>291</x>
   <y>90</y>
@@ -700,7 +700,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3922</objectName>
   <x>370</x>
   <y>90</y>
@@ -720,7 +720,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1108</objectName>
   <x>449</x>
   <y>90</y>
@@ -740,7 +740,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2826</objectName>
   <x>528</x>
   <y>90</y>
@@ -760,7 +760,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9720</objectName>
   <x>607</x>
   <y>90</y>
@@ -780,7 +780,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5895</objectName>
   <x>686</x>
   <y>90</y>
@@ -800,7 +800,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2963</objectName>
   <x>765</x>
   <y>90</y>
@@ -820,7 +820,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2877</objectName>
   <x>844</x>
   <y>90</y>
@@ -840,7 +840,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>139</y>
@@ -869,7 +869,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9802</objectName>
   <x>54</x>
   <y>133</y>
@@ -888,7 +888,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5451</objectName>
   <x>133</x>
   <y>133</y>
@@ -908,7 +908,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7133</objectName>
   <x>212</x>
   <y>133</y>
@@ -928,7 +928,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8555</objectName>
   <x>291</x>
   <y>133</y>
@@ -948,7 +948,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4007</objectName>
   <x>370</x>
   <y>133</y>
@@ -968,7 +968,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3534</objectName>
   <x>449</x>
   <y>133</y>
@@ -988,7 +988,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8021</objectName>
   <x>528</x>
   <y>133</y>
@@ -1008,7 +1008,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8969</objectName>
   <x>607</x>
   <y>133</y>
@@ -1028,7 +1028,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7430</objectName>
   <x>686</x>
   <y>133</y>
@@ -1048,7 +1048,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3049</objectName>
   <x>765</x>
   <y>133</y>
@@ -1068,7 +1068,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9549</objectName>
   <x>844</x>
   <y>133</y>
@@ -1088,7 +1088,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>54</x>
   <y>180</y>
@@ -1117,7 +1117,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>189</x>
   <y>194</y>
@@ -1143,14 +1143,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>205</x>
   <y>194</y>
@@ -1176,14 +1176,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>221</x>
   <y>194</y>
@@ -1209,14 +1209,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>237</x>
   <y>194</y>
@@ -1242,14 +1242,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>253</x>
   <y>194</y>
@@ -1275,14 +1275,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>269</x>
   <y>194</y>
@@ -1308,14 +1308,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>285</x>
   <y>194</y>
@@ -1341,14 +1341,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>301</x>
   <y>194</y>
@@ -1374,14 +1374,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>317</x>
   <y>194</y>
@@ -1407,14 +1407,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>333</x>
   <y>194</y>
@@ -1440,14 +1440,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>349</x>
   <y>194</y>
@@ -1473,14 +1473,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>365</x>
   <y>194</y>
@@ -1506,14 +1506,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>381</x>
   <y>194</y>
@@ -1539,14 +1539,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>397</x>
   <y>194</y>
@@ -1572,14 +1572,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>413</x>
   <y>194</y>
@@ -1605,14 +1605,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>429</x>
   <y>194</y>
@@ -1638,14 +1638,14 @@ Notes in the various tuning systems can be activated either using the GUI button
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>808</x>
   <y>251</y>
@@ -1674,7 +1674,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>498</x>
   <y>226</y>
@@ -1703,7 +1703,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>189</x>
   <y>275</y>
@@ -1732,7 +1732,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7615</objectName>
   <x>923</x>
   <y>47</y>
@@ -1751,7 +1751,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1454</objectName>
   <x>1002</x>
   <y>47</y>
@@ -1770,7 +1770,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3566</objectName>
   <x>923</x>
   <y>90</y>
@@ -1790,7 +1790,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2142</objectName>
   <x>1002</x>
   <y>90</y>
@@ -1809,7 +1809,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4897</objectName>
   <x>923</x>
   <y>133</y>
@@ -1829,7 +1829,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4998</objectName>
   <x>1002</x>
   <y>133</y>
@@ -1848,7 +1848,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>756</x>
   <y>226</y>
@@ -1866,7 +1866,7 @@ Notes in the various tuning systems can be activated either using the GUI button
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>34</x>
   <y>216</y>

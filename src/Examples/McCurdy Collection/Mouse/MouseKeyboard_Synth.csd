@@ -285,7 +285,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <g>206</g>
   <b>206</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>16</y>
@@ -314,7 +314,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>100</y>
@@ -343,7 +343,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>62</x>
   <y>100</y>
@@ -372,7 +372,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>122</x>
   <y>100</y>
@@ -401,7 +401,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>182</x>
   <y>100</y>
@@ -430,7 +430,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>242</x>
   <y>100</y>
@@ -459,7 +459,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>302</x>
   <y>100</y>
@@ -488,7 +488,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>362</x>
   <y>100</y>
@@ -517,7 +517,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>36</x>
   <y>100</y>
@@ -546,7 +546,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>106</x>
   <y>100</y>
@@ -575,7 +575,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>212</x>
   <y>100</y>
@@ -604,7 +604,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>282</x>
   <y>100</y>
@@ -633,7 +633,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>352</x>
   <y>100</y>
@@ -662,7 +662,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>422</x>
   <y>100</y>
@@ -691,7 +691,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>482</x>
   <y>100</y>
@@ -720,7 +720,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>542</x>
   <y>100</y>
@@ -749,7 +749,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>602</x>
   <y>100</y>
@@ -778,7 +778,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>662</x>
   <y>100</y>
@@ -807,7 +807,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>722</x>
   <y>100</y>
@@ -836,7 +836,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>782</x>
   <y>100</y>
@@ -865,7 +865,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>456</x>
   <y>100</y>
@@ -894,7 +894,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>526</x>
   <y>100</y>
@@ -923,7 +923,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>632</x>
   <y>100</y>
@@ -952,7 +952,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>702</x>
   <y>100</y>
@@ -981,7 +981,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>772</x>
   <y>100</y>
@@ -1010,7 +1010,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>103</y>
@@ -1039,7 +1039,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>39</x>
   <y>103</y>
@@ -1068,7 +1068,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>74</x>
   <y>103</y>
@@ -1097,7 +1097,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>110</x>
   <y>103</y>
@@ -1126,7 +1126,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>142</x>
   <y>103</y>
@@ -1155,7 +1155,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>103</y>
@@ -1184,7 +1184,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>216</x>
   <y>103</y>
@@ -1213,7 +1213,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>250</x>
   <y>103</y>
@@ -1242,7 +1242,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>286</x>
   <y>103</y>
@@ -1271,7 +1271,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>320</x>
   <y>103</y>
@@ -1300,7 +1300,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>356</x>
   <y>103</y>
@@ -1329,7 +1329,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>390</x>
   <y>103</y>
@@ -1358,7 +1358,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>424</x>
   <y>103</y>
@@ -1387,7 +1387,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>460</x>
   <y>103</y>
@@ -1416,7 +1416,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>494</x>
   <y>103</y>
@@ -1445,7 +1445,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>530</x>
   <y>103</y>
@@ -1474,7 +1474,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>566</x>
   <y>103</y>
@@ -1503,7 +1503,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>600</x>
   <y>103</y>
@@ -1532,7 +1532,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>636</x>
   <y>103</y>
@@ -1561,7 +1561,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>670</x>
   <y>103</y>
@@ -1590,7 +1590,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>706</x>
   <y>103</y>
@@ -1619,7 +1619,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>740</x>
   <y>103</y>
@@ -1648,7 +1648,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>776</x>
   <y>103</y>
@@ -1677,7 +1677,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>811</x>
   <y>103</y>
@@ -1706,7 +1706,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>842</x>
   <y>100</y>
@@ -1735,7 +1735,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>856</x>
   <y>103</y>
@@ -1764,7 +1764,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>911</x>
   <y>100</y>
@@ -1793,7 +1793,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>10</borderradius>
   <borderwidth>4</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DelayTime</objectName>
   <x>936</x>
   <y>179</y>
@@ -1811,7 +1811,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>922</x>
   <y>227</y>
@@ -1840,7 +1840,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ReverbMix</objectName>
   <x>1008</x>
   <y>106</y>
@@ -1858,7 +1858,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>994</x>
   <y>154</y>
@@ -1887,7 +1887,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Portamento</objectName>
   <x>936</x>
   <y>106</y>
@@ -1905,7 +1905,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>922</x>
   <y>154</y>
@@ -1934,7 +1934,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DelayMix</objectName>
   <x>1008</x>
   <y>179</y>
@@ -1952,7 +1952,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>994</x>
   <y>227</y>
@@ -1981,7 +1981,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Octave</objectName>
   <x>574</x>
   <y>29</y>
@@ -2010,7 +2010,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>503</x>
   <y>32</y>
@@ -2039,7 +2039,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>
   <x>321</x>
   <y>29</y>
@@ -2069,7 +2069,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>255</x>
   <y>31</y>
@@ -2098,7 +2098,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>AmpPort</objectName>
   <x>935</x>
   <y>250</y>
@@ -2116,7 +2116,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>922</x>
   <y>298</y>
@@ -2145,7 +2145,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ModFrq</objectName>
   <x>1008</x>
   <y>250</y>
@@ -2163,7 +2163,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>994</x>
   <y>298</y>
@@ -2192,7 +2192,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>VibDep</objectName>
   <x>936</x>
   <y>323</y>
@@ -2210,7 +2210,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>922</x>
   <y>371</y>
@@ -2239,7 +2239,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>TrmDep</objectName>
   <x>1008</x>
   <y>323</y>
@@ -2257,7 +2257,7 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>994</x>
   <y>371</y>

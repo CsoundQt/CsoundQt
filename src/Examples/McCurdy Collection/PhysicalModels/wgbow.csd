@@ -150,7 +150,7 @@ i 4		0		0.1	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -179,7 +179,7 @@ i 4		0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>76</y>
@@ -208,7 +208,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amp</objectName>
   <x>8</x>
   <y>54</y>
@@ -226,7 +226,7 @@ i 4		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp</objectName>
   <x>448</x>
   <y>76</y>
@@ -255,7 +255,7 @@ i 4		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -284,7 +284,7 @@ i 4		0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>25</y>
@@ -314,7 +314,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6089</objectName>
   <x>8</x>
   <y>16</y>
@@ -333,7 +333,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>121</y>
@@ -362,7 +362,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Freq</objectName>
   <x>8</x>
   <y>99</y>
@@ -380,7 +380,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Freq_Value</objectName>
   <x>448</x>
   <y>121</y>
@@ -409,7 +409,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>166</y>
@@ -438,7 +438,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>BowPress</objectName>
   <x>8</x>
   <y>144</y>
@@ -456,7 +456,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>BowPress_Value</objectName>
   <x>448</x>
   <y>166</y>
@@ -485,7 +485,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>211</y>
@@ -514,7 +514,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>BowPos</objectName>
   <x>8</x>
   <y>189</y>
@@ -532,7 +532,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>BowPos</objectName>
   <x>448</x>
   <y>211</y>
@@ -561,7 +561,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>256</y>
@@ -590,7 +590,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VibFreq</objectName>
   <x>8</x>
   <y>234</y>
@@ -608,7 +608,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibFreq</objectName>
   <x>448</x>
   <y>256</y>
@@ -637,7 +637,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>301</y>
@@ -666,7 +666,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VibAmp</objectName>
   <x>8</x>
   <y>279</y>
@@ -684,7 +684,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibAmp</objectName>
   <x>448</x>
   <y>301</y>
@@ -713,7 +713,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>346</y>
@@ -742,7 +742,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>MinFreq</objectName>
   <x>8</x>
   <y>324</y>
@@ -760,7 +760,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>MinFreq_Value</objectName>
   <x>448</x>
   <y>346</y>

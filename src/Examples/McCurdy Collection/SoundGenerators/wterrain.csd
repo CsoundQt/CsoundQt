@@ -197,7 +197,7 @@ i 4 0 3600			;REVERB
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -226,7 +226,7 @@ i 4 0 3600			;REVERB
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>174</y>
@@ -255,7 +255,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>XRadius</objectName>
   <x>448</x>
   <y>174</y>
@@ -284,7 +284,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>XRadius</objectName>
   <x>8</x>
   <y>158</y>
@@ -302,7 +302,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>212</y>
@@ -331,7 +331,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>YRadius</objectName>
   <x>448</x>
   <y>212</y>
@@ -360,7 +360,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>YRadius</objectName>
   <x>8</x>
   <y>196</y>
@@ -378,7 +378,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>58</y>
@@ -407,7 +407,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Freq_Value</objectName>
   <x>448</x>
   <y>58</y>
@@ -436,7 +436,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Freq</objectName>
   <x>8</x>
   <y>42</y>
@@ -454,7 +454,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>96</y>
@@ -483,7 +483,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>XCentre</objectName>
   <x>448</x>
   <y>96</y>
@@ -512,7 +512,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>XCentre</objectName>
   <x>8</x>
   <y>80</y>
@@ -530,7 +530,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>135</y>
@@ -559,7 +559,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>YCentre</objectName>
   <x>448</x>
   <y>135</y>
@@ -588,7 +588,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>YCentre</objectName>
   <x>8</x>
   <y>119</y>
@@ -606,7 +606,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1063</objectName>
   <x>10</x>
   <y>10</y>
@@ -625,7 +625,7 @@ i 4 0 3600			;REVERB
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>251</y>
@@ -654,7 +654,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>251</y>
@@ -683,7 +683,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>235</y>
@@ -701,7 +701,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>289</y>
@@ -730,7 +730,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack</objectName>
   <x>448</x>
   <y>289</y>
@@ -759,7 +759,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack</objectName>
   <x>8</x>
   <y>273</y>
@@ -777,7 +777,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>328</y>
@@ -806,7 +806,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Release</objectName>
   <x>448</x>
   <y>328</y>
@@ -835,7 +835,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Release</objectName>
   <x>8</x>
   <y>312</y>
@@ -853,7 +853,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>258</x>
   <y>389</y>
@@ -882,7 +882,7 @@ i 4 0 3600			;REVERB
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_1</objectName>
   <x>269</x>
   <y>417</y>
@@ -900,7 +900,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>269</x>
   <y>517</y>
@@ -929,7 +929,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_2</objectName>
   <x>288</x>
   <y>417</y>
@@ -947,7 +947,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>288</x>
   <y>517</y>
@@ -976,7 +976,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_3</objectName>
   <x>307</x>
   <y>417</y>
@@ -994,7 +994,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>307</x>
   <y>517</y>
@@ -1023,7 +1023,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_4</objectName>
   <x>326</x>
   <y>417</y>
@@ -1041,7 +1041,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>326</x>
   <y>517</y>
@@ -1070,7 +1070,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_5</objectName>
   <x>345</x>
   <y>417</y>
@@ -1088,7 +1088,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>345</x>
   <y>517</y>
@@ -1117,7 +1117,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_6</objectName>
   <x>364</x>
   <y>417</y>
@@ -1135,7 +1135,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>364</x>
   <y>517</y>
@@ -1164,7 +1164,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_7</objectName>
   <x>383</x>
   <y>417</y>
@@ -1182,7 +1182,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>383</x>
   <y>517</y>
@@ -1211,7 +1211,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_8</objectName>
   <x>402</x>
   <y>417</y>
@@ -1229,7 +1229,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>402</x>
   <y>517</y>
@@ -1258,7 +1258,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_9</objectName>
   <x>421</x>
   <y>417</y>
@@ -1276,7 +1276,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>421</x>
   <y>517</y>
@@ -1305,7 +1305,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_10</objectName>
   <x>440</x>
   <y>417</y>
@@ -1323,7 +1323,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>440</x>
   <y>517</y>
@@ -1352,7 +1352,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_11</objectName>
   <x>459</x>
   <y>417</y>
@@ -1370,7 +1370,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>459</x>
   <y>517</y>
@@ -1399,7 +1399,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>2_12</objectName>
   <x>478</x>
   <y>417</y>
@@ -1417,7 +1417,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>478</x>
   <y>517</y>
@@ -1446,7 +1446,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>389</y>
@@ -1475,7 +1475,7 @@ i 4 0 3600			;REVERB
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_1</objectName>
   <x>19</x>
   <y>416</y>
@@ -1493,7 +1493,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>19</x>
   <y>516</y>
@@ -1522,7 +1522,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_2</objectName>
   <x>38</x>
   <y>416</y>
@@ -1540,7 +1540,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>38</x>
   <y>516</y>
@@ -1569,7 +1569,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_3</objectName>
   <x>57</x>
   <y>416</y>
@@ -1587,7 +1587,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>57</x>
   <y>516</y>
@@ -1616,7 +1616,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_4</objectName>
   <x>76</x>
   <y>416</y>
@@ -1634,7 +1634,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>76</x>
   <y>516</y>
@@ -1663,7 +1663,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_5</objectName>
   <x>95</x>
   <y>416</y>
@@ -1681,7 +1681,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>95</x>
   <y>516</y>
@@ -1710,7 +1710,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_6</objectName>
   <x>114</x>
   <y>416</y>
@@ -1728,7 +1728,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>516</y>
@@ -1757,7 +1757,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_7</objectName>
   <x>133</x>
   <y>416</y>
@@ -1775,7 +1775,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>133</x>
   <y>516</y>
@@ -1804,7 +1804,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_8</objectName>
   <x>152</x>
   <y>416</y>
@@ -1822,7 +1822,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>152</x>
   <y>516</y>
@@ -1851,7 +1851,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_9</objectName>
   <x>171</x>
   <y>416</y>
@@ -1869,7 +1869,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>171</x>
   <y>516</y>
@@ -1898,7 +1898,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_10</objectName>
   <x>190</x>
   <y>416</y>
@@ -1916,7 +1916,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>190</x>
   <y>516</y>
@@ -1945,7 +1945,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_11</objectName>
   <x>209</x>
   <y>416</y>
@@ -1963,7 +1963,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>209</x>
   <y>516</y>
@@ -1992,7 +1992,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>1_12</objectName>
   <x>228</x>
   <y>416</y>
@@ -2010,7 +2010,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>228</x>
   <y>516</y>
@@ -2039,7 +2039,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>367</y>
@@ -2068,7 +2068,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Reverb</objectName>
   <x>448</x>
   <y>367</y>
@@ -2097,7 +2097,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Reverb</objectName>
   <x>8</x>
   <y>351</y>
@@ -2115,7 +2115,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>553</y>
@@ -2144,7 +2144,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>XJitter</objectName>
   <x>12</x>
   <y>537</y>
@@ -2162,7 +2162,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>263</x>
   <y>553</y>
@@ -2191,7 +2191,7 @@ i 4 0 3600			;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>YJitter</objectName>
   <x>263</x>
   <y>537</y>
@@ -2209,7 +2209,7 @@ i 4 0 3600			;REVERB
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -2238,7 +2238,7 @@ i 4 0 3600			;REVERB
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>32</y>

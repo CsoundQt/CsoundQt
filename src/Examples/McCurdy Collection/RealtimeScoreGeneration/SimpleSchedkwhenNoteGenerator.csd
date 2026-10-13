@@ -75,7 +75,7 @@ i 10	 0	 3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -104,7 +104,7 @@ i 10	 0	 3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>127</y>
@@ -134,7 +134,7 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9137</objectName>
   <x>8</x>
   <y>44</y>
@@ -153,7 +153,7 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>109</x>
   <y>45</y>
@@ -182,7 +182,7 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Scale</objectName>
   <x>195</x>
   <y>44</y>
@@ -207,7 +207,7 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>TrigFreqMin</objectName>
   <x>7</x>
   <y>83</y>
@@ -233,14 +233,14 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>TrigFreqMax</objectName>
   <x>7</x>
   <y>99</y>
@@ -266,14 +266,14 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>177</x>
   <y>110</y>
@@ -302,7 +302,7 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>TrigFreqMax</objectName>
   <x>447</x>
   <y>110</y>
@@ -331,7 +331,7 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>TrigFreqMin</objectName>
   <x>7</x>
   <y>110</y>

@@ -449,7 +449,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>27</y>
@@ -478,7 +478,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>5</borderradius>
   <borderwidth>3</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>189</x>
   <y>92</y>
@@ -507,7 +507,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>109</x>
   <y>52</y>
@@ -536,7 +536,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>delay_lauridsen</objectName>
   <x>14</x>
   <y>71</y>
@@ -554,7 +554,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>-1.00000000</resolution>
   <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>level</objectName>
   <x>310</x>
   <y>28</y>
@@ -572,7 +572,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>307</x>
   <y>98</y>
@@ -601,7 +601,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>delay_lauridsen</objectName>
   <x>110</x>
   <y>92</y>
@@ -630,7 +630,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>129</y>
@@ -659,7 +659,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>5</borderradius>
   <borderwidth>3</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>192</x>
   <y>193</y>
@@ -688,7 +688,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>112</x>
   <y>153</y>
@@ -717,7 +717,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>delay_schroeder</objectName>
   <x>17</x>
   <y>172</y>
@@ -735,7 +735,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>-1.00000000</resolution>
   <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>delay_schroeder</objectName>
   <x>113</x>
   <y>193</y>
@@ -764,7 +764,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>type</objectName>
   <x>389</x>
   <y>63</y>
@@ -819,7 +819,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <selectedIndex>7</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>230</y>
@@ -848,7 +848,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>5</borderradius>
   <borderwidth>3</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>113</x>
   <y>256</y>
@@ -877,7 +877,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>width_orban</objectName>
   <x>16</x>
   <y>273</y>
@@ -895,7 +895,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>-1.00000000</resolution>
   <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>mode_orban</objectName>
   <x>193</x>
   <y>300</y>
@@ -920,7 +920,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>58</x>
   <y>299</y>
@@ -949,7 +949,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
   <x>64</x>
   <y>331</y>
@@ -968,7 +968,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <latch>false</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>375</y>
@@ -997,7 +997,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>5</borderradius>
   <borderwidth>3</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>109</x>
   <y>399</y>
@@ -1026,7 +1026,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>width_gerzon</objectName>
   <x>11</x>
   <y>419</y>
@@ -1044,7 +1044,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>-1.00000000</resolution>
   <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
   <x>61</x>
   <y>475</y>
@@ -1063,7 +1063,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <latch>false</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>516</x>
   <y>26</y>
@@ -1081,7 +1081,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>mode_gerzon</objectName>
   <x>175</x>
   <y>444</y>
@@ -1131,7 +1131,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <selectedIndex>5</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>39</x>
   <y>442</y>
@@ -1160,7 +1160,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>317</x>
   <y>250</y>
@@ -1189,7 +1189,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>5</borderradius>
   <borderwidth>3</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>457</x>
   <y>398</y>
@@ -1218,7 +1218,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>403</x>
   <y>352</y>
@@ -1247,7 +1247,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>delay_adt</objectName>
   <x>329</x>
   <y>378</y>
@@ -1265,7 +1265,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>-1.00000000</resolution>
   <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>delay_adt</objectName>
   <x>379</x>
   <y>399</y>
@@ -1294,7 +1294,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>flutter_type</objectName>
   <x>433</x>
   <y>284</y>
@@ -1324,7 +1324,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>339</x>
   <y>285</y>
@@ -1353,7 +1353,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>wow_type</objectName>
   <x>434</x>
   <y>318</y>
@@ -1383,7 +1383,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>339</x>
   <y>319</y>
@@ -1412,7 +1412,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>flutter_freq</objectName>
   <x>556</x>
   <y>273</y>
@@ -1430,7 +1430,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>wow_freq</objectName>
   <x>557</x>
   <y>355</y>
@@ -1448,7 +1448,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>flutter_freq</objectName>
   <x>541</x>
   <y>326</y>
@@ -1477,7 +1477,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>flutter_amt</objectName>
   <x>625</x>
   <y>273</y>
@@ -1495,7 +1495,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>flutter_amt</objectName>
   <x>610</x>
   <y>326</y>
@@ -1524,7 +1524,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>wow_freq</objectName>
   <x>540</x>
   <y>408</y>
@@ -1553,7 +1553,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>wow_amt</objectName>
   <x>625</x>
   <y>356</y>
@@ -1571,7 +1571,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>wow_amt</objectName>
   <x>610</x>
   <y>409</y>
@@ -1600,7 +1600,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>541</x>
   <y>337</y>
@@ -1629,7 +1629,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>612</x>
   <y>337</y>
@@ -1658,7 +1658,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>539</x>
   <y>419</y>
@@ -1687,7 +1687,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>610</x>
   <y>420</y>
@@ -1716,7 +1716,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>319</x>
   <y>453</y>
@@ -1745,7 +1745,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>5</borderradius>
   <borderwidth>3</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>509</x>
   <y>610</y>
@@ -1774,7 +1774,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>458</x>
   <y>568</y>
@@ -1803,7 +1803,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>chorus_delay</objectName>
   <x>355</x>
   <y>592</y>
@@ -1821,7 +1821,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>-1.00000000</resolution>
   <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>chorus_delay</objectName>
   <x>431</x>
   <y>612</y>
@@ -1850,7 +1850,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>chorus_type</objectName>
   <x>426</x>
   <y>486</y>
@@ -1880,7 +1880,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>332</x>
   <y>487</y>
@@ -1909,7 +1909,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>543</x>
   <y>546</y>
@@ -1938,7 +1938,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>chorus_freq</objectName>
   <x>543</x>
   <y>534</y>
@@ -1967,7 +1967,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>chorus_freq</objectName>
   <x>558</x>
   <y>481</y>
@@ -1985,7 +1985,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>chorus_width</objectName>
   <x>346</x>
   <y>523</y>
@@ -2003,7 +2003,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>333</x>
   <y>573</y>
@@ -2032,7 +2032,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>517</y>
@@ -2061,7 +2061,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>5</borderradius>
   <borderwidth>3</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>fftsize</objectName>
   <x>139</x>
   <y>546</y>
@@ -2106,7 +2106,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <selectedIndex>5</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9850</objectName>
   <x>58</x>
   <y>577</y>
@@ -2125,7 +2125,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>50</x>
   <y>542</y>
@@ -2154,7 +2154,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>391</x>
   <y>38</y>
@@ -2183,7 +2183,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>315</x>
   <y>130</y>
@@ -2202,7 +2202,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>316</x>
   <y>160</y>
@@ -2229,7 +2229,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Live in</objectName>
   <x>520</x>
   <y>203</y>
@@ -2248,7 +2248,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2852</objectName>
   <x>316</x>
   <y>194</y>

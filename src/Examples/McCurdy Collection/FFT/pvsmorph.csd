@@ -108,7 +108,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -137,7 +137,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>2</y>
@@ -166,7 +166,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>20</y>
@@ -198,7 +198,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1809</objectName>
   <x>8</x>
   <y>8</y>
@@ -217,7 +217,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>367</y>
@@ -246,7 +246,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>169</x>
   <y>373</y>
@@ -275,7 +275,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>FFTattributes</objectName>
   <x>169</x>
   <y>393</y>
@@ -310,7 +310,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>104</y>
@@ -339,7 +339,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency_Interpolation</objectName>
   <x>8</x>
   <y>87</y>
@@ -357,7 +357,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Interpolation</objectName>
   <x>448</x>
   <y>104</y>
@@ -386,7 +386,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude_Interpolation</objectName>
   <x>448</x>
   <y>64</y>
@@ -415,7 +415,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude_Interpolation</objectName>
   <x>8</x>
   <y>47</y>
@@ -433,7 +433,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>64</y>
@@ -462,7 +462,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>134</y>
@@ -491,7 +491,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>246</y>
@@ -520,7 +520,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>8</x>
   <y>192</y>
@@ -539,7 +539,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>180</x>
   <y>156</y>
@@ -564,7 +564,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>179</x>
   <y>193</y>
@@ -591,7 +591,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>300</x>
   <y>330</y>
@@ -620,7 +620,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Semitones</objectName>
   <x>380</x>
   <y>330</y>
@@ -649,7 +649,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Octaves</objectName>
   <x>258</x>
   <y>330</y>
@@ -678,7 +678,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>330</y>
@@ -707,7 +707,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>179</x>
   <y>276</y>
@@ -734,7 +734,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>8</x>
   <y>275</y>
@@ -753,7 +753,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>179</x>
   <y>220</y>
@@ -782,7 +782,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>179</x>
   <y>303</y>

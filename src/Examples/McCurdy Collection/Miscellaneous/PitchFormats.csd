@@ -123,7 +123,7 @@ i 10 0 3600	;PLAY A TONE
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>245</y>
@@ -152,7 +152,7 @@ i 10 0 3600	;PLAY A TONE
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>267</y>
@@ -193,7 +193,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -222,7 +222,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Tone</objectName>
   <x>8</x>
   <y>12</y>
@@ -241,7 +241,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>cpsIP</objectName>
   <x>8</x>
   <y>41</y>
@@ -259,7 +259,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>134</y>
@@ -288,7 +288,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>79</y>
@@ -317,7 +317,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>d_cps</objectName>
   <x>68</x>
   <y>89</y>
@@ -346,7 +346,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>89</y>
@@ -375,7 +375,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>d_oct</objectName>
   <x>183</x>
   <y>89</y>
@@ -404,7 +404,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>128</x>
   <y>89</y>
@@ -433,7 +433,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>d_pch</objectName>
   <x>297</x>
   <y>89</y>
@@ -462,7 +462,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>242</x>
   <y>89</y>
@@ -491,7 +491,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>d_MIDI</objectName>
   <x>412</x>
   <y>89</y>
@@ -520,7 +520,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>357</x>
   <y>89</y>
@@ -549,7 +549,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>163</y>
@@ -578,7 +578,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>124</x>
   <y>163</y>
@@ -607,7 +607,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>238</x>
   <y>163</y>
@@ -636,7 +636,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>353</x>
   <y>163</y>
@@ -665,7 +665,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7461</objectName>
   <x>28</x>
   <y>196</y>
@@ -684,7 +684,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9833</objectName>
   <x>142</x>
   <y>196</y>
@@ -703,7 +703,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1889</objectName>
   <x>257</x>
   <y>196</y>
@@ -722,7 +722,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5334</objectName>
   <x>371</x>
   <y>196</y>
@@ -741,7 +741,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>i_cps</objectName>
   <x>58</x>
   <y>163</y>
@@ -770,7 +770,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <randomizable group="0">false</randomizable>
   <value>215.47</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>i_oct</objectName>
   <x>181</x>
   <y>163</y>
@@ -799,7 +799,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <randomizable group="0">false</randomizable>
   <value>7.71998</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>i_pch</objectName>
   <x>295</x>
   <y>163</y>
@@ -828,7 +828,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <randomizable group="0">false</randomizable>
   <value>7.0864</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>i_MIDI</objectName>
   <x>410</x>
   <y>163</y>

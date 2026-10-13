@@ -122,7 +122,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -151,7 +151,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1376</objectName>
   <x>3</x>
   <y>4</y>
@@ -170,7 +170,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Input_Gain</objectName>
   <x>10</x>
   <y>45</y>
@@ -188,7 +188,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>62</y>
@@ -217,7 +217,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Live_Input_Gain</objectName>
   <x>450</x>
   <y>62</y>
@@ -246,7 +246,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>2</y>
@@ -275,7 +275,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>521</x>
   <y>38</y>
@@ -309,7 +309,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay_Time</objectName>
   <x>450</x>
   <y>105</y>
@@ -338,7 +338,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>105</y>
@@ -367,7 +367,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time</objectName>
   <x>10</x>
   <y>88</y>
@@ -385,7 +385,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>177</x>
   <y>400</y>
@@ -410,7 +410,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>96</x>
   <y>400</y>
@@ -439,7 +439,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Amplitude_Rescaling</objectName>
   <x>10</x>
   <y>217</y>
@@ -457,7 +457,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>234</y>
@@ -486,7 +486,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Amplitude_Rescaling</objectName>
   <x>450</x>
   <y>234</y>
@@ -515,7 +515,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
   <x>450</x>
   <y>148</y>
@@ -544,7 +544,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>148</y>
@@ -573,7 +573,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
   <x>10</x>
   <y>131</y>
@@ -591,7 +591,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Portamento_Time</objectName>
   <x>450</x>
   <y>277</y>
@@ -620,7 +620,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>277</y>
@@ -649,7 +649,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Portamento_Time</objectName>
   <x>10</x>
   <y>260</y>
@@ -667,7 +667,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Amount</objectName>
   <x>10</x>
   <y>174</y>
@@ -685,7 +685,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>191</y>
@@ -714,7 +714,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback_Amount</objectName>
   <x>450</x>
   <y>191</y>
@@ -743,7 +743,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Low_Pass_Filter_Cutoff</objectName>
   <x>10</x>
   <y>346</y>
@@ -761,7 +761,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>363</y>
@@ -790,7 +790,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Low_Pass_Filter_Cutoff_Value</objectName>
   <x>450</x>
   <y>363</y>
@@ -819,7 +819,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>High_Pass_Filter_Cutoff_Value</objectName>
   <x>450</x>
   <y>320</y>
@@ -848,7 +848,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>320</y>
@@ -877,7 +877,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>High_Pass_Filter_Cutoff</objectName>
   <x>10</x>
   <y>303</y>
@@ -895,7 +895,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>5</x>
   <y>439</y>
@@ -914,7 +914,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>177</x>
   <y>439</y>
@@ -941,7 +941,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>177</x>
   <y>467</y>

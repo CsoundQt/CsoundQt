@@ -273,7 +273,7 @@ f0 3600 ; wait for live events
   <g>80</g>
   <b>80</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>11</y>
@@ -316,7 +316,7 @@ Have fun!
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>preset</objectName>
   <x>78</x>
   <y>368</y>
@@ -346,7 +346,7 @@ Have fun!
   <randomizable group="0">false</randomizable>
   <value>30</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>367</y>
@@ -377,7 +377,7 @@ Have fun!
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button3</objectName>
   <x>146</x>
   <y>366</y>
@@ -399,7 +399,7 @@ Have fun!
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName/>
   <x>14</x>
   <y>401</y>
@@ -426,7 +426,7 @@ Have fun!
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>271</y>
@@ -459,7 +459,7 @@ New presets apply to new notes, no infulence during playing time.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>394</x>
   <y>398</y>

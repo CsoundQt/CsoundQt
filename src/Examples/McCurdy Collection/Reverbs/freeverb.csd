@@ -138,7 +138,7 @@ i 11		0.0		0.1	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -167,7 +167,7 @@ i 11		0.0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5518</objectName>
   <x>8</x>
   <y>10</y>
@@ -186,7 +186,7 @@ i 11		0.0		0.1	;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>72</y>
@@ -215,7 +215,7 @@ i 11		0.0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LiveGain</objectName>
   <x>448</x>
   <y>72</y>
@@ -244,7 +244,7 @@ i 11		0.0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -273,7 +273,7 @@ i 11		0.0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>22</y>
@@ -304,7 +304,7 @@ In this example the user can choose between a sound file input or the computer's
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>201</x>
   <y>274</y>
@@ -329,7 +329,7 @@ In this example the user can choose between a sound file input or the computer's
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>119</x>
   <y>274</y>
@@ -358,7 +358,7 @@ In this example the user can choose between a sound file input or the computer's
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>8</x>
   <y>311</y>
@@ -377,7 +377,7 @@ In this example the user can choose between a sound file input or the computer's
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>180</x>
   <y>312</y>
@@ -404,7 +404,7 @@ In this example the user can choose between a sound file input or the computer's
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>341</y>
@@ -433,7 +433,7 @@ In this example the user can choose between a sound file input or the computer's
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LiveGain</objectName>
   <x>8</x>
   <y>56</y>
@@ -451,7 +451,7 @@ In this example the user can choose between a sound file input or the computer's
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>110</y>
@@ -480,7 +480,7 @@ In this example the user can choose between a sound file input or the computer's
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RoomSize</objectName>
   <x>448</x>
   <y>110</y>
@@ -509,7 +509,7 @@ In this example the user can choose between a sound file input or the computer's
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>RoomSize</objectName>
   <x>8</x>
   <y>94</y>
@@ -527,7 +527,7 @@ In this example the user can choose between a sound file input or the computer's
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>149</y>
@@ -556,7 +556,7 @@ In this example the user can choose between a sound file input or the computer's
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>HFDamping</objectName>
   <x>448</x>
   <y>149</y>
@@ -585,7 +585,7 @@ In this example the user can choose between a sound file input or the computer's
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>HFDamping</objectName>
   <x>8</x>
   <y>133</y>
@@ -603,7 +603,7 @@ In this example the user can choose between a sound file input or the computer's
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>187</y>
@@ -632,7 +632,7 @@ In this example the user can choose between a sound file input or the computer's
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
   <x>448</x>
   <y>187</y>
@@ -661,7 +661,7 @@ In this example the user can choose between a sound file input or the computer's
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
   <x>8</x>
   <y>172</y>
@@ -679,7 +679,7 @@ In this example the user can choose between a sound file input or the computer's
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Init</objectName>
   <x>201</x>
   <y>230</y>

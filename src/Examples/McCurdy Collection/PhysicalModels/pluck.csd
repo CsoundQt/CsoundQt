@@ -93,7 +93,7 @@ i 3		0		0.1	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -122,7 +122,7 @@ i 3		0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>111</y>
@@ -151,7 +151,7 @@ i 3		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>90</y>
@@ -169,7 +169,7 @@ i 3		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>111</y>
@@ -198,7 +198,7 @@ i 3		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>186</y>
@@ -236,7 +236,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8550</objectName>
   <x>8</x>
   <y>15</y>
@@ -255,7 +255,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>157</y>
@@ -284,7 +284,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency</objectName>
   <x>8</x>
   <y>136</y>
@@ -302,7 +302,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Value</objectName>
   <x>448</x>
   <y>157</y>
@@ -331,7 +331,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>64</y>
@@ -360,7 +360,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>FreqBuffer</objectName>
   <x>519</x>
   <y>43</y>
@@ -378,7 +378,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FreqBuffer_Value</objectName>
   <x>959</x>
   <y>64</y>
@@ -407,7 +407,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>110</y>
@@ -436,7 +436,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Parameter1</objectName>
   <x>519</x>
   <y>89</y>
@@ -454,7 +454,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Parameter1</objectName>
   <x>959</x>
   <y>110</y>
@@ -483,7 +483,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>156</y>
@@ -512,7 +512,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Parameter2</objectName>
   <x>519</x>
   <y>135</y>
@@ -530,7 +530,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Parameter2</objectName>
   <x>959</x>
   <y>156</y>
@@ -559,7 +559,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>53</y>
@@ -589,7 +589,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>InitBuffer</objectName>
   <x>349</x>
   <y>51</y>
@@ -614,7 +614,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>249</x>
   <y>51</y>
@@ -644,7 +644,7 @@ Buffer</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>DecayType</objectName>
   <x>105</x>
   <y>51</y>

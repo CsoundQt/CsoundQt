@@ -115,7 +115,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -144,7 +144,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>2</y>
@@ -173,7 +173,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>18</y>
@@ -204,7 +204,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7615</objectName>
   <x>8</x>
   <y>8</y>
@@ -224,7 +224,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Keepform</objectName>
   <x>277</x>
   <y>161</y>
@@ -254,7 +254,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>159</y>
@@ -283,7 +283,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Rescale_Value</objectName>
   <x>450</x>
   <y>71</y>
@@ -312,7 +312,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency_Rescale</objectName>
   <x>10</x>
   <y>54</y>
@@ -330,7 +330,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>71</y>
@@ -359,7 +359,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain_Rescale</objectName>
   <x>450</x>
   <y>112</y>
@@ -388,7 +388,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain_Rescale</objectName>
   <x>10</x>
   <y>95</y>
@@ -406,7 +406,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>112</y>
@@ -435,7 +435,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>64</x>
   <y>159</y>
@@ -465,7 +465,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>216</x>
   <y>161</y>
@@ -494,7 +494,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>350</y>
@@ -523,7 +523,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>168</x>
   <y>356</y>
@@ -552,7 +552,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>FFTattributes</objectName>
   <x>168</x>
   <y>376</y>
@@ -587,7 +587,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>10</x>
   <y>240</y>
@@ -606,7 +606,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>181</x>
   <y>241</y>
@@ -633,7 +633,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>222</y>
@@ -662,7 +662,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>274</y>
@@ -691,7 +691,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>181</x>
   <y>293</y>
@@ -718,7 +718,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>10</x>
   <y>292</y>
@@ -737,7 +737,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>181</x>
   <y>321</y>
@@ -766,7 +766,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>181</x>
   <y>269</y>

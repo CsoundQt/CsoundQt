@@ -816,7 +816,7 @@ i "init" 0 1
   <g>188</g>
   <b>143</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1010</x>
   <y>17</y>
@@ -845,7 +845,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>key</objectName>
   <x>846</x>
   <y>595</y>
@@ -874,7 +874,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>391</x>
   <y>595</y>
@@ -903,7 +903,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>cent</objectName>
   <x>847</x>
   <y>623</y>
@@ -932,7 +932,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>307</x>
   <y>623</y>
@@ -961,7 +961,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>freq</objectName>
   <x>847</x>
   <y>649</y>
@@ -990,7 +990,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>306</x>
   <y>649</y>
@@ -1019,7 +1019,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>753</x>
   <y>45</y>
@@ -1048,7 +1048,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>normfreq</objectName>
   <x>847</x>
   <y>675</y>
@@ -1077,7 +1077,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>307</x>
   <y>675</y>
@@ -1106,7 +1106,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>centdiff</objectName>
   <x>847</x>
   <y>701</y>
@@ -1135,7 +1135,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>307</x>
   <y>701</y>
@@ -1164,7 +1164,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>info</objectName>
   <x>276</x>
   <y>476</y>
@@ -1195,7 +1195,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>466</x>
   <y>45</y>
@@ -1214,7 +1214,7 @@ i "init" 0 1
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Stop</objectName>
   <x>580</x>
   <y>45</y>
@@ -1233,7 +1233,7 @@ i "init" 0 1
   <latch>false</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>vol</objectName>
   <x>314</x>
   <y>769</y>
@@ -1251,7 +1251,7 @@ i "init" 0 1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>349</x>
   <y>740</y>
@@ -1280,7 +1280,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outL</objectName>
   <x>579</x>
   <y>745</y>
@@ -1306,14 +1306,14 @@ i "init" 0 1
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outLover</objectName>
   <x>913</x>
   <y>745</y>
@@ -1339,14 +1339,14 @@ i "init" 0 1
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outR</objectName>
   <x>579</x>
   <y>771</y>
@@ -1372,14 +1372,14 @@ i "init" 0 1
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outRover</objectName>
   <x>913</x>
   <y>771</y>
@@ -1405,14 +1405,14 @@ i "init" 0 1
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>vol</objectName>
   <x>444</x>
   <y>740</y>
@@ -1441,7 +1441,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>447</x>
   <y>7</y>
@@ -1470,7 +1470,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>430</x>
   <y>71</y>
@@ -1499,7 +1499,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>431</x>
   <y>108</y>
@@ -1528,7 +1528,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>431</x>
   <y>131</y>
@@ -1557,7 +1557,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>431</x>
   <y>207</y>
@@ -1586,7 +1586,7 @@ i "init" 0 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>431</x>
   <y>233</y>
@@ -1620,7 +1620,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>431</x>
   <y>387</y>
@@ -1649,7 +1649,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>33</y>
@@ -1678,7 +1678,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>sound</objectName>
   <x>201</x>
   <y>220</y>
@@ -1718,7 +1718,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>43</x>
   <y>216</y>
@@ -1747,7 +1747,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>scsel1</objectName>
   <x>23</x>
   <y>189</y>
@@ -1773,14 +1773,14 @@ The SECOND VALUE lets you choose between three cases:
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>scsel2</objectName>
   <x>154</x>
   <y>189</y>
@@ -1806,14 +1806,14 @@ The SECOND VALUE lets you choose between three cases:
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>scsel3</objectName>
   <x>285</x>
   <y>189</y>
@@ -1839,14 +1839,14 @@ The SECOND VALUE lets you choose between three cases:
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>tunfreq</objectName>
   <x>313</x>
   <y>44</y>
@@ -1875,7 +1875,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>261.625</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>206</x>
   <y>44</y>
@@ -1904,7 +1904,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>227</x>
   <y>65</y>
@@ -1933,7 +1933,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>equal_tmprd</objectName>
   <x>12</x>
   <y>167</y>
@@ -1998,7 +1998,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>5</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>93</y>
@@ -2027,7 +2027,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>reftone</objectName>
   <x>136</x>
   <y>44</y>
@@ -2056,7 +2056,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>60</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>44</y>
@@ -2085,7 +2085,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>67</y>
@@ -2114,7 +2114,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>15</x>
   <y>120</y>
@@ -2144,7 +2144,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>various</objectName>
   <x>141</x>
   <y>167</y>
@@ -2209,7 +2209,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>148</x>
   <y>120</y>
@@ -2239,7 +2239,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>bohlen-pierce</objectName>
   <x>275</x>
   <y>167</y>
@@ -2304,7 +2304,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>278</x>
   <y>120</y>
@@ -2334,7 +2334,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>256</y>
@@ -2363,7 +2363,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>gm1_scale</objectName>
   <x>10</x>
   <y>323</y>
@@ -2528,7 +2528,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm1_key</objectName>
   <x>124</x>
   <y>323</y>
@@ -2557,7 +2557,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>36</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm1_chn</objectName>
   <x>188</x>
   <y>323</y>
@@ -2586,7 +2586,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>18</x>
   <y>293</y>
@@ -2615,7 +2615,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>125</x>
   <y>293</y>
@@ -2644,7 +2644,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>181</x>
   <y>293</y>
@@ -2673,7 +2673,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>gm2_scale</objectName>
   <x>10</x>
   <y>354</y>
@@ -2838,7 +2838,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>11</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm2_key</objectName>
   <x>124</x>
   <y>354</y>
@@ -2867,7 +2867,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>37</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm2_chn</objectName>
   <x>188</x>
   <y>354</y>
@@ -2896,7 +2896,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>gm3_scale</objectName>
   <x>10</x>
   <y>382</y>
@@ -3061,7 +3061,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>20</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm3_key</objectName>
   <x>124</x>
   <y>382</y>
@@ -3090,7 +3090,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>38</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm3_chn</objectName>
   <x>188</x>
   <y>382</y>
@@ -3119,7 +3119,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>gm4_scale</objectName>
   <x>10</x>
   <y>413</y>
@@ -3284,7 +3284,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm4_key</objectName>
   <x>124</x>
   <y>413</y>
@@ -3313,7 +3313,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>40</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm4_chn</objectName>
   <x>188</x>
   <y>413</y>
@@ -3342,7 +3342,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>gm5_scale</objectName>
   <x>10</x>
   <y>441</y>
@@ -3507,7 +3507,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>25</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm5_key</objectName>
   <x>124</x>
   <y>441</y>
@@ -3536,7 +3536,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>41</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm5_chn</objectName>
   <x>188</x>
   <y>441</y>
@@ -3565,7 +3565,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>gm6_scale</objectName>
   <x>10</x>
   <y>472</y>
@@ -3730,7 +3730,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>10</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm6_key</objectName>
   <x>124</x>
   <y>472</y>
@@ -3759,7 +3759,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>43</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm6_chn</objectName>
   <x>188</x>
   <y>472</y>
@@ -3788,7 +3788,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>gm7_scale</objectName>
   <x>10</x>
   <y>500</y>
@@ -3953,7 +3953,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>12</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm7_key</objectName>
   <x>124</x>
   <y>500</y>
@@ -3982,7 +3982,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>45</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm7_chn</objectName>
   <x>188</x>
   <y>500</y>
@@ -4011,7 +4011,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>gm8_scale</objectName>
   <x>10</x>
   <y>531</y>
@@ -4176,7 +4176,7 @@ The SECOND VALUE lets you choose between three cases:
   <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm8_key</objectName>
   <x>124</x>
   <y>531</y>
@@ -4205,7 +4205,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>47</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>gm8_chn</objectName>
   <x>188</x>
   <y>531</y>
@@ -4234,7 +4234,7 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>263</y>
@@ -4263,7 +4263,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>597</y>
@@ -4292,7 +4292,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>wdmix</objectName>
   <x>52</x>
   <y>642</y>
@@ -4310,7 +4310,7 @@ The SECOND VALUE lets you choose between three cases:
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>643</y>
@@ -4339,7 +4339,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>212</x>
   <y>644</y>
@@ -4368,7 +4368,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>73</x>
   <y>619</y>
@@ -4397,7 +4397,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>roomsize</objectName>
   <x>51</x>
   <y>694</y>
@@ -4415,7 +4415,7 @@ The SECOND VALUE lets you choose between three cases:
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1</x>
   <y>696</y>
@@ -4444,7 +4444,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>210</x>
   <y>696</y>
@@ -4473,7 +4473,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>72</x>
   <y>670</y>
@@ -4502,7 +4502,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>hfdamp</objectName>
   <x>46</x>
   <y>753</y>
@@ -4520,7 +4520,7 @@ The SECOND VALUE lets you choose between three cases:
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>756</y>
@@ -4549,7 +4549,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>204</x>
   <y>757</y>
@@ -4578,7 +4578,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>40</x>
   <y>723</y>
@@ -4607,7 +4607,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale1</objectName>
   <x>1156</x>
   <y>51</y>
@@ -4634,7 +4634,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>50</y>
@@ -4663,7 +4663,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale2</objectName>
   <x>1156</x>
   <y>75</y>
@@ -4690,7 +4690,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>75</y>
@@ -4719,7 +4719,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale3</objectName>
   <x>1156</x>
   <y>99</y>
@@ -4746,7 +4746,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>99</y>
@@ -4775,7 +4775,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale4</objectName>
   <x>1156</x>
   <y>124</y>
@@ -4802,7 +4802,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>124</y>
@@ -4831,7 +4831,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale5</objectName>
   <x>1156</x>
   <y>148</y>
@@ -4858,7 +4858,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>148</y>
@@ -4887,7 +4887,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale6</objectName>
   <x>1156</x>
   <y>173</y>
@@ -4914,7 +4914,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>173</y>
@@ -4943,7 +4943,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale7</objectName>
   <x>1156</x>
   <y>197</y>
@@ -4970,7 +4970,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>197</y>
@@ -4999,7 +4999,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale8</objectName>
   <x>1156</x>
   <y>222</y>
@@ -5026,7 +5026,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>222</y>
@@ -5055,7 +5055,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale9</objectName>
   <x>1156</x>
   <y>245</y>
@@ -5082,7 +5082,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>245</y>
@@ -5111,7 +5111,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale10</objectName>
   <x>1156</x>
   <y>270</y>
@@ -5138,7 +5138,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>270</y>
@@ -5167,7 +5167,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale11</objectName>
   <x>1156</x>
   <y>294</y>
@@ -5194,7 +5194,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>294</y>
@@ -5223,7 +5223,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale12</objectName>
   <x>1156</x>
   <y>319</y>
@@ -5250,7 +5250,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>319</y>
@@ -5279,7 +5279,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale13</objectName>
   <x>1156</x>
   <y>343</y>
@@ -5306,7 +5306,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>343</y>
@@ -5335,7 +5335,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale14</objectName>
   <x>1156</x>
   <y>368</y>
@@ -5362,7 +5362,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>368</y>
@@ -5391,7 +5391,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale15</objectName>
   <x>1156</x>
   <y>392</y>
@@ -5418,7 +5418,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>392</y>
@@ -5447,7 +5447,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale16</objectName>
   <x>1156</x>
   <y>417</y>
@@ -5474,7 +5474,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>417</y>
@@ -5503,7 +5503,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale17</objectName>
   <x>1156</x>
   <y>440</y>
@@ -5530,7 +5530,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>440</y>
@@ -5559,7 +5559,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale18</objectName>
   <x>1156</x>
   <y>465</y>
@@ -5586,7 +5586,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>465</y>
@@ -5615,7 +5615,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale19</objectName>
   <x>1156</x>
   <y>489</y>
@@ -5642,7 +5642,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>489</y>
@@ -5671,7 +5671,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale20</objectName>
   <x>1156</x>
   <y>514</y>
@@ -5698,7 +5698,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>514</y>
@@ -5727,7 +5727,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale21</objectName>
   <x>1156</x>
   <y>538</y>
@@ -5754,7 +5754,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>538</y>
@@ -5783,7 +5783,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale22</objectName>
   <x>1156</x>
   <y>563</y>
@@ -5810,7 +5810,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>563</y>
@@ -5839,7 +5839,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale23</objectName>
   <x>1156</x>
   <y>586</y>
@@ -5866,7 +5866,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>586</y>
@@ -5895,7 +5895,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale24</objectName>
   <x>1156</x>
   <y>611</y>
@@ -5922,7 +5922,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>611</y>
@@ -5951,7 +5951,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale25</objectName>
   <x>1156</x>
   <y>635</y>
@@ -5978,7 +5978,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>635</y>
@@ -6007,7 +6007,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale26</objectName>
   <x>1156</x>
   <y>660</y>
@@ -6034,7 +6034,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>660</y>
@@ -6063,7 +6063,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale27</objectName>
   <x>1156</x>
   <y>684</y>
@@ -6090,7 +6090,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>684</y>
@@ -6119,7 +6119,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale28</objectName>
   <x>1156</x>
   <y>709</y>
@@ -6146,7 +6146,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>709</y>
@@ -6175,7 +6175,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale29</objectName>
   <x>1156</x>
   <y>733</y>
@@ -6202,7 +6202,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>733</y>
@@ -6231,7 +6231,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>scale30</objectName>
   <x>1156</x>
   <y>758</y>
@@ -6258,7 +6258,7 @@ The SECOND VALUE lets you choose between three cases:
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1018</x>
   <y>758</y>
@@ -6287,7 +6287,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>267</x>
   <y>375</y>
@@ -6316,7 +6316,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>270</x>
   <y>378</y>
@@ -6345,7 +6345,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>new</objectName>
   <x>297</x>
   <y>436</y>
@@ -6364,7 +6364,7 @@ The SECOND VALUE lets you choose between three cases:
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>268</x>
   <y>257</y>
@@ -6393,7 +6393,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>277</x>
   <y>265</y>
@@ -6422,7 +6422,7 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>midi_event</objectName>
   <x>278</x>
   <y>288</y>

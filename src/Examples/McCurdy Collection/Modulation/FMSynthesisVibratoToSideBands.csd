@@ -64,7 +64,7 @@ f 0	   3600		;DUMMY SCORE EVENT - KEEPS REALTIME PERFORMANCE GOING FOR ONE HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -93,7 +93,7 @@ f 0	   3600		;DUMMY SCORE EVENT - KEEPS REALTIME PERFORMANCE GOING FOR ONE HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>2</y>
@@ -122,7 +122,7 @@ f 0	   3600		;DUMMY SCORE EVENT - KEEPS REALTIME PERFORMANCE GOING FOR ONE HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>28</y>
@@ -152,7 +152,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3558</objectName>
   <x>6</x>
   <y>6</y>
@@ -171,7 +171,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>52</y>
@@ -200,7 +200,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>92</y>
@@ -229,7 +229,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Vibrato_Depth</objectName>
   <x>212</x>
   <y>52</y>
@@ -258,7 +258,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Vibrato_Rate</objectName>
   <x>212</x>
   <y>92</y>
@@ -287,7 +287,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>9</x>
   <y>131</y>
@@ -305,7 +305,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName/>
   <x>271</x>
   <y>131</y>

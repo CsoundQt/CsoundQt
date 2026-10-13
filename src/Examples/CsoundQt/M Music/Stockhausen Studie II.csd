@@ -1844,7 +1844,7 @@ e
    <g>255</g>
    <b>75</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -1881,7 +1881,7 @@ e
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -1918,7 +1918,7 @@ e
    <g>210</g>
    <b>62</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -1955,7 +1955,7 @@ e
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>

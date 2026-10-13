@@ -110,7 +110,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -139,7 +139,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>2</y>
@@ -168,7 +168,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>521</x>
   <y>35</y>
@@ -203,7 +203,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>277</y>
@@ -232,7 +232,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Filter_Cutoff</objectName>
   <x>8</x>
   <y>260</y>
@@ -250,7 +250,7 @@ The user can choose between using a stored file or the live input as the source 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Filter_Cutoff</objectName>
   <x>448</x>
   <y>277</y>
@@ -279,7 +279,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>313</y>
@@ -308,7 +308,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Filter_Resonance</objectName>
   <x>8</x>
   <y>296</y>
@@ -326,7 +326,7 @@ The user can choose between using a stored file or the live input as the source 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Filter_Resonance</objectName>
   <x>448</x>
   <y>313</y>
@@ -355,7 +355,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>349</y>
@@ -384,7 +384,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>File_Speed</objectName>
   <x>8</x>
   <y>332</y>
@@ -402,7 +402,7 @@ The user can choose between using a stored file or the live input as the source 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>File_Speed</objectName>
   <x>448</x>
   <y>349</y>
@@ -431,7 +431,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5618</objectName>
   <x>6</x>
   <y>6</y>
@@ -450,7 +450,7 @@ The user can choose between using a stored file or the live input as the source 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>40</y>
@@ -479,7 +479,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>4</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>85</y>
@@ -508,7 +508,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Input_Gain</objectName>
   <x>7</x>
   <y>68</y>
@@ -526,7 +526,7 @@ The user can choose between using a stored file or the live input as the source 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Input_Gain</objectName>
   <x>297</x>
   <y>85</y>
@@ -555,7 +555,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>386</x>
   <y>69</y>
@@ -580,7 +580,7 @@ The user can choose between using a stored file or the live input as the source 
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>9</x>
   <y>114</y>
@@ -599,7 +599,7 @@ The user can choose between using a stored file or the live input as the source 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>181</x>
   <y>115</y>
@@ -626,7 +626,7 @@ The user can choose between using a stored file or the live input as the source 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>170</y>
@@ -655,7 +655,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack</objectName>
   <x>8</x>
   <y>153</y>
@@ -673,7 +673,7 @@ The user can choose between using a stored file or the live input as the source 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack</objectName>
   <x>448</x>
   <y>170</y>
@@ -702,7 +702,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>206</y>
@@ -731,7 +731,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Release</objectName>
   <x>8</x>
   <y>189</y>
@@ -749,7 +749,7 @@ The user can choose between using a stored file or the live input as the source 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Release</objectName>
   <x>448</x>
   <y>206</y>
@@ -778,7 +778,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>242</y>
@@ -807,7 +807,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Sensitivity</objectName>
   <x>8</x>
   <y>225</y>
@@ -825,7 +825,7 @@ The user can choose between using a stored file or the live input as the source 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Sensitivity</objectName>
   <x>448</x>
   <y>242</y>
@@ -854,7 +854,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>385</y>
@@ -883,7 +883,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Filter_Mix</objectName>
   <x>8</x>
   <y>368</y>
@@ -901,7 +901,7 @@ The user can choose between using a stored file or the live input as the source 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Filter_Mix</objectName>
   <x>448</x>
   <y>385</y>
@@ -930,7 +930,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>421</y>
@@ -959,7 +959,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>8</x>
   <y>404</y>
@@ -977,7 +977,7 @@ The user can choose between using a stored file or the live input as the source 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Gain</objectName>
   <x>448</x>
   <y>421</y>

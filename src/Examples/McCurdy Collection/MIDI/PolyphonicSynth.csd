@@ -219,7 +219,7 @@ i  4 0.1 0			;init
   <g>170</g>
   <b>170</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>589</x>
   <y>2</y>
@@ -248,7 +248,7 @@ i  4 0.1 0			;init
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>596</x>
   <y>327</y>
@@ -286,7 +286,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -315,7 +315,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>595</x>
   <y>44</y>
@@ -344,7 +344,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>FilterReso</objectName>
   <x>595</x>
   <y>27</y>
@@ -362,7 +362,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FilterReso</objectName>
   <x>1035</x>
   <y>44</y>
@@ -391,7 +391,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>595</x>
   <y>91</y>
@@ -420,7 +420,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>FilterFreq</objectName>
   <x>595</x>
   <y>74</y>
@@ -438,7 +438,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FilterFreq</objectName>
   <x>1035</x>
   <y>91</y>
@@ -467,7 +467,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>595</x>
   <y>138</y>
@@ -496,7 +496,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>DelaySend</objectName>
   <x>595</x>
   <y>121</y>
@@ -514,7 +514,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DelaySend</objectName>
   <x>1035</x>
   <y>138</y>
@@ -543,7 +543,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>595</x>
   <y>185</y>
@@ -572,7 +572,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>DelayTime</objectName>
   <x>595</x>
   <y>168</y>
@@ -590,7 +590,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DelayTime</objectName>
   <x>1035</x>
   <y>185</y>
@@ -619,7 +619,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>PortTim</objectName>
   <x>27</x>
   <y>48</y>
@@ -637,7 +637,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>98</y>
@@ -666,7 +666,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PortTim</objectName>
   <x>12</x>
   <y>117</y>
@@ -695,7 +695,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Amp</objectName>
   <x>106</x>
   <y>48</y>
@@ -713,7 +713,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>91</x>
   <y>98</y>
@@ -742,7 +742,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp</objectName>
   <x>91</x>
   <y>117</y>
@@ -771,7 +771,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>TremAmt</objectName>
   <x>185</x>
   <y>48</y>
@@ -789,7 +789,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>170</x>
   <y>98</y>
@@ -818,7 +818,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>TremAmt</objectName>
   <x>170</x>
   <y>117</y>
@@ -847,7 +847,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>VibAmt</objectName>
   <x>264</x>
   <y>48</y>
@@ -865,7 +865,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>249</x>
   <y>98</y>
@@ -894,7 +894,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibAmt</objectName>
   <x>249</x>
   <y>117</y>
@@ -923,7 +923,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ModFrq</objectName>
   <x>343</x>
   <y>48</y>
@@ -941,7 +941,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>328</x>
   <y>98</y>
@@ -970,7 +970,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ModFrq</objectName>
   <x>328</x>
   <y>117</y>
@@ -999,7 +999,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>140</y>
@@ -1028,7 +1028,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>PW</objectName>
   <x>27</x>
   <y>170</y>
@@ -1046,7 +1046,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>220</y>
@@ -1075,7 +1075,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PW</objectName>
   <x>12</x>
   <y>239</y>
@@ -1104,7 +1104,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Leak</objectName>
   <x>106</x>
   <y>170</y>
@@ -1122,7 +1122,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>91</x>
   <y>220</y>
@@ -1151,7 +1151,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Leak</objectName>
   <x>91</x>
   <y>239</y>
@@ -1180,7 +1180,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Harms</objectName>
   <x>185</x>
   <y>170</y>
@@ -1198,7 +1198,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>170</x>
   <y>220</y>
@@ -1227,7 +1227,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Harms</objectName>
   <x>170</x>
   <y>239</y>
@@ -1256,7 +1256,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>250</x>
   <y>140</y>
@@ -1285,7 +1285,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Mul</objectName>
   <x>264</x>
   <y>170</y>
@@ -1303,7 +1303,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>249</x>
   <y>220</y>
@@ -1332,7 +1332,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Mul</objectName>
   <x>252</x>
   <y>239</y>
@@ -1361,7 +1361,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Waveform</objectName>
   <x>448</x>
   <y>185</y>
@@ -1396,7 +1396,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>448</x>
   <y>164</y>
@@ -1425,7 +1425,7 @@ Pitch bend is implemented, the depth of which can be set by the user in the inte
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>312</x>
   <y>168</y>
@@ -1455,7 +1455,7 @@ of Harms</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>312</x>
   <y>208</y>
@@ -1485,7 +1485,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Nb_Harms</objectName>
   <x>381</x>
   <y>170</y>
@@ -1514,7 +1514,7 @@ Harm</label>
   <randomizable group="0">false</randomizable>
   <value>30</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Lowest_Harm</objectName>
   <x>381</x>
   <y>211</y>
@@ -1543,7 +1543,7 @@ Harm</label>
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>427</x>
   <y>59</y>
@@ -1572,7 +1572,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Bend_Range</objectName>
   <x>508</x>
   <y>58</y>
@@ -1601,7 +1601,7 @@ Harm</label>
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>269</y>
@@ -1630,7 +1630,7 @@ Harm</label>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>P_StrLev</objectName>
   <x>27</x>
   <y>301</y>
@@ -1648,7 +1648,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>351</y>
@@ -1677,7 +1677,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>P_StrLev</objectName>
   <x>12</x>
   <y>370</y>
@@ -1706,7 +1706,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>P_AttTim</objectName>
   <x>106</x>
   <y>301</y>
@@ -1724,7 +1724,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>91</x>
   <y>351</y>
@@ -1753,7 +1753,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>P_AttTim</objectName>
   <x>91</x>
   <y>370</y>
@@ -1782,7 +1782,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>P_AttLev</objectName>
   <x>185</x>
   <y>301</y>
@@ -1800,7 +1800,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>170</x>
   <y>351</y>
@@ -1829,7 +1829,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>P_AttLev</objectName>
   <x>170</x>
   <y>370</y>
@@ -1858,7 +1858,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>P_DecTim</objectName>
   <x>264</x>
   <y>301</y>
@@ -1876,7 +1876,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>249</x>
   <y>351</y>
@@ -1905,7 +1905,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>P_DecTim</objectName>
   <x>249</x>
   <y>370</y>
@@ -1934,7 +1934,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>P_RelTim</objectName>
   <x>343</x>
   <y>301</y>
@@ -1952,7 +1952,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>328</x>
   <y>351</y>
@@ -1981,7 +1981,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>P_RelTim</objectName>
   <x>328</x>
   <y>370</y>
@@ -2010,7 +2010,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>P_RelLev</objectName>
   <x>429</x>
   <y>301</y>
@@ -2028,7 +2028,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>414</x>
   <y>351</y>
@@ -2057,7 +2057,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>P_RelLev</objectName>
   <x>414</x>
   <y>370</y>
@@ -2086,7 +2086,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>397</y>
@@ -2115,7 +2115,7 @@ Harm</label>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>F_AttTim</objectName>
   <x>27</x>
   <y>429</y>
@@ -2133,7 +2133,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>479</y>
@@ -2162,7 +2162,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>F_AttTim</objectName>
   <x>12</x>
   <y>498</y>
@@ -2191,7 +2191,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>F_AttLev</objectName>
   <x>106</x>
   <y>429</y>
@@ -2209,7 +2209,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>91</x>
   <y>479</y>
@@ -2238,7 +2238,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>F_AttLev</objectName>
   <x>91</x>
   <y>498</y>
@@ -2267,7 +2267,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>F_DecTim</objectName>
   <x>185</x>
   <y>429</y>
@@ -2285,7 +2285,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>170</x>
   <y>479</y>
@@ -2314,7 +2314,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>F_DecTim</objectName>
   <x>170</x>
   <y>498</y>
@@ -2343,7 +2343,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>F_SusLev</objectName>
   <x>264</x>
   <y>429</y>
@@ -2361,7 +2361,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>249</x>
   <y>479</y>
@@ -2390,7 +2390,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>F_SusLev</objectName>
   <x>249</x>
   <y>498</y>
@@ -2419,7 +2419,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>F_RelTim</objectName>
   <x>343</x>
   <y>429</y>
@@ -2437,7 +2437,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>328</x>
   <y>479</y>
@@ -2466,7 +2466,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>F_RelTim</objectName>
   <x>328</x>
   <y>498</y>
@@ -2495,7 +2495,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>F_RelLev</objectName>
   <x>429</x>
   <y>429</y>
@@ -2513,7 +2513,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>414</x>
   <y>479</y>
@@ -2542,7 +2542,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>F_RelLev</objectName>
   <x>414</x>
   <y>498</y>
@@ -2571,7 +2571,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>F_EnvAmt</objectName>
   <x>508</x>
   <y>429</y>
@@ -2589,7 +2589,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>493</x>
   <y>479</y>
@@ -2618,7 +2618,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>F_EnvAmt</objectName>
   <x>493</x>
   <y>498</y>
@@ -2647,7 +2647,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>525</y>
@@ -2676,7 +2676,7 @@ Harm</label>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>A_AttTim</objectName>
   <x>27</x>
   <y>557</y>
@@ -2694,7 +2694,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>607</y>
@@ -2723,7 +2723,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>A_AttTim</objectName>
   <x>12</x>
   <y>626</y>
@@ -2752,7 +2752,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>A_AttLev</objectName>
   <x>106</x>
   <y>557</y>
@@ -2770,7 +2770,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>91</x>
   <y>607</y>
@@ -2799,7 +2799,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>A_AttLev</objectName>
   <x>91</x>
   <y>626</y>
@@ -2828,7 +2828,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>A_DecTim</objectName>
   <x>185</x>
   <y>557</y>
@@ -2846,7 +2846,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>170</x>
   <y>607</y>
@@ -2875,7 +2875,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>A_DecTim</objectName>
   <x>170</x>
   <y>626</y>
@@ -2904,7 +2904,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>A_SusLev</objectName>
   <x>264</x>
   <y>557</y>
@@ -2922,7 +2922,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>249</x>
   <y>607</y>
@@ -2951,7 +2951,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>A_SusLev</objectName>
   <x>249</x>
   <y>626</y>
@@ -2980,7 +2980,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>A_RelTim</objectName>
   <x>343</x>
   <y>557</y>
@@ -2998,7 +2998,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>328</x>
   <y>607</y>
@@ -3027,7 +3027,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>A_RelTim</objectName>
   <x>328</x>
   <y>626</y>
@@ -3056,7 +3056,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>A_RelLev</objectName>
   <x>429</x>
   <y>557</y>
@@ -3074,7 +3074,7 @@ Harm</label>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>414</x>
   <y>607</y>
@@ -3103,7 +3103,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>A_RelLev</objectName>
   <x>414</x>
   <y>626</y>
@@ -3132,7 +3132,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>595</x>
   <y>232</y>
@@ -3161,7 +3161,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>DelayFeedback</objectName>
   <x>595</x>
   <y>215</y>
@@ -3179,7 +3179,7 @@ Harm</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DelayFeedback</objectName>
   <x>1035</x>
   <y>232</y>
@@ -3208,7 +3208,7 @@ Harm</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>696</x>
   <y>302</y>

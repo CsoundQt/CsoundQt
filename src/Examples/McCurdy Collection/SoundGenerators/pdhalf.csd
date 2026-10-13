@@ -179,7 +179,7 @@ i 11		0.0     0.01	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -208,7 +208,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>221</y>
@@ -237,7 +237,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>69</y>
@@ -266,7 +266,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>69</y>
@@ -295,7 +295,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>53</y>
@@ -313,7 +313,7 @@ i 11		0.0     0.01	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>107</y>
@@ -342,7 +342,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Value</objectName>
   <x>448</x>
   <y>107</y>
@@ -371,7 +371,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency</objectName>
   <x>8</x>
   <y>91</y>
@@ -389,7 +389,7 @@ i 11		0.0     0.01	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>146</y>
@@ -418,7 +418,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ShapeAmt</objectName>
   <x>448</x>
   <y>146</y>
@@ -447,7 +447,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>ShapeAmt</objectName>
   <x>8</x>
   <y>130</y>
@@ -465,7 +465,7 @@ i 11		0.0     0.01	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Waveform</objectName>
   <x>340</x>
   <y>184</y>
@@ -510,7 +510,7 @@ i 11		0.0     0.01	;INIT
   <selectedIndex>5</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5646</objectName>
   <x>10</x>
   <y>16</y>
@@ -529,7 +529,7 @@ i 11		0.0     0.01	;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>39</x>
   <y>184</y>
@@ -558,7 +558,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>DistType</objectName>
   <x>119</x>
   <y>184</y>
@@ -583,7 +583,7 @@ i 11		0.0     0.01	;INIT
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>260</x>
   <y>184</y>
@@ -612,7 +612,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>StrLevS</objectName>
   <x>26</x>
   <y>252</y>
@@ -630,7 +630,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
   <y>302</y>
@@ -659,7 +659,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>StrLevS</objectName>
   <x>22</x>
   <y>315</y>
@@ -688,7 +688,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>AttTimS</objectName>
   <x>86</x>
   <y>252</y>
@@ -706,7 +706,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>82</x>
   <y>302</y>
@@ -735,7 +735,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AttTimS</objectName>
   <x>82</x>
   <y>315</y>
@@ -764,7 +764,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>AttLevS</objectName>
   <x>146</x>
   <y>252</y>
@@ -782,7 +782,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>142</x>
   <y>302</y>
@@ -811,7 +811,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AttLevS</objectName>
   <x>142</x>
   <y>315</y>
@@ -840,7 +840,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DecTimS</objectName>
   <x>206</x>
   <y>252</y>
@@ -858,7 +858,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>202</x>
   <y>302</y>
@@ -887,7 +887,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DecTimS</objectName>
   <x>202</x>
   <y>315</y>
@@ -916,7 +916,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>SusLevS</objectName>
   <x>266</x>
   <y>252</y>
@@ -934,7 +934,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>262</x>
   <y>302</y>
@@ -963,7 +963,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>SusLevS</objectName>
   <x>262</x>
   <y>315</y>
@@ -992,7 +992,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RelTimS</objectName>
   <x>326</x>
   <y>252</y>
@@ -1010,7 +1010,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>322</x>
   <y>302</y>
@@ -1039,7 +1039,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RelTimS</objectName>
   <x>322</x>
   <y>315</y>
@@ -1068,7 +1068,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RelLevS</objectName>
   <x>386</x>
   <y>252</y>
@@ -1086,7 +1086,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>382</x>
   <y>302</y>
@@ -1115,7 +1115,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RelLevS</objectName>
   <x>382</x>
   <y>315</y>
@@ -1144,7 +1144,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Vel</objectName>
   <x>446</x>
   <y>252</y>
@@ -1162,7 +1162,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>442</x>
   <y>302</y>
@@ -1191,7 +1191,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Vel</objectName>
   <x>442</x>
   <y>315</y>
@@ -1220,7 +1220,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>343</y>
@@ -1249,7 +1249,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>StrLevA</objectName>
   <x>26</x>
   <y>374</y>
@@ -1267,7 +1267,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
   <y>423</y>
@@ -1296,7 +1296,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>StrLevA</objectName>
   <x>22</x>
   <y>436</y>
@@ -1325,7 +1325,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>AttTimA</objectName>
   <x>86</x>
   <y>374</y>
@@ -1343,7 +1343,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>82</x>
   <y>423</y>
@@ -1372,7 +1372,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AttTimA</objectName>
   <x>82</x>
   <y>436</y>
@@ -1401,7 +1401,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>AttLevA</objectName>
   <x>146</x>
   <y>374</y>
@@ -1419,7 +1419,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>142</x>
   <y>423</y>
@@ -1448,7 +1448,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AttLevA</objectName>
   <x>142</x>
   <y>436</y>
@@ -1477,7 +1477,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>DecTimA</objectName>
   <x>206</x>
   <y>374</y>
@@ -1495,7 +1495,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>202</x>
   <y>423</y>
@@ -1524,7 +1524,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DecTimA</objectName>
   <x>202</x>
   <y>436</y>
@@ -1553,7 +1553,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>SusLevA</objectName>
   <x>266</x>
   <y>374</y>
@@ -1571,7 +1571,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>262</x>
   <y>423</y>
@@ -1600,7 +1600,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>SusLevA</objectName>
   <x>262</x>
   <y>436</y>
@@ -1629,7 +1629,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RelTimA</objectName>
   <x>326</x>
   <y>374</y>
@@ -1647,7 +1647,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>322</x>
   <y>423</y>
@@ -1676,7 +1676,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RelTimA</objectName>
   <x>322</x>
   <y>436</y>
@@ -1705,7 +1705,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RelLevA</objectName>
   <x>386</x>
   <y>374</y>
@@ -1723,7 +1723,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>382</x>
   <y>423</y>
@@ -1752,7 +1752,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RelLevA</objectName>
   <x>382</x>
   <y>436</y>
@@ -1781,7 +1781,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>465</y>
@@ -1810,7 +1810,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>LFODepth</objectName>
   <x>206</x>
   <y>496</y>
@@ -1828,7 +1828,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>202</x>
   <y>545</y>
@@ -1857,7 +1857,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LFODepth</objectName>
   <x>202</x>
   <y>558</y>
@@ -1886,7 +1886,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>LFORate</objectName>
   <x>266</x>
   <y>496</y>
@@ -1904,7 +1904,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>262</x>
   <y>545</y>
@@ -1933,7 +1933,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LFORate</objectName>
   <x>262</x>
   <y>558</y>
@@ -1962,7 +1962,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>LFODelay</objectName>
   <x>326</x>
   <y>496</y>
@@ -1980,7 +1980,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>322</x>
   <y>545</y>
@@ -2009,7 +2009,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LFODelay</objectName>
   <x>322</x>
   <y>558</y>
@@ -2038,7 +2038,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>LFORise</objectName>
   <x>386</x>
   <y>496</y>
@@ -2056,7 +2056,7 @@ i 11		0.0     0.01	;INIT
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>382</x>
   <y>545</y>
@@ -2085,7 +2085,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LFORise</objectName>
   <x>382</x>
   <y>558</y>
@@ -2114,7 +2114,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -2144,7 +2144,7 @@ Phase Distortion Synthesis </label>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>521</x>
   <y>49</y>

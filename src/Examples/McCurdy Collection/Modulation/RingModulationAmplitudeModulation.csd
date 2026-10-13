@@ -119,7 +119,7 @@ i 1		0.2		3600		;AUDIO STREAM
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -148,7 +148,7 @@ i 1		0.2		3600		;AUDIO STREAM
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>2</y>
@@ -177,7 +177,7 @@ i 1		0.2		3600		;AUDIO STREAM
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>21</y>
@@ -207,7 +207,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>40</y>
@@ -236,7 +236,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>95</y>
@@ -265,7 +265,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Input_Gain</objectName>
   <x>13</x>
   <y>72</y>
@@ -283,7 +283,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Input_Gain</objectName>
   <x>443</x>
   <y>95</y>
@@ -312,7 +312,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Sine_Tone_Frequency_Value</objectName>
   <x>443</x>
   <y>138</y>
@@ -341,7 +341,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Sine_Tone_Frequency</objectName>
   <x>13</x>
   <y>115</y>
@@ -359,7 +359,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>138</y>
@@ -388,7 +388,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>180</x>
   <y>157</y>
@@ -418,7 +418,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>12</x>
   <y>188</y>
@@ -437,7 +437,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>182</x>
   <y>189</y>
@@ -464,7 +464,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>232</y>
@@ -493,7 +493,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>313</y>
@@ -522,7 +522,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Modulation_Frequency</objectName>
   <x>13</x>
   <y>290</y>
@@ -540,7 +540,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Modulation_Frequency_Value</objectName>
   <x>443</x>
   <y>313</y>
@@ -569,7 +569,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>AM_RM</objectName>
   <x>180</x>
   <y>249</y>
@@ -594,7 +594,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Wave</objectName>
   <x>300</x>
   <y>249</y>
@@ -619,7 +619,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>345</y>
@@ -648,7 +648,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>435</y>
@@ -677,7 +677,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>13</x>
   <y>412</y>
@@ -695,7 +695,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Gain</objectName>
   <x>443</x>
   <y>435</y>
@@ -724,7 +724,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
   <x>443</x>
   <y>392</y>
@@ -753,7 +753,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
   <x>13</x>
   <y>369</y>
@@ -771,7 +771,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>392</y>

@@ -83,7 +83,7 @@ i 10 0 3600		;GUI - ALLOWS REAL-TIME PLAYING FOR 1 HOUR
   <g>170</g>
   <b>170</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -112,7 +112,7 @@ i 10 0 3600		;GUI - ALLOWS REAL-TIME PLAYING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>22</y>
@@ -143,7 +143,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -172,7 +172,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>66</y>
@@ -201,7 +201,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack</objectName>
   <x>8</x>
   <y>49</y>
@@ -219,7 +219,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack_Value</objectName>
   <x>448</x>
   <y>66</y>
@@ -248,7 +248,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>113</y>
@@ -277,7 +277,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Decay</objectName>
   <x>8</x>
   <y>96</y>
@@ -295,7 +295,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Decay_Value</objectName>
   <x>448</x>
   <y>113</y>
@@ -324,7 +324,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>160</y>
@@ -353,7 +353,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Sustain</objectName>
   <x>8</x>
   <y>143</y>
@@ -371,7 +371,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Sustain</objectName>
   <x>448</x>
   <y>160</y>
@@ -400,7 +400,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>207</y>
@@ -429,7 +429,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Release</objectName>
   <x>8</x>
   <y>190</y>
@@ -447,7 +447,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Release_Value</objectName>
   <x>448</x>
   <y>207</y>
@@ -476,7 +476,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9093</objectName>
   <x>408</x>
   <y>256</y>
@@ -495,7 +495,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>226</x>
   <y>258</y>

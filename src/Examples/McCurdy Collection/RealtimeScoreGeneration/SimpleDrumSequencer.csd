@@ -422,7 +422,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -451,7 +451,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5684</objectName>
   <x>6</x>
   <y>9</y>
@@ -470,7 +470,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Phase</objectName>
   <x>94</x>
   <y>48</y>
@@ -496,14 +496,14 @@ i 101 0 0			;SET INITIAL PATTERN
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>168</x>
   <y>11</y>
@@ -532,7 +532,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain1</objectName>
   <x>346</x>
   <y>59</y>
@@ -550,7 +550,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain2</objectName>
   <x>346</x>
   <y>86</y>
@@ -568,7 +568,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain3</objectName>
   <x>346</x>
   <y>113</y>
@@ -586,7 +586,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain4</objectName>
   <x>346</x>
   <y>140</y>
@@ -604,7 +604,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain5</objectName>
   <x>346</x>
   <y>167</y>
@@ -622,7 +622,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain6</objectName>
   <x>346</x>
   <y>194</y>
@@ -640,7 +640,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>380</x>
   <y>36</y>
@@ -669,7 +669,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>244</x>
   <y>12</y>
@@ -698,7 +698,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>62</y>
@@ -727,7 +727,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>197</y>
@@ -756,7 +756,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>170</y>
@@ -785,7 +785,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>143</y>
@@ -814,7 +814,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>116</y>
@@ -843,7 +843,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>89</y>
@@ -872,7 +872,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Master</objectName>
   <x>346</x>
   <y>10</y>
@@ -890,7 +890,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>2</y>
@@ -919,7 +919,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>526</x>
   <y>18</y>
@@ -950,7 +950,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Tempo</objectName>
   <x>230</x>
   <y>10</y>
@@ -979,7 +979,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <randomizable group="0">false</randomizable>
   <value>100</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3089</objectName>
   <x>101</x>
   <y>8</y>
@@ -998,7 +998,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>94</x>
   <y>60</y>
@@ -1027,7 +1027,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>155</x>
   <y>60</y>
@@ -1056,7 +1056,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>216</x>
   <y>60</y>
@@ -1085,7 +1085,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>277</x>
   <y>60</y>
@@ -1114,7 +1114,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_01</objectName>
   <x>98</x>
   <y>66</y>
@@ -1133,7 +1133,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_02</objectName>
   <x>112</x>
   <y>66</y>
@@ -1152,7 +1152,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_03</objectName>
   <x>126</x>
   <y>66</y>
@@ -1171,7 +1171,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_04</objectName>
   <x>140</x>
   <y>66</y>
@@ -1190,7 +1190,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_05</objectName>
   <x>159</x>
   <y>66</y>
@@ -1209,7 +1209,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_06</objectName>
   <x>173</x>
   <y>66</y>
@@ -1228,7 +1228,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_07</objectName>
   <x>187</x>
   <y>66</y>
@@ -1247,7 +1247,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_08</objectName>
   <x>201</x>
   <y>66</y>
@@ -1266,7 +1266,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_09</objectName>
   <x>220</x>
   <y>66</y>
@@ -1285,7 +1285,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_10</objectName>
   <x>234</x>
   <y>66</y>
@@ -1304,7 +1304,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_11</objectName>
   <x>248</x>
   <y>66</y>
@@ -1323,7 +1323,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_12</objectName>
   <x>262</x>
   <y>66</y>
@@ -1342,7 +1342,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_13</objectName>
   <x>281</x>
   <y>66</y>
@@ -1361,7 +1361,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_14</objectName>
   <x>295</x>
   <y>66</y>
@@ -1380,7 +1380,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_15</objectName>
   <x>309</x>
   <y>66</y>
@@ -1399,7 +1399,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1_16</objectName>
   <x>323</x>
   <y>66</y>
@@ -1418,7 +1418,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_01</objectName>
   <x>98</x>
   <y>92</y>
@@ -1437,7 +1437,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_02</objectName>
   <x>112</x>
   <y>92</y>
@@ -1456,7 +1456,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_03</objectName>
   <x>126</x>
   <y>92</y>
@@ -1475,7 +1475,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_04</objectName>
   <x>140</x>
   <y>92</y>
@@ -1494,7 +1494,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_05</objectName>
   <x>159</x>
   <y>92</y>
@@ -1513,7 +1513,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_06</objectName>
   <x>173</x>
   <y>92</y>
@@ -1532,7 +1532,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_07</objectName>
   <x>187</x>
   <y>92</y>
@@ -1551,7 +1551,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_08</objectName>
   <x>201</x>
   <y>92</y>
@@ -1570,7 +1570,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_09</objectName>
   <x>220</x>
   <y>92</y>
@@ -1589,7 +1589,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_10</objectName>
   <x>234</x>
   <y>92</y>
@@ -1608,7 +1608,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_11</objectName>
   <x>248</x>
   <y>92</y>
@@ -1627,7 +1627,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_12</objectName>
   <x>262</x>
   <y>92</y>
@@ -1646,7 +1646,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_13</objectName>
   <x>281</x>
   <y>92</y>
@@ -1665,7 +1665,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_14</objectName>
   <x>295</x>
   <y>92</y>
@@ -1684,7 +1684,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_15</objectName>
   <x>309</x>
   <y>92</y>
@@ -1703,7 +1703,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2_16</objectName>
   <x>323</x>
   <y>92</y>
@@ -1722,7 +1722,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_01</objectName>
   <x>98</x>
   <y>119</y>
@@ -1741,7 +1741,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_02</objectName>
   <x>112</x>
   <y>119</y>
@@ -1760,7 +1760,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_03</objectName>
   <x>126</x>
   <y>119</y>
@@ -1779,7 +1779,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_04</objectName>
   <x>140</x>
   <y>119</y>
@@ -1798,7 +1798,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_05</objectName>
   <x>159</x>
   <y>119</y>
@@ -1817,7 +1817,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_06</objectName>
   <x>173</x>
   <y>119</y>
@@ -1836,7 +1836,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_07</objectName>
   <x>187</x>
   <y>119</y>
@@ -1855,7 +1855,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_08</objectName>
   <x>201</x>
   <y>119</y>
@@ -1874,7 +1874,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_09</objectName>
   <x>220</x>
   <y>119</y>
@@ -1893,7 +1893,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_10</objectName>
   <x>234</x>
   <y>119</y>
@@ -1912,7 +1912,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_11</objectName>
   <x>248</x>
   <y>119</y>
@@ -1931,7 +1931,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_12</objectName>
   <x>262</x>
   <y>119</y>
@@ -1950,7 +1950,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_13</objectName>
   <x>281</x>
   <y>119</y>
@@ -1969,7 +1969,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_14</objectName>
   <x>295</x>
   <y>119</y>
@@ -1988,7 +1988,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_15</objectName>
   <x>309</x>
   <y>119</y>
@@ -2007,7 +2007,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3_16</objectName>
   <x>323</x>
   <y>119</y>
@@ -2026,7 +2026,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_01</objectName>
   <x>98</x>
   <y>147</y>
@@ -2045,7 +2045,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_02</objectName>
   <x>112</x>
   <y>147</y>
@@ -2064,7 +2064,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_03</objectName>
   <x>126</x>
   <y>147</y>
@@ -2083,7 +2083,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_04</objectName>
   <x>140</x>
   <y>147</y>
@@ -2102,7 +2102,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_05</objectName>
   <x>159</x>
   <y>147</y>
@@ -2121,7 +2121,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_06</objectName>
   <x>173</x>
   <y>147</y>
@@ -2140,7 +2140,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_07</objectName>
   <x>187</x>
   <y>147</y>
@@ -2159,7 +2159,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_08</objectName>
   <x>201</x>
   <y>147</y>
@@ -2178,7 +2178,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_09</objectName>
   <x>220</x>
   <y>147</y>
@@ -2197,7 +2197,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_10</objectName>
   <x>234</x>
   <y>147</y>
@@ -2216,7 +2216,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_11</objectName>
   <x>248</x>
   <y>147</y>
@@ -2235,7 +2235,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_12</objectName>
   <x>262</x>
   <y>147</y>
@@ -2254,7 +2254,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_13</objectName>
   <x>281</x>
   <y>147</y>
@@ -2273,7 +2273,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_14</objectName>
   <x>295</x>
   <y>147</y>
@@ -2292,7 +2292,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_15</objectName>
   <x>309</x>
   <y>147</y>
@@ -2311,7 +2311,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4_16</objectName>
   <x>323</x>
   <y>147</y>
@@ -2330,7 +2330,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_01</objectName>
   <x>98</x>
   <y>172</y>
@@ -2349,7 +2349,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_02</objectName>
   <x>112</x>
   <y>172</y>
@@ -2368,7 +2368,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_03</objectName>
   <x>126</x>
   <y>172</y>
@@ -2387,7 +2387,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_04</objectName>
   <x>140</x>
   <y>172</y>
@@ -2406,7 +2406,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_05</objectName>
   <x>159</x>
   <y>172</y>
@@ -2425,7 +2425,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_06</objectName>
   <x>173</x>
   <y>172</y>
@@ -2444,7 +2444,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_07</objectName>
   <x>187</x>
   <y>172</y>
@@ -2463,7 +2463,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_08</objectName>
   <x>201</x>
   <y>172</y>
@@ -2482,7 +2482,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_09</objectName>
   <x>220</x>
   <y>172</y>
@@ -2501,7 +2501,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_10</objectName>
   <x>234</x>
   <y>172</y>
@@ -2520,7 +2520,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_11</objectName>
   <x>248</x>
   <y>172</y>
@@ -2539,7 +2539,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_12</objectName>
   <x>262</x>
   <y>172</y>
@@ -2558,7 +2558,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_13</objectName>
   <x>281</x>
   <y>172</y>
@@ -2577,7 +2577,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_14</objectName>
   <x>295</x>
   <y>172</y>
@@ -2596,7 +2596,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_15</objectName>
   <x>309</x>
   <y>172</y>
@@ -2615,7 +2615,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5_16</objectName>
   <x>323</x>
   <y>172</y>
@@ -2634,7 +2634,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_01</objectName>
   <x>98</x>
   <y>199</y>
@@ -2653,7 +2653,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_02</objectName>
   <x>112</x>
   <y>199</y>
@@ -2672,7 +2672,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_03</objectName>
   <x>126</x>
   <y>199</y>
@@ -2691,7 +2691,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_04</objectName>
   <x>140</x>
   <y>199</y>
@@ -2710,7 +2710,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_05</objectName>
   <x>159</x>
   <y>199</y>
@@ -2729,7 +2729,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_06</objectName>
   <x>173</x>
   <y>199</y>
@@ -2748,7 +2748,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_07</objectName>
   <x>187</x>
   <y>199</y>
@@ -2767,7 +2767,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_08</objectName>
   <x>201</x>
   <y>199</y>
@@ -2786,7 +2786,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_09</objectName>
   <x>220</x>
   <y>199</y>
@@ -2805,7 +2805,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_10</objectName>
   <x>234</x>
   <y>199</y>
@@ -2824,7 +2824,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_11</objectName>
   <x>248</x>
   <y>199</y>
@@ -2843,7 +2843,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_12</objectName>
   <x>262</x>
   <y>199</y>
@@ -2862,7 +2862,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_13</objectName>
   <x>281</x>
   <y>199</y>
@@ -2881,7 +2881,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_14</objectName>
   <x>295</x>
   <y>199</y>
@@ -2900,7 +2900,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_15</objectName>
   <x>309</x>
   <y>199</y>
@@ -2919,7 +2919,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6_16</objectName>
   <x>323</x>
   <y>199</y>
@@ -2938,7 +2938,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>swing</objectName>
   <x>345</x>
   <y>238</y>
@@ -2956,7 +2956,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>385</x>
   <y>266</y>
@@ -2985,7 +2985,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp1</objectName>
   <x>95</x>
   <y>218</y>
@@ -3003,7 +3003,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp2</objectName>
   <x>111</x>
   <y>218</y>
@@ -3021,7 +3021,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp3</objectName>
   <x>127</x>
   <y>218</y>
@@ -3039,7 +3039,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp4</objectName>
   <x>142</x>
   <y>218</y>
@@ -3057,7 +3057,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp5</objectName>
   <x>157</x>
   <y>218</y>
@@ -3075,7 +3075,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp6</objectName>
   <x>172</x>
   <y>218</y>
@@ -3093,7 +3093,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp7</objectName>
   <x>187</x>
   <y>218</y>
@@ -3111,7 +3111,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp8</objectName>
   <x>202</x>
   <y>218</y>
@@ -3129,7 +3129,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp9</objectName>
   <x>217</x>
   <y>218</y>
@@ -3147,7 +3147,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp10</objectName>
   <x>232</x>
   <y>218</y>
@@ -3165,7 +3165,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp11</objectName>
   <x>247</x>
   <y>218</y>
@@ -3183,7 +3183,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp12</objectName>
   <x>262</x>
   <y>218</y>
@@ -3201,7 +3201,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp13</objectName>
   <x>277</x>
   <y>218</y>
@@ -3219,7 +3219,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp14</objectName>
   <x>292</x>
   <y>218</y>
@@ -3237,7 +3237,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp15</objectName>
   <x>307</x>
   <y>218</y>
@@ -3255,7 +3255,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp16</objectName>
   <x>322</x>
   <y>218</y>

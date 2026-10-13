@@ -154,7 +154,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -183,7 +183,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Input_Gain</objectName>
   <x>10</x>
   <y>69</y>
@@ -201,7 +201,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>86</y>
@@ -230,7 +230,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Input_Gain</objectName>
   <x>450</x>
   <y>86</y>
@@ -259,7 +259,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>2</y>
@@ -288,7 +288,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>24</y>
@@ -320,7 +320,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pan_Depth</objectName>
   <x>450</x>
   <y>515</y>
@@ -349,7 +349,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>555</y>
@@ -378,7 +378,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pan_Depth</objectName>
   <x>10</x>
   <y>498</y>
@@ -396,7 +396,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Dry_Gain</objectName>
   <x>450</x>
   <y>555</y>
@@ -425,7 +425,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Dry_Gain</objectName>
   <x>10</x>
   <y>538</y>
@@ -443,7 +443,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>515</y>
@@ -472,7 +472,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delays_Gain</objectName>
   <x>10</x>
   <y>578</y>
@@ -490,7 +490,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delays_Gain</objectName>
   <x>450</x>
   <y>595</y>
@@ -519,7 +519,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>595</y>
@@ -548,7 +548,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>275</y>
@@ -577,7 +577,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>126</y>
@@ -606,7 +606,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Total_Time</objectName>
   <x>10</x>
   <y>109</y>
@@ -624,7 +624,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Total_Time</objectName>
   <x>450</x>
   <y>126</y>
@@ -653,7 +653,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp_Env</objectName>
   <x>450</x>
   <y>206</y>
@@ -682,7 +682,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amp_Env</objectName>
   <x>10</x>
   <y>189</y>
@@ -700,7 +700,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>206</y>
@@ -729,7 +729,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Time_Curve</objectName>
   <x>450</x>
   <y>166</y>
@@ -758,7 +758,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>166</y>
@@ -787,7 +787,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Time_Curve</objectName>
   <x>10</x>
   <y>149</y>
@@ -805,7 +805,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp_Curve</objectName>
   <x>450</x>
   <y>247</y>
@@ -834,7 +834,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>247</y>
@@ -863,7 +863,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amp_Curve</objectName>
   <x>10</x>
   <y>230</y>
@@ -881,7 +881,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LPF_Offset</objectName>
   <x>10</x>
   <y>401</y>
@@ -899,7 +899,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>418</y>
@@ -928,7 +928,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LPF_Offset</objectName>
   <x>450</x>
   <y>418</y>
@@ -957,7 +957,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LPF_Resonance</objectName>
   <x>10</x>
   <y>441</y>
@@ -975,7 +975,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LPF_Resonance</objectName>
   <x>450</x>
   <y>458</y>
@@ -1004,7 +1004,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LPF_Curve</objectName>
   <x>450</x>
   <y>378</y>
@@ -1033,7 +1033,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LPF_Curve</objectName>
   <x>10</x>
   <y>361</y>
@@ -1051,7 +1051,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>378</y>
@@ -1080,7 +1080,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LPF_Env</objectName>
   <x>450</x>
   <y>338</y>
@@ -1109,7 +1109,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>338</y>
@@ -1138,7 +1138,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LPF_Env</objectName>
   <x>10</x>
   <y>321</y>
@@ -1156,7 +1156,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Filter</objectName>
   <x>10</x>
   <y>282</y>
@@ -1175,7 +1175,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>No_Taps</objectName>
   <x>83</x>
   <y>23</y>
@@ -1204,7 +1204,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <randomizable group="0">false</randomizable>
   <value>30</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>23</y>
@@ -1233,7 +1233,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>409</x>
   <y>23</y>
@@ -1258,7 +1258,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>348</x>
   <y>23</y>
@@ -1287,7 +1287,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>458</y>

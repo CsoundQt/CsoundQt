@@ -102,7 +102,7 @@ i 2	     0.1		 0		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -131,7 +131,7 @@ i 2	     0.1		 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -160,7 +160,7 @@ i 2	     0.1		 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>529</x>
   <y>34</y>
@@ -190,7 +190,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>64</y>
@@ -219,7 +219,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>41</y>
@@ -237,7 +237,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>64</y>
@@ -266,7 +266,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>X_Fund</objectName>
   <x>8</x>
   <y>91</y>
@@ -292,14 +292,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2148</objectName>
   <x>8</x>
   <y>8</y>
@@ -318,7 +318,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Bandwidth</objectName>
   <x>448</x>
   <y>469</y>
@@ -347,7 +347,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Bandwidth</objectName>
   <x>8</x>
   <y>446</y>
@@ -365,7 +365,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>469</y>
@@ -394,7 +394,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Octaviation</objectName>
   <x>448</x>
   <y>426</y>
@@ -423,7 +423,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Octaviation</objectName>
   <x>8</x>
   <y>403</y>
@@ -441,7 +441,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>426</y>
@@ -470,7 +470,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>511</y>
@@ -499,7 +499,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Duration</objectName>
   <x>8</x>
   <y>488</y>
@@ -517,7 +517,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Duration</objectName>
   <x>448</x>
   <y>511</y>
@@ -546,7 +546,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>554</y>
@@ -575,7 +575,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Rise_Time</objectName>
   <x>8</x>
   <y>531</y>
@@ -593,7 +593,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Rise_Time</objectName>
   <x>448</x>
   <y>554</y>
@@ -622,7 +622,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>596</y>
@@ -651,7 +651,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Decay_Time</objectName>
   <x>8</x>
   <y>573</y>
@@ -669,7 +669,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Decay_Time</objectName>
   <x>448</x>
   <y>596</y>
@@ -698,7 +698,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>373</y>
@@ -727,7 +727,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>X_Fund_Value</objectName>
   <x>127</x>
   <y>373</y>
@@ -756,7 +756,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Y_Form_Value</objectName>
   <x>448</x>
   <y>374</y>
@@ -785,7 +785,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>330</x>
   <y>374</y>

@@ -53,7 +53,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -82,7 +82,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4452</objectName>
   <x>10</x>
   <y>10</y>
@@ -101,7 +101,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>125</y>
@@ -130,7 +130,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>9</x>
   <y>102</y>
@@ -148,7 +148,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>449</x>
   <y>125</y>
@@ -177,7 +177,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>72</y>
@@ -206,7 +206,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pan</objectName>
   <x>9</x>
   <y>49</y>
@@ -224,7 +224,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pan</objectName>
   <x>449</x>
   <y>72</y>
@@ -253,7 +253,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>150</x>
   <y>147</y>
@@ -282,7 +282,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>
   <x>230</x>
   <y>145</y>
@@ -312,7 +312,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>179</y>

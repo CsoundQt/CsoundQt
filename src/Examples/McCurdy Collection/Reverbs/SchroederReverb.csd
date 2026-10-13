@@ -112,7 +112,7 @@ i  2		0.5	   3600	;REVERB INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -141,7 +141,7 @@ i  2		0.5	   3600	;REVERB INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>400</x>
   <y>2</y>
@@ -170,7 +170,7 @@ i  2		0.5	   3600	;REVERB INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>404</x>
   <y>229</y>
@@ -200,7 +200,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>14</y>
@@ -229,7 +229,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>LoopTime1</objectName>
   <x>14</x>
   <y>42</y>
@@ -262,7 +262,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>64</y>
@@ -291,7 +291,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>RvbTime1</objectName>
   <x>14</x>
   <y>92</y>
@@ -324,7 +324,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>114</y>
@@ -353,7 +353,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>105</x>
   <y>14</y>
@@ -382,7 +382,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>LoopTime2</objectName>
   <x>111</x>
   <y>42</y>
@@ -415,7 +415,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>111</x>
   <y>64</y>
@@ -444,7 +444,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>RvbTime2</objectName>
   <x>111</x>
   <y>92</y>
@@ -477,7 +477,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>111</x>
   <y>114</y>
@@ -506,7 +506,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>202</x>
   <y>14</y>
@@ -535,7 +535,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>LoopTime3</objectName>
   <x>208</x>
   <y>42</y>
@@ -568,7 +568,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>208</x>
   <y>64</y>
@@ -597,7 +597,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>RvbTime3</objectName>
   <x>208</x>
   <y>92</y>
@@ -630,7 +630,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>208</x>
   <y>114</y>
@@ -659,7 +659,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>299</x>
   <y>14</y>
@@ -688,7 +688,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>LoopTime4</objectName>
   <x>305</x>
   <y>42</y>
@@ -721,7 +721,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>305</x>
   <y>64</y>
@@ -750,7 +750,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>RvbTime4</objectName>
   <x>305</x>
   <y>92</y>
@@ -783,7 +783,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>305</x>
   <y>114</y>
@@ -812,7 +812,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>153</x>
   <y>149</y>
@@ -841,7 +841,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>LoopTime5</objectName>
   <x>159</x>
   <y>177</y>
@@ -874,7 +874,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>159</x>
   <y>199</y>
@@ -903,7 +903,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>RvbTime5</objectName>
   <x>159</x>
   <y>227</y>
@@ -936,7 +936,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>159</x>
   <y>249</y>
@@ -965,7 +965,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>153</x>
   <y>282</y>
@@ -994,7 +994,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>LoopTime6</objectName>
   <x>159</x>
   <y>310</y>
@@ -1027,7 +1027,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>159</x>
   <y>332</y>
@@ -1056,7 +1056,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>RvbTime6</objectName>
   <x>159</x>
   <y>360</y>
@@ -1089,7 +1089,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>159</x>
   <y>382</y>
@@ -1118,7 +1118,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2108</objectName>
   <x>409</x>
   <y>14</y>
@@ -1137,7 +1137,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>409</x>
   <y>63</y>
@@ -1166,7 +1166,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LiveGain</objectName>
   <x>849</x>
   <y>63</y>
@@ -1195,7 +1195,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>490</x>
   <y>195</y>
@@ -1220,7 +1220,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>408</x>
   <y>195</y>
@@ -1249,7 +1249,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>409</x>
   <y>132</y>
@@ -1268,7 +1268,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>581</x>
   <y>133</y>
@@ -1295,7 +1295,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>581</x>
   <y>161</y>
@@ -1324,7 +1324,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LiveGain</objectName>
   <x>409</x>
   <y>47</y>
@@ -1342,7 +1342,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>409</x>
   <y>101</y>
@@ -1371,7 +1371,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
   <x>849</x>
   <y>101</y>
@@ -1400,7 +1400,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
   <x>409</x>
   <y>86</y>
@@ -1418,7 +1418,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>_SetPresetIndex</objectName>
   <x>756</x>
   <y>195</y>
@@ -1453,7 +1453,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <selectedIndex>3</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>673</x>
   <y>196</y>
@@ -1482,7 +1482,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>420</y>
@@ -1511,7 +1511,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>419</y>

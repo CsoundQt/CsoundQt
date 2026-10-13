@@ -102,7 +102,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -131,7 +131,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>2</y>
@@ -160,7 +160,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>527</x>
   <y>40</y>
@@ -194,7 +194,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4852</objectName>
   <x>8</x>
   <y>8</y>
@@ -213,7 +213,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>195</x>
   <y>164</y>
@@ -242,7 +242,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>256</x>
   <y>164</y>
@@ -272,7 +272,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>331</y>
@@ -301,7 +301,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>168</x>
   <y>337</y>
@@ -330,7 +330,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>FFTattributes</objectName>
   <x>168</x>
   <y>357</y>
@@ -360,7 +360,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Blur_Time</objectName>
   <x>450</x>
   <y>73</y>
@@ -389,7 +389,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Blur_Time</objectName>
   <x>10</x>
   <y>56</y>
@@ -407,7 +407,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>73</y>
@@ -436,7 +436,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>121</y>
@@ -465,7 +465,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>10</x>
   <y>104</y>
@@ -483,7 +483,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Gain</objectName>
   <x>450</x>
   <y>121</y>
@@ -512,7 +512,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>9</x>
   <y>219</y>
@@ -531,7 +531,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>198</y>
@@ -560,7 +560,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>180</x>
   <y>220</y>
@@ -587,7 +587,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>180</x>
   <y>274</y>
@@ -614,7 +614,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>252</y>
@@ -643,7 +643,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>9</x>
   <y>273</y>
@@ -662,7 +662,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>248</y>
@@ -691,7 +691,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>301</y>

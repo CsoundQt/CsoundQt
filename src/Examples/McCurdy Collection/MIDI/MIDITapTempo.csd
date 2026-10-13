@@ -70,7 +70,7 @@ i 4 0 3600	;INSTR 4 (DELAY) PLAYS FOR 1 HOUR
   <g>170</g>
   <b>170</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -99,7 +99,7 @@ i 4 0 3600	;INSTR 4 (DELAY) PLAYS FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>28</y>
@@ -129,7 +129,7 @@ The example demonstrate a method for defining a tempo by tapping notes on a MIDI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>153</y>
@@ -158,7 +158,7 @@ The example demonstrate a method for defining a tempo by tapping notes on a MIDI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>217</x>
   <y>166</y>
@@ -187,7 +187,7 @@ The example demonstrate a method for defining a tempo by tapping notes on a MIDI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>18</x>
   <y>166</y>
@@ -216,7 +216,7 @@ The example demonstrate a method for defining a tempo by tapping notes on a MIDI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tempo</objectName>
   <x>110</x>
   <y>166</y>
@@ -245,7 +245,7 @@ The example demonstrate a method for defining a tempo by tapping notes on a MIDI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay_Time</objectName>
   <x>309</x>
   <y>166</y>

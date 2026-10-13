@@ -157,7 +157,7 @@ i 4		0		0.1		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1</x>
   <y>2</y>
@@ -186,7 +186,7 @@ i 4		0		0.1		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>76</y>
@@ -215,7 +215,7 @@ i 4		0		0.1		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amp</objectName>
   <x>8</x>
   <y>54</y>
@@ -233,7 +233,7 @@ i 4		0		0.1		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp</objectName>
   <x>448</x>
   <y>76</y>
@@ -262,7 +262,7 @@ i 4		0		0.1		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -291,7 +291,7 @@ i 4		0		0.1		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>22</y>
@@ -321,7 +321,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9023</objectName>
   <x>8</x>
   <y>16</y>
@@ -340,7 +340,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>121</y>
@@ -369,7 +369,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Freq</objectName>
   <x>8</x>
   <y>99</y>
@@ -387,7 +387,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Freq_Value</objectName>
   <x>448</x>
   <y>121</y>
@@ -416,7 +416,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>166</y>
@@ -445,7 +445,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>AirJet</objectName>
   <x>8</x>
   <y>144</y>
@@ -463,7 +463,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AirJet</objectName>
   <x>448</x>
   <y>166</y>
@@ -492,7 +492,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>211</y>
@@ -521,7 +521,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack</objectName>
   <x>8</x>
   <y>189</y>
@@ -539,7 +539,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack</objectName>
   <x>448</x>
   <y>211</y>
@@ -568,7 +568,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>256</y>
@@ -597,7 +597,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Decay</objectName>
   <x>8</x>
   <y>234</y>
@@ -615,7 +615,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Decay</objectName>
   <x>448</x>
   <y>256</y>
@@ -644,7 +644,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>301</y>
@@ -673,7 +673,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>AmpNoise</objectName>
   <x>8</x>
   <y>279</y>
@@ -691,7 +691,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AmpNoise</objectName>
   <x>448</x>
   <y>301</y>
@@ -720,7 +720,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>345</y>
@@ -749,7 +749,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VibFreq</objectName>
   <x>8</x>
   <y>323</y>
@@ -767,7 +767,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibFreq</objectName>
   <x>448</x>
   <y>345</y>
@@ -796,7 +796,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>390</y>
@@ -825,7 +825,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VibAmp</objectName>
   <x>8</x>
   <y>368</y>
@@ -843,7 +843,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibAmp</objectName>
   <x>448</x>
   <y>390</y>
@@ -872,7 +872,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>435</y>
@@ -901,7 +901,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>MinFreq</objectName>
   <x>8</x>
   <y>413</y>
@@ -919,7 +919,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>MinFreq_Value</objectName>
   <x>448</x>
   <y>435</y>
@@ -948,7 +948,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>479</y>
@@ -977,7 +977,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>AmtRefJet</objectName>
   <x>8</x>
   <y>457</y>
@@ -995,7 +995,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AmtRefJet</objectName>
   <x>448</x>
   <y>479</y>
@@ -1024,7 +1024,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>524</y>
@@ -1053,7 +1053,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>CoefRefJet</objectName>
   <x>8</x>
   <y>502</y>
@@ -1071,7 +1071,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>CoefRefJet</objectName>
   <x>448</x>
   <y>524</y>

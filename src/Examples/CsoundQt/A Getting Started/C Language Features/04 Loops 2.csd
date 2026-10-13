@@ -68,7 +68,7 @@ e
   <g>255</g>
   <b>255</b>
  </bgcolor>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>24</x>
   <y>26</y>

@@ -158,7 +158,7 @@ i 1 0 3600	;GUI
   <g>202</g>
   <b>202</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -187,7 +187,7 @@ i 1 0 3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Record_B</objectName>
   <x>8</x>
   <y>42</y>
@@ -206,7 +206,7 @@ i 1 0 3600	;GUI
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Pause</objectName>
   <x>98</x>
   <y>42</y>
@@ -225,7 +225,7 @@ i 1 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -254,7 +254,7 @@ i 1 0 3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>17</y>
@@ -285,7 +285,7 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>112</y>
@@ -314,7 +314,7 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed</objectName>
   <x>8</x>
   <y>93</y>
@@ -332,7 +332,7 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed</objectName>
   <x>448</x>
   <y>112</y>
@@ -361,7 +361,7 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3960</objectName>
   <x>187</x>
   <y>42</y>
@@ -380,7 +380,7 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>PlayStop_B</objectName>
   <x>279</x>
   <y>42</y>
@@ -399,7 +399,7 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>LoopBeg</objectName>
   <x>8</x>
   <y>153</y>
@@ -425,14 +425,14 @@ If record is pressed for a second time the original recording is overwritten. Ma
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>LoopEnd</objectName>
   <x>8</x>
   <y>176</y>
@@ -458,14 +458,14 @@ If record is pressed for a second time the original recording is overwritten. Ma
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>203</x>
   <y>189</y>
@@ -494,7 +494,7 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>15</x>
   <y>52</y>
@@ -520,14 +520,14 @@ If record is pressed for a second time the original recording is overwritten. Ma
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>285</x>
   <y>52</y>
@@ -553,7 +553,7 @@ If record is pressed for a second time the original recording is overwritten. Ma
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>

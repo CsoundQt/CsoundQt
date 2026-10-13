@@ -352,7 +352,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <g>208</g>
   <b>208</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -381,7 +381,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>X_Part</objectName>
   <x>6</x>
   <y>34</y>
@@ -414,7 +414,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>6</x>
   <y>254</y>
@@ -447,7 +447,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>29</x>
   <y>254</y>
@@ -480,7 +480,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>52</x>
   <y>254</y>
@@ -513,7 +513,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>75</x>
   <y>254</y>
@@ -546,7 +546,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>98</x>
   <y>254</y>
@@ -579,7 +579,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>121</x>
   <y>254</y>
@@ -612,7 +612,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>144</x>
   <y>254</y>
@@ -645,7 +645,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>167</x>
   <y>254</y>
@@ -678,7 +678,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>190</x>
   <y>254</y>
@@ -711,7 +711,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>213</x>
   <y>254</y>
@@ -744,7 +744,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>236</x>
   <y>254</y>
@@ -777,7 +777,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>259</x>
   <y>254</y>
@@ -810,7 +810,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>282</x>
   <y>254</y>
@@ -843,7 +843,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>305</x>
   <y>254</y>
@@ -876,7 +876,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>328</x>
   <y>254</y>
@@ -909,7 +909,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>351</x>
   <y>254</y>
@@ -942,7 +942,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>374</x>
   <y>254</y>
@@ -975,7 +975,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>397</x>
   <y>254</y>
@@ -1008,7 +1008,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>420</x>
   <y>254</y>
@@ -1041,7 +1041,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>443</x>
   <y>254</y>
@@ -1074,7 +1074,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>466</x>
   <y>254</y>
@@ -1107,7 +1107,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>489</x>
   <y>254</y>
@@ -1140,7 +1140,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>512</x>
   <y>254</y>
@@ -1173,7 +1173,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>535</x>
   <y>254</y>
@@ -1206,7 +1206,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>558</x>
   <y>254</y>
@@ -1239,7 +1239,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>581</x>
   <y>254</y>
@@ -1272,7 +1272,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>604</x>
   <y>254</y>
@@ -1305,7 +1305,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>627</x>
   <y>254</y>
@@ -1338,7 +1338,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>650</x>
   <y>254</y>
@@ -1371,7 +1371,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>673</x>
   <y>254</y>
@@ -1404,7 +1404,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>490</y>
@@ -1433,7 +1433,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>23</x>
   <y>490</y>
@@ -1462,7 +1462,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>46</x>
   <y>490</y>
@@ -1491,7 +1491,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>69</x>
   <y>490</y>
@@ -1520,7 +1520,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>92</x>
   <y>490</y>
@@ -1549,7 +1549,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>115</x>
   <y>490</y>
@@ -1578,7 +1578,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>138</x>
   <y>490</y>
@@ -1607,7 +1607,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>161</x>
   <y>490</y>
@@ -1636,7 +1636,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>184</x>
   <y>490</y>
@@ -1665,7 +1665,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>207</x>
   <y>490</y>
@@ -1694,7 +1694,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>230</x>
   <y>490</y>
@@ -1723,7 +1723,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>253</x>
   <y>490</y>
@@ -1752,7 +1752,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>276</x>
   <y>490</y>
@@ -1781,7 +1781,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>299</x>
   <y>490</y>
@@ -1810,7 +1810,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>322</x>
   <y>490</y>
@@ -1839,7 +1839,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>345</x>
   <y>490</y>
@@ -1868,7 +1868,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>368</x>
   <y>490</y>
@@ -1897,7 +1897,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>391</x>
   <y>490</y>
@@ -1926,7 +1926,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>414</x>
   <y>490</y>
@@ -1955,7 +1955,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>437</x>
   <y>490</y>
@@ -1984,7 +1984,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>460</x>
   <y>490</y>
@@ -2013,7 +2013,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>483</x>
   <y>490</y>
@@ -2042,7 +2042,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>506</x>
   <y>490</y>
@@ -2071,7 +2071,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>529</x>
   <y>490</y>
@@ -2100,7 +2100,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>552</x>
   <y>490</y>
@@ -2129,7 +2129,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>575</x>
   <y>490</y>
@@ -2158,7 +2158,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>598</x>
   <y>490</y>
@@ -2187,7 +2187,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>621</x>
   <y>490</y>
@@ -2216,7 +2216,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>644</x>
   <y>490</y>
@@ -2245,7 +2245,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>667</x>
   <y>490</y>
@@ -2274,7 +2274,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2181</objectName>
   <x>574</x>
   <y>636</y>
@@ -2294,7 +2294,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7155</objectName>
   <x>574</x>
   <y>601</y>
@@ -2313,7 +2313,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5000</objectName>
   <x>574</x>
   <y>570</y>
@@ -2332,7 +2332,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1973</objectName>
   <x>574</x>
   <y>539</y>
@@ -2351,7 +2351,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Reverb_Mix</objectName>
   <x>369</x>
   <y>585</y>
@@ -2369,7 +2369,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Reverb_Time</objectName>
   <x>369</x>
   <y>623</y>
@@ -2387,7 +2387,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Reverb_LPF</objectName>
   <x>369</x>
   <y>661</y>
@@ -2405,7 +2405,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack_Time</objectName>
   <x>369</x>
   <y>547</y>
@@ -2423,7 +2423,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Release_Time</objectName>
   <x>469</x>
   <y>547</y>
@@ -2441,7 +2441,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Fund_Freq</objectName>
   <x>9</x>
   <y>584</y>
@@ -2459,7 +2459,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amp_Fund_Port</objectName>
   <x>9</x>
   <y>622</y>
@@ -2477,7 +2477,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Ratio_Port</objectName>
   <x>9</x>
   <y>660</y>
@@ -2495,7 +2495,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>9</x>
   <y>546</y>
@@ -2513,7 +2513,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>562</y>
@@ -2542,7 +2542,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>600</y>
@@ -2571,7 +2571,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>638</y>
@@ -2600,7 +2600,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>676</y>
@@ -2629,7 +2629,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>300</x>
   <y>562</y>
@@ -2658,7 +2658,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp_Fund_Port</objectName>
   <x>300</x>
   <y>637</y>
@@ -2687,7 +2687,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Fund_Freq_Value</objectName>
   <x>300</x>
   <y>599</y>
@@ -2716,7 +2716,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>369</x>
   <y>567</y>
@@ -2745,7 +2745,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>369</x>
   <y>601</y>
@@ -2774,7 +2774,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>369</x>
   <y>639</y>
@@ -2803,7 +2803,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>469</x>
   <y>567</y>
@@ -2832,7 +2832,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>368</x>
   <y>677</y>
@@ -2861,7 +2861,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>702</x>
   <y>2</y>
@@ -2890,7 +2890,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>704</x>
   <y>29</y>
@@ -2930,7 +2930,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio1</objectName>
   <x>6</x>
   <y>515</y>
@@ -2963,7 +2963,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio17</objectName>
   <x>374</x>
   <y>515</y>
@@ -2996,7 +2996,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio18</objectName>
   <x>397</x>
   <y>515</y>
@@ -3029,7 +3029,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio19</objectName>
   <x>420</x>
   <y>515</y>
@@ -3062,7 +3062,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio8</objectName>
   <x>167</x>
   <y>515</y>
@@ -3095,7 +3095,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio9</objectName>
   <x>190</x>
   <y>515</y>
@@ -3128,7 +3128,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio10</objectName>
   <x>213</x>
   <y>515</y>
@@ -3161,7 +3161,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio5</objectName>
   <x>98</x>
   <y>515</y>
@@ -3194,7 +3194,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio6</objectName>
   <x>121</x>
   <y>515</y>
@@ -3227,7 +3227,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio7</objectName>
   <x>144</x>
   <y>515</y>
@@ -3260,7 +3260,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio2</objectName>
   <x>29</x>
   <y>515</y>
@@ -3293,7 +3293,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio3</objectName>
   <x>52</x>
   <y>515</y>
@@ -3326,7 +3326,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio4</objectName>
   <x>75</x>
   <y>515</y>
@@ -3359,7 +3359,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio11</objectName>
   <x>236</x>
   <y>515</y>
@@ -3392,7 +3392,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio12</objectName>
   <x>259</x>
   <y>515</y>
@@ -3425,7 +3425,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio13</objectName>
   <x>282</x>
   <y>515</y>
@@ -3458,7 +3458,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio14</objectName>
   <x>305</x>
   <y>515</y>
@@ -3491,7 +3491,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio15</objectName>
   <x>328</x>
   <y>515</y>
@@ -3524,7 +3524,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio16</objectName>
   <x>351</x>
   <y>515</y>
@@ -3557,7 +3557,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio20</objectName>
   <x>443</x>
   <y>515</y>
@@ -3590,7 +3590,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio21</objectName>
   <x>466</x>
   <y>515</y>
@@ -3623,7 +3623,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio22</objectName>
   <x>489</x>
   <y>515</y>
@@ -3656,7 +3656,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio23</objectName>
   <x>512</x>
   <y>515</y>
@@ -3689,7 +3689,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio24</objectName>
   <x>535</x>
   <y>515</y>
@@ -3722,7 +3722,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio25</objectName>
   <x>558</x>
   <y>515</y>
@@ -3755,7 +3755,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio26</objectName>
   <x>581</x>
   <y>515</y>
@@ -3788,7 +3788,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio27</objectName>
   <x>604</x>
   <y>515</y>
@@ -3821,7 +3821,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio28</objectName>
   <x>627</x>
   <y>515</y>
@@ -3854,7 +3854,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio29</objectName>
   <x>650</x>
   <y>515</y>
@@ -3887,7 +3887,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Ratio30</objectName>
   <x>673</x>
   <y>515</y>
@@ -3920,7 +3920,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>529</y>
@@ -3949,7 +3949,7 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Ratio_Port</objectName>
   <x>300</x>
   <y>675</y>

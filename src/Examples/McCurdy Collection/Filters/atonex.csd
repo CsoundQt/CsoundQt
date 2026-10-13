@@ -101,7 +101,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -130,7 +130,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -159,7 +159,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>37</y>
@@ -189,7 +189,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1324</objectName>
   <x>8</x>
   <y>8</y>
@@ -208,7 +208,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Filter_Cutoff_Value</objectName>
   <x>448</x>
   <y>118</y>
@@ -237,7 +237,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Filter_Cutoff</objectName>
   <x>8</x>
   <y>101</y>
@@ -255,7 +255,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>118</y>
@@ -284,7 +284,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>238</y>
@@ -303,7 +303,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>179</x>
   <y>239</y>
@@ -330,7 +330,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>217</y>
@@ -359,7 +359,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>179</y>
@@ -388,7 +388,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>162</y>
@@ -406,7 +406,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>179</y>
@@ -435,7 +435,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Initialisation</objectName>
   <x>380</x>
   <y>56</y>
@@ -454,7 +454,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>163</x>
   <y>56</y>
@@ -483,7 +483,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Layers</objectName>
   <x>305</x>
   <y>56</y>

@@ -393,7 +393,7 @@ e
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>60</y>
@@ -424,7 +424,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>n_1</objectName>
   <x>70</x>
   <y>60</y>
@@ -454,7 +454,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>118</x>
   <y>60</y>
@@ -485,7 +485,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>d_1</objectName>
   <x>129</x>
   <y>60</y>
@@ -515,7 +515,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>d_2</objectName>
   <x>129</x>
   <y>90</y>
@@ -545,7 +545,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>118</x>
   <y>90</y>
@@ -576,7 +576,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>n_2</objectName>
   <x>70</x>
   <y>91</y>
@@ -606,7 +606,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>90</y>
@@ -637,7 +637,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>d_3</objectName>
   <x>129</x>
   <y>120</y>
@@ -667,7 +667,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>118</x>
   <y>120</y>
@@ -698,7 +698,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>n_3</objectName>
   <x>70</x>
   <y>120</y>
@@ -728,7 +728,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>4</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>120</y>
@@ -759,7 +759,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>150</y>
@@ -790,7 +790,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>n_4</objectName>
   <x>70</x>
   <y>150</y>
@@ -820,7 +820,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>118</x>
   <y>150</y>
@@ -851,7 +851,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>d_4</objectName>
   <x>129</x>
   <y>150</y>
@@ -881,7 +881,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>69</x>
   <y>524</y>
@@ -903,7 +903,7 @@ e
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>btn_stop</objectName>
   <x>176</x>
   <y>524</y>
@@ -925,7 +925,7 @@ e
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>base_freq</objectName>
   <x>71</x>
   <y>195</y>
@@ -955,7 +955,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>196</y>
@@ -986,7 +986,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>menu_waveform</objectName>
   <x>69</x>
   <y>239</y>
@@ -1052,7 +1052,7 @@ e
   <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>242</y>
@@ -1083,7 +1083,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>389</x>
   <y>355</y>
@@ -1114,7 +1114,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>8ve_1</objectName>
   <x>205</x>
   <y>60</y>
@@ -1144,7 +1144,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>8ve_2</objectName>
   <x>205</x>
   <y>90</y>
@@ -1174,7 +1174,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>8ve_3</objectName>
   <x>205</x>
   <y>120</y>
@@ -1204,7 +1204,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>8ve_4</objectName>
   <x>205</x>
   <y>150</y>
@@ -1234,7 +1234,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>99</x>
   <y>31</y>
@@ -1265,7 +1265,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>205</x>
   <y>31</y>
@@ -1296,7 +1296,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>206</x>
   <y>435</y>
@@ -1327,7 +1327,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>215</x>
   <y>356</y>
@@ -1358,7 +1358,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>bb_mix</objectName>
   <x>283</x>
   <y>324</y>
@@ -1388,7 +1388,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>reverb_feedback</objectName>
   <x>456</x>
   <y>324</y>
@@ -1418,7 +1418,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>68</x>
   <y>292</y>
@@ -1449,7 +1449,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>395</x>
   <y>435</y>
@@ -1480,7 +1480,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>feedback_display</objectName>
   <x>456</x>
   <y>404</y>
@@ -1514,7 +1514,7 @@ e
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>bb_mix</objectName>
   <x>283</x>
   <y>404</y>
@@ -1548,7 +1548,7 @@ e
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>reverb_level</objectName>
   <x>434</x>
   <y>435</y>
@@ -1567,7 +1567,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>554</x>
   <y>435</y>
@@ -1598,7 +1598,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>bb_rate</objectName>
   <x>264</x>
   <y>435</y>
@@ -1617,7 +1617,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>risset_offset</objectName>
   <x>80</x>
   <y>435</y>
@@ -1636,7 +1636,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>268</x>
   <y>292</y>
@@ -1667,7 +1667,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>465</x>
   <y>292</y>
@@ -1698,7 +1698,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>70</x>
   <y>3</y>
@@ -1729,7 +1729,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>risset_offset</objectName>
   <x>99</x>
   <y>460</y>
@@ -1759,7 +1759,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>bb_rate</objectName>
   <x>278</x>
   <y>460</y>
@@ -1789,7 +1789,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>21</x>
   <y>435</y>
@@ -1820,7 +1820,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>risset_mix</objectName>
   <x>96</x>
   <y>404</y>
@@ -1854,7 +1854,7 @@ e
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>risset_mix</objectName>
   <x>96</x>
   <y>324</y>
@@ -1884,7 +1884,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>28</x>
   <y>357</y>
@@ -1915,7 +1915,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>base_pch_int</objectName>
   <x>278</x>
   <y>195</y>
@@ -1945,7 +1945,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>6</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>base_pch_frac</objectName>
   <x>327</x>
   <y>195</y>
@@ -1975,7 +1975,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>7</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>base_pch_frac</objectName>
   <x>373</x>
   <y>195</y>
@@ -2051,7 +2051,7 @@ e
   <selectedIndex>7</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>cb_use_notes</objectName>
   <x>253</x>
   <y>198</y>
@@ -2067,7 +2067,7 @@ e
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>188</x>
   <y>195</y>
@@ -2098,7 +2098,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>316</x>
   <y>195</y>
@@ -2129,7 +2129,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>btn_on3</objectName>
   <x>302</x>
   <y>120</y>
@@ -2151,7 +2151,7 @@ e
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>btn_on4</objectName>
   <x>302</x>
   <y>150</y>
@@ -2173,7 +2173,7 @@ e
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>btn_on2</objectName>
   <x>302</x>
   <y>90</y>
@@ -2195,7 +2195,7 @@ e
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>btn_on1</objectName>
   <x>302</x>
   <y>60</y>

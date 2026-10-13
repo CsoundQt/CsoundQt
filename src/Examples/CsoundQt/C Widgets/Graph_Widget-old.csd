@@ -69,7 +69,7 @@ ioText {188, 395} {111, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0}
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName>graph</objectName>
   <x>389</x>
   <y>98</y>
@@ -96,7 +96,7 @@ ioText {188, 395} {111, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0}
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>69</x>
   <y>4</y>
@@ -127,7 +127,7 @@ ioText {188, 395} {111, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0}
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>41</y>
@@ -159,7 +159,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>tabnum</objectName>
   <x>479</x>
   <y>244</y>
@@ -189,7 +189,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <randomizable group="0">false</randomizable>
   <value>3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>390</x>
   <y>244</y>
@@ -220,7 +220,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>388</x>
   <y>276</y>
@@ -251,7 +251,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>spectrum</objectName>
   <x>543</x>
   <y>249</y>
@@ -267,7 +267,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>559</x>
   <y>247</y>
@@ -298,7 +298,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName>graph_direct</objectName>
   <x>8</x>
   <y>245</y>
@@ -325,7 +325,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>graph_direct</objectName>
   <x>98</x>
   <y>395</y>
@@ -355,7 +355,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>graph_direct_table</objectName>
   <x>290</x>
   <y>395</y>
@@ -385,7 +385,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <randomizable group="0">false</randomizable>
   <value>-1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>27</x>
   <y>395</y>
@@ -416,7 +416,7 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>181</x>
   <y>395</y>

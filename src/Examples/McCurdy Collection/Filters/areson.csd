@@ -107,7 +107,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -136,7 +136,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -165,7 +165,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>25</y>
@@ -195,7 +195,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5974</objectName>
   <x>8</x>
   <y>8</y>
@@ -214,7 +214,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Value</objectName>
   <x>448</x>
   <y>77</y>
@@ -243,7 +243,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency</objectName>
   <x>8</x>
   <y>60</y>
@@ -261,7 +261,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>77</y>
@@ -290,7 +290,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>288</y>
@@ -309,7 +309,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>179</x>
   <y>289</y>
@@ -336,7 +336,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>267</y>
@@ -365,7 +365,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>115</y>
@@ -394,7 +394,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Bandwidth</objectName>
   <x>8</x>
   <y>98</y>
@@ -412,7 +412,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Bandwidth_Value</objectName>
   <x>448</x>
   <y>115</y>
@@ -441,7 +441,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>229</y>
@@ -470,7 +470,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>212</y>
@@ -488,7 +488,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>229</y>
@@ -517,7 +517,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Scaling_Mode</objectName>
   <x>43</x>
   <y>166</y>
@@ -547,7 +547,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>44</x>
   <y>146</y>
@@ -576,7 +576,7 @@ areson is an implementation of a resonant second-order notch filter. Its input a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Initialisation</objectName>
   <x>297</x>
   <y>166</y>

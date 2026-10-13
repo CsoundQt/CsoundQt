@@ -92,7 +92,7 @@ i 10 0 3600	;GUI
   <g>202</g>
   <b>202</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -121,7 +121,7 @@ i 10 0 3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9248</objectName>
   <x>6</x>
   <y>47</y>
@@ -140,7 +140,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5958</objectName>
   <x>68</x>
   <y>47</y>
@@ -159,7 +159,7 @@ i 10 0 3600	;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>497</x>
   <y>2</y>
@@ -188,7 +188,7 @@ i 10 0 3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>500</x>
   <y>49</y>
@@ -221,7 +221,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>62</y>
@@ -250,7 +250,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed1</objectName>
   <x>130</x>
   <y>44</y>
@@ -268,7 +268,7 @@ The code makes use of macros to minimize code repetition.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed1</objectName>
   <x>430</x>
   <y>62</y>
@@ -297,7 +297,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2924</objectName>
   <x>6</x>
   <y>87</y>
@@ -316,7 +316,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8307</objectName>
   <x>68</x>
   <y>87</y>
@@ -335,7 +335,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>102</y>
@@ -364,7 +364,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed2</objectName>
   <x>130</x>
   <y>84</y>
@@ -382,7 +382,7 @@ The code makes use of macros to minimize code repetition.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed2</objectName>
   <x>430</x>
   <y>102</y>
@@ -411,7 +411,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8297</objectName>
   <x>6</x>
   <y>128</y>
@@ -430,7 +430,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1506</objectName>
   <x>68</x>
   <y>128</y>
@@ -449,7 +449,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>143</y>
@@ -478,7 +478,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed3</objectName>
   <x>130</x>
   <y>125</y>
@@ -496,7 +496,7 @@ The code makes use of macros to minimize code repetition.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed3</objectName>
   <x>430</x>
   <y>143</y>
@@ -525,7 +525,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8916</objectName>
   <x>6</x>
   <y>169</y>
@@ -544,7 +544,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9896</objectName>
   <x>68</x>
   <y>169</y>
@@ -563,7 +563,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>184</y>
@@ -592,7 +592,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed4</objectName>
   <x>130</x>
   <y>166</y>
@@ -610,7 +610,7 @@ The code makes use of macros to minimize code repetition.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed4</objectName>
   <x>430</x>
   <y>184</y>
@@ -639,7 +639,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2915</objectName>
   <x>6</x>
   <y>210</y>
@@ -658,7 +658,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8591</objectName>
   <x>68</x>
   <y>210</y>
@@ -677,7 +677,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>225</y>
@@ -706,7 +706,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed5</objectName>
   <x>130</x>
   <y>207</y>
@@ -724,7 +724,7 @@ The code makes use of macros to minimize code repetition.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed5</objectName>
   <x>430</x>
   <y>225</y>
@@ -753,7 +753,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9028</objectName>
   <x>6</x>
   <y>251</y>
@@ -772,7 +772,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5192</objectName>
   <x>68</x>
   <y>251</y>
@@ -791,7 +791,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>266</y>
@@ -820,7 +820,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed6</objectName>
   <x>130</x>
   <y>248</y>
@@ -838,7 +838,7 @@ The code makes use of macros to minimize code repetition.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed6</objectName>
   <x>430</x>
   <y>266</y>

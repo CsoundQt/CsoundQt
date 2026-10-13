@@ -155,7 +155,7 @@ i  3		0 		3600		;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERFO
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -184,7 +184,7 @@ i  3		0 		3600		;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERFO
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>524</x>
   <y>2</y>
@@ -213,7 +213,7 @@ i  3		0 		3600		;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERFO
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>528</x>
   <y>26</y>
@@ -244,7 +244,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>16</y>
@@ -273,7 +273,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>69</x>
   <y>16</y>
@@ -303,7 +303,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>165</y>
@@ -332,7 +332,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>206</y>
@@ -361,7 +361,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>CPS</objectName>
   <x>11</x>
   <y>189</y>
@@ -379,7 +379,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>CPS_Value</objectName>
   <x>451</x>
   <y>206</y>
@@ -408,7 +408,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>290</x>
   <y>250</y>
@@ -437,7 +437,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Wave</objectName>
   <x>371</x>
   <y>250</y>
@@ -477,7 +477,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6560</objectName>
   <x>23</x>
   <y>250</y>
@@ -496,7 +496,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>296</y>
@@ -525,7 +525,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Pointer</objectName>
   <x>11</x>
   <y>336</y>
@@ -551,14 +551,14 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pointer</objectName>
   <x>451</x>
   <y>350</y>
@@ -587,7 +587,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>351</y>
@@ -616,7 +616,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed</objectName>
   <x>451</x>
   <y>400</y>
@@ -645,7 +645,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed</objectName>
   <x>11</x>
   <y>383</y>
@@ -663,7 +663,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>400</y>
@@ -692,7 +692,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1684</objectName>
   <x>251</x>
   <y>413</y>
@@ -711,7 +711,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>440</y>
@@ -740,7 +740,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Gate</objectName>
   <x>251</x>
   <y>447</y>
@@ -759,7 +759,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>573</y>
@@ -788,7 +788,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Mixer</objectName>
   <x>11</x>
   <y>556</y>
@@ -806,7 +806,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Mixer</objectName>
   <x>450</x>
   <y>573</y>
@@ -835,7 +835,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>451</x>
   <y>533</y>
@@ -864,7 +864,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>11</x>
   <y>516</y>
@@ -882,7 +882,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>533</y>
@@ -911,7 +911,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Depth</objectName>
   <x>451</x>
   <y>492</y>
@@ -940,7 +940,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Depth</objectName>
   <x>11</x>
   <y>475</y>
@@ -958,7 +958,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>492</y>
@@ -987,7 +987,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>11</x>
   <y>78</y>
@@ -1006,7 +1006,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>182</x>
   <y>79</y>
@@ -1033,7 +1033,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>59</y>
@@ -1062,7 +1062,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>108</y>
@@ -1091,7 +1091,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>182</x>
   <y>128</y>
@@ -1118,7 +1118,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>11</x>
   <y>127</y>
@@ -1137,7 +1137,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>182</x>
   <y>55</y>

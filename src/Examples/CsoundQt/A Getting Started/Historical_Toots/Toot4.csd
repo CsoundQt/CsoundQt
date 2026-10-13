@@ -59,7 +59,7 @@ e ; indicates the end of the score
   <g>95</g>
   <b>162</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>12</y>
@@ -88,7 +88,7 @@ e ; indicates the end of the score
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>43</y>
@@ -117,7 +117,7 @@ e ; indicates the end of the score
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>50</x>
   <y>276</y>
@@ -135,7 +135,7 @@ e ; indicates the end of the score
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>162</y>

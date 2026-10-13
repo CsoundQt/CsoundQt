@@ -85,7 +85,7 @@ i 1		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -114,7 +114,7 @@ i 1		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Bit_Depth</objectName>
   <x>10</x>
   <y>44</y>
@@ -132,7 +132,7 @@ i 1		0	   3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>61</y>
@@ -161,7 +161,7 @@ i 1		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Bit_Depth_value</objectName>
   <x>450</x>
   <y>61</y>
@@ -190,7 +190,7 @@ i 1		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>2</y>
@@ -219,7 +219,7 @@ i 1		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>524</x>
   <y>40</y>
@@ -250,7 +250,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>104</y>
@@ -279,7 +279,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>10</x>
   <y>87</y>
@@ -297,7 +297,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Gain</objectName>
   <x>450</x>
   <y>104</y>
@@ -326,7 +326,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7086</objectName>
   <x>8</x>
   <y>8</y>
@@ -345,7 +345,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>244</x>
   <y>137</y>
@@ -375,7 +375,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>183</x>
   <y>137</y>
@@ -404,7 +404,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>8</x>
   <y>175</y>
@@ -423,7 +423,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>179</x>
   <y>176</y>
@@ -450,7 +450,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>154</y>
@@ -479,7 +479,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>210</y>
@@ -508,7 +508,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>179</x>
   <y>232</y>
@@ -535,7 +535,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>8</x>
   <y>231</y>
@@ -554,7 +554,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>179</x>
   <y>203</y>
@@ -583,7 +583,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>179</x>
   <y>260</y>

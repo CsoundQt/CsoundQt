@@ -135,7 +135,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -164,7 +164,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3458</objectName>
   <x>5</x>
   <y>5</y>
@@ -183,7 +183,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Input_Gain</objectName>
   <x>10</x>
   <y>48</y>
@@ -201,7 +201,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>65</y>
@@ -230,7 +230,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Live_Input_Gain</objectName>
   <x>450</x>
   <y>65</y>
@@ -259,7 +259,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>2</y>
@@ -289,7 +289,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>529</x>
   <y>59</y>
@@ -322,7 +322,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Dry_Wet_Ratio</objectName>
   <x>450</x>
   <y>413</y>
@@ -351,7 +351,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>453</y>
@@ -380,7 +380,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Dry_Wet_Ratio</objectName>
   <x>10</x>
   <y>396</y>
@@ -398,7 +398,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>450</x>
   <y>453</y>
@@ -427,7 +427,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>10</x>
   <y>436</y>
@@ -445,7 +445,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>413</y>
@@ -474,7 +474,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Master_Gain</objectName>
   <x>10</x>
   <y>476</y>
@@ -492,7 +492,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Master_Gain</objectName>
   <x>450</x>
   <y>493</y>
@@ -521,7 +521,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>493</y>
@@ -550,7 +550,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time1</objectName>
   <x>10</x>
   <y>88</y>
@@ -568,7 +568,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time2</objectName>
   <x>10</x>
   <y>108</y>
@@ -586,7 +586,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time4</objectName>
   <x>10</x>
   <y>148</y>
@@ -604,7 +604,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time3</objectName>
   <x>10</x>
   <y>128</y>
@@ -622,7 +622,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>162</y>
@@ -651,7 +651,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay_Time1</objectName>
   <x>156</x>
   <y>162</y>
@@ -680,7 +680,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay_Time2</objectName>
   <x>246</x>
   <y>162</y>
@@ -709,7 +709,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay_Time3</objectName>
   <x>336</x>
   <y>162</y>
@@ -738,7 +738,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay_Time4_Value</objectName>
   <x>426</x>
   <y>162</y>
@@ -767,7 +767,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>216</x>
   <y>162</y>
@@ -796,7 +796,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>306</x>
   <y>162</y>
@@ -825,7 +825,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>396</x>
   <y>162</y>
@@ -854,7 +854,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>483</x>
   <y>162</y>
@@ -883,7 +883,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tap_Gain4</objectName>
   <x>426</x>
   <y>264</y>
@@ -912,7 +912,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tap_Gain3</objectName>
   <x>336</x>
   <y>264</y>
@@ -941,7 +941,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tap_Gain2</objectName>
   <x>246</x>
   <y>264</y>
@@ -970,7 +970,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tap_Gain1</objectName>
   <x>156</x>
   <y>263</y>
@@ -999,7 +999,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>264</y>
@@ -1028,7 +1028,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Gain3</objectName>
   <x>10</x>
   <y>230</y>
@@ -1046,7 +1046,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Gain4</objectName>
   <x>10</x>
   <y>250</y>
@@ -1064,7 +1064,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Gain2</objectName>
   <x>10</x>
   <y>210</y>
@@ -1082,7 +1082,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Gain1</objectName>
   <x>10</x>
   <y>190</y>
@@ -1100,7 +1100,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tap_Pan4</objectName>
   <x>426</x>
   <y>366</y>
@@ -1129,7 +1129,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tap_Pan3</objectName>
   <x>336</x>
   <y>366</y>
@@ -1158,7 +1158,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tap_Pan2</objectName>
   <x>246</x>
   <y>366</y>
@@ -1187,7 +1187,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Tap_Pan1</objectName>
   <x>156</x>
   <y>366</y>
@@ -1216,7 +1216,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>366</y>
@@ -1245,7 +1245,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Pan3</objectName>
   <x>10</x>
   <y>332</y>
@@ -1263,7 +1263,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Pan4</objectName>
   <x>10</x>
   <y>352</y>
@@ -1281,7 +1281,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Pan2</objectName>
   <x>10</x>
   <y>312</y>
@@ -1299,7 +1299,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Pan1</objectName>
   <x>10</x>
   <y>292</y>

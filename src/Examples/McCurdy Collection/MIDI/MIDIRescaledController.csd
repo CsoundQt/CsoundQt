@@ -51,7 +51,7 @@ i 1 0 3600			;INSTRUMENT 1 PLAYS A NOTE FOR 1 HOUR
   <g>170</g>
   <b>170</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -80,7 +80,7 @@ i 1 0 3600			;INSTRUMENT 1 PLAYS A NOTE FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>28</y>
@@ -114,7 +114,7 @@ A minus sign is placed in front of the the GEN routine number to ensure that the
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>315</y>
@@ -143,7 +143,7 @@ A minus sign is placed in front of the the GEN routine number to ensure that the
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ctrl1</objectName>
   <x>91</x>
   <y>327</y>
@@ -172,7 +172,7 @@ A minus sign is placed in front of the the GEN routine number to ensure that the
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>19</x>
   <y>324</y>

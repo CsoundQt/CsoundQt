@@ -86,7 +86,7 @@ i  2 0 3600	;INSTRUMENT PLAYS FOR 1 HOUR (AND SUSTAINS REALTIME PERFORMANCE)
   <g>202</g>
   <b>202</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -115,7 +115,7 @@ i  2 0 3600	;INSTRUMENT PLAYS FOR 1 HOUR (AND SUSTAINS REALTIME PERFORMANCE)
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Play_Stop</objectName>
   <x>8</x>
   <y>42</y>
@@ -134,7 +134,7 @@ i  2 0 3600	;INSTRUMENT PLAYS FOR 1 HOUR (AND SUSTAINS REALTIME PERFORMANCE)
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Mute_Live</objectName>
   <x>152</x>
   <y>42</y>
@@ -153,7 +153,7 @@ i  2 0 3600	;INSTRUMENT PLAYS FOR 1 HOUR (AND SUSTAINS REALTIME PERFORMANCE)
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -182,7 +182,7 @@ i  2 0 3600	;INSTRUMENT PLAYS FOR 1 HOUR (AND SUSTAINS REALTIME PERFORMANCE)
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>17</y>
@@ -213,7 +213,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>106</y>
@@ -242,7 +242,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Duration</objectName>
   <x>8</x>
   <y>87</y>
@@ -260,7 +260,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Duration</objectName>
   <x>448</x>
   <y>106</y>
@@ -289,7 +289,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>154</y>
@@ -318,7 +318,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pitch</objectName>
   <x>8</x>
   <y>135</y>
@@ -336,7 +336,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pitch</objectName>
   <x>448</x>
   <y>154</y>
@@ -365,7 +365,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>203</y>
@@ -394,7 +394,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Crossfade</objectName>
   <x>8</x>
   <y>184</y>
@@ -412,7 +412,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Crossfade</objectName>
   <x>448</x>
   <y>203</y>
@@ -441,7 +441,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>252</y>
@@ -470,7 +470,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Input_Gain</objectName>
   <x>8</x>
   <y>233</y>
@@ -488,7 +488,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Input_Gain</objectName>
   <x>448</x>
   <y>252</y>
@@ -517,7 +517,7 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Recording</objectName>
   <x>408</x>
   <y>44</y>
@@ -543,14 +543,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>408</x>
   <y>46</y>

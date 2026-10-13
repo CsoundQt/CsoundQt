@@ -108,7 +108,7 @@ i 11		0.0		0.1	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -137,7 +137,7 @@ i 11		0.0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4364</objectName>
   <x>8</x>
   <y>10</y>
@@ -156,7 +156,7 @@ i 11		0.0		0.1	;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>72</y>
@@ -185,7 +185,7 @@ i 11		0.0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LiveGain</objectName>
   <x>448</x>
   <y>72</y>
@@ -214,7 +214,7 @@ i 11		0.0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -243,7 +243,7 @@ i 11		0.0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>28</y>
@@ -274,7 +274,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>201</x>
   <y>402</y>
@@ -299,7 +299,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>119</x>
   <y>402</y>
@@ -328,7 +328,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>8</x>
   <y>439</y>
@@ -347,7 +347,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>180</x>
   <y>440</y>
@@ -374,7 +374,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>469</y>
@@ -403,7 +403,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LiveGain</objectName>
   <x>8</x>
   <y>56</y>
@@ -421,7 +421,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>110</y>
@@ -450,7 +450,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LoopTime_Value</objectName>
   <x>448</x>
   <y>110</y>
@@ -479,7 +479,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LoopTime</objectName>
   <x>8</x>
   <y>94</y>
@@ -497,7 +497,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>149</y>
@@ -526,7 +526,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RvbTime_Value</objectName>
   <x>448</x>
   <y>149</y>
@@ -555,7 +555,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>RvbTime</objectName>
   <x>8</x>
   <y>133</y>
@@ -573,7 +573,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>187</y>
@@ -602,7 +602,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>187</y>
@@ -631,7 +631,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>172</y>
@@ -649,7 +649,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>87</x>
   <y>234</y>
@@ -678,7 +678,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>117</x>
   <y>267</y>
@@ -707,7 +707,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>117</x>
   <y>256</y>
@@ -736,7 +736,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>277</y>
@@ -765,7 +765,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>115</x>
   <y>293</y>
@@ -794,7 +794,7 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>304</y>

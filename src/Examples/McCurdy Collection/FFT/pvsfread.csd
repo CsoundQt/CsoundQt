@@ -79,7 +79,7 @@ i 1		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -108,7 +108,7 @@ i 1		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>521</x>
   <y>2</y>
@@ -137,7 +137,7 @@ i 1		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>524</x>
   <y>22</y>
@@ -170,7 +170,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1466</objectName>
   <x>8</x>
   <y>8</y>
@@ -189,7 +189,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>PtrMode</objectName>
   <x>146</x>
   <y>185</y>
@@ -214,7 +214,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>296</x>
   <y>186</y>
@@ -243,7 +243,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>File_Pointer</objectName>
   <x>450</x>
   <y>71</y>
@@ -272,7 +272,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>File_Pointer</objectName>
   <x>10</x>
   <y>54</y>
@@ -290,7 +290,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>71</y>
@@ -319,7 +319,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pointer_Speed</objectName>
   <x>450</x>
   <y>112</y>
@@ -348,7 +348,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pointer_Speed</objectName>
   <x>10</x>
   <y>95</y>
@@ -366,7 +366,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>112</y>
@@ -395,7 +395,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>450</x>
   <y>152</y>
@@ -424,7 +424,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>10</x>
   <y>135</y>
@@ -442,7 +442,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>152</y>
@@ -471,7 +471,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>377</x>
   <y>185</y>
@@ -496,7 +496,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>65</x>
   <y>185</y>
@@ -525,7 +525,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>8</x>
   <y>251</y>
@@ -544,7 +544,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>180</x>
   <y>252</y>
@@ -571,7 +571,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>230</y>
@@ -600,7 +600,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>180</x>
   <y>310</y>
@@ -627,7 +627,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>8</x>
   <y>309</y>
@@ -646,7 +646,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>288</y>
@@ -675,7 +675,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>280</y>
@@ -704,7 +704,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>338</y>

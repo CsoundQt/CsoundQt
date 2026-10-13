@@ -106,7 +106,7 @@ i 1		0	   3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -135,7 +135,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -164,7 +164,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>18</y>
@@ -194,7 +194,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2774</objectName>
   <x>8</x>
   <y>6</y>
@@ -213,7 +213,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Filter_Cutoff_Value</objectName>
   <x>448</x>
   <y>63</y>
@@ -242,7 +242,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Filter_Cutoff</objectName>
   <x>8</x>
   <y>46</y>
@@ -260,7 +260,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>63</y>
@@ -289,7 +289,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>101</y>
@@ -318,7 +318,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Resonance</objectName>
   <x>8</x>
   <y>84</y>
@@ -336,7 +336,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Resonance_Value</objectName>
   <x>448</x>
   <y>101</y>
@@ -365,7 +365,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>173</y>
@@ -394,7 +394,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>179</x>
   <y>195</y>
@@ -421,7 +421,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>194</y>
@@ -440,7 +440,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Amplitude_Scaling</objectName>
   <x>448</x>
   <y>138</y>
@@ -469,7 +469,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Amplitude_Scaling</objectName>
   <x>8</x>
   <y>121</y>
@@ -487,7 +487,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>138</y>
@@ -516,7 +516,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Initialisation</objectName>
   <x>380</x>
   <y>6</y>

@@ -139,7 +139,7 @@ i 11		0		0	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -168,7 +168,7 @@ i 11		0		0	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>2</y>
@@ -197,7 +197,7 @@ i 11		0		0	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>21</y>
@@ -232,7 +232,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1324</objectName>
   <x>8</x>
   <y>8</y>
@@ -251,7 +251,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Scale</objectName>
   <x>448</x>
   <y>73</y>
@@ -280,7 +280,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Scale</objectName>
   <x>8</x>
   <y>51</y>
@@ -298,7 +298,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>73</y>
@@ -327,7 +327,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>232</y>
@@ -346,7 +346,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>178</x>
   <y>233</y>
@@ -373,7 +373,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Shift</objectName>
   <x>448</x>
   <y>121</y>
@@ -402,7 +402,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Shift</objectName>
   <x>8</x>
   <y>99</y>
@@ -420,7 +420,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>121</y>
@@ -449,7 +449,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Lowest_Value</objectName>
   <x>448</x>
   <y>169</y>
@@ -478,7 +478,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Lowest</objectName>
   <x>8</x>
   <y>147</y>
@@ -496,7 +496,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>169</y>
@@ -525,7 +525,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>448</x>
   <y>333</y>
@@ -554,7 +554,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>8</x>
   <y>311</y>
@@ -572,7 +572,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>333</y>
@@ -601,7 +601,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>8</x>
   <y>199</y>
@@ -626,7 +626,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Coefs</objectName>
   <x>448</x>
   <y>267</y>
@@ -655,7 +655,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <randomizable group="0">false</randomizable>
   <value>80</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>349</x>
   <y>267</y>
@@ -684,7 +684,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Method</objectName>
   <x>8</x>
   <y>267</y>
@@ -709,7 +709,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>362</y>
@@ -738,7 +738,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>167</x>
   <y>368</y>
@@ -767,7 +767,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>FFTattrib</objectName>
   <x>167</x>
   <y>388</y>

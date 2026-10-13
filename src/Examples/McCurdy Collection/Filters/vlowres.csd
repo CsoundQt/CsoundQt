@@ -108,7 +108,7 @@ i 1		0	   3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -137,7 +137,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -166,7 +166,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>16</y>
@@ -196,7 +196,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4670</objectName>
   <x>8</x>
   <y>6</y>
@@ -215,7 +215,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Filter_Cutoff_Value</objectName>
   <x>448</x>
   <y>63</y>
@@ -244,7 +244,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Filter_Cutoff</objectName>
   <x>8</x>
   <y>46</y>
@@ -262,7 +262,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>63</y>
@@ -291,7 +291,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Resonance</objectName>
   <x>8</x>
   <y>84</y>
@@ -309,7 +309,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Resonance_Value</objectName>
   <x>448</x>
   <y>101</y>
@@ -338,7 +338,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>228</y>
@@ -357,7 +357,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>177</x>
   <y>229</y>
@@ -384,7 +384,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>206</y>
@@ -413,7 +413,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>101</y>
@@ -442,7 +442,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ordinates</objectName>
   <x>453</x>
   <y>9</y>
@@ -471,7 +471,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <randomizable group="0">false</randomizable>
   <value>10</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>322</x>
   <y>8</y>
@@ -500,7 +500,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>176</y>
@@ -529,7 +529,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>176</y>
@@ -558,7 +558,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>159</y>
@@ -576,7 +576,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>138</y>
@@ -605,7 +605,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Separation</objectName>
   <x>8</x>
   <y>121</y>
@@ -623,7 +623,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Separation</objectName>
   <x>448</x>
   <y>138</y>

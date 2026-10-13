@@ -205,7 +205,7 @@ i 11 0 0		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -234,7 +234,7 @@ i 11 0 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>125</y>
@@ -263,7 +263,7 @@ i 11 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>BandSpacing</objectName>
   <x>9</x>
   <y>102</y>
@@ -281,7 +281,7 @@ i 11 0 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>BandSpacing_Value</objectName>
   <x>449</x>
   <y>125</y>
@@ -310,7 +310,7 @@ i 11 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>72</y>
@@ -339,7 +339,7 @@ i 11 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Bandwidth</objectName>
   <x>9</x>
   <y>49</y>
@@ -357,7 +357,7 @@ i 11 0 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Bandwidth_Value</objectName>
   <x>449</x>
   <y>72</y>
@@ -386,7 +386,7 @@ i 11 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>231</y>
@@ -415,7 +415,7 @@ i 11 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>HPGain</objectName>
   <x>9</x>
   <y>208</y>
@@ -433,7 +433,7 @@ i 11 0 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>HPGain_Value</objectName>
   <x>449</x>
   <y>231</y>
@@ -462,7 +462,7 @@ i 11 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>178</y>
@@ -491,7 +491,7 @@ i 11 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>BPGain</objectName>
   <x>9</x>
   <y>155</y>
@@ -509,7 +509,7 @@ i 11 0 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>BPGain_Value</objectName>
   <x>449</x>
   <y>178</y>
@@ -538,7 +538,7 @@ i 11 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>260</y>
@@ -567,7 +567,7 @@ i 11 0 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>291</y>
@@ -599,7 +599,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>49</y>
@@ -628,7 +628,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>522</x>
   <y>106</y>
@@ -647,7 +647,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>693</x>
   <y>107</y>
@@ -674,7 +674,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>85</y>
@@ -703,7 +703,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>ModIn</objectName>
   <x>813</x>
   <y>57</y>
@@ -728,7 +728,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>BaseNote</objectName>
   <x>109</x>
   <y>260</y>
@@ -757,7 +757,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <randomizable group="0">false</randomizable>
   <value>40</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>169</x>
   <y>260</y>
@@ -786,7 +786,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>NumBands</objectName>
   <x>269</x>
   <y>260</y>
@@ -815,7 +815,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <randomizable group="0">false</randomizable>
   <value>50</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>329</x>
   <y>260</y>
@@ -844,7 +844,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>dBperOct</objectName>
   <x>429</x>
   <y>260</y>
@@ -873,7 +873,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <randomizable group="0">false</randomizable>
   <value>24</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>151</y>
@@ -902,7 +902,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>CarIn</objectName>
   <x>522</x>
   <y>192</y>
@@ -927,7 +927,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>SynType</objectName>
   <x>902</x>
   <y>192</y>
@@ -962,7 +962,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>780</x>
   <y>192</y>
@@ -991,7 +991,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>LPF</objectName>
   <x>556</x>
   <y>252</y>
@@ -1017,14 +1017,14 @@ If 'External' is chosen then audio is taken from the computer's right channel in
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>248</y>
@@ -1053,7 +1053,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Res</objectName>
   <x>820</x>
   <y>252</y>
@@ -1079,14 +1079,14 @@ If 'External' is chosen then audio is taken from the computer's right channel in
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>780</x>
   <y>248</y>

@@ -148,7 +148,7 @@ i 11 0 0.01	;INIT
   <g>202</g>
   <b>202</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -179,7 +179,7 @@ i 11 0 0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8158</objectName>
   <x>8</x>
   <y>10</y>
@@ -201,7 +201,7 @@ i 11 0 0.01	;INIT
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -232,7 +232,7 @@ i 11 0 0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>20</y>
@@ -265,7 +265,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>301</y>
@@ -296,7 +296,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>FiltMix</objectName>
   <x>8</x>
   <y>284</y>
@@ -315,7 +315,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FiltMix</objectName>
   <x>448</x>
   <y>301</y>
@@ -346,7 +346,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>340</y>
@@ -377,7 +377,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Bandwidth</objectName>
   <x>8</x>
   <y>323</y>
@@ -396,7 +396,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Bandwidth</objectName>
   <x>448</x>
   <y>340</y>
@@ -427,7 +427,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>59</y>
@@ -458,7 +458,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>212</y>
@@ -489,7 +489,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>DryGain</objectName>
   <x>8</x>
   <y>195</y>
@@ -508,7 +508,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DryGain</objectName>
   <x>448</x>
   <y>212</y>
@@ -539,7 +539,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>251</y>
@@ -570,7 +570,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>WetGain</objectName>
   <x>8</x>
   <y>234</y>
@@ -589,7 +589,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>WetGain</objectName>
   <x>448</x>
   <y>251</y>
@@ -620,7 +620,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>201</x>
   <y>455</y>
@@ -646,7 +646,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>119</x>
   <y>455</y>
@@ -677,7 +677,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>492</y>
@@ -699,7 +699,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>180</x>
   <y>493</y>
@@ -727,7 +727,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>SubDiv</objectName>
   <x>83</x>
   <y>56</y>
@@ -757,7 +757,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <randomizable group="0">false</randomizable>
   <value>8</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>171</x>
   <y>59</y>
@@ -788,7 +788,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>BarLength</objectName>
   <x>251</x>
   <y>56</y>
@@ -818,7 +818,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>332</x>
   <y>59</y>
@@ -849,7 +849,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Phrase</objectName>
   <x>412</x>
   <y>56</y>
@@ -879,7 +879,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <randomizable group="0">false</randomizable>
   <value>8</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>107</y>
@@ -910,7 +910,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Repeats</objectName>
   <x>83</x>
   <y>102</y>
@@ -940,7 +940,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>171</x>
   <y>103</y>
@@ -971,7 +971,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>StutSpeed</objectName>
   <x>251</x>
   <y>99</y>
@@ -1001,7 +1001,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <randomizable group="0">false</randomizable>
   <value>4</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>332</x>
   <y>96</y>
@@ -1033,7 +1033,7 @@ Chance</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>StutChance</objectName>
   <x>412</x>
   <y>98</y>
@@ -1063,7 +1063,7 @@ Chance</label>
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>155</y>
@@ -1094,7 +1094,7 @@ Chance</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>BPM</objectName>
   <x>83</x>
   <y>150</y>
@@ -1124,7 +1124,7 @@ Chance</label>
   <randomizable group="0">false</randomizable>
   <value>110</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>171</x>
   <y>151</y>
@@ -1155,7 +1155,7 @@ Chance</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>FilDiv</objectName>
   <x>251</x>
   <y>147</y>
@@ -1185,7 +1185,7 @@ Chance</label>
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>FreqMin</objectName>
   <x>8</x>
   <y>370</y>
@@ -1214,7 +1214,7 @@ Chance</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1222,7 +1222,7 @@ Chance</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>389</y>
@@ -1253,7 +1253,7 @@ Chance</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>FreqMax</objectName>
   <x>8</x>
   <y>380</y>
@@ -1282,7 +1282,7 @@ Chance</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1290,7 +1290,7 @@ Chance</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FreqMin_Value</objectName>
   <x>8</x>
   <y>389</y>
@@ -1321,7 +1321,7 @@ Chance</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FreqMax_Value</objectName>
   <x>448</x>
   <y>389</y>
@@ -1352,7 +1352,7 @@ Chance</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>429</y>
@@ -1383,7 +1383,7 @@ Chance</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Interp_SH</objectName>
   <x>8</x>
   <y>412</y>
@@ -1402,7 +1402,7 @@ Chance</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Interp_SH</objectName>
   <x>448</x>
   <y>429</y>

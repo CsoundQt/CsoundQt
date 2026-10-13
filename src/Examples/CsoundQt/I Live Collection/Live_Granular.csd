@@ -226,7 +226,7 @@ e
   <g>236</g>
   <b>236</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>9</y>
@@ -257,7 +257,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>58</y>
@@ -290,7 +290,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>132</y>
@@ -321,7 +321,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>LiveInPre</objectName>
   <x>120</x>
   <y>164</y>
@@ -358,7 +358,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>LiveInPreOver</objectName>
   <x>454</x>
   <y>164</y>
@@ -395,7 +395,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>LiveInPost</objectName>
   <x>116</x>
   <y>240</y>
@@ -432,7 +432,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>LiveInPostOver</objectName>
   <x>450</x>
   <y>240</y>
@@ -469,7 +469,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>21</x>
   <y>164</y>
@@ -500,7 +500,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>19</x>
   <y>240</y>
@@ -531,7 +531,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>20</x>
   <y>202</y>
@@ -562,7 +562,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>ingaindb</objectName>
   <x>120</x>
   <y>199</y>
@@ -581,7 +581,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>131</y>
@@ -612,7 +612,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out</objectName>
   <x>528</x>
   <y>197</y>
@@ -649,7 +649,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outover</objectName>
   <x>863</x>
   <y>197</y>
@@ -686,7 +686,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>525</x>
   <y>228</y>
@@ -706,7 +706,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <mode>0.00000000</mode>
   <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>354</y>
@@ -737,7 +737,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>529</x>
   <y>164</y>
@@ -768,7 +768,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>outgaindb</objectName>
   <x>625</x>
   <y>164</y>
@@ -787,7 +787,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>44</x>
   <y>390</y>
@@ -818,7 +818,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>17</x>
   <y>562</y>
@@ -849,7 +849,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>transp</objectName>
   <x>18</x>
   <y>586</y>
@@ -868,7 +868,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>34</x>
   <y>481</y>
@@ -899,7 +899,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>grainsize</objectName>
   <x>31</x>
   <y>506</y>
@@ -918,7 +918,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>grainrate</objectName>
   <x>21</x>
   <y>418</y>
@@ -937,7 +937,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>374</x>
   <y>394</y>
@@ -968,7 +968,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>dist</objectName>
   <x>369</x>
   <y>420</y>
@@ -987,7 +987,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>238</x>
   <y>481</y>
@@ -1018,7 +1018,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>posrand</objectName>
   <x>239</x>
   <y>509</y>
@@ -1037,7 +1037,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>centrand</objectName>
   <x>275</x>
   <y>589</y>
@@ -1056,7 +1056,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>275</x>
   <y>562</y>
@@ -1087,7 +1087,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>298</x>
   <y>419</y>
@@ -1118,7 +1118,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>418</y>
@@ -1149,7 +1149,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>694</x>
   <y>363</y>
@@ -1180,7 +1180,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>winshape</objectName>
   <x>682</x>
   <y>414</y>
@@ -1241,7 +1241,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <selectedIndex>8</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName>ftab</objectName>
   <x>620</x>
   <y>476</y>
@@ -1268,7 +1268,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>667</x>
   <y>451</y>
@@ -1299,7 +1299,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>652</x>
   <y>389</y>
@@ -1330,7 +1330,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>458</x>
   <y>198</y>
@@ -1361,7 +1361,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>ingaindb</objectName>
   <x>380</x>
   <y>200</y>
@@ -1391,7 +1391,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>861</x>
   <y>162</y>
@@ -1422,7 +1422,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>outgaindb</objectName>
   <x>781</x>
   <y>163</y>
@@ -1452,7 +1452,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>grainrate</objectName>
   <x>186</x>
   <y>390</y>
@@ -1482,7 +1482,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <randomizable group="0">false</randomizable>
   <value>152</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>freeze</objectName>
   <x>513</x>
   <y>480</y>
@@ -1504,7 +1504,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>grainsize</objectName>
   <x>131</x>
   <y>481</y>
@@ -1534,7 +1534,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <randomizable group="0">false</randomizable>
   <value>100</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>posrand</objectName>
   <x>429</x>
   <y>480</y>
@@ -1564,7 +1564,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>transp</objectName>
   <x>164</x>
   <y>562</y>
@@ -1594,7 +1594,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>centrand</objectName>
   <x>506</x>
   <y>561</y>
@@ -1624,7 +1624,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>dbrange</objectName>
   <x>421</x>
   <y>289</y>
@@ -1654,7 +1654,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>334</x>
   <y>288</y>
@@ -1685,7 +1685,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>145</x>
   <y>289</y>
@@ -1716,7 +1716,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>showdb</objectName>
   <x>254</x>
   <y>289</y>
@@ -1742,7 +1742,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>inchnl</objectName>
   <x>105</x>
   <y>290</y>
@@ -1772,7 +1772,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>289</y>

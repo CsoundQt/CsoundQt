@@ -226,7 +226,7 @@ i 3	     0.1		 0		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -255,7 +255,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>X_Pointer</objectName>
   <x>84</x>
   <y>170</y>
@@ -281,14 +281,14 @@ i 3	     0.1		 0		;INIT
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6350</objectName>
   <x>8</x>
   <y>8</y>
@@ -307,7 +307,7 @@ i 3	     0.1		 0		;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>185</y>
@@ -336,7 +336,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>X_Pointer</objectName>
   <x>25</x>
   <y>215</y>
@@ -365,7 +365,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Y_Density_Value</objectName>
   <x>26</x>
   <y>301</y>
@@ -394,7 +394,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>272</y>
@@ -423,7 +423,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>64</y>
@@ -452,7 +452,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Octaviation_Index</objectName>
   <x>522</x>
   <y>41</y>
@@ -470,7 +470,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Octaviation_Index</objectName>
   <x>962</x>
   <y>64</y>
@@ -499,7 +499,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>106</y>
@@ -528,7 +528,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Transposition_Factor</objectName>
   <x>522</x>
   <y>83</y>
@@ -546,7 +546,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Transposition_Factor</objectName>
   <x>712</x>
   <y>106</y>
@@ -575,7 +575,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Trans_Random</objectName>
   <x>962</x>
   <y>106</y>
@@ -604,7 +604,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Trans_Random</objectName>
   <x>772</x>
   <y>83</y>
@@ -622,7 +622,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>772</x>
   <y>106</y>
@@ -651,7 +651,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>TransMode</objectName>
   <x>8</x>
   <y>69</y>
@@ -676,7 +676,7 @@ i 3	     0.1		 0		;INIT
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>210</x>
   <y>65</y>
@@ -705,7 +705,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Portamento_Amount</objectName>
   <x>210</x>
   <y>41</y>
@@ -723,7 +723,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Portamento_Amount</objectName>
   <x>450</x>
   <y>65</y>
@@ -752,7 +752,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>MIDItoTrans</objectName>
   <x>367</x>
   <y>98</y>
@@ -771,7 +771,7 @@ i 3	     0.1		 0		;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>MIDItoDens</objectName>
   <x>494</x>
   <y>98</y>
@@ -790,7 +790,7 @@ i 3	     0.1		 0		;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>386</x>
   <y>95</y>
@@ -819,7 +819,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>246</x>
   <y>95</y>
@@ -848,7 +848,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>6</x>
   <y>133</y>
@@ -867,7 +867,7 @@ i 3	     0.1		 0		;INIT
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>177</x>
   <y>134</y>
@@ -894,7 +894,7 @@ i 3	     0.1		 0		;INIT
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>112</y>
@@ -923,7 +923,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>48</y>
@@ -952,7 +952,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>148</y>
@@ -981,7 +981,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Grain_Duration</objectName>
   <x>522</x>
   <y>125</y>
@@ -999,7 +999,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Grain_Duration_Value</objectName>
   <x>962</x>
   <y>148</y>
@@ -1028,7 +1028,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>190</y>
@@ -1057,7 +1057,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Grain_Rise_Time</objectName>
   <x>522</x>
   <y>167</y>
@@ -1075,7 +1075,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Grain_Rise_Time</objectName>
   <x>712</x>
   <y>190</y>
@@ -1104,7 +1104,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Grain_Decay_Time</objectName>
   <x>962</x>
   <y>190</y>
@@ -1133,7 +1133,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Grain_Decay_Time</objectName>
   <x>772</x>
   <y>167</y>
@@ -1151,7 +1151,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>772</x>
   <y>190</y>
@@ -1180,7 +1180,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4918</objectName>
   <x>653</x>
   <y>104</y>
@@ -1199,7 +1199,7 @@ i 3	     0.1		 0		;INIT
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>232</y>
@@ -1228,7 +1228,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Bandwidth</objectName>
   <x>522</x>
   <y>209</y>
@@ -1246,7 +1246,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Bandwidth</objectName>
   <x>962</x>
   <y>232</y>
@@ -1275,7 +1275,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>274</y>
@@ -1304,7 +1304,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>522</x>
   <y>251</y>
@@ -1322,7 +1322,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>962</x>
   <y>274</y>
@@ -1351,7 +1351,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>316</y>
@@ -1380,7 +1380,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pointer_Randomness</objectName>
   <x>522</x>
   <y>293</y>
@@ -1398,7 +1398,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>689</x>
   <y>316</y>
@@ -1427,7 +1427,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Density_Randomness</objectName>
   <x>689</x>
   <y>293</y>
@@ -1445,7 +1445,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>856</x>
   <y>316</y>
@@ -1474,7 +1474,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Bandwidth_Randomness</objectName>
   <x>856</x>
   <y>293</y>
@@ -1492,7 +1492,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>344</y>
@@ -1521,7 +1521,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>390</y>
@@ -1550,7 +1550,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack_Time</objectName>
   <x>522</x>
   <y>367</y>
@@ -1568,7 +1568,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack_Time</objectName>
   <x>712</x>
   <y>390</y>
@@ -1597,7 +1597,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Release_Time</objectName>
   <x>962</x>
   <y>390</y>
@@ -1626,7 +1626,7 @@ i 3	     0.1		 0		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Release_Time</objectName>
   <x>772</x>
   <y>367</y>
@@ -1644,7 +1644,7 @@ i 3	     0.1		 0		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>772</x>
   <y>390</y>

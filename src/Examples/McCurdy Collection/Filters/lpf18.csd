@@ -67,7 +67,7 @@ i 1		0	   3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -96,7 +96,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -125,7 +125,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>20</y>
@@ -155,7 +155,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4650</objectName>
   <x>8</x>
   <y>6</y>
@@ -174,7 +174,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Filter_Cutoff_Value</objectName>
   <x>448</x>
   <y>63</y>
@@ -203,7 +203,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Filter_Cutoff</objectName>
   <x>8</x>
   <y>46</y>
@@ -221,7 +221,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>63</y>
@@ -250,7 +250,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>101</y>
@@ -279,7 +279,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Resonance</objectName>
   <x>8</x>
   <y>84</y>
@@ -297,7 +297,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Resonance</objectName>
   <x>448</x>
   <y>101</y>
@@ -326,7 +326,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Distortion</objectName>
   <x>448</x>
   <y>138</y>
@@ -355,7 +355,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Distortion</objectName>
   <x>8</x>
   <y>121</y>
@@ -373,7 +373,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>138</y>
@@ -402,7 +402,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Amplitude_Scaling</objectName>
   <x>448</x>
   <y>214</y>
@@ -431,7 +431,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Amplitude_Scaling</objectName>
   <x>8</x>
   <y>197</y>
@@ -449,7 +449,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>214</y>
@@ -478,7 +478,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>176</y>
@@ -507,7 +507,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Oscillator_Frequency</objectName>
   <x>8</x>
   <y>159</y>
@@ -525,7 +525,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Oscillator_Frequency_Value</objectName>
   <x>448</x>
   <y>176</y>

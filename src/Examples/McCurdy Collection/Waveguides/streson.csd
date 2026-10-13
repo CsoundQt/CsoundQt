@@ -110,7 +110,7 @@ i  1 0	3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -139,7 +139,7 @@ i  1 0	3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>78</y>
@@ -168,7 +168,7 @@ i  1 0	3600		;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>InputGain</objectName>
   <x>8</x>
   <y>56</y>
@@ -186,7 +186,7 @@ i  1 0	3600		;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4555</objectName>
   <x>8</x>
   <y>20</y>
@@ -205,7 +205,7 @@ i  1 0	3600		;GUI
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>2</y>
@@ -234,7 +234,7 @@ i  1 0	3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>18</y>
@@ -265,7 +265,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>InputGain</objectName>
   <x>448</x>
   <y>78</y>
@@ -294,7 +294,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>178</x>
   <y>247</y>
@@ -324,7 +324,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>96</x>
   <y>247</y>
@@ -353,7 +353,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>6</x>
   <y>285</y>
@@ -372,7 +372,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>178</x>
   <y>286</y>
@@ -399,7 +399,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>123</y>
@@ -428,7 +428,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency</objectName>
   <x>8</x>
   <y>101</y>
@@ -446,7 +446,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Value</objectName>
   <x>448</x>
   <y>123</y>
@@ -475,7 +475,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>168</y>
@@ -504,7 +504,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback</objectName>
   <x>8</x>
   <y>146</y>
@@ -522,7 +522,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback</objectName>
   <x>448</x>
   <y>168</y>
@@ -551,7 +551,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>213</y>
@@ -580,7 +580,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>191</y>
@@ -598,7 +598,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>213</y>

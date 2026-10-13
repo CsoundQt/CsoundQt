@@ -194,7 +194,7 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <g>202</g>
   <b>202</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -223,7 +223,7 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>RecReady_B</objectName>
   <x>8</x>
   <y>33</y>
@@ -242,7 +242,7 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>PlayOnce_B</objectName>
   <x>194</x>
   <y>42</y>
@@ -261,7 +261,7 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>LoopPlay_B</objectName>
   <x>194</x>
   <y>80</y>
@@ -280,7 +280,7 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Reset_Rec_Ready</objectName>
   <x>9</x>
   <y>89</y>
@@ -299,7 +299,7 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Auto_Play_Once</objectName>
   <x>320</x>
   <y>42</y>
@@ -318,7 +318,7 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Auto_Play_Looped</objectName>
   <x>320</x>
   <y>80</y>
@@ -337,7 +337,7 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -366,7 +366,7 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>26</y>
@@ -397,7 +397,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>266</y>
@@ -426,7 +426,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed</objectName>
   <x>8</x>
   <y>249</y>
@@ -444,7 +444,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed</objectName>
   <x>448</x>
   <y>266</y>
@@ -473,7 +473,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>305</y>
@@ -502,7 +502,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>8</x>
   <y>288</y>
@@ -520,7 +520,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>448</x>
   <y>305</y>
@@ -549,7 +549,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Meter</objectName>
   <x>8</x>
   <y>129</y>
@@ -575,14 +575,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>144</y>
@@ -611,7 +611,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>177</y>
@@ -640,7 +640,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>On_Threshold</objectName>
   <x>8</x>
   <y>160</y>
@@ -658,7 +658,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>On_Threshold</objectName>
   <x>448</x>
   <y>177</y>
@@ -687,7 +687,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>216</y>
@@ -716,7 +716,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Off_Threshold</objectName>
   <x>8</x>
   <y>199</y>
@@ -734,7 +734,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Off_Threshold</objectName>
   <x>448</x>
   <y>216</y>
@@ -763,7 +763,7 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Record_Led</objectName>
   <x>9</x>
   <y>63</y>
@@ -789,14 +789,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>202</x>
   <y>50</y>
@@ -822,14 +822,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>13</x>
   <y>41</y>
@@ -855,14 +855,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>202</x>
   <y>87</y>
@@ -888,14 +888,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>19</x>
   <y>64</y>

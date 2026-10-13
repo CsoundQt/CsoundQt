@@ -111,7 +111,7 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -140,7 +140,7 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b123</objectName>
   <x>5</x>
   <y>5</y>
@@ -159,7 +159,7 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Input_Gain</objectName>
   <x>10</x>
   <y>48</y>
@@ -177,7 +177,7 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>65</y>
@@ -206,7 +206,7 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Live_Input_Gain</objectName>
   <x>450</x>
   <y>65</y>
@@ -235,7 +235,7 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>2</y>
@@ -264,7 +264,7 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>38</y>
@@ -299,7 +299,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay_Time_Value</objectName>
   <x>449</x>
   <y>115</y>
@@ -328,7 +328,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>115</y>
@@ -357,7 +357,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time</objectName>
   <x>9</x>
   <y>98</y>
@@ -375,7 +375,7 @@ A gain control is provided to control the gain of the live input.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>179</x>
   <y>343</y>
@@ -400,7 +400,7 @@ A gain control is provided to control the gain of the live input.</label>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>97</x>
   <y>343</y>
@@ -429,7 +429,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Amplitude_Rescaling</objectName>
   <x>9</x>
   <y>245</y>
@@ -447,7 +447,7 @@ A gain control is provided to control the gain of the live input.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>262</y>
@@ -476,7 +476,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Amplitude_Rescaling</objectName>
   <x>449</x>
   <y>262</y>
@@ -505,7 +505,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
   <x>449</x>
   <y>162</y>
@@ -534,7 +534,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>162</y>
@@ -563,7 +563,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
   <x>9</x>
   <y>145</y>
@@ -581,7 +581,7 @@ A gain control is provided to control the gain of the live input.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Portamento_Time</objectName>
   <x>449</x>
   <y>309</y>
@@ -610,7 +610,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>309</y>
@@ -639,7 +639,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Portamento_Time</objectName>
   <x>9</x>
   <y>292</y>
@@ -657,7 +657,7 @@ A gain control is provided to control the gain of the live input.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>9</x>
   <y>194</y>
@@ -675,7 +675,7 @@ A gain control is provided to control the gain of the live input.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>211</y>
@@ -704,7 +704,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>449</x>
   <y>211</y>
@@ -733,7 +733,7 @@ A gain control is provided to control the gain of the live input.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>6</x>
   <y>383</y>
@@ -752,7 +752,7 @@ A gain control is provided to control the gain of the live input.</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>178</x>
   <y>384</y>
@@ -779,7 +779,7 @@ A gain control is provided to control the gain of the live input.</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>410</y>

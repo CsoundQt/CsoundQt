@@ -106,7 +106,7 @@ f 0 3600				;DUMMY SCORE EVENT - REAL TIME PERFORMANCE FOR 1 HOUR
   <g>170</g>
   <b>170</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -135,7 +135,7 @@ f 0 3600				;DUMMY SCORE EVENT - REAL TIME PERFORMANCE FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>21</y>
@@ -171,7 +171,7 @@ Two different envelopes which illustrate these two situations have been implemen
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>288</y>
@@ -200,7 +200,7 @@ Two different envelopes which illustrate these two situations have been implemen
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>310</y>
@@ -229,7 +229,7 @@ Two different envelopes which illustrate these two situations have been implemen
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Portamento</objectName>
   <x>12</x>
   <y>292</y>
@@ -247,7 +247,7 @@ Two different envelopes which illustrate these two situations have been implemen
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Portamento</objectName>
   <x>641</x>
   <y>310</y>

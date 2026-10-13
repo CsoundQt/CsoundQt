@@ -54,7 +54,7 @@ i 10		0.0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -83,7 +83,7 @@ i 10		0.0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -113,7 +113,7 @@ Pink Noise</label>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>43</y>
@@ -144,7 +144,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>62</y>
@@ -173,7 +173,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>WhiteAmp</objectName>
   <x>448</x>
   <y>62</y>
@@ -202,7 +202,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>WhiteAmp</objectName>
   <x>8</x>
   <y>46</y>
@@ -220,7 +220,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>101</y>
@@ -249,7 +249,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Beta</objectName>
   <x>448</x>
   <y>101</y>
@@ -278,7 +278,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Beta</objectName>
   <x>8</x>
   <y>85</y>
@@ -296,7 +296,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4711</objectName>
   <x>186</x>
   <y>13</y>
@@ -315,7 +315,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>116</x>
   <y>10</y>
@@ -344,7 +344,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>136</y>
@@ -373,7 +373,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>196</y>
@@ -402,7 +402,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PinkAmp</objectName>
   <x>448</x>
   <y>196</y>
@@ -431,7 +431,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>PinkAmp</objectName>
   <x>8</x>
   <y>180</y>
@@ -449,7 +449,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6357</objectName>
   <x>186</x>
   <y>147</y>
@@ -468,7 +468,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>116</x>
   <y>144</y>

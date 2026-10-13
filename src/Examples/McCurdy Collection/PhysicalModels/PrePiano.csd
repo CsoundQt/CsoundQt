@@ -209,7 +209,7 @@ i 200	0		0.1		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -238,7 +238,7 @@ i 200	0		0.1		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>77</y>
@@ -267,7 +267,7 @@ i 200	0		0.1		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>StrFreq</objectName>
   <x>8</x>
   <y>57</y>
@@ -285,7 +285,7 @@ i 200	0		0.1		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>StrFreq_Value</objectName>
   <x>448</x>
   <y>77</y>
@@ -314,7 +314,7 @@ i 200	0		0.1		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5353</objectName>
   <x>8</x>
   <y>14</y>
@@ -333,7 +333,7 @@ i 200	0		0.1		;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>418</y>
@@ -365,7 +365,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>167</y>
@@ -394,7 +394,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Stiffness</objectName>
   <x>8</x>
   <y>147</y>
@@ -412,7 +412,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Stiffness</objectName>
   <x>448</x>
   <y>167</y>
@@ -441,7 +441,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>122</y>
@@ -470,7 +470,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Detuning</objectName>
   <x>8</x>
   <y>102</y>
@@ -488,7 +488,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Detuning</objectName>
   <x>448</x>
   <y>122</y>
@@ -517,7 +517,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>212</y>
@@ -546,7 +546,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>30DT</objectName>
   <x>8</x>
   <y>192</y>
@@ -564,7 +564,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>30DT</objectName>
   <x>448</x>
   <y>212</y>
@@ -593,7 +593,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>257</y>
@@ -622,7 +622,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>HFLoss</objectName>
   <x>8</x>
   <y>237</y>
@@ -640,7 +640,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>HFLoss</objectName>
   <x>448</x>
   <y>257</y>
@@ -669,7 +669,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>302</y>
@@ -698,7 +698,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>HammerMass</objectName>
   <x>8</x>
   <y>282</y>
@@ -716,7 +716,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>HammerMass</objectName>
   <x>448</x>
   <y>302</y>
@@ -745,7 +745,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>392</y>
@@ -774,7 +774,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>HammerInitPos</objectName>
   <x>8</x>
   <y>372</y>
@@ -792,7 +792,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>HammerInitPos</objectName>
   <x>448</x>
   <y>392</y>
@@ -821,7 +821,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>347</y>
@@ -850,7 +850,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>HammerFreq</objectName>
   <x>8</x>
   <y>327</y>
@@ -868,7 +868,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>HammerFreq_Value</objectName>
   <x>448</x>
   <y>347</y>
@@ -897,7 +897,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>437</y>
@@ -926,7 +926,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>HammerPosStr</objectName>
   <x>8</x>
   <y>417</y>
@@ -944,7 +944,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>HammerPosStr</objectName>
   <x>448</x>
   <y>437</y>
@@ -973,7 +973,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>482</y>
@@ -1002,7 +1002,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>StringVel</objectName>
   <x>8</x>
   <y>462</y>
@@ -1020,7 +1020,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>StringVel</objectName>
   <x>448</x>
   <y>482</y>
@@ -1049,7 +1049,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>527</y>
@@ -1078,7 +1078,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>ScanFreq</objectName>
   <x>8</x>
   <y>507</y>
@@ -1096,7 +1096,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ScanFreq</objectName>
   <x>448</x>
   <y>527</y>
@@ -1125,7 +1125,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>572</y>
@@ -1154,7 +1154,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>OutGain</objectName>
   <x>517</x>
   <y>552</y>
@@ -1172,7 +1172,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>OutGain</objectName>
   <x>957</x>
   <y>572</y>
@@ -1201,7 +1201,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>572</y>
@@ -1230,7 +1230,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>ScanFreqSpread</objectName>
   <x>8</x>
   <y>552</y>
@@ -1248,7 +1248,7 @@ Example written by Iain McCurdy.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ScanFreqSpread</objectName>
   <x>448</x>
   <y>572</y>
@@ -1277,7 +1277,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>115</y>
@@ -1306,7 +1306,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>613</x>
   <y>164</y>
@@ -1335,7 +1335,7 @@ Example written by Iain McCurdy.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>713</x>
   <y>164</y>
@@ -1366,7 +1366,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>posRat</objectName>
   <x>613</x>
   <y>136</y>
@@ -1395,7 +1395,7 @@ Ratio</label>
   <randomizable group="0">false</randomizable>
   <value>0.6</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>MDRRat</objectName>
   <x>713</x>
   <y>136</y>
@@ -1424,7 +1424,7 @@ Ratio</label>
   <randomizable group="0">false</randomizable>
   <value>0.1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>813</x>
   <y>164</y>
@@ -1453,7 +1453,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>FrqRat</objectName>
   <x>813</x>
   <y>136</y>
@@ -1482,7 +1482,7 @@ Ratio</label>
   <randomizable group="0">false</randomizable>
   <value>100</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>913</x>
   <y>164</y>
@@ -1511,7 +1511,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>LenRat</objectName>
   <x>913</x>
   <y>136</y>
@@ -1540,7 +1540,7 @@ Ratio</label>
   <randomizable group="0">false</randomizable>
   <value>0.1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>337</y>
@@ -1569,7 +1569,7 @@ Ratio</label>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>671</x>
   <y>358</y>
@@ -1598,7 +1598,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>858</x>
   <y>358</y>
@@ -1627,7 +1627,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>bcL</objectName>
   <x>712</x>
   <y>358</y>
@@ -1657,7 +1657,7 @@ Ratio</label>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>bcR</objectName>
   <x>899</x>
   <y>358</y>
@@ -1687,7 +1687,7 @@ Ratio</label>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>590</x>
   <y>60</y>
@@ -1716,7 +1716,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>NumbStr</objectName>
   <x>713</x>
   <y>56</y>
@@ -1745,7 +1745,7 @@ Ratio</label>
   <randomizable group="0">false</randomizable>
   <value>3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Rattle</objectName>
   <x>545</x>
   <y>151</y>
@@ -1764,7 +1764,7 @@ Ratio</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>166</y>
@@ -1793,7 +1793,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>225</y>
@@ -1822,7 +1822,7 @@ Ratio</label>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>613</x>
   <y>274</y>
@@ -1851,7 +1851,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>713</x>
   <y>274</y>
@@ -1882,7 +1882,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>posRub</objectName>
   <x>613</x>
   <y>246</y>
@@ -1911,7 +1911,7 @@ Ratio</label>
   <randomizable group="0">false</randomizable>
   <value>0.7</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>MDRRub</objectName>
   <x>713</x>
   <y>246</y>
@@ -1940,7 +1940,7 @@ Ratio</label>
   <randomizable group="0">false</randomizable>
   <value>0.1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>813</x>
   <y>274</y>
@@ -1969,7 +1969,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>FrqRub</objectName>
   <x>813</x>
   <y>246</y>
@@ -1998,7 +1998,7 @@ Ratio</label>
   <randomizable group="0">false</randomizable>
   <value>500</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>913</x>
   <y>274</y>
@@ -2027,7 +2027,7 @@ Ratio</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>LosRub</objectName>
   <x>913</x>
   <y>246</y>
@@ -2056,7 +2056,7 @@ Ratio</label>
   <randomizable group="0">false</randomizable>
   <value>0.1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Rubber</objectName>
   <x>545</x>
   <y>261</y>
@@ -2075,7 +2075,7 @@ Ratio</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>276</y>

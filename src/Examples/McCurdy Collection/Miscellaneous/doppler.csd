@@ -103,7 +103,7 @@ i 10 0 3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -132,7 +132,7 @@ i 10 0 3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>36</y>
@@ -162,7 +162,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -191,7 +191,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4271</objectName>
   <x>10</x>
   <y>10</y>
@@ -210,7 +210,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>125</y>
@@ -239,7 +239,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Microphone</objectName>
   <x>9</x>
   <y>102</y>
@@ -257,7 +257,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Microphone</objectName>
   <x>449</x>
   <y>125</y>
@@ -286,7 +286,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>72</y>
@@ -315,7 +315,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Source</objectName>
   <x>449</x>
   <y>72</y>
@@ -344,7 +344,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>231</y>
@@ -373,7 +373,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>FilterCutoff</objectName>
   <x>9</x>
   <y>208</y>
@@ -391,7 +391,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FilterCutoff</objectName>
   <x>449</x>
   <y>231</y>
@@ -420,7 +420,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>178</y>
@@ -449,7 +449,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>RoomSize</objectName>
   <x>9</x>
   <y>155</y>
@@ -467,7 +467,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>RoomSize_Value</objectName>
   <x>449</x>
   <y>178</y>
@@ -496,7 +496,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>284</y>
@@ -525,7 +525,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VCOPitch</objectName>
   <x>9</x>
   <y>261</y>
@@ -543,7 +543,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VCOPitch</objectName>
   <x>194</x>
   <y>284</y>
@@ -572,7 +572,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>388</y>
@@ -601,7 +601,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Depth</objectName>
   <x>9</x>
   <y>365</y>
@@ -619,7 +619,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Depth</objectName>
   <x>449</x>
   <y>388</y>
@@ -648,7 +648,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>335</y>
@@ -677,7 +677,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed</objectName>
   <x>9</x>
   <y>312</y>
@@ -695,7 +695,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed_Value</objectName>
   <x>449</x>
   <y>335</y>
@@ -724,7 +724,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>264</x>
   <y>284</y>
@@ -753,7 +753,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Siren</objectName>
   <x>264</x>
   <y>261</y>
@@ -771,7 +771,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Siren</objectName>
   <x>449</x>
   <y>284</y>
@@ -800,7 +800,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>437</y>
@@ -829,7 +829,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>AmpScaling</objectName>
   <x>9</x>
   <y>414</y>
@@ -847,7 +847,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>AmpScaling</objectName>
   <x>449</x>
   <y>437</y>
@@ -876,7 +876,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Source</objectName>
   <x>12</x>
   <y>53</y>
@@ -902,14 +902,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>120</x>
   <y>18</y>
@@ -935,7 +935,7 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>

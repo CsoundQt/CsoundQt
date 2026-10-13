@@ -85,7 +85,7 @@ i  3 0 3600
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -114,7 +114,7 @@ i  3 0 3600
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Slider2</objectName>
   <x>159</x>
   <y>62</y>
@@ -132,7 +132,7 @@ i  3 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Slider1</objectName>
   <x>159</x>
   <y>36</y>
@@ -150,7 +150,7 @@ i  3 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Slider3</objectName>
   <x>159</x>
   <y>88</y>
@@ -168,7 +168,7 @@ i  3 0 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>114</y>
@@ -198,7 +198,7 @@ ftsave and ftload allow the contents of function tables to be saved to and loade
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5204</objectName>
   <x>19</x>
   <y>63</y>
@@ -217,7 +217,7 @@ ftsave and ftload allow the contents of function tables to be saved to and loade
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7826</objectName>
   <x>86</x>
   <y>63</y>

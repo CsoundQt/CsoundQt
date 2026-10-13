@@ -148,7 +148,7 @@ i  2 0 3600				;REVERB INSTRUMENT PLAYS A NOTE FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>1</y>
@@ -177,7 +177,7 @@ i  2 0 3600				;REVERB INSTRUMENT PLAYS A NOTE FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>473</x>
   <y>77</y>
@@ -206,7 +206,7 @@ i  2 0 3600				;REVERB INSTRUMENT PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Phase_1</objectName>
   <x>8</x>
   <y>50</y>
@@ -224,7 +224,7 @@ i  2 0 3600				;REVERB INSTRUMENT PLAYS A NOTE FOR 1 HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Phase_1</objectName>
   <x>1036</x>
   <y>77</y>
@@ -253,7 +253,7 @@ i  2 0 3600				;REVERB INSTRUMENT PLAYS A NOTE FOR 1 HOUR
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>427</y>
@@ -284,7 +284,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>473</x>
   <y>134</y>
@@ -313,7 +313,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Phase_2</objectName>
   <x>8</x>
   <y>107</y>
@@ -331,7 +331,7 @@ The relationships between the two voices can be further explored through the ind
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Phase_2</objectName>
   <x>1036</x>
   <y>134</y>
@@ -360,7 +360,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>190</y>
@@ -389,7 +389,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain_1</objectName>
   <x>8</x>
   <y>163</y>
@@ -407,7 +407,7 @@ The relationships between the two voices can be further explored through the ind
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain_2</objectName>
   <x>1036</x>
   <y>190</y>
@@ -436,7 +436,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain_2</objectName>
   <x>556</x>
   <y>163</y>
@@ -454,7 +454,7 @@ The relationships between the two voices can be further explored through the ind
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain_1</objectName>
   <x>488</x>
   <y>190</y>
@@ -483,7 +483,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>556</x>
   <y>190</y>
@@ -512,7 +512,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>246</y>
@@ -541,7 +541,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Balance_1</objectName>
   <x>8</x>
   <y>219</y>
@@ -559,7 +559,7 @@ The relationships between the two voices can be further explored through the ind
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Balance_2</objectName>
   <x>1036</x>
   <y>246</y>
@@ -588,7 +588,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Balance_2</objectName>
   <x>556</x>
   <y>219</y>
@@ -606,7 +606,7 @@ The relationships between the two voices can be further explored through the ind
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Balance_1</objectName>
   <x>488</x>
   <y>246</y>
@@ -635,7 +635,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>556</x>
   <y>246</y>
@@ -664,7 +664,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8661</objectName>
   <x>11</x>
   <y>12</y>
@@ -683,7 +683,7 @@ The relationships between the two voices can be further explored through the ind
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>LinkTempi</objectName>
   <x>493</x>
   <y>290</y>
@@ -702,7 +702,7 @@ The relationships between the two voices can be further explored through the ind
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>AutoPhase_1</objectName>
   <x>434</x>
   <y>360</y>
@@ -721,7 +721,7 @@ The relationships between the two voices can be further explored through the ind
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>AutoPhase_2</objectName>
   <x>560</x>
   <y>360</y>
@@ -740,7 +740,7 @@ The relationships between the two voices can be further explored through the ind
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Tempo_1</objectName>
   <x>111</x>
   <y>290</y>
@@ -769,7 +769,7 @@ The relationships between the two voices can be further explored through the ind
   <randomizable group="0">false</randomizable>
   <value>120</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>28</x>
   <y>293</y>
@@ -798,7 +798,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Transpose_1</objectName>
   <x>261</x>
   <y>290</y>
@@ -827,7 +827,7 @@ The relationships between the two voices can be further explored through the ind
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>176</x>
   <y>287</y>
@@ -857,7 +857,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>FineTune_1</objectName>
   <x>411</x>
   <y>290</y>
@@ -886,7 +886,7 @@ The relationships between the two voices can be further explored through the ind
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>326</x>
   <y>287</y>
@@ -916,7 +916,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Tempo_2</objectName>
   <x>715</x>
   <y>290</y>
@@ -945,7 +945,7 @@ The relationships between the two voices can be further explored through the ind
   <randomizable group="0">false</randomizable>
   <value>120</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>632</x>
   <y>293</y>
@@ -974,7 +974,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Transpose_2</objectName>
   <x>865</x>
   <y>290</y>
@@ -1003,7 +1003,7 @@ The relationships between the two voices can be further explored through the ind
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>780</x>
   <y>287</y>
@@ -1033,7 +1033,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>FineTune_2</objectName>
   <x>1015</x>
   <y>290</y>
@@ -1062,7 +1062,7 @@ The relationships between the two voices can be further explored through the ind
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>930</x>
   <y>287</y>
@@ -1092,7 +1092,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>391</y>
@@ -1121,7 +1121,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Rate_1</objectName>
   <x>8</x>
   <y>360</y>
@@ -1139,7 +1139,7 @@ The relationships between the two voices can be further explored through the ind
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Rate_1</objectName>
   <x>368</x>
   <y>391</y>
@@ -1168,7 +1168,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>677</x>
   <y>388</y>
@@ -1197,7 +1197,7 @@ The relationships between the two voices can be further explored through the ind
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Rate_2</objectName>
   <x>677</x>
   <y>360</y>
@@ -1215,7 +1215,7 @@ The relationships between the two voices can be further explored through the ind
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Rate_2</objectName>
   <x>1037</x>
   <y>388</y>

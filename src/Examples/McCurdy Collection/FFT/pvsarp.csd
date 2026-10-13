@@ -114,7 +114,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -143,7 +143,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>2</y>
@@ -172,7 +172,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>20</y>
@@ -206,7 +206,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1324</objectName>
   <x>8</x>
   <y>8</y>
@@ -225,7 +225,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Depth</objectName>
   <x>450</x>
   <y>65</y>
@@ -254,7 +254,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Depth</objectName>
   <x>10</x>
   <y>48</y>
@@ -272,7 +272,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>65</y>
@@ -301,7 +301,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>106</y>
@@ -330,7 +330,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>10</x>
   <y>89</y>
@@ -348,7 +348,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>449</x>
   <y>106</y>
@@ -377,7 +377,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>147</y>
@@ -406,7 +406,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LFO_Depth</objectName>
   <x>10</x>
   <y>130</y>
@@ -424,7 +424,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LFO_Depth</objectName>
   <x>450</x>
   <y>147</y>
@@ -453,7 +453,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>188</y>
@@ -482,7 +482,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LFO_Offset</objectName>
   <x>10</x>
   <y>171</y>
@@ -500,7 +500,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LFO_Offset</objectName>
   <x>450</x>
   <y>188</y>
@@ -529,7 +529,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>LFO_Shape</objectName>
   <x>341</x>
   <y>273</y>
@@ -574,7 +574,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>260</x>
   <y>273</y>
@@ -603,7 +603,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LFO_Speed_Value</objectName>
   <x>450</x>
   <y>228</y>
@@ -632,7 +632,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LFO_Speed</objectName>
   <x>10</x>
   <y>211</y>
@@ -650,7 +650,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>228</y>
@@ -679,7 +679,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>290</y>
@@ -708,7 +708,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>180</x>
   <y>312</y>
@@ -735,7 +735,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>9</x>
   <y>311</y>
@@ -754,7 +754,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>340</y>

@@ -65,7 +65,7 @@ i 1 0 0.01	;SHORT SCORE EVENT - DURATION REQUIRED FOR OUTPUT FILE WILL BE DERIVE
   <g>46</g>
   <b>255</b>
  </bgcolor>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>slider1</objectName>
   <x>5</x>
   <y>5</y>

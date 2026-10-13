@@ -78,7 +78,7 @@ e
   <g>255</g>
   <b>255</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>57</x>
   <y>46</y>

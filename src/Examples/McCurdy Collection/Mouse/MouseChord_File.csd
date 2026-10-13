@@ -249,7 +249,7 @@ i 1000	0	   3600	;REVERB
   <g>255</g>
   <b>255</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>3</x>
   <y>10</y>
@@ -278,7 +278,7 @@ i 1000	0	   3600	;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>50</x>
   <y>105</y>
@@ -307,7 +307,7 @@ i 1000	0	   3600	;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Ton</objectName>
   <x>201</x>
   <y>15</y>
@@ -382,7 +382,7 @@ i 1000	0	   3600	;REVERB
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Key</objectName>
   <x>290</x>
   <y>15</y>
@@ -407,7 +407,7 @@ i 1000	0	   3600	;REVERB
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Octave</objectName>
   <x>438</x>
   <y>15</y>
@@ -436,7 +436,7 @@ i 1000	0	   3600	;REVERB
   <randomizable group="0">false</randomizable>
   <value>-1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>370</x>
   <y>19</y>
@@ -465,7 +465,7 @@ i 1000	0	   3600	;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>300</x>
   <y>105</y>
@@ -494,7 +494,7 @@ i 1000	0	   3600	;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>550</x>
   <y>105</y>
@@ -523,7 +523,7 @@ i 1000	0	   3600	;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>800</x>
   <y>105</y>
@@ -552,7 +552,7 @@ i 1000	0	   3600	;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>174</x>
   <y>386</y>
@@ -581,7 +581,7 @@ i 1000	0	   3600	;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>424</x>
   <y>386</y>
@@ -610,7 +610,7 @@ i 1000	0	   3600	;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>674</x>
   <y>386</y>
@@ -639,7 +639,7 @@ i 1000	0	   3600	;REVERB
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>530</x>
   <y>15</y>
@@ -658,7 +658,7 @@ i 1000	0	   3600	;REVERB
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>702</x>
   <y>16</y>

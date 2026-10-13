@@ -169,7 +169,7 @@ i 10 0 3600
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -198,7 +198,7 @@ i 10 0 3600
   <borderradius>10</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>On_Off</objectName>
   <x>15</x>
   <y>47</y>
@@ -217,7 +217,7 @@ i 10 0 3600
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Az</objectName>
   <x>356</x>
   <y>354</y>
@@ -246,7 +246,7 @@ i 10 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Elev</objectName>
   <x>90</x>
   <y>252</y>
@@ -275,7 +275,7 @@ i 10 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Az</objectName>
   <x>152</x>
   <y>47</y>
@@ -301,14 +301,14 @@ i 10 0 3600
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>15</x>
   <y>117</y>
@@ -333,7 +333,7 @@ i 10 0 3600
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Opcode</objectName>
   <x>15</x>
   <y>82</y>
@@ -368,7 +368,7 @@ i 10 0 3600
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>457</x>
   <y>2</y>
@@ -397,7 +397,7 @@ i 10 0 3600
   <borderradius>10</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>191</x>
   <y>354</y>
@@ -426,7 +426,7 @@ i 10 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>54</x>
   <y>206</y>
@@ -456,7 +456,7 @@ i 10 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>461</x>
   <y>21</y>
@@ -496,7 +496,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>392</y>
@@ -525,7 +525,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>10</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>124</x>
   <y>400</y>
@@ -554,7 +554,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>
   <x>185</x>
   <y>398</y>
@@ -579,7 +579,7 @@ Off and On the instrument after changing Audio file.</label>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Fade</objectName>
   <x>17</x>
   <y>434</y>
@@ -597,7 +597,7 @@ Off and On the instrument after changing Audio file.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Fade</objectName>
   <x>382</x>
   <y>451</y>
@@ -626,7 +626,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>17</x>
   <y>451</y>
@@ -655,7 +655,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>482</y>
@@ -684,7 +684,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>10</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>587</y>
@@ -713,7 +713,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>10</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>15</x>
   <y>524</y>
@@ -742,7 +742,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Overlap_value</objectName>
   <x>382</x>
   <y>524</y>
@@ -771,7 +771,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Overlap</objectName>
   <x>17</x>
   <y>507</y>
@@ -789,7 +789,7 @@ Off and On the instrument after changing Audio file.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>17</x>
   <y>560</y>
@@ -818,7 +818,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Radius</objectName>
   <x>382</x>
   <y>560</y>
@@ -847,7 +847,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Radius</objectName>
   <x>17</x>
   <y>543</y>
@@ -865,7 +865,7 @@ Off and On the instrument after changing Audio file.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>17</x>
   <y>628</y>
@@ -894,7 +894,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Radius_stat</objectName>
   <x>382</x>
   <y>628</y>
@@ -923,7 +923,7 @@ Off and On the instrument after changing Audio file.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Radius_stat</objectName>
   <x>17</x>
   <y>611</y>
@@ -941,7 +941,7 @@ Off and On the instrument after changing Audio file.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>479</x>
   <y>581</y>
@@ -960,7 +960,7 @@ Off and On the instrument after changing Audio file.</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>479</x>
   <y>615</y>

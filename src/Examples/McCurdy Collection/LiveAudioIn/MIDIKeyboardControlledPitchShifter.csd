@@ -138,7 +138,7 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -167,7 +167,7 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>2</y>
@@ -196,7 +196,7 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>521</x>
   <y>35</y>
@@ -233,7 +233,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>180</y>
@@ -262,7 +262,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Wet</objectName>
   <x>8</x>
   <y>163</y>
@@ -280,7 +280,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Wet</objectName>
   <x>448</x>
   <y>180</y>
@@ -309,7 +309,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>216</y>
@@ -338,7 +338,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack</objectName>
   <x>8</x>
   <y>199</y>
@@ -356,7 +356,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack_Value</objectName>
   <x>448</x>
   <y>216</y>
@@ -385,7 +385,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>252</y>
@@ -414,7 +414,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Release</objectName>
   <x>8</x>
   <y>235</y>
@@ -432,7 +432,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Release_Value</objectName>
   <x>448</x>
   <y>252</y>
@@ -461,7 +461,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>73</y>
@@ -490,7 +490,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Grain_Size</objectName>
   <x>8</x>
   <y>56</y>
@@ -508,7 +508,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Grain_Size</objectName>
   <x>448</x>
   <y>73</y>
@@ -537,7 +537,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>109</y>
@@ -566,7 +566,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback</objectName>
   <x>8</x>
   <y>92</y>
@@ -584,7 +584,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback</objectName>
   <x>448</x>
   <y>109</y>
@@ -613,7 +613,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>145</y>
@@ -642,7 +642,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Dry</objectName>
   <x>8</x>
   <y>128</y>
@@ -660,7 +660,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Dry</objectName>
   <x>448</x>
   <y>145</y>
@@ -689,7 +689,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>288</y>
@@ -718,7 +718,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>271</y>
@@ -736,7 +736,7 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>288</y>

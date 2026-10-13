@@ -103,7 +103,7 @@ i 100 0.1	0.01		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -132,7 +132,7 @@ i 100 0.1	0.01		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>78</y>
@@ -161,7 +161,7 @@ i 100 0.1	0.01		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>ClusterFreq</objectName>
   <x>8</x>
   <y>56</y>
@@ -179,7 +179,7 @@ i 100 0.1	0.01		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ClusterFreq</objectName>
   <x>448</x>
   <y>78</y>
@@ -208,7 +208,7 @@ i 100 0.1	0.01		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5574</objectName>
   <x>8</x>
   <y>20</y>
@@ -227,7 +227,7 @@ i 100 0.1	0.01		;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>106</x>
   <y>102</y>
@@ -256,7 +256,7 @@ i 100 0.1	0.01		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>2</y>
@@ -285,7 +285,7 @@ i 100 0.1	0.01		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>30</y>
@@ -318,7 +318,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>NbEvts</objectName>
   <x>268</x>
   <y>99</y>
@@ -347,7 +347,7 @@ The sounds themselves are simple sine waves.</label>
   <randomizable group="0">false</randomizable>
   <value>3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>OctMin</objectName>
   <x>8</x>
   <y>146</y>
@@ -373,14 +373,14 @@ The sounds themselves are simple sine waves.</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>OctMax</objectName>
   <x>8</x>
   <y>162</y>
@@ -406,14 +406,14 @@ The sounds themselves are simple sine waves.</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>173</y>
@@ -442,7 +442,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>OctMax</objectName>
   <x>448</x>
   <y>173</y>
@@ -471,7 +471,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>OctMin</objectName>
   <x>8</x>
   <y>173</y>
@@ -500,7 +500,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>218</y>
@@ -529,7 +529,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>EvtSprd</objectName>
   <x>8</x>
   <y>196</y>
@@ -547,7 +547,7 @@ The sounds themselves are simple sine waves.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DurMin</objectName>
   <x>8</x>
   <y>249</y>
@@ -573,14 +573,14 @@ The sounds themselves are simple sine waves.</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DurMax</objectName>
   <x>8</x>
   <y>265</y>
@@ -606,14 +606,14 @@ The sounds themselves are simple sine waves.</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>276</y>
@@ -642,7 +642,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DurMax</objectName>
   <x>448</x>
   <y>276</y>
@@ -671,7 +671,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>DurMin</objectName>
   <x>8</x>
   <y>276</y>
@@ -700,7 +700,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>321</y>
@@ -729,7 +729,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>PanSprd</objectName>
   <x>8</x>
   <y>299</y>
@@ -747,7 +747,7 @@ The sounds themselves are simple sine waves.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>GainMin</objectName>
   <x>8</x>
   <y>352</y>
@@ -773,14 +773,14 @@ The sounds themselves are simple sine waves.</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>GainMax</objectName>
   <x>8</x>
   <y>368</y>
@@ -806,14 +806,14 @@ The sounds themselves are simple sine waves.</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>379</y>
@@ -842,7 +842,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>GainMax</objectName>
   <x>448</x>
   <y>379</y>
@@ -871,7 +871,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>GainMin</objectName>
   <x>8</x>
   <y>379</y>
@@ -900,7 +900,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>424</y>
@@ -929,7 +929,7 @@ The sounds themselves are simple sine waves.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack</objectName>
   <x>8</x>
   <y>402</y>

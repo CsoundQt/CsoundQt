@@ -119,7 +119,7 @@ i 4		0		0.1		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1</x>
   <y>2</y>
@@ -148,7 +148,7 @@ i 4		0		0.1		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>76</y>
@@ -177,7 +177,7 @@ i 4		0		0.1		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pluck</objectName>
   <x>8</x>
   <y>54</y>
@@ -195,7 +195,7 @@ i 4		0		0.1		;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pluck</objectName>
   <x>448</x>
   <y>76</y>
@@ -224,7 +224,7 @@ i 4		0		0.1		;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -253,7 +253,7 @@ i 4		0		0.1		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>22</y>
@@ -283,7 +283,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7548</objectName>
   <x>8</x>
   <y>16</y>
@@ -302,7 +302,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>121</y>
@@ -331,7 +331,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pick</objectName>
   <x>8</x>
   <y>99</y>
@@ -349,7 +349,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pick</objectName>
   <x>448</x>
   <y>121</y>
@@ -378,7 +378,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>166</y>
@@ -407,7 +407,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Refl</objectName>
   <x>8</x>
   <y>144</y>
@@ -425,7 +425,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Refl</objectName>
   <x>448</x>
   <y>166</y>
@@ -454,7 +454,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>211</y>
@@ -483,7 +483,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pitch</objectName>
   <x>8</x>
   <y>189</y>
@@ -501,7 +501,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pitch_Value</objectName>
   <x>448</x>
   <y>211</y>
@@ -530,7 +530,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>256</y>
@@ -559,7 +559,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>8</x>
   <y>234</y>
@@ -577,7 +577,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain_Value</objectName>
   <x>448</x>
   <y>256</y>

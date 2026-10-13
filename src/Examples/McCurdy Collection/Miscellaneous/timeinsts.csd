@@ -41,7 +41,7 @@ f 0 3600
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -70,7 +70,7 @@ f 0 3600
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>80</y>
@@ -100,7 +100,7 @@ The timeinsts opcode outputs the time elapsed since the beginning of the note ev
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6530</objectName>
   <x>15</x>
   <y>43</y>
@@ -119,7 +119,7 @@ The timeinsts opcode outputs the time elapsed since the beginning of the note ev
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>144</x>
   <y>45</y>
@@ -148,7 +148,7 @@ The timeinsts opcode outputs the time elapsed since the beginning of the note ev
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>CLOCK</objectName>
   <x>228</x>
   <y>45</y>

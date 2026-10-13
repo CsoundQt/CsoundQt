@@ -52,7 +52,7 @@ this will not become compiled :-), so I don't need the comment sign
   <g>158</g>
   <b>162</b>
  </bgcolor>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName/>
   <x>51</x>
   <y>30</y>

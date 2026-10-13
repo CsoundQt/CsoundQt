@@ -110,7 +110,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -139,7 +139,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>2</y>
@@ -168,7 +168,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>524</x>
   <y>20</y>
@@ -199,7 +199,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4006</objectName>
   <x>8</x>
   <y>8</y>
@@ -218,7 +218,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Keepform</objectName>
   <x>270</x>
   <y>239</y>
@@ -248,7 +248,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>239</y>
@@ -277,7 +277,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Shift</objectName>
   <x>450</x>
   <y>71</y>
@@ -306,7 +306,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency_Shift</objectName>
   <x>10</x>
   <y>54</y>
@@ -324,7 +324,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>71</y>
@@ -353,7 +353,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain_Rescale</objectName>
   <x>450</x>
   <y>112</y>
@@ -382,7 +382,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain_Rescale</objectName>
   <x>10</x>
   <y>95</y>
@@ -400,7 +400,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>112</y>
@@ -429,7 +429,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>74</x>
   <y>239</y>
@@ -459,7 +459,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>209</x>
   <y>239</y>
@@ -488,7 +488,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>419</y>
@@ -517,7 +517,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>169</x>
   <y>425</y>
@@ -546,7 +546,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>FFTattributes</objectName>
   <x>169</x>
   <y>447</y>
@@ -581,7 +581,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>193</y>
@@ -610,7 +610,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>10</x>
   <y>176</y>
@@ -628,7 +628,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Gain</objectName>
   <x>450</x>
   <y>193</y>
@@ -657,7 +657,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>152</y>
@@ -686,7 +686,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Lowest_Frequency</objectName>
   <x>10</x>
   <y>135</y>
@@ -704,7 +704,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Lowest_Frequency_Value</objectName>
   <x>449</x>
   <y>152</y>
@@ -733,7 +733,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>10</x>
   <y>301</y>
@@ -752,7 +752,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>182</x>
   <y>301</y>
@@ -779,7 +779,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>281</y>
@@ -808,7 +808,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>338</y>
@@ -837,7 +837,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>182</x>
   <y>358</y>
@@ -864,7 +864,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>10</x>
   <y>358</y>
@@ -883,7 +883,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>182</x>
   <y>328</y>
@@ -912,7 +912,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>182</x>
   <y>387</y>

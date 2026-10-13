@@ -59,7 +59,7 @@ i  1 0 3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -88,7 +88,7 @@ i  1 0 3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>21</y>
@@ -122,7 +122,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -151,7 +151,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>125</y>
@@ -180,7 +180,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Minimum</objectName>
   <x>449</x>
   <y>125</y>
@@ -209,7 +209,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>72</y>
@@ -238,7 +238,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Input</objectName>
   <x>9</x>
   <y>49</y>
@@ -256,7 +256,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Input</objectName>
   <x>449</x>
   <y>72</y>
@@ -285,7 +285,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>231</y>
@@ -314,7 +314,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output</objectName>
   <x>449</x>
   <y>231</y>
@@ -343,7 +343,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>178</y>
@@ -372,7 +372,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Maximum</objectName>
   <x>449</x>
   <y>178</y>
@@ -401,7 +401,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>
   <x>252</x>
   <y>256</y>
@@ -431,7 +431,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Minimum</objectName>
   <x>9</x>
   <y>102</y>
@@ -457,14 +457,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Maximum</objectName>
   <x>9</x>
   <y>154</y>
@@ -490,14 +490,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Output</objectName>
   <x>9</x>
   <y>206</y>
@@ -523,7 +523,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>

@@ -118,7 +118,7 @@ i 2	     0.1		 0		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -147,7 +147,7 @@ i 2	     0.1		 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>2</y>
@@ -176,7 +176,7 @@ i 2	     0.1		 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>521</x>
   <y>21</y>
@@ -220,7 +220,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>94</y>
@@ -249,7 +249,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>71</y>
@@ -267,7 +267,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>94</y>
@@ -296,7 +296,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Control_1</objectName>
   <x>448</x>
   <y>137</y>
@@ -325,7 +325,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Control_1</objectName>
   <x>8</x>
   <y>114</y>
@@ -343,7 +343,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>137</y>
@@ -372,7 +372,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>266</y>
@@ -401,7 +401,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Vibrato_Rate</objectName>
   <x>8</x>
   <y>243</y>
@@ -419,7 +419,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Vibrato_Rate</objectName>
   <x>448</x>
   <y>266</y>
@@ -448,7 +448,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Preset</objectName>
   <x>182</x>
   <y>328</y>
@@ -498,7 +498,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>223</y>
@@ -527,7 +527,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Vibrato_Depth</objectName>
   <x>8</x>
   <y>200</y>
@@ -545,7 +545,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Vibrato_Depth</objectName>
   <x>448</x>
   <y>223</y>
@@ -574,7 +574,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Control_2</objectName>
   <x>448</x>
   <y>180</y>
@@ -603,7 +603,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Control_2</objectName>
   <x>8</x>
   <y>157</y>
@@ -621,7 +621,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>180</y>
@@ -650,7 +650,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>117</x>
   <y>328</y>

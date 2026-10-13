@@ -103,7 +103,7 @@ i 3 1 0		;init
   <g>57</g>
   <b>0</b>
  </bgcolor>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Index1_Attack</objectName>
   <x>9</x>
   <y>80</y>
@@ -133,7 +133,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>135</y>
@@ -164,7 +164,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>69</x>
   <y>135</y>
@@ -195,7 +195,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Index1_Decay</objectName>
   <x>69</x>
   <y>80</y>
@@ -225,7 +225,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>129</x>
   <y>135</y>
@@ -256,7 +256,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Index1_Sustain</objectName>
   <x>129</x>
   <y>80</y>
@@ -286,7 +286,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>189</x>
   <y>135</y>
@@ -317,7 +317,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Index1_Release</objectName>
   <x>189</x>
   <y>80</y>
@@ -347,7 +347,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>55</x>
   <y>50</y>
@@ -378,7 +378,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>162</x>
   <y>2</y>
@@ -409,7 +409,7 @@ i 3 1 0		;init
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>307</x>
   <y>50</y>
@@ -440,7 +440,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Index2_Release</objectName>
   <x>441</x>
   <y>80</y>
@@ -470,7 +470,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>441</x>
   <y>135</y>
@@ -501,7 +501,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Index2_Sustain</objectName>
   <x>381</x>
   <y>80</y>
@@ -531,7 +531,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>381</x>
   <y>135</y>
@@ -562,7 +562,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Index2_Decay</objectName>
   <x>321</x>
   <y>80</y>
@@ -592,7 +592,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>321</x>
   <y>135</y>
@@ -623,7 +623,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>261</x>
   <y>135</y>
@@ -654,7 +654,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Index2_Attack</objectName>
   <x>261</x>
   <y>156</y>
@@ -685,7 +685,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Index2_Attack</objectName>
   <x>261</x>
   <y>80</y>
@@ -715,7 +715,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>560</x>
   <y>50</y>
@@ -746,7 +746,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Amp_Release</objectName>
   <x>694</x>
   <y>80</y>
@@ -776,7 +776,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>694</x>
   <y>135</y>
@@ -807,7 +807,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Amp_Sustain</objectName>
   <x>634</x>
   <y>80</y>
@@ -837,7 +837,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>634</x>
   <y>135</y>
@@ -868,7 +868,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Amp_Decay</objectName>
   <x>574</x>
   <y>80</y>
@@ -898,7 +898,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>574</x>
   <y>135</y>
@@ -929,7 +929,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>135</y>
@@ -960,7 +960,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp_Attack</objectName>
   <x>514</x>
   <y>156</y>
@@ -991,7 +991,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Amp_Attack</objectName>
   <x>514</x>
   <y>80</y>
@@ -1021,7 +1021,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>261</x>
   <y>74</y>
@@ -1052,7 +1052,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>514</x>
   <y>74</y>
@@ -1083,7 +1083,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>74</y>
@@ -1114,7 +1114,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Filter_Cutoff</objectName>
   <x>381</x>
   <y>187</y>
@@ -1144,7 +1144,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>376</x>
   <y>242</y>
@@ -1175,7 +1175,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>438</x>
   <y>242</y>
@@ -1206,7 +1206,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Filter_Reso</objectName>
   <x>441</x>
   <y>187</y>
@@ -1236,7 +1236,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>513</x>
   <y>242</y>
@@ -1267,7 +1267,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Pan</objectName>
   <x>515</x>
   <y>187</y>
@@ -1297,7 +1297,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>574</x>
   <y>242</y>
@@ -1328,7 +1328,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Chorus</objectName>
   <x>575</x>
   <y>187</y>
@@ -1358,7 +1358,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Mod_ratio1</objectName>
   <x>80</x>
   <y>208</y>
@@ -1388,7 +1388,7 @@ i 3 1 0		;init
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>210</y>
@@ -1419,7 +1419,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>246</y>
@@ -1450,7 +1450,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Mod_index1</objectName>
   <x>80</x>
   <y>244</y>
@@ -1480,7 +1480,7 @@ i 3 1 0		;init
   <randomizable group="0">false</randomizable>
   <value>3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Mod_index2</objectName>
   <x>255</x>
   <y>245</y>
@@ -1510,7 +1510,7 @@ i 3 1 0		;init
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>175</x>
   <y>246</y>
@@ -1541,7 +1541,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>175</x>
   <y>210</y>
@@ -1572,7 +1572,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Mod_ratio2</objectName>
   <x>255</x>
   <y>209</y>
@@ -1602,7 +1602,7 @@ i 3 1 0		;init
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Volume</objectName>
   <x>693</x>
   <y>187</y>
@@ -1632,7 +1632,7 @@ i 3 1 0		;init
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>691</x>
   <y>242</y>
@@ -1663,7 +1663,7 @@ i 3 1 0		;init
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>6</x>
   <y>295</y>

@@ -153,7 +153,7 @@ i  3		0 		3600			;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERF
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -182,7 +182,7 @@ i  3		0 		3600			;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERF
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>2</y>
@@ -211,7 +211,7 @@ i  3		0 		3600			;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERF
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>33</y>
@@ -250,7 +250,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>32</y>
@@ -279,7 +279,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>65</x>
   <y>32</y>
@@ -309,7 +309,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>178</y>
@@ -338,7 +338,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>217</y>
@@ -367,7 +367,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>CPS</objectName>
   <x>10</x>
   <y>200</y>
@@ -385,7 +385,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>CPS_Value</objectName>
   <x>450</x>
   <y>217</y>
@@ -414,7 +414,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>302</x>
   <y>264</y>
@@ -443,7 +443,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Wave</objectName>
   <x>373</x>
   <y>264</y>
@@ -483,7 +483,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4790</objectName>
   <x>25</x>
   <y>264</y>
@@ -502,7 +502,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>322</y>
@@ -531,7 +531,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Pointer</objectName>
   <x>10</x>
   <y>362</y>
@@ -557,14 +557,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pointer</objectName>
   <x>450</x>
   <y>378</y>
@@ -593,7 +593,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>378</y>
@@ -622,7 +622,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed</objectName>
   <x>450</x>
   <y>426</y>
@@ -651,7 +651,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed</objectName>
   <x>10</x>
   <y>409</y>
@@ -669,7 +669,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>426</y>
@@ -698,7 +698,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6102</objectName>
   <x>250</x>
   <y>439</y>
@@ -717,7 +717,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>466</y>
@@ -746,7 +746,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Gate</objectName>
   <x>250</x>
   <y>473</y>
@@ -765,7 +765,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Cross_Synthesis_Amplitude</objectName>
   <x>450</x>
   <y>559</y>
@@ -794,7 +794,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Cross_Synthesis_Amplitude</objectName>
   <x>10</x>
   <y>542</y>
@@ -812,7 +812,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>559</y>
@@ -841,7 +841,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Excitation_Signal_Amplitude</objectName>
   <x>450</x>
   <y>518</y>
@@ -870,7 +870,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Excitation_Signal_Amplitude</objectName>
   <x>10</x>
   <y>501</y>
@@ -888,7 +888,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>518</y>
@@ -917,7 +917,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>6</x>
   <y>88</y>
@@ -936,7 +936,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>69</y>
@@ -965,7 +965,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>177</x>
   <y>89</y>
@@ -992,7 +992,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>177</x>
   <y>141</y>
@@ -1019,7 +1019,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>121</y>
@@ -1048,7 +1048,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>6</x>
   <y>140</y>
@@ -1067,7 +1067,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>177</x>
   <y>66</y>

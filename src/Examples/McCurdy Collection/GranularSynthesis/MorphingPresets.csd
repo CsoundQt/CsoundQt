@@ -226,7 +226,7 @@ i 21		1		0.1
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -255,7 +255,7 @@ i 21		1		0.1
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9092</objectName>
   <x>8</x>
   <y>8</y>
@@ -274,7 +274,7 @@ i 21		1		0.1
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>148</y>
@@ -303,7 +303,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pitch</objectName>
   <x>8</x>
   <y>125</y>
@@ -321,7 +321,7 @@ i 21		1		0.1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pitch_Value</objectName>
   <x>298</x>
   <y>148</y>
@@ -350,7 +350,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>578</x>
   <y>49</y>
@@ -379,7 +379,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>702</x>
   <y>49</y>
@@ -408,7 +408,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>370</x>
   <y>110</y>
@@ -427,7 +427,7 @@ i 21		1		0.1
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>540</x>
   <y>111</y>
@@ -454,7 +454,7 @@ i 21		1		0.1
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>370</x>
   <y>89</y>
@@ -483,7 +483,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>106</y>
@@ -512,7 +512,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Grain_Duration</objectName>
   <x>8</x>
   <y>83</y>
@@ -530,7 +530,7 @@ i 21		1		0.1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Grain_Duration</objectName>
   <x>298</x>
   <y>106</y>
@@ -559,7 +559,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>190</y>
@@ -588,7 +588,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pitch_Offset</objectName>
   <x>8</x>
   <y>167</y>
@@ -606,7 +606,7 @@ i 21		1		0.1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pitch_Offset</objectName>
   <x>298</x>
   <y>190</y>
@@ -635,7 +635,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>64</y>
@@ -664,7 +664,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>41</y>
@@ -682,7 +682,7 @@ i 21		1		0.1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>298</x>
   <y>64</y>
@@ -711,7 +711,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>316</y>
@@ -740,7 +740,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Grain_Phase_Rnd_Offset</objectName>
   <x>8</x>
   <y>293</y>
@@ -758,7 +758,7 @@ i 21		1		0.1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Grain_Phase_Rnd_Offset</objectName>
   <x>298</x>
   <y>316</y>
@@ -787,7 +787,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>274</y>
@@ -816,7 +816,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Grain_Phase</objectName>
   <x>8</x>
   <y>251</y>
@@ -834,7 +834,7 @@ i 21		1		0.1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Grain_Phase</objectName>
   <x>298</x>
   <y>274</y>
@@ -863,7 +863,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>358</y>
@@ -892,7 +892,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Dist_Rnd_Freq_Var</objectName>
   <x>8</x>
   <y>335</y>
@@ -910,7 +910,7 @@ i 21		1		0.1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Dist_Rnd_Freq_Var</objectName>
   <x>298</x>
   <y>358</y>
@@ -939,7 +939,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>232</y>
@@ -968,7 +968,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Density</objectName>
   <x>8</x>
   <y>209</y>
@@ -986,7 +986,7 @@ i 21		1		0.1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Density</objectName>
   <x>298</x>
   <y>232</y>
@@ -1015,7 +1015,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>370</x>
   <y>357</y>
@@ -1044,7 +1044,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Dist_Rnd_Phase_Var</objectName>
   <x>370</x>
   <y>334</y>
@@ -1062,7 +1062,7 @@ i 21		1		0.1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Dist_Rnd_Phase_Var</objectName>
   <x>660</x>
   <y>357</y>
@@ -1091,7 +1091,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>370</x>
   <y>316</y>
@@ -1120,7 +1120,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Density_Rnd_Amount</objectName>
   <x>370</x>
   <y>293</y>
@@ -1138,7 +1138,7 @@ i 21		1		0.1
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Density_Rnd_Amount</objectName>
   <x>660</x>
   <y>316</y>
@@ -1167,7 +1167,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>SyncCPS</objectName>
   <x>504</x>
   <y>158</y>
@@ -1186,7 +1186,7 @@ i 21		1		0.1
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>IntegerLoc</objectName>
   <x>642</x>
   <y>158</y>
@@ -1205,7 +1205,7 @@ i 21		1		0.1
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>535</x>
   <y>149</y>
@@ -1234,7 +1234,7 @@ i 21		1		0.1
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>376</x>
   <y>149</y>
@@ -1264,7 +1264,7 @@ to CPS</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Interp</objectName>
   <x>504</x>
   <y>189</y>
@@ -1283,7 +1283,7 @@ to CPS</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>NoInterp</objectName>
   <x>642</x>
   <y>189</y>
@@ -1302,7 +1302,7 @@ to CPS</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>534</x>
   <y>180</y>
@@ -1332,7 +1332,7 @@ Waveform</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>382</x>
   <y>184</y>
@@ -1361,7 +1361,7 @@ Waveform</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>SkipInit</objectName>
   <x>504</x>
   <y>220</y>
@@ -1380,7 +1380,7 @@ Waveform</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>382</x>
   <y>216</y>
@@ -1409,7 +1409,7 @@ Waveform</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>LessZero</objectName>
   <x>780</x>
   <y>158</y>
@@ -1428,7 +1428,7 @@ Waveform</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>660</x>
   <y>149</y>
@@ -1458,7 +1458,7 @@ at Negative Phase</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>FreqCont</objectName>
   <x>780</x>
   <y>189</y>
@@ -1477,7 +1477,7 @@ at Negative Phase</label>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>660</x>
   <y>180</y>
@@ -1507,7 +1507,7 @@ Modification</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>719</x>
   <y>302</y>
@@ -1536,7 +1536,7 @@ Modification</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Maximum_Overlaps</objectName>
   <x>743</x>
   <y>324</y>
@@ -1565,7 +1565,7 @@ Modification</label>
   <randomizable group="0">false</randomizable>
   <value>600</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Grain_Envelope</objectName>
   <x>492</x>
   <y>252</y>
@@ -1610,7 +1610,7 @@ Modification</label>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>354</x>
   <y>254</y>
@@ -1639,7 +1639,7 @@ Modification</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Seed_Value_L</objectName>
   <x>578</x>
   <y>69</y>
@@ -1668,7 +1668,7 @@ Modification</label>
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Seed_Value_R</objectName>
   <x>702</x>
   <y>69</y>
@@ -1697,7 +1697,7 @@ Modification</label>
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Morph_X</objectName>
   <x>837</x>
   <y>72</y>
@@ -1723,14 +1723,14 @@ Modification</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b3192</objectName>
   <x>840</x>
   <y>50</y>
@@ -1749,7 +1749,7 @@ Modification</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1613</objectName>
   <x>1098</x>
   <y>50</y>
@@ -1768,7 +1768,7 @@ Modification</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b6977</objectName>
   <x>840</x>
   <y>358</y>
@@ -1787,7 +1787,7 @@ Modification</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4149</objectName>
   <x>1098</x>
   <y>358</y>
@@ -1806,7 +1806,7 @@ Modification</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8915</objectName>
   <x>904</x>
   <y>49</y>
@@ -1825,7 +1825,7 @@ Modification</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8762</objectName>
   <x>979</x>
   <y>49</y>

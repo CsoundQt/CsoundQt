@@ -145,7 +145,7 @@ i 11		0.0     0.01	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>2</y>
@@ -174,7 +174,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>270</y>
@@ -203,7 +203,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PW</objectName>
   <x>448</x>
   <y>270</y>
@@ -232,7 +232,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>PW</objectName>
   <x>8</x>
   <y>254</y>
@@ -250,7 +250,7 @@ i 11		0.0     0.01	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>308</y>
@@ -279,7 +279,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>InitPhase</objectName>
   <x>448</x>
   <y>308</y>
@@ -308,7 +308,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>InitPhase</objectName>
   <x>8</x>
   <y>292</y>
@@ -326,7 +326,7 @@ i 11		0.0     0.01	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>347</y>
@@ -355,7 +355,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PhaseDepth</objectName>
   <x>448</x>
   <y>347</y>
@@ -384,7 +384,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>PhaseDepth</objectName>
   <x>8</x>
   <y>331</y>
@@ -402,7 +402,7 @@ i 11		0.0     0.01	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Waveform</objectName>
   <x>226</x>
   <y>68</y>
@@ -457,7 +457,7 @@ i 11		0.0     0.01	;INIT
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b4902</objectName>
   <x>10</x>
   <y>16</y>
@@ -476,7 +476,7 @@ i 11		0.0     0.01	;INIT
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>146</x>
   <y>68</y>
@@ -505,7 +505,7 @@ i 11		0.0     0.01	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -535,7 +535,7 @@ vco2 </label>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>47</y>
@@ -570,7 +570,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Phase</objectName>
   <x>10</x>
   <y>68</y>
@@ -589,7 +589,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>155</y>
@@ -618,7 +618,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
   <y>155</y>
@@ -647,7 +647,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
   <y>139</y>
@@ -665,7 +665,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>193</y>
@@ -694,7 +694,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Value</objectName>
   <x>448</x>
   <y>193</y>
@@ -723,7 +723,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency</objectName>
   <x>8</x>
   <y>177</y>
@@ -741,7 +741,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>232</y>
@@ -770,7 +770,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Harmonics</objectName>
   <x>448</x>
   <y>232</y>
@@ -799,7 +799,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Harmonics</objectName>
   <x>8</x>
   <y>216</y>
@@ -817,7 +817,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>385</y>
@@ -846,7 +846,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PhaseRate</objectName>
   <x>448</x>
   <y>385</y>
@@ -875,7 +875,7 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>PhaseRate</objectName>
   <x>8</x>
   <y>369</y>

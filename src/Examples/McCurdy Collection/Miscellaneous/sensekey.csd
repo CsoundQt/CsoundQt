@@ -71,7 +71,7 @@ i 1 0 3600	;SENSES KEYBOARD ACTIVITY INSTRUMENT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -100,7 +100,7 @@ i 1 0 3600	;SENSES KEYBOARD ACTIVITY INSTRUMENT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>105</y>
@@ -134,7 +134,7 @@ sensekey is case sensitive.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>34</y>
@@ -163,7 +163,7 @@ sensekey is case sensitive.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>data</objectName>
   <x>8</x>
   <y>64</y>

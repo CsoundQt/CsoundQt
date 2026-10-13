@@ -105,7 +105,7 @@ i 3		0		0.1	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -134,7 +134,7 @@ i 3		0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>111</y>
@@ -163,7 +163,7 @@ i 3		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amp</objectName>
   <x>8</x>
   <y>90</y>
@@ -181,7 +181,7 @@ i 3		0		0.1	;INIT
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp</objectName>
   <x>448</x>
   <y>111</y>
@@ -210,7 +210,7 @@ i 3		0		0.1	;INIT
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>515</x>
   <y>2</y>
@@ -239,7 +239,7 @@ i 3		0		0.1	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>25</y>
@@ -269,7 +269,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b123</objectName>
   <x>8</x>
   <y>15</y>
@@ -288,7 +288,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>157</y>
@@ -317,7 +317,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Freq</objectName>
   <x>8</x>
   <y>136</y>
@@ -335,7 +335,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Freq_Value</objectName>
   <x>448</x>
   <y>157</y>
@@ -364,7 +364,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>203</y>
@@ -393,7 +393,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>FiltReso</objectName>
   <x>8</x>
   <y>182</y>
@@ -411,7 +411,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FiltReso</objectName>
   <x>448</x>
   <y>203</y>
@@ -440,7 +440,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>249</y>
@@ -469,7 +469,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>FiltRate</objectName>
   <x>8</x>
   <y>228</y>
@@ -487,7 +487,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>FiltRate</objectName>
   <x>448</x>
   <y>249</y>
@@ -516,7 +516,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>295</y>
@@ -545,7 +545,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VibFreq</objectName>
   <x>8</x>
   <y>274</y>
@@ -563,7 +563,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibFreq</objectName>
   <x>448</x>
   <y>295</y>
@@ -592,7 +592,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>341</y>
@@ -621,7 +621,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>VibAmp</objectName>
   <x>8</x>
   <y>320</y>
@@ -639,7 +639,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>VibAmp</objectName>
   <x>448</x>
   <y>341</y>
@@ -668,7 +668,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Waveform</objectName>
   <x>262</x>
   <y>49</y>
@@ -693,7 +693,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>162</x>
   <y>53</y>

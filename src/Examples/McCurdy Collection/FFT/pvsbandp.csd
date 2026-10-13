@@ -125,7 +125,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -154,7 +154,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>2</y>
@@ -183,7 +183,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>19</y>
@@ -217,7 +217,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7205</objectName>
   <x>8</x>
   <y>8</y>
@@ -236,7 +236,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>191</x>
   <y>280</y>
@@ -265,7 +265,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>252</x>
   <y>280</y>
@@ -290,7 +290,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>373</y>
@@ -319,7 +319,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>169</x>
   <y>379</y>
@@ -348,7 +348,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>FFTattributes</objectName>
   <x>169</x>
   <y>399</y>
@@ -383,7 +383,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Low_Cut_Value</objectName>
   <x>450</x>
   <y>73</y>
@@ -412,7 +412,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Low_Cut</objectName>
   <x>10</x>
   <y>56</y>
@@ -430,7 +430,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>75</y>
@@ -459,7 +459,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>116</y>
@@ -488,7 +488,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Low_Full</objectName>
   <x>10</x>
   <y>97</y>
@@ -506,7 +506,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Low_Full_Value</objectName>
   <x>450</x>
   <y>114</y>
@@ -535,7 +535,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>157</y>
@@ -564,7 +564,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>High_Cut</objectName>
   <x>10</x>
   <y>138</y>
@@ -582,7 +582,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>High_Cut_Value</objectName>
   <x>450</x>
   <y>155</y>
@@ -611,7 +611,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>198</y>
@@ -640,7 +640,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>High_Full</objectName>
   <x>10</x>
   <y>179</y>
@@ -658,7 +658,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>High_Full_Value</objectName>
   <x>451</x>
   <y>196</y>
@@ -687,7 +687,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>10</x>
   <y>320</y>
@@ -706,7 +706,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>301</y>
@@ -735,7 +735,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>181</x>
   <y>321</y>
@@ -762,7 +762,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Curve_Type</objectName>
   <x>451</x>
   <y>237</y>
@@ -791,7 +791,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Curve_Type</objectName>
   <x>10</x>
   <y>220</y>
@@ -809,7 +809,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>239</y>
@@ -838,7 +838,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>181</x>
   <y>349</y>

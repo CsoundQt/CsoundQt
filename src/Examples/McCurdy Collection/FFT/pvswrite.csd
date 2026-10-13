@@ -109,7 +109,7 @@ i 11		0		0	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -138,7 +138,7 @@ i 11		0		0	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>2</y>
@@ -167,7 +167,7 @@ i 11		0		0	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>21</y>
@@ -198,7 +198,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Write</objectName>
   <x>8</x>
   <y>55</y>
@@ -217,7 +217,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pointer</objectName>
   <x>448</x>
   <y>133</y>
@@ -246,7 +246,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pointer</objectName>
   <x>8</x>
   <y>111</y>
@@ -264,7 +264,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>133</y>
@@ -293,7 +293,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed</objectName>
   <x>448</x>
   <y>181</y>
@@ -322,7 +322,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed</objectName>
   <x>8</x>
   <y>159</y>
@@ -340,7 +340,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>181</y>
@@ -369,7 +369,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Transpose_Value</objectName>
   <x>448</x>
   <y>229</y>
@@ -398,7 +398,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Transpose</objectName>
   <x>8</x>
   <y>207</y>
@@ -416,7 +416,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>229</y>
@@ -445,7 +445,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>448</x>
   <y>277</y>
@@ -474,7 +474,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>8</x>
   <y>255</y>
@@ -492,7 +492,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>277</y>
@@ -521,7 +521,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Read</objectName>
   <x>90</x>
   <y>55</y>
@@ -540,7 +540,7 @@ one in which a pointer through the file is controlled manually and another in wh
   <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>
   <x>240</x>
   <y>55</y>

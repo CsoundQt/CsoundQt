@@ -291,7 +291,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>30</r>
    <g>30</g>

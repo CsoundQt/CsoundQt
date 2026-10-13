@@ -369,7 +369,7 @@ i99 0 999999999
   <g>153</g>
   <b>179</b>
  </bgcolor>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m0</objectName>
   <x>131</x>
   <y>102</y>
@@ -384,7 +384,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m1</objectName>
   <x>154</x>
   <y>102</y>
@@ -399,7 +399,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m2</objectName>
   <x>178</x>
   <y>102</y>
@@ -414,7 +414,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m3</objectName>
   <x>201</x>
   <y>102</y>
@@ -429,7 +429,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m4</objectName>
   <x>131</x>
   <y>125</y>
@@ -444,7 +444,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m5</objectName>
   <x>154</x>
   <y>125</y>
@@ -459,7 +459,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m6</objectName>
   <x>178</x>
   <y>125</y>
@@ -474,7 +474,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m7</objectName>
   <x>201</x>
   <y>125</y>
@@ -489,7 +489,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m8</objectName>
   <x>131</x>
   <y>147</y>
@@ -504,7 +504,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m9</objectName>
   <x>154</x>
   <y>147</y>
@@ -519,7 +519,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m10</objectName>
   <x>178</x>
   <y>147</y>
@@ -534,7 +534,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m11</objectName>
   <x>201</x>
   <y>147</y>
@@ -549,7 +549,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m12</objectName>
   <x>131</x>
   <y>169</y>
@@ -564,7 +564,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m13</objectName>
   <x>154</x>
   <y>169</y>
@@ -579,7 +579,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m14</objectName>
   <x>178</x>
   <y>169</y>
@@ -594,7 +594,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>m15</objectName>
   <x>201</x>
   <y>169</y>
@@ -609,7 +609,7 @@ i99 0 999999999
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>sine_freq</objectName>
   <x>10</x>
   <y>103</y>
@@ -627,7 +627,7 @@ i99 0 999999999
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>saw_freq</objectName>
   <x>10</x>
   <y>127</y>
@@ -645,7 +645,7 @@ i99 0 999999999
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>lfo_hz</objectName>
   <x>12</x>
   <y>169</y>
@@ -663,7 +663,7 @@ i99 0 999999999
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>228</x>
   <y>99</y>
@@ -692,7 +692,7 @@ i99 0 999999999
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>228</x>
   <y>124</y>
@@ -721,7 +721,7 @@ i99 0 999999999
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>228</x>
   <y>149</y>
@@ -750,7 +750,7 @@ i99 0 999999999
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>228</x>
   <y>170</y>
@@ -779,7 +779,7 @@ i99 0 999999999
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>132</x>
   <y>25</y>
@@ -812,7 +812,7 @@ L</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>155</x>
   <y>25</y>
@@ -845,7 +845,7 @@ R</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>178</x>
   <y>25</y>
@@ -878,7 +878,7 @@ IN</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>201</x>
   <y>6</y>

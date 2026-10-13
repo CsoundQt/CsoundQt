@@ -129,7 +129,7 @@ f0 3600
   <g>221</g>
   <b>230</b>
  </bgcolor>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName>graph1</objectName>
   <x>5</x>
   <y>65</y>
@@ -156,7 +156,7 @@ f0 3600
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>tabindex</objectName>
   <x>90</x>
   <y>262</y>
@@ -186,7 +186,7 @@ f0 3600
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>267</y>
@@ -217,7 +217,7 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName>graph2</objectName>
   <x>5</x>
   <y>350</y>
@@ -244,7 +244,7 @@ f0 3600
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName>graph3</objectName>
   <x>5</x>
   <y>560</y>
@@ -271,7 +271,7 @@ f0 3600
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>freq</objectName>
   <x>210</x>
   <y>255</y>
@@ -301,7 +301,7 @@ f0 3600
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>145</x>
   <y>267</y>
@@ -332,7 +332,7 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>1</y>
@@ -363,7 +363,7 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBTableDisplay">
+ <bsbObject type="BSBTableDisplay" version="2">
   <objectName>plot1</objectName>
   <x>370</x>
   <y>65</y>
@@ -381,7 +381,7 @@ f0 3600
   </color>
   <range>0.00</range>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>45</y>
@@ -412,7 +412,7 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>370</x>
   <y>44</y>
@@ -443,7 +443,7 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
   <y>310</y>
@@ -475,7 +475,7 @@ Click on a peak to display its frequency</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>540</y>

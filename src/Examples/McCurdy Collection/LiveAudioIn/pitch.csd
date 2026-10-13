@@ -123,7 +123,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -152,7 +152,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>156</y>
@@ -181,7 +181,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Upper</objectName>
   <x>8</x>
   <y>139</y>
@@ -199,7 +199,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Upper</objectName>
   <x>448</x>
   <y>156</y>
@@ -228,7 +228,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>49</y>
@@ -257,7 +257,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Update</objectName>
   <x>8</x>
   <y>32</y>
@@ -275,7 +275,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Update</objectName>
   <x>448</x>
   <y>49</y>
@@ -304,7 +304,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>85</y>
@@ -333,7 +333,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Threshold</objectName>
   <x>8</x>
   <y>68</y>
@@ -351,7 +351,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Threshold</objectName>
   <x>448</x>
   <y>85</y>
@@ -380,7 +380,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>121</y>
@@ -409,7 +409,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Lower</objectName>
   <x>8</x>
   <y>104</y>
@@ -427,7 +427,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Lower_Value</objectName>
   <x>448</x>
   <y>121</y>
@@ -456,7 +456,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Limit</objectName>
   <x>438</x>
   <y>177</y>
@@ -482,14 +482,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>438</x>
   <y>176</y>
@@ -518,7 +518,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Divisions</objectName>
   <x>82</x>
   <y>210</y>
@@ -547,7 +547,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <randomizable group="0">false</randomizable>
   <value>120</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>53</x>
   <y>239</y>
@@ -576,7 +576,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Conformations</objectName>
   <x>209</x>
   <y>210</y>
@@ -605,7 +605,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <randomizable group="0">false</randomizable>
   <value>10</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>183</x>
   <y>239</y>
@@ -634,7 +634,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decimations</objectName>
   <x>341</x>
   <y>210</y>
@@ -663,7 +663,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <randomizable group="0">false</randomizable>
   <value>6</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>313</x>
   <y>239</y>
@@ -692,7 +692,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>291</y>
@@ -721,7 +721,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Starting</objectName>
   <x>8</x>
   <y>274</y>
@@ -739,7 +739,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Starting</objectName>
   <x>448</x>
   <y>291</y>
@@ -768,7 +768,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>327</y>
@@ -797,7 +797,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Q_Filters</objectName>
   <x>8</x>
   <y>310</y>
@@ -815,7 +815,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Q_Filters</objectName>
   <x>448</x>
   <y>327</y>
@@ -844,7 +844,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Harmonics</objectName>
   <x>209</x>
   <y>364</y>
@@ -873,7 +873,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <randomizable group="0">false</randomizable>
   <value>10</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>79</x>
   <y>389</y>
@@ -902,7 +902,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Skip</objectName>
   <x>311</x>
   <y>364</y>
@@ -921,7 +921,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>426</y>
@@ -950,7 +950,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Rolloff</objectName>
   <x>8</x>
   <y>409</y>
@@ -968,7 +968,7 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Rolloff</objectName>
   <x>448</x>
   <y>426</y>

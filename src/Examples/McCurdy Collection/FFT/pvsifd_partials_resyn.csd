@@ -109,7 +109,7 @@ i  2		0		0	;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -138,7 +138,7 @@ i  2		0		0	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -167,7 +167,7 @@ i  2		0		0	;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>22</y>
@@ -198,7 +198,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b2233</objectName>
   <x>8</x>
   <y>8</y>
@@ -217,7 +217,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Threshold</objectName>
   <x>448</x>
   <y>74</y>
@@ -246,7 +246,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Threshold</objectName>
   <x>8</x>
   <y>51</y>
@@ -264,7 +264,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>74</y>
@@ -293,7 +293,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>302</y>
@@ -312,7 +312,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>179</x>
   <y>303</y>
@@ -339,7 +339,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>208</x>
   <y>206</y>
@@ -368,7 +368,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>MinPoints</objectName>
   <x>308</x>
   <y>206</y>
@@ -397,7 +397,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>MaxTracks</objectName>
   <x>139</x>
   <y>206</y>
@@ -426,7 +426,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <randomizable group="0">false</randomizable>
   <value>30</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>39</x>
   <y>206</y>
@@ -455,7 +455,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>179</x>
   <y>331</y>
@@ -484,7 +484,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Scaling</objectName>
   <x>448</x>
   <y>123</y>
@@ -513,7 +513,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Scaling</objectName>
   <x>8</x>
   <y>100</y>
@@ -531,7 +531,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>123</y>
@@ -560,7 +560,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Transp_Value</objectName>
   <x>448</x>
   <y>172</y>
@@ -589,7 +589,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Transp</objectName>
   <x>8</x>
   <y>149</y>
@@ -607,7 +607,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>172</y>
@@ -636,7 +636,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>MaxGap_Value</objectName>
   <x>448</x>
   <y>265</y>
@@ -665,7 +665,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>MaxGap</objectName>
   <x>8</x>
   <y>242</y>
@@ -683,7 +683,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>265</y>

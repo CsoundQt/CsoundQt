@@ -129,7 +129,7 @@ i 11 0 0		;init
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>2</y>
@@ -158,7 +158,7 @@ i 11 0 0		;init
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>36</y>
@@ -188,7 +188,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -217,7 +217,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b7585</objectName>
   <x>33</x>
   <y>78</y>
@@ -236,7 +236,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>231</y>
@@ -265,7 +265,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>OscAmp</objectName>
   <x>9</x>
   <y>208</y>
@@ -283,7 +283,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>OscAmp</objectName>
   <x>449</x>
   <y>231</y>
@@ -312,7 +312,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>178</y>
@@ -341,7 +341,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Freq</objectName>
   <x>9</x>
   <y>155</y>
@@ -359,7 +359,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Freq_Value</objectName>
   <x>449</x>
   <y>178</y>
@@ -388,7 +388,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>283</y>
@@ -417,7 +417,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>PlayAmp</objectName>
   <x>9</x>
   <y>260</y>
@@ -435,7 +435,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>PlayAmp</objectName>
   <x>449</x>
   <y>283</y>
@@ -464,7 +464,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8477</objectName>
   <x>329</x>
   <y>64</y>
@@ -483,7 +483,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>253</x>
   <y>58</y>
@@ -512,7 +512,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>253</x>
   <y>82</y>
@@ -541,7 +541,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>253</x>
   <y>106</y>
@@ -570,7 +570,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>368</x>
   <y>82</y>
@@ -599,7 +599,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>318</x>
   <y>66</y>
@@ -625,14 +625,14 @@ This example illustrates a method of rendering a realtime performance to the har
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8645</objectName>
   <x>329</x>
   <y>87</y>
@@ -651,7 +651,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>318</x>
   <y>89</y>
@@ -677,14 +677,14 @@ This example illustrates a method of rendering a realtime performance to the har
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b1513</objectName>
   <x>329</x>
   <y>110</y>
@@ -703,7 +703,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>318</x>
   <y>112</y>
@@ -729,14 +729,14 @@ This example illustrates a method of rendering a realtime performance to the har
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b8243</objectName>
   <x>444</x>
   <y>87</y>
@@ -755,7 +755,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>433</x>
   <y>89</y>
@@ -781,7 +781,7 @@ This example illustrates a method of rendering a realtime performance to the har
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>

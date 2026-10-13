@@ -132,7 +132,7 @@ i 10 0 3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -161,7 +161,7 @@ i 10 0 3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>527</x>
   <y>28</y>
@@ -191,7 +191,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -220,7 +220,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b9952</objectName>
   <x>10</x>
   <y>10</y>
@@ -239,7 +239,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>522</x>
   <y>256</y>
@@ -258,7 +258,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>693</x>
   <y>257</y>
@@ -285,7 +285,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>235</y>
@@ -314,7 +314,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>125</y>
@@ -343,7 +343,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>HPF_Cutoff</objectName>
   <x>9</x>
   <y>102</y>
@@ -361,7 +361,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>HPF_Cutoff_Value</objectName>
   <x>449</x>
   <y>125</y>
@@ -390,7 +390,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>72</y>
@@ -419,7 +419,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>LPF_Cutoff</objectName>
   <x>9</x>
   <y>49</y>
@@ -437,7 +437,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>LPF_Cutoff_Value</objectName>
   <x>449</x>
   <y>72</y>
@@ -466,7 +466,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>231</y>
@@ -495,7 +495,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Reverb_Size</objectName>
   <x>9</x>
   <y>208</y>
@@ -513,7 +513,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Reverb_Size</objectName>
   <x>449</x>
   <y>231</y>
@@ -542,7 +542,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>178</y>
@@ -571,7 +571,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Reverb_Mix</objectName>
   <x>9</x>
   <y>155</y>
@@ -589,7 +589,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Reverb_Mix</objectName>
   <x>449</x>
   <y>178</y>
@@ -618,7 +618,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>337</y>
@@ -647,7 +647,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>9</x>
   <y>314</y>
@@ -665,7 +665,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>449</x>
   <y>337</y>
@@ -694,7 +694,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>284</y>
@@ -723,7 +723,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Reverb_HF_Damping</objectName>
   <x>9</x>
   <y>261</y>
@@ -741,7 +741,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Reverb_HF_Damping</objectName>
   <x>449</x>
   <y>284</y>
@@ -770,7 +770,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Morph</objectName>
   <x>523</x>
   <y>302</y>
@@ -796,14 +796,14 @@ This example is operated by activating 'On/Off' button and then operating the 'm
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>523</x>
   <y>336</y>
@@ -832,7 +832,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Morph</objectName>
   <x>963</x>
   <y>336</y>

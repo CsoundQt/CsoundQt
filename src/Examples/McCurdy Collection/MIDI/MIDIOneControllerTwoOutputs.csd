@@ -51,7 +51,7 @@ i 1 0 3600		; INSTRUMENT 1 PLAYS A NOTE FOR 1 HOUR
   <g>170</g>
   <b>170</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -80,7 +80,7 @@ i 1 0 3600		; INSTRUMENT 1 PLAYS A NOTE FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>25</y>
@@ -110,7 +110,7 @@ Move controller 1 on MIDI channel 1 or the modulation wheel on a MIDI keyboard s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>8</x>
   <y>193</y>

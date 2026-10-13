@@ -116,7 +116,7 @@ i 10		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -145,7 +145,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>2</y>
@@ -174,7 +174,7 @@ i 10		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>520</x>
   <y>18</y>
@@ -204,7 +204,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>b5993</objectName>
   <x>8</x>
   <y>8</y>
@@ -223,7 +223,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>341</y>
@@ -252,7 +252,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>169</x>
   <y>347</y>
@@ -281,7 +281,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>FFTattributes</objectName>
   <x>169</x>
   <y>367</y>
@@ -316,7 +316,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Rescale_Frequencies_Value</objectName>
   <x>449</x>
   <y>93</y>
@@ -345,7 +345,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Rescale_Frequencies</objectName>
   <x>9</x>
   <y>76</y>
@@ -363,7 +363,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>93</y>
@@ -392,7 +392,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>222</y>
@@ -421,7 +421,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>280</y>
@@ -440,7 +440,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>180</x>
   <y>244</y>
@@ -465,7 +465,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
   <x>179</x>
   <y>281</y>
@@ -492,7 +492,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>162</x>
   <y>153</y>
@@ -521,7 +521,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Bin_Offset</objectName>
   <x>242</x>
   <y>153</y>
@@ -550,7 +550,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>No_Oscs</objectName>
   <x>120</x>
   <y>153</y>
@@ -579,7 +579,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <randomizable group="0">false</randomizable>
   <value>256</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>40</x>
   <y>153</y>
@@ -608,7 +608,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>303</x>
   <y>153</y>
@@ -637,7 +637,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Bin_Increment</objectName>
   <x>383</x>
   <y>153</y>
@@ -666,7 +666,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>179</x>
   <y>309</y>

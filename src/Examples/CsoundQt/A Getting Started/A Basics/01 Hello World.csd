@@ -53,7 +53,7 @@ e 							; e - ends the score
   <g>158</g>
   <b>162</b>
  </bgcolor>
- <bsbObject version="2" type="BSBConsole">
+ <bsbObject type="BSBConsole" version="2">
   <objectName/>
   <x>24</x>
   <y>2</y>
@@ -76,7 +76,7 @@ e 							; e - ends the score
    <b>255</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>25</x>
   <y>166</y>
