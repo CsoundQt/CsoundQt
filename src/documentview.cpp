@@ -1095,11 +1095,14 @@ void DocumentView::autoCompleteAtCursor() {
         destroySyntaxMenu();
     }
     if(showSyntaxMenu && !syntaxMenu->actions().isEmpty()) {
-        QRect r =  editor->cursorRect();
-        QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+        // cursorRect() is in viewport coordinates. Leave a small gap so the
+        // menu does not sit right against (and partly over) the cursor/text.
+        const QRect r = editor->cursorRect();
+        const int gap = 4;
+        const QPoint p = QPoint(r.x() + r.width() + gap, r.y() + r.height() + gap);
         const auto actions = syntaxMenu->actions();
         syntaxMenu->setDefaultAction(actions[0]);
-        syntaxMenu->move(editor->mapToGlobal(p));
+        syntaxMenu->move(editor->viewport()->mapToGlobal(p));
         syntaxMenu->show();
     }
 }
