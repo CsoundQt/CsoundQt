@@ -524,13 +524,23 @@ void WidgetLayout::setDisplayValue(QString channelName, double value)
         
         for (const auto widget : m_widgets) {
             auto wtype = widget->getWidgetTypeID();
-            if (wtype == QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY
-                    || wtype == QuteWidgetType::VUMETER) {
-                applyValue(widget);
-                matchingWidgets.append(widget);
-                QDEBUG << "Setting unknown display channel:" << channelName 
-                       << "to" << value << "UUID: " << widget->getUuid();
+            if (wtype != QuteWidgetType::DISPLAY && wtype != QuteWidgetType::TABLEDISPLAY
+                    && wtype != QuteWidgetType::VUMETER) {
+                continue;
             }
+            // Only widgets actually bound to this channel (directly or through
+            // their second channel). Without this check the cache entry for one
+            // display channel would collect every display widget, so after the
+            // cache is rebuilt (e.g. after a widget is added/removed) all meters
+            // would receive each other's values.
+            if (widget->getChannelName() != channelName
+                    && widget->getChannel2Name() != channelName) {
+                continue;
+            }
+            applyValue(widget);
+            matchingWidgets.append(widget);
+            QDEBUG << "Setting unknown display channel:" << channelName 
+                   << "to" << value << "UUID: " << widget->getUuid();
         }
         
         channelNameToWidgets.insert(channelName, matchingWidgets);
