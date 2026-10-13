@@ -1276,6 +1276,19 @@ void WidgetLayout::restoreRuntimeState(const QHash<QString, RuntimeState> &state
             continue;
         }
         const RuntimeState &s = it.value();
+        const QuteWidgetType type = w->getWidgetTypeID();
+        if (type == QuteWidgetType::LABEL) {
+            // Static text; its content is not runtime state.
+            continue;
+        }
+        if (type == QuteWidgetType::DISPLAY || type == QuteWidgetType::TABLEDISPLAY) {
+            // Text-based display: restore the text. Setting the numeric value
+            // would reformat the text (e.g. to "0.000").
+            if (!s.stringValue.isEmpty()) {
+                w->setValue(s.stringValue);
+            }
+            continue;
+        }
         if (!s.stringValue.isEmpty()) {
             w->setValue(s.stringValue);
         }
