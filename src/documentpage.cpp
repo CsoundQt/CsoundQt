@@ -145,9 +145,9 @@ void DocumentPage::insertTextAtCursor(QString text)
 	return m_view->insertTextAtCursor(text);
 }
 
-void DocumentPage::insertAfterOrchestraHeader(QString text)
+void DocumentPage::insertOrchestraGlobal(QString text)
 {
-	return m_view->insertAfterOrchestraHeader(text);
+	return m_view->insertOrchestraGlobal(text);
 }
 
 void DocumentPage::insertAtScoreStart(QString text)

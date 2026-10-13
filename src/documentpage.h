@@ -55,7 +55,7 @@ public:
 	void insertText(QString text, int section = -1);
 	// Drag & drop helpers (see BaseView).
 	void insertTextAtCursor(QString text);
-	void insertAfterOrchestraHeader(QString text);
+	void insertOrchestraGlobal(QString text);
 	void insertAtScoreStart(QString text);
 	void setFullText(QString text);
 	void setBasicText(QString text);

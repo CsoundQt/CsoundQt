@@ -5310,8 +5310,10 @@ void CsoundQt::connectActions()
     // line and column number connection
     connect(doc->getView(), SIGNAL(newLineAndColumn(int, int)), this, SLOT(setLineAndColumn(int,int)));
 
-    // file drop connection
-    connect(doc->getView(), &BaseView::fileDropped, this, &CsoundQt::handleDroppedFiles);
+    // file drop connection (UniqueConnection: connectActions() runs again on
+    // every tab change, and a duplicate would open one menu per connection)
+    connect(doc->getView(), &BaseView::fileDropped, this, &CsoundQt::handleDroppedFiles,
+            Qt::UniqueConnection);
 
     // connect(gotoLineAct, SIGNAL(triggered()), doc, SLOT(gotoLineDialog()));
     //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
@@ -6480,26 +6482,33 @@ int CsoundQt::loadFileFromSystem(QString fileName)
 
 void CsoundQt::handleDroppedFiles(QList<QUrl> urls, QPoint globalPos)
 {
+    QStringList insertFiles;
     for (const QUrl &url : urls) {
         if (!url.isLocalFile())
             continue;
         const QString fileName = url.toLocalFile();
         const QString suffix = QFileInfo(fileName).suffix().toLower();
         // Csound source files are opened directly; any other file is offered
-        // as text/table material to insert at the drop point.
+        // as text/table material to insert.
         if (suffix == QLatin1String("csd")
                 || suffix == QLatin1String("udo")
                 || suffix == QLatin1String("orc")) {
             loadFile(fileName);
         }
         else {
-            // Defer the menu: showing a modal popup directly from inside the
-            // drop event can break the (still active) drag on some platforms.
-            QTimer::singleShot(0, this, [this, fileName, globalPos]() {
-                showDroppedFileMenu(fileName, globalPos);
-            });
+            insertFiles << fileName;
         }
     }
+    if (insertFiles.isEmpty())
+        return;
+    // Defer the menu(s): showing a modal popup directly from inside the drop
+    // event can break the (still active) drag on some platforms. All files are
+    // handled by one deferred call so the menus appear one after the other
+    // instead of nesting (exec() runs a nested event loop).
+    QTimer::singleShot(0, this, [this, insertFiles, globalPos]() {
+        for (const QString &fileName : insertFiles)
+            showDroppedFileMenu(fileName, globalPos);
+    });
 }
 
 // Path of a dropped file as Csound should see it: absolute or relative to the
@@ -6572,7 +6581,7 @@ void CsoundQt::insertDroppedFtgen(const QString &fileName)
     // and format from the soundfile header.
     const QString line = QStringLiteral("gi_%1 ftgen 0, 0, 0, 1, \"%2\", 0, 0, 0\n")
             .arg(name, path);
-    documentPages[curPage]->insertAfterOrchestraHeader(line);
+    documentPages[curPage]->insertOrchestraGlobal(line);
 }
 
 void CsoundQt::insertDroppedScoreTable(const QString &fileName)

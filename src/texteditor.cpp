@@ -124,10 +124,9 @@ void TextEditor::dragMoveEvent(QDragMoveEvent *event)
 void TextEditor::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasUrls()) {
-        // Move the cursor to the drop point so that inserted text lands where
-        // the user dropped the file, and report the global position so the
-        // caller can show its menu there.
-        setTextCursor(cursorForPosition(event->position().toPoint()));
+        // Report the drop point so the caller can show its menu there. The
+        // text cursor is deliberately left alone: path insertion happens at
+        // the cursor, not at the drop point.
         setFocus();
         emit fileDropped(event->mimeData()->urls(), QCursor::pos());
         // Never let the source move/delete the file: we only reference it.

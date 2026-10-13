@@ -23,6 +23,23 @@
 #include "texteditor.h"
 #include "opentryparser.h"
 
+#include <QRegularExpression>
+
+// Position of the first line that starts an instrument or opcode definition at
+// or after `from`, or -1 if there is none. Used to place global orchestra code
+// (e.g. an ftgen) after the header and before the first definition.
+static int firstDefinitionPosition(const QString &text, int from)
+{
+	static const QRegularExpression defRx(
+				QStringLiteral(R"(^[ \t]*(?:instr|opcode)\b)"),
+				QRegularExpression::MultilineOption);
+	auto it = defRx.globalMatch(text, from);
+	if (it.hasNext()) {
+		return it.next().capturedStart();
+	}
+	return -1;
+}
+
 BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
 	QScrollArea(parent), m_opcodeTree(opcodeTree)
 {
@@ -665,8 +682,9 @@ QString BaseView::getBasicText()
 
 void BaseView::insertTextAtCursor(QString text)
 {
-	// Insert where the file was dropped. Fall back to the main editor if the
-	// drop target is unknown or not visible.
+	// Insert at the cursor of the editor that received the drop. The cursor is
+	// not moved by the drop, so this is the position the user was editing at.
+	// Fall back to the main editor if the drop target is unknown.
 	TextEditor *editor = m_lastDropEditor;
 	if (!editor || !editor->isVisible()) {
 		editor = m_mainEditor;
@@ -676,29 +694,43 @@ void BaseView::insertTextAtCursor(QString text)
 	editor->setTextCursor(cursor);
 }
 
-void BaseView::insertAfterOrchestraHeader(QString text)
+void BaseView::insertOrchestraGlobal(QString text)
 {
+	// Insert among the global orchestra code: after the header, before the
+	// first instrument or opcode definition.
+	QTextCursor cursor;
+	QString document;
 	if (m_viewMode < 2) { // Unified view: the whole document lives in the main editor
-		QTextCursor cursor = m_mainEditor->textCursor();
-		const QString document = m_mainEditor->toPlainText();
-		const int tagIndex = document.indexOf(QStringLiteral("<CsInstruments>"));
-		if (tagIndex >= 0) {
-			int insertPos = document.indexOf(QLatin1Char('\n'), tagIndex);
-			insertPos = insertPos >= 0
-					? insertPos + 1
-					: tagIndex + QStringLiteral("<CsInstruments>").size();
-			cursor.setPosition(insertPos);
+		cursor = m_mainEditor->textCursor();
+		document = m_mainEditor->toPlainText();
+		const int orcStart = document.indexOf(QStringLiteral("<CsInstruments>"));
+		const int orcEnd = document.indexOf(QStringLiteral("</CsInstruments>"));
+		int insertPos;
+		if (orcStart >= 0 && orcEnd > orcStart) {
+			const int defPos = firstDefinitionPosition(document, orcStart);
+			insertPos = (defPos >= 0 && defPos < orcEnd) ? defPos : orcEnd;
 		}
 		else {
-			// Orchestra-only file (or no tags): the header is the top.
-			cursor.setPosition(0);
+			// Orchestra-only file (or no tags): the whole text is the orchestra.
+			const int defPos = firstDefinitionPosition(document, 0);
+			insertPos = defPos >= 0 ? defPos : document.size();
 		}
+		if (insertPos > 0 && document.at(insertPos - 1) != QLatin1Char('\n'))
+			text.prepend(QLatin1Char('\n'));
+		cursor.setPosition(insertPos);
 		cursor.insertText(text);
 		m_mainEditor->setTextCursor(cursor);
 	}
 	else { // Split view: the orchestra has its own editor.
-		QTextCursor cursor = m_orcEditor->textCursor();
-		cursor.movePosition(QTextCursor::Start);
+		cursor = m_orcEditor->textCursor();
+		document = m_orcEditor->toPlainText();
+		const int defPos = firstDefinitionPosition(document, 0);
+		if (defPos >= 0)
+			cursor.setPosition(defPos);
+		else
+			cursor.movePosition(QTextCursor::End);
+		if (cursor.position() > 0 && document.at(cursor.position() - 1) != QLatin1Char('\n'))
+			text.prepend(QLatin1Char('\n'));
 		cursor.insertText(text);
 		m_orcEditor->setTextCursor(cursor);
 	}
