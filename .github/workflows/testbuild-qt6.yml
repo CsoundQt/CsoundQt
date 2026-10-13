@@ -691,5 +691,17 @@ jobs:
           env PATH="${NMAKE_PATH}" nmake
           EXE=$(find . -maxdepth 2 -iname 'test_externallauncher*.exe' -type f | head -1)
           test -n "${EXE}" || { echo "test executable not found"; ls -R .; exit 1; }
-          "${EXE}" -v2
+          # The QtTest banner/Totals printed by the test executable are not
+          # reliably captured in the Windows runner log. Ask QtTest to also
+          # write the results to a file and print that file here, so the
+          # outcome is always visible, while still propagating the exit code.
+          set +e
+          "${EXE}" -v2 -o test-results.txt,txt
+          rc=$?
+          set -e
+          echo "test_externallauncher exit code: ${rc}"
+          echo "----- test_externallauncher results -----"
+          cat test-results.txt || true
+          echo "----- end of test_externallauncher results -----"
+          exit "${rc}"
 
