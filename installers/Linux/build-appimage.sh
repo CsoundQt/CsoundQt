@@ -340,7 +340,13 @@ EOF
     cat > "$APPDIR/apprun-hooks/csound-env.sh" <<'EOF'
 export OPCODE7DIR64="${APPDIR}/usr/lib/csound/plugins64-7.0/"
 export PATH="${APPDIR}/usr/bin:${PATH}"
-export LD_LIBRARY_PATH="${APPDIR}/usr/lib:${LD_LIBRARY_PATH:-}"
+# Do NOT export LD_LIBRARY_PATH here. Every bundled ELF object (the app,
+# libcsound64, the csound opcode plugins, the Qt platform plugins, ...) already
+# carries an RPATH ($ORIGIN/../lib etc.) that resolves the bundled libraries, so
+# a global LD_LIBRARY_PATH is unnecessary. Worse, it is inherited by every
+# external program CsoundQt launches (xdg-open -> kde-open, the browser, the
+# terminal, ...), which then loads the AppImage's Qt/glib/NSS libraries instead
+# of the host's and fails silently ("nothing happens" when opening a link).
 if [ -x "${APPDIR}/usr/libexec/QtWebEngineProcess" ]; then
     export QTWEBENGINEPROCESS_PATH="${APPDIR}/usr/libexec/QtWebEngineProcess"
 elif [ -x "${APPDIR}/usr/lib/QtWebEngineProcess" ]; then
