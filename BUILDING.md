@@ -1,160 +1,198 @@
 # Build instructions for CsoundQt
 
-- [Getting the sources](#getting-the-sources)
-- [Requirements](#requirements)
-- [Building with qmake](#building-with-qmake)
-- [Build options](#build-options)
-- [Installing](#installing)
-- [CMake (experimental)](#cmake-experimental)
-- [Notes for Linux](#notes-for-linux)
-- [Notes for macOS](#notes-for-macos)
-- [Notes for Windows](#notes-for-windows)
+These instructions build the **`csoundqt7`** branch (CsoundQt 7), which requires
+**Csound 7** and **Qt 6**. Report problems at
+<https://github.com/CsoundQt/CsoundQt/issues>.
 
-Please help improving these instructions and report any issue to
-<https://github.com/CsoundQt/CsoundQt/issues>. Thanks!
+# Windows
 
-> **Note:** These instructions are for the `csoundqt7` branch (CsoundQt 7),
-> which requires **Csound 7** and **Qt 6**. 
+## Prerequisites
 
-## Getting the sources
+1. **Csound 7** — download from <https://csound.com/download.html> and run the
+   installer. Keep the default location (`C:\Program Files\Csound7`); the
+   commands below assume it.
+2. **Qt 6** — download the Qt online installer from
+   <https://www.qt.io/download-open-source/> and run it (a free Qt account is
+   required). Under the latest **Qt 6.7 or newer** select `MSVC 2022 64-bit`,
+   and also select **Qt Creator**. Default install path:
+   `C:\Qt\6.8.3\msvc2022_64`; replace `6.8.3` below with the installed version.
+3. **Visual Studio 2022** — install *Visual Studio Community 2022*
+   (<https://visualstudio.microsoft.com/vs/community/>) with the *Desktop
+   development with C++* workload. This provides the compiler and the terminal
+   used below.
+4. **Git** — <https://git-scm.com/download/win>, default options.
 
-The source files for CsoundQt can be browsed and downloaded from GitHub:
-<https://github.com/CsoundQt/CsoundQt>. Source releases are in the
-[Releases section](https://github.com/CsoundQt/CsoundQt/releases).
+## Build from a terminal
 
-Clone the repository and check out the `csoundqt7` branch:
+Open Start menu → **Developer PowerShell for VS 2022** (this has the compiler on
+`PATH`; a plain PowerShell does not), then run:
 
-    $ git clone https://github.com/CsoundQt/CsoundQt.git
-    $ cd CsoundQt
-    $ git checkout csoundqt7
-    $ git submodule update --init --recursive
+```powershell
+$env:Path = "C:\Qt\6.8.3\msvc2022_64\bin;$env:Path"
 
-## Requirements
+git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
+cd CsoundQt
 
-- **Csound 7** — must be installed before building. On macOS and Windows you
-  can use the prebuilt installers from <https://csound.com/download.html>;
-  on Linux it is often preferable to build it yourself, see
-  <https://github.com/csound/csound/blob/develop/BUILD.md>.
-- **Qt 6** — with the modules `widgets`, `concurrent`,
-  `network`, `printsupport`, `quickwidgets`, `quickcontrols2` and, for HTML
-  support, `webenginewidgets` and `webchannel`.Use the Qt online installer
-  from <https://www.qt.io/download-open-source/>.
-- **libsndfile** (optional) — allows recording the realtime output of
-  Csound to a file.
+qmake qcs.pro CONFIG+=rtmidi CONFIG+=release `
+    "CSOUND_API_INCLUDE_DIR=C:/Program Files/Csound7/include/csound" `
+    "CSOUND_INTERFACES_INCLUDE_DIR=C:/Program Files/Csound7/include/csound" `
+    "CSOUND_LIBRARY_DIR=C:/Program Files/Csound7/lib"
+nmake
 
-## Building with qmake
+Copy-Item "C:\Program Files\Csound7\bin\csound64.dll" bin\
+Copy-Item "C:\Program Files\Csound7\plugins64" bin\plugins64 -Recurse
+windeployqt --qmldir src\QML bin\CsoundQt-d-cs7.exe
 
-    $ qmake6 qcs.pro   # or just qmake, if `qmake --version` >= 6.7
-    $ make
-
-The qmake project files search for the Csound headers and library in
-standard locations:
-
-- Linux: `/usr/local/include/csound`, `/usr/include/csound`,
-  `/usr/local/lib`, `/usr/lib`
-- macOS: `/Applications/Csound/CsoundLib64.framework` (from the Csound
-  installer), Homebrew locations, `~/Library/Frameworks`
-
-If your Csound installation is elsewhere, pass the paths on the qmake
-command line:
-
-    $ qmake6 qcs.pro "CSOUND_INCLUDE_DIR = <path to csound.h>" "CSOUND_LIBRARY_DIR = <path to libcsound64>"
-
-or create a file named `config.user.pri` in the source root (here assuming csound is installed in 
-at the ``~/.local`` prefix):
-
-```
-CSOUND_INCLUDE_DIR = ~/.local/include/csound
-CSOUND_LIBRARY_DIR = ~/.local/lib
+.\bin\CsoundQt-d-cs7.exe
 ```
 
-If you built Csound from source without installing it, you can instead set
-`CSOUND_SOURCE_TREE` to the Csound source directory.
+To rebuild after editing code, run the build and run commands again from the
+`CsoundQt` directory.
 
-The executable is written to `bin/` and named `CsoundQt-d-cs7`
-(`-debug` suffix for debug builds).
+## Build with Qt Creator
+
+1. Open Qt Creator.
+2. **File ▸ Open File or Project…** → select `qcs.pro` → **Open**.
+3. Tick the `MSVC2022 64bit` kit → **Configure Project**.
+4. Create `config.user.pri` in the `CsoundQt` folder containing:
+   ```
+   CSOUND_API_INCLUDE_DIR = C:/Program Files/Csound7/include/csound
+   CSOUND_INTERFACES_INCLUDE_DIR = C:/Program Files/Csound7/include/csound
+   CSOUND_LIBRARY_DIR = C:/Program Files/Csound7/lib
+   ```
+   Then **Build ▸ Run qmake**.
+5. Run (Ctrl+R).
+6. Before the first run, copy `csound64.dll` from `C:\Program Files\Csound7\bin`
+   into the `bin` directory listed under **Projects ▸ Build Settings**.
+
+## Notes
+
+- `qcs.pro` calls `windeployqt6`, which Qt does not ship; run `windeployqt`
+  manually (as above) or create a `windeployqt6.exe` alias.
+- To build from a shell other than the Developer PowerShell, MSVC's `link.exe`
+  must come before Git Bash's; otherwise linking fails.
+- Installer: `installers\Windows\csoundqt7-x64.iss` (Inno Setup), driven by
+  `CSOUNDQT_VERSION`, `CSOUNDQT_APPNAME` and `CSOUNDQT_STAGING_DIR`.
+
+# macOS
+
+## Prerequisites
+
+1. **Csound 7** — download from <https://csound.com/download.html> and run the
+   installer. It installs `/Applications/Csound/CsoundLib64.framework`, which
+   the build finds automatically.
+2. **Qt 6** — download the Qt online installer from
+   <https://www.qt.io/download-open-source/> and run it (a free Qt account is
+   required). Under **Qt 6.10 or newer** (required with Xcode 26; 6.7 is the
+   minimum) select `macOS`, and also select **Qt Creator**. Default install
+   path: `~/Qt/6.8.3/macos`; replace `6.8.3` below with the installed version.
+3. **Command-line tools** — run `xcode-select --install`. This provides clang,
+   `make` and Git.
+
+## Build from a terminal
+
+```bash
+export PATH="$HOME/Qt/6.8.3/macos/bin:$PATH"
+
+git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
+cd CsoundQt
+
+qmake qcs.pro CONFIG+=rtmidi CONFIG+=release
+make -j$(sysctl -n hw.logicalcpu)
+
+open bin/CsoundQt-d-cs7.app
+```
+
+To rebuild after editing code, run the build and run commands again from the
+`CsoundQt` directory.
+
+## Build with Qt Creator
+
+1. Open Qt Creator.
+2. **File ▸ Open File or Project…** → select `qcs.pro` → **Open**.
+3. Tick the `macOS` kit → **Configure Project**.
+4. Run (Cmd+R).
+
+## Notes
+
+- `qcs-macx.pro` sets `QMAKE_APPLE_DEVICE_ARCHS = arm64`. Edit that line for
+  `x86_64` or a universal binary.
+- To use a Csound in a non-default location, set
+  `CSOUND_LIBRARY_DIR=/path/CsoundLib64.framework/Versions/Current` and
+  `CSOUND_INCLUDE_DIR=/path/CsoundLib64.framework/Versions/Current/Headers`.
+- `make install` runs `macdeployqt` for a self-contained `.app`;
+  `CONFIG+=bundle_csound` embeds `CsoundLib64.framework`. Put the offline
+  [manual](https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip)
+  in `Contents/Resources/Manual`. Verify with
+  `installers/MacOS/test-app-bundle.sh`; sign and notarise with
+  `installers/MacOS/sign-and-notarize.sh`.
+
+# Linux
+
+CsoundQt needs a recent version of csound 7. Build/installation instructions for that are
+out of scope here.
+
+Install the Qt 6 development packages (Debian/Ubuntu shown), then build and
+install:
+
+```bash
+sudo apt-get install build-essential git qt6-base-dev qt6-declarative-dev
+# add qt6-webengine-dev for CONFIG+=html_support
+
+git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
+cd CsoundQt
+
+qmake6 qcs.pro CONFIG+=rtmidi CONFIG+=release
+make -j$(nproc)
+./bin/CsoundQt-d-cs7
+
+sudo make install          # optional, installs under /usr/local
+```
+
+Notes:
+
+- At the moment of this writing, distro packages of Csound are Csound 6; 
+  build Csound 7 from source (<https://github.com/csound/csound/blob/develop/BUILD.md>).
+- For a user-local install:
+  `qmake6 qcs.pro INSTALL_DIR=~ SHARE_DIR=~/.local/share && make install`.
+- To use a Csound build tree that is not installed, set `CSOUND_SOURCE_TREE` to
+  the Csound source directory.
+
+# Reference
 
 ## Build options
 
-Pass these to qmake as `CONFIG+=...`:
+Pass as `CONFIG+=...`:
 
-- `CONFIG+=rtmidi` — build with RtMidi support (requires the submodule or
-  a system RtMidi on Linux)
-- `CONFIG+=html_support` — support for the `<html>` element in csd files
-  via Qt WebEngine
-- `CONFIG+=record_support` — recording support (enabled via
-  `perfThread_build` when available)
-- `CONFIG+=debugger` — build the Csound debugger
+- `rtmidi` — MIDI support (recommended)
+- `html_support` — `<html>` GUI element via Qt WebEngine
+- `record_support` — recording support (usually enabled automatically)
+- `debugger` — Csound debugger
+- `no_splash` — no splash screen
+- `release` — optimised build
 
-Example:
+## Pointing at a custom Csound
 
-    $ qmake6 qcs.pro CONFIG+=rtmidi CONFIG+=html_support
+Csound is searched in default locations (`/usr/local`, `/usr` on Linux;
+`/Applications/Csound/CsoundLib64.framework` and Homebrew on macOS). To use
+another location, set any of these on the qmake command line or in
+`config.user.pri` in the source root:
 
-See the header comments of `qcs.pro` for the full list of variables and
-options.
+- `CSOUND_INCLUDE_DIR` — directory with `csound.h`
+- `CSOUND_INTERFACES_INCLUDE_DIR` — directory with `csound.hpp`
+- `CSOUND_LIBRARY_DIR` — directory with the Csound library
 
-## Installing
+```
+# config.user.pri (example: ~/.local prefix)
+CSOUND_INCLUDE_DIR = ~/.local/include/csound
+CSOUND_INTERFACES_INCLUDE_DIR = ~/.local/include/csound
+CSOUND_LIBRARY_DIR = ~/.local/lib
+```
 
-On Linux you can install CsoundQt system-wide with:
+Build the **`csoundqt7`** branch:
 
-    $ sudo make install
+    $ git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
 
-This installs the executable, a `csoundqt` symlink, desktop file, icons,
-MIME types, examples and templates. The default prefix is `/usr/local`;
-override with `INSTALL_DIR` and `SHARE_DIR`, e.g. for a user-local install:
+`--recursive` fetches the required submodules `litehtml` (manual viewer) and
+`rtmidi` (MIDI).
 
-    $ qmake6 qcs.pro INSTALL_DIR=~ SHARE_DIR=~/.local/share
-    $ make install
-
-On macOS, `make install` runs `macdeployqt` and produces a self-contained
-`CsoundQt-d-cs7.app` bundle. The bundle does **not** include Csound by
-default — Csound 7 must be installed separately. Use `CONFIG+=bundle_csound`
-to include the `CsoundLib64.framework` in the bundle.
-
-## CMake (experimental)
-
-A `CMakeLists.txt` exists, but CMake support is **in progress and not yet
-ready** — it currently only supports Linux and lags behind the qmake build.
-Use qmake unless you want to help developing the CMake build.
-
-## Notes for Linux
-
-Using the Qt 6 development packages from your distribution is recommended.
-On Debian/Ubuntu, for example:
-
-    $ sudo apt install qt6-base-dev qt6-declarative-dev qt6-webengine-dev \
-        qt6-tools-dev libasound2-dev libjack-dev
-
-If qmake reports "Unknown module(s) in QT: ...", install the corresponding
-Qt 6 `-dev` package with your package manager.
-
-With RtMidi support, CsoundQt uses ALSA (and JACK if `libjack` is found),
-so the ALSA development headers (`libasound2-dev` on Debian/Ubuntu) are
-required.
-
-
-### Outdated: 
-
-CsoundQt looks for the **Csound manual** in
-`/usr/share/doc/csound-manual/html/` and `/usr/share/doc/csound-doc/html/`.
-If you installed the manual via a package manager it should be there.
-Otherwise use *Download Csound Manual* in the *Help* menu and set the path
-in *Configure -> Environment*.
-
-## Notes for macOS
-
-The default paths in `qcs-macx.pro` are set up for **Csound 7 from the
-macOS installer** (`/Applications/Csound/CsoundLib64.framework`); Homebrew
-installations are searched as a fallback. The build targets `arm64` by
-default (see `QMAKE_APPLE_DEVICE_ARCHS` in `qcs-macx.pro`).
-
-If the menu is missing the **Scripts** item on first start, set the
-*Python Script directory* in *Configure > Environment* to the
-`src/Scripts` directory of your CsoundQt sources, then restart CsoundQt.
-
-## Notes for Windows
-
-See [Building_on_Windows.md](Building_on_Windows.md). Note that this
-document has not yet been fully updated for CsoundQt 7 / Qt 6 — it still
-refers to Qt 5 and Csound 6 in places, but the general workflow (MSVC,
-`config.user.pri`, `windeployqt`) applies. Help updating it is welcome.
