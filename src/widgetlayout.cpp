@@ -283,6 +283,14 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
         ~LoadingGuard() { flag = false; }
     } loadingGuard(m_loadingWidgets);
 
+    // Capture the runtime state (current values / latched buttons) of the
+    // widgets that exist now, including previously retired ones (e.g. a widget
+    // that was just deleted and is being restored by undo). The state is
+    // restored into any widget with the same uuid after the reload, so a
+    // structural undo/redo does not turn off running instruments or reset
+    // display meters.
+    const QHash<QString, RuntimeState> runtimeState = captureRuntimeState();
+
     m_unknownWidgetFonts.clear();
     clearWidgetLayout();
     QDomDocument doc;
@@ -325,6 +333,7 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
             version = ret;
         }
     }
+    restoreRuntimeState(runtimeState);
     if (version > QString(CSQT_CURRENT_XML_VERSION).toInt()) {
         qDebug() << "WidgetLayout::loadXmlWidgets Newer Widget Format version";
         QMessageBox::warning(this, tr("Newer Widget Format"),
@@ -1220,6 +1229,50 @@ void WidgetLayout::pruneRetiredWidgets()
     qDeleteAll(snapshots);
     qDeleteAll(widgets);
     qDeleteAll(frames);
+}
+
+QHash<QString, WidgetLayout::RuntimeState> WidgetLayout::captureRuntimeState()
+{
+    QHash<QString, RuntimeState> state;
+    widgetsMutex.lock();
+    auto capture = [&state](QuteWidget *w) {
+        RuntimeState s;
+        s.value = w->getValue();
+        s.value2 = w->getValue2();
+        s.stringValue = w->getStringValue();
+        state.insert(w->getUuid(), s);
+    };
+    // Retired first, live last: if a uuid is present in both (it normally is
+    // not), the live widget wins.
+    for (QuteWidget *w : m_retiredWidgets) {
+        capture(w);
+    }
+    for (QuteWidget *w : m_widgets) {
+        capture(w);
+    }
+    widgetsMutex.unlock();
+    return state;
+}
+
+void WidgetLayout::restoreRuntimeState(const QHash<QString, RuntimeState> &state)
+{
+    if (state.isEmpty()) {
+        return;
+    }
+    widgetsMutex.lock();
+    for (QuteWidget *w : m_widgets) {
+        auto it = state.constFind(w->getUuid());
+        if (it == state.constEnd()) {
+            continue;
+        }
+        const RuntimeState &s = it.value();
+        if (!s.stringValue.isEmpty()) {
+            w->setValue(s.stringValue);
+        }
+        w->setValue(s.value);
+        w->setValue2(s.value2);
+    }
+    widgetsMutex.unlock();
 }
 
 QString WidgetLayout::getMidiControllerInstrument()

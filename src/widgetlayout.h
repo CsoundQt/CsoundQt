@@ -506,6 +506,16 @@ private:
 	void retireFrameLocked(FrameWidget *frame);        // widgetsMutex must be held
 	void pruneRetiredWidgets();                        // frees retired widgets/frames/snapshots
 
+	// Runtime (not serialized) widget state, used to keep instruments and
+	// display widgets alive across a full reload triggered by undo/redo.
+	struct RuntimeState {
+		double value = 0.0;
+		double value2 = 0.0;
+		QString stringValue;
+	};
+	QHash<QString, RuntimeState> captureRuntimeState();                 // uuid -> state
+	void restoreRuntimeState(const QHash<QString, RuntimeState> &state);
+
 	int parseXmlNode(QDomNode node);
 	QString createSlider(int x, int y, int width, int height, const QString &channel, double minimum, double maximum, double value);
 	QString createText(int x, int y, int width, int height, const QString &textType, const QString &channel, const QString &alignment, const QString &font, int fontSize, const QColor &fgColor, const QColor &bgColor, bool bgMode, const QString &borderMode, const QString &labelText);
