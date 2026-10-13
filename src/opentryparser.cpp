@@ -25,6 +25,7 @@
 #include "algorithm"
 
 #include <QFile>
+#include <QSet>
 
 void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
     QDomDocument m_doc("opcodes");
@@ -198,9 +199,14 @@ QStringList OpEntryParser::opcodeNameList(bool includeDisabled)
     }
 	QStringList list;
     includeDisabled = false;
+    QSet<QString> seen;
     for(auto opcode : opcodeList) {
         if(includeDisabled || opcode.isInstalled) {
-            list.append(opcode.opcodeName);
+            // Overloads share a name; the list only needs each name once.
+            if(!seen.contains(opcode.opcodeName)) {
+                seen.insert(opcode.opcodeName);
+                list.append(opcode.opcodeName);
+            }
         }
     }
     m_opcodeNameListCache = list;
