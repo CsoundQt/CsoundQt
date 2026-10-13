@@ -100,22 +100,6 @@ CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
-<MacGUI>
-ioView background {0, 41634, 53199}
-ioText {4, 44} {382, 82} label 0.000000 0.00100 "" left "Courier 10 Pitch" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Note events:
-ioText {4, 129} {184, 116} label 0.000000 0.00100 "" left "Courier 10 Pitch" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Control Change:
-ioText {130, 159} {40, 25} display 0.000000 0.00100 "cc" left "DejaVu Sans" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0
-ioText {130, 184} {40, 25} display 0.000000 0.00100 "ccvalue" left "DejaVu Sans" 14 {0, 0, 0} {61440, 56320, 58624} nobackground noborder 0
-ioText {130, 209} {40, 25} display 0.000000 0.00100 "channel" left "DejaVu Sans" 14 {0, 0, 0} {56320, 55552, 65280} nobackground noborder 0
-ioButton {201, 133} {179, 26} event 1.000000 "button1" "Generate note" "/" i1 0 1
-ioCheckbox {205, 171} {20, 20} off continuous
-ioText {223, 166} {164, 29} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Generate continuously
-ioText {4, 162} {125, 24} label 0.000000 0.00100 "" right "DejaVu Sans" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Controller number CC#
-ioText {19, 187} {110, 25} label 0.000000 0.00100 "" right "DejaVu Sans" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Value
-ioText {33, 211} {96, 25} label 0.000000 0.00100 "" right "DejaVu Sans" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Channel
-ioText {4, 67} {381, 53} label 0.000000 0.00100 "note" left "DejaVu Sans" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Note On: chan = 0 note#  = 0 velocity = 0
-ioText {5, 7} {382, 32} label 0.000000 0.00100 "" center "DejaVu Sans Mono" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder MIDI I/O
-</MacGUI>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>

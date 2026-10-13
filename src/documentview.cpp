@@ -537,14 +537,6 @@ QString DocumentView::getSelectedText(int section)
 	return text;
 }
 
-QString DocumentView::getMacWidgetsText()
-{
-	// With tags including presets. For text that is being edited in the text editor
-	// Includes presets text
-	qDebug() << "Not implemented and will crash!";
-    return "Not implemented.";
-}
-
 QString DocumentView::getWidgetsText()
 {
 	// With tags including presets, in new xml format. For text that is being edited in the text editor
@@ -2044,6 +2036,9 @@ void DocumentView::indent()
 				|| m_mode == EDIT_PYTHON_MODE) {
 			indentChar = indentString();
 		}
+		if (indentChar.isEmpty()) {
+			return;  // nothing is indented in this mode
+		}
 		QTextCursor cursor = m_mainEditor->textCursor();
 		QTextCursor::MoveMode moveMode = cursor.selectedText().isEmpty() ? QTextCursor::MoveAnchor : QTextCursor::KeepAnchor;
 		if (cursor.position() > cursor.anchor()) {
@@ -2058,8 +2053,8 @@ void DocumentView::indent()
 		QString text = cursor.selectedText();
 		text.prepend(indentChar);
 		text.replace(QChar(QChar::ParagraphSeparator), "\n" + indentChar);
-		if (text.endsWith("\n" + indentChar) ) {
-			text.chop(1);
+		if (text.endsWith("\n" + indentChar)) {
+			text.chop(indentChar.size());
 		}
 		cursor.insertText(text);
 		cursor.setPosition(start);
@@ -2071,64 +2066,110 @@ void DocumentView::indent()
 	}
 }
 
+// Removes one indentation step from the start of a single line. In spaces mode
+// that is a leading tab or up to tabSpaces leading spaces; otherwise it is a
+// leading tab (Csound modes), or a leading tab / four spaces (Python mode).
+static QString removeOneIndent(const QString &line, bool useSpaces, int tabSpaces, bool pythonMode)
+{
+	if (useSpaces) {
+		if (line.startsWith(QLatin1Char('\t'))) {
+			return line.mid(1);
+		}
+		int count = 0;
+		while (count < tabSpaces && count < line.size()
+			   && line.at(count) == QLatin1Char(' ')) {
+			++count;
+		}
+		return line.mid(count);
+	}
+	if (line.startsWith(QLatin1Char('\t'))) {
+		return line.mid(1);
+	}
+	if (pythonMode && line.startsWith(QStringLiteral("    "))) {
+		return line.mid(4);
+	}
+	return line;
+}
+
 void DocumentView::unindent()
 {
 	// TODO implment for multiple views
-	if (m_viewMode < 2) {
-		internalChange = true;
-		QString indentChar = "";
-		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
-				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE
-				|| m_mode == EDIT_PYTHON_MODE) {
-			indentChar = indentString();
-		}
-		QTextCursor cursor = m_mainEditor->textCursor();
-		if (cursor.position() > cursor.anchor()) {
-			int temp = cursor.anchor();
-			cursor.setPosition(cursor.position());
-			cursor.setPosition(temp, QTextCursor::KeepAnchor);
-		}
-		if (!cursor.atBlockStart()) {
-			cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-		}
-		int start = cursor.selectionStart();
-		QString text = cursor.selectedText();
-		if (m_mainEditor->tabUseSpaces() && !indentChar.isEmpty()) {
-			// Remove up to one indentation step from the start of each
-			// selected line: a single leading tab, or as many leading spaces
-			// as the configured tab width.
-			const int tabSpaces = m_mainEditor->tabSpaces();
-			QStringList lines = text.split(QChar(QChar::ParagraphSeparator));
-			for (QString &line : lines) {
-				if (line.startsWith(QLatin1Char('\t'))) {
-					line.remove(0, 1);
-				} else {
-					int removed = 0;
-					while (removed < tabSpaces && line.startsWith(QLatin1Char(' '))) {
-						line.remove(0, 1);
-						++removed;
-					}
-				}
-			}
-			text = lines.join(QStringLiteral("\n"));
-		} else {
-			while (indentChar == "    "  && text.startsWith("\t")) {
-				text.remove(0,1);
-			}
-			if (text.startsWith(indentChar)) {
-				text.remove(0,indentChar.size());
-			}
-			text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
-			text.replace("\n" + indentChar, QString("\n")); //TODO make more robust
-		}
-		cursor.insertText(text);
-		cursor.setPosition(start);
-		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
-		m_mainEditor->setTextCursor(cursor);
-	}
-	else {
+	if (m_viewMode >= 2) {
 		qDebug() << "Not implemented for split view";
+		return;
 	}
+	if (!(m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+			|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE
+			|| m_mode == EDIT_PYTHON_MODE)) {
+		return;  // nothing is indented in this mode
+	}
+
+	internalChange = true;
+	const bool useSpaces = m_mainEditor->tabUseSpaces();
+	const int tabSpaces = m_mainEditor->tabSpaces();
+	const bool pythonMode = (m_mode == EDIT_PYTHON_MODE);
+
+	QTextCursor cursor = m_mainEditor->textCursor();
+	const int anchor = cursor.anchor();
+	const int position = cursor.position();
+	const int selStart = qMin(anchor, position);
+	const int selEnd = qMax(anchor, position);
+
+	// Unindent whole lines: from the line containing the start of the
+	// selection (or the cursor) up to the line containing its end. If the
+	// selection ends exactly at the beginning of a line, that line is not
+	// really selected and is left untouched. Working on whole lines keeps the
+	// result independent of where the cursor sits within the line.
+	QTextBlock firstBlock = m_mainEditor->document()->findBlock(selStart);
+	QTextBlock lastBlock = m_mainEditor->document()->findBlock(selEnd);
+	if (anchor != position && lastBlock != firstBlock
+			&& lastBlock.position() == selEnd) {
+		lastBlock = lastBlock.previous();
+	}
+
+	const int rangeStart = firstBlock.position();
+	const int rangeEnd = lastBlock.position() + lastBlock.text().size();
+
+	QTextCursor work(m_mainEditor->document());
+	work.setPosition(rangeStart);
+	work.setPosition(rangeEnd, QTextCursor::KeepAnchor);
+	const QString oldText = work.selectedText();
+
+	// Remove one indentation step from each line and remember how many
+	// characters each line lost, so the cursor and selection can be kept.
+	const QStringList oldLines = oldText.split(QChar(QChar::ParagraphSeparator));
+	QStringList newLines;
+	newLines.reserve(oldLines.size());
+	for (const QString &line : oldLines) {
+		newLines << removeOneIndent(line, useSpaces, tabSpaces, pythonMode);
+	}
+	const QString newText = newLines.join(QStringLiteral("\n"));
+	if (newText == oldText) {
+		return;  // the lines were not indented; nothing to do
+	}
+
+	// Map a position in the old text to the corresponding position after the
+	// leading whitespace has been removed.
+	auto adjustPosition = [&](int absPos) {
+		int adjusted = absPos;
+		int lineStart = rangeStart;
+		for (int i = 0; i < oldLines.size(); ++i) {
+			const int removed = oldLines[i].size() - newLines[i].size();
+			if (removed > 0 && absPos > lineStart) {
+				adjusted -= qMin(removed, absPos - lineStart);
+			}
+			lineStart += oldLines[i].size() + 1;  // + paragraph separator
+		}
+		return adjusted;
+	};
+	const int newAnchor = adjustPosition(anchor);
+	const int newPosition = adjustPosition(position);
+
+	work.insertText(newText);
+
+	cursor.setPosition(newAnchor);
+	cursor.setPosition(newPosition, QTextCursor::KeepAnchor);
+	m_mainEditor->setTextCursor(cursor);
 }
 
 void DocumentView::tabsToSpaces()

@@ -36,7 +36,6 @@ public:
 	virtual void setMidiValue(int value);
 	virtual bool acceptsMidi() {return true;}
 	//    virtual void setResolution(double resolution);
-	virtual QString getWidgetLine();
 	virtual QString getCsladspaLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();

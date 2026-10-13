@@ -2372,16 +2372,6 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="oldFormatCheckBox">
-                  <property name="toolTip">
-                   <string>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</string>
-                  </property>
-                  <property name="text">
-                   <string>Store Old Widget Format</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <widget class="QCheckBox" name="enableFLTKCheckBox">
                   <property name="toolTip">
                    <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>

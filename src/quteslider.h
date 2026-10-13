@@ -41,7 +41,6 @@ public:
 	void setRangeMax(double v) { m_max = v; }
 
 	virtual void setWidgetGeometry(int x, int y, int w, int h);
-	virtual QString getWidgetLine();
 	virtual QString getCabbageLine();
 	virtual QString getCsladspaLine();
 	virtual QString getWidgetXmlText();

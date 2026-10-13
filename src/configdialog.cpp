@@ -231,7 +231,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	enableFLTKCheckBox->setChecked(m_options->enableFLTK);
 	terminalFLTKCheckBox->setChecked(m_options->terminalFLTK);
 	terminalFLTKCheckBox->setEnabled(m_options->enableFLTK);
-	oldFormatCheckBox->setChecked(m_options->oldFormat);
 	openPropertiesCheckBox->setChecked(m_options->openProperties);
 	fontScalingSpinBox->setValue(m_options->fontScaling);
 	fontOffsetSpinBox->setValue(m_options->fontOffset);
@@ -557,7 +556,6 @@ void ConfigDialog::accept()
 	m_options->showTooltips = showTooltipsCheckBox->isChecked();
 	m_options->enableFLTK = enableFLTKCheckBox->isChecked();
 	m_options->terminalFLTK = terminalFLTKCheckBox->isChecked();
-	m_options->oldFormat = oldFormatCheckBox->isChecked();
 	m_options->openProperties = openPropertiesCheckBox->isChecked();
 	m_options->fontScaling = fontScalingSpinBox->value();
 	m_options->fontOffset = fontOffsetSpinBox->value();

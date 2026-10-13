@@ -80,7 +80,6 @@ public:
 	// These two should be used with care as they are only here in case
 	// Widgets are being edited in text format. In most cases, you want to
 	// get the widgets Text from the widget layout object
-	QString getMacWidgetsText(); // With tags including presets
 	QString getWidgetsText(); // With tags including presets, in new xml format
 	int getViewMode();
 

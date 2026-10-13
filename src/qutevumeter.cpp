@@ -547,12 +547,6 @@ QString QuteVUMeter::getWidgetType()
 	return QString("BSBVUMeter");
 }
 
-QString QuteVUMeter::getWidgetLine()
-{
-	// Legacy MacCsound format: not supported, export as XML only.
-	return QString();
-}
-
 void QuteVUMeter::createPropertiesDialog()
 {
 	QuteWidget::createPropertiesDialog();

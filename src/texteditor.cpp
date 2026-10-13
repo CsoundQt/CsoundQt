@@ -49,8 +49,10 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 	case Qt::Key_Tab:
         if (m_parameterMode) {
             emit tabPressed();
-        } else if(m_tabIndents) {
-            // this blocks default behaviour and only tab does not move any further
+        } else if(m_tabIndents || textCursor().hasSelection()) {
+            // "Tab always indents", or a selection is present: indent the
+            // current line / all selected lines instead of replacing the
+            // selection with a tab or spaces.
 			emit requestIndent();
         } else if (m_tabUseSpaces) {
             // Insert spaces instead of a tab character.
@@ -62,7 +64,9 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 	case Qt::Key_Backtab:
 		if (m_parameterMode) {
 			emit backtabPressed();
-		} else if(m_tabIndents) {
+		} else if(m_tabIndents || m_tabUseSpaces || textCursor().hasSelection()) {
+			// Unindent the current line / selected lines. This also handles
+			// the case where Tab inserts spaces rather than a tab character.
 			emit requestUnindent();
 		}
 		return;

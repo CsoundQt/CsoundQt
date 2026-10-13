@@ -166,7 +166,6 @@ public:
 	QuteWaveform(QWidget *parent);
 	~QuteWaveform() override;
 
-	QString getWidgetLine() override { return QString(); }
 	QString getWidgetXmlText() override;
 	QString getWidgetType() override { return QString("BSBWaveform"); }
 	QuteWidgetType getWidgetTypeID() override { return QuteWidgetType::WAVEFORM; }

@@ -312,24 +312,6 @@ void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
 	m_widget->blockSignals(false);
 }
 
-QString QuteKnob::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioKnob {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-	line += QString::number(property("CSQT_maximum").toDouble(), 'f', 6) + " ";
-	line += QString::number(property("CSQT_minimum").toDouble(), 'f', 6) + " ";
-	line += QString::number(property("CSQT_resolution").toDouble(), 'f', 6) + " ";
-	line += QString::number(m_value, 'f', 6) + " " + m_channel;
-	//   qDebug("QuteKnob::getWidgetLine() %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteKnob::getCsladspaLine()
 {
 #ifdef  USE_WIDGET_MUTEX

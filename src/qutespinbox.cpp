@@ -87,39 +87,6 @@ void QuteSpinBox::setMidiValue(int value)
 //  setProperty("CSQT_resolution", resolution);
 //}
 
-QString QuteSpinBox::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioText {" + QString::number(property("CSQT_x").toInt()) + ", " + QString::number(property("CSQT_y").toInt()) + "} ";
-	line += "{"+ QString::number(property("CSQT_width").toInt()) +", "+ QString::number(property("CSQT_height").toInt()) +"} ";
-	line += m_type + " ";
-	line += QString::number(static_cast<QDoubleSpinBox*>(m_widget)->value(), 'f', 6) + " ";
-	line += QString::number(property("CSQT_resolution").toDouble(), 'f', 6) + " \"" + m_channel + "\" ";
-	line += property("CSQT_alignment").toString() + " ";
-	line += "\"" + m_widget->property("CSQT_font").toString() + "\" "
-			+ QString::number(m_widget->property("CSQT_fontsize").toInt()) + " ";
-	QColor color = m_widget->palette().color(QPalette::WindowText);
-	line += "{" + QString::number(color.red() * 256)
-			+ ", " + QString::number(color.green() * 256)
-			+ ", " + QString::number(color.blue() * 256) + "} ";
-	color = m_widget->palette().color(QPalette::Window);
-	line += "{" + QString::number(color.red() * 256)
-			+ ", " + QString::number(color.green() * 256)
-			+ ", " + QString::number(color.blue() * 256) + "} ";
-	line += m_widget->autoFillBackground()? "background ":"nobackground ";
-	line += "noborder ";
-	line += QString::number(static_cast<QDoubleSpinBox*>(m_widget)->value(), 'f', 6);
-	// For this type of ioText widget, value and text are redundant. CsoundQt reads mthe value coming
-	// in the text field, but writes to both.
-	//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteSpinBox::getCsladspaLine()
 {
 #ifdef  USE_WIDGET_MUTEX

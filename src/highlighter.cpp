@@ -382,7 +382,6 @@ Highlighter::Highlighter(QTextDocument *parent)
 				<< "<CsScore>" << "</CsScore>"
 				<< "<CsVersion>" << "</CsVersion>"
 				<< "<MacOptions>" << "</MacOptions>"
-				<< "<MacGUI>" << "</MacGUI>"
 				<< "<csLADSPA>" << "</csLADSPA>"
                 << "<Cabbage>" << "</Cabbage>"
 				<< "<CsHtml5>" << "</CsHtml5>"

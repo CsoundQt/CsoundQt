@@ -66,7 +66,3 @@ IOViewEdit: On
 Options:
 </MacOptions>
 
-<MacGUI>
-ioView nobackground {59367, 11822, 65535}
-ioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1
-</MacGUI>

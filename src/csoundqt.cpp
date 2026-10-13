@@ -1465,18 +1465,6 @@ void CsoundQt::openLogFile()
     }
 }
 
-void CsoundQt::showNewFormatWarning()
-{
-    QMessageBox::warning(this, tr("New widget format"),
-                         tr("This version of CsoundQt implements a new format for storing"
-                            " widgets, which enables many of the new widget features you "
-                            "will find now.\n"
-                            "The old format is still read and saved, so you will be able "
-                            "to open files in older versions but some of the features will "
-                            "not be passed to older versions.\n"),
-                         QMessageBox::Ok);
-}
-
 void CsoundQt::setupEnvironment()
 {
     if (m_options->sadirActive){
@@ -3768,7 +3756,6 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
                             (int) m_options->consoleFontPointSize));
 
     p->setPythonExecutable(m_options->pythonExecutable);
-    p->useOldFormat(m_options->oldFormat);
     p->setConsoleBufferSize(m_options->consoleBufferSize);
     p->showLineNumbers(m_options->showLineNumberArea);
 
@@ -5338,10 +5325,6 @@ void CsoundQt::connectActions()
     //  disconnect(doc, SIGNAL(textChanged()), 0, 0);
     //  disconnect(doc, SIGNAL(cursorPositionChanged()), 0, 0);
 
-    //  disconnect(widgetPanel, SIGNAL(widgetsChanged(QString)),0,0);
-    //   connect(widgetPanel, SIGNAL(widgetsChanged(QString)),
-    //           doc, SLOT(setMacWidgetsText(QString)) );
-
     // Connect inspector actions to document
     disconnect(m_inspector, 0, 0, 0);
     connect(m_inspector, SIGNAL(jumpToLine(int)),
@@ -6019,7 +6002,6 @@ void CsoundQt::readSettings()
     m_options->showTooltips = settings.value("showTooltips", true).toBool();
     m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
     m_options->terminalFLTK = settings.value("terminalFLTK", true).toBool();
-    m_options->oldFormat = settings.value("oldFormat", false).toBool();
     m_options->openProperties = settings.value("openProperties", true).toBool();
     m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
     m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
@@ -6183,7 +6165,6 @@ void CsoundQt::readSettings()
     settings.endGroup();
     settings.endGroup();
     if (settingsVersion < 3 && settingsVersion > 0) {
-        showNewFormatWarning();
         m_options->csdTemplate = CSQT_DEFAULT_TEMPLATE;
     }
 }
@@ -6290,7 +6271,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("showTooltips", m_options->showTooltips);
         settings.setValue("enableFLTK", m_options->enableFLTK);
         settings.setValue("terminalFLTK", m_options->terminalFLTK);
-        settings.setValue("oldFormat", m_options->oldFormat);
         settings.setValue("openProperties", m_options->openProperties);
         settings.setValue("fontOffset", m_options->fontOffset);
         settings.setValue("fontScaling", m_options->fontScaling);

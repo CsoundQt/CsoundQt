@@ -73,7 +73,6 @@ public:
 	virtual void setValue(QString text); // String Value (internal) of button (e.g. for filenames)
 	virtual double getValue(); // This value represents the state of the button
 	virtual QString getStringValue(); // This value represents the filename from a _Browse channel button
-	virtual QString getWidgetLine();
 	virtual QString getCabbageLine();
 	virtual QString getQml();
 	virtual QString getWidgetXmlText();

@@ -39,22 +39,6 @@ i 20 0 3600
 </CsScore>
 </CsoundSynthesizer>
 
-<MacGUI>
-ioView background {35466, 38293, 40092}
-ioGraph {389, 98} {292, 142} table 5.000000 1.000000 graph
-ioText {69, 4} {559, 40} label 0.000000 0.00100 "" center "Helvetica" 24 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Graph Widget
-ioText {7, 41} {376, 199} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Graph Widgets display Csound's tables. The currently visible table can be changed by sending values on the widget's channel. Positive values change the table by index and negative values change the table by f-table number. The second channel can be used to display tables by f-table number instead of index. The displayed table can also be changed with the mouse using the menu on the upper left corner. Doing this will produce output on both channels.Â¬Graph widgets can also show the spectrum from signals using the dispfft opcode, or time varying signals (a-rate and k-rate) using the display opcode.
-ioText {479, 244} {45, 25} editnum 3.000000 1.000000 "tabnum" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 3.000000
-ioText {390, 244} {91, 26} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Use f-table
-ioText {388, 276} {294, 80} label 0.000000 0.00100 "" left "Nimbus Sans L" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Note that the numbers in the lower section will only have effect if Csound is running as they pass through Csound, while the ones on the top are connected directly by channel number.
-ioCheckbox {543, 249} {20, 20} on spectrum
-ioText {559, 247} {111, 27} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Show spectrum
-ioGraph {8, 245} {373, 142} table 0.000000 1.000000 graph_direct
-ioText {91, 395} {80, 25} editnum 0.000000 1.000000 "graph_direct" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.000000
-ioText {299, 395} {80, 25} editnum 0.000000 1.000000 "graph_direct_table" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.000000
-ioText {11, 395} {80, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Index
-ioText {188, 395} {111, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder F-table number
-</MacGUI>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>

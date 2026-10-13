@@ -46,7 +46,6 @@ public:
 
 	~QuteGraph();
 
-	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
 	virtual void setWidgetGeometry(int x,int y,int width,int height);
@@ -292,7 +291,6 @@ class QuteTable : public QuteWidget {
 public:
     QuteTable(QWidget *parent);
     ~QuteTable();
-    virtual QString getWidgetLine() { return QString(""); }
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType() { return QString("BSBTableDisplay"); }
     // virtual void setWidgetGeometry(int x,int y,int width,int height);

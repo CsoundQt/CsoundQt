@@ -62,7 +62,6 @@ public:
 	void setZoomx(double z) { m_zoomx = z; }
 	void setZoomy(double z) { m_zoomy = z; }
 
-	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
 	//    virtual void setWidgetGeometry(int x,int y,int width,int height);

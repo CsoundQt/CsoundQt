@@ -32,7 +32,6 @@ public:
 	QuteDummy(QWidget *parent);
 	~QuteDummy();
 
-	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
 	QuteWidgetType getWidgetTypeID() override;

@@ -181,20 +181,6 @@ void DocumentPage::setOptionsText(QString text)
 QString DocumentPage::getFullText()
 {
 	QString fullText = BaseDocument::getFullText();
-	if (saveOldFormat) {
-		QString macOptions = getMacOptionsText();
-		if (!macOptions.isEmpty()) {
-			fullText += macOptions + "\n";
-		}
-		QString macWidgets = getMacWidgetsText();
-		if (!macWidgets.isEmpty()) {
-			fullText += macWidgets + "\n";
-		}
-		QString macPresets = getMacPresetsText();
-		if (!macPresets.isEmpty()) {
-			fullText += macPresets + "\n";  // Put old format for backward compatibility
-		}
-	}
 /*
     QString liveEventsText = "";
 	if (saveLiveEvents) { // Only add live events sections if file is a csd file
@@ -244,37 +230,6 @@ QString DocumentPage::getSelectedWidgetsText()
 	//FIXME allow multiple
 	QString text = m_widgetLayouts[0]->getSelectedWidgetsText();
 	return text;
-}
-
-QString DocumentPage::getMacWidgetsText()
-{
-	QString t = getWidgetsText();  // TODO only for testing. remove later
-	//FIXME allow multiple
-	return m_widgetLayouts[0]->getMacWidgetsText();
-}
-
-QString DocumentPage::getMacPresetsText()
-{
-	return m_macPresets;
-}
-
-QString DocumentPage::getMacOptionsText()
-{
-	return m_macOptions.join("\n");
-}
-
-QString DocumentPage::getMacOptions(QString option)
-{
-	if (!option.endsWith(":"))
-		option += ":";
-	if (!option.endsWith(" "))
-		option += " ";
-    int index = m_macOptions.indexOf(QRegularExpression(option + ".*"));
-	if (index < 0) {
-        qDebug("Option %s not found!", option.toLocal8Bit().constData());
-		return QString("");
-	}
-	return m_macOptions[index].mid(option.size());
 }
 
 QString DocumentPage::getHtmlText()
@@ -881,12 +836,6 @@ void DocumentPage::setWidgetEnabled(bool enabled)
 	m_csEngine->enableWidgets(enabled);
 }
 
-void DocumentPage::useOldFormat(bool use)
-{
-	//  qDebug() << use;
-	saveOldFormat = use;
-}
-
 void DocumentPage::setPythonExecutable(QString pythonExec)
 {
 	m_pythonExecutable = pythonExec;
@@ -955,7 +904,6 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 			this, SLOT(perfEnded()));
 
 	//  detachWidgets();
-	saveOldFormat = false; // don't save Mac widgets by default
 	m_pythonRunning = false;
 }
 
@@ -1104,40 +1052,6 @@ void DocumentPage::showMidiLearn(QuteWidget *widget)
 	m_midiLearn->setCurrentWidget(widget);
 	m_midiLearn->setModal(true); // not to leave the dialog floating around
 	m_midiLearn->show();
-}
-
-void DocumentPage::applyMacOptions(QStringList options)
-{
-    int index = options.indexOf(QRegularExpression("WindowBounds: .*"));
-	if (index > 0) {
-		QString line = options[index];
-		QStringList values = line.split(" ");
-		values.removeFirst();  //remove property name
-		// FIXME allow multiple layouts
-		QRect r(values[0].toInt(),values[1].toInt(),
-		        values[2].toInt(), values[3].toInt());
-		if (r.isValid()) {
-			m_widgetLayouts[0]->setOuterGeometry(r);
-		}
-	}
-	else {
-		qDebug("no Geometry!");
-	}
-}
-
-void DocumentPage::setMacOption(QString option, QString newValue)
-{
-	if (!option.endsWith(":"))
-		option += ":";
-	if (!option.endsWith(" "))
-		option += " ";
-    int index = m_macOptions.indexOf(QRegularExpression(option + ".*"));
-	if (index < 0) {
-		qDebug("Option not found!");
-		return;
-	}
-	m_macOptions[index] = option + newValue;
-	qDebug("%s", m_macOptions[index].toLocal8Bit().constData());
 }
 
 void DocumentPage::setWidgetEditMode(bool active)

@@ -143,23 +143,6 @@ void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
 	m_widget->blockSignals(false);
 }
 
-QString QuteSlider::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioSlider {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-	line += QString::number(property("CSQT_minimum").toDouble(), 'f', 6) + " ";
-	line += QString::number(property("CSQT_maximum").toDouble(), 'f', 6) + " ";
-	line += QString::number(m_value, 'f', 6) + " " + m_channel;
-	//   qDebug("QuteSlider::getWidgetLine() %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteSlider::getCabbageLine()
 {
 #ifdef  USE_WIDGET_MUTEX

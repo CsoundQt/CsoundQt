@@ -205,26 +205,6 @@ QString QuteButton::getStringValue()
 	return stringValue;
 }
 
-QString QuteButton::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioButton {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-	line +=  property("CSQT_type").toString()  + " ";
-	line +=  QString::number(m_value,'f', 6) + " ";
-	line += "\"" + m_channel + "\" ";
-    line += "\"" + static_cast<QPushButton *>(m_widget)->text().replace(QRegularExpression("[\n\r]"), "\u00AC") + "\" ";
-	line += "\"" + property("CSQT_image").toString() + "\" ";
-	line += property("CSQT_eventLine").toString();
-	//   qDebug("QuteButton::getWidgetLine() %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteButton::getCabbageLine()
 {
 #ifdef  USE_WIDGET_MUTEX

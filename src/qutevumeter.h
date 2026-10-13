@@ -102,7 +102,6 @@ public:
 	~QuteVUMeter();
 
 	virtual void setWidgetGeometry(int x, int y, int width, int height);
-	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
 	virtual void refreshWidget();

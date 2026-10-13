@@ -180,7 +180,6 @@ public:
 	~QuteKnob();
 
 	virtual void setWidgetGeometry(int x, int y, int width, int height);
-	virtual QString getWidgetLine();
 	virtual QString getCsladspaLine();
 	virtual QString getCabbageLine();
     virtual QString getQml();

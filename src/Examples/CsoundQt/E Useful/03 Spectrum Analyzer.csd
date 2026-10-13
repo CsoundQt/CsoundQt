@@ -126,78 +126,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
 
 
 
-<MacGUI>
-ioView background {5654, 5654, 5654}
-ioGraph {10, 70} {1000, 500} table 0.000000 2.000000 spectrum
-ioCheckbox {10, 580} {30, 30} on ch1
-ioCheckbox {40, 580} {30, 30} off ch2
-ioCheckbox {70, 580} {30, 30} off ch3
-ioCheckbox {100, 580} {30, 30} off ch4
-ioMenu {150, 580} {80, 30} 2 303 "2048,4096,8192,16384" fftsize
-ioText {30, 550} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Channels
-ioText {145, 550} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61696, 61696, 61696} {65024, 65024, 64768} nobackground noborder FFT Size
-ioCheckbox {460, 580} {30, 30} on playpeak
-ioText {435, 550} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Play peak
-ioKnob {585, 575} {56, 54} 24.000000 -24.000000 0.010000 0.000000 ingain
-ioText {505, 530} {80, 25} label 0.000000 0.00100 "" right "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Input Gain (dB)
-ioKnob {720, 575} {56, 54} 0.000000 -80.000000 0.010000 -23.704000 peakgain
-ioText {640, 530} {80, 25} label 0.000000 0.00100 "" right "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Peak Gain (dB)
-ioText {340, 550} {100, 26} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Filter low freqs
-ioCheckbox {375, 580} {30, 30} on filterlow
-ioMenu {250, 580} {80, 30} 4 303 "10,12,15,18,20,24,30" refreshrateidx
-ioText {250, 550} {84, 25} label 0.000000 0.00100 "" center "Arial" 13 {61696, 61696, 61696} {65024, 65024, 64768} nobackground noborder Refresh Rate
-ioText {794, 519} {196, 45} label 0.000000 0.00100 "" left "Liberation Sans" 13 {61184, 61184, 61184} {12288, 13568, 14848} nobackground noborder Press mouse in spectrum display to show nearest  peak
-</MacGUI>
 
 
-<MacGUI>
-ioView background {5654, 5654, 5654}
-ioGraph {10, 80} {1000, 500} table 0.000000 2.000000 spectrum
-ioCheckbox {10, 590} {30, 30} on ch1
-ioCheckbox {40, 590} {30, 30} off ch2
-ioCheckbox {70, 590} {30, 30} off ch3
-ioCheckbox {100, 590} {30, 30} off ch4
-ioMenu {150, 590} {80, 30} 2 303 "2048,4096,8192,16384" fftsize
-ioText {30, 610} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Channels
-ioText {145, 610} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61696, 61696, 61696} {65024, 65024, 64768} nobackground noborder FFT Size
-ioCheckbox {460, 590} {30, 30} on playpeak
-ioText {435, 610} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Play peak
-ioKnob {585, 585} {56, 54} 24.000000 -24.000000 0.010000 0.000000 ingain
-ioText {505, 590} {80, 25} label 0.000000 0.00100 "" right "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Input Gain (dB)
-ioKnob {720, 585} {56, 54} 0.000000 -80.000000 0.010000 -23.704000 peakgain
-ioText {640, 590} {80, 25} label 0.000000 0.00100 "" right "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Peak Gain (dB)
-ioText {340, 610} {100, 26} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Filter low freqs
-ioCheckbox {375, 590} {30, 30} on filterlow
-ioMenu {250, 590} {80, 30} 4 303 "10,12,15,18,20,24,30" refreshrateidx
-ioText {250, 610} {84, 25} label 0.000000 0.00100 "" center "Arial" 13 {61696, 61696, 61696} {65024, 65024, 64768} nobackground noborder Refresh Rate
-ioText {795, 580} {196, 45} label 0.000000 0.00100 "" left "Liberation Sans" 13 {61184, 61184, 61184} {12288, 13568, 14848} nobackground noborder Press mouse in spectrum display to show nearest  peak
-ioText {10, 10} {999, 70} label 0.000000 0.00100 "" center "Liberation Sans" 24 {61184, 61184, 61184} {12288, 13568, 14848} nobackground noborder Spectrum Analyzer¬Spectral Analysis of Live Input (up to four input channels)
-</MacGUI>
 
 
-<MacGUI>
-ioView background {5654, 5654, 5654}
-ioGraph {10, 80} {1000, 500} table 0.000000 2.000000 spectrum
-ioCheckbox {10, 590} {30, 30} on ch1
-ioCheckbox {40, 590} {30, 30} off ch2
-ioCheckbox {70, 590} {30, 30} off ch3
-ioCheckbox {100, 590} {30, 30} off ch4
-ioMenu {150, 590} {80, 30} 2 303 "2048,4096,8192,16384" fftsize
-ioText {30, 620} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Channels
-ioText {145, 620} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61696, 61696, 61696} {65024, 65024, 64768} nobackground noborder FFT Size
-ioCheckbox {460, 590} {30, 30} on playpeak
-ioText {435, 620} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Play peak
-ioKnob {585, 585} {56, 54} 24.000000 -24.000000 0.010000 0.000000 ingain
-ioText {505, 600} {80, 25} label 0.000000 0.00100 "" right "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Input Gain (dB)
-ioKnob {720, 585} {56, 54} 0.000000 -80.000000 0.010000 -23.704000 peakgain
-ioText {640, 600} {80, 25} label 0.000000 0.00100 "" right "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Peak Gain (dB)
-ioText {340, 620} {100, 26} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Filter low freqs
-ioCheckbox {375, 590} {30, 30} on filterlow
-ioMenu {250, 590} {80, 30} 4 303 "10,12,15,18,20,24,30" refreshrateidx
-ioText {250, 620} {84, 25} label 0.000000 0.00100 "" center "Arial" 13 {61696, 61696, 61696} {65024, 65024, 64768} nobackground noborder Refresh Rate
-ioText {795, 590} {196, 45} label 0.000000 0.00100 "" left "Liberation Sans" 13 {61184, 61184, 61184} {12288, 13568, 14848} nobackground noborder Press mouse in spectrum display to show nearest  peak
-ioText {10, 10} {999, 70} label 0.000000 0.00100 "" center "Liberation Sans" 24 {61184, 61184, 61184} {12288, 13568, 14848} nobackground noborder Spectrum Analyzer¬Spectral Analysis of Live Input (up to four input channels)
-</MacGUI>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -765,26 +697,3 @@ Spectral Analysis of Live Input (up to four input channels)</label>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacGUI>
-ioView background {5654, 5654, 5654}
-ioGraph {10, 80} {1000, 500} table 0.000000 2.000000 spectrum
-ioCheckbox {10, 590} {30, 30} on ch1
-ioCheckbox {40, 590} {30, 30} off ch2
-ioCheckbox {70, 590} {30, 30} off ch3
-ioCheckbox {100, 590} {30, 30} off ch4
-ioMenu {150, 590} {80, 30} 2 303 "2048,4096,8192,16384" fftsize
-ioText {30, 620} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Channels
-ioText {145, 620} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61696, 61696, 61696} {65024, 65024, 64768} nobackground noborder FFT Size
-ioCheckbox {460, 590} {30, 30} on playpeak
-ioText {435, 620} {80, 25} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Play peak
-ioKnob {585, 585} {56, 54} 24.000000 -24.000000 0.010000 0.000000 ingain
-ioText {505, 600} {80, 25} label 0.000000 0.00100 "" right "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Input Gain (dB)
-ioKnob {720, 585} {56, 54} 0.000000 -80.000000 0.010000 -23.704000 peakgain
-ioText {640, 600} {80, 25} label 0.000000 0.00100 "" right "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Peak Gain (dB)
-ioText {340, 620} {100, 26} label 0.000000 0.00100 "" center "Arial" 13 {61184, 61440, 61696} {65024, 65024, 64768} nobackground noborder Filter low freqs
-ioCheckbox {375, 590} {30, 30} on filterlow
-ioMenu {250, 590} {80, 30} 4 303 "10,12,15,18,20,24,30" refreshrateidx
-ioText {250, 620} {84, 25} label 0.000000 0.00100 "" center "Arial" 13 {61696, 61696, 61696} {65024, 65024, 64768} nobackground noborder Refresh Rate
-ioText {795, 590} {196, 45} label 0.000000 0.00100 "" left "Liberation Sans" 13 {61184, 61184, 61184} {12288, 13568, 14848} nobackground noborder Press mouse in spectrum display to show nearest  peak
-ioText {10, 10} {999, 70} label 0.000000 0.00100 "" center "Liberation Sans" 24 {61184, 61184, 61184} {12288, 13568, 14848} nobackground noborder Spectrum Analyzer¬Spectral Analysis of Live Input (up to four input channels)
-</MacGUI>

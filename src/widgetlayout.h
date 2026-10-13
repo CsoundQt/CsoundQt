@@ -101,12 +101,9 @@ public:
 	//    void loadWidgets(QString widgets);
 	void loadXmlWidgets(QString xmlWidgets);
 	void loadXmlPresets(QString xmlPresets);
-	void loadMacWidgets(QString macWidgets);
 	QString getWidgetsText(); // With full tags
 	QString getPresetsText();
 	QString getSelectedWidgetsText();
-	QString getMacWidgetsText(); // With full tags
-	QStringList getSelectedMacWidgetsText();
 	QString getCsladspaLines();
 	QString getCabbageWidgets();
 	bool openMidiPort(int port);
@@ -166,7 +163,6 @@ public:
 	bool enqueueOutputValue(const char *channelName, double value);
 	bool enqueueOutputString(const char *channelName, const char *value);
 	int newXmlWidget(QDomNode node, bool offset = false, bool newId = false);
-	QString newMacWidget(QString widgetLine, bool offset = false);  // Offset is used when pasting duplicated widgets
 	void registerWidget(QuteWidget *widget);
 
 	// TEST: try to get midiBingins info
@@ -402,7 +398,6 @@ private:
 
 	// Configuration
 	bool m_repeatKeys;
-	bool m_xmlFormat;
 	bool m_trackMouse;
 	bool m_openProperties; // Open widget properties when creating widgets
 	bool m_enableEdit; // Enable editing and properties dialog
@@ -467,23 +462,22 @@ private:
 	int m_activeWidgets; // Keeps a number of widgets that can be currently accessed by value callbacks (e.g. set to 0 during paste). This is done to avoid locking the callbacks, which are called from a realtime thread
 
 	int parseXmlNode(QDomNode node);
-	QString createSlider(int x, int y, int width, int height, QString widgetLine);
-	QString createText(int x, int y, int width, int height, QString widgetLine);
-	QString createScrollNumber(int x, int y, int width, int height, QString widgetLine);
-	QString createLineEdit(int x, int y, int width, int height, QString widgetLine);
-	QString createSpinBox(int x, int y, int width, int height, QString widgetLine);
-	QString createButton(int x, int y, int width, int height, QString widgetLine);
-	QString createKnob(int x, int y, int width, int height, QString widgetLine);
-	QString createCheckBox(int x, int y, int width, int height, QString widgetLine);
-	QString createMenu(int x, int y, int width, int height, QString widgetLine);
-	QString createMeter(int x, int y, int width, int height, QString widgetLine);
-	QString createConsole(int x, int y, int width, int height, QString widgetLine);
-	QString createGraph(int x, int y, int width, int height, QString widgetLine);
-	QString createScope(int x, int y, int width, int height, QString widgetLine);
-	QString createDummy(int x, int y, int width, int height, QString widgetLine);
-    QString createTableDisplay(int x, int y, int width, int height, QString widgetLine);
-    QString createWaveform(int x, int y, int width, int height, QString widgetLine);
-    QString createVUMeter(int x, int y, int width, int height, QString widgetLine);
+	QString createSlider(int x, int y, int width, int height, const QString &channel, double minimum, double maximum, double value);
+	QString createText(int x, int y, int width, int height, const QString &textType, const QString &channel, const QString &alignment, const QString &font, int fontSize, const QColor &fgColor, const QColor &bgColor, bool bgMode, const QString &borderMode, const QString &labelText);
+	QString createScrollNumber(int x, int y, int width, int height, const QString &channel, const QString &alignment, const QString &font, int fontSize, const QColor &fgColor, const QColor &bgColor, bool bgMode, const QString &borderMode, double resolution, double value);
+	QString createLineEdit(int x, int y, int width, int height, const QString &channel, const QString &alignment, const QString &font, int fontSize, const QColor &fgColor, const QColor &bgColor, bool bgMode, const QString &borderMode, const QString &labelText);
+	QString createSpinBox(int x, int y, int width, int height, const QString &channel, const QString &alignment, const QString &font, int fontSize, const QColor &fgColor, const QColor &bgColor, bool bgMode, const QString &borderMode, double resolution, double value);
+	QString createButton(int x, int y, int width, int height, const QString &channel, const QString &buttonType, double pressedValue, const QString &text, const QString &image, const QString &eventLine);
+	QString createKnob(int x, int y, int width, int height, const QString &channel, double minimum, double maximum, double resolution, double value);
+	QString createCheckBox(int x, int y, int width, int height, const QString &channel, bool checked);
+	QString createMenu(int x, int y, int width, int height, const QString &channel, const QString &items, int selectedIndex);
+	QString createMeter(int x, int y, int width, int height, const QString &channel, const QString &channel2, const QColor &color, const QString &meterType, double xValue, double yValue, int pointSize, int fadeSpeed);
+	QString createConsole(int x, int y, int width, int height);
+	QString createGraph(int x, int y, int width, int height);
+	QString createScope(int x, int y, int width, int height, const QString &scopeType, double zoom, int channels);
+    QString createTableDisplay(int x, int y, int width, int height);
+    QString createWaveform(int x, int y, int width, int height);
+    QString createVUMeter(int x, int y, int width, int height);
 
 
 	void setBackground(bool bg, QColor bgColor);

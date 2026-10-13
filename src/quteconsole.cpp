@@ -44,20 +44,6 @@ QuteConsole::~QuteConsole()
 QuteWidgetType QuteConsole::getWidgetTypeID() { return QuteWidgetType::CONSOLE; }
 
 
-QString QuteConsole::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioListing {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"}";
-	//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteConsole::getWidgetXmlText()
 {
 	// Consoles are not implemented in blue

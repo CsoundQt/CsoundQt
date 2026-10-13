@@ -34,7 +34,6 @@ public:
 
 	~QuteText();
 
-	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
 
 	virtual QString getWidgetType();
@@ -106,7 +105,6 @@ public:
 	~QuteLineEdit();
 
 	virtual void setText(QString text);
-	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getStringValue();
 	virtual double getValue();
@@ -139,7 +137,6 @@ public:
 	~QuteScrollNumber();
 
     virtual void setTextAlignment(int alignment);
-	virtual QString getWidgetLine();
 	virtual QString getCsladspaLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();

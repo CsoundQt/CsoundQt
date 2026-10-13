@@ -32,7 +32,6 @@ public:
 	QuteComboBox(QWidget *parent);
 	~QuteComboBox();
 
-	virtual QString getWidgetLine();
 	virtual QString getCabbageLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();

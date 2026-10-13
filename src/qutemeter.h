@@ -54,7 +54,6 @@ public:
 	virtual void setMidiValue(int value);
 	virtual bool acceptsMidi() {return true;}
 	//    virtual void setMidiValue2(int value);
-	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
 	virtual QString getCabbageLine();

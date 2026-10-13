@@ -69,7 +69,6 @@ Options::Options(ConfigLists *configlists) :
     showWidgetsOnRun = true;
     showTooltips = false;
     terminalFLTK = false;
-    oldFormat = false;  // Store old MacCsound widget format
     openProperties = true;  // Open properties automatically when creating a widget
     fontScaling = 1.0;
     fontOffset = 0.0;

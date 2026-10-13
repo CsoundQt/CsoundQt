@@ -347,44 +347,6 @@ void QuteText::setFontOffset(double offset)
 	//  applyInternalProperties();
 }
 
-QString QuteText::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioText {" + QString::number(property("CSQT_x").toInt()) + ", " + QString::number(property("CSQT_y").toInt()) + "} ";
-	line += "{"+ QString::number(property("CSQT_width").toInt()) +", "+ QString::number(property("CSQT_height").toInt()) +"} ";
-	line += m_type + " ";
-	line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_channel + "\" ";
-	QString alignment = "";
-	if (((QLabel *)m_widget)->alignment() & Qt::AlignLeft)
-		alignment = "left";
-	else if (((QLabel *)m_widget)->alignment() & Qt::AlignCenter)
-		alignment = "center";
-	else if (((QLabel *)m_widget)->alignment() & Qt::AlignRight)
-		alignment = "right";
-	line += alignment + " ";
-	line += "\"" + property("CSQT_font").toString() + "\" " + QString::number(property("CSQT_fontsize").toInt()) + " ";
-	QColor color = m_widget->palette().color(QPalette::WindowText);
-	line += "{" + QString::number(color.red() * 256)
-			+ ", " + QString::number(color.green() * 256)
-			+ ", " + QString::number(color.blue() * 256) + "} ";
-	color = m_widget->palette().color(QPalette::Window);
-	line += "{" + QString::number(color.red() * 256)
-			+ ", " + QString::number(color.green() * 256)
-			+ ", " + QString::number(color.blue() * 256) + "} ";
-	line += m_widget->autoFillBackground()? "background ":"nobackground ";
-	line += static_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
-	//   line += ((QLabel *)m_widget)->toPlainText();
-	QString outText = property("CSQT_label").toString();
-    outText.replace(QRegularExpression("[\n\r]"), "\u00AC");
-	line += outText;
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteText::getWidgetType()
 {
 	QString type = (m_type=="label" ? "BSBLabel" : "BSBDisplay");
@@ -894,35 +856,6 @@ void QuteLineEdit::setText(QString text)
 	static_cast<QLineEdit*>(m_widget)->setCursorPosition(cursorPos);
 }
 
-QString QuteLineEdit::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-	line += m_type + " ";
-	line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_channel + "\" ";
-	line += property("CSQT_alignmet").toString() + " ";
-	line += "\"" + property("CSQT_font").toString() + "\" " + QString::number(property("CSQT_fontsize").toInt()) + " ";
-	QColor color = property("CSQT_color").value<QColor>();
-	line += "{" + QString::number(color.red() * 256)
-			+ ", " + QString::number(color.green() * 256)
-			+ ", " + QString::number(color.blue() * 256) + "} ";
-	color = property("CSQT_bgcolor").value<QColor>();
-	line += "{" + QString::number(color.red() * 256)
-			+ ", " + QString::number(color.green() * 256)
-			+ ", " + QString::number(color.blue() * 256) + "} ";
-	line += property("CSQT_bgcolormode").toBool() ? "true":"false";
-	line += "noborder ";
-	line += m_stringValue;
-	//   qDebug("QuteLineEdit::getWidgetLine() %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteLineEdit::getWidgetXmlText()
 {
 	xmlText = "";
@@ -1274,40 +1207,6 @@ void QuteScrollNumber::setTextAlignment(int alignment)
 		align = Qt::AlignLeft|Qt::AlignTop;
 	}
 	static_cast<ScrollNumberWidget*>(m_widget)->setAlignment(align);
-}
-
-QString QuteScrollNumber::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-	line += m_type + " ";
-	line += QString::number(m_value, 'f', 6) + " ";
-	line += QString::number(property("CSQT_resolution").toDouble(), 'f', 6);
-	line += + " \"" + m_channel + "\" ";
-	line += property("CSQT_alignment").toString() + " ";
-	line += "\"" + property("CSQT_font").toString() + "\" "
-			+ QString::number(property("CSQT_fontsize").toInt()) + " ";
-	QColor color = property("CSQT_color").value<QColor>();
-	line += "{" + QString::number(color.red() * 256)
-			+ ", " + QString::number(color.green() * 256)
-			+ ", " + QString::number(color.blue() * 256) + "} ";
-	color = property("CSQT_bgcolor").value<QColor>();
-	line += "{" + QString::number(color.red() * 256)
-			+ ", " + QString::number(color.green() * 256)
-			+ ", " + QString::number(color.blue() * 256) + "} ";
-	line += property("CSQT_bgcolormode").toBool() ? "background ":"nobackground ";
-	line += property("CSQT_bordermode").toBool() ? "noborder ": "border ";
-	QString outText = property("CSQT_label").toString();
-    outText.replace(QRegularExpression("[\n\r]"), "\u00AC");
-	line += outText;
-	//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
 }
 
 QString QuteScrollNumber::getCsladspaLine()

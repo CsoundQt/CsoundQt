@@ -342,15 +342,3 @@ IOViewEdit: On
 Options:
 </MacOptions>
 
-<MacGUI>
-ioView background {21845, 43690, 32639}
-ioSlider {60, 49} {20, 100} 1.000000 80.000000 1.000000 att
-ioText {176, 172} {80, 25} label 0.000000 0.00100 "" center "Arial" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Attack
-ioSlider {117, 49} {20, 100} 1.000000 50.000000 47.060000 rel
-ioText {225, 164} {80, 25} label 0.000000 0.00100 "" center "Arial" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Release
-ioText {199, 116} {80, 25} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Slow
-ioText {173, 35} {80, 25} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Fast
-ioText {183, 56} {10, 60} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {0, 0, 0} nobackground noborder 
-ioSlider {195, 49} {20, 100} 1.000000 50.000000 16.680000 pitchglide
-ioText {164, 147} {80, 25} label 0.000000 0.00100 "" center "Arial" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Glide
-</MacGUI>

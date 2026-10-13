@@ -373,7 +373,6 @@ private:
 	// void createQuickRefPdf();
 	void deleteTab(int index = -1);
 	void openLogFile();
-	void showNewFormatWarning();
 	void setupEnvironment();
     void openHtmlHelp(QString fileName, QString entry, bool external);
 

@@ -360,18 +360,3 @@ CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioSlider {5, 5} {20, 200} 0.000000 1.000000 0.000000 ratio
-ioSlider {45, 5} {20, 200} 0.000000 0.100000 0.100000 gain
-ioText {1, 200} {34, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ratio
-ioText {38, 200} {33, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Gain
-ioCheckbox {75, 180} {30, 30} off learn
-ioText {90, 183} {60, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {37632, 13312, 3584} {65280, 65280, 65280} nobackground noborder Learn
-ioButton {75, 158} {100, 25} event 1.000000 "button1" "Clear mask" "/" i2 0 1
-ioCheckbox {75, 130} {30, 30} off 
-ioText {90, 135} {80, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Bypass
-ioText {75, 5} {160, 125} label 0.000000 0.00100 "" left "Helvetica" 10 {32512, 28672, 24064} {49664, 49664, 49664} nobackground noborder This noise reduction unit can sample a noise print and then remove it through spectral masking. First clear the mask then activate the learn while the noise is playing. Deactivate the learn button and the noise will be removed.
-ioCheckbox {236, 191} {30, 30} off learning
-ioButton {190, 158} {132, 25} event 1.000000 "white" "Mask white noise" "/" i3 0 1
-</MacGUI>

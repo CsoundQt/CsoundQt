@@ -70,12 +70,8 @@ public:
     void enableScoreSyntaxHighlighting(bool status);
     virtual QString getFullText();
 	QString getDotText();
-	QString getMacWidgetsText();
-	QString getMacPresetsText();
-	QString getMacOptionsText();
 	QString getSelectedText(int section = -1);
 	QString getSelectedWidgetsText();
-	QString getMacOptions(QString option);
 	QString getHtmlText();
 	int getViewMode();
 	QString wordUnderCursor();
@@ -168,7 +164,6 @@ public:
 	// Internal Options setters
 	void setConsoleBufferSize(int size);
 	void setWidgetEnabled(bool enabled);
-	void useOldFormat(bool use);
 	void setPythonExecutable(QString pythonExec);
 	virtual void registerButton(QuteButton *button);
 	void queueMidiIn(std::vector<unsigned char> *message);
@@ -200,8 +195,6 @@ public slots:
 	void passSelectedWidget(QuteWidget* widget);
 	void passUnselectedWidget(QuteWidget* widget);
 	void showMidiLearn(QuteWidget *widget);
-	void applyMacOptions(QStringList options);
-	void setMacOption(QString option, QString newValue);
     void setModified(bool mod = true);
 	// For Csound Engine
 	void sendCodeToEngine(QString code);
@@ -232,16 +225,12 @@ private:
 	CsoundOptions getParentOptions();
 	virtual WidgetLayout* newWidgetLayout();
 	QString companionFile;
-	QStringList m_macOptions;
-	QString m_macPresets;
-	QString m_macGUI;
 	bool m_pythonRunning;
 	QString m_pythonExecutable;
 	MidiLearnDialog *m_midiLearn;
 	//    DocumentView *m_view;
 	// Options
 	bool saveLiveEvents;
-	bool saveOldFormat;
 	int m_lineEnding;
     QString m_colorTheme;
     QStringList m_parsedUdos;

@@ -137,26 +137,6 @@ QuteGraph::~QuteGraph()
 {
 }
 
-QString QuteGraph::getWidgetLine()
-{
-	// Extension to MacCsound: type of graph (table, ftt, scope), value (which hold the index of the
-	// table displayed) zoom and channel name
-	// channel number is unused in QuteGraph, but selects channel for scope
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} table ";
-	line += QString::number(m_value, 'f', 6) + " ";
-	line += QString::number(property("CSQT_zoomx").toDouble(), 'f', 6) + " ";
-	line += m_channel;
-	//   qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteGraph::getWidgetXmlText()
 {
 	// Graphs are not implemented in blue

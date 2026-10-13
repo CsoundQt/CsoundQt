@@ -193,13 +193,6 @@ CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
-<MacGUI>
-ioView nobackground {59110, 56797, 54741}
-ioText {17, 62} {500, 207} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This file introduces the Live Event Panel of CsoundQtÂ¬Â¬1. Run this file!Â¬2. Open the Live Event Controller window from the View Menu (If it's not currently at the front, you may need to hide it first and then show it)Â¬3. You can play the contents of the panels by clicking on the play buttons. Alternatively, you can show the panels, to control events individually. Right click there on the cells to see actions.Â¬4. Try the "Send events" action when standing over one of the event linesÂ¬
-ioButton {105, 361} {318, 29} value 1.000000 "_Play" "Run" "/" 
-ioText {17, 9} {500, 47} label 0.000000 0.00100 "" center "Helvetica" 22 {0, 0, 0} {32512, 48640, 48640} nobackground noborder Event Panels
-ioText {15, 275} {500, 78} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Note that you can send individual events, setting independent tempos for each panel.Â¬You can also set a loop range for each panel, and loop each panel independently.
-</MacGUI>
 <EventPanel name="Demo 1" tempo="60.00000000" loop="8.00000000" x="616" y="297" width="603" height="374" visible="false" loopStart="0" loopEnd="7">    
 i 1 0 1 440 0.2 0.3 1 
 i 1 0 1 880 0.2 0.3 1 

@@ -96,22 +96,6 @@ double QuteCheckBox::getValue()
 //  return static_cast<QCheckBox *>(m_widget)->text();
 //}
 
-QString QuteCheckBox::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioCheckbox {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-	line += (static_cast<QCheckBox *>(m_widget)->isChecked()? QString("on "):QString("off "));
-	line += m_channel;
-	//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteCheckBox::getCabbageLine()
 {
 #ifdef  USE_WIDGET_MUTEX

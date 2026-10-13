@@ -49,23 +49,6 @@ QuteComboBox::~QuteComboBox()
 QuteWidgetType QuteComboBox::getWidgetTypeID() { return QuteWidgetType::DROPDOWN; } 
 
 
-QString QuteComboBox::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioMenu {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-	line += QString::number(((QComboBox *)m_widget)->currentIndex()) + " ";
-	line += "303 ";
-	line += "\"" + itemList() + "\" ";
-	line += m_channel;
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteComboBox::getCabbageLine()
 {
 #ifdef  USE_WIDGET_MUTEX

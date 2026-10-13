@@ -34,7 +34,6 @@ public:
 
 	~QuteConsole();
 
-	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
 	virtual void setWidgetGeometry(int x,int y,int width,int height);

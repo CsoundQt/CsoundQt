@@ -129,23 +129,6 @@ QString triggerModeToName(TriggerMode t) {
 }
 
 
-QString QuteScope::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-	line += property("CSQT_type").toString() + " " + QString::number(zoomx(), 'f', 6) + " ";
-	line += QString::number((int) m_value) + " ";
-	line += m_channel;
-	//   qDebug("QuteScope::getWidgetLine() %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteScope::getWidgetXmlText()
 {
 	xmlText = "";

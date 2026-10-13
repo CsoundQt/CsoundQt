@@ -88,30 +88,6 @@ void QuteMeter::setMidiValue(int value)
     emit newValue(channelValue);
 }
 
-QString QuteMeter::getWidgetLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-    widgetLock.lockForRead();
-#endif
-    QString line = "ioMeter {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-    line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-    QColor color = property("CSQT_color").value<QColor>();
-    line += "{" + QString::number(color.red() * 256)
-            + ", " + QString::number(color.green() * 256)
-            + ", " + QString::number(color.blue() * 256) + "} ";
-    line += "\"" + m_channel + "\" " + QString::number(m_value, 'f', 6) + " ";
-    line += "\"" + m_channel2 + "\" " + QString::number(m_value2, 'f', 6) + " ";
-    line += property("CSQT_type").toString() + " ";
-    line += QString::number(property("CSQT_pointsize").toInt()) + " ";
-    line += QString::number(property("CSQT_fadeSpeed").toInt()) + " ";
-    line += "mouse";
-    //   qDebug("QuteMeter::getWidgetLine() %s", line.toStdString().c_str());
-#ifdef  USE_WIDGET_MUTEX
-    widgetLock.unlock();
-#endif
-    return line;
-}
-
 QString QuteMeter::getWidgetXmlText()
 {
     xmlText = "";
