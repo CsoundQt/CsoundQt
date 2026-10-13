@@ -25,19 +25,30 @@
 
 #include <QRegularExpression>
 
+// Matches a line that starts an instrument or opcode definition.
+static const QRegularExpression &orchestraDefinitionRx()
+{
+	static const QRegularExpression defRx(
+				QStringLiteral(R"(^[ \t]*(?:instr|opcode)\b)"),
+				QRegularExpression::MultilineOption);
+	return defRx;
+}
+
 // Position of the first line that starts an instrument or opcode definition at
 // or after `from`, or -1 if there is none. Used to place global orchestra code
 // (e.g. an ftgen) after the header and before the first definition.
 static int firstDefinitionPosition(const QString &text, int from)
 {
-	static const QRegularExpression defRx(
-				QStringLiteral(R"(^[ \t]*(?:instr|opcode)\b)"),
-				QRegularExpression::MultilineOption);
-	auto it = defRx.globalMatch(text, from);
+	auto it = orchestraDefinitionRx().globalMatch(text, from);
 	if (it.hasNext()) {
 		return it.next().capturedStart();
 	}
 	return -1;
+}
+
+static bool isDefinitionLine(const QString &line)
+{
+	return orchestraDefinitionRx().match(line).hasMatch();
 }
 
 BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
@@ -734,6 +745,11 @@ void BaseView::insertOrchestraGlobal(QString text)
 		}
 		cursor.setPosition(pos);
 		cursor.insertText(text);
+		// Always keep at least one blank line between the inserted code and
+		// the first instr/opcode definition.
+		if (isDefinitionLine(cursor.block().text())) {
+			cursor.insertText(QStringLiteral("\n"));
+		}
 	};
 	if (m_viewMode < 2) { // Unified view: the whole document lives in the main editor
 		QTextCursor cursor = m_mainEditor->textCursor();
