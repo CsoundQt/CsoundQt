@@ -6067,6 +6067,10 @@ void CsoundQt::readSettings()
     m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
     m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
     m_options->HwBufferSizeActive = settings.value("HwBufferSizeActive", false).toBool();
+    // Normalise: anything but the legacy value means modern 1.0 (this also
+    // migrates the old "orchestra" value from earlier builds).
+    m_options->zeroDbfs =
+            settings.value("zeroDbfs", "1.0").toString() == "32768" ? "32768" : "1.0";
     m_options->dither = settings.value("dither", false).toBool();
     m_options->newParser = settings.value("newParser", false).toBool();
     m_options->multicore = settings.value("multicore", false).toBool();
@@ -6327,6 +6331,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
         settings.setValue("HwBufferSize",m_options->HwBufferSize);
         settings.setValue("HwBufferSizeActive", m_options->HwBufferSizeActive);
+        settings.setValue("zeroDbfs", m_options->zeroDbfs);
         settings.setValue("dither", m_options->dither);
         settings.setValue("realtimeFlag", m_options->realtimeFlag);
         settings.setValue("sampleAccurateFlag", m_options->sampleAccurateFlag);
