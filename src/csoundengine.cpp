@@ -1279,6 +1279,9 @@ void CsoundEngine::setupChannels()
     }
     ud->outputChannelNamesSet = seenChannelNames;
 
+    // Publish the freshly built channel map for the realtime input callbacks.
+    // This runs before the performance thread is started.
+    ud->wl->publishChannelSnapshot();
 }
 
 void CsoundEngine::messageListDispatcher(void *data)

@@ -120,6 +120,10 @@ public:
 	void setDisplayValue(QString channelName, double value);
 	QString getStringForChannel(QString channelName, bool *modified = 0);
     double getValueForChannel(QString channelName, bool *modified = 0, double notfound = 0.0);
+	// Rebuild and atomically publish the lock-free channel snapshot read by the
+	// realtime input callbacks. Must be called on the GUI thread after the
+	// channel map / widget set changed (e.g. after setupChannels()).
+	void publishChannelSnapshot();
 	void getMouseValues(QVector<double> *values);
 	int getMouseX();
 	int getMouseY();
@@ -348,6 +352,10 @@ public slots:
 	void alignCenterHorizontal();
 
 	void markHistory();
+	// Like markHistory(), but records that the state was reached by changing
+	// widget geometry only (move/resize). Undo/redo can then restore the
+	// positions in place instead of destroying and rebuilding the whole panel.
+	void markHistoryGeometry();
 	void createEditFrame(QuteWidget* widget);
 
 	void widgetChanged(QuteWidget* widget = 0);
@@ -415,8 +423,20 @@ private:
     // XXXX: flag to control updateData
     bool m_updating;
 
-	QVector<QString> m_history;  // Undo/ Redo history
+	// One undo/redo state. Besides the serialized panel, each entry stores the
+	// geometry of every widget at that state plus whether the transition into it
+	// only changed widget geometry (move/resize). Geometry-only states are
+	// restored by moving widgets in place, avoiding a destructive reload.
+	struct HistoryEntry {
+		QString xml;
+		bool geometryOnly = false;
+		QHash<QString, QRect> geometry; // widget uuid -> geometry
+	};
+	QVector<HistoryEntry> m_history;  // Undo/ Redo history
 	int m_historyIndex; // Current point in history
+	void markHistoryInternal(bool geometryOnly);
+	QHash<QString, QRect> currentWidgetGeometry();
+	void applyHistoryGeometry(const QHash<QString, QRect> &geometry);
 	bool m_modified;
 	bool m_editMode;
 	//    QString m_clipboard;
@@ -460,6 +480,31 @@ private:
 	QVector<QuteScope *> scopeWidgets;
 	QVector<QuteWaveform *> waveformWidgets;
 	int m_activeWidgets; // Keeps a number of widgets that can be currently accessed by value callbacks (e.g. set to 0 during paste). This is done to avoid locking the callbacks, which are called from a realtime thread
+
+	// Lock-free snapshot read by the Csound performance thread's input channel
+	// callbacks (getValueForChannel/getStringForChannel). Instead of touching
+	// m_widgets / channelNameToWidgets directly - which the GUI thread mutates
+	// and whose widgets it may delete during undo/redo/reload - the realtime
+	// callbacks read this immutable snapshot. A new snapshot is published
+	// whenever the widget set changes; the previous one, and the widgets it
+	// points to, are kept alive in the "retired" lists until
+	// pruneRetiredWidgets() runs, which only happens when no performance is
+	// running. This makes widget teardown safe with respect to the realtime thread.
+	struct ChannelSnapshot {
+		QHash<QString, QList<QuteWidget *>> channelNameToWidgets;
+		QVector<QuteWidget *> widgets;
+		int activeWidgets = 0;
+	};
+	QAtomicPointer<ChannelSnapshot> m_channelSnapshot; // current snapshot (owned here)
+	QList<ChannelSnapshot *> m_retiredSnapshots;       // superseded snapshots
+	QList<QuteWidget *> m_retiredWidgets;              // widgets removed from the panel
+	QList<FrameWidget *> m_retiredFrames;              // their edit frames
+	bool m_loadingWidgets;                             // suppress snapshot publishing while rebuilding
+
+	void publishChannelSnapshotLocked();               // widgetsMutex must be held
+	void retireWidgetLocked(QuteWidget *widget);       // widgetsMutex must be held
+	void retireFrameLocked(FrameWidget *frame);        // widgetsMutex must be held
+	void pruneRetiredWidgets();                        // frees retired widgets/frames/snapshots
 
 	int parseXmlNode(QDomNode node);
 	QString createSlider(int x, int y, int width, int height, const QString &channel, double minimum, double maximum, double value);

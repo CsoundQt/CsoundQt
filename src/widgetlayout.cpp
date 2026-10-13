@@ -57,6 +57,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     m_currentPreset = -1;
     m_activeWidgets = 0;
     m_updateRate = 30;
+    m_loadingWidgets = false;
 
     auto palette = qApp->palette();
     auto isLightTheme = palette.text().color().lightness() < palette.window().color().lightness();
@@ -252,6 +253,9 @@ WidgetLayout::~WidgetLayout()
         QThread::usleep(10000);
     }
     clearGraphs();  // To free memory from curves.
+    pruneRetiredWidgets();
+    delete m_channelSnapshot.loadRelaxed();
+    m_channelSnapshot.storeRelaxed(nullptr);
 }
 
 //unsigned int WidgetLayout::widgetCount()
@@ -270,6 +274,15 @@ QuteWidgetType WidgetLayout::widgetNameToType(QString widgetName) {
 
 void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 {
+    // Keep the previously published channel snapshot alive while the panel is
+    // being rebuilt (registerWidget() will not publish a new one); a fresh
+    // snapshot is published at the end and on the early-return paths below.
+    struct LoadingGuard {
+        bool &flag;
+        explicit LoadingGuard(bool &f) : flag(f) { flag = true; }
+        ~LoadingGuard() { flag = false; }
+    } loadingGuard(m_loadingWidgets);
+
     m_unknownWidgetFonts.clear();
     clearWidgetLayout();
     QDomDocument doc;
@@ -277,6 +290,7 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
         QMessageBox::warning(this, tr("Widget Error"),
                              tr("Widgets can't be read! No widgets created."));
         qDebug() << "WidgetLayout::loadXmlWidgets Error parsing xml text! Aborting.";
+        publishChannelSnapshot();
         return;
     }
     QDomNodeList panel = doc.elementsByTagName("bsbPanel");
@@ -289,6 +303,7 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     QDomNode p = panel.item(0);
     if (p.isNull()) {
         qDebug() << "WidgetLayout::loadXmlWidgets no bsbPanel element! Aborting.";
+        publishChannelSnapshot();
         return;
     }
     QDomNodeList c = p.childNodes();
@@ -333,6 +348,7 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     //	}
     qDebug() << "Finished loading xml widgets";
     reportUnknownWidgetFonts();
+    publishChannelSnapshot();
 }
 
 void WidgetLayout::reportUnknownWidgetFonts()
@@ -633,12 +649,19 @@ void WidgetLayout::setValue(int index, QString value)
 QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 {
     (void) modified;
-    const auto &widgets = channelNameToWidgets.constFind(channelName);
-    if(widgets == channelNameToWidgets.end()) {
-        for (int i = 0; i < m_activeWidgets ; i++) {
-            if (m_widgets[i]->getChannelName() == channelName) {
-                QString value = m_widgets[i]->getStringValue();
-                return value;
+    // Called from the Csound performance thread: read the lock-free snapshot
+    // instead of the live widget containers.
+    ChannelSnapshot *snapshot = m_channelSnapshot.loadAcquire();
+    if (snapshot == nullptr) {
+        return QString();
+    }
+    auto widgets = snapshot->channelNameToWidgets.constFind(channelName);
+    if(widgets == snapshot->channelNameToWidgets.constEnd()) {
+        const int count = qMin(snapshot->activeWidgets, snapshot->widgets.size());
+        for (int i = 0; i < count ; i++) {
+            QuteWidget *w = snapshot->widgets[i];
+            if (w->getChannelName() == channelName) {
+                return w->getStringValue();
             }
         }
         return QString();
@@ -654,17 +677,32 @@ QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 double WidgetLayout::getValueForChannel(QString channelName, bool *modified, double notfound)
 {
     (void) modified;
-    if(!channelNameToWidgets.contains(channelName))
+    // Called from the Csound performance thread: read the lock-free snapshot
+    // instead of the live widget containers.
+    ChannelSnapshot *snapshot = m_channelSnapshot.loadAcquire();
+    if (snapshot == nullptr) {
         return notfound;
-    const auto &widgets = channelNameToWidgets[channelName];
-    if(widgets.isEmpty()) {
-        QDEBUG << "No widgets found for channel " << channelName;
-        return notfound;
-    } else {
-        auto w = widgets.constFirst();
+    }
+    auto widgets = snapshot->channelNameToWidgets.constFind(channelName);
+    if (widgets != snapshot->channelNameToWidgets.constEnd() && !widgets.value().isEmpty()) {
+        auto w = widgets.value().constFirst();
         return w->getChannelName() == channelName ? w->getValue() : w->getValue2();
     }
-    // TODO: deal with UUID as channel name    
+    // Fallback: scan the snapshot's widget list. This covers the window in
+    // which the channel cache has not been rebuilt yet (e.g. right after a
+    // reload), so input channels keep working.
+    const int count = qMin(snapshot->activeWidgets, snapshot->widgets.size());
+    for (int i = 0; i < count; i++) {
+        QuteWidget *w = snapshot->widgets[i];
+        if (w->getChannelName() == channelName) {
+            return w->getValue();
+        }
+        if (w->getChannel2Name() == channelName) {
+            return w->getValue2();
+        }
+    }
+    return notfound;
+    // TODO: deal with UUID as channel name
 }
 
 void WidgetLayout::getMouseValues(QVector<double> *values)
@@ -1119,9 +1157,69 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
     }
     setWidgetToolTip(widget, m_tooltips);
     m_activeWidgets++;
+    if (!m_loadingWidgets) {
+        publishChannelSnapshotLocked();
+    }
     widgetsMutex.unlock();
     adjustLayoutSize();
 	widget->show();
+}
+
+void WidgetLayout::publishChannelSnapshotLocked()
+{
+    // widgetsMutex must be held (callers inside the layout guarantee this).
+    auto *snapshot = new ChannelSnapshot;
+    snapshot->channelNameToWidgets = channelNameToWidgets;
+    snapshot->widgets = m_widgets;
+    snapshot->activeWidgets = m_activeWidgets;
+    ChannelSnapshot *old = m_channelSnapshot.fetchAndStoreRelease(snapshot);
+    if (old != nullptr) {
+        // An in-flight realtime read may still be using it; keep it until
+        // pruneRetiredWidgets() runs.
+        m_retiredSnapshots.append(old);
+    }
+}
+
+void WidgetLayout::publishChannelSnapshot()
+{
+    QMutexLocker locker(&widgetsMutex);
+    publishChannelSnapshotLocked();
+}
+
+void WidgetLayout::retireWidgetLocked(QuteWidget *widget)
+{
+    // Do not delete the widget: the Csound performance thread may still hold a
+    // pointer to it through a published snapshot. Hide it and detach it from
+    // the controller registry; it is freed by pruneRetiredWidgets().
+    widget->blockSignals(true);
+    widget->hide();
+    unregisterWidgetController(widget);
+    m_retiredWidgets.append(widget);
+}
+
+void WidgetLayout::retireFrameLocked(FrameWidget *frame)
+{
+    frame->blockSignals(true);
+    frame->hide();
+    m_retiredFrames.append(frame);
+}
+
+void WidgetLayout::pruneRetiredWidgets()
+{
+    // Only safe when no performance is running: the Csound performance thread
+    // must not be reading retired widgets or snapshots. Called when the engine
+    // stops (engineStopped()) and on destruction.
+    QList<ChannelSnapshot *> snapshots;
+    QList<QuteWidget *> widgets;
+    QList<FrameWidget *> frames;
+    widgetsMutex.lock();
+    snapshots.swap(m_retiredSnapshots);
+    widgets.swap(m_retiredWidgets);
+    frames.swap(m_retiredFrames);
+    widgetsMutex.unlock();
+    qDeleteAll(snapshots);
+    qDeleteAll(widgets);
+    qDeleteAll(frames);
 }
 
 QString WidgetLayout::getMidiControllerInstrument()
@@ -1250,6 +1348,9 @@ void WidgetLayout::flush()
 void WidgetLayout::engineStopped()
 {
     flushGraphBuffer();
+    // No performance is running now, so retired widgets and snapshots can be
+    // freed safely (the realtime input callbacks are no longer invoked).
+    pruneRetiredWidgets();
 }
 
 void WidgetLayout::showWidgetTooltips(bool show)
@@ -2359,21 +2460,28 @@ void WidgetLayout::clearWidgetLayout()
     //   qDebug("WidgetLayout::clearWidgetLayout()");
     widgetsMutex.lock();
     m_activeWidgets = 0;
+    // Retire the widgets instead of deleting them: the Csound performance
+    // thread may still be reading them through the published channel snapshot.
+    // They are actually freed by pruneRetiredWidgets() when no performance is
+    // running (see engineStopped()).
     foreach (QuteWidget *widget, m_widgets) {
-        delete widget;
+        retireWidgetLocked(widget);
     }
     m_widgets.clear();
     channelNameToWidgets.clear();
     m_widgetNameToWidget.clear();
-    foreach (FrameWidget *widget, editWidgets) {
+    foreach (FrameWidget *frame, editWidgets) {
         //     qDebug("WidgetLayout::clearWidgetLayout() removed editWidget");
-        delete widget;
+        retireFrameLocked(frame);
     }
     editWidgets.clear();
     consoleWidgets.clear();
     graphWidgets.clear();
     scopeWidgets.clear();
     waveformWidgets.clear();
+    if (!m_loadingWidgets) {
+        publishChannelSnapshotLocked();
+    }
     widgetsMutex.unlock();
 }
 
@@ -2913,6 +3021,12 @@ void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
 
 void WidgetLayout::widgetChanged(QuteWidget* widget)
 {
+    if (widget != nullptr && !m_widgets.contains(widget)) {
+        // The widget has been removed from the panel. Do not re-register it as
+        // a controller/channel owner; just refresh the layout.
+        adjustLayoutSize();
+        return;
+    }
     if (widget != nullptr) {
         //    widgetsMutex.lock();
         // check if this is an unknown channel
@@ -3565,7 +3679,7 @@ void WidgetLayout::setMouseOffset(int x, int y)
 void WidgetLayout::clearHistory()
 {
     m_history.clear();
-    m_history << "";
+    m_history.append(HistoryEntry());
     m_historyIndex = 0;
 }
 
@@ -3948,8 +4062,8 @@ void WidgetLayout::setEditMode(bool active)
     }
     if (active) {
         widgetsMutex.lock();
-        foreach (FrameWidget *widget, editWidgets) {
-            delete widget;
+        foreach (FrameWidget *frame, editWidgets) {
+            retireFrameLocked(frame);
         }
         editWidgets.clear();
         foreach (QuteWidget * widget, m_widgets) {
@@ -3959,10 +4073,12 @@ void WidgetLayout::setEditMode(bool active)
         widgetsMutex.unlock();
     }
     else {
-        foreach (QFrame* frame, editWidgets) {
-            delete(frame);
+        widgetsMutex.lock();
+        foreach (FrameWidget *frame, editWidgets) {
+            retireFrameLocked(frame);
         }
         editWidgets.clear();
+        widgetsMutex.unlock();
     }
     m_editMode = active;
 }
@@ -3987,7 +4103,7 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
             this, SLOT(widgetMoved( QPair<int, int> )));
     connect(frame, SIGNAL(resized( QPair<int, int> )),
             this, SLOT(widgetResized( QPair<int, int> )));
-    connect(frame, SIGNAL(mouseReleased()), this, SLOT(markHistory()));
+    connect(frame, SIGNAL(mouseReleased()), this, SLOT(markHistoryGeometry()));
     connect(frame, SIGNAL(editWidget()), widget, SLOT(openProperties()));
     connect(frame, SIGNAL(widgetSelected(QuteWidget*)),
             this, SLOT(widgetSelected(QuteWidget*)));
@@ -3998,38 +4114,114 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
 
 void WidgetLayout::markHistory()
 {
-    QString text = getWidgetsText();
+    markHistoryInternal(false);
+}
+
+void WidgetLayout::markHistoryGeometry()
+{
+    markHistoryInternal(true);
+}
+
+void WidgetLayout::markHistoryInternal(bool geometryOnly)
+{
+    const QString text = getWidgetsText();
+    const QHash<QString, QRect> geometry = currentWidgetGeometry();
     if (m_history.isEmpty()) {
-        m_history << "";
+        m_history.append(HistoryEntry());
         m_historyIndex = 0;
     }
-    if (m_history[m_historyIndex] != text) {
-        if (! m_history[m_historyIndex].isEmpty())
-            m_historyIndex++;
-        if (m_historyIndex >= CSQT_MAX_UNDO) {
-            m_history.pop_front();
-            (m_historyIndex)--;
-        }
-        if (m_history.size() != m_historyIndex + 1)
-            m_history.resize(m_historyIndex + 1);
-        m_history[m_historyIndex] = text;
+    const QString currentXml = m_history[m_historyIndex].xml;
+    if (currentXml == text) {
+        return;  // nothing changed
     }
+    if (!currentXml.isEmpty()) {
+        m_historyIndex++;
+    }
+    if (m_historyIndex >= CSQT_MAX_UNDO) {
+        m_history.pop_front();
+        m_historyIndex--;
+    }
+    if (m_history.size() != m_historyIndex + 1) {
+        m_history.resize(m_historyIndex + 1);
+    }
+    HistoryEntry entry;
+    entry.xml = text;
+    entry.geometryOnly = geometryOnly;
+    entry.geometry = geometry;
+    m_history[m_historyIndex] = entry;
+}
+
+QHash<QString, QRect> WidgetLayout::currentWidgetGeometry()
+{
+    QHash<QString, QRect> geometry;
+    widgetsMutex.lock();
+    geometry.reserve(m_widgets.size());
+    for (QuteWidget *widget : m_widgets) {
+        geometry.insert(widget->getUuid(), QRect(widget->x(), widget->y(),
+                                                 widget->width(), widget->height()));
+    }
+    widgetsMutex.unlock();
+    return geometry;
+}
+
+void WidgetLayout::applyHistoryGeometry(const QHash<QString, QRect> &geometry)
+{
+    // Restore geometry in place (no widget is destroyed or created). Used to
+    // undo/redo move and resize actions without reloading the whole panel.
+    widgetsMutex.lock();
+    for (int i = 0; i < m_widgets.size(); i++) {
+        QuteWidget *widget = m_widgets[i];
+        auto it = geometry.constFind(widget->getUuid());
+        if (it == geometry.constEnd()) {
+            continue;
+        }
+        const QRect r = it.value();
+        if (r.width() <= 0 || r.height() <= 0) {
+            continue;
+        }
+        widget->setProperty("CSQT_x", r.x());
+        widget->setProperty("CSQT_y", r.y());
+        widget->setProperty("CSQT_width", r.width());
+        widget->setProperty("CSQT_height", r.height());
+        widget->setWidgetGeometry(r.x(), r.y(), r.width(), r.height());
+        if (i < editWidgets.size()) {
+            editWidgets[i]->setGeometry(r);
+        }
+    }
+    widgetsMutex.unlock();
+    adjustLayoutSize();
+    widgetChanged();
+    setModified(true);
 }
 
 void WidgetLayout::deleteWidget(QuteWidget *widget)
 {
     widgetsMutex.lock();
     int index = m_widgets.indexOf(widget);
+    if (index < 0) {
+        // Already removed (e.g. during a reload); nothing to do.
+        widgetsMutex.unlock();
+        return;
+    }
     m_activeWidgets = index;  // Allow all widgets before this one to be active
-    widget->close();
     m_widgets.remove(index);
-    channelNameToWidgets.clear();
+    // Remove only this widget from the channel cache. Clearing the whole cache
+    // would make every other channel briefly fall back to discovery, which has
+    // side effects on widgets that are not being removed.
+    for (auto it = channelNameToWidgets.begin(); it != channelNameToWidgets.end(); ) {
+        it.value().removeAll(widget);
+        if (it.value().isEmpty()) {
+            it = channelNameToWidgets.erase(it);
+        } else {
+            ++it;
+        }
+    }
     if (!widget->getWidgetName().isEmpty()
             && m_widgetNameToWidget.value(widget->getWidgetName()) == widget) {
         m_widgetNameToWidget.remove(widget->getWidgetName());
     }
     if (!editWidgets.isEmpty()) {
-        delete(editWidgets[index]);
+        retireFrameLocked(editWidgets[index]);
         editWidgets.remove(index);
     }
     index = consoleWidgets.indexOf(dynamic_cast<QuteConsole *>(widget));
@@ -4046,6 +4238,8 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
     if (index >= 0)
         waveformWidgets.remove(index);
     m_activeWidgets = m_widgets.size();  // Allow all widgets again
+    retireWidgetLocked(widget);
+    publishChannelSnapshotLocked();
     widgetsMutex.unlock();
     widgetChanged(widget);
 }
@@ -4276,7 +4470,7 @@ void WidgetLayout::moveSelected(int horiz, int vert, int grid) {
         widgetsMutex.lock();
     }
     widgetsMutex.unlock();
-    markHistory();
+    markHistoryGeometry();
     setModified(true);
 }
 
@@ -4284,14 +4478,22 @@ void WidgetLayout::undo()
 {
     if(m_historyIndex <= 0)
         return;
+    // If the change being undone only moved/resized widgets, restore the
+    // geometry in place instead of reloading (and destroying) the whole panel.
+    const bool geometryOnly = m_history[m_historyIndex].geometryOnly;
     m_historyIndex--;
-    loadXmlWidgets(m_history[m_historyIndex]);
+    if (geometryOnly) {
+        applyHistoryGeometry(m_history[m_historyIndex].geometry);
+    }
+    else {
+        loadXmlWidgets(m_history[m_historyIndex].xml);
+    }
 }
 
 void WidgetLayout::reloadWidgets() {
-    if(m_historyIndex <= 0)
+    if(m_historyIndex <= 0 || m_historyIndex >= m_history.size())
         return;
-    loadXmlWidgets(m_history[m_historyIndex]);
+    loadXmlWidgets(m_history[m_historyIndex].xml);
 }
 
 void WidgetLayout::redo()
@@ -4299,7 +4501,12 @@ void WidgetLayout::redo()
     if (m_historyIndex >= m_history.size() - 1)
         return;
     m_historyIndex++;
-    loadXmlWidgets(m_history[m_historyIndex]);
+    if (m_history[m_historyIndex].geometryOnly) {
+        applyHistoryGeometry(m_history[m_historyIndex].geometry);
+    }
+    else {
+        loadXmlWidgets(m_history[m_historyIndex].xml);
+    }
 }
 
 
