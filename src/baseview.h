@@ -93,10 +93,9 @@ public:
 	//    void setOpcodeTree(OpEntryParser *opcodeTree);
 	void setOrc(QString text);
 	void setSco(QString text);
-	// Drag & drop helpers: insert generated code at the cursor, among the
-	// orchestra's global code (before the first instr/opcode), or at the top
-	// of the score section.
-	void insertTextAtCursor(QString text);
+	// Drag & drop helpers: insert a file path at the cursor, global orchestra
+	// code (before the first instr/opcode), or at the top of the score.
+	void insertPathAtCursor(const QString &path);
 	void insertOrchestraGlobal(QString text);
 	void insertAtScoreStart(QString text);
 	void clearFileBText();

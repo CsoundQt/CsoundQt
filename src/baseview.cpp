@@ -680,7 +680,27 @@ QString BaseView::getBasicText()
 	return text;
 }
 
-void BaseView::insertTextAtCursor(QString text)
+// True when the cursor sits inside a double-quoted string on its line. A
+// backslash escapes the following character, so \" does not toggle the state.
+static bool cursorIsInsideQuotes(const QTextCursor &cursor)
+{
+	const QString line = cursor.block().text();
+	const int column = cursor.positionInBlock();
+	bool inside = false;
+	for (int i = 0; i < column && i < line.size(); ++i) {
+		const QChar c = line.at(i);
+		if (c == QLatin1Char('\\')) {
+			++i; // skip the escaped character
+			continue;
+		}
+		if (c == QLatin1Char('"')) {
+			inside = !inside;
+		}
+	}
+	return inside;
+}
+
+void BaseView::insertPathAtCursor(const QString &path)
 {
 	// Insert at the cursor of the editor that received the drop. The cursor is
 	// not moved by the drop, so this is the position the user was editing at.
@@ -690,7 +710,14 @@ void BaseView::insertTextAtCursor(QString text)
 		editor = m_mainEditor;
 	}
 	QTextCursor cursor = editor->textCursor();
-	cursor.insertText(text);
+	// If the cursor is already inside a quoted string, insert the bare path
+	// instead of adding another pair of quotes.
+	if (cursorIsInsideQuotes(cursor)) {
+		cursor.insertText(path);
+	}
+	else {
+		cursor.insertText(QStringLiteral("\"%1\"").arg(path));
+	}
 	editor->setTextCursor(cursor);
 }
 

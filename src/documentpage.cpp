@@ -140,9 +140,9 @@ void DocumentPage::insertText(QString text, int section)
 	return m_view->insertText(text, section);
 }
 
-void DocumentPage::insertTextAtCursor(QString text)
+void DocumentPage::insertPathAtCursor(const QString &path)
 {
-	return m_view->insertTextAtCursor(text);
+	return m_view->insertPathAtCursor(path);
 }
 
 void DocumentPage::insertOrchestraGlobal(QString text)

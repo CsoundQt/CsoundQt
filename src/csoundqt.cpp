@@ -6554,12 +6554,10 @@ void CsoundQt::showDroppedFileMenu(const QString &fileName, const QPoint &global
         return;
 
     if (selected == absoluteAct) {
-        const QString path = droppedFilePath(fileName, true);
-        documentPages[curPage]->insertTextAtCursor(QStringLiteral("\"%1\"").arg(path));
+        documentPages[curPage]->insertPathAtCursor(droppedFilePath(fileName, true));
     }
     else if (selected == relativeAct) {
-        const QString path = droppedFilePath(fileName, false);
-        documentPages[curPage]->insertTextAtCursor(QStringLiteral("\"%1\"").arg(path));
+        documentPages[curPage]->insertPathAtCursor(droppedFilePath(fileName, false));
     }
     else if (selected == ftgenAct) {
         insertDroppedFtgen(fileName);

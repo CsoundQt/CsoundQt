@@ -54,7 +54,7 @@ public:
 	void showLineNumbers(bool show);
 	void insertText(QString text, int section = -1);
 	// Drag & drop helpers (see BaseView).
-	void insertTextAtCursor(QString text);
+	void insertPathAtCursor(const QString &path);
 	void insertOrchestraGlobal(QString text);
 	void insertAtScoreStart(QString text);
 	void setFullText(QString text);
