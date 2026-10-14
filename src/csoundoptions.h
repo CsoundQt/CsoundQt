@@ -53,6 +53,8 @@ public:
 	bool bufferSizeActive;
 	int HwBufferSize;
 	bool HwBufferSizeActive;
+	// 0dbfs override: "1.0" (default, modern) or "32768" (legacy 32-bit pcm)
+	QString zeroDbfs;
 	bool dither;
     bool sampleAccurateFlag;
     bool realtimeFlag;

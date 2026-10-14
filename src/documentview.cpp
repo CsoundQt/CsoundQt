@@ -29,6 +29,9 @@
 #include "highlighter.h"
 #include "texteditor.h"
 
+#include <QGuiApplication>
+#include <QScreen>
+
 
 static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesizer", "CsOptions"};
 
@@ -119,7 +122,9 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 
 	syntaxMenu = new MySyntaxMenu(m_mainEditor);
 	//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
-	syntaxMenu->setAutoFillBackground(true);
+	// The stylesheet paints the background; leaving autofill on would paint the
+	// whole (square) popup rect first and undo the rounded corners.
+	syntaxMenu->setAutoFillBackground(false);
 
 	setViewMode(1);
 	setViewMode(0);  // To force a change
@@ -1095,14 +1100,69 @@ void DocumentView::autoCompleteAtCursor() {
         destroySyntaxMenu();
     }
     if(showSyntaxMenu && !syntaxMenu->actions().isEmpty()) {
-        // cursorRect() is in viewport coordinates. Leave a small gap so the
-        // menu does not sit right against (and partly over) the cursor/text.
-        const QRect r = editor->cursorRect();
-        const int gap = 4;
-        const QPoint p = QPoint(r.x() + r.width() + gap, r.y() + r.height() + gap);
         const auto actions = syntaxMenu->actions();
         syntaxMenu->setDefaultAction(actions[0]);
-        syntaxMenu->move(editor->viewport()->mapToGlobal(p));
+
+        // Place the popup next to the cursor. Near the lower edge of the screen
+        // flip it above the cursor so it does not cover what is being typed.
+        // If it cannot fit on either side, use the larger side and cap the
+        // height; the "menu-scrollable" stylesheet property then turns it into
+        // a scrolling menu instead of letting it run off-screen.
+        const QRect cursorRect = editor->cursorRect();
+        const QWidget *viewport = editor->viewport();
+        // Leave a small gap so the menu does not sit right against the cursor.
+        const int gap = 4;
+        const QPoint cursorBottomLeft =
+                viewport->mapToGlobal(QPoint(cursorRect.left(), cursorRect.bottom() + 1 + gap));
+        const QPoint cursorTopLeft =
+                viewport->mapToGlobal(QPoint(cursorRect.left(), cursorRect.top() - gap));
+
+        QScreen *screen = QGuiApplication::screenAt(cursorBottomLeft);
+        if (!screen)
+            screen = editor->screen();
+        const QRect avail = screen ? screen->availableGeometry() : QRect();
+
+        const QSize preferred = syntaxMenu->sizeHint();
+        const int spaceBelow = avail.isValid()
+                ? avail.bottom() - cursorBottomLeft.y() + 1 : preferred.height();
+        const int spaceAbove = avail.isValid()
+                ? cursorTopLeft.y() - avail.top() : preferred.height();
+
+        bool above;
+        if (preferred.height() <= spaceBelow)
+            above = false;
+        else if (preferred.height() <= spaceAbove)
+            above = true;
+        else
+            above = spaceAbove > spaceBelow; // does not fit anywhere: scroll
+
+        const int available = above ? spaceAbove : spaceBelow;
+        const int height = qMin(preferred.height(), qMax(1, available));
+        const int width = avail.isValid()
+                ? qMin(preferred.width(), avail.width()) : preferred.width();
+        // Constrain the height only when the menu really has to shrink.
+        // Setting a maximum equal to the natural height makes QMenu show
+        // scrolling arrows even though everything fits. The minimum is set too
+        // so QMenu keeps exactly the height we budget for (its scrollable mode
+        // would otherwise size itself to a fraction of the screen and leave a
+        // gap between the menu and the cursor). Reset both otherwise, since
+        // they persist between calls.
+        if (height < preferred.height()) {
+            syntaxMenu->setMinimumHeight(height);
+            syntaxMenu->setMaximumHeight(height);
+        } else {
+            syntaxMenu->setMinimumHeight(0);
+            syntaxMenu->setMaximumHeight(QWIDGETSIZE_MAX);
+        }
+
+        int x = cursorBottomLeft.x();
+        int y = above ? cursorTopLeft.y() - height : cursorBottomLeft.y();
+        if (avail.isValid()) {
+            x = qBound(avail.left(), x, qMax(avail.left(), avail.right() - width + 1));
+            y = qBound(avail.top(), y, qMax(avail.top(), avail.bottom() - height + 1));
+        }
+
+        syntaxMenu->move(x, y);
         syntaxMenu->show();
     }
 }
@@ -2472,11 +2532,17 @@ MySyntaxMenu::MySyntaxMenu(QWidget * parent) :
 	QMenu(parent)
 
 {
+    // The popup is a top-level window; without a translucent background the
+    // area outside the stylesheet's border-radius is painted opaque and the
+    // corners stay square. Drop the native shadow for the same reason.
+    setAttribute(Qt::WA_TranslucentBackground);
+    setWindowFlag(Qt::NoDropShadowWindowHint, true);
+
     this->setStyleSheet(
         "QMenu {"
         "  background-color: #f8f8f8; "
         "  color: #5050A0 !important; "
-        "  border-radius: 4px;        "
+        "  border-radius: 8px;        "
         "  menu-scrollable: 1;        "
         "  padding: 4px;"
         "}   "

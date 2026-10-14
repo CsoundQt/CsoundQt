@@ -1000,7 +1000,7 @@
              <x>20</x>
              <y>20</y>
              <width>551</width>
-             <height>301</height>
+             <height>340</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -1010,6 +1010,9 @@
             </sizepolicy>
            </property>
            <layout class="QGridLayout" name="gridLayout_10">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetFixedSize</enum>
+            </property>
             <property name="spacing">
              <number>6</number>
             </property>
@@ -1093,7 +1096,7 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
+            <item row="5" column="0">
              <widget class="QCheckBox" name="multicoreCheckBox">
               <property name="enabled">
                <bool>true</bool>
@@ -1129,6 +1132,39 @@
               <property name="text">
                <string>512</string>
               </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="dbfsLabel">
+              <property name="toolTip">
+               <string>Set the 0dBFS value passed to Csound as --0dbfs.</string>
+              </property>
+              <property name="text">
+               <string>0dbfs</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QComboBox" name="dbfsComboBox">
+              <property name="maximumSize">
+               <size>
+                <width>140</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Set the value 0dBFS (decibels relative to full scale).&lt;br/&gt;Legacy versions used 32bit pcm (32768), modern csound should always use 1.0.&lt;br/&gt;Use legacy for older code which relies on this value for amplitudes</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>1.0</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Legacy</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item row="2" column="0">
@@ -1171,7 +1207,7 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="2">
+            <item row="5" column="2">
              <widget class="QSpinBox" name="numThreadsSpinBox">
               <property name="enabled">
                <bool>false</bool>

@@ -44,6 +44,7 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	bufferSizeActive = false;
 	HwBufferSize = 2048;
 	HwBufferSizeActive = false;
+	zeroDbfs = "1.0";
 	dither = false;
 	newParser = false;
 	multicore = false;
@@ -115,6 +116,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
         opts << "-b" + QString::number(bufferSize);
 	if (HwBufferSizeActive)
         opts << "-B" + QString::number(HwBufferSize);
+    // 0dbfs: modern Csound expects 1.0; the legacy 32-bit pcm value was 32768.
+    opts << (zeroDbfs == "32768" ? "--0dbfs=32768" : "--0dbfs=1.0");
 	if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty()) {
         QStringList addFlags = additionalFlags.split(wihteSpaceRegex,Qt::SkipEmptyParts);
 		foreach (QString f, addFlags) {

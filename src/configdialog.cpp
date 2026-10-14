@@ -266,6 +266,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	HwBufferSizeLineEdit->setText(QString::number(m_options->HwBufferSize));
 	HwBufferSizeCheckBox->setChecked(m_options->HwBufferSizeActive);
 	HwBufferSizeLineEdit->setEnabled(m_options->HwBufferSizeActive);
+	// Combo: index 0 = "1.0", index 1 = "Legacy" (32768).
+	dbfsComboBox->setCurrentIndex(m_options->zeroDbfs == "32768" ? 1 : 0);
     // DitherCheckBox->setChecked(m_options->dither);
     // newParserCheckBox->setChecked(m_options->newParser);
 	multicoreCheckBox->setChecked(m_options->multicore);
@@ -582,6 +584,7 @@ void ConfigDialog::accept()
 	m_options->bufferSizeActive = BufferSizeCheckBox->isChecked();
 	m_options->HwBufferSize = HwBufferSizeLineEdit->text().toInt();
 	m_options->HwBufferSizeActive = HwBufferSizeCheckBox->isChecked();
+	m_options->zeroDbfs = dbfsComboBox->currentIndex() == 1 ? "32768" : "1.0";
     // m_options->dither = DitherCheckBox->isChecked();
     m_options->realtimeFlag = realtimeCheckBox->isChecked(); // this was empty after = ?
     // m_options->newParser = newParserCheckBox->isChecked() ? 1 : 0;
