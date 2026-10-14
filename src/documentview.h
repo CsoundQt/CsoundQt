@@ -164,6 +164,7 @@ public slots:
 	void markErrorLines(QList<QPair<int, QString> > lines);
 	void unmarkErrorLines();
     void jumpToLine(int line, bool mark=true);
+    void jumpToLineWithoutFocus(int line);
     void goBackToPreviousPosition();
 	void gotoNextLine();
 	void opcodeFromMenu();
@@ -182,6 +183,7 @@ private:
 	void updateFindHighlights(bool moveCursor);
 	void updateFindStatus();
 	void refreshFindAfterEdit();
+	void jumpToLineInternal(int line, bool mark, bool focus);
 
 	// The string used for one indentation step in the current mode: a tab
 	// character, or the configured number of spaces when "use spaces" is on.

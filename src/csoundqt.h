@@ -252,6 +252,14 @@ private slots:
     void setHtmlFullScreen(bool full);
     void setHelpFullScreen(bool full);
     void setWidgetsFullScreen(bool full);
+    void maximizePanel(bool maximize);
+    void restoreMaximizedPanel();
+    void focusEditor();
+    void focusWidgets();
+    void focusHelp();
+    void focusInspector();
+    void updateFocusIndicator(QWidget *focused);
+    void applyFocusIndicator();
     void showDebugger(bool show);
 	void showVirtualKeyboard(bool show);
 	void showTableEditor(bool show);
@@ -313,7 +321,7 @@ private slots:
     void setLineAndColumn(int line, int column);
 
     DocumentPage *getCurrentDocumentPage() {
-        if(curPage >= documentPages.size())
+        if(curPage < 0 || curPage >= documentPages.size())
             return nullptr;
         return documentPages[curPage];
     }
@@ -470,7 +478,6 @@ private:
 	QAction *externalPlayerAct;
     QAction *showEditorAct;
 	QAction *showHelpAct;
-    QAction *raiseHelpAct;
 	QAction *showManualAct;
 	QAction *showManualOnlineAct;
 	QAction *showFlossManualAct;
@@ -481,10 +488,11 @@ private:
 	QAction *showConsoleAct;
     QAction *raiseConsoleAct;
     QAction *viewFullScreenAct;
-    QAction *viewEditorFullScreenAct;
-    QAction *viewHtmlFullScreenAct;
-    QAction *viewHelpFullScreenAct;
-    QAction *viewWidgetsFullScreenAct;
+    QAction *maximizePanelAct;
+    QAction *focusEditorAct;
+    QAction *focusWidgetsAct;
+    QAction *focusHelpAct;
+    QAction *focusInspectorAct;
 #ifdef CSQT_DEBUGGER
 	QAction *showDebugAct;
 #endif
@@ -511,10 +519,8 @@ private:
 	QAction *openDocumentationAct;
 	QAction *showUtilitiesAct;
 	QAction *showWidgetsAct;
-    QAction *raiseWidgetsAct;
 
 	QAction *showInspectorAct;
-    QAction *raiseInspectorAct;
 	QAction *showScratchPadAct;
     QAction *raiseScratchPadAct;
 	QAction *commentAct;
@@ -567,6 +573,7 @@ private:
 #endif
     QByteArray m_preFullScreenState;
     QString m_fullScreenComponent;
+    QString m_lastFocusPanel;
     QDir m_rissetDataPath;
     bool m_rissetInitialized = false;
     bool m_rissetReady = false;
@@ -585,6 +592,8 @@ private:
         "--format"
     };
     QLabel *lineAndColumnLabel;
+    QLabel *focusPanelLabel;
+    QTimer *m_focusIndicatorTimer;
     QPalette makeAppPalette(bool dark);
     QFileSystemWatcher *m_fileWatcher;
     QSet<QString> m_pendingFileChanges;

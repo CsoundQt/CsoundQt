@@ -45,6 +45,12 @@ public:
 	void setParameterMode(bool on) {m_parameterMode = on; setCursorWidth(on ? 8 : 1);}
 	bool getParameterMode() {return m_parameterMode;}
     int getLastKey() {return m_lastkey;}
+    // Paste tracking: set whenever text is inserted from the clipboard or
+    // selection (Ctrl+V, context menu, DocumentView::paste(), middle-click,
+    // drag-and-drop). DocumentView consumes it in textChanged() so the
+    // autocomplete menu is never triggered as a result of a paste.
+    // Returns true once if a paste happened since the last call.
+    bool consumePaste() {bool pasted = m_pasteHappened; m_pasteHappened = false; return pasted;}
 
 
 protected:
@@ -53,6 +59,7 @@ protected:
     virtual void dropEvent(QDropEvent *event);
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dragMoveEvent(QDragMoveEvent *event);
+    virtual void insertFromMimeData(const QMimeData *source);
 
 	bool m_tabIndents;
 	bool m_tabUseSpaces;
@@ -60,6 +67,7 @@ protected:
 	bool m_parameterMode;
 	bool m_commaTyped;
     int  m_lastkey;
+    bool m_pasteHappened;
 
 
 signals:

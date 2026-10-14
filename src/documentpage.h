@@ -207,6 +207,7 @@ public slots:
 	void duplicateWidgets();
 	// Passed directly to document view
 	void jumpToLine(int line);
+	void jumpToLineWithoutFocus(int line);
 	void comment();
 	void uncomment();
 	void indent();

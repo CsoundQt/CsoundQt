@@ -1098,6 +1098,11 @@ void DocumentPage::jumpToLine(int line)
 	m_view->jumpToLine(line);
 }
 
+void DocumentPage::jumpToLineWithoutFocus(int line)
+{
+	m_view->jumpToLineWithoutFocus(line);
+}
+
 void DocumentPage::comment()
 {
 	//  qDebug();

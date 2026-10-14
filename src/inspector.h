@@ -55,6 +55,9 @@ public:
 	~Inspector();
 	void parseText(const QString &text);
 	void parsePythonText(const QString &text);
+    // Give keyboard focus to the inspector's tree, for the Focus Inspector
+    // action. Showing/raising the dock itself is the caller's job.
+    void focusTree();
     QStringList getParsedUDOs() { return m_opcodes; }
     QVector<Opcode*> getUdosVector() { return udosVector; }
     QHash<QString, Opcode>*getUdosMap() { return &udosMap; }
@@ -63,6 +66,9 @@ public:
 protected:
 	virtual void focusInEvent (QFocusEvent * event);
 	virtual void closeEvent(QCloseEvent * event);
+	// Intercept Space (navigate like a click, keep focus) and Tab (always
+	// move focus to the editor) on the tree.
+	virtual bool eventFilter(QObject *obj, QEvent *event);
 
 private:
 	QTreeWidget *m_treeWidget;
@@ -89,11 +95,21 @@ private:
 
 private slots:
 	void itemActivated(QTreeWidgetItem * item, int column = 0);
-	void itemChanged(QTreeWidgetItem * newItem, QTreeWidgetItem * oldItem);
+	void itemClicked(QTreeWidgetItem * item, int column = 0);
+
+private:
+	// Navigate the editor to the line of the given/current tree item.
+	// focusEditor=true also moves keyboard focus to the editor.
+	void activateItem(QTreeWidgetItem *item, bool focusEditor);
 
 signals:
 	void Close(bool visible);
+	// Navigate without stealing focus (mouse click, Space).
 	void jumpToLine(int line);
+	// Navigate and move keyboard focus to the editor (Enter, double-click).
+	void jumpToLineAndFocus(int line);
+	// Move keyboard focus to the editor without navigating (Tab).
+	void focusEditorRequested();
     void parsedUDOs();
 };
 

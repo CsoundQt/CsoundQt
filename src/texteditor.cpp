@@ -36,6 +36,8 @@ TextEditor::TextEditor(QWidget *parent) :
     m_tabIndents = false;
     m_tabUseSpaces = false;
     m_tabSpaces = 2;
+    m_lastkey = 0;
+    m_pasteHappened = false;
     //  qDebug() << "TextEditor::TextEditor" << acceptDrops();
 }
 
@@ -98,11 +100,26 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 
 void TextEditor::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (e->button() == Qt::MiddleButton
+            && QApplication::clipboard()
+            && QApplication::clipboard()->supportsSelection()) {
+        // X11 middle-click pastes the selection without going through
+        // insertFromMimeData(), so flag it here beforehand.
+        m_pasteHappened = true;
+    }
 	QTextEdit::mouseReleaseEvent(e); // and do all the necessary qt job
 	if (m_parameterMode) {
 		emit requestParameterModeExit();
 	}
 
+}
+
+void TextEditor::insertFromMimeData(const QMimeData *source)
+{
+    // All clipboard pastes (Ctrl+V, context menu, paste() API) and
+    // drag-and-drop of text funnel through here.
+    m_pasteHappened = true;
+    QTextEdit::insertFromMimeData(source);
 }
 
 void TextEditor::dragEnterEvent(QDragEnterEvent *event)

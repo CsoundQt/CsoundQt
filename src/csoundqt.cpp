@@ -117,13 +117,13 @@ CsoundQt::CsoundQt(QStringList fileNames)
     initialDir = QCoreApplication::applicationDirPath();
     setWindowTitle("CsoundQt[*]");
     m_fullScreenComponent = QString();
-    
+
     setWindowIcon(QIcon(":/images/csoundqt.png"));
     //Does this take care of the decimal separator for different locales?
     QLocale::setDefault(QLocale::system());
     curPage = -1;
     m_options = new Options(&m_configlists);
-    
+
     auto palette = qApp->palette();
     // the palette is dark (dark "theme") if the background is darker than the text
     isDarkPalette = palette.text().color().lightness() > palette.window().color().lightness();
@@ -148,15 +148,15 @@ CsoundQt::CsoundQt(QStringList fileNames)
                                Qt::BottomDockWidgetArea |
                                Qt::LeftDockWidgetArea);
     helpPanel->setObjectName("helpPanel");
-    
+
     // QLabel *helpTitle = new QLabel("Help", helpPanel);
     // helpTitle->setStyleSheet("qproperty-alignment: AlignCenter; padding: 3px; font-size: 9pt; ");
     // helpPanel->setTitleBarWidget(helpTitle);
 
     helpPanel->show();
-    
+
     addDockWidget(Qt::RightDockWidgetArea, helpPanel);
-    
+
 #ifdef Q_OS_WIN
     // Call OleInitialize  to enable clipboard together with FLTK libraries
     HRESULT result = OleInitialize(NULL);
@@ -174,7 +174,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // Hide until CsoundQt has finished loading
     widgetPanel->hide();
     // widgetPanel->show();
-    
+
     addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
     tabifyDockWidget(helpPanel, widgetPanel);
 
@@ -189,13 +189,13 @@ CsoundQt::CsoundQt(QStringList fileNames)
     //   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     // addDockWidget(Qt::BottomDockWidgetArea, m_console);
     addDockWidget(Qt::RightDockWidgetArea, m_console);
-    
+
     m_inspector = new Inspector(this);
     m_inspector->setObjectName("Inspector");
     m_inspector->parseText(QString());
     addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
     m_inspector->hide();
-    
+
 #ifdef CSQT_DEBUGGER
     m_debugPanel = new DebugPanel(this);
     m_debugPanel->setObjectName("Debug Panel");
@@ -222,7 +222,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_scratchPad->setWindowTitle(tr("Interactive Code Pad"));
     m_scratchPad->hide();
     connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
-    
+
     QSettings settings("csoundqt", "csoundqt");
     settings.beginGroup("GUI");
 
@@ -246,7 +246,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_fileWatcher = new QFileSystemWatcher(this);
     connect(m_fileWatcher, &QFileSystemWatcher::fileChanged,
             this, &CsoundQt::onExternalFileChanged);
-    
+
 #if defined(CSQT_QTHTML)
     //TODO: change it when user changes
     if (m_options->debugPort) {
@@ -265,7 +265,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     csoundHtmlView->setOptions(m_options);
     addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
     csoundHtmlView->hide();
-    
+
 #endif
 
     focusMapper = new QSignalMapper(this);
@@ -282,7 +282,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_midiLearn = new MidiLearnDialog(this);
     m_midiLearn->setModal(false);
     midiHandler->setMidiLearner(m_midiLearn);
-    
+
     // Must be after readSettings() to save last state // was: isVisible()
     // in some reason reported always false
     bool widgetsVisible = !widgetPanel->isHidden();
@@ -546,7 +546,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     m_configlists.refreshModules(); // must happen after UI is created
 
-    
+
 /*
 #ifdef Q_OS_LINUX
     // ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3
@@ -1596,36 +1596,20 @@ void CsoundQt::disableInternalRtMidi()
 #endif
 }
 
+static bool isDescendantOf(QWidget *w, QWidget *ancestor)
+{
+    for (; w != nullptr; w = w->parentWidget()) {
+        if (w == ancestor)
+            return true;
+    }
+    return false;
+}
+
 void CsoundQt::focusToTab(int tab) {
     QDockWidget *panel = nullptr;
     QAction * action = nullptr;
     qDebug()<<tab;
     switch (tab) {
-    case 1:
-        qDebug()<<"Raise widgets";
-        if(m_options->widgetsIndependent) {
-            QDEBUG << "Widget panel is an independent window";
-            auto doc = this->documentPages[this->curPage];
-            auto wl = doc->getWidgetLayout();
-            if(wl->isVisible()) {
-                wl->setVisible(false);
-                showWidgetsAct->setChecked(false);
-            } else {
-                // not visible
-                wl->setVisible(true);
-                showWidgetsAct->setChecked(true);
-            }
-            return;
-        } else {
-           panel = widgetPanel;
-           action = showWidgetsAct;
-           break;
-        }
-    case 2:
-        qDebug()<<"Raise help";
-        panel = helpPanel;
-        action = showHelpAct;
-        break;
     case 3:
         qDebug()<<"Raise console";
         panel = m_console;
@@ -1637,11 +1621,6 @@ void CsoundQt::focusToTab(int tab) {
         panel = csoundHtmlView;
         action = showHtml5Act;
     #endif
-        break;
-    case 5:
-        qDebug()<<"Raise inspector";
-        panel = m_inspector;
-        action = showInspectorAct;
         break;
     // 6 is  Live events that is independent window
 
@@ -1675,6 +1654,159 @@ void CsoundQt::focusToTab(int tab) {
         action->setChecked(true);
     }
     panel->raise();
+}
+
+void CsoundQt::focusEditor()
+{
+    DocumentPage *doc = getCurrentDocumentPage();
+    if (doc == nullptr)
+        return;
+    if (!documentTabs->isVisible())
+        showEditorAct->setChecked(true);
+    activateWindow();
+    raise();
+    doc->setEditorFocus();
+}
+
+void CsoundQt::focusWidgets()
+{
+    DocumentPage *doc = getCurrentDocumentPage();
+    if (doc == nullptr)
+        return;
+    if (m_options->widgetsIndependent) {
+        WidgetLayout *wl = doc->getWidgetLayout();
+        if (wl == nullptr)
+            return;
+        doc->showWidgets(true);
+        showWidgetsAct->setChecked(true);
+        wl->raise();
+        wl->activateWindow();
+        wl->setFocus(Qt::ActiveWindowFocusReason);
+    } else {
+        widgetPanel->showAndRaise(true);
+        showWidgetsAct->setChecked(true);
+        activateWindow();
+        raise();
+        WidgetLayout *wl = doc->getWidgetLayout();
+        if (wl != nullptr)
+            wl->setFocus(Qt::ActiveWindowFocusReason);
+    }
+}
+
+void CsoundQt::focusHelp()
+{
+    helpPanel->setVisibleAndRaise(true);
+    showHelpAct->setChecked(true);
+    helpPanel->activateWindow();
+    helpPanel->raise();
+    helpPanel->focusText();
+}
+
+void CsoundQt::focusInspector()
+{
+    if (!m_inspector->isVisible()) {
+        m_inspector->show();
+        showInspectorAct->setChecked(true);
+    }
+    m_inspector->raise();
+    // The inspector may live in a floating dock (its own window), in which
+    // case setFocus() alone would not pull focus out of it.
+    m_inspector->activateWindow();
+    m_inspector->focusTree();
+}
+
+// Briefly outline the newly focused panel so panel switches (e.g. via the
+// Focus actions) are easy to follow. The outline fades out instead of
+// vanishing, and deletes itself when done.
+static void flashPanel(QWidget *panel)
+{
+    if (panel == nullptr || !panel->isVisible())
+        return;
+    QWidget *parent = panel->isWindow() ? panel : panel->parentWidget();
+    if (parent == nullptr)
+        return;
+    auto *band = new QRubberBand(QRubberBand::Line, parent);
+    band->setGeometry(panel->isWindow() ? panel->rect() : panel->geometry());
+    // windowOpacity() does not work for child widgets, so fade the outline
+    // (and its border) with a graphics effect animation.
+    auto *effect = new QGraphicsOpacityEffect(band);
+    effect->setOpacity(0.5);
+    band->setGraphicsEffect(effect);
+    band->show();
+    auto *anim = new QPropertyAnimation(effect, "opacity", band);
+    anim->setDuration(300);
+    anim->setStartValue(0.5);
+    anim->setEndValue(0.0);
+    anim->setEasingCurve(QEasingCurve::OutCubic);
+    QObject::connect(anim, &QPropertyAnimation::finished, band, &QObject::deleteLater);
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void CsoundQt::updateFocusIndicator(QWidget *focused)
+{
+    if (focused == nullptr) {
+        return;  // popups/menus: keep the last shown panel
+    }
+    // Focus changes often arrive in bursts (old -> null -> new, or a dock
+    // raising itself). Coalesce them and report the panel that actually holds
+    // focus once things settle, so the indicator and flash always name the
+    // panel that GOT the focus, never the one that lost it.
+    if (m_focusIndicatorTimer != nullptr) {
+        m_focusIndicatorTimer->start();
+    } else {
+        applyFocusIndicator();
+    }
+}
+
+void CsoundQt::applyFocusIndicator()
+{
+    QWidget *focused = QApplication::focusWidget();
+    if (focused == nullptr) {
+        return;
+    }
+    QString name;
+    QWidget *panel = nullptr;  // container to flash on a panel switch
+    DocumentPage *doc = getCurrentDocumentPage();
+    WidgetLayout *wl = (doc != nullptr) ? doc->getWidgetLayout() : nullptr;
+    if (documentTabs != nullptr && isDescendantOf(focused, documentTabs)) {
+        name = "Editor";
+        panel = documentTabs;
+    } else if (widgetPanel != nullptr && isDescendantOf(focused, widgetPanel)) {
+        name = "Widgets";
+        panel = widgetPanel;
+    } else if (wl != nullptr && isDescendantOf(focused, wl)) {
+        // Widgets in their independent window.
+        name = "Widgets";
+        panel = wl;
+    } else if (helpPanel != nullptr && isDescendantOf(focused, helpPanel)) {
+        name = "Help";
+        panel = helpPanel;
+    } else if (m_inspector != nullptr && isDescendantOf(focused, m_inspector)) {
+        name = "Inspector";
+        panel = m_inspector;
+    } else if (m_console != nullptr && isDescendantOf(focused, m_console)) {
+        name = "Console";
+        panel = m_console;
+#ifdef CSQT_QTHTML
+    } else if (csoundHtmlView != nullptr && isDescendantOf(focused, csoundHtmlView)) {
+        name = "HTML";
+        panel = csoundHtmlView;
+#endif
+    } else if (m_scratchPad != nullptr && isDescendantOf(focused, m_scratchPad)) {
+        name = "CodePad";
+        panel = m_scratchPad;
+    }
+    if (name.isEmpty()) {
+        focusPanelLabel->setText("");
+        return;
+    }
+    focusPanelLabel->setText("[" + name + "]");
+    if (name != m_lastFocusPanel) {
+        m_lastFocusPanel = name;
+        if (m_options->flashFocus) {
+            flashPanel(panel);
+        }
+    }
 }
 
 void CsoundQt::ambiguosShortcut()
@@ -2848,17 +2980,15 @@ void CsoundQt::setFullScreen(bool full)
 void CsoundQt::checkFullScreen() // checks if some component is already fullscreen and resets it
 {
     //qDebug()<< " fullScreenComponent: " << m_fullScreenComponent << "state bytes: " << m_preFullScreenState.size();
-    if ( !m_fullScreenComponent.isEmpty() ) {
-        if (m_fullScreenComponent == "mainwindow" ) {
-            viewFullScreenAct->setChecked(false);
-        } else if (m_fullScreenComponent == "help" ) {
-            viewHelpFullScreenAct->setChecked(false);
-        } else if (m_fullScreenComponent == "widgets") {
-            viewWidgetsFullScreenAct->setChecked(false);
-        } else if ( m_fullScreenComponent == "editor" ) {
-        } else if ( m_fullScreenComponent == "html" ) {
-            viewHtmlFullScreenAct->setChecked(false);
-        }
+    if (m_fullScreenComponent.isEmpty()) {
+        return;
+    }
+    if (m_fullScreenComponent == "mainwindow") {
+        viewFullScreenAct->setChecked(false);
+    } else {
+        // A panel (editor/html/help/widgets) is maximized through the single
+        // Maximize Panel action: untoggling it restores the panel.
+        maximizePanelAct->setChecked(false);
     }
 }
 
@@ -2966,6 +3096,78 @@ void CsoundQt::setWidgetsFullScreen(bool full)
             m_fullScreenComponent = "";
         }
 
+    }
+}
+
+void CsoundQt::restoreMaximizedPanel()
+{
+    // Restores a panel maximized through maximizePanel(). The tracker is
+    // cleared first so the nested checkFullScreen() calls stay no-ops and
+    // cannot untoggle the Maximize Panel action mid-restore.
+    // ("mainwindow" is owned by viewFullScreenAct and never touched here.)
+    QString component = m_fullScreenComponent;
+    m_fullScreenComponent.clear();
+    if (component == "editor") {
+        setEditorFullScreen(false);
+    } else if (component == "help") {
+        setHelpFullScreen(false);
+    } else if (component == "widgets") {
+        setWidgetsFullScreen(false);
+    } else if (component == "html") {
+        setHtmlFullScreen(false);
+    }
+}
+
+void CsoundQt::maximizePanel(bool maximize)
+{
+    QString component = m_fullScreenComponent;
+    if (!component.isEmpty() && component != "mainwindow") {
+        // Another panel is maximized: restore it first.
+        restoreMaximizedPanel();
+    }
+    if (!maximize) {
+        // Unmaximizing: hand focus back to the restored panel instead of
+        // letting it fall to the editor, so a widgets-focused maximize /
+        // unmaximize round trip keeps focus on the widgets.
+        if (component == "editor") {
+            focusEditor();
+        } else if (component == "help") {
+            focusHelp();
+        } else if (component == "widgets") {
+            focusWidgets();
+        }
+#ifdef CSQT_QTHTML
+        else if (component == "html" && csoundHtmlView != nullptr) {
+            activateWindow();
+            raise();
+            csoundHtmlView->setFocus(Qt::ActiveWindowFocusReason);
+        }
+#endif
+        return;
+    }
+    // Maximize the panel holding keyboard focus; default to the editor.
+    QWidget *fw = QApplication::focusWidget();
+    DocumentPage *doc = getCurrentDocumentPage();
+    WidgetLayout *wl = (doc != nullptr) ? doc->getWidgetLayout() : nullptr;
+    if (fw != nullptr && helpPanel != nullptr && isDescendantOf(fw, helpPanel)) {
+        setHelpFullScreen(true);
+    } else if (fw != nullptr && widgetPanel != nullptr && isDescendantOf(fw, widgetPanel)) {
+        setWidgetsFullScreen(true);
+    } else if (fw != nullptr && wl != nullptr && isDescendantOf(fw, wl)) {
+        // Widgets in their independent window.
+        setWidgetsFullScreen(true);
+#ifdef CSQT_QTHTML
+    } else if (fw != nullptr && csoundHtmlView != nullptr && isDescendantOf(fw, csoundHtmlView)) {
+        setHtmlFullScreen(true);
+#endif
+    } else {
+        setEditorFullScreen(true);
+    }
+    if (m_fullScreenComponent.isEmpty()) {
+        // Maximizing failed (e.g. no document for the widgets panel):
+        // untoggle so the action reflects reality. The nested toggled(false)
+        // restores nothing since there is nothing maximized.
+        maximizePanelAct->setChecked(false);
     }
 }
 
@@ -4255,25 +4457,21 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     renderAct->setShortcut(tr("Alt+F"));
     externalPlayerAct->setShortcut(tr(""));
     externalEditorAct->setShortcut(tr(""));
-    showEditorAct->setShortcut(tr("Ctrl+0"));
-    raiseHelpAct->setShortcut(tr("Ctrl+2"));
-    raiseWidgetsAct->setShortcut(tr("Ctrl+1"));
+    showEditorAct->setShortcut(tr(""));
+    focusEditorAct->setShortcut(tr("Ctrl+0"));
+    focusWidgetsAct->setShortcut(tr("Ctrl+1"));
+    focusHelpAct->setShortcut(tr("Ctrl+2"));
+    focusInspectorAct->setShortcut(tr("Ctrl+3"));
     showGenAct->setShortcut(tr(""));
     showOverviewAct->setShortcut(tr(""));
-    raiseConsoleAct->setShortcut(tr("Ctrl+3"));
+    raiseConsoleAct->setShortcut(tr("Ctrl+6"));
     autocompleteAct->setShortcut(tr("Ctrl+M"));
 #ifdef Q_OS_MACOS
     viewFullScreenAct->setShortcut(tr("Ctrl+Shift+F"));
 #else
     viewFullScreenAct->setShortcut(tr("F11"));
 #endif
-
-    viewEditorFullScreenAct->setShortcut(tr("Alt+Ctrl+0"));
-#ifdef CSQT_QTHTML
-    viewHtmlFullScreenAct->setShortcut(tr("Alt+Ctrl+4"));  // was H
-#endif
-    viewHelpFullScreenAct->setShortcut(tr("Alt+Ctrl+2")); // was vice versa
-    viewWidgetsFullScreenAct->setShortcut(tr("Alt+Ctrl+1"));
+    maximizePanelAct->setShortcut(tr("Alt+Ctrl+M"));
 #ifdef CSQT_DEBUGGER
     showDebugAct->setShortcut(tr("F5"));
 #endif
@@ -4282,7 +4480,6 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
     midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
     createCodeGraphAct->setShortcut(tr("")); // was Ctr +4 save it for html view
-    raiseInspectorAct->setShortcut(tr("Ctrl+5"));
 
 #ifdef CSQT_QTHTML
     raiseHtml5Act->setShortcut(tr("Ctrl+4")); // Alt-4 was before for Code graph
@@ -4750,12 +4947,11 @@ void CsoundQt::createActions()
     showWidgetsAct->setIconText(tr("Widgets"));
     showWidgetsAct->setShortcutContext(Qt::ApplicationShortcut);
 
-    raiseWidgetsAct = new QAction(this);
-    raiseWidgetsAct->setText(tr("Show/Raise Widgets Panel"));
-    raiseWidgetsAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(raiseWidgetsAct, SIGNAL(triggered()), focusMapper, SLOT(map()));
-    focusMapper->setMapping(raiseWidgetsAct, 1);
-    this->addAction(raiseWidgetsAct);
+    focusWidgetsAct = new QAction(tr("Focus Widgets"), this);
+    focusWidgetsAct->setStatusTip(tr("Show the widgets panel and give it keyboard focus"));
+    focusWidgetsAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(focusWidgetsAct, SIGNAL(triggered()), this, SLOT(focusWidgets()));
+    this->addAction(focusWidgetsAct);
 
     showInspectorAct = new QAction(QIcon(prefix + "edit-find.png"), tr("Inspector"), this);
     showInspectorAct->setCheckable(true);
@@ -4765,12 +4961,11 @@ void CsoundQt::createActions()
     connect(showInspectorAct, SIGNAL(triggered(bool)), m_inspector, SLOT(setVisible(bool)));
     connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
 
-    raiseInspectorAct = new QAction(this);
-    raiseInspectorAct->setText(tr("Show/Raise Inspector Panel"));
-    raiseInspectorAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(raiseInspectorAct, SIGNAL(triggered()), focusMapper, SLOT(map()));
-    focusMapper->setMapping(raiseInspectorAct, 5);
-    this->addAction(raiseInspectorAct);
+    focusInspectorAct = new QAction(tr("Focus Inspector"), this);
+    focusInspectorAct->setStatusTip(tr("Show the inspector panel and give it keyboard focus"));
+    focusInspectorAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(focusInspectorAct, SIGNAL(triggered()), this, SLOT(focusInspector()));
+    this->addAction(focusInspectorAct);
 
     showEditorAct = new QAction(QIcon(prefix + "editor.png"), tr("Editor"), this);
     showEditorAct->setCheckable(true);
@@ -4778,6 +4973,12 @@ void CsoundQt::createActions()
     showEditorAct->setStatusTip(tr("Show the text editor"));
     showEditorAct->setIconText(tr("Editor"));
     showEditorAct->setShortcutContext(Qt::ApplicationShortcut);
+
+    focusEditorAct = new QAction(tr("Focus Editor"), this);
+    focusEditorAct->setStatusTip(tr("Show the text editor and give it keyboard focus"));
+    focusEditorAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(focusEditorAct, SIGNAL(triggered()), this, SLOT(focusEditor()));
+    this->addAction(focusEditorAct);
 
     showHelpAct = new QAction(QIcon(prefix + "info.png"), tr("Help Panel"), this);
     showHelpAct->setCheckable(true);
@@ -4790,13 +4991,12 @@ void CsoundQt::createActions()
     connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
     connect(helpPanel, SIGNAL(requestExternalBrowser(QUrl)), this, SLOT(openExternalBrowser(QUrl)) );
 
-    raiseHelpAct = new QAction(this);
-    raiseHelpAct->setText(tr("Show/Raise help panel"));
-    raiseHelpAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(raiseHelpAct, SIGNAL(triggered()), focusMapper, SLOT(map()));
-    focusMapper->setMapping(raiseHelpAct, 2);
+    focusHelpAct = new QAction(tr("Focus Help"), this);
+    focusHelpAct->setStatusTip(tr("Show the help panel and give it keyboard focus"));
+    focusHelpAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(focusHelpAct, SIGNAL(triggered()), this, SLOT(focusHelp()));
     connect(focusMapper, SIGNAL(mappedInt(int)), this, SLOT(focusToTab(int)));
-    this->addAction(raiseHelpAct);
+    this->addAction(focusHelpAct);
 
     showScratchPadAct = new QAction(QIcon(prefix + "scratchpad.png"), tr("CodePad"), this);
     showScratchPadAct->setCheckable(true);
@@ -4873,34 +5073,12 @@ void CsoundQt::createActions()
     viewFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(viewFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setFullScreen(bool)));
 
-    viewEditorFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Editor Fullscreen"), this);
-    viewEditorFullScreenAct->setCheckable(true);
-    viewEditorFullScreenAct->setChecked(false);
-    viewEditorFullScreenAct->setStatusTip(tr("Have the editor occupy all available screen space"));
-    viewEditorFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(viewEditorFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setEditorFullScreen(bool)));
-
-#ifdef CSQT_QTHTML
-    viewHtmlFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View HTML Fullscreen"), this);
-    viewHtmlFullScreenAct->setCheckable(true);
-    viewHtmlFullScreenAct->setChecked(false);
-    viewHtmlFullScreenAct->setStatusTip(tr("Have the HTML page occupy all available screen space"));
-    viewHtmlFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(viewHtmlFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setHtmlFullScreen(bool)));
-#endif
-    viewHelpFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Help Fullscreen"), this);
-    viewHelpFullScreenAct->setCheckable(true);
-    viewHelpFullScreenAct->setChecked(false);
-    viewHelpFullScreenAct->setStatusTip(tr("Have the help page occupy all available screen space"));
-    viewHelpFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(viewHelpFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setHelpFullScreen(bool)));
-
-    viewWidgetsFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Widgets Fullscreen"), this);
-    viewWidgetsFullScreenAct->setCheckable(true);
-    viewWidgetsFullScreenAct->setChecked(false);
-    viewWidgetsFullScreenAct->setStatusTip(tr("Have the widgets panel occupy all available screen space"));
-    viewWidgetsFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(viewWidgetsFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setWidgetsFullScreen(bool)));
+    maximizePanelAct = new QAction(tr("Maximize Panel"), this);
+    maximizePanelAct->setCheckable(true);
+    maximizePanelAct->setChecked(false);
+    maximizePanelAct->setStatusTip(tr("Maximize the currently focused panel (editor, help, widgets, ...)"));
+    maximizePanelAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(maximizePanelAct, SIGNAL(toggled(bool)), this, SLOT(maximizePanel(bool)));
 
 #ifdef CSQT_DEBUGGER
     showDebugAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show debugger"), this);
@@ -5235,13 +5413,14 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(externalPlayerAct);
     m_keyActions.append(externalEditorAct);
     m_keyActions.append(showEditorAct);
-    m_keyActions.append(raiseWidgetsAct);
+    m_keyActions.append(focusEditorAct);
+    m_keyActions.append(focusWidgetsAct);
     m_keyActions.append(showInspectorAct);
-    m_keyActions.append(raiseHelpAct);
+    m_keyActions.append(focusHelpAct);
+    m_keyActions.append(focusInspectorAct);
     m_keyActions.append(showGenAct);
     m_keyActions.append(showOverviewAct);
     m_keyActions.append(raiseConsoleAct);
-    m_keyActions.append(raiseInspectorAct);
     m_keyActions.append(raiseScratchPadAct);
     m_keyActions.append(showUtilitiesAct);
     m_keyActions.append(showVirtualKeyboardAct);
@@ -5261,12 +5440,7 @@ void CsoundQt::setKeyboardShortcutsList()
     // m_keyActions.append(showOpcodeQuickRefAct);
     m_keyActions.append(infoAct);
     m_keyActions.append(viewFullScreenAct);
-    m_keyActions.append(viewEditorFullScreenAct);
-#if defined(CSQT_QTHTML)
-    m_keyActions.append(viewHtmlFullScreenAct);
-#endif
-    m_keyActions.append(viewHelpFullScreenAct);
-    m_keyActions.append(viewWidgetsFullScreenAct);
+    m_keyActions.append(maximizePanelAct);
 #ifdef CSQT_DEBUGGER
     m_keyActions.append(showDebugAct);
 #endif
@@ -5330,8 +5504,15 @@ void CsoundQt::connectActions()
 
     // Connect inspector actions to document
     disconnect(m_inspector, 0, 0, 0);
+    // Click / Space: navigate but keep focus in the inspector tree.
     connect(m_inspector, SIGNAL(jumpToLine(int)),
+            doc, SLOT(jumpToLineWithoutFocus(int)));
+    // Enter / double-click: navigate and focus the editor.
+    connect(m_inspector, SIGNAL(jumpToLineAndFocus(int)),
             doc, SLOT(jumpToLine(int)));
+    // Tab: always move focus to the editor.
+    connect(m_inspector, SIGNAL(focusEditorRequested()),
+            this, SLOT(focusEditor()));
     connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
 
     disconnect(doc, 0,0,0);
@@ -5451,7 +5632,7 @@ void CsoundQt::createMenus()
     editMenu->addSeparator();
     editMenu->addAction(findAct);
     editMenu->addAction(gotoLineAct);
-    // editMenu->addAction(goBackAct);
+    editMenu->addAction(goBackAct);
     editMenu->addSeparator();
     editMenu->addAction(commentAct);
     //  editMenu->addAction(uncommentAct);
@@ -5508,12 +5689,7 @@ void CsoundQt::createMenus()
     viewMenu->addAction(showTableEditorAct);
     viewMenu->addSeparator();
     viewMenu->addAction(viewFullScreenAct);
-    viewMenu->addAction(viewEditorFullScreenAct);
-#if defined(CSQT_QTHTML)
-    viewMenu->addAction(viewHtmlFullScreenAct);
-#endif
-    viewMenu->addAction(viewHelpFullScreenAct);
-    viewMenu->addAction(viewWidgetsFullScreenAct);
+    viewMenu->addAction(maximizePanelAct);
     viewMenu->addSeparator();
     viewMenu->addAction(splitViewAct);
     viewMenu->addSeparator();
@@ -5856,38 +6032,51 @@ void CsoundQt::createStatusBar()
     lineAndColumnLabel = new QLabel();
     setLineAndColumn(0,0);
     statusbar->addPermanentWidget(lineAndColumnLabel);
+
+    // Focus indicator at the far right: [Editor], [Widgets], [Help], ...
+    // (added last so it sits rightmost of the permanent widgets).
+    focusPanelLabel = new QLabel();
+    statusbar->addPermanentWidget(focusPanelLabel);
+    // Coalesce bursts of focus changes so the indicator/flash always end up
+    // naming the panel that actually holds focus.
+    m_focusIndicatorTimer = new QTimer(this);
+    m_focusIndicatorTimer->setSingleShot(true);
+    m_focusIndicatorTimer->setInterval(60);
+    connect(m_focusIndicatorTimer, &QTimer::timeout,
+            this, &CsoundQt::applyFocusIndicator);
+    connect(qApp, &QApplication::focusChanged,
+            this, &CsoundQt::updateFocusIndicator);
 }
 
 void CsoundQt::readSettings()
 {
     QSettings settings("csoundqt", "csoundqt");
-    int settingsVersion = settings.value("settingsVersion", 5).toInt();
+    int settingsVersion = settings.value("settingsVersion", 6).toInt();
     // Version 1 to remove "-d" from additional command line flags
     // Version 2 to save default keyboard shortcuts (weren't saved previously)
     // Version 2 to add "*" to jack client name
     // version 4 to signal that many shotcuts have been changed
-    if (settingsVersion>0 && settingsVersion<4) {
-        QMessageBox::warning(this, tr("Settings changed"),
-                             tr("In this version the shortcuts for showing panels changed. "
-                                "See ... for more information. Please Use "
-                                "'Edit/Keyboard shortcuts/Restore Defaults' to activate it."));
-    }
+    // Version 6 to signal that the panel shortcuts changed again
+    // (single Maximize Panel action, new Focus actions on Ctrl+0..3).
+    // No startup warning: stale saved entries for removed actions are
+    // ignored on load and disappear on the next settings save, and the
+    // shortcuts panel offers Restore Defaults for the rest.
 
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
     m_options->themeMode = settings.value("themeMode", "auto").toString();
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
-    if(!pos.isNull()) 
+    if(!pos.isNull())
         move(pos);
     else
         QDEBUG << "Settings: invalid pos value";
-        
+
     QSize size = settings.value("size", QSize(600, 500)).toSize();
     if(size.isValid())
         resize(size); // does not work here for MacOS Mojave
     else
         QDEBUG << "Settings: invalid size";
-        
+
     if (settings.contains("dockstate")) {
         auto dockstate = settings.value("dockstate").toByteArray();
         if(!dockstate.isEmpty())
@@ -5991,6 +6180,7 @@ void CsoundQt::readSettings()
     m_options->toolbarIconSize = settings.value("toolbarIconSize", 20).toInt();
     m_options->wrapLines = settings.value("wrapLines", true).toBool();
     m_options->autoComplete = settings.value("autoComplete", true).toBool();
+    m_options->flashFocus = settings.value("flashFocus", true).toBool();
     m_options->autoCompleteDelay = settings.value("autoCompleteDelay", 150).toInt();
     m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();
     m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
@@ -6187,7 +6377,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     QSettings settings("csoundqt", "csoundqt");
     QDEBUG << "writing settings";
 
-    settings.setValue("settingsVersion", 5);
+    settings.setValue("settingsVersion", 6);
 
     QHash<QString, QVariant> shortcuts;
     foreach (QAction *act, m_keyActions) {
@@ -6260,6 +6450,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("toolbarIconSize", m_options->toolbarIconSize);
         settings.setValue("wrapLines", m_options->wrapLines);
         settings.setValue("autoComplete", m_options->autoComplete);
+        settings.setValue("flashFocus", m_options->flashFocus);
         settings.setValue("autoCompleteDelay", m_options->autoCompleteDelay);
         settings.setValue("autoParameterMode", m_options->autoParameterMode);
         settings.setValue("enableWidgets", m_options->enableWidgets);

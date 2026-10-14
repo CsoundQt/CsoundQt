@@ -188,6 +188,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	tabUseSpacesCheckBox->setChecked(m_options->tabUseSpaces);
 	tabSpacesSpinBox->setValue(m_options->tabSpaces);
 	tabSpacesSpinBox->setEnabled(m_options->tabUseSpaces);
+	flashFocusCheckBox->setChecked(m_options->flashFocus);
 
     // allow translations for highlightingThemeComboBox and themeCombobox
     // NB! make sure that the strings are the same as in configdialog.ui
@@ -529,6 +530,7 @@ void ConfigDialog::accept()
 	m_options->tabIndents = tabIndentCheckBox->isChecked();
 	m_options->tabUseSpaces = tabUseSpacesCheckBox->isChecked();
 	m_options->tabSpaces = tabSpacesSpinBox->value();
+	m_options->flashFocus = flashFocusCheckBox->isChecked();
 
     // deal with localized themes:
     m_options->themeMode = themeComboBox->currentData().toString();    // to allow to be translated
