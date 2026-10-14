@@ -136,6 +136,7 @@ protected:
 	{
 		freeze = false;
 	}
+	virtual void paintEvent(QPaintEvent *event);
 
 	//   signals:
 	//     void popUpMenu(QPoint pos);

@@ -3970,7 +3970,6 @@ void CsoundQt::setColors(QString themeMode)
     setIcon(stopAllAct, "media-stop.png");
     setIcon(recAct, "media-record.png");
     setIcon(renderAct, "render.svg");
-    setIcon(testAudioSetupAct, "hearing.svg");
     setIcon(checkSyntaxAct, "scratchpad.png");
     setIcon(externalPlayerAct, "playfile.png");
     setIcon(externalEditorAct, "editfile.png");
@@ -4304,7 +4303,6 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     unindentAct->setShortcut(tr("Shift+Ctrl+I"));
     evaluateAct->setShortcut(tr("Shift+Ctrl+E"));
     evaluateSectionAct->setShortcut(tr("Shift+Ctrl+W"));
-    scratchPadCsdModeAct->setShortcut(tr("Shift+Alt+S"));
     raiseScratchPadAct->setShortcut(tr("Ctrl+8"));
     killLineAct->setShortcut(tr("Ctrl+K"));
     killToEndAct->setShortcut(tr("Shift+Alt+K"));
@@ -4319,7 +4317,6 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showWidgetEditAct->setShortcut(tr("Shift+Alt+7"));
     lineNumbersAct->setShortcut(tr("Shift+Alt+L"));
     parameterModeAct->setShortcut(tr("Shift+Alt+P"));
-    cabbageAct->setShortcut(tr("Shift+Ctrl+C"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
 
     checkSyntaxAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
@@ -4728,10 +4725,6 @@ void CsoundQt::createActions()
     renderAct->setIconText(tr("Render"));
     renderAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
-
-    testAudioSetupAct = new QAction(QIcon(prefix+"hearing.svg"),
-                                    tr("Test Audio Setup"), this);
-    connect(testAudioSetupAct, SIGNAL(triggered(bool)), this, SLOT(testAudioSetup()));
 
     checkSyntaxAct = new QAction(QIcon(prefix + "scratchpad.png"), tr("Check Syntax"), this);
     checkSyntaxAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -5191,6 +5184,12 @@ void CsoundQt::createActions()
     findNextShortcut->setContext(Qt::WindowShortcut);
     connect(findNextShortcut, &QShortcut::activated, this, &CsoundQt::findString);
 
+    // "Find again" / "Find previous" are no longer menu entries, but their
+    // actions (and configurable shortcuts) must remain active, so register them
+    // on the window.
+    addAction(findAgainAct);
+    addAction(findPreviousAct);
+
     setKeyboardShortcutsList();
     setDefaultKeyboardShortcuts();
 }
@@ -5217,7 +5216,6 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(inToGetAct);
     m_keyActions.append(getToInAct);
     m_keyActions.append(csladspaAct);
-    m_keyActions.append(cabbageAct);
     m_keyActions.append(findAct);
     m_keyActions.append(findAgainAct);
     m_keyActions.append(findPreviousAct);
@@ -5280,7 +5278,6 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(goBackAct);
     m_keyActions.append(evaluateAct);
     m_keyActions.append(evaluateSectionAct);
-    m_keyActions.append(scratchPadCsdModeAct);
     m_keyActions.append(showOrcAct);
     m_keyActions.append(showScoreAct);
     m_keyActions.append(showOptionsAct);
@@ -5450,12 +5447,9 @@ void CsoundQt::createMenus()
     editMenu->addAction(insertOpcodeAct);
     editMenu->addAction(evaluateAct);
     editMenu->addAction(evaluateSectionAct);
-    editMenu->addAction(scratchPadCsdModeAct);
 
     editMenu->addSeparator();
     editMenu->addAction(findAct);
-    editMenu->addAction(findAgainAct);
-    editMenu->addAction(findPreviousAct);
     editMenu->addAction(gotoLineAct);
     // editMenu->addAction(goBackAct);
     editMenu->addSeparator();
@@ -5472,9 +5466,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(joinAct);
     editMenu->addAction(inToGetAct);
     editMenu->addAction(getToInAct);
-    editMenu->addAction(midiControlAct);
     // editMenu->addAction(csladspaAct);
-    editMenu->addAction(cabbageAct);
     editMenu->addSeparator();
     editMenu->addAction(editAct);
     editMenu->addSeparator();
@@ -5493,8 +5485,6 @@ void CsoundQt::createMenus()
     controlMenu->addAction(externalEditorAct);
     controlMenu->addAction(externalPlayerAct);
     controlMenu->addAction(checkSyntaxAct);
-    controlMenu->addSeparator();
-    controlMenu->addAction(testAudioSetupAct);
 
 
     viewMenu = menuBar()->addMenu(tr("View"));

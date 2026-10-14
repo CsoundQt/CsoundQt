@@ -36,6 +36,7 @@ FrameWidget::FrameWidget(QWidget* parent) : QFrame(parent)
 	m_resizeBox->show();
 	m_resizeBox->setMinimumSize(2,2);
 	m_selected = false;
+	m_selecting = false;
 	m_changed = false;
     this->setStyleSheet("QFrame, QLabel, QToolTip{color:" + qApp->palette().color(QPalette::WindowText).name() + "; border:2px solid green;}");
 }
@@ -82,6 +83,24 @@ void FrameWidget::contextMenuEvent(QContextMenuEvent *event)
 
 void FrameWidget::mousePressEvent ( QMouseEvent * event )
 {
+	if ((event->button() & Qt::LeftButton)
+			&& (event->modifiers() & Qt::AltModifier)) {
+		// Alt+click cycles the selection through the widgets stacked under the
+		// cursor, going one level deeper each time.
+		emit selectThrough(event->globalPosition().toPoint());
+		event->accept();
+		return;
+	}
+	if ((event->button() & Qt::LeftButton)
+			&& (event->modifiers() & Qt::ShiftModifier)) {
+		// Shift+click starts a rubber-band selection that is driven by the
+		// parent layout. The frame keeps the mouse grab (accepts the event) so
+		// it receives the move events and forwards them.
+		m_selecting = true;
+		emit selectionStarted(event->globalPosition().toPoint());
+		event->accept();
+		return;
+	}
 	QFrame::mousePressEvent(event);
 	this->setFocus(Qt::MouseFocusReason);
 	if (event->button() & Qt::LeftButton) {
@@ -93,9 +112,7 @@ void FrameWidget::mousePressEvent ( QMouseEvent * event )
 			m_resize = true;
 		else
 			m_resize = false;
-        if (event->modifiers() & Qt::ShiftModifier) {
-            this->select();
-        } else if (event->modifiers() & Qt::ControlModifier) {
+        if (event->modifiers() & Qt::ControlModifier) {
             this->setSelected(!this->isSelected());
         } else if(!isSelected()) {
             emit deselectAllSignal();
@@ -107,6 +124,12 @@ void FrameWidget::mousePressEvent ( QMouseEvent * event )
 
 void FrameWidget::mouseReleaseEvent ( QMouseEvent * event )
 {
+	if (m_selecting && (event->button() & Qt::LeftButton)) {
+		m_selecting = false;
+		emit selectionFinished();
+		event->accept();
+		return;
+	}
 	QFrame::mouseReleaseEvent(event);
 	emit mouseReleased();
 	event->accept(); //to avoid propagation of the event to parent widgets
@@ -114,6 +137,10 @@ void FrameWidget::mouseReleaseEvent ( QMouseEvent * event )
 
 void FrameWidget::mouseMoveEvent (QMouseEvent* event)
 {
+	if (m_selecting) {
+		emit selectionMoved(event->globalPosition().toPoint());
+		return;
+	}
 	if (m_resize) {
         if(event->modifiers() & Qt::ShiftModifier) {
             auto dx = event->x() - oldx;
@@ -131,6 +158,10 @@ void FrameWidget::mouseMoveEvent (QMouseEvent* event)
         }
 	}
 	else {
+		// A locked widget (labels) keeps its position when dragged.
+		if (m_widget->property("CSQT_locked").toBool()) {
+			return;
+		}
 		QPair<int, int> pair(event->x()- startx, event->y()- starty);
 		emit moved(pair);
 	}

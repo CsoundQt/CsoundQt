@@ -720,6 +720,11 @@ void WaveformView::paintEvent(QPaintEvent *)
 		painter.setPen(QPen(m_cursorColor, 0));
 		painter.drawLine(QPointF(cx, waveRect.top()), QPointF(cx, waveRect.bottom()));
 	}
+
+	// Disabled: dim the whole view.
+	if (!isEnabled()) {
+		QuteWidget::paintDisabledOverlay(painter, r);
+	}
 }
 
 void WaveformView::mousePressEvent(QMouseEvent *event)

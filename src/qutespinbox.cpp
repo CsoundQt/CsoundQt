@@ -333,6 +333,9 @@ void QuteSpinBox::applyInternalProperties()
         .arg(bgstr);
 
 #endif
+    // A stylesheet color would otherwise survive setEnabled(false).
+    sheet += QString(" QDoubleSpinBox:disabled { color:%1; }")
+                 .arg(disabledColor(property("CSQT_color").value<QColor>()).name());
     m_widget->setStyleSheet(sheet);
 
 #ifdef  USE_WIDGET_MUTEX

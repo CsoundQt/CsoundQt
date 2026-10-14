@@ -52,7 +52,9 @@ Inspector::Inspector(QWidget *parent)
     m_treeWidget->expandItem(treeItem3);    // instruments
     m_treeWidget->collapseItem(treeItem4);  // ftables
     m_treeWidget->collapseItem(treeItem5);    // score
-    rxOpcode.setPattern("\\bopcode\\s+(\\w+),\\s*\\w+\\s*,\\s*\\w+");
+    // Matches both the old opcode syntax ("opcode name, outtypes, intypes")
+    // and the new-style syntax ("opcode name(inargs):(outargs)").
+    rxOpcode.setPattern("\\bopcode\\s+(\\w+)\\s*(?:,|\\()");
     xinRx.setPattern("\\bxin\\b");
     // xinRx.setPattern("[akiS]\\w+[,\\w\\d\\s_]+\\bxin\\s*$");
     xoutRx.setPattern("\\bxout\\s+");

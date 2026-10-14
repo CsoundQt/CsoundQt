@@ -71,6 +71,7 @@ public:
     int findCurve(CurveType type, QStringView text);
 	virtual void applyInternalProperties();
 	virtual bool applyProperty(const QString &name);
+	virtual void setWidgetEnabled(bool enabled);
     size_t spectrumGetPeak(Curve *curve, double freq, double relativeBandwidth);
     QuteWidgetType getWidgetTypeID() override;
 

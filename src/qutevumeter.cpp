@@ -151,65 +151,73 @@ void VUMeterWidget::paintEvent(QPaintEvent * /*event*/)
 		p.fillRect(bar, m_bgColor);
 	}
 
+	// Disabled: grey only the meter bar (not the ruler area) and show no value.
+	const bool enabled = isEnabled();
+	if (!enabled) {
+		QuteWidget::paintDisabledOverlay(p, bar.toRect());
+	}
+
 	// Filled portion. The gradient depends only on the range/exponent and the
 	// scale rect (not on the value), so it is cached and rebuilt only when one
 	// of those changes.
-	const double frac = fractionForDb(m_value);
-	QRectF fillRect = scale;
-	if (vertical) {
-		fillRect.setTop(scale.bottom() - scale.height() * frac);
-	} else {
-		fillRect.setWidth(scale.width() * frac);
-	}
-	if (!m_gradientValid || m_gradMin != m_min || m_gradMax != m_max
-	        || m_gradExp != m_exponent || m_gradRect != scale
-	        || m_gradVertical != vertical) {
-		QLinearGradient grad;
+	if (enabled) {
+		const double frac = fractionForDb(m_value);
+		QRectF fillRect = scale;
 		if (vertical) {
-			grad = QLinearGradient(scale.left(), scale.bottom(), scale.left(), scale.top());
+			fillRect.setTop(scale.bottom() - scale.height() * frac);
 		} else {
-			grad = QLinearGradient(scale.left(), scale.top(), scale.right(), scale.top());
+			fillRect.setWidth(scale.width() * frac);
 		}
-		// Colour stops are anchored to dB values (not to fractions of the bar),
-		// so a colour always corresponds to the same dB regardless of the skew:
-		// green up to -18 dB, yellow around -6 dB, red at/above 0 dB.
-		QVector<QPair<double, QColor>> stops;
-		// Adds an interior stop only when the dB value lies inside the range
-		// (the endpoints are added explicitly below).
-		auto addStop = [&](double db, const QColor &color) {
-			if (db > m_min && db <= m_max) {
-				stops << qMakePair(db, color);
+		if (!m_gradientValid || m_gradMin != m_min || m_gradMax != m_max
+		        || m_gradExp != m_exponent || m_gradRect != scale
+		        || m_gradVertical != vertical) {
+			QLinearGradient grad;
+			if (vertical) {
+				grad = QLinearGradient(scale.left(), scale.bottom(), scale.left(), scale.top());
+			} else {
+				grad = QLinearGradient(scale.left(), scale.top(), scale.right(), scale.top());
 			}
-		};
-		stops << qMakePair(m_min, QColor(40, 50, 56));
-		addStop(-90.0, QColor(40, 50, 56));
-		addStop(-60.0, QColor(55, 71, 79));
-		addStop(-48.0, QColor(23, 107, 80));
-		addStop(-36.0, QColor(32, 164, 100));
-		addStop(-24.0, QColor(101, 200, 74));
-		addStop(-18.0, QColor(185, 217, 43));
-		addStop(-12.0, QColor(240, 210, 47));
-		addStop(-6.0,  QColor(245, 165, 35));
-		addStop(-2.0,  QColor(230, 60, 53));
-		addStop(0.0,   QColor(255, 23, 68));
-		addStop(+12.1, QColor(255, 0, 170));
-		stops << qMakePair(m_max, QColor(255, 0, 170));
-		std::sort(stops.begin(), stops.end(),
-		          [](const QPair<double, QColor> &a, const QPair<double, QColor> &b) {
-		              return a.first < b.first;
-		          });
-		for (const auto &stop : stops) {
-			grad.setColorAt(std::clamp(fractionForDb(stop.first), 0.0, 1.0), stop.second);
+			// Colour stops are anchored to dB values (not to fractions of the bar),
+			// so a colour always corresponds to the same dB regardless of the skew:
+			// green up to -18 dB, yellow around -6 dB, red at/above 0 dB.
+			QVector<QPair<double, QColor>> stops;
+			// Adds an interior stop only when the dB value lies inside the range
+			// (the endpoints are added explicitly below).
+			auto addStop = [&](double db, const QColor &color) {
+				if (db > m_min && db <= m_max) {
+					stops << qMakePair(db, color);
+				}
+			};
+			stops << qMakePair(m_min, QColor(40, 50, 56));
+			addStop(-90.0, QColor(40, 50, 56));
+			addStop(-60.0, QColor(55, 71, 79));
+			addStop(-48.0, QColor(23, 107, 80));
+			addStop(-36.0, QColor(32, 164, 100));
+			addStop(-24.0, QColor(101, 200, 74));
+			addStop(-18.0, QColor(185, 217, 43));
+			addStop(-12.0, QColor(240, 210, 47));
+			addStop(-6.0,  QColor(245, 165, 35));
+			addStop(-2.0,  QColor(230, 60, 53));
+			addStop(0.0,   QColor(255, 23, 68));
+			addStop(+12.1, QColor(255, 0, 170));
+			stops << qMakePair(m_max, QColor(255, 0, 170));
+			std::sort(stops.begin(), stops.end(),
+			          [](const QPair<double, QColor> &a, const QPair<double, QColor> &b) {
+			              return a.first < b.first;
+			          });
+			for (const auto &stop : stops) {
+				grad.setColorAt(std::clamp(fractionForDb(stop.first), 0.0, 1.0), stop.second);
+			}
+			m_gradient = grad;
+			m_gradMin = m_min;
+			m_gradMax = m_max;
+			m_gradExp = m_exponent;
+			m_gradRect = scale;
+			m_gradVertical = vertical;
+			m_gradientValid = true;
 		}
-		m_gradient = grad;
-		m_gradMin = m_min;
-		m_gradMax = m_max;
-		m_gradExp = m_exponent;
-		m_gradRect = scale;
-		m_gradVertical = vertical;
-		m_gradientValid = true;
+		p.fillRect(fillRect, m_gradient);
 	}
-	p.fillRect(fillRect, m_gradient);
 
 	// Border.
 	p.setPen(m_borderColor);
@@ -356,7 +364,8 @@ void VUMeterWidget::paintEvent(QPaintEvent * /*event*/)
 
 	// Cursor (second channel): a line across the meter at the cursor's dB value
 	// (horizontal for a vertical meter, vertical otherwise). Drawn on top.
-	if (m_cursorVisible && m_cursor >= m_min && m_cursor <= m_max) {
+	// Not shown while disabled.
+	if (enabled && m_cursorVisible && m_cursor >= m_min && m_cursor <= m_max) {
 		const double f = fractionForDb(m_cursor);
 		p.setPen(QPen(m_cursorColor, m_cursorWidth));
 		if (vertical) {

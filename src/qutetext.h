@@ -80,9 +80,11 @@ protected:
     SelectColorButton *borderColor = nullptr; // invalid/empty = follow text color
     bool m_borderColorSet = false;
     QCheckBox *bg;
+    QCheckBox *lockedCheckBox = nullptr; // labels only
     // QCheckBox *border;
 	QSpinBox *borderRadius;
 	QSpinBox *borderWidth;
+    QSpinBox *paddingSpinBox = nullptr;
     QSpinBox *precisionSpinBox;
 	QComboBox  *font;
 	QSpinBox * fontSize;

@@ -25,6 +25,7 @@
 #include "src/types.h"
 #include <cmath>
 #include <QPalette>
+#include <QGraphicsOpacityEffect>
 
 
 #include <QColorDialog>
@@ -1034,6 +1035,23 @@ bool QuteGraph::applyProperty(const QString &name)
 	return QuteWidget::applyProperty(name);
 }
 
+void QuteGraph::setWidgetEnabled(bool enabled)
+{
+	QuteWidget::setWidgetEnabled(enabled);
+	// The graph is made of child graphics views, so a paint overlay on the
+	// container would be painted underneath them. A (cheap, only while disabled)
+	// opacity effect greys the whole subtree instead.
+	if (enabled) {
+		if (m_widget->graphicsEffect()) {
+			m_widget->setGraphicsEffect(nullptr);
+		}
+	} else if (!m_widget->graphicsEffect()) {
+		auto *effect = new QGraphicsOpacityEffect(m_widget);
+		effect->setOpacity(0.35);
+		m_widget->setGraphicsEffect(effect);
+	}
+}
+
 void QuteGraph::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
@@ -1590,6 +1608,8 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
         painter.drawRect(this->rect());
         painter.setPen(Qt::white);
         painter.drawText(this->rect(), Qt::AlignCenter, "Stopped");
+        if (!isEnabled())
+            QuteWidget::paintDisabledOverlay(painter, this->rect());
         return;
     }
     if(m_tabnum <= 0) {
@@ -1598,6 +1618,8 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
         painter.drawRect(this->rect());
         painter.setPen(Qt::white);
         painter.drawText(this->rect(), Qt::AlignCenter, "Table not set");
+        if (!isEnabled())
+            QuteWidget::paintDisabledOverlay(painter, this->rect());
         return;
     }
     // running OK
@@ -1612,6 +1634,8 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
     painter.setPen(QPen(m_color, 0));
     painter.drawPath(m_path);
     mutex.unlock();
+    if (!isEnabled())
+        QuteWidget::paintDisabledOverlay(painter, this->rect());
     // blockSignals(false);
 }
 

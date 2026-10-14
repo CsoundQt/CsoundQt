@@ -58,7 +58,6 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	m_value = 0.0;
 	m_widget = new QLabel(this);
 	static_cast<QLabel*>(m_widget)->setWordWrap (true);
-	static_cast<QLabel*>(m_widget)->setMargin (5);
 	//  static_cast<QLabel*>(m_widget)->setTextFormat(Qt::RichText);
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
     // Necessary to pass mouse tracking to widget panel for _MouseX channels
@@ -81,6 +80,9 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_bordermode", "noborder");
 	setProperty("CSQT_borderradius", 1);
 	setProperty("CSQT_borderwidth", 1);
+	// Space between the (optional) border and the text; matches the previous
+	// hard-coded QLabel margin.
+	setProperty("CSQT_padding", 5);
 
 	m_fontScaling = 1.0;
 	m_fontOffset = 1.0;
@@ -130,8 +132,13 @@ void QuteText::setValue(QString value)
 void QuteText::setType(QString type)
 {
 	m_type = type;
-	if(type == "label")
+	if(type == "label") {
         m_typeid = QuteWidgetType::LABEL;
+        // Labels can be locked in place so dragging does not move them.
+        if (!property("CSQT_locked").isValid()) {
+            setProperty("CSQT_locked", false);
+        }
+    }
     else if(type == "display")
         m_typeid = QuteWidgetType::DISPLAY;
     else {
@@ -318,17 +325,26 @@ void QuteText::applyInternalProperties()
         (QString("; background-color:")+property("CSQT_bgcolor").value<QColor>().name()) :
         QString("");
 
+    // Padding only applies to labels and displays (the QLabel-based widgets).
+    QString paddingStr;
+    if (m_typeid == QuteWidgetType::LABEL || m_typeid == QuteWidgetType::DISPLAY) {
+        paddingStr = "; padding:" + QString::number(property("CSQT_padding").toInt()) + "px";
+    }
+
     m_widget->setStyleSheet(
         "QLabel{ font-family:\"" + property("CSQT_font").toString() + "\""
             // + "; font-size: " + QString::number(new_fontSize) + "pt"
             + "; font-size: " + QString::number(fontSize) + "px"
             + bgstr
+            + paddingStr
             + "; color:" + textColor.name()
             + "; border-color:" + borderCol.name()
             + "; border-radius:" + QString::number(property("CSQT_borderradius").toInt()) + "px"
             + "; border-width: " + QString::number(borderWidth) + "px"
             + "; border-style: " + borderStyle
-            + "; }");
+            // A stylesheet color would otherwise survive setEnabled(false), so
+            // grey the text explicitly for the disabled state.
+            + "; } QLabel:disabled { color:" + disabledColor(textColor).name() + "; }");
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -453,6 +469,10 @@ QString QuteText::getWidgetXmlText()
 	s.writeTextElement("font", property("CSQT_font").toString());
 	s.writeTextElement("fontsize", QString::number(property("CSQT_fontsize").toInt()));
 	s.writeTextElement("precision", QString::number(property("CSQT_precision").toInt()));
+	s.writeTextElement("padding", QString::number(property("CSQT_padding").toInt()));
+	if (m_type == "label") {
+		s.writeTextElement("locked", property("CSQT_locked").toBool() ? "true" : "false");
+	}
 
 	QColor color = property("CSQT_color").value<QColor>();
 	s.writeStartElement("color");
@@ -649,6 +669,27 @@ void QuteText::createPropertiesDialog()
     vertAlignmentComboBox->addItem(tr("Bottom", "Alignment"));
     layout->addWidget(vertAlignmentComboBox, 11, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
+    if (m_typeid == QuteWidgetType::LABEL || m_typeid == QuteWidgetType::DISPLAY) {
+        label = new QLabel(dialog);
+        label->setText(tr("Padding"));
+        label->setToolTip(tr("Space between the border and the text, in pixels."));
+        layout->addWidget(label, 12, 0, Qt::AlignRight|Qt::AlignVCenter);
+        labelPtrs["padding"] = label;
+
+        paddingSpinBox = new QSpinBox(dialog);
+        paddingSpinBox->unsetLocale();
+        paddingSpinBox->setRange(0, 999);
+        paddingSpinBox->setValue(property("CSQT_padding").toInt());
+        layout->addWidget(paddingSpinBox, 12, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    }
+
+    if (m_type == "label") {
+        lockedCheckBox = new QCheckBox(tr("Locked"), dialog);
+        lockedCheckBox->setToolTip(tr("Lock the label in place so it cannot be dragged."));
+        lockedCheckBox->setChecked(property("CSQT_locked").toBool());
+        layout->addWidget(lockedCheckBox, 13, 0, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    }
+
     // connect(bgColor, SIGNAL(released()), this, SLOT(selectBgColor()));
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
@@ -752,7 +793,12 @@ void QuteText::applyProperties()
 	setProperty("CSQT_borderwidth", borderWidth->value());
     m_precision = precisionSpinBox->value();
     setProperty("CSQT_precision", m_precision);
-
+    if (paddingSpinBox) {
+        setProperty("CSQT_padding", paddingSpinBox->value());
+    }
+    if (lockedCheckBox) {
+        setProperty("CSQT_locked", lockedCheckBox->isChecked());
+    }
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -995,7 +1041,7 @@ void QuteLineEdit::applyInternalProperties()
                             + "; border-radius:" + QString::number(borderRadius) + "px"
                             + "; border-width:" + QString::number(borderWidth) + "px"
                             + "; border-style: " + borderStyle
-                            + "; }");
+                            + "; } QLineEdit:disabled { color:" + disabledColor(textColor).name() + "; }");
 #else
     int new_fontSize = 0;
     int totalHeight = 0;
@@ -1015,7 +1061,8 @@ void QuteLineEdit::applyInternalProperties()
 							+ "; border-radius:" + QString::number(borderRadius) + "px"
 							+ "; border-width:" + QString::number(borderWidth) + "px"
 							+ "; border-style: " + borderStyle
-							+ "; }");
+							// A stylesheet color would otherwise survive setEnabled(false).
+							+ "; } QLineEdit:disabled { color:" + disabledColor(textColor).name() + "; }");
 #endif
 	//  qDebug() << "QuteLineEdit::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
 }

@@ -24,6 +24,8 @@
 #include "widgetlayout.h"
 #include "bundledfonts.h"
 
+#include <QPainter>
+
 // Copied widget styles, keyed by widget type. A copied style holds all dynamic
 // "CSQT_*" properties except position, size, channel(s), text and identity, so
 // it can be applied to another widget of the same type.
@@ -47,6 +49,14 @@ static bool isStylePropertyExcluded(const QString &name)
 	}
 	// Widget identity (defensive; these are static properties, not dynamic)
 	if (name == "CSQT_uuid" || name == "CSQT_widgetName") {
+		return true;
+	}
+	// Runtime state, not appearance
+	if (name == "CSQT_enabled") {
+		return true;
+	}
+	// Behaviour, not appearance
+	if (name == "CSQT_locked") {
 		return true;
 	}
 	return false;
@@ -76,6 +86,7 @@ QuteWidget(QWidget *parent):
 	m_valueChanged = false;
 	m_value2Changed = false;
 	m_locked = false;
+	m_enabled = true;
     m_description = "";
     m_widgetName = "";
     // used by all widgets which need access to the api (TableDisplay)
@@ -94,13 +105,81 @@ QuteWidget(QWidget *parent):
     setProperty("CSQT_uuid", QUuid::createUuid().toString());
     setProperty("CSQT_widgetName", "");
 	setProperty("CSQT_visible", true);
+	setProperty("CSQT_enabled", true);
 	setProperty("CSQT_midichan", 0);
 	setProperty("CSQT_midicc", -3);
     setProperty("CSQT_description", "");
+
+	// Swallow input events while disabled. Disabling m_widget already blocks
+	// the child controls; this also covers widgets (e.g. the graph) that handle
+	// mouse events on the QuteWidget itself.
+	installEventFilter(this);
 }
 
 QuteWidget::~QuteWidget()
 {
+}
+
+void QuteWidget::setWidgetEnabled(bool enabled)
+{
+	m_enabled = enabled;
+	if (m_widget) {
+		// Disabling the inner widget blocks user input and gives native controls
+		// their platform disabled appearance.
+		m_widget->setEnabled(enabled);
+	}
+	if (enabled) {
+		// Resume at the current value on the next refresh.
+		m_valueChanged = true;
+	}
+	update();
+}
+
+QColor QuteWidget::disabledColor(const QColor &color)
+{
+	if (!color.isValid())
+		return color;
+	int h, s, l, a;
+	color.getHsl(&h, &s, &l, &a);
+	// Keep a hint of the hue but drain almost all of the saturation so the
+	// result reads as grey while preserving the original lightness.
+	s /= 8;
+	QColor result;
+	result.setHsl(h, s, l, a);
+	return result;
+}
+
+void QuteWidget::paintDisabledOverlay(QPainter &painter, const QRect &rect)
+{
+	if (rect.isEmpty())
+		return;
+	painter.save();
+	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+	painter.fillRect(rect, QColor(140, 140, 140, 140));
+	painter.restore();
+}
+
+bool QuteWidget::eventFilter(QObject *obj, QEvent *event)
+{
+	if (obj == this && !m_enabled) {
+		switch (event->type()) {
+		case QEvent::MouseButtonPress:
+		case QEvent::MouseButtonRelease:
+		case QEvent::MouseButtonDblClick:
+		case QEvent::Wheel:
+		case QEvent::KeyPress:
+		case QEvent::KeyRelease:
+		case QEvent::ContextMenu:
+		case QEvent::DragEnter:
+		case QEvent::DragMove:
+		case QEvent::DragLeave:
+		case QEvent::Drop:
+			return true; // Disabled widgets do not react to input
+		default:
+			break;
+		}
+	}
+	return QWidget::eventFilter(obj, event);
 }
 
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
@@ -232,6 +311,11 @@ static QString csqtPropertyKey(const QString &name)
 void QuteWidget::widgetMessage(const QString& path, const QString& text)
 {
     const QString propertyKey = csqtPropertyKey(path);
+    // A disabled widget ignores every change coming from Csound except the one
+    // that re-enables it.
+    if (!m_enabled && propertyKey != "CSQT_enabled") {
+        return;
+    }
     if(setPropertyIfExists(propertyKey, text)) {
         if (!applyProperty(propertyKey)) {
             // Property not handled individually: fall back to re-applying the
@@ -266,6 +350,11 @@ void QuteWidget::widgetMessage(const QString& path, const QString& text)
 void QuteWidget::widgetMessage(const QString& path, double value)
 {
     const QString propertyKey = csqtPropertyKey(path);
+    // See the string overload: only the property that re-enables the widget is
+    // accepted while it is disabled.
+    if (!m_enabled && propertyKey != "CSQT_enabled") {
+        return;
+    }
     if (setPropertyIfExists(propertyKey, value)) {
         if (!applyProperty(propertyKey)) {
             // See above: fall back to a full apply, preserving the live values
@@ -338,6 +427,7 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 	s.writeTextElement("uuid", property("CSQT_uuid").toString());
 	s.writeTextElement("widgetName", property("CSQT_widgetName").toString());
 	s.writeTextElement("visible", property("CSQT_visible").toBool() ? "true":"false");
+	s.writeTextElement("enabled", property("CSQT_enabled").toBool() ? "true":"false");
 	s.writeTextElement("midichan", QString::number(property("CSQT_midichan").toInt()));
 	s.writeTextElement("midicc", QString::number(property("CSQT_midicc").toInt()));
     s.writeTextElement("description", m_description);
@@ -504,6 +594,7 @@ void QuteWidget::applyInternalProperties()
 	m_midicc = property("CSQT_midicc").toInt();
 	m_midichan = property("CSQT_midichan").toInt();
 	setVisible(property("CSQT_visible").toBool());
+	setWidgetEnabled(property("CSQT_enabled").toBool());
 	m_valueChanged = true;
     m_description = property("CSQT_description").toString();
     m_widgetName = property("CSQT_widgetName").toString();
@@ -543,6 +634,10 @@ bool QuteWidget::applyProperty(const QString &name)
 	}
 	if (name == "CSQT_visible") {
 		setVisible(property(cname).toBool());
+		return true;
+	}
+	if (name == "CSQT_enabled") {
+		setWidgetEnabled(property(cname).toBool());
 		return true;
 	}
 	if (name == "CSQT_objectName") {
@@ -840,6 +935,14 @@ void QuteWidget::createPropertiesDialog()
 	nameLineEdit->selectAll();
     layout->addWidget(nameLineEdit, 3, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
+    enabledCheckBox = new QCheckBox(tr("Enabled"), dialog);
+    enabledCheckBox->setToolTip(tr("When unchecked the widget is disabled: it ignores "
+                                   "both user input and updates from Csound, and is "
+                                   "drawn greyed out. It can also be toggled from Csound "
+                                   "with outvalue \"<channel>/enabled\", <0 or 1>."));
+    enabledCheckBox->setChecked(property("CSQT_enabled").toBool());
+    layout->addWidget(enabledCheckBox, 15, 0, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
+
     label = new QLabel(tr("Name ="), dialog);
     layout->addWidget(label, footerRow-3, 0, Qt::AlignRight|Qt::AlignVCenter);
 
@@ -934,6 +1037,7 @@ void QuteWidget::applyProperties()
 		setProperty("CSQT_widgetName", widgetName);
 	}
 	setProperty("CSQT_objectName", nameLineEdit->text());
+	setProperty("CSQT_enabled", enabledCheckBox->isChecked());
 	setProperty("CSQT_x", xSpinBox->value());
 	setProperty("CSQT_y",ySpinBox->value());
 	setProperty("CSQT_width", wSpinBox->value());

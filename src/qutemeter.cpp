@@ -940,6 +940,15 @@ void MeterWidget::mousePressEvent(QMouseEvent* event)
         handlePointerEvent(event->position(), false);
 }
 
+void MeterWidget::paintEvent(QPaintEvent *event)
+{
+    QGraphicsView::paintEvent(event);
+    if (!isEnabled()) {
+        QPainter painter(viewport());
+        QuteWidget::paintDisabledOverlay(painter, viewport()->rect());
+    }
+}
+
 void MeterWidget::mouseMoveEvent(QMouseEvent* event)
 {
     if (event->buttons() & Qt::LeftButton)

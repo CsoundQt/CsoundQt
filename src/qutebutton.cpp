@@ -48,13 +48,21 @@ void QutePushButton::paintEvent(QPaintEvent *event)
 	if (!textColor.isValid()) {
 		textColor = palette().color(QPalette::ButtonText);
 	}
+	QColor borderColor = m_bordercolor;
+	if (!isEnabled()) {
+		// Self-drawn flat buttons grey themselves out instead of relying on the
+		// native disabled look.
+		bg = QuteWidget::disabledColor(bg);
+		textColor = QuteWidget::disabledColor(textColor);
+		borderColor = QuteWidget::disabledColor(borderColor);
+	}
 
 	const double half = m_borderwidth / 2.0;
 	const QRectF r = QRectF(rect()).adjusted(half, half, -half, -half);
 
 	painter.setBrush(bg);
-	if (m_borderwidth > 0 && m_bordercolor.isValid()) {
-		QPen pen(m_bordercolor, m_borderwidth);
+	if (m_borderwidth > 0 && borderColor.isValid()) {
+		QPen pen(borderColor, m_borderwidth);
 		if (m_borderwidth == 1) {
 			// Cosmetic pen so a 1px border is not thinned by scaling.
 			pen.setWidth(0);

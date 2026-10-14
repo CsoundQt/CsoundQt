@@ -118,9 +118,13 @@ void QVdial::paintEvent(QPaintEvent *event) {
         return this->QDial::paintEvent(event);
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    QColor bgcolor = m_color.darker(330);
+    const bool enabled = isEnabled();
+    const QColor fg = enabled ? m_color : QuteWidget::disabledColor(m_color);
+    const QColor bgcolor = enabled ? m_color.darker(330)
+                                   : QuteWidget::disabledColor(m_color.darker(330));
+    const QColor border = enabled ? m_bordercolor : QuteWidget::disabledColor(m_bordercolor);
     double r = qMin(this->rect().height(), this->rect().width()) / 2.0;
-    drawKnob(painter, m_border, m_color, bgcolor, m_bordercolor);
+    drawKnob(painter, m_border, fg, bgcolor, border);
 
     if(m_draw_value && r >= 8) {
         double display_value = displayValue();
@@ -139,7 +143,7 @@ void QVdial::paintEvent(QPaintEvent *event) {
         int fontSize = (int) ((r - m_border) * fontScale);
         if(fontSize >= 6) {
             painter.setFont({"Helvetica", fontSize});
-            painter.setPen(m_textcolor);
+            painter.setPen(enabled ? m_textcolor : QuteWidget::disabledColor(m_textcolor));
             painter.drawText(this->rect(), Qt::AlignCenter, strValue);
         }
     }

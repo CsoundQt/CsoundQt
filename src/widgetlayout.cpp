@@ -21,9 +21,11 @@
 */
 
 #include <cstdlib>
+#include <cmath>
 
 #include <QSet>
 #include <QThread>
+#include <limits>
 
 #include "widgetlayout.h"
 #include "qutewidget.h"
@@ -176,6 +178,42 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     sendToFrontAct = new QAction(QIcon(iconPrefix + "object-order-front.svg"),
                                  tr("Send to Front"), this);
     connect(sendToFrontAct, SIGNAL(triggered()), this, SLOT(sendToFront()));
+
+    // Page Up / Page Down change the stacking order while editing. Kept as
+    // widget-context shortcuts so they do not interfere with scrolling outside
+    // edit mode.
+    sendToFrontAct->setShortcut(QKeySequence(Qt::Key_PageUp));
+    sendToFrontAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    addAction(sendToFrontAct);
+    sendToBackAct->setShortcut(QKeySequence(Qt::Key_PageDown));
+    sendToBackAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    addAction(sendToBackAct);
+
+    // Ctrl+arrows move the selection to the nearest widget in that direction.
+    // These override the application-level Ctrl+Left/Right (browse back/forward)
+    // while the widget panel is focused.
+    auto makeSelectAct = [this](const QString &text, Qt::Key key, int dx, int dy) {
+        QAction *act = new QAction(text, this);
+        act->setShortcut(QKeySequence(Qt::CTRL | key));
+        act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        connect(act, &QAction::triggered, this, [this, dx, dy]() {
+            selectInDirection(dx, dy);
+        });
+        addAction(act);
+        return act;
+    };
+    selectLeftAct  = makeSelectAct(tr("Select widget to the left"),  Qt::Key_Left,  -1,  0);
+    selectRightAct = makeSelectAct(tr("Select widget to the right"), Qt::Key_Right,  1,  0);
+    selectUpAct    = makeSelectAct(tr("Select widget above"),       Qt::Key_Up,     0, -1);
+    selectDownAct  = makeSelectAct(tr("Select widget below"),       Qt::Key_Down,   0,  1);
+
+    // Enabled only while editing (see setEditMode()).
+    sendToFrontAct->setEnabled(false);
+    sendToBackAct->setEnabled(false);
+    selectLeftAct->setEnabled(false);
+    selectRightAct->setEnabled(false);
+    selectUpAct->setEnabled(false);
+    selectDownAct->setEnabled(false);
 
     distributeHorizontalAct = new QAction(tr("Distribute Horizontally"), this);
     connect(distributeHorizontalAct, SIGNAL(triggered()),
@@ -509,6 +547,9 @@ void WidgetLayout::setDisplayValue(QString channelName, double value)
                 && wtype != QuteWidgetType::VUMETER) {
             return;
         }
+        if (!w->isWidgetEnabled()) {
+            return; // Disabled widgets ignore updates from Csound
+        }
         if (!channelName.isEmpty() && w->getChannel2Name() == channelName) {
             w->setValue2(value);
         } else {
@@ -589,6 +630,8 @@ void WidgetLayout::setValue(QString channelName, double value)
             auto match = (w->getChannelName() == channelName) + (w->getChannel2Name() == channelName)*2;
             if(match > 0) {
                 matches.append(w);
+                if(!w->isWidgetEnabled())
+                    continue;
                 if(match & 1)
                     w->setValue(value);
                 if(match & 2)
@@ -600,6 +643,8 @@ void WidgetLayout::setValue(QString channelName, double value)
         it = channelNameToWidgets.insert(channelName, matches);
     } else {
         for (auto* w : it.value()) {
+            if(!w->isWidgetEnabled())
+                continue;
             if (w->getChannelName() == channelName) {
                 w->setValue(value);
             }
@@ -624,11 +669,13 @@ void WidgetLayout::setValue(QString channelName, QString value)
         for (int i = 0; i < m_widgets.size(); i++) {
             auto w = m_widgets[i];
             if (w->getChannelName() == channelName) {
-                w->setValue(value);
+                if (w->isWidgetEnabled())
+                    w->setValue(value);
                 matches.append(w);
             } else if (!matchedByUuid && w->getUuid() == channelName) {
                 // Channel name is a widget uuid: not cached by channel.
-                w->setValue(value);
+                if (w->isWidgetEnabled())
+                    w->setValue(value);
                 matchedByUuid = true;
             }
         }
@@ -637,6 +684,8 @@ void WidgetLayout::setValue(QString channelName, QString value)
         }
     } else {
         for(const auto& w: widgets.value()) {
+            if(!w->isWidgetEnabled())
+                continue;
             if(w->getChannelName() == channelName) {
                 w->setValue(value);
             }
@@ -650,7 +699,8 @@ void WidgetLayout::setValue(int index, double value)
     // there are two values for each widget
     widgetsMutex.lock();
     if (index < m_widgets.size() * 2) {
-        m_widgets[index/2]->setValue(value);
+        if (m_widgets[index/2]->isWidgetEnabled())
+            m_widgets[index/2]->setValue(value);
     }
     widgetsMutex.unlock();
 }
@@ -660,7 +710,8 @@ void WidgetLayout::setValue(int index, QString value)
     // there are two values for each widget
     widgetsMutex.lock();
     if (index < m_widgets.size() * 2) {
-        m_widgets[index/2]->setValue(value);
+        if (m_widgets[index/2]->isWidgetEnabled())
+            m_widgets[index/2]->setValue(value);
     }
     widgetsMutex.unlock();
 }
@@ -956,6 +1007,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         else if (nodeName == "width" || nodeName == "height"
                  || nodeName == "fontsize"
                  || nodeName == "precision"
+                 || nodeName == "padding"
                  || nodeName == "borderwidth"
                  || nodeName == "borderradius"
                  || nodeName == "borderWidth"
@@ -977,6 +1029,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         }
         else if (nodeName == "randomizable" || nodeName == "selected"
                  || nodeName == "visible"
+                 || nodeName == "enabled"
+                 || nodeName == "locked"
                  || nodeName == "flatStyle"
                  || nodeName == "instant" ) {  // BOOL type
             QDomNode n = node.firstChild();
@@ -1409,6 +1463,8 @@ void WidgetLayout::appendMessage(QString message, int role)
 {
 
     for (int i=0; i < consoleWidgets.size(); i++) {
+        if (!consoleWidgets[i]->isWidgetEnabled())
+            continue;
         consoleWidgets[i]->appendMessage(message, role);
         consoleWidgets[i]->scrollToEnd();
     }
@@ -1640,7 +1696,8 @@ void WidgetLayout::setCurveData(Curve *curve)
 {
     //  qDebug() << "WidgetPanel::setCurveData" <<curve;
     for (int i = 0; i < graphWidgets.size(); i++) {
-        graphWidgets[i]->setCurveData(curve);
+        if (graphWidgets[i]->isWidgetEnabled())
+            graphWidgets[i]->setCurveData(curve);
     }
 }
 
@@ -1746,7 +1803,8 @@ void WidgetLayout::refreshWidgets()
             for (int i = 0; i < registeredControllers.size(); i++) {
                 if (registeredControllers[i].cc == midiQueue[index][1]) {
 					if ( channel == registeredControllers[i].chan) {
-                        registeredControllers[i].widget->setMidiValue(midiQueue[index][2]);
+                        if (registeredControllers[i].widget->isWidgetEnabled())
+                            registeredControllers[i].widget->setMidiValue(midiQueue[index][2]);
                     }
                 }
             }
@@ -1782,14 +1840,15 @@ void WidgetLayout::refreshWidgets()
     };
 
     for (int i=0; i < m_widgets.size(); i++) {
-        if (m_widgets[i]->m_valueChanged || m_widgets[i]->m_value2Changed) {
+        if (m_widgets[i]->isWidgetEnabled()
+                && (m_widgets[i]->m_valueChanged || m_widgets[i]->m_value2Changed)) {
             m_widgets[i]->refreshWidget();
         }
         if (m_trackMouse) {
-            if (m_widgets[i]->mouseParam1 != MouseParam::None) {
+            if (m_widgets[i]->isWidgetEnabled() && m_widgets[i]->mouseParam1 != MouseParam::None) {
                 m_widgets[i]->setValue(mouseValue(m_widgets[i]->mouseParam1));
             }
-            if (m_widgets[i]->mouseParam2 != MouseParam::None) {
+            if (m_widgets[i]->isWidgetEnabled() && m_widgets[i]->mouseParam2 != MouseParam::None) {
                 m_widgets[i]->setValue2(mouseValue(m_widgets[i]->mouseParam2));
             }
         }
@@ -2008,6 +2067,9 @@ void WidgetLayout::widgetMoved(QPair<int, int> delta)
     widgetsMutex.lock();
     for (int i = 0; i < m_widgets.size(); i++) {
         if (editWidgets[i]->isSelected()) {
+            // Locked widgets (labels) keep their position even in a group drag.
+            if (m_widgets[i]->property("CSQT_locked").toBool())
+                continue;
             int newx = m_widgets[i]->x() + delta.first;
             int newy = m_widgets[i]->y() + delta.second;
             m_widgets[i]->move(newx, newy);
@@ -2791,44 +2853,73 @@ void WidgetLayout::sendToBack()
     if (!m_editMode)
         return;
 
+    QVector<QuteWidget *> selWidgets;
+    QVector<FrameWidget *> selFrames;
     widgetsMutex.lock();
-    for (int i = 0; i < editWidgets.size() ; i++) { // First invert selection
+    for (int i = 0; i < qMin(m_widgets.size(), editWidgets.size()); ++i) {
         if (editWidgets[i]->isSelected()) {
-            editWidgets[i]->deselect();
-        }
-        else {
-            editWidgets[i]->select();
+            selWidgets.append(m_widgets[i]);
+            selFrames.append(editWidgets[i]);
         }
     }
+    if (selWidgets.isEmpty()) {
+        widgetsMutex.unlock();
+        return;
+    }
+    for (int i = m_widgets.size() - 1; i >= 0; --i) {
+        if (editWidgets[i]->isSelected()) {
+            m_widgets.removeAt(i);
+            editWidgets.removeAt(i);
+        }
+    }
+    // Put the selection at the bottom (front of the bottom->top list).
+    for (int k = selWidgets.size() - 1; k >= 0; --k) {
+        m_widgets.prepend(selWidgets[k]);
+        editWidgets.prepend(selFrames[k]);
+    }
+    // Restack bottom -> top; frames are raised last so they stay above widgets.
+    for (QuteWidget *w : m_widgets) w->raise();
+    for (FrameWidget *f : editWidgets) f->raise();
     widgetsMutex.unlock();
-    cut();
-    paste();
-    deselectAll();
+
     markHistory();
     setModified(true);
-    //    widgetsMutex.lock();
-    //    for (int i = 0; i < editWidgets.size() ; i++) { // Now invert selection again
-    //      if (editWidgets[i]->isSelected()) {
-    //        editWidgets[i]->deselect();
-    //      }
-    //      else {
-    //        editWidgets[i]->select();
-    //      }
-    //    }
-    //    widgetsMutex.unlock();
 }
 
 void WidgetLayout::sendToFront()
 {
-    if(!m_editMode)
+    if (!m_editMode)
         return;
-    if (m_editMode) {
-        cut();
-        paste();
-        deselectAll();
-        markHistory();
-        setModified(true);
+
+    QVector<QuteWidget *> selWidgets;
+    QVector<FrameWidget *> selFrames;
+    widgetsMutex.lock();
+    for (int i = 0; i < qMin(m_widgets.size(), editWidgets.size()); ++i) {
+        if (editWidgets[i]->isSelected()) {
+            selWidgets.append(m_widgets[i]);
+            selFrames.append(editWidgets[i]);
+        }
     }
+    if (selWidgets.isEmpty()) {
+        widgetsMutex.unlock();
+        return;
+    }
+    for (int i = m_widgets.size() - 1; i >= 0; --i) {
+        if (editWidgets[i]->isSelected()) {
+            m_widgets.removeAt(i);
+            editWidgets.removeAt(i);
+        }
+    }
+    // Put the selection on top (end of the bottom->top list).
+    for (QuteWidget *w : selWidgets) m_widgets.append(w);
+    for (FrameWidget *f : selFrames) editWidgets.append(f);
+    // Restack bottom -> top; frames are raised last so they stay above widgets.
+    for (QuteWidget *w : m_widgets) w->raise();
+    for (FrameWidget *f : editWidgets) f->raise();
+    widgetsMutex.unlock();
+
+    markHistory();
+    setModified(true);
 }
 
 
@@ -3161,13 +3252,7 @@ void WidgetLayout::mousePressEvent(QMouseEvent *event)
 {
     auto evbutton = event->button();
     if (m_editMode && (evbutton & Qt::LeftButton)) {
-        this->setFocus(Qt::MouseFocusReason);
-        selectionFrame->show();
-        auto pos = event->position();
-        startx = pos.x() + xOffset;
-        starty = pos.y() + yOffset;
-        selectionFrame->setGeometry(startx, starty, 0,0);
-        deselectAll();
+        beginSelection(event->globalPosition().toPoint());
     }
     mouseLock.lockForWrite();
     if (evbutton == Qt::LeftButton)
@@ -3175,30 +3260,299 @@ void WidgetLayout::mousePressEvent(QMouseEvent *event)
     else if (evbutton == Qt::RightButton)
         mouseBut2 = 1;
     mouseLock.unlock();
+    // Accept so the layout takes the mouse grab and receives the move/release
+    // events that drive the rubber-band selection started here.
+    event->accept();
     //  QWidget::mousePressEvent(event);
+}
+
+void WidgetLayout::beginSelection(QPoint globalPos)
+{
+    if (!m_editMode) {
+        return;
+    }
+    this->setFocus(Qt::MouseFocusReason);
+    selectionFrame->show();
+    selectionFrame->raise();
+    const QPoint pos = mapFromGlobal(globalPos);
+    startx = pos.x() + xOffset;
+    starty = pos.y() + yOffset;
+    selectionFrame->setGeometry(startx, starty, 0, 0);
+    deselectAll();
+}
+
+void WidgetLayout::continueSelection(QPoint globalPos)
+{
+    const QPoint pos = mapFromGlobal(globalPos);
+    const int relx = pos.x();
+    const int rely = pos.y();
+    int x = startx;
+    int y = starty;
+    int width  = abs(relx - startx + xOffset);
+    int height = abs(rely - starty + yOffset);
+    if (relx < (startx - xOffset)) {
+        x = relx + xOffset;
+    }
+    if (rely < (starty - yOffset)) {
+        y = rely + yOffset;
+    }
+    selectionFrame->setGeometry(x, y, width, height);
+    selectionChanged(QRect(x - xOffset, y - yOffset, width, height));
+}
+
+void WidgetLayout::endSelection()
+{
+    selectionFrame->hide();
+    markHistory();
+}
+
+bool WidgetLayout::focusNextPrevChild(bool next)
+{
+    // In edit mode Tab / Shift+Tab walk the widget selection instead of moving
+    // keyboard focus.
+    if (m_editMode && !m_widgets.isEmpty()) {
+        selectNextWidget(next);
+        return true;
+    }
+    return QWidget::focusNextPrevChild(next);
+}
+
+void WidgetLayout::selectNextWidget(bool forward)
+{
+    const int count = qMin(editWidgets.size(), m_widgets.size());
+    if (count == 0) {
+        return;
+    }
+    int current = -1;
+    if (forward) {
+        // Next widget after the last selected one.
+        for (int i = 0; i < count; ++i) {
+            if (editWidgets[i]->isSelected()) {
+                current = i;
+            }
+        }
+    } else {
+        // Previous widget before the first selected one.
+        for (int i = count - 1; i >= 0; --i) {
+            if (editWidgets[i]->isSelected()) {
+                current = i;
+            }
+        }
+    }
+    int next;
+    if (current < 0) {
+        next = forward ? 0 : count - 1;
+    } else {
+        next = (current + (forward ? 1 : -1) + count) % count;
+    }
+    deselectAll();
+    editWidgets[next]->select();
+}
+
+// Distance from a rectangle to a point; 0 when the point is inside.
+static double pointToRectDistance(const QRect &r, const QPoint &p)
+{
+    const int dx = qMax(qMax(r.left() - p.x(), p.x() - r.right()), 0);
+    const int dy = qMax(qMax(r.top() - p.y(), p.y() - r.bottom()), 0);
+    return std::sqrt(double(dx) * dx + double(dy) * dy);
+}
+
+// Smallest distance from rectangle a to any of rectangle b's four vertices.
+static double rectToRectVerticesDistance(const QRect &a, const QRect &b)
+{
+    double d = pointToRectDistance(a, b.topLeft());
+    d = qMin(d, pointToRectDistance(a, b.topRight()));
+    d = qMin(d, pointToRectDistance(a, b.bottomLeft()));
+    d = qMin(d, pointToRectDistance(a, b.bottomRight()));
+    return d;
+}
+
+void WidgetLayout::selectInDirection(int dx, int dy)
+{
+    const int count = qMin(editWidgets.size(), m_widgets.size());
+    if (count == 0) {
+        return;
+    }
+    QRect current;
+    bool any = false;
+    for (int i = 0; i < count; ++i) {
+        if (editWidgets[i]->isSelected()) {
+            current = any ? current.united(m_widgets[i]->geometry())
+                          : m_widgets[i]->geometry();
+            any = true;
+        }
+    }
+    const bool skipContainingWidgets = any;
+    if (!any) {
+        // With no selection, use the cursor as the navigation origin when it
+        // is over the widget panel. Otherwise start at the panel edge facing
+        // the requested direction, with the perpendicular span covering the
+        // visible panel (an infinite selection band into the panel).
+        QRect panelRect = rect();
+        QWidget *panelViewport = nullptr;
+        for (QWidget *ancestor = parentWidget(); ancestor != nullptr;
+             ancestor = ancestor->parentWidget()) {
+            if (auto *scrollArea = qobject_cast<QScrollArea *>(ancestor)) {
+                panelViewport = scrollArea->viewport();
+                break;
+            }
+        }
+        if (panelViewport) {
+            const QRect viewportGlobal(panelViewport->mapToGlobal(panelViewport->rect().topLeft()),
+                                      panelViewport->mapToGlobal(panelViewport->rect().bottomRight()));
+            const QPoint cursorGlobal = QCursor::pos();
+            if (viewportGlobal.contains(cursorGlobal)) {
+                const QPoint cursor = mapFromGlobal(cursorGlobal);
+                current = QRect(cursor, QSize(1, 1));
+            } else {
+                const QPoint topLeft = mapFromGlobal(viewportGlobal.topLeft());
+                const QPoint bottomRight = mapFromGlobal(viewportGlobal.bottomRight());
+                panelRect = QRect(topLeft, bottomRight).normalized();
+            }
+        } else {
+            const QPoint cursorGlobal = QCursor::pos();
+            const QRect layoutGlobal(mapToGlobal(rect().topLeft()),
+                                     mapToGlobal(rect().bottomRight()));
+            if (layoutGlobal.contains(cursorGlobal)) {
+                current = QRect(mapFromGlobal(cursorGlobal), QSize(1, 1));
+            }
+        }
+
+        if (current.isNull()) {
+            if (dx > 0) {
+                current = QRect(panelRect.left(), panelRect.top(), 1, panelRect.height());
+            } else if (dx < 0) {
+                current = QRect(panelRect.right(), panelRect.top(), 1, panelRect.height());
+            } else if (dy > 0) {
+                current = QRect(panelRect.left(), panelRect.top(), panelRect.width(), 1);
+            } else {
+                current = QRect(panelRect.left(), panelRect.bottom(), panelRect.width(), 1);
+            }
+        }
+    }
+
+    int bestIntersect = -1;
+    long bestGap = std::numeric_limits<long>::max();
+    int bestFallback = -1;
+    double bestFallbackDist = std::numeric_limits<double>::max();
+
+    for (int i = 0; i < count; ++i) {
+        if (editWidgets[i]->isSelected()) {
+            continue;
+        }
+        const QRect c = m_widgets[i]->geometry();
+
+        // Skip a widget that contains the current one: otherwise a large widget
+        // sitting on top of a label (or any container) would always be picked
+        // when navigating away from it.
+        if (skipContainingWidgets && c.contains(current)) {
+            continue;
+        }
+
+        // First rule: the current geometry, extended endlessly in the requested
+        // direction, is a rectangle; the closest widget intersecting it wins.
+        bool intersects = false;
+        long gap = 0;
+        if (dx != 0) {
+            const bool perpendicularOverlap = qMax(current.top(), c.top())
+                                              <= qMin(current.bottom(), c.bottom());
+            if (perpendicularOverlap) {
+                if (dx > 0 && c.right() >= current.right()) {
+                    intersects = true;
+                    gap = qMax(0, c.left() - current.right());
+                } else if (dx < 0 && c.left() <= current.left()) {
+                    intersects = true;
+                    gap = qMax(0, current.left() - c.right());
+                }
+            }
+        } else if (dy != 0) {
+            const bool perpendicularOverlap = qMax(current.left(), c.left())
+                                              <= qMin(current.right(), c.right());
+            if (perpendicularOverlap) {
+                if (dy > 0 && c.bottom() >= current.bottom()) {
+                    intersects = true;
+                    gap = qMax(0, c.top() - current.bottom());
+                } else if (dy < 0 && c.top() <= current.top()) {
+                    intersects = true;
+                    gap = qMax(0, current.top() - c.bottom());
+                }
+            }
+        }
+        if (intersects && (bestIntersect < 0 || gap < bestGap)) {
+            bestGap = gap;
+            bestIntersect = i;
+        }
+
+        // Fallback candidate: any widget lying in the requested direction.
+        const QPoint cc = c.center();
+        const QPoint rc = current.center();
+        const bool inDirection = (dx > 0 && cc.x() > rc.x())
+                              || (dx < 0 && cc.x() < rc.x())
+                              || (dy > 0 && cc.y() > rc.y())
+                              || (dy < 0 && cc.y() < rc.y());
+        if (inDirection) {
+            const double dist = rectToRectVerticesDistance(current, c);
+            if (dist < bestFallbackDist) {
+                bestFallbackDist = dist;
+                bestFallback = i;
+            }
+        }
+    }
+
+    const int best = (bestIntersect >= 0) ? bestIntersect : bestFallback;
+    if (best >= 0) {
+        deselectAll();
+        editWidgets[best]->select();
+    }
+}
+
+void WidgetLayout::selectThroughWidgets(QPoint globalPos)
+{
+    if (!m_editMode) {
+        return;
+    }
+    const QPoint pos = mapFromGlobal(globalPos);
+    // Widgets under the point, front-most first (later widgets are on top).
+    QVector<int> stack;
+    const int count = qMin(editWidgets.size(), m_widgets.size());
+    for (int i = count - 1; i >= 0; --i) {
+        const QRect r(m_widgets[i]->x(), m_widgets[i]->y(),
+                      m_widgets[i]->width(), m_widgets[i]->height());
+        if (r.contains(pos)) {
+            stack.append(i);
+        }
+    }
+    if (stack.isEmpty()) {
+        return;
+    }
+    int current = -1;
+    for (int k = 0; k < stack.size(); ++k) {
+        if (editWidgets[stack[k]]->isSelected()) {
+            current = k;
+            break;
+        }
+    }
+    // First Alt+click goes one level below the front-most widget; further clicks
+    // go deeper, wrapping around at the bottom.
+    int next;
+    if (current < 0) {
+        next = (stack.size() > 1) ? 1 : 0;
+    } else {
+        next = (current + 1) % stack.size();
+    }
+    deselectAll();
+    editWidgets[stack[next]]->select();
 }
 
 void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
 {
     //  QWidget::mouseMoveEvent(event);
-    int x = startx;
-    int y = starty;
     auto relpos = event->position();
     auto relx = relpos.x();
     auto rely = relpos.y();
-    
-    int width  = abs(relx - startx + xOffset);
-    int height = abs(rely - starty + yOffset);
+
     if (event->buttons() & Qt::LeftButton) {
-        // Currently dragging selection
-        if (relx < (startx - xOffset)) {
-            x = relx + xOffset;
-        }
-        if (rely < (starty - yOffset)) {
-            y = rely + yOffset;
-        }
-        selectionFrame->setGeometry(x, y, width, height);
-        selectionChanged(QRect(x - xOffset, y - yOffset, width, height));
+        continueSelection(event->globalPosition().toPoint());
     }
     mouseLock.lockForWrite();
     auto globalpos = event->globalPosition();
@@ -3212,7 +3566,7 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
 void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() & Qt::LeftButton) {
-        selectionFrame->hide();
+        endSelection(); // Hides the frame and records history.
     }
     mouseLock.lockForWrite();
     if (event->button() == Qt::LeftButton)
@@ -3222,7 +3576,9 @@ void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
         mouseBut2 = 0;
     }
     mouseLock.unlock();
-    markHistory();
+    if (!(event->button() & Qt::LeftButton)) {
+        markHistory();
+    }
     //  QWidget::mouseReleaseEvent(event);
 }
 
@@ -4157,6 +4513,14 @@ void WidgetLayout::setEditMode(bool active)
         widgetsMutex.unlock();
     }
     m_editMode = active;
+    // These shortcuts are only meaningful while editing; disabling them outside
+    // edit mode keeps Page Up/Down free for scrolling the panel.
+    sendToFrontAct->setEnabled(active);
+    sendToBackAct->setEnabled(active);
+    selectLeftAct->setEnabled(active);
+    selectRightAct->setEnabled(active);
+    selectUpAct->setEnabled(active);
+    selectDownAct->setEnabled(active);
 }
 
 void WidgetLayout::createEditFrame(QuteWidget* widget)
@@ -4180,6 +4544,10 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
     connect(frame, SIGNAL(resized( QPair<int, int> )),
             this, SLOT(widgetResized( QPair<int, int> )));
     connect(frame, SIGNAL(mouseReleased()), this, SLOT(markHistoryGeometry()));
+    connect(frame, SIGNAL(selectionStarted(QPoint)), this, SLOT(beginSelection(QPoint)));
+    connect(frame, SIGNAL(selectionMoved(QPoint)), this, SLOT(continueSelection(QPoint)));
+    connect(frame, SIGNAL(selectionFinished()), this, SLOT(endSelection()));
+    connect(frame, SIGNAL(selectThrough(QPoint)), this, SLOT(selectThroughWidgets(QPoint)));
     connect(frame, SIGNAL(editWidget()), widget, SLOT(openProperties()));
     connect(frame, SIGNAL(widgetSelected(QuteWidget*)),
             this, SLOT(widgetSelected(QuteWidget*)));
@@ -4366,7 +4734,10 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
             return;
         }
         for (int i = 0; i < m_widgets.size(); i++) {
-            if (m_widgets[i]->getChannelName() != channelName)
+            // Properties can be addressed through either the widget's channel
+            // or its second channel (e.g. a controller's x/y channels).
+            if (m_widgets[i]->getChannelName() != channelName
+                    && m_widgets[i]->getChannel2Name() != channelName)
                 continue;
             m_widgets[i]->widgetMessage(path, channelValue.second);
             sentAsMessage = true;
@@ -4423,7 +4794,10 @@ void WidgetLayout::newValue(QPair<QString, QString> channelValue)
     bool updateValue = true;
     if (!channelName.isEmpty()) {
         for (int i = 0; i < m_widgets.size(); i++){
-            if (m_widgets[i]->getChannelName() != channelName)
+            // Match either the primary or the second channel (see the numeric
+            // overload of newValue()).
+            if (m_widgets[i]->getChannelName() != channelName
+                    && m_widgets[i]->getChannel2Name() != channelName)
                 continue;
             if (path == channelName)
                 m_widgets[i]->setValue(channelValue.second);
@@ -4720,10 +5094,12 @@ void WidgetLayout::updateData()
         // delete curveData; //FIXME don't do this deleting here...
     }
     for (int i = 0; i < scopeWidgets.size(); i++) {
-        scopeWidgets[i]->updateData();
+        if (scopeWidgets[i]->isWidgetEnabled())
+            scopeWidgets[i]->updateData();
     }
     for (int i = 0; i < waveformWidgets.size(); i++) {
-        waveformWidgets[i]->updateData();
+        if (waveformWidgets[i]->isWidgetEnabled())
+            waveformWidgets[i]->updateData();
     }
     layoutMutex.unlock();
     closing = 0;

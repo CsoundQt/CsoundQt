@@ -242,6 +242,11 @@ public:
 	QAction *alignBottomAct;
 	QAction *sendToBackAct;
     QAction *sendToFrontAct;
+	// Directional selection (edit mode, Ctrl+arrows)
+	QAction *selectLeftAct;
+	QAction *selectRightAct;
+	QAction *selectUpAct;
+	QAction *selectDownAct;
 	QAction *distributeHorizontalAct;
 	QAction *distributeVerticalAct;
 	QAction *alignCenterHorizontalAct;
@@ -310,6 +315,16 @@ public slots:
 	void mouseReleaseEventParent(QMouseEvent *event);
 	void mouseMoveEventParent(QMouseEvent *event);
 	void selectionChanged(QRect selection);
+	// Rubber-band selection driven by a widget frame (Shift+drag started on a
+	// widget); positions are global screen coordinates.
+	void beginSelection(QPoint globalPos);
+	void continueSelection(QPoint globalPos);
+	void endSelection();
+	// Selection navigation (edit mode): next/previous in widget order, or the
+	// nearest widget in a direction, or the next widget below the cursor.
+	void selectNextWidget(bool forward);
+	void selectInDirection(int dx, int dy);
+	void selectThroughWidgets(QPoint globalPos);
 	QSize getUsedSize();
 	void adjustLayoutSize();
 	void adjustWidgetSize();
@@ -379,6 +394,7 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent *event);
 	virtual void keyPressEvent(QKeyEvent *event);
 	virtual void keyReleaseEvent(QKeyEvent *event);
+	virtual bool focusNextPrevChild(bool next) override;
 	virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void closeEvent(QCloseEvent *event);
 	QRubberBand *selectionFrame;

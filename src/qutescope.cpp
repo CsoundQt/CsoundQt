@@ -26,6 +26,15 @@
 #include "types.h"  //necessary for the userdata struct
 #include "csoundqt.h"  //necessary for the userdata struct
 
+void ScopeWidget::paintEvent(QPaintEvent *event)
+{
+	QGraphicsView::paintEvent(event);
+	if (!isEnabled()) {
+		QPainter painter(viewport());
+		QuteWidget::paintDisabledOverlay(painter, viewport()->rect());
+	}
+}
+
 
 QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 {

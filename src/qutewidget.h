@@ -26,6 +26,8 @@
 #include <QtWidgets>
 #include <QtXml>
 
+class QPainter;
+
 #define CSQT_CURRENT_XML_VERSION "2"
 #define CSQT_CURVE_BUFFER_SIZE 256
 //#define USE_WIDGET_MUTEX
@@ -86,6 +88,17 @@ public:
 	virtual QuteWidgetType getWidgetTypeID() = 0;
 	virtual void refreshWidget() { ;}
 
+	// The "enabled" flag (dynamic property CSQT_enabled). A disabled widget
+	// ignores value/property updates from Csound and user input, and is drawn
+	// greyed out. It is enabled by default.
+	bool isWidgetEnabled() const { return m_enabled; }
+	virtual void setWidgetEnabled(bool enabled);
+	// Desaturates a colour for the self-drawn widgets when disabled.
+	static QColor disabledColor(const QColor &color);
+	// Paints a translucent grey overlay (used by self-drawn widgets that fill
+	// their whole area) to indicate a disabled state.
+	static void paintDisabledOverlay(QPainter &painter, const QRect &rect);
+
 	virtual void applyInternalProperties();
 	// Applies a single property to the live widget. Returns true if the property
 	// was handled. Used by the "<channel>/<property>" message path so that a
@@ -143,6 +156,7 @@ protected:
 	QSpinBox *midiccSpinBox;
 	QSpinBox *midichanSpinBox;
 	QPushButton *midiLearnButton;
+	QCheckBox *enabledCheckBox;
 	QWidget *m_widget;
 	QDialog *dialog;
 	QGridLayout *layout;  // For preference dialog
@@ -151,6 +165,7 @@ protected:
 	QString m_channel, m_channel2;
 	int m_midicc, m_midichan;
 	bool m_locked; // Allow modification of widget (properties, alignment, etc.)
+	bool m_enabled; // Property CSQT_enabled; disabled widgets ignore input and updates
     CsoundUserData *m_csoundUserData;
     QString m_description;
     QString m_uuid;
@@ -163,6 +178,7 @@ protected:
 	QString xmlText;
 
 	virtual void contextMenuEvent(QContextMenuEvent *event);
+	virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();

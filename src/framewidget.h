@@ -56,6 +56,7 @@ private:
 	QFrame *m_resizeBox;
 	QuteWidget *m_widget;
 	bool m_resize;
+	bool m_selecting;
 	bool m_selected;
 	bool m_changed;
 
@@ -68,6 +69,12 @@ signals:
 	void mouseReleased();  // When mouse released, send to set undo history
 	void widgetSelected(QuteWidget *widget);
 	void widgetUnselected(QuteWidget *widget);
+	// Rubber-band selection forwarded to the layout (global screen coords).
+	void selectionStarted(QPoint globalPos);
+	void selectionMoved(QPoint globalPos);
+	void selectionFinished();
+	// Alt+click: select the next widget below the cursor.
+	void selectThrough(QPoint globalPos);
 };
 
 #endif

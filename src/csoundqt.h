@@ -459,7 +459,6 @@ private:
 	QAction *setShortcutsAct;
 	QAction *editAct;
 	QAction *runAct;
-    QAction *testAudioSetupAct;
     QAction *checkSyntaxAct;
 	QAction *runTermAct;
 	QAction *pauseAct;
