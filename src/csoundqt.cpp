@@ -5468,7 +5468,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(findAgainAct);
     editMenu->addAction(findPreviousAct);
     editMenu->addAction(gotoLineAct);
-    // editMenu->addAction(goBackAct);
+    editMenu->addAction(goBackAct);
     editMenu->addSeparator();
     editMenu->addAction(commentAct);
     //  editMenu->addAction(uncommentAct);
