@@ -1,24 +1,14 @@
-<CsVersion>
-After 6.13
-</CsVersion>
 <CsoundSynthesizer>
-<CsOptions>
-</CsOptions>
 <CsInstruments>
-
-sr = 44100
-nchnls = 8
 ksmps = 128
 A4 = 442
-0dbfs = 1
-
-; -------------------------------------------------
 
 massign 0, 0
+
 gaSpectrumOut init 0
 gkSpectrumFFTSize init 4096
 
-giFFTSizes[] fillarray 2048,4096,8192
+giFFTSizes[] = [2048, 4096, 8192]
 
 
 instr AudioTest
@@ -36,8 +26,8 @@ instr AudioTest
 	
 	;; ----- UI input -----
 	ktrig metro iuiRefreshRate
-	ksignal invalue "signaltype"
-	kfftSizeIndex invalue "fftsize"
+	ksignal       chnget "signaltype"
+	kfftSizeIndex chnget "fftsize"
 	kfftSize = giFFTSizes[kfftSizeIndex]
 	if kfftSize != gkSpectrumFFTSize then
 		gkSpectrumFFTSize = kfftSize
@@ -52,16 +42,16 @@ instr AudioTest
 	if ksignalOn == 0 kgoto skipOutput
 	
 	if ktrig == 1 then
-		kon1    invalue "on1"
-		kon2    invalue "on2"
-		kon3    invalue "on3"
-		kon4    invalue "on4"
-		kon5    invalue "on5"
-		kon6    invalue "on6"
-		kon7    invalue "on7"
-		kon8    invalue "on8"
-		kSpectrumSelect invalue "spmenu"
-		ksignalFreq invalue "signalfreq"
+		kon1 chnget "on1"
+		kon2 chnget "on2"
+		kon3 chnget "on3"
+		kon4 chnget "on4"
+		kon5 chnget "on5"
+		kon6 chnget "on6"
+		kon7 chnget "on7"
+		kon8 chnget "on8"
+		kSpectrumSelect chnget "spmenu"
+		ksignalFreq chnget "signalfreq"
 	endif
 	
 	;; Output
@@ -80,7 +70,7 @@ instr AudioTest
 	; output to graph
 	display asig, ksmps/sr*2
 	
-	iswitchlag = 0.2
+	iswitchlag = 0.3
 	
 	aout1 = asig*interp(lag(kon1, iswitchlag))
 	koutamp1 max_k aout1, ktrig, 1
@@ -154,29 +144,28 @@ skipOutput:
 	kamp8 lagud kamp8, imeterUpLag, imeterDownLag
 	
 	if ktrig == 0 kgoto skipDisplay
-	outvalue "in1", dbamp(kamp1)
-	outvalue "vu1", linlin(dbamp(koutamp1), 0, 1, -irange, 0)
-	; outvalue "in2", linlin(dbamp(kamp2), 0, 1, -irange, 0)
-	outvalue "in2", dbamp(kamp2)
-	outvalue "vu2", linlin(dbamp(koutamp2), 0, 1, -irange, 0)
+	chnset dbamp(kamp1), "in1" 	
+	chnset linlin(dbamp(koutamp1), 0, 1, -irange, 0), "vu1" 
+	chnset dbamp(kamp2), "in2" 
+	chnset linlin(dbamp(koutamp2), 0, 1, -irange, 0), "vu2" 
 	if nchnls <= 2 goto skipDisplay
 	
-	outvalue "in3", dbfsamp(kamp3)
-	outvalue "vu3", linlin(dbamp(koutamp3), 0, 1, -irange, 0)
-	outvalue "in4", dbamp(kamp4)
-	outvalue "vu4", linlin(dbamp(koutamp4), 0, 1, -irange, 0)
+	chnset dbfsamp(kamp3), "in3" 
+	chnset linlin(dbamp(koutamp3), 0, 1, -irange, 0), "vu3" 
+	chnset dbamp(kamp4), "in4" 
+	chnset linlin(dbamp(koutamp4), 0, 1, -irange, 0), "vu4" 
 	if nchnls <= 4 goto skipDisplay
 	
-	outvalue "in5", dbamp(kamp5)
-	outvalue "vu5", linlin(dbamp(koutamp5), 0, 1, -irange, 0)
-	outvalue "in6", dbamp(kamp6)
-	outvalue "vu6", linlin(dbamp(koutamp6), 0, 1, -irange, 0)
+	chnset dbamp(kamp5), "in5" 
+	chnset linlin(dbamp(koutamp5), 0, 1, -irange, 0), "vu5" 
+	chnset dbamp(kamp6), "in6" 
+	chnset linlin(dbamp(koutamp6), 0, 1, -irange, 0), "vu6" 
 	if nchnls <= 6 goto skipDisplay
 	
-	outvalue "in7", dbamp(kamp7)
-	outvalue "vu7", linlin(dbamp(koutamp7), 0, 1, -irange, 0)
-	outvalue "in8", dbamp(kamp8)
-	outvalue "vu8", linlin(dbamp(koutamp8), 0, 1, -irange, 0)
+	chnset dbamp(kamp7), "in7" 
+	chnset linlin(dbamp(koutamp7), 0, 1, -irange, 0), "vu7" 
+	chnset dbamp(kamp8), "in8" 
+	chnset linlin(dbamp(koutamp8), 0, 1, -irange, 0), "vu8" 
 	
 skipDisplay:
 	
@@ -184,14 +173,14 @@ skipDisplay:
 	ktrig2 metro iuiRefreshRate*0.33
 
 	if ktrig2 == 1 then
-		outvalue "indb1", round(dbfsamp(kamp1))
-		outvalue "indb2", round(dbfsamp(kamp2))
-		outvalue "indb3", round(dbfsamp(kamp3))
-		outvalue "indb4", round(dbfsamp(kamp4))
-		outvalue "indb5", round(dbfsamp(kamp5))
-		outvalue "indb6", round(dbfsamp(kamp6))
-		outvalue "indb7", round(dbfsamp(kamp7))
-		outvalue "indb8", round(dbfsamp(kamp8))
+		chnset round(dbfsamp(kamp1)), "indb1"
+		chnset round(dbfsamp(kamp2)), "indb2"
+		chnset round(dbfsamp(kamp3)), "indb3"
+		chnset round(dbfsamp(kamp4)), "indb4"
+		chnset round(dbfsamp(kamp5)), "indb5"
+		chnset round(dbfsamp(kamp6)), "indb6"
+		chnset round(dbfsamp(kamp7)), "indb7"
+		chnset round(dbfsamp(kamp8)), "indb8"
 	endif
 	
 	if kSpectrumSelect == 0 then
@@ -229,7 +218,7 @@ instr MidiNote  ; midi note input
 	schedule "led", 0, 0.1, "notein"
 	if timeinstk() == 1 then
 		Smsg sprintf "Note %d, vel=%d, chan=%d", ikey, ivel, ichn
-		outvalue "display", Smsg
+		chnset  Smsg, "display"
 	endif
 	
 	iamp = ampdb(ivel/127 * 48 - 48)
@@ -245,8 +234,8 @@ instr MidiCC
 	ival = p6
 	schedule "led", 0, 0.1, "ccin"
 	Smsg sprintf "CC %d: %d (chan=%d)", icc, ival, ichan
-	if timeinstk() == 1 then
-		outvalue "displaycc", Smsg
+	if eventcycles() == 0 then
+		chnset Smsg, "displaycc"
 	endif
 	
 endin
@@ -270,37 +259,51 @@ instr MidiIn
 endin
 
 instr Setup
-	outvalue "graph-index", 0
-	outvalue "spectrum-index", 1
-	outvalue "display", "..."
-	outvalue "displaycc", "..."
-	outvalue "notein", 0
-	outvalue "ccin", 0
+	chnset 0, "graph-index"
+	chnset 1, "spectrum-index"
+	chnset "...", "display"
+	chnset "...", "displaycc"
+	chnset 0, "notein"
+	chnset 0, "ccin"
 	
-	outvalue "vu1",0
-	outvalue "vu2",0
-	outvalue "vu3",0
-	outvalue "vu4",0
-	outvalue "vu5",0
-	outvalue "vu6",0
-	outvalue "vu7",0
-	outvalue "vu8",0
+	chnset 0, "vu1"
+	chnset 0, "vu2"
+	chnset 0, "vu3"
+	chnset 0, "vu4"
+	chnset 0, "vu5"
+	chnset 0, "vu6"
+	chnset 0, "vu7"
+	chnset 0, "vu8"
 	
-	outvalue "in1", -120
-	outvalue "in2", -120
-	outvalue "in3", -120
-	outvalue "in4", -120
-	outvalue "in5", -120
-	outvalue "in6", -120
-	outvalue "in7", -120
-	outvalue "in8", -120
+	chnset -120, "in1"
+	chnset -120, "in2"
+	chnset -120, "in3"
+	chnset -120, "in4"
+	chnset -120, "in5"
+	chnset -120, "in6"
+	chnset -120, "in7"
+	chnset -120, "in8"
 	
-	outvalue "samplerate", sprintf("%d", sr)
-	outvalue "nchnls", sprintf("%d", nchnls)
+	chnset sprintf("%d", sr), "samplerate"
+	chnset sprintf("%d", nchnls), "nchnls"
 	
+	for i0 in [0 ... nchnls-1] do
+	  outvalue sprintf("on%d/enabled", i0), 1
+	  outvalue sprintf("vu%d/enabled", i0), 1
+	  outvalue sprintf("in%d/enabled", i0), 1
+	  outvalue sprintf("indb%d/enabled", i0), 1
+	od
+	
+	for i0 in [nchnls+1 ... 8] do
+	  
+	  outvalue sprintf("on%d/enabled", i0), 0
+	  outvalue sprintf("vu%d/enabled", i0), 0
+	  outvalue sprintf("in%d/enabled", i0), 0
+	  outvalue sprintf("indb%d/enabled", i0), 0
+	od
+	outvalue "vu3/enabled", 0
 	turnoff
 endin
-
 
 </CsInstruments>
 <CsScore>
@@ -350,13 +353,20 @@ e
 
 
 
+
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>458</x>
- <y>179</y>
- <width>715</width>
- <height>624</height>
+ <x>0</x>
+ <y>0</y>
+ <width>702</width>
+ <height>620</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -373,6 +383,7 @@ e
   <uuid>{f046b35f-13ea-4c0f-9282-b4b6007fc90e}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -410,6 +421,7 @@ e
   <uuid>{d25e4c33-85be-48ad-a3f4-b071e3baa5fe}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -447,6 +459,7 @@ e
   <uuid>{dc5604fd-41c0-4189-abe2-55c72f10172b}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -484,6 +497,7 @@ e
   <uuid>{6b0524fe-c62b-443e-a7cc-2786168abc62}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -521,6 +535,7 @@ e
   <uuid>{cf92f08d-bb58-4a3d-acda-479165db96d4}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -558,6 +573,7 @@ e
   <uuid>{557e7fb7-3fab-45bd-b4ea-cbe3fd20a92a}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -574,7 +590,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-21.00000000</value>
+  <value>-24.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -598,6 +614,7 @@ e
   <uuid>{38bd1f5e-dcf7-4897-a5c6-565e19983e63}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -614,7 +631,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-22.00000000</value>
+  <value>-24.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -638,6 +655,7 @@ e
   <uuid>{a3545b15-5470-4efb-9dfd-eee56bc47d2a}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -673,6 +691,7 @@ e
   <uuid>{a4ab00b5-62ab-45b1-9b1f-2978742d4057}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -712,6 +731,7 @@ e
   <uuid>{6d7e91db-0e40-4c78-8ff3-e01a436b45af}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -749,6 +769,7 @@ e
   <uuid>{00820929-c5f2-4b95-857d-8f65bc444510}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -786,6 +807,7 @@ e
   <uuid>{731bae72-8739-4e2d-bcf8-dac396e37ccc}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -823,6 +845,7 @@ e
   <uuid>{0dea1661-8fb5-4157-8e62-59c9d9ab05a1}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -863,6 +886,7 @@ e
   <uuid>{fa018fbc-6904-481b-9ab5-765ad0da46ca}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -903,6 +927,7 @@ e
   <uuid>{727c9851-0e1b-4fc9-8afc-fd6c62f253be}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -940,6 +965,7 @@ e
   <uuid>{2846ddf1-0e08-457a-8d28-e6dd839a2eb8}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -977,6 +1003,7 @@ e
   <uuid>{5abc28b7-4a2d-472d-9b00-4bca52043588}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1017,6 +1044,7 @@ e
   <uuid>{577dd7c9-26ee-41c7-b301-6f7b95b7dd6a}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1057,6 +1085,7 @@ e
   <uuid>{f55bd16e-cd68-44a7-8b08-2f9e1183ab42}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1094,6 +1123,7 @@ e
   <uuid>{34ecffc5-5d86-422e-97fc-e5c9fd0e0aa7}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1131,6 +1161,7 @@ e
   <uuid>{e2d590fc-d377-4d40-bd2e-9f8ff3af5bc5}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1171,6 +1202,7 @@ e
   <uuid>{3da9b4f6-fe00-4b13-a271-976525c17057}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1211,6 +1243,7 @@ e
   <uuid>{4c976814-f547-431d-ab74-e9225f3aff12}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1248,6 +1281,7 @@ e
   <uuid>{55747531-f2e1-4e50-9839-3e788d995014}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1283,6 +1317,7 @@ e
   <uuid>{a498f284-9d66-4ec8-9c40-07632ace83b4}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1320,6 +1355,7 @@ e
   <uuid>{738f62ff-0256-428d-826b-2e96fb28c483}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1329,7 +1365,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-29.15625348</yValue>
+  <yValue>-124.63587345</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <exponent>1.00000000</exponent>
@@ -1359,6 +1395,7 @@ e
   <uuid>{6fa42161-ada8-4ca1-a785-00e8d9ca3d0c}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1394,6 +1431,7 @@ e
   <uuid>{81589d71-6606-4fa8-b0fa-daeaf64b35ac}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1403,7 +1441,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-22.90625362</yValue>
+  <yValue>-120.82479559</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -1433,6 +1471,7 @@ e
   <uuid>{aeb8b307-415d-4a1f-83a6-edd57e6e525d}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1468,6 +1507,7 @@ e
   <uuid>{47096117-b4df-4a57-9f63-43e4433b93d2}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1484,7 +1524,7 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#00ff00</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
@@ -1507,6 +1547,7 @@ e
   <uuid>{28590fdc-f133-43b3-99b8-7d7c379d5f79}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1542,6 +1583,7 @@ e
   <uuid>{1c265b1b-8455-4c2c-96e6-e6f5d5d97caf}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1581,6 +1623,7 @@ e
   <uuid>{7a266b0a-9e69-4579-b3d5-bf911c9ae383}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1616,6 +1659,7 @@ e
   <uuid>{122c6052-83a6-4992-86e3-a44e37e9d19d}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1655,6 +1699,7 @@ e
   <uuid>{e04bef86-57d9-46fc-8e12-508e8b42f03f}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1690,6 +1735,7 @@ e
   <uuid>{ad1f2483-c122-4501-8e77-b1795091923d}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1729,6 +1775,7 @@ e
   <uuid>{987ad683-ffda-4c02-ba76-fba80eef6f99}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1764,6 +1811,7 @@ e
   <uuid>{831662dd-60f9-46a5-a8b2-6335223bf3ab}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1803,6 +1851,7 @@ e
   <uuid>{eb86882f-def6-42b6-90ae-22f49f88a876}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1838,6 +1887,7 @@ e
   <uuid>{2816aa9b-fa21-4b9c-a8ae-c29e6509d5b7}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1877,6 +1927,7 @@ e
   <uuid>{3112a9ff-3ad0-4640-be66-9c8f659b03c2}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1914,6 +1965,7 @@ e
   <uuid>{c1ed5763-b6f3-49fa-a32b-01e54082a604}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1934,43 +1986,6 @@ e
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject type="BSBDisplay" version="2">
-  <objectName>display</objectName>
-  <x>44</x>
-  <y>341</y>
-  <width>140</width>
-  <height>25</height>
-  <uuid>{23d21873-0a2e-49e7-826a-9c6e4613e89a}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>...</label>
-  <alignment>left</alignment>
-  <valignment>top</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>243</r>
-   <g>243</g>
-   <b>243</b>
-  </color>
-  <bgcolor mode="background">
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>0</borderradius>
-  <borderwidth>0</borderwidth>
- </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>17</x>
@@ -1980,6 +1995,7 @@ e
   <uuid>{4226d3d7-ef78-4a0f-8d15-8cd322f71634}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2019,6 +2035,7 @@ e
   <uuid>{67bb9df3-11b5-4f60-a18d-7f0dd3cb6dd2}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2056,6 +2073,7 @@ e
   <uuid>{37470029-ec0e-4126-921e-eb82afe59857}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2093,13 +2111,14 @@ e
   <uuid>{f8080f9c-7129-4dca-882f-9a3d2607106b}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>0.42000000</exponent>
-  <value>-19.26959503</value>
+  <value>-19.70302619</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2125,6 +2144,7 @@ e
   <uuid>{650b8432-c87b-4a3c-8b0e-cbb2b482c252}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2162,9 +2182,10 @@ e
   <uuid>{4fe7d33b-9e2f-41c1-9a8e-ef1d0f723b31}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <description/>
+  <description>Set the number of channels in Edit/Configuration/Run</description>
   <label>2</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
@@ -2199,6 +2220,7 @@ e
   <uuid>{9abf6954-2dc5-492c-bfb6-d4d40850f9f9}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2236,6 +2258,7 @@ e
   <uuid>{eaacf58e-e1b3-4a36-8cc7-18bc45a9d98f}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2273,6 +2296,7 @@ e
   <uuid>{a99a03fb-0336-41b5-99f4-bc12ec8036c3}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2302,6 +2326,7 @@ e
   <uuid>{a8934883-bf45-4155-be13-834e1b5f9a9b}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2364,6 +2389,7 @@ e
   <uuid>{8afe76f5-61f5-4669-b921-f9520406a099}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2401,8 +2427,9 @@ e
   <uuid>{53268cff-714e-423a-902b-7351141be7ec}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
@@ -2441,6 +2468,7 @@ e
   <uuid>{ae79f074-43a6-4d48-965c-5f07fcc4d3ac}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2478,6 +2506,7 @@ e
   <uuid>{13bbe66e-eb51-4cd5-b44e-59eb1ee3e6dd}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description>FFT size</description>
@@ -2510,6 +2539,7 @@ e
   <uuid>{f10e642f-7bf6-4bd6-8c2d-7d8a2fccfd06}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2547,6 +2577,7 @@ e
   <uuid>{dff5c758-6ef9-4c17-9096-68c25c5fafb8}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2579,6 +2610,7 @@ e
   <uuid>{733f880f-dbe6-43bd-93dc-ec633a0f78c3}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2611,6 +2643,7 @@ e
   <uuid>{00719c73-78e7-477c-89e0-027caab08d48}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2618,14 +2651,14 @@ e
   <maximum>0.00000000</maximum>
   <objectName2/>
   <rulermode>hide</rulermode>
-  <rulercolor>#000000</rulercolor>
+  <rulercolor>#aaaaaa</rulercolor>
   <exponent>0.30000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
   <bgcolor>
-   <r>18</r>
-   <g>0</g>
-   <b>27</b>
+   <r>20</r>
+   <g>20</g>
+   <b>20</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
   <bordercolor>
@@ -2643,6 +2676,7 @@ e
   <uuid>{fb742b82-b354-4ab5-8cee-d4579f1a1c98}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2675,6 +2709,7 @@ e
   <uuid>{6afdf700-3d48-40e3-ab43-ea1f3679820f}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2707,6 +2742,7 @@ e
   <uuid>{826da4a0-55e9-4d35-99b4-b20e1f1d33c7}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2739,6 +2775,7 @@ e
   <uuid>{27bf4ddf-2e7c-4b4f-8ca1-9b6ff75d697d}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2771,6 +2808,7 @@ e
   <uuid>{92b27e66-4065-4726-816f-3752986b8659}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2793,6 +2831,44 @@ e
    <g>179</g>
    <b>179</b>
   </bordercolor>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>display</objectName>
+  <x>44</x>
+  <y>341</y>
+  <width>140</width>
+  <height>25</height>
+  <uuid>{23d21873-0a2e-49e7-826a-9c6e4613e89a}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>...</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>243</r>
+   <g>243</g>
+   <b>243</b>
+  </color>
+  <bgcolor mode="background">
+   <r>39</r>
+   <g>39</g>
+   <b>39</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

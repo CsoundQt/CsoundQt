@@ -39,7 +39,7 @@
    <item row="0" column="0">
     <widget class="QScrollArea" name="scrollArea">
      <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
+      <enum>QFrame::Shape::NoFrame</enum>
      </property>
      <property name="lineWidth">
       <number>0</number>
@@ -53,7 +53,7 @@
         <x>0</x>
         <y>0</y>
         <width>820</width>
-        <height>706</height>
+        <height>704</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -74,11 +74,17 @@
          <property name="enabled">
           <bool>true</bool>
          </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -134,10 +140,10 @@
                 <item row="3" column="7">
                  <spacer name="horizontalSpacer_16">
                   <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                   <enum>Qt::Orientation::Vertical</enum>
                   </property>
                   <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
+                   <enum>QSizePolicy::Policy::Fixed</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -285,10 +291,10 @@
                 <item row="2" column="3">
                  <spacer name="horizontalSpacer_8">
                   <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                   <enum>Qt::Orientation::Vertical</enum>
                   </property>
                   <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
+                   <enum>QSizePolicy::Policy::Fixed</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -440,7 +446,7 @@
                    <bool>true</bool>
                   </property>
                   <property name="buttonSymbols">
-                   <enum>QAbstractSpinBox::UpDownArrows</enum>
+                   <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
                   </property>
                   <property name="showGroupSeparator" stdset="0">
                    <bool>false</bool>
@@ -507,10 +513,10 @@
            <item>
             <spacer name="verticalSpacer_7">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Minimum</enum>
+              <enum>QSizePolicy::Policy::Minimum</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -555,10 +561,10 @@
                 <item row="3" column="4">
                  <spacer name="horizontalSpacer_14">
                   <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                   <enum>Qt::Orientation::Vertical</enum>
                   </property>
                   <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
+                   <enum>QSizePolicy::Policy::Fixed</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -747,7 +753,7 @@
                 <item row="3" column="7">
                  <spacer name="horizontalSpacer_17">
                   <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                   <enum>Qt::Orientation::Vertical</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -765,10 +771,10 @@
            <item>
             <spacer name="horizontalSpacer_6">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Minimum</enum>
+              <enum>QSizePolicy::Policy::Minimum</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -896,10 +902,10 @@
                 <item row="0" column="3">
                  <spacer name="horizontalSpacer_4">
                   <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                   <enum>Qt::Orientation::Vertical</enum>
                   </property>
                   <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
+                   <enum>QSizePolicy::Policy::Fixed</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -932,7 +938,7 @@
                 <item row="1" column="7">
                  <spacer name="horizontalSpacer">
                   <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                   <enum>Qt::Orientation::Vertical</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -978,7 +984,7 @@
            <item>
             <spacer name="verticalSpacer_6">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -999,7 +1005,7 @@
             <rect>
              <x>20</x>
              <y>20</y>
-             <width>551</width>
+             <width>571</width>
              <height>340</height>
             </rect>
            </property>
@@ -1010,9 +1016,6 @@
             </sizepolicy>
            </property>
            <layout class="QGridLayout" name="gridLayout_10">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetFixedSize</enum>
-            </property>
             <property name="spacing">
              <number>6</number>
             </property>
@@ -1137,7 +1140,7 @@
             <item row="4" column="0" colspan="3">
              <widget class="QCheckBox" name="fallbackDbfsCheckBox">
               <property name="toolTip">
-               <string>Pass --0dbfs=1 to Csound when the csd does not set 0dbfs itself (neither as an orchestra header assignment nor as --0dbfs in the CsOptions tag). This is equivalent to having --0dbfs=1 in a .csound7rc file. Uncheck to let Csound's own default take over.</string>
+               <string>&lt;div style='max-width:400px;'&gt;Pass --0dbfs=1 to Csound when the csd does not set 0dbfs itself (neither as an orchestra header assignment nor as --0dbfs in the CsOptions tag). This is equivalent to having --0dbfs=1 in a .csound7rc file. Uncheck to let Csound's own default take over&lt;/div&gt;</string>
               </property>
               <property name="text">
                <string>Fallback 0dBFS = 1.0</string>
@@ -1199,7 +1202,7 @@
                <string>Number of threads when using multicore</string>
               </property>
               <property name="buttonSymbols">
-               <enum>QAbstractSpinBox::UpDownArrows</enum>
+               <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
               </property>
               <property name="minimum">
                <number>1</number>
@@ -1257,12 +1260,12 @@
               </property>
               <property name="maximumSize">
                <size>
-                <width>600</width>
+                <width>16777215</width>
                 <height>16777215</height>
                </size>
               </property>
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Csound flags&lt;/span&gt;:&lt;/p&gt;&lt;p&gt;--dither → dither&lt;br/&gt;--ksmps → Override number of samples per cycle&lt;br/&gt;--sample-rate=48000 → Override sample rate&lt;br/&gt;--env:NAME=VALUE → Set environment veriable NAME to VALUE&lt;br/&gt;--omacro:XXX=YYY → set orchestra macro XXX to value YYY&lt;br/&gt;--smacro:XXX=YYY → Set score macro XXX to value YYY&lt;br/&gt;--sample-accurate → Use sample-accurate timing of events&lt;br/&gt;--realtime → Realtime priority mode&lt;br/&gt;--daemon → Do not exit if orchestra is not given&lt;br/&gt;--port=N → liston to UDP port N for code (implies --daemon) &lt;br/&gt;--udp-echo → Echo UDP commands on terminal&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Useful flags&lt;/span&gt;:&lt;/p&gt;&lt;p&gt;--dither → dither&lt;br/&gt;--ksmps → Override number of samples per cycle&lt;br/&gt;--env:NAME=VALUE → Set environment veriable NAME to VALUE&lt;br/&gt;--omacro:XXX=YYY → set orchestra macro XXX to value YYY&lt;br/&gt;--smacro:XXX=YYY → Set score macro XXX to value YYY&lt;br/&gt;--port=N → liston to UDP port N for code (implies --daemon) &lt;br/&gt;--udp-echo → Echo UDP commands on terminal&lt;br/&gt;--sched → set real-time scheduling priority and lock memory&lt;br/&gt;--messagelevel=N → tty message level (use 0 to hide messages)&lt;br/&gt;--sinesize=N → length of internal sine table&lt;br/&gt;--suppress-version → do not print version details&lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="maxLength">
                <number>32760</number>
@@ -1380,7 +1383,7 @@
            <item row="10" column="0">
             <spacer name="verticalSpacer_3">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -1558,7 +1561,7 @@
                 <item row="1" column="5">
                  <spacer name="horizontalSpacer_18">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -1602,7 +1605,7 @@
              <item>
               <widget class="QCheckBox" name="simultaneousCheckBox">
                <property name="layoutDirection">
-                <enum>Qt::LeftToRight</enum>
+                <enum>Qt::LayoutDirection::LeftToRight</enum>
                </property>
                <property name="text">
                 <string>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </string>
@@ -1650,7 +1653,7 @@
                 <item>
                  <spacer name="horizontalSpacer_22">
                   <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                   <enum>Qt::Orientation::Vertical</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -1668,7 +1671,7 @@
            <item row="7" column="0" rowspan="2" colspan="2">
             <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0,0">
              <property name="sizeConstraint">
-              <enum>QLayout::SetDefaultConstraint</enum>
+              <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
              </property>
              <item>
               <widget class="QLabel" name="label_40">
@@ -1693,7 +1696,7 @@
              <item>
               <spacer name="horizontalSpacer_12">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -1780,7 +1783,7 @@
               <item row="0" column="1">
                <layout class="QFormLayout" name="formLayout">
                 <property name="formAlignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
                 </property>
                 <item row="0" column="0">
                  <widget class="QCheckBox" name="tabIndentCheckBox">
@@ -1916,10 +1919,10 @@
               <item row="0" column="0">
                <layout class="QFormLayout" name="formLayout_2">
                 <property name="labelAlignment">
-                 <set>Qt::AlignLeading</set>
+                 <set>Qt::AlignmentFlag::AlignLeading</set>
                 </property>
                 <property name="formAlignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
                 </property>
                 <item row="0" column="0">
                  <widget class="QLabel" name="label">
@@ -2133,7 +2136,7 @@
            <item row="4" column="0">
             <spacer name="verticalSpacer_4">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -2208,7 +2211,7 @@
               <item row="0" column="4">
                <spacer name="horizontalSpacer_15">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -2259,7 +2262,7 @@
               <item row="6" column="2">
                <spacer name="horizontalSpacer_13">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -2295,7 +2298,7 @@
            <item row="1" column="0">
             <spacer name="verticalSpacer">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -2314,7 +2317,7 @@
               <item row="1" column="0">
                <spacer name="horizontalSpacer_2">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -2422,10 +2425,10 @@
                   <item>
                    <spacer name="horizontalSpacer_5">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeType">
-                     <enum>QSizePolicy::Fixed</enum>
+                     <enum>QSizePolicy::Policy::Fixed</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -2448,7 +2451,7 @@
                   <item>
                    <spacer name="horizontalSpacer_21">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -2494,7 +2497,7 @@
                  <item>
                   <spacer name="horizontalSpacer_9">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2847,7 +2850,7 @@ Default directory for sound files. Used if no full path is given for sound files
                 <item row="17" column="0">
                  <spacer name="verticalSpacer_2">
                   <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                   <enum>Qt::Orientation::Vertical</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -3090,7 +3093,7 @@ Default directory for sound files. Used if no full path is given for sound files
            <item row="1" column="0">
             <spacer name="verticalSpacer_5">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -3118,7 +3121,7 @@ Default directory for sound files. Used if no full path is given for sound files
                 <item>
                  <spacer name="horizontalSpacer_11">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -3169,7 +3172,7 @@ Default directory for sound files. Used if no full path is given for sound files
      <item>
       <spacer name="horizontalSpacer_10">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
