@@ -323,6 +323,11 @@ void Inspector::focusInEvent (QFocusEvent * event)
 	//  parseText();
 }
 
+void Inspector::focusTree()
+{
+    m_treeWidget->setFocus(Qt::ActiveWindowFocusReason);
+}
+
 void Inspector::closeEvent(QCloseEvent * /*event*/)
 {
 	//  qDebug() << "Inspector::closeEvent";

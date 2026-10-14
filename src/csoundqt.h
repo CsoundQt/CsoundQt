@@ -252,6 +252,12 @@ private slots:
     void setHtmlFullScreen(bool full);
     void setHelpFullScreen(bool full);
     void setWidgetsFullScreen(bool full);
+    void maximizePanel(bool maximize);
+    void restoreMaximizedPanel();
+    void focusEditor();
+    void focusWidgets();
+    void focusHelp();
+    void focusInspector();
     void showDebugger(bool show);
 	void showVirtualKeyboard(bool show);
 	void showTableEditor(bool show);
@@ -466,7 +472,6 @@ private:
 	QAction *externalPlayerAct;
     QAction *showEditorAct;
 	QAction *showHelpAct;
-    QAction *raiseHelpAct;
 	QAction *showManualAct;
 	QAction *showManualOnlineAct;
 	QAction *showFlossManualAct;
@@ -477,10 +482,11 @@ private:
 	QAction *showConsoleAct;
     QAction *raiseConsoleAct;
     QAction *viewFullScreenAct;
-    QAction *viewEditorFullScreenAct;
-    QAction *viewHtmlFullScreenAct;
-    QAction *viewHelpFullScreenAct;
-    QAction *viewWidgetsFullScreenAct;
+    QAction *maximizePanelAct;
+    QAction *focusEditorAct;
+    QAction *focusWidgetsAct;
+    QAction *focusHelpAct;
+    QAction *focusInspectorAct;
 #ifdef CSQT_DEBUGGER
 	QAction *showDebugAct;
 #endif
@@ -507,10 +513,8 @@ private:
 	QAction *openDocumentationAct;
 	QAction *showUtilitiesAct;
 	QAction *showWidgetsAct;
-    QAction *raiseWidgetsAct;
 
 	QAction *showInspectorAct;
-    QAction *raiseInspectorAct;
 	QAction *showScratchPadAct;
     QAction *raiseScratchPadAct;
 	QAction *commentAct;
