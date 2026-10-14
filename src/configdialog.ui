@@ -1134,37 +1134,14 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="dbfsLabel">
+            <item row="4" column="0" colspan="3">
+             <widget class="QCheckBox" name="fallbackDbfsCheckBox">
               <property name="toolTip">
-               <string>Set the 0dBFS value passed to Csound as --0dbfs.</string>
+               <string>Pass --0dbfs=1 to Csound when the csd does not set 0dbfs itself (neither as an orchestra header assignment nor as --0dbfs in the CsOptions tag). This is equivalent to having --0dbfs=1 in a .csound7rc file. Uncheck to let Csound's own default take over.</string>
               </property>
               <property name="text">
-               <string>0dbfs</string>
+               <string>Fallback 0dBFS = 1.0</string>
               </property>
-             </widget>
-            </item>
-            <item row="4" column="2">
-             <widget class="QComboBox" name="dbfsComboBox">
-              <property name="maximumSize">
-               <size>
-                <width>140</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Set the value 0dBFS (decibels relative to full scale).&lt;br/&gt;Legacy versions used 32bit pcm (32768), modern csound should always use 1.0.&lt;br/&gt;Use legacy for older code which relies on this value for amplitudes</string>
-              </property>
-              <item>
-               <property name="text">
-                <string>1.0</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Legacy</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="2" column="0">

@@ -2275,6 +2275,10 @@ void CsoundQt::play(bool realtime, int index)
     m_options->fileName1 = runFileName1;
     m_options->fileName2 = runFileName2;
     m_options->rt = realtime;
+    // Fallback 0dBFS: only pass --0dbfs=1 when the csd does not set 0dbfs
+    // itself (orchestra header assignment or --0dbfs in <CsOptions>).
+    m_options->csdSetsDbfs = CsoundOptions::textSetsDbfs(page->getBasicText(),
+                                                         page->getOptionsText());
     if (!m_options->simultaneousRun) {
         stopAllOthers();
 #if defined(CSQT_QTHTML)
@@ -6051,10 +6055,7 @@ void CsoundQt::readSettings()
     m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
     m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
     m_options->HwBufferSizeActive = settings.value("HwBufferSizeActive", false).toBool();
-    // Normalise: anything but the legacy value means modern 1.0 (this also
-    // migrates the old "orchestra" value from earlier builds).
-    m_options->zeroDbfs =
-            settings.value("zeroDbfs", "1.0").toString() == "32768" ? "32768" : "1.0";
+    m_options->fallbackDbfs = settings.value("fallbackDbfs", true).toBool();
     m_options->dither = settings.value("dither", false).toBool();
     m_options->newParser = settings.value("newParser", false).toBool();
     m_options->multicore = settings.value("multicore", false).toBool();
@@ -6313,7 +6314,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
         settings.setValue("HwBufferSize",m_options->HwBufferSize);
         settings.setValue("HwBufferSizeActive", m_options->HwBufferSizeActive);
-        settings.setValue("zeroDbfs", m_options->zeroDbfs);
+        settings.setValue("fallbackDbfs", m_options->fallbackDbfs);
         settings.setValue("dither", m_options->dither);
         settings.setValue("realtimeFlag", m_options->realtimeFlag);
         settings.setValue("sampleAccurateFlag", m_options->sampleAccurateFlag);

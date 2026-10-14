@@ -44,7 +44,8 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	bufferSizeActive = false;
 	HwBufferSize = 2048;
 	HwBufferSizeActive = false;
-	zeroDbfs = "1.0";
+	fallbackDbfs = true;
+	csdSetsDbfs = false;
 	dither = false;
 	newParser = false;
 	multicore = false;
@@ -116,8 +117,10 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
         opts << "-b" + QString::number(bufferSize);
 	if (HwBufferSizeActive)
         opts << "-B" + QString::number(HwBufferSize);
-    // 0dbfs: modern Csound expects 1.0; the legacy 32-bit pcm value was 32768.
-    opts << (zeroDbfs == "32768" ? "--0dbfs=32768" : "--0dbfs=1.0");
+    // Fallback 0dBFS: only pass --0dbfs=1 when the csd does not set 0dbfs
+    // itself (orchestra header assignment or --0dbfs in <CsOptions>).
+    if (fallbackDbfs && !csdSetsDbfs)
+        opts << "--0dbfs=1";
 	if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty()) {
         QStringList addFlags = additionalFlags.split(wihteSpaceRegex,Qt::SkipEmptyParts);
 		foreach (QString f, addFlags) {
@@ -229,6 +232,27 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
     opts << "--env:CSNOSTOP=yes";
     qDebug() << ">>>>> Csound options: " << opts;
     return opts;
+}
+
+bool CsoundOptions::textSetsDbfs(const QString &basicText, const QString &optionsText)
+{
+    // Orchestra header assignment, e.g. "0dbfs = 1", "0dbfs=1.0" or
+    // "0dbfs = 32768". Comments start with ; or //, so they do not match.
+    static const QRegularExpression headerRx(
+                QStringLiteral(R"(^\s*0dbfs\s*=)"),
+                QRegularExpression::MultilineOption);
+    if (headerRx.match(basicText).hasMatch())
+        return true;
+    // --0dbfs=<value> in the <CsOptions> tag. Ignore commented-out lines so a
+    // disabled flag is not mistaken for an actual setting.
+    for (const QString &line : optionsText.split('\n')) {
+        const QString trimmed = line.trimmed();
+        if (trimmed.startsWith(';'))
+            continue;
+        if (trimmed.contains("--0dbfs"))
+            return true;
+    }
+    return false;
 }
 
 int CsoundOptions::generateCmdLine(char **argv)

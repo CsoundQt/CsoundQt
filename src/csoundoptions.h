@@ -36,6 +36,10 @@ public:
 	QStringList generateCmdLineFlagsList();
 	int generateCmdLine(char **argv);
 
+	// True if the csd sets 0dbfs itself: either an assignment in the orchestra
+	// header ("0dbfs = ...") or "--0dbfs=..." in the <CsOptions> tag.
+	static bool textSetsDbfs(const QString &basicText, const QString &optionsText);
+
 	void setJackNameSize(int size);
 
 	bool hasFixedSamplerateBackend() const;
@@ -53,8 +57,13 @@ public:
 	bool bufferSizeActive;
 	int HwBufferSize;
 	bool HwBufferSizeActive;
-	// 0dbfs override: "1.0" (default, modern) or "32768" (legacy 32-bit pcm)
-	QString zeroDbfs;
+	// Fallback 0dBFS: when true, pass --0dbfs=1 unless the csd sets 0dbfs
+	// itself (see csdSetsDbfs).
+	bool fallbackDbfs;
+	// Per-run value set by the caller: the csd sets 0dbfs itself, either with
+	// an orchestra header assignment ("0dbfs = ...") or with "--0dbfs=..." in
+	// the <CsOptions> tag. Not persisted.
+	bool csdSetsDbfs;
 	bool dither;
     bool sampleAccurateFlag;
     bool realtimeFlag;
