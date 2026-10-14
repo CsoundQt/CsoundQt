@@ -35,12 +35,17 @@ Inspector::Inspector(QWidget *parent)
 	m_treeWidget->setHeaderHidden(true);
 	m_treeWidget->show();
 	setWidget(m_treeWidget);
-	//  connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
-	//          this, SLOT(itemActivated(QTreeWidgetItem*,int)));
-	connect(m_treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-			this, SLOT(itemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
-	//  connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
-	//          this, SLOT(itemActivated(QTreeWidgetItem*,int)));
+	// Jump on mouse click and on Enter/double-click. Deliberately NOT on
+	// currentItemChanged: that also fires while merely moving around the tree
+	// with the arrow keys, which must not move the editor or the focus.
+	// A click navigates but keeps focus in the tree; Enter/double-click also
+	// hands focus to the editor.
+	connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+	        this, SLOT(itemClicked(QTreeWidgetItem*,int)));
+	connect(m_treeWidget, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
+	        this, SLOT(itemActivated(QTreeWidgetItem*,int)));
+	m_treeWidget->installEventFilter(this);
+	m_treeWidget->viewport()->installEventFilter(this);
 	treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
 	treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
 	treeItem3 = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
@@ -336,19 +341,44 @@ void Inspector::closeEvent(QCloseEvent * /*event*/)
 
 void Inspector::itemActivated(QTreeWidgetItem * item, int /*column*/)
 {
-	int line = static_cast<TreeItem *>(item)->getLine();
-	if (line >= 0) {
-		emit jumpToLine(line);
-	}
+	// Enter / double-click: navigate and move focus to the editor.
+	activateItem(item, true);
 }
 
-void Inspector::itemChanged(QTreeWidgetItem * newItem, QTreeWidgetItem * /*oldItem*/)
+void Inspector::itemClicked(QTreeWidgetItem * item, int /*column*/)
 {
-	if (newItem == 0) {
+	// Mouse click: navigate only, keep focus in the tree.
+	activateItem(item, false);
+}
+
+void Inspector::activateItem(QTreeWidgetItem *item, bool focusEditor)
+{
+	if (item == nullptr)
 		return;
-	}
-	int line = static_cast<TreeItem *>(newItem)->getLine();
-	if (line >= 0) {
+	int line = static_cast<TreeItem *>(item)->getLine();
+	if (line < 0)
+		return;
+	if (focusEditor)
+		emit jumpToLineAndFocus(line);
+	else
 		emit jumpToLine(line);
+}
+
+bool Inspector::eventFilter(QObject *obj, QEvent *event)
+{
+	if (event->type() == QEvent::KeyPress
+	        && (obj == m_treeWidget || obj == m_treeWidget->viewport())) {
+		QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+		if (ke->key() == Qt::Key_Space) {
+			// Space behaves like a mouse click: navigate, keep focus here.
+			activateItem(m_treeWidget->currentItem(), false);
+			return true;
+		}
+		if (ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Backtab) {
+			// Tab always hands focus to the editor (never cycles widgets).
+			emit focusEditorRequested();
+			return true;
+		}
 	}
+	return QDockWidget::eventFilter(obj, event);
 }

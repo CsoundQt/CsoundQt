@@ -49,6 +49,7 @@ Options::Options(ConfigLists *configlists) :
     tabWidth = 4;
     tabUseSpaces = false;
     tabSpaces = 2;
+    flashFocus = true;
     colorVariables = true;
     highlightingTheme = "light";
     autoPlay = true;

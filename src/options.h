@@ -48,6 +48,7 @@ public:
 	bool tabIndents;
 	bool tabUseSpaces;  // insert spaces instead of a tab character when Tab is pressed
 	int tabSpaces;      // number of spaces per tab (used when tabUseSpaces is true)
+	bool flashFocus;    // briefly outline the panel that receives keyboard focus
 	bool colorVariables;
     QString highlightingTheme;
 	bool autoPlay;

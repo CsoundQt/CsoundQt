@@ -2407,26 +2407,34 @@ void editorJumpToLine(TextEditor *editor, int line) {
 
 void DocumentView::jumpToLine(int line, bool mark)
 {
+    jumpToLineInternal(line, mark, true);
+}
+
+void DocumentView::jumpToLineWithoutFocus(int line)
+{
+    // Navigate the editor to the given line but leave keyboard focus where it
+    // is (used when clicking/scrolling the inspector: the text position
+    // follows, but the user keeps working in the tree).
+    jumpToLineInternal(line, true, false);
+}
+
+void DocumentView::jumpToLineInternal(int line, bool mark, bool focus)
+{
     if(mark)
         markCurrentPosition();
 	// TODO implment for multiple views
-    if (m_viewMode < 2) {
-        editorJumpToLine(m_mainEditor, line);
-        m_mainEditor->ensureCursorVisible();
-        // A jump (inspector click, goto-line, go-back) hands keyboard focus
+    TextEditor *editor = (m_viewMode < 2) ? (TextEditor *)m_mainEditor : m_orcEditor;
+    editorJumpToLine(editor, line);
+    editor->ensureCursorVisible();
+    if (focus) {
+        // A jump (goto-line, go-back, inspector Enter) hands keyboard focus
         // to the editor so typing and cursor keys work right away.
         // activateWindow() first: the inspector may live in a floating dock
         // (its own window), in which case setFocus() alone would not transfer
         // focus out of it.
-        m_mainEditor->activateWindow();
-        m_mainEditor->setFocus(Qt::ActiveWindowFocusReason);
-	}
-	else {
-        editorJumpToLine(m_orcEditor, line);
-        m_orcEditor->ensureCursorVisible();
-        m_orcEditor->activateWindow();
-        m_orcEditor->setFocus(Qt::ActiveWindowFocusReason);
-	}
+        editor->activateWindow();
+        editor->setFocus(Qt::ActiveWindowFocusReason);
+    }
 }
 
 void DocumentView::goBackToPreviousPosition() {

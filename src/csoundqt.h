@@ -258,6 +258,8 @@ private slots:
     void focusWidgets();
     void focusHelp();
     void focusInspector();
+    void updateFocusIndicator(QWidget *focused);
+    void applyFocusIndicator();
     void showDebugger(bool show);
 	void showVirtualKeyboard(bool show);
 	void showTableEditor(bool show);
@@ -319,7 +321,7 @@ private slots:
     void setLineAndColumn(int line, int column);
 
     DocumentPage *getCurrentDocumentPage() {
-        if(curPage >= documentPages.size())
+        if(curPage < 0 || curPage >= documentPages.size())
             return nullptr;
         return documentPages[curPage];
     }
@@ -567,6 +569,7 @@ private:
 #endif
     QByteArray m_preFullScreenState;
     QString m_fullScreenComponent;
+    QString m_lastFocusPanel;
     QDir m_rissetDataPath;
     bool m_rissetInitialized = false;
     bool m_rissetReady = false;
@@ -585,6 +588,8 @@ private:
         "--format"
     };
     QLabel *lineAndColumnLabel;
+    QLabel *focusPanelLabel;
+    QTimer *m_focusIndicatorTimer;
     QPalette makeAppPalette(bool dark);
     QFileSystemWatcher *m_fileWatcher;
     QSet<QString> m_pendingFileChanges;
