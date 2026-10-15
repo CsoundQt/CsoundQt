@@ -665,18 +665,12 @@ void WidgetLayout::setValue(QString channelName, QString value)
         // full list. The map is normally built by setupChannels(), but that only
         // runs when Csound starts, so this path must also work without it.
         QList<QuteWidget *> matches;
-        bool matchedByUuid = false;
         for (int i = 0; i < m_widgets.size(); i++) {
             auto w = m_widgets[i];
             if (w->getChannelName() == channelName) {
                 if (w->isWidgetEnabled())
                     w->setValue(value);
                 matches.append(w);
-            } else if (!matchedByUuid && w->getUuid() == channelName) {
-                // Channel name is a widget uuid: not cached by channel.
-                if (w->isWidgetEnabled())
-                    w->setValue(value);
-                matchedByUuid = true;
             }
         }
         if (!matches.isEmpty()) {
@@ -772,7 +766,6 @@ double WidgetLayout::getValueForChannel(QString channelName, bool *modified, dou
         }
     }
     return notfound;
-    // TODO: deal with UUID as channel name
 }
 
 void WidgetLayout::getMouseValues(QVector<double> *values)
@@ -4804,7 +4797,7 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
 
     // Mirror the string overload of newValue(): when a path is given, e.g.
     // outvalue "b1/CSQT_x", 10, the value addresses a property of the widget(s)
-    // bound to the channel, not the widget's value.
+    // bound to the address, not the widget's value.
     bool sentAsMessage = false;
     if (!path.isEmpty() && !channelName.isEmpty()) {
         if (!widgetsMutex.tryLock(1)) {
@@ -4812,12 +4805,22 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
             return;
         }
         for (int i = 0; i < m_widgets.size(); i++) {
-            // Properties can be addressed through either the widget's channel
-            // or its second channel (e.g. a controller's x/y channels).
-            if (m_widgets[i]->getChannelName() != channelName
-                    && m_widgets[i]->getChannel2Name() != channelName)
+            QuteWidget *w = m_widgets[i];
+            // Properties can be addressed through the widget's Name or through
+            // either of its channels (e.g. a controller's x/y channels). A channel
+            // may be shared by several widgets; a Name is unique within the file
+            // and identifies exactly one widget (see m_widgetNameToWidget).
+            const bool matchesName = !w->getWidgetName().isEmpty()
+                    && w->getWidgetName() == channelName;
+            const bool matchesChannel = w->getChannelName() == channelName
+                    || w->getChannel2Name() == channelName;
+            if (!matchesName && !matchesChannel)
                 continue;
-            m_widgets[i]->widgetMessage(path, channelValue.second);
+            // A label is addressed by its Name only; its channel must never
+            // modify it (see also QuteText::setValue()).
+            if (w->getWidgetTypeID() == QuteWidgetType::LABEL && !matchesName)
+                continue;
+            w->widgetMessage(path, channelValue.second);
             sentAsMessage = true;
         }
         widgetsMutex.unlock();
@@ -4859,11 +4862,11 @@ void WidgetLayout::newValue(QPair<QString, QString> channelValue)
         return;
     }
 
-    QString channelName = channelValue.first;
-    if (channelName.contains("/")) {
-        channelName = channelValue.first.left(channelValue.first.indexOf("/"));
-    }
-    QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
+    const QString fullName = channelValue.first;
+    const int slashIdx = fullName.indexOf("/");
+    const bool hasPath = slashIdx >= 0;
+    QString channelName = hasPath ? fullName.left(slashIdx) : fullName;
+    const QString path = hasPath ? fullName.mid(slashIdx + 1) : QString();
     // Send value to a widget if channel matches
     if(!widgetsMutex.tryLock(1)) {
         QDEBUG << "Could not acquire widgets lock";
@@ -4872,18 +4875,28 @@ void WidgetLayout::newValue(QPair<QString, QString> channelValue)
     bool updateValue = true;
     if (!channelName.isEmpty()) {
         for (int i = 0; i < m_widgets.size(); i++){
-            // Match either the primary or the second channel (see the numeric
+            QuteWidget *w = m_widgets[i];
+            // Match the widget's Name or either of its channels (see the numeric
             // overload of newValue()).
-            if (m_widgets[i]->getChannelName() != channelName
-                    && m_widgets[i]->getChannel2Name() != channelName)
+            const bool matchesName = !w->getWidgetName().isEmpty()
+                    && w->getWidgetName() == channelName;
+            const bool matchesChannel = w->getChannelName() == channelName
+                    || w->getChannel2Name() == channelName;
+            if (!matchesName && !matchesChannel)
                 continue;
-            if (path == channelName)
-                m_widgets[i]->setValue(channelValue.second);
-            else {
-                // A "channel/path" message (e.g. "b1/CSQT_color") modifies the
-                // widget via widgetMessage() -> applyInternalProperties(). Safe
-                // here because of the GUI-thread guard above.
-                m_widgets[i]->widgetMessage(path, channelValue.second);
+            const bool isLabel = w->getWidgetTypeID() == QuteWidgetType::LABEL;
+            if (!hasPath) {
+                // Plain value update: a label is not a value widget.
+                if (isLabel)
+                    continue;
+                w->setValue(channelValue.second);
+            } else {
+                // A "<name|channel>/<property>" message (e.g. "b1/color") modifies
+                // the widget via widgetMessage() -> applyInternalProperties().
+                // Labels are addressable by their Name only.
+                if (isLabel && !matchesName)
+                    continue;
+                w->widgetMessage(path, channelValue.second);
                 // This is a message to the widget, not a value change, so it must
                 // not be stored in the channel changes buffer below.
                 updateValue = false;

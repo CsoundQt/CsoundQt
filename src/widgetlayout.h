@@ -473,7 +473,11 @@ private:
 
 	// Contained Widgets
 	QVector<QuteWidget *> m_widgets;
-	QHash<QString, QuteWidget *> m_widgetNameToWidget; // Per file map of user defined widget name -> widget (names are unique, empty names are not stored)
+	// Per-file map of user-defined widget Name -> widget. A Name is unique within
+	// the file (empty names are not stored). Unlike a channel, which can be shared
+	// by several widgets, the Name identifies exactly one widget and is used only
+	// to address that widget directly, via outvalue "<name>/<property>", <value>.
+	QHash<QString, QuteWidget *> m_widgetNameToWidget;
     QVector<FrameWidget *> editWidgets;
 
 	// Widget fonts found while loading that are neither bundled nor known
