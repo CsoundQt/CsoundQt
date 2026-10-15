@@ -2043,7 +2043,12 @@ void WidgetLayout::deselectAll()
 
 void WidgetLayout::selectAll()
 {
-    for (int i = 0; i< editWidgets.size(); i++) {
+    // Locked widgets are not caught by "Select All" either; use an individual
+    // click or Ctrl+click to select them.
+    const int count = qMin(editWidgets.size(), m_widgets.size());
+    for (int i = 0; i < count; i++) {
+        if (m_widgets[i]->property("CSQT_locked").toBool())
+            continue;
         editWidgets[i]->select();
     }
 }
@@ -2100,6 +2105,37 @@ void WidgetLayout::widgetResized(QPair<int, int> delta)
 			m_widgets[i]->setProperty("CSQT_width", neww);
 			m_widgets[i]->setProperty("CSQT_height", newh);
         }
+    }
+    widgetsMutex.unlock();
+    adjustLayoutSize();
+}
+
+void WidgetLayout::widgetResizedTopLeft(QPair<int, int> delta)
+{
+    // Dragging the top-left corner moves the origin and resizes from the opposite
+    // (right/bottom) edges, which stay fixed.
+    widgetsMutex.lock();
+    for (int i = 0; i < editWidgets.size(); i++) {
+        if (!editWidgets[i]->isSelected())
+            continue;
+        int x = m_widgets[i]->x();
+        int y = m_widgets[i]->y();
+        int w = m_widgets[i]->width();
+        int h = m_widgets[i]->height();
+        // Clamp so the size stays >= 5 and the opposite edges do not move.
+        int dx = qMin(delta.first, qMax(0, w - 5));
+        int dy = qMin(delta.second, qMax(0, h - 5));
+        int newx = x + dx;
+        int newy = y + dy;
+        int neww = w - dx;
+        int newh = h - dy;
+        m_widgets[i]->setWidgetGeometry(newx, newy, neww, newh);
+        editWidgets[i]->setGeometry(newx, newy, neww, newh);
+        // Keep the properties in sync (see widgetResized()).
+        m_widgets[i]->setProperty("CSQT_x", newx);
+        m_widgets[i]->setProperty("CSQT_y", newy);
+        m_widgets[i]->setProperty("CSQT_width", neww);
+        m_widgets[i]->setProperty("CSQT_height", newh);
     }
     widgetsMutex.unlock();
     adjustLayoutSize();
@@ -2180,7 +2216,10 @@ void WidgetLayout::selectionChanged(QRect selection)
         int h = m_widgets[i]->height();
         bool inSelection = (x > selection.x() - w && x < selection.x() + selection.width() &&
                             y > selection.y() - h && y < selection.y() + selection.height());
-        if (inSelection && !editWidgets[i]->isSelected())
+        // Locked widgets are not picked up by the rubber band; they can still be
+        // selected individually or toggled with Ctrl+click.
+        if (inSelection && !m_widgets[i]->property("CSQT_locked").toBool()
+                && !editWidgets[i]->isSelected())
             toSelect.append(i);
         else if (!inSelection && editWidgets[i]->isSelected())
             toDeselect.append(i);
@@ -3080,6 +3119,22 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
     if(m_editMode) {
         int quant = (event->modifiers() & Qt::AltModifier) ? 1 : 5;
         switch(key) {
+        case Qt::Key_Escape:
+            // Escape clears the selection while editing the panel.
+            this->deselectAll();
+            event->accept();
+            return;
+        case Qt::Key_Return:
+        case Qt::Key_Enter: {
+            // With exactly one widget selected, Enter opens its properties dialog.
+            const QList<QuteWidget *> selected = getSelectedWidgets();
+            if (selected.size() == 1) {
+                selected.first()->openProperties();
+                event->accept();
+                return;
+            }
+            break;
+        }
         case Qt::Key_Left:
             this->moveSelected(-quant, 0, quant);
             event->accept();
@@ -3245,6 +3300,12 @@ void WidgetLayout::widgetPropertyApplied(QuteWidget* widget, const QString &prop
     }
     else if (property == "CSQT_midichan") {
         registerWidgetChannel(widget, widget->property("CSQT_midichan").toInt());
+    }
+    else if (property == "CSQT_locked") {
+        // Locked widgets get a dashed frame while unselected.
+        if (editWidgets.size() > index) {
+            editWidgets[index]->refreshFrameAppearance();
+        }
     }
 }
 
@@ -4523,6 +4584,14 @@ void WidgetLayout::setEditMode(bool active)
     selectDownAct->setEnabled(active);
 }
 
+void WidgetLayout::setFrameColors(const QColor &unselected, const QColor &selected)
+{
+    FrameWidget::setFrameColors(unselected, selected);
+    for (FrameWidget *frame : editWidgets) {
+        frame->refreshFrameAppearance();
+    }
+}
+
 void WidgetLayout::createEditFrame(QuteWidget* widget)
 {
     // This function should be locked from outside always
@@ -4530,6 +4599,9 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
     QPalette palette = QPalette(QColor(Qt::red),QColor(Qt::red));
     palette.setColor(QPalette::WindowText, QColor(Qt::red));
     frame->setWidget(widget);
+    // The constructor runs before the widget is bound, so apply the frame style
+    // now that the locked flag is known (dotted frame for locked widgets).
+    frame->refreshFrameAppearance();
     frame->setPalette(palette);
     frame->setFocusProxy(this);
     frame->setGeometry(widget->x(), widget->y(), widget->width(), widget->height());
@@ -4543,6 +4615,8 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
             this, SLOT(widgetMoved( QPair<int, int> )));
     connect(frame, SIGNAL(resized( QPair<int, int> )),
             this, SLOT(widgetResized( QPair<int, int> )));
+    connect(frame, SIGNAL(resizedTopLeft( QPair<int, int> )),
+            this, SLOT(widgetResizedTopLeft( QPair<int, int> )));
     connect(frame, SIGNAL(mouseReleased()), this, SLOT(markHistoryGeometry()));
     connect(frame, SIGNAL(selectionStarted(QPoint)), this, SLOT(beginSelection(QPoint)));
     connect(frame, SIGNAL(selectionMoved(QPoint)), this, SLOT(continueSelection(QPoint)));

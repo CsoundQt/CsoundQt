@@ -81,6 +81,7 @@
 #include "csoundengine.h"
 #include "documentview.h"
 #include "widgetlayout.h"
+#include "framewidget.h"
 
 #ifdef CSQT_RTMIDI
 #include "RtMidi.h"
@@ -3950,6 +3951,8 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setAutoParameterMode(m_options->autoParameterMode);
     p->setWidgetEnabled(m_options->enableWidgets);
     p->showWidgetTooltips(m_options->showTooltips);
+    p->setWidgetFrameColors(m_options->widgetFrameColorUnselected,
+                            m_options->widgetFrameColorSelected);
     p->setKeyRepeatMode(m_options->keyRepeat);
     p->setOpenProperties(m_options->openProperties);
     p->setFontOffset(m_options->fontOffset);
@@ -6155,6 +6158,13 @@ void CsoundQt::readSettings()
     // m_options->editorBgColor = settings.value("editorBgColor",
     //                                           QVariant(QColor(Qt::white))).value<QColor>();
 
+    m_options->widgetFrameColorUnselected =
+            settings.value("widgetFrameColorUnselected",
+                           QVariant(FrameWidget::frameColorUnselected())).value<QColor>();
+    m_options->widgetFrameColorSelected =
+            settings.value("widgetFrameColorSelected",
+                           QVariant(FrameWidget::frameColorSelected())).value<QColor>();
+
     m_options->tabWidth = settings.value("tabWidth", 24).toInt();
     m_options->tabIndents = settings.value("tabIndents", false).toBool();
     m_options->tabUseSpaces = settings.value("tabUseSpaces", false).toBool();
@@ -6429,6 +6439,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
         settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
         // settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
+        settings.setValue("widgetFrameColorUnselected", QVariant(m_options->widgetFrameColorUnselected));
+        settings.setValue("widgetFrameColorSelected", QVariant(m_options->widgetFrameColorSelected));
         settings.setValue("tabWidth", m_options->tabWidth );
         settings.setValue("tabIndents", m_options->tabIndents);
         settings.setValue("tabUseSpaces", m_options->tabUseSpaces);

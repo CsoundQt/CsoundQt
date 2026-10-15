@@ -25,6 +25,7 @@
 
 #include <QFrame>
 #include <QWidget>
+#include <QColor>
 
 class QuteWidget;
 
@@ -43,6 +44,14 @@ public:
 	void setWidget(QuteWidget* widget) {m_widget = widget;}
 	QuteWidget* getWidget() {return m_widget;}
 
+	// Edit-frame colours, set from Settings/Widgets. Static because the setting
+	// is global; every frame reads the current values.
+	static QColor frameColorUnselected();
+	static QColor frameColorSelected();
+	static void setFrameColors(const QColor &unselected, const QColor &selected);
+	// Re-apply the stylesheet after the colours changed.
+	void refreshFrameAppearance();
+
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent *event);
 	virtual void mousePressEvent ( QMouseEvent * event );
@@ -53,18 +62,30 @@ protected:
 
 private:
 	int startx, starty, oldx, oldy;
-	QFrame *m_resizeBox;
+	// Transparent children that only provide the diagonal resize cursor for the
+	// bottom-right and top-left corners. They ignore mouse events, so the frame
+	// still receives press/move/release and drives the resize.
+	QWidget *m_resizeHitBR;
+	QWidget *m_resizeHitTL;
+	QFrame *m_resizeHandleBR;
+	QFrame *m_resizeHandleTL;
 	QuteWidget *m_widget;
 	bool m_resize;
+	bool m_resizeTopLeft;
+	bool m_moving;
 	bool m_selecting;
 	bool m_selected;
 	bool m_changed;
+	bool m_ctrlPress;
+	bool m_dragStarted;
+	QPoint m_lastGlobal;
 
 signals:
 	void popUpMenu(QPoint pos);
 	void deselectAllSignal();
 	void moved(QPair<int, int>);
 	void resized(QPair<int, int>);
+	void resizedTopLeft(QPair<int, int>);
 	void editWidget();
 	void mouseReleased();  // When mouse released, send to set undo history
 	void widgetSelected(QuteWidget *widget);

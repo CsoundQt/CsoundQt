@@ -183,6 +183,13 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	palette = QPalette(m_options->editorBgColor);
     // editorBgColorButton->setPalette(palette);
 
+	// Edit-mode widget frame colours (the unselected one carries an alpha).
+	QPixmap framePixmap(64, 64);
+	framePixmap.fill(m_options->widgetFrameColorUnselected);
+	frameColorUnselectedButton->setIcon(framePixmap);
+	framePixmap.fill(m_options->widgetFrameColorSelected);
+	frameColorSelectedButton->setIcon(framePixmap);
+
 	tabWidthSpinBox->setValue(m_options->tabWidth);
 	tabIndentCheckBox->setChecked(m_options->tabIndents);
 	tabUseSpacesCheckBox->setChecked(m_options->tabUseSpaces);
@@ -433,6 +440,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(consoleFontColorPushButton, SIGNAL(released()), this, SLOT(selectTextColor()));
 	connect(consoleBgColorPushButton, SIGNAL(released()), this, SLOT(selectBgColor()));
     // connect(editorBgColorButton, SIGNAL(released()), this, SLOT(selectEditorBgColor()));
+	connect(frameColorUnselectedButton, SIGNAL(released()), this, SLOT(selectWidgetFrameColorUnselected()));
+	connect(frameColorSelectedButton, SIGNAL(released()), this, SLOT(selectWidgetFrameColorSelected()));
 
 	connect(clearTemplatePushButton,SIGNAL(released()), this, SLOT(clearTemplate()));
 	connect(defaultTemplatePushButton,SIGNAL(released()), this, SLOT(defaultTemplate()));
@@ -1030,6 +1039,33 @@ void ConfigDialog::selectEditorBgColor()
         // editorBgColorButton->setIcon(pixmap);
 		QPalette palette(m_options->editorBgColor);
         // editorBgColorButton->setPalette(palette);
+	}
+}
+
+
+void ConfigDialog::selectWidgetFrameColorUnselected()
+{
+	// Opacity is part of the colour (ShowAlphaChannel).
+	QColor color = QColorDialog::getColor(m_options->widgetFrameColorUnselected, this,
+	                                      tr("Widget frame colour (unselected)"),
+	                                      QColorDialog::ShowAlphaChannel);
+	if (color.isValid()) {
+		m_options->widgetFrameColorUnselected = color;
+		QPixmap pixmap(64, 64);
+		pixmap.fill(color);
+		frameColorUnselectedButton->setIcon(pixmap);
+	}
+}
+
+void ConfigDialog::selectWidgetFrameColorSelected()
+{
+	QColor color = QColorDialog::getColor(m_options->widgetFrameColorSelected, this,
+	                                      tr("Widget frame colour (selected)"));
+	if (color.isValid()) {
+		m_options->widgetFrameColorSelected = color;
+		QPixmap pixmap(64, 64);
+		pixmap.fill(color);
+		frameColorSelectedButton->setIcon(pixmap);
 	}
 }
 

@@ -1077,6 +1077,13 @@ void DocumentPage::setWidgetEditMode(bool active)
 	}
 }
 
+void DocumentPage::setWidgetFrameColors(const QColor &unselected, const QColor &selected)
+{
+	foreach (WidgetLayout *wl, m_widgetLayouts) {
+		wl->setFrameColors(unselected, selected);
+	}
+}
+
 //void DocumentPage::toggleWidgetEditMode()
 //{
 //  qDebug() <<;

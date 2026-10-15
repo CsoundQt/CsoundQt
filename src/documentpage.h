@@ -204,6 +204,7 @@ public slots:
 	void sendCodeToEngine(QString code);
 	//Passed directly to widget layout
 	void setWidgetEditMode(bool active);
+	void setWidgetFrameColors(const QColor &unselected, const QColor &selected);
 	void duplicateWidgets();
 	// Passed directly to document view
 	void jumpToLine(int line);

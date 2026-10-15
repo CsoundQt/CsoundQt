@@ -90,6 +90,8 @@ private slots:
 	void selectTextColor();
 	void selectBgColor();
 	void selectEditorBgColor();
+	void selectWidgetFrameColorUnselected();
+	void selectWidgetFrameColorSelected();
 	void clearTemplate();
 	void defaultTemplate();
 

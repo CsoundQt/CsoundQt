@@ -78,6 +78,11 @@ public:
 	bool openProperties;  // Open properties automatically when creating a widget
 	double fontScaling;
 	double fontOffset;
+	// Edit-mode widget frame border colours (Settings/Widgets). The unselected
+	// colour may carry an alpha; the selected one is opaque and also drives the
+	// resize handle colour.
+	QColor widgetFrameColorUnselected;
+	QColor widgetFrameColorSelected;
 
 	bool useAPI;
 	bool enableWidgets;
