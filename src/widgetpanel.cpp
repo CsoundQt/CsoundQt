@@ -37,6 +37,17 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 	m_stack->show();
 	setWidget(m_stack);
 
+	// Hide the dock title bar when docked (it wastes vertical space).
+	// The native title bar is restored when floating, otherwise the
+	// floating window would have no decorations to move/dock with.
+	// Note: setTitleBarWidget(nullptr) removes but does not delete the
+	// custom widget, so m_hiddenTitleBar can be safely reused.
+	m_hiddenTitleBar = new QWidget(this);
+	m_hiddenTitleBar->setFixedHeight(0);
+	connect(this, &QDockWidget::topLevelChanged,
+			this, &WidgetPanel::updateTitleBar);
+	updateTitleBar(isFloating());
+
 	setMouseTracking(true);
 }
 
@@ -75,7 +86,6 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 WidgetLayout * WidgetPanel::takeWidgetLayout(QRect outerGeometry)
 {
 	//  qDebug() << "WidgetPanel::takeWidgetLayout()";
-	disconnect(this,SIGNAL(topLevelChanged(bool)));
 	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
 	if (!s) // scroll area is sometimes null during startup and shutdown
         return nullptr;
@@ -135,8 +145,31 @@ void WidgetPanel::showEvent(QShowEvent *event)
 void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 {
 	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
-    Q_ASSERT(s != nullptr);
-	static_cast<WidgetLayout *>(s->widget())->createContextMenu(event);
+	WidgetLayout *w = s ? qobject_cast<WidgetLayout *>(s->widget()) : nullptr;
+	if (w != nullptr) {
+		// Includes the Float/Dock panel action (see WidgetLayout::createContextMenu)
+		w->createContextMenu(event);
+		return;
+	}
+	// No layout (e.g. during startup/shutdown): still offer Float/Dock.
+	QMenu menu;
+	QAction *floatAct = menu.addAction(isFloating() ? tr("Dock Panel") : tr("Float Panel"));
+	if (menu.exec(event->globalPos()) == floatAct) {
+		setFloating(!isFloating());
+	}
+}
+
+void WidgetPanel::updateTitleBar(bool floating)
+{
+	if (floating) {
+		if (titleBarWidget() != nullptr) {
+			setTitleBarWidget(nullptr);
+		}
+	} else {
+		if (titleBarWidget() != m_hiddenTitleBar) {
+			setTitleBarWidget(m_hiddenTitleBar);
+		}
+	}
 }
 
 void WidgetPanel::mousePressEvent(QMouseEvent * event)
