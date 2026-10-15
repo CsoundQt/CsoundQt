@@ -81,6 +81,7 @@
 #include "csoundengine.h"
 #include "documentview.h"
 #include "widgetlayout.h"
+#include "notification.h"
 
 #ifdef CSQT_RTMIDI
 #include "RtMidi.h"
@@ -944,7 +945,7 @@ void CsoundQt::reload()
         // auto doc = documentPages[curPage];
 
     } else {
-        QMessageBox::information(nullptr, "Reload", "File was not modified");
+        Notification::showTransient(this, tr("File was not modified"), 3000);
     }
 }
 
