@@ -3196,6 +3196,23 @@ void CsoundQt::showDebugger(bool show)
 #endif
 }
 
+// Qt Quick Controls ignore the application palette and fall back to black text,
+// which is unreadable on a dark background. Pass the palette down as context
+// properties; the root element of each QML scene installs it on a Pane so the
+// child controls inherit it.
+static void setQuickControlsPalette(QQmlContext *context)
+{
+    const QPalette p = qApp->palette();
+    context->setContextProperty("windowColor", p.color(QPalette::Window));
+    context->setContextProperty("windowTextColor", p.color(QPalette::WindowText));
+    context->setContextProperty("textColor", p.color(QPalette::Text));
+    context->setContextProperty("baseColor", p.color(QPalette::Base));
+    context->setContextProperty("buttonColor", p.color(QPalette::Button));
+    context->setContextProperty("buttonTextColor", p.color(QPalette::ButtonText));
+    context->setContextProperty("highlightColor", p.color(QPalette::Highlight));
+    context->setContextProperty("highlightedTextColor", p.color(QPalette::HighlightedText));
+}
+
 void CsoundQt::showVirtualKeyboard(bool show)
 {
 
@@ -3207,8 +3224,9 @@ void CsoundQt::showVirtualKeyboard(bool show)
         m_virtualKeyboardPointer = m_virtualKeyboard;  // guarded pointer to check if object is  alive
         m_virtualKeyboard->setWindowTitle(tr("CsoundQt Virtual Keyboard"));
         m_virtualKeyboard->setWindowFlags(Qt::Window);
-        QColor windowColor = qApp->palette().color(QPalette::Window);
-        m_virtualKeyboard->rootContext()->setContextProperty("windowColor", windowColor);
+        // Qt Quick Controls do not use the application palette, so pass it down
+        // explicitly (see VirtualKeyboard.qml) to avoid black-on-dark text.
+        setQuickControlsPalette(m_virtualKeyboard->rootContext());
         m_virtualKeyboard->setSource(QUrl("qrc:/QML/VirtualKeyboard.qml"));
         QObject *rootObject = m_virtualKeyboard->rootObject();
         m_virtualKeyboard->setFocus();
@@ -3234,7 +3252,8 @@ void CsoundQt::showTableEditor(bool show)
         m_tableEditorPointer = m_tableEditor;  // guarded pointer to check if object is  alive
         m_tableEditor->setWindowTitle(tr("CsoundQt table editor"));
         m_tableEditor->setWindowFlags(Qt::Window);
-        m_tableEditor->rootContext()->setContextProperty("windowColor", qApp->palette().color(QPalette::Window));
+        // See setQuickControlsPalette(): Theme the Quick Controls (see TableEditor.qml).
+        setQuickControlsPalette(m_tableEditor->rootContext());
         m_tableEditor->setSource(QUrl("qrc:/QML/TableEditor.qml"));
         m_tableEditor->setResizeMode(QQuickWidget::SizeRootObjectToView);
         QObject *rootObject = m_tableEditor->rootObject();

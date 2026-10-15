@@ -24,62 +24,78 @@ Rectangle {
             return luminance < 0.5
     }
 
-    ColumnLayout {
+    // A Pane carrying the application palette so the child Controls (buttons,
+    // tabs, labels, ...) use the theme colours instead of the Controls default
+    // (black text), which is unreadable on a dark background.
+    Pane {
         anchors.fill: parent
-        spacing: 10
+        padding: 0
+        palette.window: windowColor
+        palette.windowText: windowTextColor
+        palette.text: textColor
+        palette.base: baseColor
+        palette.button: buttonColor
+        palette.buttonText: buttonTextColor
+        palette.highlight: highlightColor
+        palette.highlightedText: highlightedTextColor
 
-        ToolBar {
-            Layout.fillWidth: true
-            RowLayout {
-                anchors.fill: parent
-                ToolButton {
+        ColumnLayout {
+            anchors.fill: parent
+            spacing: 10
 
-                    id: graph2syntaxButton
-                    text: qsTr("&Insert to CsoundQt")
+            ToolBar {
+                Layout.fillWidth: true
+                RowLayout {
+                    anchors.fill: parent
+                    ToolButton {
 
-                    onClicked:  {
-                        let csoundCode = ""
-                        if (stack.itemAt(stack.currentIndex)?.name === "gen7" ) {
-                            csoundCode = gen7Editor.graph2syntax();
-                        } else if (stack.itemAt(stack.currentIndex)?.name === "gen10") {
-                            csoundCode = gen10Editor.generateCsoundCode();
-                        } else if (stack.itemAt(stack.currentIndex)?.name === "freehand") {
-                            csoundCode = freehandEditor.generateCsoundCode();
+                        id: graph2syntaxButton
+                        text: qsTr("&Insert to CsoundQt")
+
+                        onClicked:  {
+                            let csoundCode = ""
+                            if (stack.itemAt(stack.currentIndex)?.name === "gen7" ) {
+                                csoundCode = gen7Editor.graph2syntax();
+                            } else if (stack.itemAt(stack.currentIndex)?.name === "gen10") {
+                                csoundCode = gen10Editor.generateCsoundCode();
+                            } else if (stack.itemAt(stack.currentIndex)?.name === "freehand") {
+                                csoundCode = freehandEditor.generateCsoundCode();
+                            }
+                            //console.log("Text to insert: ", csoundCode);
+                            if (csoundCode) {
+                                newSyntax(csoundCode);
+                            } else {
+                                console.warn("No Csound code generated.");
+                            }
                         }
-                        //console.log("Text to insert: ", csoundCode);
-                        if (csoundCode) {
-                            newSyntax(csoundCode);
-                        } else {
-                            console.warn("No Csound code generated.");
-                        }
+
                     }
-
                 }
             }
+
+            TabBar {
+                id: tabBar
+                currentIndex: stack.currentIndex
+                TabButton { implicitWidth: Math.max(80, contentItem.implicitWidth + 20); text: "GEN7" }
+                TabButton { implicitWidth: Math.max(80, contentItem.implicitWidth + 20); text: "GEN10" }
+                TabButton { implicitWidth: Math.max(80, contentItem.implicitWidth + 20); text: qsTr("Freehand") }
+            }
+
+            StackLayout {
+                id: stack
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                currentIndex: tabBar.currentIndex
+
+
+                Gen7Editor { id: gen7Editor}
+
+                Gen10Editor { id: gen10Editor}
+
+                FreehandEditor { id: freehandEditor }
+
+            }
+
         }
-
-        TabBar {
-            id: tabBar
-            currentIndex: stack.currentIndex
-            TabButton { implicitWidth: Math.max(80, contentItem.implicitWidth + 20); text: "GEN7" }
-            TabButton { implicitWidth: Math.max(80, contentItem.implicitWidth + 20); text: "GEN10" }
-            TabButton { implicitWidth: Math.max(80, contentItem.implicitWidth + 20); text: qsTr("Freehand") }
-        }
-
-        StackLayout {
-            id: stack
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            currentIndex: tabBar.currentIndex
-
-
-            Gen7Editor { id: gen7Editor}
-
-            Gen10Editor { id: gen10Editor}
-
-            FreehandEditor { id: freehandEditor }
-
-        }
-
     }
 }
