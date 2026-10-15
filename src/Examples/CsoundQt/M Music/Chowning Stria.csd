@@ -245,7 +245,7 @@ endin
 
 ; spectrogram for gui display in csoundqt
 instr setup
-	outvalue "graph1", "@find fft amon"
+	outvalue "graph1/findfft", "amon"
 	turnoff
 endin
 

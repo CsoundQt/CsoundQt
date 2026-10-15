@@ -20,6 +20,8 @@ e
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -41,13 +43,15 @@ e
   <width>25</width>
   <height>90</height>
   <uuid>{5491438a-64c2-4645-943c-964c1a77396d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>67.50000000</value>
+  <value>43.69140625</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -60,7 +64,9 @@ e
   <width>274</width>
   <height>151</height>
   <uuid>{e2d67816-aec0-4d10-9c1c-91e0aff6a55a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -70,6 +76,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -80,6 +88,11 @@ e
    <g>195</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -91,7 +104,9 @@ e
   <width>243</width>
   <height>126</height>
   <uuid>{992f7bb4-3b06-4921-89e7-62a852239c53}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -101,6 +116,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -111,6 +128,11 @@ e
    <g>194</g>
    <b>199</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -122,13 +144,16 @@ e
   <width>60</width>
   <height>60</height>
   <uuid>{b7fdac27-8f78-4a58-a7cc-2a8442859b2c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.45000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.73330000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -152,7 +177,9 @@ e
   <width>100</width>
   <height>28</height>
   <uuid>{d64e707e-94a6-4d6f-91fa-96a6281b0653}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -182,7 +209,9 @@ e
   <width>100</width>
   <height>28</height>
   <uuid>{2a151994-be4c-43b0-aa83-3e5d9b4eead4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -196,6 +225,18 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>212</r>
+   <g>224</g>
+   <b>230</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#8d9599</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>menu6</objectName>
@@ -204,7 +245,9 @@ e
   <width>100</width>
   <height>28</height>
   <uuid>{cff4de90-d3d2-4b91-a46f-3bd89cf01ce9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -232,16 +275,18 @@ e
   <objectName>scroll1</objectName>
   <x>42</x>
   <y>219</y>
-  <width>105</width>
-  <height>36</height>
+  <width>108</width>
+  <height>39</height>
   <uuid>{935af565-14cd-47de-bdb0-b4721b5a2377}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Mono</font>
-  <fontsize>32</fontsize>
+  <fontsize>30</fontsize>
   <color>
    <r>230</r>
    <g>230</g>
@@ -252,10 +297,15 @@ e
    <g>79</g>
    <b>49</b>
   </bgcolor>
-  <value>43.11926606</value>
+  <value>53.78081995</value>
   <resolution>1.00000000</resolution>
   <minimum>0.00000000</minimum>
   <maximum>100.00000000</maximum>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -269,7 +319,9 @@ e
   <width>109</width>
   <height>80</height>
   <uuid>{36487753-397c-4830-bd3b-687a703c7d1f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -278,10 +330,11 @@ e
   <xMax>100.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>100.00000000</yMax>
-  <xValue>43.11926606</xValue>
-  <yValue>67.50000000</yValue>
+  <xValue>53.78081995</xValue>
+  <yValue>43.69140625</yValue>
   <type>crosshair</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -306,7 +359,9 @@ e
   <width>300</width>
   <height>100</height>
   <uuid>{39cc7164-674c-412c-b9d2-b4f7e2c9fec2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -316,6 +371,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -326,6 +383,11 @@ e
    <g>194</g>
    <b>199</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -337,7 +399,9 @@ e
   <width>20</width>
   <height>20</height>
   <uuid>{a55de8f0-2955-43ea-934b-14f624928a0b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -353,11 +417,14 @@ e
   <width>87</width>
   <height>25</height>
   <uuid>{4f65c81a-84db-465e-b856-65cbd3aacb73}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <label>Type here</label>
+  <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
@@ -373,6 +440,14 @@ e
    <b>240</b>
   </bgcolor>
   <background>nobackground</background>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -381,7 +456,9 @@ e
   <width>390</width>
   <height>42</height>
   <uuid>{2528f251-f1cd-4b35-a099-65e0f983ffce}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -391,6 +468,8 @@ e
   <font>Liberation Serif</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -401,6 +480,11 @@ e
    <g>194</g>
    <b>199</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -412,7 +496,9 @@ e
   <width>390</width>
   <height>42</height>
   <uuid>{72622cd0-4b49-49ee-92ae-ab788d0c3051}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -422,6 +508,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>30</r>
    <g>30</g>
@@ -432,6 +520,11 @@ e
    <g>195</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>

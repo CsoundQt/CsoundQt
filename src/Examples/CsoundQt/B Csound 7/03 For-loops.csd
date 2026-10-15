@@ -217,6 +217,8 @@ endin
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -238,7 +240,9 @@ endin
   <width>283</width>
   <height>42</height>
   <uuid>{9c6b0259-6016-411d-b9c8-a14161cc2423}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -251,7 +255,19 @@ endin
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
-  <fontsize>16</fontsize>
+  <fontsize>14</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#a0a0a0</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>display-output</objectName>
@@ -260,7 +276,9 @@ endin
   <width>753</width>
   <height>703</height>
   <uuid>{dca2180d-3708-4a41-8865-eee375f49ef0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -287,8 +305,9 @@ returns:
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Mono</font>
-  <fontsize>18</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>0</r>
    <g>0</g>
@@ -299,6 +318,11 @@ returns:
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -310,7 +334,9 @@ returns:
   <width>283</width>
   <height>42</height>
   <uuid>{d0f0f4c4-8aae-4855-918c-eda974cc7d04}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -323,7 +349,19 @@ returns:
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
-  <fontsize>16</fontsize>
+  <fontsize>14</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#a0a0a0</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button0</objectName>
@@ -332,7 +370,9 @@ returns:
   <width>283</width>
   <height>42</height>
   <uuid>{be92a551-06c7-48d7-884c-f6d975ab5ba1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -345,7 +385,19 @@ returns:
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
-  <fontsize>16</fontsize>
+  <fontsize>14</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#a0a0a0</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button0</objectName>
@@ -354,7 +406,9 @@ returns:
   <width>283</width>
   <height>42</height>
   <uuid>{0d48ac7b-aeef-4148-a6da-613ff90375a6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -368,6 +422,18 @@ returns:
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>16</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#a0a0a0</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -376,7 +442,9 @@ returns:
   <width>1040</width>
   <height>38</height>
   <uuid>{321802e3-d5a0-407d-a4e1-df59e780d96b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -386,6 +454,8 @@ returns:
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -396,6 +466,11 @@ returns:
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

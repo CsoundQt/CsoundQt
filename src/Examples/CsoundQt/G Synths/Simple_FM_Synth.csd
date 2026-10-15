@@ -82,7 +82,7 @@ instr 99 ;Always on instrument
 endin
 
 instr setup
-  outvalue "graph1", "@find fft aoutl"
+  outvalue "graph1/findfft", "aoutl"
   turnoff
 endin
 

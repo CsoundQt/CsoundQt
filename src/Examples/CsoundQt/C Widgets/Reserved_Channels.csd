@@ -524,7 +524,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>counter</objectName>
   <x>21</x>
   <y>175</y>

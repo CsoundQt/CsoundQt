@@ -28,6 +28,8 @@ i 2 0 3600
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -51,6 +53,7 @@ i 2 0 3600
   <uuid>{2cb4b857-9f1f-4eff-8058-11ce0a604257}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -60,6 +63,8 @@ i 2 0 3600
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>30</r>
    <g>30</g>
@@ -88,6 +93,7 @@ i 2 0 3600
   <uuid>{a9056c84-91e8-4a49-9e7d-666460fb2b8a}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -97,6 +103,8 @@ i 2 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -125,6 +133,7 @@ i 2 0 3600
   <uuid>{a7da460d-cfe1-487c-8ec1-6fc05692d212}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -134,6 +143,8 @@ i 2 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -162,6 +173,7 @@ i 2 0 3600
   <uuid>{f43311a3-c5f0-4368-925a-3ab5324658ac}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -171,6 +183,8 @@ i 2 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -199,6 +213,7 @@ i 2 0 3600
   <uuid>{16f25933-2318-4091-ab37-b57f1a656ab9}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -209,6 +224,8 @@ Buttons can be set to "latch".</label>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -233,10 +250,11 @@ Buttons can be set to "latch".</label>
   <x>15</x>
   <y>507</y>
   <width>167</width>
-  <height>29</height>
+  <height>34</height>
   <uuid>{3e9f4268-b2f7-496f-94ea-a22e8f68736c}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -246,6 +264,8 @@ Buttons can be set to "latch".</label>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
+  <padding>2</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -261,7 +281,7 @@ Buttons can be set to "latch".</label>
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -274,6 +294,7 @@ Buttons can be set to "latch".</label>
   <uuid>{2767b528-7849-4306-85be-7b0aeeffccef}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -283,6 +304,8 @@ Buttons can be set to "latch".</label>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -311,6 +334,7 @@ Buttons can be set to "latch".</label>
   <uuid>{03723e12-b763-4641-b1ab-3ffdee02428d}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -346,6 +370,7 @@ Buttons can be set to "latch".</label>
   <uuid>{e2702106-c0b8-47b9-8754-d87a2480b056}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -381,6 +406,7 @@ Buttons can be set to "latch".</label>
   <uuid>{9a1f4b9d-3757-4fb5-b522-0b6981bb9b4d}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -416,6 +442,7 @@ Buttons can be set to "latch".</label>
   <uuid>{7df9afbe-0376-4602-8cb8-40a1877c4be3}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -451,6 +478,7 @@ Buttons can be set to "latch".</label>
   <uuid>{56eae0d9-14f8-40b9-9378-b80e731b8b41}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -482,10 +510,11 @@ Buttons can be set to "latch".</label>
   <x>15</x>
   <y>610</y>
   <width>250</width>
-  <height>29</height>
+  <height>35</height>
   <uuid>{b1a2c3d4-1111-2222-3333-444455556666}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -495,6 +524,8 @@ Buttons can be set to "latch".</label>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
+  <padding>2</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -510,7 +541,7 @@ Buttons can be set to "latch".</label>
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -523,6 +554,7 @@ Buttons can be set to "latch".</label>
   <uuid>{b1a2c3d4-7777-8888-9999-aaaabbbbcccc}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -532,6 +564,8 @@ Buttons can be set to "latch".</label>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -560,6 +594,7 @@ Buttons can be set to "latch".</label>
   <uuid>{c2b3d4e5-1234-5678-9abc-def012345678}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>Flat event button</description>
@@ -595,6 +630,7 @@ Buttons can be set to "latch".</label>
   <uuid>{d3c4e5f6-2345-6789-abcd-ef0123456789}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>Latched flat button: shows the pressed colour while latched</description>

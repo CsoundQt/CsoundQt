@@ -10,13 +10,13 @@ Graph Widget
 Graph Widgets can display tables, audio signals and fft analysis. The currently 
 visible table can be changed by sending values on the widget's channel. 
 Positive values change the table by index and negative values change the 
-table by table number. The displayed table can also be changed using the 
+table by table number. The displayed table can also be changed using the 
 menu on the upper left corner. 
 Graph widgets can also show the spectrum from signals using the dispfft opcode, 
 or time varying signals (a-rate and k-rate) using the display opcode. 
 In spectrum mode, clicking near a peak will detect and display the frequency
-of the highest peak near the mouse. If @getPeak was set, this value will also 
-be output to the given named channel
+of the highest peak near the mouse. If a peak channel was set (see below), this 
+value will also be sent to that named channel.
 
 
 Keyboard Shortcuts:
@@ -30,18 +30,22 @@ Z: toggle scrollbars
 +/-: zoom in / out 
 
 
-String commands:
+Methods
 
-@set <index:int>    Sets the index graph to be displayed, similar to `outvalue "graphid", index`
-@find fft   <signal:str>
-@find audio <signal:str>
-@find table <tablenumber:int>
-@freeze <status:int>  1 - freeze the display, 0 - unfreeze
-@getPeak <chan:str>   The peak frequency is output to the given named channel. The peak 
-                      is output whenever the user clicks on a spectrum graph
-                      NB: see Examples/Useful/SpectrumAnalyzer for an example of this
-                      feature 
+The graph is controlled from Csound with "methods". A method is called like a 
+property, through outvalue "<graphid>/<method>", <argument>, but it is applied 
+immediately and is never stored in the csd file. 
 
+findfft <signal:str>      Show the spectrum (dispfft) curve matching <signal>.
+findaudio <signal:str>    Show the waveform (display) curve matching <signal>.
+findtable <tabnum:int>    Show the f-table with the given table number.
+freeze <status:int>       Freeze (1) or unfreeze (0) a spectrum display.
+peakchannel <chan:str>    Channel the detected peak frequency is written to. 
+                          The peak is reported when the user clicks on a 
+                          spectrum graph.
+
+A numeric value sent on the graph's channel also selects a table: positive 
+values address it by index, negative values by table number.
 */
 
 sr = 44100
@@ -73,29 +77,31 @@ instr Oscil
 	display adisp, 0.01
 	
 	if timeinstk() == 1 || changed(kindex) == 1 then
-		; A numeric value sent to the graph widget sets it to display graph 
+		; A numeric value sent to the graph widget sets it to display the graph 
 		; at that index. In this case, the graph is only enabled for tables,
-		; so that the index corresponds to the index of the itables array
+		; so that the index corresponds to the index of the itables array:
 		; outvalue "graph1", kindex
-		; Another possibility is to the the table number directly via the
-		; @find command:
-		; outvalue "graph1", sprintfk("@find table %d", ktab)
-		; Or, you can set the table directly as negative number:
-		outvalue "graph1", -ktab
+		; The table number can be selected directly with the findtable method:
+		outvalue "graph1/findtable", ktab
+		; ... or as a negative number sent on the graph's channel:
+		; outvalue "graph1", -ktab
 		outvalue "plot1", ktab
 	endif
 	
 endin
 
 instr SetupGraphs
-	; It is possible to select the desired graph through the @find string command
+	; The desired graph is selected with methods:
 	
-	outvalue "graph2", "@find fft asig"
-	outvalue "graph3", "@find audio adisp"
+	outvalue "graph2/findfft", "asig"
+	outvalue "graph3/findaudio", "adisp"
+	
+	; A spectrum graph (graph2) can be frozen and its detected peak sent
+	; to a named channel:
+	; outvalue "graph2/freeze", 1        ; 1 = freeze, 0 = unfreeze
+	; outvalue "graph2/peakchannel", "peak"
+	
 	; outvalue "plot1", gisin1
-	
-	; To select a table by number: 
-	; outvalue "graph1", sprintf("@find table %d", itabnum) 
 	turnoff
 endin
 
@@ -115,6 +121,10 @@ schedule "SetupGraphs", 0.5, 1
 f0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -136,12 +146,15 @@ f0 3600
   <width>360</width>
   <height>189</height>
   <uuid>{ec9057d4-b17b-4c85-b694-0dec1a12500a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>2</value>
+  <value>0</value>
   <objectName2/>
+  <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -163,7 +176,9 @@ f0 3600
   <width>50</width>
   <height>40</height>
   <uuid>{12cab531-987e-41ac-9262-d5f71c064805}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -193,7 +208,9 @@ f0 3600
   <width>85</width>
   <height>30</height>
   <uuid>{d70336af-31c0-46c6-8288-9113647dfccf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -203,6 +220,8 @@ f0 3600
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -213,6 +232,11 @@ f0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -224,12 +248,15 @@ f0 3600
   <width>570</width>
   <height>189</height>
   <uuid>{23c327bd-bf0d-492b-90dd-e6536e96ae62}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>5</value>
+  <value>0</value>
   <objectName2/>
+  <zoomx>4.00000000</zoomx>
   <zoomx>4.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -251,12 +278,15 @@ f0 3600
   <width>570</width>
   <height>189</height>
   <uuid>{43a72640-7329-4222-abdb-bbd4584d49c0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>6</value>
+  <value>0</value>
   <objectName2/>
+  <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -278,12 +308,15 @@ f0 3600
   <width>55</width>
   <height>55</height>
   <uuid>{e273f498-ec83-4aa1-bc8a-5dbde9a50fcf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>20.00000000</minimum>
   <maximum>1000.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>743.73000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
@@ -308,7 +341,9 @@ f0 3600
   <width>64</width>
   <height>30</height>
   <uuid>{e0e7e340-f91d-4b1a-83f7-99afd9b06fec}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -318,6 +353,8 @@ f0 3600
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -328,6 +365,11 @@ f0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -336,10 +378,12 @@ f0 3600
   <objectName/>
   <x>6</x>
   <y>1</y>
-  <width>174</width>
-  <height>40</height>
+  <width>202</width>
+  <height>45</height>
   <uuid>{9084758a-d369-4258-a038-c3887349a499}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -348,7 +392,9 @@ f0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>28</fontsize>
-  <precision>3</precision>
+  <precision>0</precision>
+  <padding>2</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -359,6 +405,11 @@ f0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -370,7 +421,9 @@ f0 3600
   <width>360</width>
   <height>189</height>
   <uuid>{ccc0ad50-1250-4166-987c-eb32de8a9566}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -384,11 +437,13 @@ f0 3600
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
-  <y>45</y>
+  <y>42</y>
   <width>247</width>
-  <height>21</height>
+  <height>24</height>
   <uuid>{895a45e4-944d-4121-b5ed-d012a62b8893}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -398,6 +453,8 @@ f0 3600
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
+  <padding>2</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -408,6 +465,11 @@ f0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -415,11 +477,13 @@ f0 3600
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>370</x>
-  <y>44</y>
+  <y>41</y>
   <width>247</width>
-  <height>21</height>
+  <height>24</height>
   <uuid>{ec8cdf60-0106-4db3-8ca6-49dc35779522}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -429,6 +493,8 @@ f0 3600
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
+  <padding>2</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -439,6 +505,11 @@ f0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -450,7 +521,9 @@ f0 3600
   <width>303</width>
   <height>38</height>
   <uuid>{9a77618a-96c8-4a63-b6a7-74e9af0b3ee2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -461,6 +534,8 @@ Click on a peak to display its frequency</label>
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -471,6 +546,11 @@ Click on a peak to display its frequency</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -482,7 +562,9 @@ Click on a peak to display its frequency</label>
   <width>238</width>
   <height>23</height>
   <uuid>{95516290-ec6d-42db-aea9-418260ff1003}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -492,6 +574,8 @@ Click on a peak to display its frequency</label>
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -502,6 +586,11 @@ Click on a peak to display its frequency</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

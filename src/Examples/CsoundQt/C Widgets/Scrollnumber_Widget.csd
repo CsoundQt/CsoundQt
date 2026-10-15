@@ -30,6 +30,8 @@ i 1 0 3600
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -51,7 +53,9 @@ i 1 0 3600
   <width>227</width>
   <height>37</height>
   <uuid>{e0d516ac-0bd9-4502-a3a2-9fa4f22f7054}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -61,6 +65,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
+  <padding>2</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -71,6 +77,11 @@ i 1 0 3600
    <g>204</g>
    <b>234</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -82,7 +93,9 @@ i 1 0 3600
   <width>250</width>
   <height>108</height>
   <uuid>{1972f251-3570-4dc4-8a87-50de9868eebe}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -92,6 +105,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -102,6 +117,11 @@ i 1 0 3600
    <g>204</g>
    <b>234</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -113,7 +133,9 @@ i 1 0 3600
   <width>250</width>
   <height>43</height>
   <uuid>{e42a48e9-9ee1-4337-8488-301faeedb988}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -123,6 +145,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>6</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -133,6 +157,11 @@ i 1 0 3600
    <g>163</g>
    <b>142</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -144,7 +173,9 @@ i 1 0 3600
   <width>55</width>
   <height>26</height>
   <uuid>{d46c4956-ab0b-4024-987f-e277c708d41a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -161,10 +192,15 @@ i 1 0 3600
    <g>220</g>
    <b>220</b>
   </bgcolor>
-  <value>3.22900000</value>
+  <value>3.26900000</value>
   <resolution>0.00100000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -178,7 +214,9 @@ i 1 0 3600
   <width>55</width>
   <height>26</height>
   <uuid>{81904718-714a-4157-a559-e688b0c0205c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -195,10 +233,15 @@ i 1 0 3600
    <g>220</g>
    <b>220</b>
   </bgcolor>
-  <value>26.10000000</value>
+  <value>18.40000000</value>
   <resolution>0.10000000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -212,7 +255,9 @@ i 1 0 3600
   <width>44</width>
   <height>26</height>
   <uuid>{2ee5bcc9-bff7-4d21-a848-8b2af2c72899}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -222,6 +267,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -232,27 +279,35 @@ i 1 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>c</objectName>
   <x>165</x>
   <y>230</y>
   <width>90</width>
   <height>26</height>
   <uuid>{73266aa0-0ae3-4bcd-bbaf-911453733b6c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>is 84.277</label>
+  <label>is 60.150</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>0</r>
    <g>0</g>
@@ -263,6 +318,11 @@ i 1 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -274,7 +334,9 @@ i 1 0 3600
   <width>250</width>
   <height>54</height>
   <uuid>{e0e82cee-79df-4f1c-9011-fd8655d840a5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -284,6 +346,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -294,6 +358,11 @@ i 1 0 3600
    <g>163</g>
    <b>142</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -305,7 +374,9 @@ i 1 0 3600
   <width>87</width>
   <height>25</height>
   <uuid>{ae8f1ea4-e737-4ace-ba33-16f1b5c32b32}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -322,10 +393,15 @@ i 1 0 3600
    <g>63</g>
    <b>69</b>
   </bgcolor>
-  <value>69.00000000</value>
+  <value>68.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -339,7 +415,9 @@ i 1 0 3600
   <width>110</width>
   <height>24</height>
   <uuid>{de1f7fcb-de33-4c40-a4fa-2c9aed935b86}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -349,6 +427,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -359,6 +439,11 @@ i 1 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -370,7 +455,9 @@ i 1 0 3600
   <width>38</width>
   <height>23</height>
   <uuid>{658fc00b-9195-42be-9887-1a49b2734e83}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -380,6 +467,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>2</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -390,27 +479,35 @@ i 1 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>hertz</objectName>
   <x>150</x>
   <y>169</y>
   <width>97</width>
   <height>25</height>
   <uuid>{566a8d25-ee1d-4705-ba26-c36c772cd35f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>442.0 Hz.</label>
+  <label>417.2 Hz.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>1</precision>
+  <padding>3</padding>
   <color>
    <r>0</r>
    <g>0</g>
@@ -421,6 +518,11 @@ i 1 0 3600
    <g>214</g>
    <b>169</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>

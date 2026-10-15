@@ -431,7 +431,7 @@ Options: -b128 -A -s -m167 -R
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>note</objectName>
   <x>4</x>
   <y>67</y>

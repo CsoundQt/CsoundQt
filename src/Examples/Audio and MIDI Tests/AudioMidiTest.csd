@@ -284,10 +284,20 @@ instr Setup
 	chnset -120, "in7"
 	chnset -120, "in8"
 	
+	chnset 0, "indb1"
+	chnset 0, "indb2"
+	chnset 0, "indb3"
+	chnset 0, "indb4"
+	chnset 0, "indb5"
+	chnset 0, "indb6"
+	chnset 0, "indb7"
+	chnset 0, "indb8"
+	
+	
 	chnset sprintf("%d", sr), "samplerate"
 	chnset sprintf("%d", nchnls), "nchnls"
 	
-	for i0 in [0 ... nchnls-1] do
+	for i0 in [1 ... nchnls] do
 	  outvalue sprintf("on%d/enabled", i0), 1
 	  outvalue sprintf("vu%d/enabled", i0), 1
 	  outvalue sprintf("in%d/enabled", i0), 1
@@ -295,13 +305,11 @@ instr Setup
 	od
 	
 	for i0 in [nchnls+1 ... 8] do
-	  
 	  outvalue sprintf("on%d/enabled", i0), 0
 	  outvalue sprintf("vu%d/enabled", i0), 0
 	  outvalue sprintf("in%d/enabled", i0), 0
 	  outvalue sprintf("indb%d/enabled", i0), 0
 	od
-	outvalue "vu3/enabled", 0
 	turnoff
 endin
 
@@ -313,6 +321,14 @@ i "Setup"       0.02 -1
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
+
+
+
+
 
 
 
@@ -393,6 +409,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>true</locked>
   <color>
    <r>240</r>
    <g>240</g>
@@ -431,6 +449,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>true</locked>
   <color>
    <r>255</r>
    <g>255</g>
@@ -469,6 +489,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>255</r>
    <g>255</g>
@@ -507,6 +529,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>true</locked>
   <color>
    <r>243</r>
    <g>243</g>
@@ -529,7 +553,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>17</x>
-  <y>257</y>
+  <y>254</y>
   <width>23</width>
   <height>25</height>
   <uuid>{cf92f08d-bb58-4a3d-acda-479165db96d4}</uuid>
@@ -545,10 +569,12 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>218</r>
+   <g>218</g>
+   <b>218</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -563,88 +589,6 @@ e
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBScrollNumber" version="2">
-  <objectName>indb1</objectName>
-  <x>10</x>
-  <y>280</y>
-  <width>36</width>
-  <height>21</height>
-  <uuid>{557e7fb7-3fab-45bd-b4ea-cbe3fd20a92a}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>true</enabled>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>11</fontsize>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
-  <value>-24.00000000</value>
-  <resolution>1.00000000</resolution>
-  <minimum>-120.00000000</minimum>
-  <maximum>24.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>0</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
- </bsbObject>
- <bsbObject type="BSBScrollNumber" version="2">
-  <objectName>indb2</objectName>
-  <x>49</x>
-  <y>280</y>
-  <width>36</width>
-  <height>21</height>
-  <uuid>{38bd1f5e-dcf7-4897-a5c6-565e19983e63}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>true</enabled>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>11</fontsize>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
-  <value>-24.00000000</value>
-  <resolution>1.00000000</resolution>
-  <minimum>-120.00000000</minimum>
-  <maximum>24.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>0</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -763,7 +707,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>56</x>
-  <y>257</y>
+  <y>254</y>
   <width>23</width>
   <height>25</height>
   <uuid>{00820929-c5f2-4b95-857d-8f65bc444510}</uuid>
@@ -779,10 +723,12 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>218</r>
+   <g>218</g>
+   <b>218</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -794,14 +740,14 @@ e
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>95</x>
-  <y>257</y>
+  <y>254</y>
   <width>23</width>
   <height>25</height>
   <uuid>{731bae72-8739-4e2d-bcf8-dac396e37ccc}</uuid>
@@ -817,10 +763,12 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>218</r>
+   <g>218</g>
+   <b>218</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -832,96 +780,14 @@ e
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBScrollNumber" version="2">
-  <objectName>indb3</objectName>
-  <x>88</x>
-  <y>280</y>
-  <width>36</width>
-  <height>21</height>
-  <uuid>{0dea1661-8fb5-4157-8e62-59c9d9ab05a1}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>false</enabled>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>11</fontsize>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
-  <value>-inf</value>
-  <resolution>1.00000000</resolution>
-  <minimum>-120.00000000</minimum>
-  <maximum>24.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>0</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
- </bsbObject>
- <bsbObject type="BSBScrollNumber" version="2">
-  <objectName>indb4</objectName>
-  <x>127</x>
-  <y>280</y>
-  <width>36</width>
-  <height>21</height>
-  <uuid>{fa018fbc-6904-481b-9ab5-765ad0da46ca}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>false</enabled>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>11</fontsize>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
-  <value>-inf</value>
-  <resolution>1.00000000</resolution>
-  <minimum>-120.00000000</minimum>
-  <maximum>24.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>0</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>134</x>
-  <y>257</y>
+  <y>254</y>
   <width>23</width>
   <height>25</height>
   <uuid>{727c9851-0e1b-4fc9-8afc-fd6c62f253be}</uuid>
@@ -937,10 +803,12 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>218</r>
+   <g>218</g>
+   <b>218</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -952,14 +820,14 @@ e
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>173</x>
-  <y>257</y>
+  <y>254</y>
   <width>23</width>
   <height>25</height>
   <uuid>{2846ddf1-0e08-457a-8d28-e6dd839a2eb8}</uuid>
@@ -975,10 +843,12 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>218</r>
+   <g>218</g>
+   <b>218</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -990,96 +860,14 @@ e
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBScrollNumber" version="2">
-  <objectName>indb5</objectName>
-  <x>166</x>
-  <y>280</y>
-  <width>36</width>
-  <height>21</height>
-  <uuid>{5abc28b7-4a2d-472d-9b00-4bca52043588}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>false</enabled>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>11</fontsize>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
-  <value>-inf</value>
-  <resolution>1.00000000</resolution>
-  <minimum>-120.00000000</minimum>
-  <maximum>24.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>0</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
- </bsbObject>
- <bsbObject type="BSBScrollNumber" version="2">
-  <objectName>indb6</objectName>
-  <x>205</x>
-  <y>280</y>
-  <width>36</width>
-  <height>21</height>
-  <uuid>{577dd7c9-26ee-41c7-b301-6f7b95b7dd6a}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>false</enabled>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>11</fontsize>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
-  <value>-inf</value>
-  <resolution>1.00000000</resolution>
-  <minimum>-120.00000000</minimum>
-  <maximum>24.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>0</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>212</x>
-  <y>257</y>
+  <y>254</y>
   <width>23</width>
   <height>25</height>
   <uuid>{f55bd16e-cd68-44a7-8b08-2f9e1183ab42}</uuid>
@@ -1095,10 +883,12 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>218</r>
+   <g>218</g>
+   <b>218</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -1110,14 +900,14 @@ e
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>251</x>
-  <y>257</y>
+  <y>254</y>
   <width>23</width>
   <height>25</height>
   <uuid>{34ecffc5-5d86-422e-97fc-e5c9fd0e0aa7}</uuid>
@@ -1133,10 +923,12 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>218</r>
+   <g>218</g>
+   <b>218</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -1148,96 +940,14 @@ e
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBScrollNumber" version="2">
-  <objectName>indb7</objectName>
-  <x>244</x>
-  <y>280</y>
-  <width>36</width>
-  <height>21</height>
-  <uuid>{e2d590fc-d377-4d40-bd2e-9f8ff3af5bc5}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>false</enabled>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>11</fontsize>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
-  <value>-inf</value>
-  <resolution>1.00000000</resolution>
-  <minimum>-120.00000000</minimum>
-  <maximum>24.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>0</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
- </bsbObject>
- <bsbObject type="BSBScrollNumber" version="2">
-  <objectName>indb8</objectName>
-  <x>283</x>
-  <y>280</y>
-  <width>36</width>
-  <height>21</height>
-  <uuid>{3da9b4f6-fe00-4b13-a271-976525c17057}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>false</enabled>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>11</fontsize>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
-  <value>-inf</value>
-  <resolution>1.00000000</resolution>
-  <minimum>-120.00000000</minimum>
-  <maximum>24.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>0</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>290</x>
-  <y>257</y>
+  <y>254</y>
   <width>23</width>
   <height>25</height>
   <uuid>{4c976814-f547-431d-ab74-e9225f3aff12}</uuid>
@@ -1253,10 +963,12 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>218</r>
+   <g>218</g>
+   <b>218</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -1268,7 +980,7 @@ e
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -1310,10 +1022,10 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>564</x>
-  <y>204</y>
-  <width>113</width>
-  <height>35</height>
+  <x>582</x>
+  <y>219</y>
+  <width>80</width>
+  <height>25</height>
   <uuid>{a498f284-9d66-4ec8-9c40-07632ace83b4}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1327,6 +1039,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>223</r>
    <g>112</g>
@@ -1365,7 +1079,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-124.63587345</yValue>
+  <yValue>-38.90450678</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <exponent>1.00000000</exponent>
@@ -1374,8 +1088,8 @@ e
   <bordermode>noborder</bordermode>
   <borderColor>#3c332e</borderColor>
   <color>
-   <r>245</r>
-   <g>124</g>
+   <r>255</r>
+   <g>85</g>
    <b>0</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
@@ -1424,8 +1138,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>404</x>
-  <y>117</y>
+  <x>405</x>
+  <y>116</y>
   <width>16</width>
   <height>80</height>
   <uuid>{81589d71-6606-4fa8-b0fa-daeaf64b35ac}</uuid>
@@ -1441,7 +1155,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-120.82479559</yValue>
+  <yValue>-32.82672806</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -1600,7 +1314,7 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#00ff00</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
@@ -1937,6 +1651,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>240</r>
    <g>240</g>
@@ -1958,8 +1674,8 @@ e
  </bsbObject>
  <bsbObject type="BSBGraph" version="2">
   <objectName>graph-index</objectName>
-  <x>548</x>
-  <y>306</y>
+  <x>547</x>
+  <y>307</y>
   <width>142</width>
   <height>98</height>
   <uuid>{c1ed5763-b6f3-49fa-a32b-01e54082a604}</uuid>
@@ -2045,6 +1761,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>240</r>
    <g>240</g>
@@ -2083,6 +1801,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>243</r>
    <g>243</g>
@@ -2118,7 +1837,7 @@ e
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>0.42000000</exponent>
-  <value>-19.70302619</value>
+  <value>-28.84818506</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2154,6 +1873,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>2</padding>
   <color>
    <r>245</r>
    <g>124</g>
@@ -2192,6 +1912,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>245</r>
    <g>124</g>
@@ -2230,6 +1951,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>205</r>
    <g>205</g>
@@ -2268,6 +1991,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>205</r>
    <g>205</g>
@@ -2382,10 +2107,10 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>545</x>
+  <x>547</x>
   <y>256</y>
   <width>97</width>
-  <height>24</height>
+  <height>22</height>
   <uuid>{8afe76f5-61f5-4669-b921-f9520406a099}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -2399,6 +2124,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>171</r>
    <g>171</g>
@@ -2420,7 +2147,7 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>signalfreq</objectName>
-  <x>658</x>
+  <x>657</x>
   <y>278</y>
   <width>32</width>
   <height>26</height>
@@ -2461,10 +2188,10 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>657</x>
+  <x>658</x>
   <y>256</y>
   <width>30</width>
-  <height>24</height>
+  <height>22</height>
   <uuid>{ae79f074-43a6-4d48-965c-5f07fcc4d3ac}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -2478,6 +2205,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>164</r>
    <g>164</g>
@@ -2549,6 +2278,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>205</r>
    <g>205</g>
@@ -2566,6 +2297,45 @@ e
   </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>display</objectName>
+  <x>44</x>
+  <y>341</y>
+  <width>140</width>
+  <height>25</height>
+  <uuid>{23d21873-0a2e-49e7-826a-9c6e4613e89a}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>...</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <padding>5</padding>
+  <color>
+   <r>243</r>
+   <g>243</g>
+   <b>243</b>
+  </color>
+  <bgcolor mode="background">
+   <r>39</r>
+   <g>39</g>
+   <b>39</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
@@ -2833,33 +2603,34 @@ e
   </bordercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
-  <objectName>display</objectName>
-  <x>44</x>
-  <y>341</y>
-  <width>140</width>
-  <height>25</height>
-  <uuid>{23d21873-0a2e-49e7-826a-9c6e4613e89a}</uuid>
+  <objectName>indb2</objectName>
+  <x>51</x>
+  <y>279</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{647cc93d-f278-474f-9efe-397ef1e22adf}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>...</label>
-  <alignment>left</alignment>
-  <valignment>top</valignment>
+  <label>-26</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
   <font>Liberation Sans</font>
-  <fontsize>12</fontsize>
-  <precision>3</precision>
+  <fontsize>10</fontsize>
+  <precision>0</precision>
+  <padding>5</padding>
   <color>
-   <r>243</r>
-   <g>243</g>
-   <b>243</b>
+   <r>85</r>
+   <g>255</g>
+   <b>127</b>
   </color>
   <bgcolor mode="background">
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
+   <r>49</r>
+   <g>54</g>
+   <b>59</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2867,7 +2638,280 @@ e
    <b>0</b>
   </bordercolor>
   <bordermode>false</bordermode>
-  <borderradius>0</borderradius>
+  <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>indb1</objectName>
+  <x>13</x>
+  <y>279</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{6020d615-b765-4bca-97e3-810a3c0774f5}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>-26</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <precision>0</precision>
+  <padding>5</padding>
+  <color>
+   <r>85</r>
+   <g>255</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="background">
+   <r>49</r>
+   <g>54</g>
+   <b>59</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>indb3</objectName>
+  <x>89</x>
+  <y>279</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{5cf612a7-df07-4cfe-9e01-c0c98c58bbf4}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>false</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>-inf</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <precision>0</precision>
+  <padding>5</padding>
+  <color>
+   <r>85</r>
+   <g>255</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="background">
+   <r>49</r>
+   <g>54</g>
+   <b>59</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>indb4</objectName>
+  <x>128</x>
+  <y>279</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{da01e34b-57da-4892-987b-e7e485337a33}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>false</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>-inf</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <precision>0</precision>
+  <padding>5</padding>
+  <color>
+   <r>85</r>
+   <g>255</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="background">
+   <r>49</r>
+   <g>54</g>
+   <b>59</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>indb5</objectName>
+  <x>167</x>
+  <y>279</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{7f7b5c97-21e7-4d2e-9aae-ae28d9c742bf}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>false</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>-inf</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <precision>0</precision>
+  <padding>5</padding>
+  <color>
+   <r>85</r>
+   <g>255</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="background">
+   <r>49</r>
+   <g>54</g>
+   <b>59</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>indb6</objectName>
+  <x>206</x>
+  <y>279</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{21644b5f-836d-4ce7-9ea3-af25e6fbe72a}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>false</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>-inf</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <precision>0</precision>
+  <padding>5</padding>
+  <color>
+   <r>85</r>
+   <g>255</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="background">
+   <r>49</r>
+   <g>54</g>
+   <b>59</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>indb7</objectName>
+  <x>245</x>
+  <y>279</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{47deccba-ed76-4ecc-8ec3-7dd1025ea175}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>false</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>-inf</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <precision>0</precision>
+  <padding>5</padding>
+  <color>
+   <r>85</r>
+   <g>255</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="background">
+   <r>49</r>
+   <g>54</g>
+   <b>59</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>indb8</objectName>
+  <x>284</x>
+  <y>279</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{880c3f40-c68f-4e45-ad37-c90f82946c9e}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>false</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>-inf</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <precision>0</precision>
+  <padding>5</padding>
+  <color>
+   <r>85</r>
+   <g>255</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="background">
+   <r>49</r>
+   <g>54</g>
+   <b>59</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>

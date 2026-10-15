@@ -36,6 +36,8 @@ endin
 i 1 0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -46,19 +48,20 @@ i 1 0 3600
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>212</r>
-  <g>212</g>
-  <b>212</b>
+  <r>231</r>
+  <g>231</g>
+  <b>231</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>8</y>
   <width>450</width>
-  <height>34</height>
+  <height>45</height>
   <uuid>{aaae8b01-3ff8-483b-9f79-63c55aa1804e}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -68,6 +71,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -96,6 +101,7 @@ i 1 0 3600
   <uuid>{693b9425-a8c0-4502-a99e-50594ba159ec}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -105,6 +111,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>49</r>
    <g>54</g>
@@ -133,6 +141,7 @@ i 1 0 3600
   <uuid>{35353dda-5ced-4564-ae81-0319d4e322ea}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -142,7 +151,7 @@ i 1 0 3600
   <rulermode>full</rulermode>
   <rulercolor>#6d6d6d</rulercolor>
   <exponent>0.50000000</exponent>
-  <cursorcolor>#ffffff</cursorcolor>
+  <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
   <bgcolor>
    <r>20</r>
@@ -165,6 +174,7 @@ i 1 0 3600
   <uuid>{07e60557-2eb3-46df-a978-29b8ca8ec59a}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -174,7 +184,7 @@ i 1 0 3600
   <rulermode>full</rulermode>
   <rulercolor>#6d6d6d</rulercolor>
   <exponent>0.50000000</exponent>
-  <cursorcolor>#ffffff</cursorcolor>
+  <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
   <bgcolor>
    <r>20</r>
@@ -197,6 +207,7 @@ i 1 0 3600
   <uuid>{2f7b0285-44f9-4a06-a176-82bbdb51de38}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -206,7 +217,7 @@ i 1 0 3600
   <rulermode>full</rulermode>
   <rulercolor>#6d6d6d</rulercolor>
   <exponent>0.50000000</exponent>
-  <cursorcolor>#ffffff</cursorcolor>
+  <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
   <bgcolor>
    <r>20</r>
@@ -229,6 +240,7 @@ i 1 0 3600
   <uuid>{90725201-c304-4dfb-abe3-e52ace00da1e}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -238,6 +250,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>49</r>
    <g>54</g>
@@ -266,6 +280,7 @@ i 1 0 3600
   <uuid>{1ddec04f-aa8c-42b6-b1df-ec6425dfb86f}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -275,6 +290,8 @@ i 1 0 3600
   <font>Inter</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>212</r>
    <g>212</g>
@@ -303,6 +320,7 @@ i 1 0 3600
   <uuid>{d00bc45e-f84f-4acb-8bf3-fb835fcfd0f3}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -312,7 +330,7 @@ i 1 0 3600
   <rulermode>full</rulermode>
   <rulercolor>#d4d4d4</rulercolor>
   <exponent>0.30000000</exponent>
-  <cursorcolor>#ffffff</cursorcolor>
+  <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
   <bgcolor>
    <r>20</r>
@@ -335,6 +353,7 @@ i 1 0 3600
   <uuid>{079f7a97-516f-4131-b4b3-6fb3e25c87f4}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -344,7 +363,7 @@ i 1 0 3600
   <rulermode>full</rulermode>
   <rulercolor>#d4d4d4</rulercolor>
   <exponent>0.55000000</exponent>
-  <cursorcolor>#ffffff</cursorcolor>
+  <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
   <bgcolor>
    <r>20</r>
@@ -367,6 +386,7 @@ i 1 0 3600
   <uuid>{4cee766b-b444-4b80-8232-fd5cd7844821}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -376,7 +396,7 @@ i 1 0 3600
   <rulermode>compact</rulermode>
   <rulercolor>#d4d4d4</rulercolor>
   <exponent>0.80000000</exponent>
-  <cursorcolor>#ffffff</cursorcolor>
+  <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
   <bgcolor>
    <r>20</r>
@@ -399,6 +419,7 @@ i 1 0 3600
   <uuid>{586b75f6-bb76-460f-9286-534ff87278c1}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -408,7 +429,7 @@ i 1 0 3600
   <rulermode>hide</rulermode>
   <rulercolor>#d4d4d4</rulercolor>
   <exponent>0.80000000</exponent>
-  <cursorcolor>#ffffff</cursorcolor>
+  <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
   <bgcolor>
    <r>20</r>
@@ -431,6 +452,7 @@ i 1 0 3600
   <uuid>{0b2ce519-8c47-4196-a469-d1571ec12951}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -440,6 +462,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>49</r>
    <g>54</g>
@@ -468,6 +492,7 @@ i 1 0 3600
   <uuid>{1a6e70d9-0028-41ec-9b37-032640ef5b50}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -500,6 +525,7 @@ i 1 0 3600
   <uuid>{e80594ff-d3f5-46e2-ab30-56be434540a9}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -532,6 +558,7 @@ i 1 0 3600
   <uuid>{2c3d06db-367c-41bf-88e6-f1f91f281471}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -541,6 +568,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>74</r>
    <g>38</g>

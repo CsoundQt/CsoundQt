@@ -127,6 +127,8 @@ schedule 10, 0, 100
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -148,7 +150,9 @@ schedule 10, 0, 100
   <width>360</width>
   <height>220</height>
   <uuid>{0c6062cd-26ee-44ec-8b8c-2e57adfd1916}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -166,7 +170,9 @@ schedule 10, 0, 100
   <width>360</width>
   <height>220</height>
   <uuid>{de99af7a-d3d5-4e8f-a18a-86c66ec2481b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -184,7 +190,9 @@ schedule 10, 0, 100
   <width>271</width>
   <height>56</height>
   <uuid>{cb8cacc9-7f4f-4465-af4f-b8c31fca1acb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -194,6 +202,8 @@ schedule 10, 0, 100
   <font>Liberation Sans</font>
   <fontsize>36</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>67</r>
    <g>67</g>
@@ -204,6 +214,11 @@ schedule 10, 0, 100
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -215,19 +230,22 @@ schedule 10, 0, 100
   <width>460</width>
   <height>127</height>
   <uuid>{ce9539a1-5f6f-4a93-8e67-2e45899088cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <label>This widget allows to visualize the contents of a table in real-time. To set the table number to plot send the table number to its channel. To update the plot just send -1 and the last set table will be updated. 
 
-The widget also accepts string values. The table can be set with 'outvalue "@set &lt;tablenumber>"' and it can be updated via 'outvalue "@update"'
 </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>52</r>
    <g>52</g>
@@ -238,6 +256,11 @@ The widget also accepts string values. The table can be set with 'outvalue "@set
    <g>68</g>
    <b>68</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -249,7 +272,9 @@ The widget also accepts string values. The table can be set with 'outvalue "@set
   <width>121</width>
   <height>38</height>
   <uuid>{c9cdfd2b-7f5d-48bf-91c5-c6172252fdc4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -259,6 +284,8 @@ The widget also accepts string values. The table can be set with 'outvalue "@set
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>67</r>
    <g>67</g>
@@ -269,6 +296,11 @@ The widget also accepts string values. The table can be set with 'outvalue "@set
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

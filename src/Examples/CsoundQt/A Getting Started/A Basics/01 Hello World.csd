@@ -27,7 +27,7 @@ problem, with those comment signs used here.
 
 instr 123 					; instr starts an instrument block and refers it to a number. In this case, it is 123.
 							; You can put comments everywhere, they will not become compiled.
-	prints "Hello World!%n" 	     ; 'prints' will print a string to the Csound console.
+	prints "Hello World!\n" 	     ; 'prints' will print a string to the Csound console.
 	aSin	oscils 0dbfs/4, 440, 0 	; the opcode 'oscils' here generates a 440 Hz sinetone signal at -12dB FS
 	out aSin				     ; here the signal is assigned to the computer audio output
 endin
@@ -39,6 +39,8 @@ e 							; e - ends the score
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -60,9 +62,12 @@ e 							; e - ends the score
   <width>250</width>
   <height>158</height>
   <uuid>{1802f52a-87e1-4b4e-8d07-4995b2f04435}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <font>Liberation Mono</font>
   <fontsize>8</fontsize>
   <color>
@@ -83,14 +88,20 @@ e 							; e - ends the score
   <width>249</width>
   <height>164</height>
   <uuid>{7f895e8a-7492-42e7-ac81-27023be7ff44}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>This is a widget window. In this case, the Console Output is also visible here. More information about widgets can be found in the menu: Examples-> Widgets</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -101,9 +112,14 @@ e 							; e - ends the score
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

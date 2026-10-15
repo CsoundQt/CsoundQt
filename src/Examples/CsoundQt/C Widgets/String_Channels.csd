@@ -118,7 +118,7 @@ i 1 0 1
   <borderradius>4</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>text</objectName>
   <x>23</x>
   <y>28</y>

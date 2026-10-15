@@ -39,6 +39,8 @@ i 1 0 3600
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -62,6 +64,7 @@ i 1 0 3600
   <uuid>{8910a9af-b5e5-40df-a55d-f3ccb55c17be}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -71,6 +74,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -99,6 +104,7 @@ i 1 0 3600
   <uuid>{e525e33c-5cae-41a8-ac9d-80bcae4880c0}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -108,6 +114,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -136,6 +144,7 @@ i 1 0 3600
   <uuid>{b0670b97-c937-4c65-9751-c2aeaf31107b}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -145,6 +154,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -173,6 +184,7 @@ i 1 0 3600
   <uuid>{c23fb7ff-a3d4-4e89-9628-1b0f3221e3db}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -182,6 +194,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -210,6 +224,7 @@ i 1 0 3600
   <uuid>{5de22031-4f6c-49d1-b5ac-d4512bc4d7ad}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -219,6 +234,8 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>2</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -234,7 +251,7 @@ i 1 0 3600
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -247,6 +264,7 @@ i 1 0 3600
   <uuid>{c21e0e5c-fe9a-442a-838c-3cc6a6a79766}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -256,6 +274,7 @@ i 1 0 3600
   <font>Liberation Mono</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>0</r>
    <g>0</g>
@@ -284,6 +303,7 @@ i 1 0 3600
   <uuid>{12fa0947-bffd-4521-8e3b-93f0a01c7861}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -293,6 +313,7 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>170</r>
    <g>255</g>
@@ -321,6 +342,7 @@ i 1 0 3600
   <uuid>{cacc9d21-8be0-474f-a070-8a5be7834973}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -330,6 +352,7 @@ i 1 0 3600
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>2</padding>
   <color>
    <r>0</r>
    <g>0</g>
@@ -345,7 +368,7 @@ i 1 0 3600
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -358,6 +381,7 @@ i 1 0 3600
   <uuid>{829997bc-e773-4bf3-a169-4d5f061f0d94}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -370,6 +394,7 @@ i 1 0 3600
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>border</bordermode>

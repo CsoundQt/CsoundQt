@@ -102,8 +102,8 @@ instr PostInit
 	; this needs to run at a point where the fft curve already 
 	; exists, which, depending on gk_fftSize, is, at the latest,
 	; 16384 / sr (16384 / 44100 = 0.37...)
-	outvalue "spectrum", "@find fft aspectrum"
-	outvalue "spectrum", "@getPeak peak"
+	outvalue "spectrum/findfft", "aspectrum"
+	outvalue "spectrum/peakchannel", "peak"
 	turnoff
 endin
 
@@ -116,6 +116,12 @@ schedule "PostInit", 16384/sr + 0.01, -1
 
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
+
+
 
 
 
@@ -151,12 +157,15 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>1000</width>
   <height>500</height>
   <uuid>{ae3dee92-fc91-44c4-9b0f-b8656a7eb4f3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>Spectrum - Press mouse to show/play peak</description>
   <value>0</value>
   <objectName2/>
+  <zoomx>2.00000000</zoomx>
   <zoomx>2.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -178,7 +187,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>30</width>
   <height>30</height>
   <uuid>{5aae7b7e-875a-492f-89cb-dbb779039dbe}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>Enable Channel 1</description>
@@ -194,7 +205,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>30</width>
   <height>30</height>
   <uuid>{00c02e40-ab30-4c76-8737-0f1c375df75a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>Enable Channel 2</description>
@@ -210,7 +223,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>30</width>
   <height>30</height>
   <uuid>{cb2805f4-c9ec-4a28-ba5c-459a2e3cec59}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>Enable Channel 3</description>
@@ -226,7 +241,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>30</width>
   <height>30</height>
   <uuid>{2192eed2-7818-45d5-8593-200cb766966c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>Enable Channel 4</description>
@@ -242,7 +259,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>80</width>
   <height>30</height>
   <uuid>{e3a55dea-950a-4c43-a7ef-50f107379f17}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>FFT size</description>
@@ -278,7 +297,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>80</width>
   <height>25</height>
   <uuid>{342a2cbb-91b5-413b-9de1-aa82f1d74a0d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -288,6 +309,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>239</r>
    <g>240</g>
@@ -298,6 +321,11 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -309,7 +337,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>80</width>
   <height>25</height>
   <uuid>{09805d02-0ae6-4f4c-9c39-6b7e61fb1356}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -319,6 +349,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>241</r>
    <g>241</g>
@@ -329,6 +361,11 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -340,7 +377,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>30</width>
   <height>30</height>
   <uuid>{f8803c6a-6fba-459f-a113-0e33c0ff19d1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description>Play the peak frequency when the mouse is pressed</description>
@@ -356,7 +395,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>80</width>
   <height>25</height>
   <uuid>{67e8666d-183c-491d-b465-61d7a1a218d5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -366,6 +407,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>239</r>
    <g>240</g>
@@ -376,6 +419,11 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -387,12 +435,15 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>56</width>
   <height>54</height>
   <uuid>{ce2ca6ad-fa91-4b89-a2eb-7c092f529f22}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>1</midichan>
   <midicc>7</midicc>
   <description>Input Gain (dB)</description>
   <minimum>-24.00000000</minimum>
   <maximum>24.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
@@ -417,7 +468,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>80</width>
   <height>25</height>
   <uuid>{8e80da70-b7b1-4f2d-935c-3e78f2730099}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -427,6 +480,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>239</r>
    <g>240</g>
@@ -437,6 +492,11 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -448,13 +508,16 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>56</width>
   <height>54</height>
   <uuid>{5951dec6-0e29-4eed-a7c9-3438955fabc4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description>Input Gain (dB)</description>
   <minimum>-80.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>-23.70400000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -478,7 +541,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>80</width>
   <height>25</height>
   <uuid>{b1e91595-3134-4b62-943e-17e7f17b2058}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -488,6 +553,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>239</r>
    <g>240</g>
@@ -498,6 +565,11 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -509,7 +581,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>100</width>
   <height>26</height>
   <uuid>{d9b44e66-bfec-4a49-ba48-e52e29d1e889}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -519,6 +593,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>239</r>
    <g>240</g>
@@ -529,6 +605,11 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -540,7 +621,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>30</width>
   <height>30</height>
   <uuid>{761ac268-c49b-4473-a0df-c045ea9fdaa4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description>Filter low frequencies</description>
@@ -556,7 +639,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>80</width>
   <height>30</height>
   <uuid>{6aab35af-5577-4c32-a245-d69c50b0dfcd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description>Refresh Rate</description>
@@ -607,7 +692,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>84</width>
   <height>25</height>
   <uuid>{432a9bd1-1587-40a7-a618-e256a453b4e4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -617,6 +704,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>241</r>
    <g>241</g>
@@ -627,6 +716,11 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -636,9 +730,11 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <x>795</x>
   <y>590</y>
   <width>196</width>
-  <height>45</height>
+  <height>48</height>
   <uuid>{13da7982-27d8-46ae-a425-3aecf9e1c34c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -648,6 +744,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
+  <padding>7</padding>
+  <locked>false</locked>
   <color>
    <r>239</r>
    <g>239</g>
@@ -658,6 +756,11 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <g>53</g>
    <b>58</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -669,7 +772,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <width>999</width>
   <height>70</height>
   <uuid>{272ab196-d807-4b5f-a506-2f391cf651f5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -678,8 +783,10 @@ Spectral Analysis of Live Input (up to four input channels)</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
-  <fontsize>24</fontsize>
+  <fontsize>20</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>239</r>
    <g>239</g>
@@ -690,6 +797,11 @@ Spectral Analysis of Live Input (up to four input channels)</label>
    <g>53</g>
    <b>58</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>

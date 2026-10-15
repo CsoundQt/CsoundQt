@@ -474,7 +474,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>az</objectName>
   <x>307</x>
   <y>185</y>
@@ -503,7 +503,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>el</objectName>
   <x>307</x>
   <y>238</y>
