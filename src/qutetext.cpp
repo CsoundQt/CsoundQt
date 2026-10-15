@@ -58,6 +58,12 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	m_value = 0.0;
 	m_widget = new QLabel(this);
 	static_cast<QLabel*>(m_widget)->setWordWrap (true);
+	// A stylesheet padding makes QLabel report a non-zero frameWidth(), which in
+	// turn activates its automatic indent (half the width of "x", so proportional
+	// to the font size). The old hard-coded QLabel margin did not do that, so
+	// turn the auto-indent off to keep the padding as the single, predictable
+	// inset. With CSQT_padding == 5 this reproduces the previous look exactly.
+	static_cast<QLabel*>(m_widget)->setIndent(0);
 	//  static_cast<QLabel*>(m_widget)->setTextFormat(Qt::RichText);
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
     // Necessary to pass mouse tracking to widget panel for _MouseX channels
@@ -80,8 +86,9 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_bordermode", "noborder");
 	setProperty("CSQT_borderradius", 1);
 	setProperty("CSQT_borderwidth", 1);
-	// Space between the (optional) border and the text; matches the previous
-	// hard-coded QLabel margin.
+	// Space between the (optional) border and the text, in pixels. 5 reproduces
+	// the previous hard-coded QLabel margin; the property lets the user tighten
+	// or loosen the gap per widget.
 	setProperty("CSQT_padding", 5);
 
 	m_fontScaling = 1.0;
@@ -104,6 +111,12 @@ QuteWidgetType QuteText::getWidgetTypeID() {
 
 void QuteText::setValue(double value)
 {
+	// A label is static text, not a value widget: addressing it through its
+	// channel must never change it. To change a label at runtime use a
+	// "<name>/<property>" message (e.g. outvalue "<name>/label", "...").
+	if (m_typeid == QuteWidgetType::LABEL) {
+		return;
+	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
@@ -117,6 +130,10 @@ void QuteText::setValue(double value)
 
 void QuteText::setValue(QString value)
 {
+	// See the double overload: labels are addressable by name/property only.
+	if (m_typeid == QuteWidgetType::LABEL) {
+		return;
+	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
@@ -507,6 +524,9 @@ void QuteText::createPropertiesDialog()
 		dialog->setWindowTitle("Label");
 		channelLabel->hide();
 		nameLineEdit->hide();
+		// Labels are not tooltipped, so a description would have no effect.
+		if (descriptionLabel) descriptionLabel->hide();
+		descriptionLineEdit->hide();
 	}
 	else if (m_type == "display") {
 		dialog->setWindowTitle("Display");
@@ -1197,6 +1217,7 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
             this, SLOT(setValueFromDialog()));
 
 	m_type = "scroll";
+	m_typeid = QuteWidgetType::SCROLLNUMBER;
 
 	setProperty("CSQT_value", (double) 0.0);
 	setProperty("CSQT_resolution", (double) 0.01);

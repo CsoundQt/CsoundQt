@@ -869,7 +869,9 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     if (type == "BSBLabel" || type == "BSBDisplay") {
 
         QuteText *w = new QuteText(this);
-        w->setTransparentForMouse(true);
+        // Displays must stay mouse-interactive so they can show tooltips; labels
+        // stay transparent for mouse events (and therefore have no tooltip).
+        w->setTransparentForMouse(type == "BSBLabel");
         w->setFontOffset(m_fontOffset);
         w->setFontScaling(m_fontScaling);
         w->setType(type == "BSBLabel" ? "label" : "display");
@@ -1498,7 +1500,9 @@ void WidgetLayout::showWidgetTooltips(bool show)
 void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 {
     // This function must be protected/locked by the caller
-    if(!show) {
+    // Labels are not tooltipped: they stay transparent for mouse events, so a
+    // description on them would have no effect (and is not offered).
+    if(!show || widget->getWidgetTypeID() == QuteWidgetType::LABEL) {
         widget->setToolTip("");
         if (m_editMode && getEditWidget(widget) != nullptr) {
             getEditWidget(widget)->setToolTip("");

@@ -957,6 +957,7 @@ void QuteWidget::createPropertiesDialog()
 
     label = new QLabel(tr("Description ="), dialog);
     layout->addWidget(label, footerRow-2, 0, Qt::AlignRight|Qt::AlignVCenter);
+    descriptionLabel = label;
 
     descriptionLineEdit = new QLineEdit(dialog);
     descriptionLineEdit->setMinimumWidth(240);

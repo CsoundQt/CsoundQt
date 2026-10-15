@@ -152,6 +152,7 @@ protected:
 	QLineEdit *nameLineEdit;
     QLineEdit *widgetNameLineEdit;
     QLineEdit *descriptionLineEdit;
+    QLabel *descriptionLabel = nullptr;
 
 	QSpinBox *midiccSpinBox;
 	QSpinBox *midichanSpinBox;

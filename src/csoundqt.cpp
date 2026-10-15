@@ -33,6 +33,7 @@
 #include <QSysInfo>
 #include <QProcess>
 #include <QShortcut>
+#include <QToolTip>
 #include <QtConcurrent/QtConcurrentRun>
 
 #include <memory>
@@ -4061,6 +4062,26 @@ QPalette CsoundQt::makeAppPalette(bool dark)
 }
 
 
+static void configureNativeToolTips()
+{
+    static bool installed = false;
+    if (installed)
+        return;
+    installed = true;
+
+    // Leave shape, border, shadows, and rendering to the platform style.
+    // QToolTip's palette and font remain configurable independently.
+    QPalette tipPalette = QToolTip::palette();
+    tipPalette.setColor(QPalette::ToolTipBase, QColor(0xe0, 0xe0, 0xe0));
+    tipPalette.setColor(QPalette::ToolTipText, QColor(0x28, 0x28, 0x28));
+    QToolTip::setPalette(tipPalette);
+
+    QFont tipFont = qApp->font();
+    tipFont.setPixelSize(11);
+    QToolTip::setFont(tipFont);
+}
+
+
 void CsoundQt::setColors(QString themeMode)
 {
     // Centralized theme + highlighting + icon + console color handling.
@@ -4095,6 +4116,10 @@ void CsoundQt::setColors(QString themeMode)
         //     qApp->setStyleSheet(existing);
         // }
     }
+
+    // Keep the tooltip text/background colours and font, but use native tooltip
+    // shape, border, and shadow rendering.
+    configureNativeToolTips();
 
     // Map theme mode to theme name (used in icon paths) and highlighting theme
     if (m_options->themeMode == "dark") {
