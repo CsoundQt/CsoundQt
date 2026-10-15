@@ -240,10 +240,39 @@ private:
 			" font-size: 13px;"
 			"}"));
 		const int margin = 16;
-		const int available = qMax(200, top->width() - 2 * margin);
-		banner->setMinimumWidth(qMin(400, available));
-		banner->setMaximumWidth(qMin(640, available));
+		const int MINWIDTH = 200;
+		const int MAXWIDTH = 480;
+		const int available = qMax(MINWIDTH, top->width() - 2 * margin);
+		const int cap = qMin(MAXWIDTH, available);
+		// Single-line bubble when there is no explicit line break and the
+		// content fits: measure unconstrained (includes stylesheet padding)
+		// and shrink the bubble to the text. Otherwise fix the width and
+		// wrap by words.
+		bool hasNewline = m_text.contains(QLatin1Char('\n'))
+			|| m_title.contains(QLatin1Char('\n'));
+		if (m_richText && !hasNewline) {
+			const QString lower = m_text.toLower() + m_title.toLower();
+			hasNewline = lower.contains(QStringLiteral("<br"))
+				|| lower.contains(QStringLiteral("<p"))
+				|| lower.contains(QStringLiteral("<div"));
+		}
+		banner->setWordWrap(false);
+		banner->setMinimumWidth(0);
+		banner->setMaximumWidth(QWIDGETSIZE_MAX);
 		banner->adjustSize();
+		const int singleWidth = banner->width();
+		if (!hasNewline && singleWidth <= cap) {
+			const int w = qBound(MINWIDTH, singleWidth, cap);
+			banner->setWordWrap(false);
+			banner->setMinimumWidth(w);
+			banner->setMaximumWidth(w);
+			banner->resize(w, banner->height());
+		} else {
+			banner->setWordWrap(true);
+			banner->setMinimumWidth(cap);
+			banner->setMaximumWidth(cap);
+			banner->adjustSize();
+		}
 		int x;
 		switch (m_horizontal) {
 		case Notification::Horizontal::Left:

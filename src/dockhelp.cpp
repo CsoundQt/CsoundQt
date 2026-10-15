@@ -33,12 +33,20 @@
 DockHelp::DockHelp(QWidget *parent)
 	: QDockWidget(parent), ui(new Ui::DockHelp)
 {
-    // QWidget* emptyTitleBar = new QWidget(this);
-    // setTitleBarWidget(emptyTitleBar);
-    
 	ui->setupUi(this);
     setWindowTitle("Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
+
+	// Hide the dock title bar when docked (it wastes vertical space).
+	// The native title bar is restored when floating, otherwise the
+	// floating window would have no decorations to move/dock with.
+	// Note: setTitleBarWidget(nullptr) removes but does not delete the
+	// custom widget, so m_hiddenTitleBar can be safely reused.
+	m_hiddenTitleBar = new QWidget(this);
+	m_hiddenTitleBar->setFixedHeight(0);
+	connect(this, &QDockWidget::topLevelChanged,
+			this, &DockHelp::updateTitleBar);
+	updateTitleBar(isFloating());
 
 	// LiteHtml viewer replaces the previous QtWebEngine view.
 	m_view = new LiteHtmlView(this);
@@ -165,6 +173,28 @@ void DockHelp::copy()
 void DockHelp::resizeEvent(QResizeEvent *e)
 {
 	QDockWidget::resizeEvent(e);
+}
+
+void DockHelp::contextMenuEvent(QContextMenuEvent *event)
+{
+	QMenu menu;
+	QAction *floatAct = menu.addAction(isFloating() ? tr("Dock Panel") : tr("Float Panel"));
+	if (menu.exec(event->globalPos()) == floatAct) {
+		setFloating(!isFloating());
+	}
+}
+
+void DockHelp::updateTitleBar(bool floating)
+{
+	if (floating) {
+		if (titleBarWidget() != nullptr) {
+			setTitleBarWidget(nullptr);
+		}
+	} else {
+		if (titleBarWidget() != m_hiddenTitleBar) {
+			setTitleBarWidget(m_hiddenTitleBar);
+		}
+	}
 }
 
 

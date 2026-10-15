@@ -64,6 +64,8 @@ protected:
 private:
 	QStackedWidget *m_stack;
 
+	QWidget *m_hiddenTitleBar = nullptr;  // Empty title bar used to hide the dock title when docked
+
 	QStringList clipboard;
 	QSize oldSize;
 	int m_width;
@@ -71,6 +73,7 @@ private:
 
 private slots:
 	void scrollBarMoved(int);
+	void updateTitleBar(bool floating);
 
 signals:
 	void Close(bool visible);

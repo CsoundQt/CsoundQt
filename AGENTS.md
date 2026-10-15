@@ -46,3 +46,12 @@
   `CsoundOptions::csdSetsDbfs` (per-run, set in `CsoundQt::play()` from the
   document text via `CsoundOptions::textSetsDbfs()`), and the flag itself is
   added in `CsoundOptions::generateCmdLineFlagsList()`.
+
+## Commits
+
+When commiting yourself, think that commits are where we build a knowledge base 
+for future development. Be clear about what was the idea behind the commit or part of the commit:
+
+* was it a bug fix? A new feature? 
+* What needed to be fixed, what did you try that did not work (if applicable)
+* how did you fix it, was there some valuable interaction with the human?

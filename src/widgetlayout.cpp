@@ -25,6 +25,7 @@
 
 #include <QSet>
 #include <QThread>
+#include <QDockWidget>
 #include <limits>
 
 #include "widgetlayout.h"
@@ -2026,13 +2027,35 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
     menu.addAction(propertiesAct);
     menu.addAction(reloadWidgetsAct);
 
+    // Offer Float/Dock when this layout is contained in a dock widget
+    // (the dock title bar is hidden when docked, so this is the way to float it).
+    QDockWidget *dock = nullptr;
+    if (m_contained) {
+        QWidget *p = parentWidget();
+        while (p != nullptr) {
+            dock = qobject_cast<QDockWidget *>(p);
+            if (dock != nullptr) {
+                break;
+            }
+            p = p->parentWidget();
+        }
+    }
+    QAction *floatAct = nullptr;
+    if (dock != nullptr) {
+        menu.addSeparator(); // ------------------------------------------------------------
+        floatAct = menu.addAction(dock->isFloating() ? tr("Dock Panel") : tr("Float Panel"));
+    }
+
     currentPosition = event->pos();
     //  if (m_sbActive) {
     //    currentPosition.setX(currentPosition.x() + scrollArea->horizontalScrollBar()->value());
     //    currentPosition.setY(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
     //  }
-    menu.exec(event->globalPos());
+    QAction *selected = menu.exec(event->globalPos());
     //  menu.exec(event->pos());
+    if (floatAct != nullptr && selected == floatAct && dock != nullptr) {
+        dock->setFloating(!dock->isFloating());
+    }
 }
 
 void WidgetLayout::deselectAll()

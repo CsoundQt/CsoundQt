@@ -54,6 +54,7 @@ private:
 
 protected:
 	void resizeEvent(QResizeEvent *);
+	void contextMenuEvent(QContextMenuEvent *event) override;
 
 public slots:
 	void showManual();
@@ -77,6 +78,11 @@ public slots:
 
 private:
 	Ui::DockHelp *ui;
+
+	QWidget *m_hiddenTitleBar = nullptr;  // Empty title bar used to hide the dock title when docked
+
+private slots:
+	void updateTitleBar(bool floating);
 
 signals:
 	void Close(bool visible);
