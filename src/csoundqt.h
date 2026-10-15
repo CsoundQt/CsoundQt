@@ -226,6 +226,7 @@ private slots:
 	void evaluateString(QString evalCode);
 	void setScratchPadMode(bool csdMode);
 	void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
+	void onFocusChanged(QWidget *old, QWidget *now);
 	void duplicate();
 	void print();
 	void findReplace();  // Direct to current Page
@@ -531,7 +532,7 @@ private:
 	QAction *killLineAct;
 	QAction *killToEndAct;
     QAction *gotoLineAct;
-    QAction *goBackAct;
+    QAction *goBackAct = nullptr;
 	QAction *aboutAct;
 	QAction *donateAct;
 	//    QAction *aboutQtAct;

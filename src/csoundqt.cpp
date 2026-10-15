@@ -180,6 +180,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
     tabifyDockWidget(helpPanel, widgetPanel);
 
+    // "Go Back" (Alt+Left) belongs to the editor: while the widget panel has
+    // focus, Alt+Left nudges the widget selection instead (see onFocusChanged).
+    connect(qApp, &QApplication::focusChanged, this, &CsoundQt::onFocusChanged);
+
     m_console = new DockConsole(this);
     m_console->setObjectName("m_console");
     m_console->setFeatures(QDockWidget::DockWidgetMovable |
@@ -1290,6 +1294,15 @@ void CsoundQt::setWidgetEditMode(bool active)
     for (int i = 0; i < documentPages.size(); i++) {
         documentPages[i]->setWidgetEditMode(active);
     }
+}
+
+void CsoundQt::onFocusChanged(QWidget *old, QWidget *now)
+{
+    Q_UNUSED(old);
+    // Alt+Left nudges the widget selection while the widget panel has focus, so
+    // the editor's "Go Back" shortcut is only active elsewhere.
+    if (goBackAct)
+        goBackAct->setEnabled(!(now && widgetPanel && widgetPanel->isAncestorOf(now)));
 }
 
 void CsoundQt::duplicate()
@@ -5317,6 +5330,8 @@ void CsoundQt::createActions()
     goBackAct->setStatusTip(tr("Go back to previous position"));
     goBackAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(goBackAct, &QAction::triggered, [this]() { this->getCurrentDocumentPage()->goBackToPreviousPosition(); });
+    // Sync with the current focus: the widget panel may already hold it.
+    onFocusChanged(nullptr, QApplication::focusWidget());
 
     aboutAct = new QAction(tr("&About CsoundQt"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
