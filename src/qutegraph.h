@@ -50,7 +50,6 @@ public:
     virtual QString getWidgetType();
 	virtual void setWidgetGeometry(int x,int y,int width,int height);
 	void setValue(double value);
-    void setValue(QString text);
 
 	void clearCurves();
 	void addCurve(Curve *curve);
@@ -71,6 +70,7 @@ public:
     int findCurve(CurveType type, QStringView text);
 	virtual void applyInternalProperties();
 	virtual bool applyProperty(const QString &name);
+	QStringList transitoryProperties() const override;
 	virtual void setWidgetEnabled(bool enabled);
     size_t spectrumGetPeak(Curve *curve, double freq, double relativeBandwidth);
     QuteWidgetType getWidgetTypeID() override;
@@ -147,6 +147,14 @@ private:
     void drawGraph(Curve *curve, int index);
     void showScrollbars(bool show);
     void freezeSpectrum(bool status);
+
+    // Transitory graph "methods" (see transitoryProperties()). Each is reachable
+    // as an outvalue "<name>/<method>" property.
+    void findFft(const QString &text);
+    void findAudio(const QString &text);
+    void findTable(int tabnum);
+    void freezeGraph(int status);
+    void setPeakChannel(const QString &channel);
 
     QVector<double> frozenCurve;
 

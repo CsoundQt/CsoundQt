@@ -528,6 +528,13 @@ QStringList QuteWidget::getAvailableProperties()
 	return properties;
 }
 
+bool QuteWidget::isTransitoryProperty(const QString &name) const
+{
+	// Accept both the internal ("CSQT_...") and the addressed ("...") spelling.
+	const QString plain = name.startsWith("CSQT_") ? name.mid(5) : name;
+	return transitoryProperties().contains(plain, Qt::CaseInsensitive);
+}
+
 void QuteWidget::showAvailableProperties()
 {
 	QDialog propertiesDialog(this);

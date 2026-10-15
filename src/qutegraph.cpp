@@ -113,6 +113,14 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     setProperty("CSQT_showScrollbars", true);
     setProperty("CSQT_enableTables", true);
     setProperty("CSQT_enableDisplays", true);
+    // Transitory ("method-like") graph methods (see transitoryProperties()).
+    // They are created here so that they can be addressed as
+    // "<channel>/<method>"; the values are neither saved nor restored.
+    setProperty("CSQT_findfft", "");
+    setProperty("CSQT_findaudio", "");
+    setProperty("CSQT_findtable", -1);
+    setProperty("CSQT_freeze", 0);
+    setProperty("CSQT_peakchannel", "");
     m_enableTables = true;
     m_enableDisplays = true;
 	setProperty("CSQT_all", true);
@@ -124,6 +132,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     m_frozen = false;
     m_getPeakChannel = "";
     m_peakChannelPtr = nullptr;
+    m_ud = nullptr;
 
     m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
     m_widget->setContextMenuPolicy(Qt::NoContextMenu);
@@ -346,140 +355,6 @@ void QuteGraph::setValue(double value)
 
 }
 
-void QuteGraph::setValue(QString text)
-{
-    if (text.isEmpty()) {
-        return;
-    }
-
-    bool ok;
-    //auto parts = text.split(' ', SKIP_EMPTY_PARTS); // splitRef
-    auto parts = QStringView(text).split(' ', SKIP_EMPTY_PARTS);
-    if (parts[0] == QLatin1String("@set")) {
-        bool ok;
-        int index = parts[1].toInt(&ok);
-        if(parts.size() != 2 || !ok) {
-            qDebug() << "@set: value error";
-            qDebug() << "@set syntax: @set <curveindex:int>";
-            return;
-        }
-        if(index >= 0 && index < curves.size())
-            this->setValue(index);
-    }
-    else if(parts[0] == QLatin1String("@find")) {
-        // @find type text
-        // type: one of fft, audio, ftable
-        // Example: @find fft asignal
-        qDebug() << "@find " << parts;
-        if(parts.size() != 3) {
-            qDebug() << "@find: Wrong number of arguments";
-            qDebug() << "syntax: @find <kind:str> <text:str>";
-            qDebug() << "    * kind: one of fft, audio, ftable";
-            qDebug() << "    * text: a text to match against the caption";
-            return;
-        }
-        int index;
-        if(parts[1] == QLatin1String("fft")) {
-            index = findCurve(CURVE_SPECTRUM, parts[2]); // TODO: cresyr overload findCurve(..., QStringView)
-        }
-        else if (parts[1] == QLatin1String("audio") ) {
-            index = findCurve(CURVE_AUDIOSIGNAL, parts[2]);
-        }
-        else if (parts[1] == QLatin1String("table") ) {
-            int tabnum = parts[2].toInt(&ok);
-            if(!ok) {
-                qDebug()<<"@find table syntax: @find table <tablenumber:int>";
-                return;
-            }
-            index = this->getIndexForTableNum(tabnum);
-        }
-        else {
-            qDebug() << "@find: graph type should be one of 'table', 'fft' or 'audio', got"
-                     << parts[1];
-            return;
-        }
-        if(index >= 0 && index < curves.size())
-            this->setValue(index);
-        else {
-            qDebug() << "@find: graph not found";
-            return;
-        }
-    }
-    else if(parts[0] == QLatin1String("@freeze") ) {
-        int index = m_value;
-        if(graphtypes[index] != GraphType::GRAPH_SPECTRUM)
-            return;
-        bool ok;
-        int status = parts[1].toInt(&ok);
-        if(status != 0 && status != 1) {
-            qDebug() << "Syntax: @freeze <status:int> (0 or 1)";
-            return;
-        }
-        freezeSpectrum(status);
-    }
-    else if (parts[0] == QLatin1String("@showPeak") ) {
-        if(parts.size() == 2) {
-            if(parts[1] == QLatin1String("true") || parts[1] == QLatin1String("1")) {
-                m_showPeak = true;
-            }
-            else if (parts[1] == QLatin1String("false") || parts[1] == QLatin1String("0")) {
-                m_showPeak = false;
-            } else {
-                bool ok;
-                double freq = parts[1].toDouble(&ok);
-                if(!ok) {
-                    qDebug() << "@showPeak: expected a frequency, got" << parts[1];
-                    return;
-                }
-                m_showPeak = true;
-                m_showPeakCenterFrequency = freq;
-            }
-        }
-        else if (parts.size() == 3) {
-            // @showPeak freq bw
-            bool ok;
-            double freq = parts[1].toDouble(&ok);
-            if(!ok) {
-                qDebug() << "@showPeak: expected a frequency, got" << parts[1];
-                return;
-            }
-            double bw = parts[2].toDouble(&ok);
-            if(!ok) {
-                qDebug() << "@showPeak: expected a bandwidth as third arg, got" << parts[2];
-                return;
-            }
-            m_showPeak = true;
-            if(freq > 0)
-                m_showPeakCenterFrequency = freq;
-            m_showPeakRelativeBandwidth = bw;
-        }
-        else {
-            qDebug() << "@showPeak syntax:";
-            qDebug() << "   @showPeak false : turn off peak display";
-            qDebug() << "   @showPeak 0     : turn off peak display";
-            qDebug() << "   @showPeak true  : turn on peak display";
-            qDebug() << "   @showPeak 1     : turn on peak display";
-            qDebug() << "   @showPeak <freq:double> : turn on peak display, set freq";
-            qDebug() << "   @showPeak <freq:double> <bandwidth:double>";
-            qDebug() << "      (use freq=0 to only set bandwidth)";
-            return;
-        }
-    }
-    else if(parts[0] == QLatin1String("@getPeak")) {
-        m_getPeakChannel = parts[1].toString();
-        qDebug() << "@getPeak channel: " << m_getPeakChannel;
-        cs_float *ptr;
-        csoundGetChannelPtr(m_ud->csound, (void **) &ptr,
-                            m_getPeakChannel.toLocal8Bit().constData(),
-                            CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL);
-        m_peakChannelPtr = ptr;
-    }
-    else {
-        qDebug() << "Command" << text << "not found";
-    }
-}
-
-
 void QuteGraph::refreshWidget()
 {
     bool needsUpdate = false;
@@ -655,6 +530,81 @@ int QuteGraph::findCurve(CurveType type, QStringView text) {
         }
     }
     return -1;
+}
+
+void QuteGraph::findFft(const QString &text)
+{
+    // Switch the graph to the spectrum curve whose caption contains text
+    // (the "findfft" method).
+    if (text.isEmpty())
+        return;
+    const int index = findCurve(CURVE_SPECTRUM, QStringView(text));
+    if (index >= 0 && index < curves.size())
+        setValue(index);
+    else
+        qDebug() << "findfft: no spectrum curve matching" << text;
+}
+
+void QuteGraph::findAudio(const QString &text)
+{
+    // Switch the graph to the audio-signal curve whose caption contains text
+    // (the waveform display, cf. Csound's "display" opcode; the "findaudio"
+    // method).
+    if (text.isEmpty())
+        return;
+    const int index = findCurve(CURVE_AUDIOSIGNAL, QStringView(text));
+    if (index >= 0 && index < curves.size())
+        setValue(index);
+    else
+        qDebug() << "findaudio: no audio signal curve matching" << text;
+}
+
+void QuteGraph::findTable(int tabnum)
+{
+    // Switch the graph to the f-table curve with the given table number
+    // (the "findtable" method).
+    const int index = getIndexForTableNum(tabnum);
+    if (index >= 0 && index < curves.size())
+        setValue(index);
+    else
+        qDebug() << "findtable: no curve for table" << tabnum;
+}
+
+void QuteGraph::freezeGraph(int status)
+{
+    // Freeze (status != 0) or unfreeze (status == 0) a spectrum display
+    // (the "freeze" method).
+    const int index = (int)m_value;
+    if (index < 0 || index >= graphtypes.size()
+            || graphtypes[index] != GraphType::GRAPH_SPECTRUM) {
+        return;
+    }
+    if (status != 0 && status != 1) {
+        qDebug() << "freeze: expected status 0 (unfreeze) or 1 (freeze), got" << status;
+        return;
+    }
+    freezeSpectrum(status == 1);
+}
+
+void QuteGraph::setPeakChannel(const QString &channel)
+{
+    // Name of the control channel the detected peak frequency is written to
+    // (the "peakchannel" method).
+    if (channel.isEmpty())
+        return;
+    m_getPeakChannel = channel;
+    qDebug() << "peak channel: " << m_getPeakChannel;
+    if (m_ud == nullptr || m_ud->csound == nullptr) {
+        // Not connected to Csound yet (e.g. while loading a file); the channel
+        // pointer is acquired on the next message once Csound is available.
+        m_peakChannelPtr = nullptr;
+        return;
+    }
+    cs_float *ptr = nullptr;
+    csoundGetChannelPtr(m_ud->csound, (void **) &ptr,
+                        m_getPeakChannel.toLocal8Bit().constData(),
+                        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL);
+    m_peakChannelPtr = ptr;
 }
 
 void QuteGraph::changeCurve(int index)
@@ -1013,6 +963,13 @@ void QuteGraph::setCurveData(Curve * curve)
     view->verticalScrollBar()->setValue(viewPosy);
 }
 
+QStringList QuteGraph::transitoryProperties() const
+{
+	// Graph "methods": addressed as "<channel>/<method>", applied immediately
+	// and never written to or read from the file.
+	return { "findfft", "findaudio", "findtable", "freeze", "peakchannel" };
+}
+
 bool QuteGraph::applyProperty(const QString &name)
 {
 	if (name == "CSQT_showGrid") {
@@ -1030,6 +987,26 @@ bool QuteGraph::applyProperty(const QString &name)
 			m_pageComboBox->show();
 		else
 			m_pageComboBox->hide();
+		return true;
+	}
+	if (name == "CSQT_findfft") {
+		findFft(property("CSQT_findfft").toString());
+		return true;
+	}
+	if (name == "CSQT_findaudio") {
+		findAudio(property("CSQT_findaudio").toString());
+		return true;
+	}
+	if (name == "CSQT_findtable") {
+		findTable(property("CSQT_findtable").toInt());
+		return true;
+	}
+	if (name == "CSQT_freeze") {
+		freezeGraph(property("CSQT_freeze").toInt());
+		return true;
+	}
+	if (name == "CSQT_peakchannel") {
+		setPeakChannel(property("CSQT_peakchannel").toString());
 		return true;
 	}
 	return QuteWidget::applyProperty(name);

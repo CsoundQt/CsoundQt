@@ -969,6 +969,10 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     for (int i = 0; i < childNodes.size() ; i++) {
         QDomElement node = childNodes.item(i).toElement();
         QString nodeName = node.nodeName();
+        // Transitory ("method-like") properties are runtime-only: a stale copy
+        // in the file must not be restored.
+        if (widget->isTransitoryProperty(nodeName))
+            continue;
         if (nodeName == "color" || nodeName == "bgcolor"
                 || nodeName == "bordercolor"
                 || nodeName == "cursorcolor") {  // COLOR type

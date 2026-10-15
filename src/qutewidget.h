@@ -84,6 +84,12 @@ public:
 	QString getWidgetName();
 	void setWidgetName(const QString &name);
 	QStringList getAvailableProperties(); // Widget attributes that can be addressed via "<channel>/<property>"
+	// Dynamic properties that are accepted via "<channel>/<property>" but are
+	// transitory: they work like methods taking a single argument. Their value is
+	// applied immediately and is never saved to or restored from the widget XML.
+	// Names are listed without the internal "CSQT_" prefix.
+	virtual QStringList transitoryProperties() const { return QStringList(); }
+	bool isTransitoryProperty(const QString &name) const;
 	virtual QString getWidgetType() = 0;
 	virtual QuteWidgetType getWidgetTypeID() = 0;
 	virtual void refreshWidget() { ;}
