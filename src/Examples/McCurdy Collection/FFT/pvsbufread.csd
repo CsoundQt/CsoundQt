@@ -1,120 +1,131 @@
-;Written by Iain McCurdy 2009
+; Written by Iain McCurdy 2009
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 1		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 1      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-giphasor			ftgen	0, 0, 65536, 7, 0, 65536, 1		;WAVE SHAPE FOR A MOVING PHASE POINTER
+giphasor ftgen 0, 0, 65536, 7, 0, 65536, 1  ; Wave shape for a moving phase pointer
 
-giFFTattributes0	ftgen	1, 0, 4, -2,  512, 256, 1024, 1
-giFFTattributes1	ftgen	2, 0, 4, -2, 1024, 256, 1024, 1
-giFFTattributes2	ftgen	3, 0, 4, -2, 2048, 256, 2048, 1
-giFFTattributes3	ftgen	4, 0, 4, -2, 2048, 128, 2048, 1
-giFFTattributes4	ftgen	5, 0, 4, -2, 4096, 128, 4096, 1
+giFFTattributes0 ftgen 1, 0, 4, -2, 512, 256, 1024, 1
+giFFTattributes1 ftgen 2, 0, 4, -2, 1024, 256, 1024, 1
+giFFTattributes2 ftgen 3, 0, 4, -2, 2048, 256, 2048, 1
+giFFTattributes3 ftgen 4, 0, 4, -2, 2048, 128, 2048, 1
+giFFTattributes4 ftgen 5, 0, 4, -2, 4096, 128, 4096, 1
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkInGain			invalue	"Input_Gain"		;init 1.0
-		gkbuflen			invalue	"Buffer_Length"	;init 1.0
-		gkphrange			invalue	"Phasor_Range"		;init 1.0
-		gkspeed			invalue	"Phasor_Speed"		;init 1.0
-		gkPhOffset		invalue	"Phasor_Offset"	;init 0.0
-		gkscal			invalue	"Pitch_Rescale"	;init 0.0
-		gkfbratio			invalue	"Feedback_Ratio"	;init 0.0
-		gkdirect			invalue	"Direct"			;init 0.0
-		gkOutGain			invalue	"Output_Gain"		;init 1.0
-		gkwrite			invalue 	"Write_Pointer"	
-		gkread			invalue 	"Read_Pointer"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkInGain   invalue "Input_Gain"      ; init 1.0
+    gkbuflen   invalue "Buffer_Length"   ; init 1.0
+    gkphrange  invalue "Phasor_Range"    ; init 1.0
+    gkspeed    invalue "Phasor_Speed"    ; init 1.0
+    gkPhOffset invalue "Phasor_Offset"   ; init 0.0
+    gkscal     invalue "Pitch_Rescale"   ; init 0.0
+    gkfbratio  invalue "Feedback_Ratio"  ; init 0.0
+    gkdirect   invalue "Direct"          ; init 0.0
+    gkOutGain  invalue "Output_Gain"     ; init 1.0
+    gkwrite    invalue "Write_Pointer"
+    gkread     invalue "Read_Pointer"
 
-		gkWriteEnable		invalue	"Write_Buffer"		;init 1
-		gkSyncToWrite		invalue	"Sync_Write"
-		gkFFTattributes	invalue	"FFTattributes"	;init 1
-	endif
+    gkWriteEnable   invalue "Write_Buffer"  ; init 1
+    gkSyncToWrite   invalue "Sync_Write"
+    gkFFTattributes invalue "FFTattributes"  ; init 1
+  endif
 endin
 
-instr	1
-	kSwitch		changed		gkFFTattributes, gkbuflen				;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then
-		reinit	UPDATE
-	endif
-	UPDATE:
-	afeedback		init		0										;INITIALISE FEEDBACK SIGNAL (FOR FIRST PASS)
-	ain			inch		1										;READ AUDIO FROM 1ST INPUT CHANNEL (LEFT)
-	ain			= ain*gkInGain										;SCALE INPUT WITH 'Input Gain' SLIDER
-	ain			= ain + afeedback									;ADD FEEDBACK SIGNAL TO INPUT SIGNAL
-	ibuflen		= i(gkbuflen)										;CREATE I-RATE VERSION OF BUFFER LENGTH
+instr 1
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkFFTattributes, gkbuflen
+  if kSwitch = 1 then
+    reinit UPDATE
+  endif
+UPDATE:
+  afeedback init 0           ; Initialise feedback signal (for first pass)
+  ain inch 1                 ; Read audio from 1st input channel (left)
+  ain     = ain*gkInGain     ; Scale input with 'input gain' slider
+  ain     = ain + afeedback  ; Add feedback signal to input signal
+  ibuflen = i(gkbuflen)      ; Create i-rate version of buffer length
 
-	iFFTsize		table	0, i(gkFFTattributes)+1
-	ioverlap		table	1, i(gkFFTattributes)+1
-	iwinsize		table	2, i(gkFFTattributes)+1
-	iwintype		table	3, i(gkFFTattributes)+1	
+  iFFTsize table 0, i(gkFFTattributes)+1
+  ioverlap table 1, i(gkFFTattributes)+1
+  iwinsize table 2, i(gkFFTattributes)+1
+  iwintype table 3, i(gkFFTattributes)+1
 
-	fsig1  		pvsanal	ain, iFFTsize, ioverlap, iwinsize, iwintype		;ANALYSE THE AUDIO SIGNAL THAT WAS CREATED IN INSTRUMENT 1. OUTPUT AN F-SIGNAL.
+  ; Analyse the audio signal that was created in instrument 1. Output an f-signal.
+  fsig1 pvsanal ain, iFFTsize, ioverlap, iwinsize, iwintype
 
-	if	gkWriteEnable=1	then
-		ibuffer,ktime  	pvsbuffer   fsig1, ibuflen					;BUFFER FSIG
-	endif
-	khandle		init 	ibuffer									;INITIALISE HANDLE TO BUFFER
-	if	gkSyncToWrite=0	then
-		aread 	osciliktp gkspeed/ibuflen, giphasor, gkPhOffset			;CREATE MOVING POINTER TO READ FROM BUFFER
-		kread	downsamp	aread									;DOWNSAMPLE BUFFER TO K-RATE, pvsbufread ONLY ACCEPTS A K-RATE POINTER
-		kread	= kread * gkphrange * ibuflen							;RESCALE READ POINTER WITH PHASOR RANGE SLIDER
-	elseif	gkSyncToWrite=1	then
-		kread	=	ktime										;SYNC TO WRITE POINTER
-		kread	=	kread + (gkPhOffset * ibuflen)					;ADD PHASE OFFSET AND SCALE ACCORDING TO BUFFER LENGTH
-		kread	wrap	kread, 0, ibuflen								;WRAP-AROUND READ POINTER VALUE TO PREVENT OUT OF RANGE VALUES 
-	endif
-	fsig2  		pvsbufread  	kread , khandle						;READ BUFFER
-	kscal		= cpsoct(gkscal+8)/cpsoct(8)							;CREATE PITCH RESCALING VARIABLE
+  if gkWriteEnable = 1 then
+    ibuffer, ktime pvsbuffer fsig1, ibuflen  ; Buffer fsig
+  endif
+  khandle init ibuffer  ; Initialise handle to buffer
+  if gkSyncToWrite = 0 then
+    ; Create moving pointer to read from buffer
+    aread osciliktp gkspeed/ibuflen, giphasor, gkPhOffset
+    ; Downsample buffer to k-rate, pvsbufread only accepts a k-rate pointer
+    kread downsamp aread
+    kread = kread * gkphrange * ibuflen  ; Rescale read pointer with phasor range slider
+  elseif gkSyncToWrite = 1 then
+    kread = ktime  ; Sync to write pointer
+    ; Add phase offset and scale according to buffer length
+    kread = kread + (gkPhOffset * ibuflen)
+    ; Wrap-around read pointer value to prevent out of range values
+    kread wrap kread, 0, ibuflen
+  endif
+  fsig2 pvsbufread kread, khandle     ; Read buffer
+  kscal = cpsoct(gkscal+8)/cpsoct(8)  ; Create pitch rescaling variable
 
-	;OUTPUT		OPCODE	INPUT | RESCALE_VALUE | FORMANT_MODE |   GAIN
-	fsig3 		pvscale 	fsig2,      kscal							;RESCALE THE FREQUENCY VALUES ACCORDING TO THE INPUT ARGUMENT gkscal.	
+  ; Output  opcode input | rescale_value | formant_mode |   gain
+  ; Rescale the frequency values according to the input argument gkscal.
+  fsig3 pvscale fsig2, kscal
 
-	aresyn 		pvsynth  	fsig3                  					 	;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL	
-	afeedback		= aresyn * gkfbratio								;CREATE FEEDBACK SIGNAL FOR NEXT PASS THROUGH THE CODE	
-	aout			= (aresyn*gkOutGain*2)+(ain*gkdirect)					;CREATE OUTPUT SIGNAL
-				outs		aout, aout
+  ; Resynthesize the f-signal as an audio signal
+  aresyn pvsynth fsig3
+  ; Create feedback signal for next pass through the code
+  afeedback = aresyn * gkfbratio
+  aout      = (aresyn*gkOutGain*2)+(ain*gkdirect)  ; Create output signal
+  outs aout, aout
 
-	ktrigger		metro	10
-	if ktrigger == 1 then
-		outvalue	"Write_Pointer", ktime
-		outvalue	"Read_Pointer", kread
-	endif
-			rireturn
+  ktrigger metro 10
+  if ktrigger == 1 then
+    outvalue "Write_Pointer", ktime
+    outvalue "Read_Pointer", kread
+  endif
+  rireturn
 endin
 
-instr	2	;FREEZE POINTER
-	;THIS INSTRUMENT FREEZES POINTER MOVEMENT BY SIMPLY SETTING READ POINTER FREQUENCY TO ZERO 
-	outvalue	"Phasor_Speed", 0
+instr 2  ; Freeze pointer
+  ; This instrument freezes pointer movement by simply setting read pointer frequency to
+  ; zero
+  outvalue "Phasor_Speed", 0
 endin
 
-instr	3	;SET READ POINTER PHASE OFFSET TO ZERO
-	outvalue	"Phasor_Offset", 0
+instr 3  ; Set read pointer phase offset to zero
+  outvalue "Phasor_Offset", 0
 endin
 
-instr	4	;SET PITCH RESCALE TO ZERO
-	outvalue	"Pitch_Rescale", 0
+instr 4  ; Set pitch rescale to zero
+  outvalue "Pitch_Rescale", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
@@ -126,9 +137,9 @@ i 10		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -146,15 +157,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -175,15 +191,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -206,14 +227,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -232,11 +253,23 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Input_Gain</objectName>
@@ -254,14 +287,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -301,14 +334,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -330,14 +363,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -377,14 +410,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -406,15 +439,20 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -435,14 +473,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -504,14 +542,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -551,14 +589,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -580,14 +618,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -627,14 +665,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -658,6 +696,18 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <eventLine>i 2 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Sync_Write</objectName>
@@ -677,6 +727,18 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Write_Buffer</objectName>
@@ -691,11 +753,23 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Write to Buffer</text>
+  <text>Write to Buffer</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4463</objectName>
@@ -715,6 +789,18 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <eventLine>i 4 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Phasor_Offset</objectName>
@@ -732,14 +818,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -779,14 +865,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -808,14 +894,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -855,14 +941,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -886,6 +972,18 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <eventLine>i 3 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -903,14 +1001,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -950,14 +1048,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -979,14 +1077,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1026,14 +1124,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1055,14 +1153,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1102,14 +1200,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1131,14 +1229,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1160,14 +1258,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1201,9 +1299,9 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1234,9 +1332,9 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -1255,14 +1353,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1284,14 +1382,14 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

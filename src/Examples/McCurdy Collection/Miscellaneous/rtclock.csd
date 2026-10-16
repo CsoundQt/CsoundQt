@@ -1,29 +1,29 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
 instr 1
-	ktime 	rtclock
-	outvalue	"Clock", ktime
+  ktime rtclock
+  outvalue "Clock", ktime
 endin
 </CsInstruments>
 <CsScore>
-f 0 3600	;REAL TIME FOR 1 HOUR
+f 0 3600  ; Real time for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -36,9 +36,9 @@ f 0 3600	;REAL TIME FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -56,15 +56,20 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -82,11 +87,23 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -104,14 +121,14 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -133,15 +150,20 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -165,14 +187,14 @@ The resolution of the clock output varies from operating system to operating sys
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

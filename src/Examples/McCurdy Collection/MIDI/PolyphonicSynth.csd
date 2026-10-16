@@ -1,208 +1,227 @@
-;Writen by Iain McCurdy
+; Writen by Iain McCurdy
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ; Use Pitch Bend wheel
-; Use Mod wheel (CC#01) for VIBRATO AMPLITUDE
-; Use MIDI CC#74 for VIBRATO FREQUENCY
-; Use MIDI CC#71 for FILTER BASE FREQUENCY
-; Use MIDI CC#91 for FILTER RESONANCE
+; Use mod wheel (cc#01) for vibrato amplitude
+; Use MIDI cc#74 for vibrato frequency
+; Use MIDI cc#71 for filter base frequency
+; Use MIDI cc#91 for filter resonance
 
-;Notes on modifications from original csd:
-;	Use Preset 0 for INIT
-;	Macro MIDI_CC and MIDI CC number change
+; Notes on modifications from original csd:
+; Use Preset 0 for INIT
+; Macro MIDI_CC and MIDI CC number change
 
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-;INITIALISE GLOBAL VARIABLES
-gaSend		init		0
+; Initialise global variables
+gaSend init 0
 
-;INITIALISE MIDI CONTROLERS
-;				CH | CC | VAL
-		initc7	1,    1,   0		;VIBRATO AMPLITUDE
-		initc7	1,    74,  .25		;VIBRATO FREQUENCY
-		initc7	1,    71,  .5		;FILTER BASE FREQUENCY
-		initc7	1,    91,  .5/.9	;FILTER RESONANCE
+; Initialise MIDI controlers
+; Ch | cc | val
+initc7 1, 1, 0       ; Vibrato amplitude
+initc7 1, 74, .25    ; Vibrato frequency
+initc7 1, 71, .5     ; Filter base frequency
+initc7 1, 91, .5/.9  ; Filter resonance
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkRes		invalue	"FilterReso"
-		gkBaseFrq		invalue	"FilterFreq"
-		gkDlyAmt		invalue	"DelaySend"
-		gkDlyTim		invalue	"DelayTime"
-		gkDlyFB		invalue	"DelayFeedback"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkRes     invalue "FilterReso"
+    gkBaseFrq invalue "FilterFreq"
+    gkDlyAmt  invalue "DelaySend"
+    gkDlyTim  invalue "DelayTime"
+    gkDlyFB   invalue "DelayFeedback"
 
-		gkgliss		invalue	"PortTim"
-		gkamp		invalue	"Amp"
-		gktrmdep		invalue	"TremAmt"
-		gkvibdep		invalue	"VibAmt"
-		gkmodfreq		invalue	"ModFrq"
-		gkpw			invalue	"PW"
-		gkleak		invalue	"Leak"
-		gknyx		invalue	"Harms"
-		gkmul		invalue	"Mul"
+    gkgliss   invalue "PortTim"
+    gkamp     invalue "Amp"
+    gktrmdep  invalue "TremAmt"
+    gkvibdep  invalue "VibAmt"
+    gkmodfreq invalue "ModFrq"
+    gkpw      invalue "PW"
+    gkleak    invalue "Leak"
+    gknyx     invalue "Harms"
+    gkmul     invalue "Mul"
 
-		gkPStrLev		invalue	"P_StrLev"
-		gkPAttTim		invalue	"P_AttTim"
-		gkPAttLev		invalue	"P_AttLev"
-		gkPDecTim		invalue	"P_DecTim"
-		gkPRelTim		invalue	"P_RelTim"
-		gkPRelLev		invalue	"P_RelLev"
+    gkPStrLev invalue "P_StrLev"
+    gkPAttTim invalue "P_AttTim"
+    gkPAttLev invalue "P_AttLev"
+    gkPDecTim invalue "P_DecTim"
+    gkPRelTim invalue "P_RelTim"
+    gkPRelLev invalue "P_RelLev"
 
-		gkFAttTim		invalue	"F_AttTim"
-		gkFAttLev		invalue	"F_AttLev"
-		gkFDecTim		invalue	"F_DecTim"
-		gkFSusLev		invalue	"F_SusLev"
-		gkFRelTim		invalue	"F_RelTim"
-		gkFRelLev		invalue	"F_RelLev"
-		gkFEnvAmt		invalue	"F_EnvAmt"
+    gkFAttTim invalue "F_AttTim"
+    gkFAttLev invalue "F_AttLev"
+    gkFDecTim invalue "F_DecTim"
+    gkFSusLev invalue "F_SusLev"
+    gkFRelTim invalue "F_RelTim"
+    gkFRelLev invalue "F_RelLev"
+    gkFEnvAmt invalue "F_EnvAmt"
 
-		gkAAttTim		invalue	"A_AttTim"
-		gkAAttLev		invalue	"A_AttLev"
-		gkADecTim		invalue	"A_DecTim"
-		gkASusLev		invalue	"A_SusLev"
-		gkARelTim		invalue	"A_RelTim"
-		gkARelLev		invalue	"A_RelLev"
+    gkAAttTim invalue "A_AttTim"
+    gkAAttLev invalue "A_AttLev"
+    gkADecTim invalue "A_DecTim"
+    gkASusLev invalue "A_SusLev"
+    gkARelTim invalue "A_RelTim"
+    gkARelLev invalue "A_RelLev"
 
-		gkBendRnge	invalue	"Bend_Range"
-		gkwave		invalue	"Waveform"
-		gkwave		=		gkwave + 1
-		gkharm		invalue	"Nb_Harms"
-		gklh			invalue	"Lowest_Harm"
-	endif
+    gkBendRnge invalue "Bend_Range"
+    gkwave     invalue "Waveform"
+    gkwave = gkwave + 1
+    gkharm invalue "Nb_Harms"
+    gklh   invalue "Lowest_Harm"
+  endif
 
-;UPDATING DUAL MODE MIDI/GUI VALUATORS
-#define	MIDI_CC(NAME'WIDGET'Chan'CC'min'Max)
-#
-	k$NAME		ctrl7	$Chan,$CC,$min,$Max							;READ MIDI CONTROLLER
-	ktrig$NAME	changed	k$NAME									;CREATE A TRIGGER PULSE IF MIDI CONTROLLER IS MOVED
-	if ktrig$NAME = 1 then
-		outvalue	"$WIDGET", k$NAME									;UPDATE VALUATOR IF MIDI CONTROLLER HAS BEEN MOVED
-	endif
-#
+  ; Updating dual mode MIDI/GUI valuators
+  #define MIDI_CC(NAME'WIDGET'Chan'CC'min'Max)
+  #
+  k$NAME ctrl7 $Chan, $CC, $min, $Max  ; Read MIDI controller
+  ; Create a trigger pulse if MIDI controller is moved
+  ktrig$NAME changed k$NAME
+  if ktrig$NAME = 1 then
+    outvalue "$WIDGET", k$NAME  ; Update valuator if MIDI controller has been moved
+  endif
+  #
 
-$MIDI_CC(modfreq'ModFrq'1'74'0'20)
+  $MIDI_CC(modfreq'ModFrq'1'74'0'20)
 
-$MIDI_CC(BaseFrq'FilterFreq'1'71'4'14)
+  $MIDI_CC(BaseFrq'FilterFreq'1'71'4'14)
 
-$MIDI_CC(Res'FilterReso'1'91'0'1)
+  $MIDI_CC(Res'FilterReso'1'91'0'1)
 
 endin
-	
-instr	1	;RECEIVES MIDI NOTE INPUT - TRIGGERS ONE NOTE AT A TIME
-	;READ VALUES FOR FREQUENCY FROM A MIDI KEYBOARD 
-	icps		cpsmidi
-	
-	;PITCH BEND INFORMATION IS READ
-	iSemitoneBendRange 	init	i(gkBendRnge)								;PITCH BEND RANGE IN SEMITONES
-	imin 		= 		0										;EQUILIBRIUM POSITION
-	imax 		= 		iSemitoneBendRange * .0833333					;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend		pchbend	imin, imax								;PITCH BEND VARIABLE (IN oct FORMAT)
-	gkbendmlt		=		cpsoct(8+kbend)/cpsoct(8.00)					;CREATE A MULTIPLIER THAT WHEN MULTIPLIED TO THE FREQUENCY OF AN OSCILLATOR WILL IMPLEMENT PITCH BEND
-	
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	iporttime		=		.03										;VALUE USED AS PORTAMENTO TIME FOR OTHER VALUATORS
-	kporttime		linseg	0,(.001),iporttime,(1),iporttime				;RAMPING UP VARIABLE IS CREATED THAT WILL BE USED AT PORTAMENTO TIME
-	kpw			portk	gkpw, kporttime							;PORTAMENTO IS APPLIED TO gkpw VARIABLE
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	kmodwhl		ctrl7	1,1,0,1
-	imodwave		=		1
-	kmod			oscil	1, gkmodfreq, imodwave
-	gkvib		=		(kmod * kmodwhl * gkvibdep) + 1
-	gktrm		=		1 - (kmod * .5 * gktrmdep * kmodwhl) - (gktrmdep * .5 * kmodwhl)
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-		
-	;AMPLITUDE ENVELOPE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	aAEnv		linsegr	0, i(gkAAttTim), i(gkAAttLev), i(gkADecTim), i(gkASusLev), i(gkARelTim), i(gkARelLev)
-	
-	;PITCH MULTIPLIER ENVELOPE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	kPEnv		linsegr	i(gkPStrLev), i(gkPAttTim), i(gkPAttLev), i(gkPDecTim), 1, i(gkPRelTim), i(gkPRelLev)
-	
-	if	gkwave==4	goto	SKIP1	;IF gkwave=4 (I.E. 'BUZZ') JUMP TO LABEL 'SKIP1'
-	
-	;VCO;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	ifn			=		1										;FUNCTION TABLE FOR A SINE WAVE THAT WILL BE USED BY VCO
-	imaxd		=		1										;MAXIMUM DELAY TIME				
-	asig			vco	 	gkamp*gktrm*0.3, icps*gkvib*kPEnv*gkbendmlt, i(gkwave), kpw, ifn, imaxd, i(gkleak), i(gknyx);, 0, 0
-	goto	ESCAPE1		;JUMP TO LABEL 'ESCAPE1'
-	
-	;GBUZZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	SKIP1:			;LABEL 'SKIP1'
-	;OUTPUT		OPCODE	AMPLITUDE     |         FREQUENCY         | NO.OF_HARMONICS | LOWEST_HARMONIC | POWER | FUNCTION_TABLE
-	asig			gbuzz 	gkamp*gktrm,    icps*gkvib*kPEnv*gkbendmlt,      gkharm,            gklh,        gkmul,       2
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	ESCAPE1:		;LABEL 'ESCAPE1'
-	
-	;FILTER ENVELOPE - ALL LEVELS ARE GIVEN IN OCT FORMAT;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	kFEnv		linsegr	0, i(gkFAttTim), i(gkFAttLev), i(gkFDecTim), i(gkFSusLev), i(gkFRelTim), i(gkFRelLev)
-	
-	kBaseFrq		lineto	gkBaseFrq, kporttime						;APPLY LINETO SMOOTHING TO gkBaseFrq (CUTOFF FREQUENCY) VARIABLE
-	kCFoct		=		(kFEnv*gkFEnvAmt) + kBaseFrq					;FINAL FILTER CUTOFF VALUE (IN CPS) INCORPORATING THE FILTER ENVELOPE AND THE FILTER BASE LEVEL
-	kCFoct		limit	kCFoct, 4, 14								;LIMIT FILTER CUTOFF RANGE - THIS PREVENTS THE POSSIBILITY OF CRASHES OR NASTY NOISES DUE TO MASSIVELY OUT OF RANGE CUTOFF RANGES
-	kCFcps		=		cpsoct(kCFoct)								;CONVERT CUTOFF VALUE FROM AN OCT FORMAT VALUE INTO A CPS VALUE
-	
-	;CREATE A FILTERED VERSION OF THE OSCILLATOR SIGNAL;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	aFilt		moogladder asig, kCFcps, gkRes
-	
-	aFilt		=		aFilt * aAEnv								;APPLY AMPLITUDE ENVELOPE
-	
-	;SEND FILTERED SIGNAL TO OUTPUT
-				outs		aFilt, aFilt
-	gaSend		=		gaSend+(aFilt*gkDlyAmt)						;CREATE AN EFFECTS SEND AUDIO SIGNAL WHICH IS SENT TO THE DELAY EFFECT INSTRUMENT
-endin
-	
-instr	3	; PING PONG DELAY
-	imaxdelay		=		2									;MAXIMUM DELAY TIME
-	
-	;LEFT CHANNEL OFFSETTING DELAY (NO FEEDBACK!)
-	aBuffer		delayr	imaxdelay*.5
-	aLeftOffset	deltap3	gkDlyTim*.5
-				delayw	gaSend
-			
-	;LEFT CHANNEL DELAY WITH FEEDBACK
-	aFBsigL		init		0
-	aBuffer		delayr	imaxdelay
-	aDlySigL		deltap3	gkDlyTim
-				delayw	aLeftOffset+aFBsigL
-	aFBsigL		=		aDlySigL * gkDlyFB
-	
-	;RIGHT CHANNEL DELAY WITH FEEDBACK
-	aFBsigR		init		0
-	aBuffer		delayr	imaxdelay
-	aDlySigR		deltap3	gkDlyTim
-				delayw	gaSend+aFBsigR
-	aFBsigR		=		aDlySigR * gkDlyFB
-	
-				outs		aDlySigL+aLeftOffset, aDlySigR			;SEND DELAY OUTPUT SIGNALS TO THE SPEAKERS
-	gaSend		=		0									;RESET EFFECTS SEND GLOBAL AUDIO VARIABLE TO PREVENT STUCK VALUES WHEN INSTR 1 STOPS PLAYING
+
+instr 1  ; Receives MIDI note input - triggers one note at a time
+  ; Read values for frequency from a MIDI keyboard
+  icps cpsmidi
+
+  ; Pitch bend information is read
+  iSemitoneBendRange init i(gkBendRnge)  ; Pitch bend range in semitones
+  imin = 0                               ; Equilibrium position
+  imax = iSemitoneBendRange * .0833333   ; Max pitch displacement (in oct format)
+  kbend pchbend imin, imax               ; Pitch bend variable (in oct format)
+  ; Create a multiplier that when multiplied to the frequency of an oscillator will
+  ; implement pitch bend
+  gkbendmlt = cpsoct(8+kbend)/cpsoct(8.00)
+
+  ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  iporttime = .03  ; Value used as portamento time for other valuators
+  ; Ramping up variable is created that will be used at portamento time
+  kporttime linseg 0, (.001), iporttime, (1), iporttime
+  kpw portk gkpw, kporttime  ; Portamento is applied to gkpw variable
+  ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  kmodwhl ctrl7 1, 1, 0, 1
+  imodwave = 1
+  kmod oscil 1, gkmodfreq, imodwave
+  gkvib = (kmod * kmodwhl * gkvibdep) + 1
+  gktrm = 1 - (kmod * .5 * gktrmdep * kmodwhl) - (gktrmdep * .5 * kmodwhl)
+  ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ; Amplitude
+  ; envelope;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  aAEnv linsegr 0, i(gkAAttTim), i(gkAAttLev), i(gkADecTim), i(gkASusLev), i(gkARelTim), i(gkARelLev)
+
+  ; Pitch multiplier
+  ; envelope;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  kPEnv linsegr i(gkPStrLev), i(gkPAttTim), i(gkPAttLev), i(gkPDecTim), 1, i(gkPRelTim), i(gkPRelLev)
+
+  if gkwave == 4 goto SKIP1  ; If gkwave=4 (i.e. 'buzz') jump to label 'skip1'
+
+  ; Vco;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ifn   = 1  ; Function table for a sine wave that will be used by vco
+  imaxd = 1  ; Maximum delay time
+  ; , 0, 0
+  asig vco gkamp*gktrm*0.3, icps*gkvib*kPEnv*gkbendmlt, i(gkwave), kpw, ifn, imaxd, i(gkleak), i(gknyx)
+  goto ESCAPE1  ; Jump to label 'escape1'
+
+  ; Gbuzz;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+SKIP1:  ; Label 'skip1'
+  ; Output opcode amplitude | frequency | no.of_harmonics | lowest_harmonic | power |
+  ; function_table
+  asig gbuzz gkamp*gktrm, icps*gkvib*kPEnv*gkbendmlt, gkharm, gklh, gkmul, 2
+  ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ESCAPE1:  ; Label 'escape1'
+
+  ; Filter envelope - all levels are given in oct
+  ; format;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  kFEnv linsegr 0, i(gkFAttTim), i(gkFAttLev), i(gkFDecTim), i(gkFSusLev), i(gkFRelTim), i(gkFRelLev)
+
+  ; Apply lineto smoothing to gkbasefrq (cutoff frequency) variable
+  kBaseFrq lineto gkBaseFrq, kporttime
+  ; Final filter cutoff value (in cps) incorporating the filter envelope and the filter
+  ; base level
+  kCFoct = (kFEnv*gkFEnvAmt) + kBaseFrq
+  ; Limit filter cutoff range - this prevents the possibility of crashes or nasty noises
+  ; due to massively out of range cutoff ranges
+  kCFoct limit kCFoct, 4, 14
+  ; Convert cutoff value from an oct format value into a cps value
+  kCFcps = cpsoct(kCFoct)
+
+  ; Create a filtered version of the oscillator
+  ; signal;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  aFilt moogladder asig, kCFcps, gkRes
+
+  aFilt = aFilt * aAEnv  ; Apply amplitude envelope
+
+  ; Send filtered signal to output
+  outs aFilt, aFilt
+  ; Create an effects send audio signal which is sent to the delay effect instrument
+  gaSend = gaSend+(aFilt*gkDlyAmt)
 endin
 
-instr	4	; INIT
-		outvalue	"_SetPresetIndex", 0
+instr 3          ; Ping pong delay
+  imaxdelay = 2  ; Maximum delay time
+
+  ; Left channel offsetting delay (no feedback!)
+  aBuffer delayr imaxdelay*.5
+  aLeftOffset deltap3 gkDlyTim*.5
+  delayw gaSend
+
+  ; Left channel delay with feedback
+  aFBsigL init 0
+  aBuffer delayr imaxdelay
+  aDlySigL deltap3 gkDlyTim
+  delayw aLeftOffset+aFBsigL
+  aFBsigL = aDlySigL * gkDlyFB
+
+  ; Right channel delay with feedback
+  aFBsigR init 0
+  aBuffer delayr imaxdelay
+  aDlySigR deltap3 gkDlyTim
+  delayw gaSend+aFBsigR
+  aFBsigR = aDlySigR * gkDlyFB
+
+  outs aDlySigL+aLeftOffset, aDlySigR  ; Send delay output signals to the speakers
+  ; Reset effects send global audio variable to prevent stuck values when instr 1 stops
+  ; playing
+  gaSend = 0
+endin
+
+instr 4  ; Init
+  outvalue "_SetPresetIndex", 0
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 131072 10 1  		;A SINE WAVE - USED BY BOTH THE VIBRATO AND THE vco
-f 2 0 65536 9 1 1 90  	;COSINE WAVE (USED BY GBUZZ)
+f 1 0 131072 10 1     ; A sine wave - used by both the vibrato and the vco
+f 2 0 65536 9 1 1 90  ; Cosine wave (used by gbuzz)
 
-i  3 0 3600			;INSTRUMENT 3 PLAYS FOR 1 HOUR
-i 10 0 3600			;INSTRUMENT 10 PLAYS FOR 1 HOUR
+i 3 0 3600   ; Instrument 3 plays for 1 hour
+i 10 0 3600  ; Instrument 10 plays for 1 hour
 
-i  4 0.1 0			;init
+i 4 0.1 0  ; init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

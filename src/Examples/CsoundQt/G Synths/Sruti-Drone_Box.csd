@@ -1,52 +1,52 @@
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 ; Drone Instrument/Sruti Box
 ; by Dave Seidel <mysterybear.net/>
 ; with contributions from joachim heintz
 ; and Andres Cabrera.
-;
+
 ; Written with Csound 5.12.1 (http://www.csounds.com)
 ; and CsoundQt 0.6.0 (http://CsoundQt.sourceforge.net/).
-;
+
 ; To use, open in CsoundQt, make sure the Widgets window
 ; is open, and click the Start button.  Then use On/Off
 ; buttons to play or stop the drones.
-;
+
 ; version 2.7 (09-Oct-2010)
-;	- always play primary oscillator for each tone, independent of
-;	  harmonic arpeggio or binaural beat output
-;	- made all pitch controls (Ratio, 8ve, and Base) changeable in realtime
-;	- add option to tune base frequency to conventional (Western) pitches,
-;	  using pitch-class or note name 
+; - always play primary oscillator for each tone, independent of
+; harmonic arpeggio or binaural beat output
+; - made all pitch controls (Ratio, 8ve, and Base) changeable in realtime
+; - add option to tune base frequency to conventional (Western) pitches,
+; using pitch-class or note name
 ; version 2.6 (26-Sep-2010)
-;	- add level control for Risset effect (now labeled Harmonic Arpeggio);
-;	  this allows the use of binaural beating by itself
-;	- line up all effects horizontally
-;	- use SpinBox for Harmonic Arpeggio Offset and Binaural Beats BPS, for
-;	  finer control
-;	- normalize level controls to use 0.0-1.0 range
-;	- change multiplier for BB level from 5x to 4x, seems to match HA level better
-;	- layout tweakage
+; - add level control for Risset effect (now labeled Harmonic Arpeggio);
+; this allows the use of binaural beating by itself
+; - line up all effects horizontally
+; - use SpinBox for Harmonic Arpeggio Offset and Binaural Beats BPS, for
+; finer control
+; - normalize level controls to use 0.0-1.0 range
+; - change multiplier for BB level from 5x to 4x, seems to match HA level better
+; - layout tweakage
 ; version 2.5 (12-Sep-2010)
-;	- add precision to the base freq. per David First
+; - add precision to the base freq. per David First
 ; version 2.4 (12-Sep-2010)
-;	- bugfix from Mark Van Peteghem in the binauralize UDO
+; - bugfix from Mark Van Peteghem in the binauralize UDO
 ; version 2.3 (10-Sep-2010)
-;	- fixes from Andres
+; - fixes from Andres
 ; version 2.2 (09-Sep-2010)
-;	- binaural beat and reverb controls
-;	- make Risset offset realtime
+; - binaural beat and reverb controls
+; - make Risset offset realtime
 ; version 2.1 (06-Sep-2010)
-;	- fixed release on turnoff
-;	- better "on" indicators fron joachim
-;	- added binaural beating effect
+; - fixed release on turnoff
+; - better "on" indicators fron joachim
+; - added binaural beating effect
 ; version 2.0 (06-Sep-2010)
-;	- rewrite for CsoundQt
-;
+; - rewrite for CsoundQt
+
 ; Copyright 2005,2010, Dave Seidel. Some rights reserved.
 ; This work is licensed under a Creative Commons
 ; Attribution-Noncommercial 3.0 Unported License:
 ; http://creativecommons.org/licenses/by-nc/3.0/
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 
 <CsoundSynthesizer>
 <CsOptions>
@@ -54,320 +54,320 @@
 </CsOptions>
 <CsInstruments>
 
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 ; globals
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 
 sr     = 44100
 ksmps  = 128
 nchnls = 2
 0dbfs  = 1
 
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 ; global channels
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 
-gaL		init	0
-gaR		init	0
+gaL init 0
+gaR init 0
 
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 ; waveform tables
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 
-giTblSz	init		1048576
+giTblSz init 1048576
 
 ; pure sine wave
-giFn1	ftgen	1, 0, giTblSz, 10, 1
+giFn1 ftgen 1, 0, giTblSz, 10, 1
 
 
 ; sawtooth wave  all partials (through 17) at a strength of 1/harmonic#
-giFn2	ftgen	2, 0, giTblSz, 10, 1, .5, .3333, .25, .2, .1667, .1428, .125, .111, .1, .0909, .0833, .077, .0714, .0667, .0625, .0588
+giFn2 ftgen 2, 0, giTblSz, 10, 1, .5, .3333, .25, .2, .1667, .1428, .125, .111, .1, .0909, .0833, .077, .0714, .0667, .0625, .0588
 
 ; first 13 partials, strength = 1/n + 1/(n-1)
-giFn3	ftgen	3, 0, giTblSz, 10, 1, 1.5,  .8333, .58, .45, .367, .31, .268,  .236, .211, .1909, .1742, .1603
+giFn3 ftgen 3, 0, giTblSz, 10, 1, 1.5, .8333, .58, .45, .367, .31, .268, .236, .211, .1909, .1742, .1603
 
 
 ; square wave  odd partials (through 19) at a strength of 1/harmonic#
-giFn4	ftgen	4, 0, giTblSz, 9,  1,1,0,  3,.3333,0, 5,.2,0,     7,.1428,0, 9,.111,0,  11,.0909,0,  13,.077,0,  15,.0667,0,  17,.0588,0,  19,.0526,0
+giFn4 ftgen 4, 0, giTblSz, 9, 1, 1, 0, 3, .3333, 0, 5, .2, 0, 7, .1428, 0, 9, .111, 0, 11, .0909, 0, 13, .077, 0, 15, .0667, 0, 17, .0588, 0, 19, .0526, 0
 
 ; odd partials to 19, strength = 1/n, where n is ordinal to the odd set
-giFn5	ftgen	5, 0, giTblSz, 9,  1,1,0,  3,.5,0,    5,.3333,0,  7,.25,0,   9,.2,0,    11,.1667,0,  13,.1429,0, 15,.125,0,   17,.1111,0,  19,.1,0
+giFn5 ftgen 5, 0, giTblSz, 9, 1, 1, 0, 3, .5, 0, 5, .3333, 0, 7, .25, 0, 9, .2, 0, 11, .1667, 0, 13, .1429, 0, 15, .125, 0, 17, .1111, 0, 19, .1, 0
 
 
 ; prime partials to 23, strength = 1/n
-giFn6	ftgen	6, 0, giTblSz, 9,  1,1,0,  2,.5,0,  3,.3333,0,  5,.2,0,    7,.143,0,  11,.0909,0,  13,.077,0,   17,.0588,0,  19,.0526,0, 23,.0435,0, 27,.037,0
+giFn6 ftgen 6, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .2, 0, 7, .143, 0, 11, .0909, 0, 13, .077, 0, 17, .0588, 0, 19, .0526, 0, 23, .0435, 0, 27, .037, 0
 
 ; primes to 23, strength = 1/n, where n is ordinal to the prime set
-giFn7	ftgen	7, 0, giTblSz, 9,  1,1,0,  2,.5,0,  3,.3333,0,  5,.25,0,   7,.20,0,   11,.1667,0,  13,.1429,0,  17,.125,0,   19,.1111,0, 23,.1,0,    27,.0909,0
+giFn7 ftgen 7, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .25, 0, 7, .20, 0, 11, .1667, 0, 13, .1429, 0, 17, .125, 0, 19, .1111, 0, 23, .1, 0, 27, .0909, 0
 
 
 ; partials in the Fibonacci series to 89, strength = 1/n
-giFn8	ftgen	8, 0, giTblSz, 9,  1,1,0,   2,.5,0,   3,.3333,0,  5,.2,0,   8,.125,0,  13,.0769,0,  21,.0476,0,  34,.0294,0,  55,.0182,0,  89,.0112,0, 144,.0069,0
+giFn8 ftgen 8, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .2, 0, 8, .125, 0, 13, .0769, 0, 21, .0476, 0, 34, .0294, 0, 55, .0182, 0, 89, .0112, 0, 144, .0069, 0
 
 ; fibs to 89, strength = 1/n, where n is ordinal to the fib set
-giFn9	ftgen	9, 0, giTblSz, 9,  1,1,0,   2,.5,0,   3,.3333,0,  5,.25,0,  8,.2,0,    13,.1667,0,  21,.1429,0,  34,.125,0,   55,.1111,0,  89,.1,0,   144,.0909,0
+giFn9 ftgen 9, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .25, 0, 8, .2, 0, 13, .1667, 0, 21, .1429, 0, 34, .125, 0, 55, .1111, 0, 89, .1, 0, 144, .0909, 0
 
 
 ; David First's "asymptotic sawtooth wave"
-giFn10	ftgen	10, 0, giTblSz, 9,  1,1,0,   1.732050807568877,.5773502691896259,0,   2.449489742783178,.408248290463863,0,   3.162277660168379,.3162277660168379,0,   3.872983346207417,.2581988897471611,0,   4.58257569495584,.2182178902359924,0,   5.291502622129182,.1889822365046136,0, 6,.1666666666666667,0,   6.70820393249937,.1490711984999859,0,   7.416198487095663,.1348399724926484,0,   8.124038404635961,.1230914909793327,0,   9.539392014169456,.1048284836721918,0,  10.2469507659596,.0975900072948533,0,  10.95445115010332,.0912870929175277,0,   11.6619037896906,.0857492925712544,0
+giFn10 ftgen 10, 0, giTblSz, 9, 1, 1, 0, 1.732050807568877, .5773502691896259, 0, 2.449489742783178, .408248290463863, 0, 3.162277660168379, .3162277660168379, 0, 3.872983346207417, .2581988897471611, 0, 4.58257569495584, .2182178902359924, 0, 5.291502622129182, .1889822365046136, 0, 6, .1666666666666667, 0, 6.70820393249937, .1490711984999859, 0, 7.416198487095663, .1348399724926484, 0, 8.124038404635961, .1230914909793327, 0, 9.539392014169456, .1048284836721918, 0, 10.2469507659596, .0975900072948533, 0, 10.95445115010332, .0912870929175277, 0, 11.6619037896906, .0857492925712544, 0
 
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 ; basic offset value for Risset effect
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 
-giofs   	init		.01
+giofs init .01
 
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 ; multipler for binaural beat level
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 
-gibblvl	init    	4
+gibblvl init 4
 
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 ; FFT size for pvsanal
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 
-gifftsz	init		2048
+gifftsz init 2048
 
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 ; initialize globals for values from UI
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 
-gktbl	init		1
-gkbase	init		440
+gktbl  init 1
+gkbase init 440
 
-;---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 ; orchestra macros
-;---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 
 ; base pitch in specified octave above base
 #define BOCT(B'O) #$B.*(2^($O.))#
 
-;---------------------------------------------------------------------------------------
+; ---------------------------------------------------------------------------------------
 ; panner
-;---------------------------------------------------------------------------------------
+; ---------------------------------------------------------------------------------------
 
-	opcode pan_equal_power, aa, ak
-ain, kpan	xin
-kangl	= 	1.57079633 * (kpan + 0.5)
-		xout	ain * sin(kangl), ain * cos(kangl)
-	endop
+opcode pan_equal_power, aa, ak
+  ain, kpan xin
+  kangl = 1.57079633 * (kpan + 0.5)
+  xout ain * sin(kangl), ain * cos(kangl)
+endop
 
-;---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 ; make binaural beats
-;---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 
-	opcode binauralize, aa, akk
+opcode binauralize, aa, akk
 
-ain,kcent,kdiff	xin
+  ain, kcent, kdiff xin
 
-; determine pitches
-kp1		=		kcent + (kdiff/2)
-kp2		=		kcent - (kdiff/2)
-krat1	=		kp1 / kcent
-krat2	=		kp2 / kcent
+  ; determine pitches
+  kp1   = kcent + (kdiff/2)
+  kp2   = kcent - (kdiff/2)
+  krat1 = kp1 / kcent
+  krat2 = kp2 / kcent
 
-; take it apart
-fsig		pvsanal	ain, gifftsz, gifftsz/4, gifftsz, 1
+  ; take it apart
+  fsig pvsanal ain, gifftsz, gifftsz/4, gifftsz, 1
 
-; create derived streams
-fbinL	pvscale	fsig, krat1, 1
-fbinR	pvscale	fsig, krat2, 1
+  ; create derived streams
+  fbinL pvscale fsig, krat1, 1
+  fbinR pvscale fsig, krat2, 1
 
-; put it back together
-abinL	pvsynth	fbinL
-abinR	pvsynth	fbinR
+  ; put it back together
+  abinL pvsynth fbinL
+  abinR pvsynth fbinR
 
-; send it out
-		xout	abinL, abinR
+  ; send it out
+  xout abinL, abinR
 
-	endop
-	
-;---------------------------------------------------------------------------
+endop
+
+; ---------------------------------------------------------------------------
 ; oscillators with optional Risset harmonic arpeggio and binaural beating
-;---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 
-	instr 3 ; oscillators
+instr 3  ; oscillators
 
-itone	=		p4
-iamp		=		ampdb(-15)/9
-ipan		=		0.0
-itbl		=		i(gktbl)
+  itone = p4
+  iamp  = ampdb(-15)/9
+  ipan  = 0.0
+  itbl  = i(gktbl)
 
-kgoto kpass
-; Send this value only in the init pass
-Sdsp_c	sprintf	"disp_on_c%d", itone
-		outvalue	Sdsp_c, 1
+  kgoto kpass
+  ; Send this value only in the init pass
+  Sdsp_c sprintf "disp_on_c%d", itone
+  outvalue Sdsp_c, 1
 kpass:
 
-; which tone is being played?
-	if (itone == 1) then
-knum		invalue	"n_1"
-kden		invalue	"d_1"
-k8ve1	invalue	"8ve_1"
-kbase	=		$BOCT.(gkbase'k8ve1)
-	elseif (itone == 2) then
-knum		invalue	"n_2"
-kden		invalue	"d_2"
-k8ve2	invalue	"8ve_2"
-kbase	=		$BOCT.(gkbase'k8ve2)
-	elseif (itone == 3) then
-knum		invalue	"n_3"
-kden		invalue	"d_3"
-k8ve3	invalue	"8ve_3"
-kbase	=		$BOCT.(gkbase'k8ve3)
-	elseif (itone == 4) then
-knum		invalue	"n_4"
-kden		invalue	"d_4"
-k8ve4	invalue	"8ve_4"
-kbase	=		$BOCT.(gkbase'k8ve4)
-	endif
+  ; which tone is being played?
+  if (itone == 1) then
+    knum  invalue "n_1"
+    kden  invalue "d_1"
+    k8ve1 invalue "8ve_1"
+    kbase = $BOCT.(gkbase'k8ve1)
+  elseif (itone == 2) then
+    knum  invalue "n_2"
+    kden  invalue "d_2"
+    k8ve2 invalue "8ve_2"
+    kbase = $BOCT.(gkbase'k8ve2)
+  elseif (itone == 3) then
+    knum  invalue "n_3"
+    kden  invalue "d_3"
+    k8ve3 invalue "8ve_3"
+    kbase = $BOCT.(gkbase'k8ve3)
+  elseif (itone == 4) then
+    knum  invalue "n_4"
+    kden  invalue "d_4"
+    k8ve4 invalue "8ve_4"
+    kbase = $BOCT.(gkbase'k8ve4)
+  endif
 
-;; determine pitch
-kfrac	=		knum/kden
-kfreq	=		kbase*kfrac
+  ; ; determine pitch
+  kfrac = knum/kden
+  kfreq = kbase*kfrac
 
-; set up Risset effect
-koff		invalue	"risset_offset"
-koff0	=		((kden*2)/knum)*koff		; inversely proportional to ratio
-koff1	=		koff0					; oscillator offset for arpeggio
-koff2	=		2*koff					; .
-koff3	=		3*koff					; .
-koff4	=		4*koff					; .
+  ; set up Risset effect
+  koff invalue "risset_offset"
+  koff0 = ((kden*2)/knum)*koff  ; inversely proportional to ratio
+  koff1 = koff0                 ; oscillator offset for arpeggio
+  koff2 = 2*koff                ; .
+  koff3 = 3*koff                ; .
+  koff4 = 4*koff                ; .
 
-;; envelope
-kenv		linenr	iamp, 2, 3, 0.01			; env needs release segment for turnoff2
+  ; ; envelope
+  kenv linenr iamp, 2, 3, 0.01  ; env needs release segment for turnoff2
 
-; generate primary tone
-a1		poscil3	kenv, kfreq, itbl
+  ; generate primary tone
+  a1 poscil3 kenv, kfreq, itbl
 
-; generate Risset tones
-a2		poscil3	kenv, kfreq+koff1, itbl		; nine oscillators with the same envelope
-a3		poscil3	kenv, kfreq+koff2, itbl		; and waveform, but slightly different
-a4		poscil3	kenv, kfreq+koff3, itbl		; frequencies, create harmonic arpeggio
-a5		poscil3	kenv, kfreq+koff4, itbl
-a6		poscil3	kenv, kfreq-koff1, itbl
-a7		poscil3	kenv, kfreq-koff2, itbl
-a8		poscil3	kenv, kfreq-koff3, itbl
-a9		poscil3	kenv, kfreq-koff4, itbl
+  ; generate Risset tones
+  a2 poscil3 kenv, kfreq+koff1, itbl  ; nine oscillators with the same envelope
+  a3 poscil3 kenv, kfreq+koff2, itbl  ; and waveform, but slightly different
+  a4 poscil3 kenv, kfreq+koff3, itbl  ; frequencies, create harmonic arpeggio
+  a5 poscil3 kenv, kfreq+koff4, itbl
+  a6 poscil3 kenv, kfreq-koff1, itbl
+  a7 poscil3 kenv, kfreq-koff2, itbl
+  a8 poscil3 kenv, kfreq-koff3, itbl
+  a9 poscil3 kenv, kfreq-koff4, itbl
 
-; create simple output (just the primary oscillator)
-a1L, a1R	pan_equal_power	a1, ipan
+  ; create simple output (just the primary oscillator)
+  a1L, a1R pan_equal_power a1, ipan
 
-;; create Risset output
-krismix	invalue	"risset_mix"
-aout		sum		a2, a3, a4, a5, a6, a7, a8, a9
-a2L,a2R	pan_equal_power	aout*krismix, ipan
+  ; ; create Risset output
+  krismix invalue "risset_mix"
+  aout sum a2, a3, a4, a5, a6, a7, a8, a9
+  a2L, a2R pan_equal_power aout*krismix, ipan
 
-;; create binaural beating output
-kbbmix	invalue	"bb_mix"
-kbbrate	invalue	"bb_rate"
-a3L,a3R	binauralize	a1*(kbbmix*gibblvl), kfreq, kbbrate
+  ; ; create binaural beating output
+  kbbmix  invalue "bb_mix"
+  kbbrate invalue "bb_rate"
+  a3L, a3R binauralize a1*(kbbmix*gibblvl), kfreq, kbbrate
 
-; combine and send to global output channels
-gaL		=		gaL+a1L+a2L+a3L
-gaR		=		gaR+a1R+a2R+a3R
+  ; combine and send to global output channels
+  gaL = gaL+a1L+a2L+a3L
+  gaR = gaR+a1R+a2R+a3R
 
-	endin
-	
-;-------------------------------------------------------------------------
+endin
+
+; -------------------------------------------------------------------------
 ; turn off a tone
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 
-	instr 4
+instr 4
 
-itone	=	p4
+  itone = p4
 
-Sdsp_c	sprintf	"disp_on_c%d", itone
-		outvalue	Sdsp_c, 0
+  Sdsp_c sprintf "disp_on_c%d", itone
+  outvalue Sdsp_c, 0
 
-	if (itone == 1) then
-		turnoff2	3.1, 4, 1
-	elseif (itone == 2) then
-		turnoff2	3.2, 4, 1
-	elseif (itone == 3) then
-		turnoff2	3.3, 4, 1
-	elseif (itone == 4) then
-		turnoff2	3.4, 4, 1
-	endif
+  if (itone == 1) then
+    turnoff2 3.1, 4, 1
+  elseif (itone == 2) then
+    turnoff2 3.2, 4, 1
+  elseif (itone == 3) then
+    turnoff2 3.3, 4, 1
+  elseif (itone == 4) then
+    turnoff2 3.4, 4, 1
+  endif
 
-	endin
+endin
 
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 ; stop everything and quit
-;-------------------------------------------------------------------------
+; -------------------------------------------------------------------------
 
-	instr 5
-	
-		turnoff2	1, 0, 0
-		turnoff2	3.1, 4, 1
-		turnoff2	3.2, 4, 1
-		turnoff2	3.3, 4, 1
-		turnoff2	3.4, 4, 1
-		outvalue	"disp_on_c1", 0
-		outvalue	"disp_on_c2", 0
-		outvalue	"disp_on_c3", 0
-		outvalue	"disp_on_c4", 0
-		exitnow
+instr 5
 
-	endin
+  turnoff2 1, 0, 0
+  turnoff2 3.1, 4, 1
+  turnoff2 3.2, 4, 1
+  turnoff2 3.3, 4, 1
+  turnoff2 3.4, 4, 1
+  outvalue "disp_on_c1", 0
+  outvalue "disp_on_c2", 0
+  outvalue "disp_on_c3", 0
+  outvalue "disp_on_c4", 0
+  exitnow
 
-;---------------------------------------------------------------------------
+endin
+
+; ---------------------------------------------------------------------------
 ; get/set base pitch and waveform
-;---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 
-	instr 98
+instr 98
 
-; base pitch
-knotes	invalue	"cb_use_notes"
-	if (knotes == 0) then
-	; tuning by cycles per second
-kbase0	invalue	"base_freq"
-koct		=		octcps(kbase0)
-kpch		=		pchoct(koct)
-kpch_i	=		int(kpch)
-kpch_f	=		frac(kpch)
-;		outvalue	"base_pch_int", kpch_i
-;		outvalue	"base_pch_frac", kpch_f
-	else
-	; tuning by pitch-class
-kpch_i	invalue	"base_pch_int"
-kpch_f	invalue	"base_pch_frac"
-kbase0	=		cpspch(kpch_i+(kpch_f/100))
-		outvalue	"base_freq", kbase0
-	endif
-gkbase	=		kbase0
+  ; base pitch
+  knotes invalue "cb_use_notes"
+  if (knotes == 0) then
+    ; tuning by cycles per second
+    kbase0 invalue "base_freq"
+    koct   = octcps(kbase0)
+    kpch   = pchoct(koct)
+    kpch_i = int(kpch)
+    kpch_f = frac(kpch)
+    ; outvalue "base_pch_int", kpch_i
+    ; outvalue "base_pch_frac", kpch_f
+  else
+    ; tuning by pitch-class
+    kpch_i invalue "base_pch_int"
+    kpch_f invalue "base_pch_frac"
+    kbase0 = cpspch(kpch_i+(kpch_f/100))
+    outvalue "base_freq", kbase0
+  endif
+  gkbase = kbase0
 
-; waveform
-ktbl		invalue	"menu_waveform"
-gktbl	=		ktbl+1
+  ; waveform
+  ktbl invalue "menu_waveform"
+  gktbl = ktbl+1
 
-	endin
-;---------------------------------------------------------------------------
+endin
+; ---------------------------------------------------------------------------
 ; global output instrument with optional reverb
-;---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 
-	instr 99
-	
-kfb		invalue	"reverb_feedback"
-		outvalue	"feedback_display", kfb
-kwet		invalue	"reverb_level"
+instr 99
 
-aL, aR	reverbsc	gaL, gaR, kfb, p4, sr/1.5, p5, 0
-aoutL 	=		(gaL * kwet) + (aL * (1 - kwet))
-aoutR 	=		(gaR * kwet) + (aR * (1 - kwet))
-		outs		gaL+aoutL, gaR+aoutR
-gaL		=	0
-gaR		=	0
-	
-	endin
+  kfb invalue "reverb_feedback"
+  outvalue "feedback_display", kfb
+  kwet invalue "reverb_level"
+
+  aL, aR reverbsc gaL, gaR, kfb, p4, sr/1.5, p5, 0
+  aoutL = (gaL * kwet) + (aL * (1 - kwet))
+  aoutR = (gaR * kwet) + (aR * (1 - kwet))
+  outs gaL+aoutL, gaR+aoutR
+  gaL = 0
+  gaR = 0
+
+endin
 
 </CsInstruments>
 <CsScore>
 
-;---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 ; score
-;---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 
 ; start reading UI values
 i98 0 36000
@@ -389,9 +389,9 @@ e
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>85</r>
-  <g>170</g>
-  <b>127</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -411,14 +411,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -439,14 +439,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -472,14 +472,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -500,14 +500,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -530,14 +530,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -563,14 +563,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -591,14 +591,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -624,14 +624,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -652,14 +652,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -685,14 +685,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -713,14 +713,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -746,14 +746,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -777,14 +777,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -805,14 +805,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -838,14 +838,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -866,14 +866,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -902,6 +902,18 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>btn_stop</objectName>
@@ -924,6 +936,18 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>base_freq</objectName>
@@ -940,14 +964,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>1</minimum>
@@ -973,14 +997,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1070,14 +1094,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1101,14 +1125,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1129,14 +1153,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-6</minimum>
@@ -1159,14 +1183,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-6</minimum>
@@ -1189,14 +1213,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-6</minimum>
@@ -1219,14 +1243,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-6</minimum>
@@ -1252,14 +1276,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1283,14 +1307,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1314,14 +1338,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1345,14 +1369,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1377,13 +1401,13 @@ e
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -1407,13 +1431,13 @@ e
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -1436,15 +1460,20 @@ e
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1467,14 +1496,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1495,14 +1524,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <color>
-   <r>0</r>
-   <g>255</g>
-   <b>0</b>
+   <r>50</r>
+   <g>230</g>
+   <b>50</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <value>0.93000001</value>
   <resolution>0.00100000</resolution>
@@ -1529,14 +1558,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <color>
-   <r>0</r>
-   <g>255</g>
-   <b>0</b>
+   <r>50</r>
+   <g>230</g>
+   <b>50</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <value>0.55000000</value>
   <resolution>0.01000000</resolution>
@@ -1585,14 +1614,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1654,15 +1683,20 @@ e
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1685,15 +1719,20 @@ e
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1716,14 +1755,14 @@ e
   <fontsize>11</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1744,14 +1783,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.01000000</resolution>
   <minimum>0</minimum>
@@ -1774,14 +1813,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
@@ -1807,14 +1846,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1835,14 +1874,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
   <color>
-   <r>0</r>
-   <g>255</g>
-   <b>0</b>
+   <r>50</r>
+   <g>230</g>
+   <b>50</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <value>0.53000000</value>
   <resolution>0.01000000</resolution>
@@ -1873,13 +1912,13 @@ e
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -1902,14 +1941,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1930,14 +1969,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>4</minimum>
@@ -1960,14 +1999,14 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -2085,14 +2124,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2116,14 +2155,14 @@ e
   <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2150,6 +2189,18 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>btn_on4</objectName>
@@ -2172,6 +2223,18 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>btn_on2</objectName>
@@ -2194,6 +2257,18 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>btn_on1</objectName>
@@ -2216,6 +2291,18 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -1,96 +1,107 @@
-;Written by Iain McCurdy 2011
+; Written by Iain McCurdy 2011
 
-;Modified for QuteCsound by René, May 2011
-;Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and QuteCsound svn rev 848
-;-------------->>>>> DON'T WORK on Csound 5.13.0
-;-------------->>>>> NOT STABLE on Csound git, QuteCsound freeze when changing gkpartials in realtime. (reinit)
-
-
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
+; Modified for QuteCsound by René, May 2011
+; Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and
+; QuteCsound svn rev 848
+; -------------->>>>> DON'T WORK on Csound 5.13.0
+; -------------->>>>> NOT STABLE on Csound git, QuteCsound freeze when changing gkpartials
+; in realtime. (reinit)
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+
+
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../../SourceMaterials
+--env:SADIR+ = ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gisine	ftgen	0,0,4096,10,1					;SINE
-giExp1	ftgen	0, 0, 129, -25, 0, 0.25, 128, 4.0	;TABLE FOR EXP SLIDER
+gisine ftgen 0, 0, 4096, 10, 1                  ; Sine
+giExp1 ftgen 0, 0, 129, -25, 0, 0.25, 128, 4.0  ; Table for exp slider
 
 
-instr	1
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SLIDERS
-		gkptr			invalue	"Pointer"
-		kfmod			invalue	"PitchMod"
-		gkfmod			tablei	kfmod, giExp1, 1
-						outvalue	"PitchMod_Value", gkfmod
-		gkspeed			invalue	"Speed"
-		gkporttime		invalue	"PortTime"
-		gkRvbAmt			invalue	"ReverbAmount"
-		;COUNTERS
-		gkpartials		invalue	"Partials"
-		gkpartialoffset	invalue	"PartialsOffset"
-		gkpartialincr		invalue	"PartialsIncr"
-		;MENU
-		gkptrmode			invalue	"PointerMode"
-		
-		gSfile			invalue	"_Browse"
-	endif
+instr 1
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Sliders
+    gkptr invalue "Pointer"
+    kfmod invalue "PitchMod"
+    gkfmod tablei kfmod, giExp1, 1
+    outvalue "PitchMod_Value", gkfmod
+    gkspeed    invalue "Speed"
+    gkporttime invalue "PortTime"
+    gkRvbAmt   invalue "ReverbAmount"
+    ; Counters
+    gkpartials      invalue "Partials"
+    gkpartialoffset invalue "PartialsOffset"
+    gkpartialincr   invalue "PartialsIncr"
+    ; Menu
+    gkptrmode invalue "PointerMode"
+
+    gSfile invalue "_Browse"
+  endif
 endin
 
-instr	2
-	kporttime		linseg	0, 0.001, 1								;RAMPING UP FUNCTION CONTRIBUTING TO PORTAMENTO TIME VARIABLE
-	ifilelen		filelen	gSfile									;READ FILE LENGTH OF INPUT ATS ANALYSIS FILE
-	if gkptrmode=0 then												;IF POINTER MODE SELECTION IS TO 'Pointer'...
-		kptr		portk	gkptr*ifilelen, kporttime*gkporttime			;DEFINE TIME POINTER VALUE AND APPLY PORTAMENTO SMOOTHING	
-	else															;OTHERWISE... (SPEED MODE SELECTED)
-		kptr		phasor	gkspeed/ifilelen							;POINTER CREATED USING A PHASOR
-		kptr		=		kptr*ifilelen								;PHASOR (0-1) RESCALED ACCORDING TO LENGTH OF ORIGINAL FILE
-	endif														;END OF THIS CONDITIONAL BRANCH
-	kfmod		portk	gkfmod, kporttime*gkporttime					;APPLY PORTAMENTO SMOOTHING TO PITCH RATIO VARIABLE
+instr 2
+  ; Ramping up function contributing to portamento time variable
+  kporttime linseg 0, 0.001, 1
+  ifilelen filelen gSfile  ; Read file length of input ats analysis file
+  if gkptrmode = 0 then    ; If pointer mode selection is to 'pointer'...
+    ; Define time pointer value and apply portamento smoothing
+    kptr portk gkptr*ifilelen, kporttime*gkporttime
+  else                            ; Otherwise... (speed mode selected)
+    kptr phasor gkspeed/ifilelen  ; Pointer created using a phasor
+    ; Phasor (0-1) rescaled according to length of original file
+    kptr = kptr*ifilelen
+  endif  ; End of this conditional branch
+  ; Apply portamento smoothing to pitch ratio variable
+  kfmod portk gkfmod, kporttime*gkporttime
 
-	ktrig		changed	 gkpartialoffset, gkpartialincr, gkpartials		;IF ANY OF THE INPUT VARIABLES CHANGES GENERATE A MOMENTARY '1' AT THE OUTPUT
-	if ktrig=1 then												;IF AN I-RATE SLIDER VARIABLE HAS BEEN CHANGED...
-		reinit	UPDATE											;...BEGIN A RE-INITIALIZATION PASS FROM THE LABEL 'UPDATE'
-	endif														;END OF THIS CONDITIONAL BRANCH
+  ; If any of the input variables changes generate a momentary '1' at the output
+  ktrig changed gkpartialoffset, gkpartialincr, gkpartials
+  if ktrig = 1 then  ; If an i-rate slider variable has been changed...
+    reinit UPDATE    ; ...Begin a re-initialization pass from the label 'update'
+  endif              ; End of this conditional branch
 
-	UPDATE:														;LABEL 'UPDATE'
-	asig			ATSadd	kptr, kfmod, gSfile, gisine, i(gkpartials), i(gkpartialoffset), i(gkpartialincr)		;PERFORM ATS RESYNTHESIS
-				rireturn
+UPDATE:  ; Label 'update'
+  ; Perform ats resynthesis
+  asig ATSadd kptr, kfmod, gSfile, gisine, i(gkpartials), i(gkpartialoffset), i(gkpartialincr)
+  rireturn
 
-				denorm	asig
-	aRvbL, aRvbR	reverbsc	asig, asig, 0.9, 8000						;REVERB SIGNAL CREATED USING reverbsc
-				outs		asig+aRvbL*gkRvbAmt, asig+aRvbR*gkRvbAmt
+  denorm asig
+  aRvbL, aRvbR reverbsc asig, asig, 0.9, 8000  ; Reverb signal created using reverbsc
+  outs asig+aRvbL*gkRvbAmt, asig+aRvbR*gkRvbAmt
 endin
-instr	3
-		outvalue	"Pointer"			, 0.5
-		outvalue	"PitchMod"		, 0.25
-		outvalue	"Partials"		, 15
-		outvalue	"PartialsOffset"	, 8
-		outvalue	"PartialsIncr"		, 7
-		outvalue	"PointerMode"		, 1
-		outvalue	"Speed"			, 0.1
-		outvalue	"PortTime"		, 0.01
+instr 3
+  outvalue "Pointer", 0.5
+  outvalue "PitchMod", 0.25
+  outvalue "Partials", 15
+  outvalue "PartialsOffset", 8
+  outvalue "PartialsIncr", 7
+  outvalue "PointerMode", 1
+  outvalue "Speed", 0.1
+  outvalue "PortTime", 0.01
 endin
 </CsInstruments>
 <CsScore>
-i 1	0	3600		;GUI
-i 3	0	0		;INIT
+i 1 0 3600  ; GUI
+i 3 0 0     ; Init
 </CsScore>
 </CsoundSynthesizer>
 
 
 
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -101,9 +112,9 @@ i 3	0	0		;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -112,24 +123,35 @@ i 3	0	0		;INIT
   <width>514</width>
   <height>510</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>ATSadd</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -141,24 +163,35 @@ i 3	0	0		;INIT
   <width>386</width>
   <height>510</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>ATSadd</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -170,30 +203,41 @@ i 3	0	0		;INIT
   <width>383</width>
   <height>487</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>---------------------------------------------------------------------------------------------
 ATSadd performs additive synthesis based on analysis data stored in a file that has been pre-analysed using Juan Pampin's ATS (Analysis - Transformation - Synthesis). The design of this opcode bears simularities to the pvadd opcode and the results are comparable.
 'Partials' defines the number of partials that will be used in the resysnthesis. Reducing this value significantly will limit the number of higher frequencies that can be reproduced and will therefore function as a lowpass filter. 'P.Offset' raises a threshold below which partials will not be reproduced. This will have the effect of removing lower frequencies and the effect will be that of a highpass filter. The time domain of the resynthesis is controlled using a time pointer. In this implementation the user can choose between manual manipulation of the time pointer or control of the speed of an automated moving pointer. 'P.Incr' defines the counter increment between subsequent partials that will be resynthesized. In a straight resynthesis this value should be 1 so that all partials are included. Values greater than 1 will result in partials being omitted in the resynthesis.
 The maximum partial number that can be with this example is 311. Certain combinations of 'Partials', 'P.Offset' and 'P.Incr' will demand partial numbers beyond this limit. These will not be reproduced so the user should anticipate this situation nby observing warnings given in the console output. Crashes can also occur if combinations of values are demanded that the opcode is not happy with.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4807</objectName>
@@ -202,17 +246,34 @@ The maximum partial number that can be with this example is 311. Certain combina
   <width>100</width>
   <height>30</height>
   <uuid>{24979132-c53f-4414-ac6b-6b4f503ecfe8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -221,27 +282,38 @@ The maximum partial number that can be with this example is 311. Certain combina
   <width>80</width>
   <height>30</height>
   <uuid>{5b8d26a2-2397-439e-b2ff-21072fb8f53f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>No of Partials</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Partials</objectName>
@@ -250,21 +322,24 @@ The maximum partial number that can be with this example is 311. Certain combina
   <width>60</width>
   <height>30</height>
   <uuid>{6c726695-a184-4e03-9c9b-5a7defdb3984}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -279,21 +354,24 @@ The maximum partial number that can be with this example is 311. Certain combina
   <width>60</width>
   <height>30</height>
   <uuid>{dab1b064-395c-483f-9944-a8311aba4438}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -308,28 +386,39 @@ The maximum partial number that can be with this example is 311. Certain combina
   <width>76</width>
   <height>40</height>
   <uuid>{63c66be6-1d1f-4a44-8b22-8680f083e808}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Partials
 Offset</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>PartialsIncr</objectName>
@@ -338,21 +427,24 @@ Offset</label>
   <width>60</width>
   <height>30</height>
   <uuid>{3039dd4c-40c6-4553-b4be-9187ba630c04}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -367,28 +459,39 @@ Offset</label>
   <width>76</width>
   <height>40</height>
   <uuid>{34bc6389-9909-465c-93aa-5f708194d623}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Partials
 Increment</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Pointer</objectName>
@@ -397,27 +500,37 @@ Increment</label>
   <width>60</width>
   <height>30</height>
   <uuid>{745d6bee-b951-4a03-9fe8-9e10d5ae4556}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Pointer</objectName>
@@ -426,9 +539,12 @@ Increment</label>
   <width>500</width>
   <height>27</height>
   <uuid>{06814721-6151-4baa-84e2-8f39843b07a4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -444,27 +560,38 @@ Increment</label>
   <width>150</width>
   <height>30</height>
   <uuid>{c6d7165c-6730-426f-b293-52b411bc73cf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Pointer</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -473,18 +600,22 @@ Increment</label>
   <width>330</width>
   <height>28</height>
   <uuid>{68b5f90b-b78e-4581-b434-232db5f4c40f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>AndItsAll.ats</label>
+  <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -492,6 +623,14 @@ Increment</label>
    <b>206</b>
   </bgcolor>
   <background>nobackground</background>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -500,27 +639,38 @@ Increment</label>
   <width>330</width>
   <height>30</height>
   <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Restart the instrument after changing the ATS file.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>PointerMode</objectName>
@@ -529,9 +679,12 @@ Increment</label>
   <width>120</width>
   <height>30</height>
   <uuid>{2a932bf5-a5c9-4ce2-8fe3-e00e4bd01291}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Pointer</name>
@@ -554,27 +707,38 @@ Increment</label>
   <width>100</width>
   <height>30</height>
   <uuid>{bc692434-237b-47a7-a666-03108fcbbcb8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Pointer Mode :</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>PitchMod_Value</objectName>
@@ -583,27 +747,37 @@ Increment</label>
   <width>60</width>
   <height>30</height>
   <uuid>{04c9dace-9480-4e55-898f-e0c00de2c1f1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>PitchMod</objectName>
@@ -612,9 +786,12 @@ Increment</label>
   <width>500</width>
   <height>27</height>
   <uuid>{b47f6a17-4914-4c3a-9cc0-5f7b9299a578}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.25000000</value>
@@ -630,27 +807,38 @@ Increment</label>
   <width>150</width>
   <height>30</height>
   <uuid>{7866f624-7937-48ac-8363-1bd5aa7b9625}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Pitch Modulation</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Speed</objectName>
@@ -659,27 +847,37 @@ Increment</label>
   <width>60</width>
   <height>30</height>
   <uuid>{f940a4ca-6ca3-46fe-a5d6-f09fa405fe6c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.100</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Speed</objectName>
@@ -688,9 +886,12 @@ Increment</label>
   <width>500</width>
   <height>27</height>
   <uuid>{5bff9d9f-6ed6-466d-a67e-e0e98bc000df}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
   <value>0.10000000</value>
@@ -706,27 +907,38 @@ Increment</label>
   <width>150</width>
   <height>30</height>
   <uuid>{c15a01f7-b70d-4251-aabe-9d7c2d312ea8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Speed</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>PortTime</objectName>
@@ -735,27 +947,37 @@ Increment</label>
   <width>60</width>
   <height>30</height>
   <uuid>{4608f0e7-8c46-421e-98fd-de5d17d49010}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.010</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>PortTime</objectName>
@@ -764,9 +986,12 @@ Increment</label>
   <width>500</width>
   <height>27</height>
   <uuid>{03089344-3d3c-48f2-939e-8d4f9635befc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.01000000</value>
@@ -782,27 +1007,38 @@ Increment</label>
   <width>150</width>
   <height>30</height>
   <uuid>{8d180fa4-046e-4636-8205-76cfb7d5c66c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Portamento Time</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ReverbAmount</objectName>
@@ -811,27 +1047,37 @@ Increment</label>
   <width>60</width>
   <height>30</height>
   <uuid>{f4f9825b-2418-453e-8895-67974638267d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.926</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>ReverbAmount</objectName>
@@ -840,9 +1086,12 @@ Increment</label>
   <width>500</width>
   <height>27</height>
   <uuid>{4792157e-ea37-4d49-8cb4-341dd2e412e6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.92600000</value>
@@ -858,27 +1107,38 @@ Increment</label>
   <width>150</width>
   <height>30</height>
   <uuid>{0da9e8e2-9088-41b3-b1c5-b292a65afe7b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Reverb Amount</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -887,38 +1147,52 @@ Increment</label>
   <width>150</width>
   <height>30</height>
   <uuid>{cc0c2a1c-5c88-41c0-9e2b-aae5d01c05af}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Analysis File</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
   <x>8</x>
   <y>450</y>
-  <width>170</width>
+  <width>166</width>
   <height>30</height>
   <uuid>{8386ec82-9b74-48d0-b64b-e6bf1db6ae0b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>AndItsAll.ats</stringvalue>
@@ -926,9 +1200,22 @@ Increment</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

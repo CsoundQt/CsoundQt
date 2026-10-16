@@ -1,154 +1,164 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 815
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 815
 
-; This csd use the files HRTFcompact, hrtf-44100-left.dat and hrtf-44100-right.dat, use the macro PATH_HRTF to define the path of these files.
+; This csd use the files HRTFcompact, hrtf-44100-left.dat and hrtf-44100-right.dat, use
+; the macro PATH_HRTF to define the path of these files.
 
-;Notes on modifications from original csd
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
-;	I don't know why when i start instrument 2 (hrtfer) for the second time, i have a too high amplitude.
+; Notes on modifications from original csd
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; I don't know why when i start instrument 2 (hrtfer) for the second time, i have a too
+; high amplitude.
 
 
-;my flags on Ubuntu  -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu  -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 64		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 64     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
 #define PATH_HRTF #../../SourceMaterials#
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz 
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1) then
-		gkOnOff		invalue		"On_Off"
-		ktrigOn		trigger		gkOnOff, 0.5, 0
-					schedkwhen	ktrigOn, 0, 0, 1, 0, -1		;start instr 1
-		ktrigOff		trigger		gkOnOff, 0.5, 1
-					schedkwhen	ktrigOff, 0, 0, -1, 0, 1		;stop instr 1
-		
-		gkopcode		invalue		"Opcode"
-		gkinput		invalue		"Input"
-		gkAz			invalue		"Az"
-		gkElev		invalue		"Elev"
-		gkmode		invalue		"Mode"
-		gkfade		invalue		"Fade"
-		gkoverlap		invalue		"Overlap"
-		gkoverlap		=			int(gkoverlap)
-					outvalue		"Overlap_value", gkoverlap
-		gkradius		invalue		"Radius"
-		gkradius_stat	invalue		"Radius_stat"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkOnOff invalue "On_Off"
+    ktrigOn trigger gkOnOff, 0.5, 0
+    schedkwhen ktrigOn, 0, 0, 1, 0, -1  ; start instr 1
+    ktrigOff trigger gkOnOff, 0.5, 1
+    schedkwhen ktrigOff, 0, 0, -1, 0, 1  ; stop instr 1
+
+    gkopcode  invalue "Opcode"
+    gkinput   invalue "Input"
+    gkAz      invalue "Az"
+    gkElev    invalue "Elev"
+    gkmode    invalue "Mode"
+    gkfade    invalue "Fade"
+    gkoverlap invalue "Overlap"
+    gkoverlap = int(gkoverlap)
+    outvalue "Overlap_value", gkoverlap
+    gkradius      invalue "Radius"
+    gkradius_stat invalue "Radius_stat"
+  endif
 endin
 
-instr	1	;CONTROL INSTRUMENT
-	if	gkinput = 0	then										;IF INPUT SELECTOR IS ON 'File Input'...
-		Sfile		invalue	"_Browse1"		
-		gasrc, asigR	FilePlay2	Sfile, 1,0,1						;READ AUDIO FILE FROM DISK (RIGHT CHANNEL WILL BE IGNORED)
-	elseif	gkinput = 1	then									;OR IF INPUT SELECTER IS ON 'LIVE INPUT'
-		gasrc	inch	1										;READ LIVE AUDIO FROM THE COMPUTER'S FIRST (LEFT) AUDIO INPUT
-	endif													;END OF CONDITIONAL BRANCHING
-	if	gkopcode = 0	then										;IF OPCODE SELECTER IS ON 'hrtfer'...
-		;SCHEDKWHEN KTRIGGER, KMINTIM, KMAXNUM, KINSNUM, KWHEN, KDUR 
-		schedkwhen     1,        0,       1,       2,       0,  -1 		;START INSTRUMENT 2 (hrtfer)
-	endif													;END OF CONDITIONAL BRANCHING
-	if	gkopcode = 1	then										;IF OPCODE SELECTER IS ON 'hrtfmove'...
-		;SCHEDKWHEN KTRIGGER, KMINTIM, KMAXNUM, KINSNUM, KWHEN, KDUR                                         
-		schedkwhen     1,        0,       1,       3,       0,  -1		;START INSTRUMENT 3 (hrtfmove)         
-	endif                                                          		;END OF CONDITIONAL BRANCHING        
-	if	gkopcode = 2	then										;IF OPCODE SELECTER IS ON 'hrtfmove2'...
-		;SCHEDKWHEN KTRIGGER, KMINTIM, KMAXNUM, KINSNUM, KWHEN, KDUR                                         
-		schedkwhen     1,        0,       1,       4,       0,  -1		;START INSTRUMENT 4 (hrtfmove2)         
-	endif													;END OF CONDITIONAL BRANCHING        
-	if	gkopcode = 3	then										;IF OPCODE SELECTER IS ON 'hrtfstat'...
-		;SCHEDKWHEN KTRIGGER, KMINTIM, KMAXNUM, KINSNUM, KWHEN, KDUR                                         
-		schedkwhen     1,        0,       1,       5,       0, -1		;START INSTRUMENT 5 (hrtfstat)         
-	endif													;END OF CONDITIONAL BRANCHING        
+instr 1                ; Control instrument
+  if gkinput = 0 then  ; If input selector is on 'file input'...
+    Sfile invalue "_Browse1"
+    ; Read audio file from disk (right channel will be ignored)
+    gasrc, asigR FilePlay2 Sfile, 1, 0, 1
+  elseif gkinput = 1 then  ; Or if input selecter is on 'live input'
+    gasrc inch 1           ; Read live audio from the computer's first (left) audio input
+  endif                    ; End of conditional branching
+  if gkopcode = 0 then     ; If opcode selecter is on 'hrtfer'...
+    ; Schedkwhen ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur
+    schedkwhen 1, 0, 1, 2, 0, -1  ; Start instrument 2 (hrtfer)
+  endif                           ; End of conditional branching
+  if gkopcode = 1 then            ; If opcode selecter is on 'hrtfmove'...
+    ; Schedkwhen ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur
+    schedkwhen 1, 0, 1, 3, 0, -1  ; Start instrument 3 (hrtfmove)
+  endif                           ; End of conditional branching
+  if gkopcode = 2 then            ; If opcode selecter is on 'hrtfmove2'...
+    ; Schedkwhen ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur
+    schedkwhen 1, 0, 1, 4, 0, -1  ; Start instrument 4 (hrtfmove2)
+  endif                           ; End of conditional branching
+  if gkopcode = 3 then            ; If opcode selecter is on 'hrtfstat'...
+    ; Schedkwhen ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur
+    schedkwhen 1, 0, 1, 5, 0, -1  ; Start instrument 5 (hrtfstat)
+  endif                           ; End of conditional branching
 endin
 
-instr	2	;hrtfer
-	; SENSE GUI ON/OFF SWITCH
-	if		gkOnOff = 0	then									;IF ON/OFF SELECTER IS OFF
-			turnoff											;TURN THIS INSTRUMENT OFF IMMEDIATELY
-	endif													;END OF CONDITIONAL BRANCHING
-	if		gkopcode != 0	then									;IF OPCODE SELECTER IS NOT ON 'hrtfer'... 
-			turnoff											;TURN THIS INSTRUMENT OFF IMMEDIATELY
-	endif													;END OF CONDITIONAL BRANCHING
+instr 2  ; hrtfer
+  ; Sense GUI on/off switch
+  if gkOnOff = 0 then    ; If on/off selecter is off
+    turnoff              ; Turn this instrument off immediately
+  endif                  ; End of conditional branching
+  if gkopcode != 0 then  ; If opcode selecter is not on 'hrtfer'...
+    turnoff              ; Turn this instrument off immediately
+  endif                  ; End of conditional branching
 
-	aleft, aright	hrtfer	gasrc, gkAz, gkElev, "$PATH_HRTF/HRTFcompact"	;APPLY hrtfer OPCODE TO AUDIO SOURCE FROM INSTR 1
-				outs		aleft*100, aright*100						;SEND TO AUDIO OUTPUTS AND BOOST
+  ; Apply hrtfer opcode to audio source from instr 1
+  aleft, aright hrtfer gasrc, gkAz, gkElev, "$PATH_HRTF/HRTFcompact"
+  outs aleft*100, aright*100  ; Send to audio outputs and boost
 endin
 
-instr	3	;hrtfmove			
-	if		gkOnOff = 0	then     								;IF ON/OFF SELECTER IS OFF                    
-			turnoff											;TURN THIS INSTRUMENT OFF IMMEDIATELY         
-	endif													;END OF CONDITIONAL BRANCHING                 
-	if		gkopcode != 1	then									;IF OPCODE SELECTER IS NOT ON 'hrtfmove'...
-			turnoff											;TURN THIS INSTRUMENT OFF IMMEDIATELY         
-	endif													;END OF CONDITIONAL BRANCHING                 
-	ktrigger	changed	gkmode, gkfade								;IF gkmode OR gkfade CHANGE OUTPUT (ktrigger) A MOMENTARY 1 VALUE
-	if	ktrigger = 1	then										;IF ktrigger IS 1
-			reinit	UPDATE									;BEGIN A RE-INITIALIZATION PASS FROM LABEL 'UPDATE'
-	endif													;END OF CONDITIONAL BRANCHING
-	UPDATE:													;LABEL 'UPDATE'
-	aleft, aright	hrtfmove	gasrc, gkAz, gkElev, "$PATH_HRTF/hrtf-44100-left.dat","$PATH_HRTF/hrtf-44100-right.dat", i(gkmode), i(gkfade), sr		;APPLY hrtfmove OPCODE TO AUDIO SOURCE FROM INSTR 1
- 				rireturn										;END OF RE-INITIALIZATION PASS - RETURN TO PERFORMANCE TIME
- 				outs		aleft, aright							;SEND AUDIO TO OUTPUTS
+instr 3                  ; hrtfmove
+  if gkOnOff = 0 then    ; If on/off selecter is off
+    turnoff              ; Turn this instrument off immediately
+  endif                  ; End of conditional branching
+  if gkopcode != 1 then  ; If opcode selecter is not on 'hrtfmove'...
+    turnoff              ; Turn this instrument off immediately
+  endif                  ; End of conditional branching
+  ; If gkmode or gkfade change output (ktrigger) a momentary 1 value
+  ktrigger changed gkmode, gkfade
+  if ktrigger = 1 then  ; IF ktrigger IS 1
+    reinit UPDATE       ; Begin a re-initialization pass from label 'update'
+  endif                 ; End of conditional branching
+UPDATE:                 ; Label 'update'
+  ; Apply hrtfmove opcode to audio source from instr 1
+  aleft, aright hrtfmove gasrc, gkAz, gkElev, "$PATH_HRTF/hrtf-44100-left.dat", "$PATH_HRTF/hrtf-44100-right.dat", i(gkmode), i(gkfade), sr
+  rireturn            ; End of re-initialization pass - return to performance time
+  outs aleft, aright  ; Send audio to outputs
 endin
 
-instr	4	;hrtfmove2
-	if		gkOnOff = 0	then									;IF ON/OFF SELECTER IS OFF                 
-			turnoff											;TURN THIS INSTRUMENT OFF IMMEDIATELY      
-	endif													;END OF CONDITIONAL BRANCHING              
-	if		gkopcode != 2	then									;IF OPCODE SELECTER IS NOT ON 'hrtfmove2'...
-			turnoff											;TURN THIS INSTRUMENT OFF IMMEDIATELY      
-	endif													;END OF CONDITIONAL BRANCHING              
+instr 4                  ; hrtfmove2
+  if gkOnOff = 0 then    ; If on/off selecter is off
+    turnoff              ; Turn this instrument off immediately
+  endif                  ; End of conditional branching
+  if gkopcode != 2 then  ; If opcode selecter is not on 'hrtfmove2'...
+    turnoff              ; Turn this instrument off immediately
+  endif                  ; End of conditional branching
 
-	ktrigger	changed	gkoverlap, gkradius							;IF gkmode OR gkfade CHANGE OUTPUT (ktrigger) A MOMENTARY 1 VALUE
-	if	ktrigger = 1	then										;IF ktrigger IS 1
-			reinit	UPDATE									;BEGIN A RE-INITIALIZATION PASS FROM LABEL 'UPDATE'
-	endif													;END OF CONDITIONAL BRANCHING
-	UPDATE:													;LABEL 'UPDATE'
-	aleft, aright	hrtfmove2	gasrc, gkAz, gkElev, "$PATH_HRTF/hrtf-44100-left.dat","$PATH_HRTF/hrtf-44100-right.dat", i(gkoverlap), i(gkradius), sr	;APPLY hrtfmove2 OPCODE TO AUDIO SOURCE FROM INSTR 1
- 				rireturn
-				outs		aleft, aright							;SEND AUDIO TO OUTPUTS
+  ; If gkmode or gkfade change output (ktrigger) a momentary 1 value
+  ktrigger changed gkoverlap, gkradius
+  if ktrigger = 1 then  ; IF ktrigger IS 1
+    reinit UPDATE       ; Begin a re-initialization pass from label 'update'
+  endif                 ; End of conditional branching
+UPDATE:                 ; Label 'update'
+  ; Apply hrtfmove2 opcode to audio source from instr 1
+  aleft, aright hrtfmove2 gasrc, gkAz, gkElev, "$PATH_HRTF/hrtf-44100-left.dat", "$PATH_HRTF/hrtf-44100-right.dat", i(gkoverlap), i(gkradius), sr
+  rireturn
+  outs aleft, aright  ; Send audio to outputs
 endin
 
-instr	5	;hrtfstat
-	if		gkOnOff = 0	then									;IF ON/OFF SELECTER IS OFF                  
-			turnoff											;TURN THIS INSTRUMENT OFF IMMEDIATELY       
-	endif													;END OF CONDITIONAL BRANCHING               
-	if		gkopcode != 3	then									;IF OPCODE SELECTER IS NOT ON 'hrtfstat'...
-			turnoff											;TURN THIS INSTRUMENT OFF IMMEDIATELY      
-	endif													;END OF CONDITIONAL BRANCHING              
-	ktrigger	changed	gkAz, gkElev, gkradius_stat					;IF gkAz OR gkElev CHANGE OUTPUT (ktrigger) A MOMENTARY 1 VALUE
-	if	ktrigger = 1	then										;IF ktrigger=1, i.e. gkAz OR gkElev ARE CHANGED...
-			reinit	UPDATE									;BEGIN A REINITIALIZATION PASS FROM LABEL 'UPDATE'
-	endif													;END OF CONDITIONAL BRANCHING               
-	UPDATE:													;BEGIN A RE-INITIALIZATION PASS FROM LABEL 'UPDATE'
-	aleft, aright	hrtfstat	gasrc, i(gkAz), i(gkElev), "$PATH_HRTF/hrtf-44100-left.dat","$PATH_HRTF/hrtf-44100-right.dat", i(gkradius_stat), sr	;APPLY hrtfmove2 OPCODE TO AUDIO SOURCE FROM INSTR 1
-				rireturn										;END OF RE-INITIALIZATION PASS - RETURN TO PERFORMANCE TIME
-				outs		aleft, aright							;SEND AUDIO TO OUTPUTS
+instr 5                  ; hrtfstat
+  if gkOnOff = 0 then    ; If on/off selecter is off
+    turnoff              ; Turn this instrument off immediately
+  endif                  ; End of conditional branching
+  if gkopcode != 3 then  ; If opcode selecter is not on 'hrtfstat'...
+    turnoff              ; Turn this instrument off immediately
+  endif                  ; End of conditional branching
+  ; If gkaz or gkelev change output (ktrigger) a momentary 1 value
+  ktrigger changed gkAz, gkElev, gkradius_stat
+  if ktrigger = 1 then  ; IF ktrigger=1, i.e. gkAz OR gkElev ARE CHANGED...
+    reinit UPDATE       ; Begin a reinitialization pass from label 'update'
+  endif                 ; End of conditional branching
+UPDATE:                 ; Begin a re-initialization pass from label 'update'
+  ; Apply hrtfmove2 opcode to audio source from instr 1
+  aleft, aright hrtfstat gasrc, i(gkAz), i(gkElev), "$PATH_HRTF/hrtf-44100-left.dat", "$PATH_HRTF/hrtf-44100-right.dat", i(gkradius_stat), sr
+  rireturn            ; End of re-initialization pass - return to performance time
+  outs aleft, aright  ; Send audio to outputs
 endin
 </CsInstruments>
 <CsScore>

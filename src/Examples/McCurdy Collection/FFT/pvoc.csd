@@ -1,95 +1,118 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, October 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, October 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for analysis files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for analysis files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../../SourceMaterials
+--env:SADIR+ = ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-giExp2			ftgen	1000, 0, 129, -25, 0, 0.5, 128, 2.0		;TABLE FOR EXP SLIDER
+giExp2 ftgen 1000, 0, 129, -25, 0, 0.5, 128, 2.0  ; Table for exp slider
 
 
-instr	1	;GUI AND CREATE A CONTINUOUS MOVING PHASE VALUE WITH A GLOBAL VARIABLE OUTPUT
+instr 1  ; GUI and create a continuous moving phase value with a global variable output
 
-	Sfile_new			strcpy	""					;INIT TO EMPTY STRING
+  Sfile_new strcpy ""  ; Init to empty string
 
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkporttime	invalue	"Portamento_Amount"
-		kpch			invalue	"Pitch"
-		gkpch		tablei	kpch, giExp2, 1
-					outvalue	"Pitch_Value", gkpch
-		gkptr		invalue	"Pointer"
-		gkspeed		invalue	"Speed"
-		gkoutgain		invalue	"Amplitude"
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkporttime invalue "Portamento_Amount"
+    kpch       invalue "Pitch"
+    gkpch tablei kpch, giExp2, 1
+    outvalue "Pitch_Value", gkpch
+    gkptr     invalue "Pointer"
+    gkspeed   invalue "Speed"
+    gkoutgain invalue "Amplitude"
 
-		gkptrswitch	invalue	"Pointer_Switch"
-		gkextractmode	invalue	"Extract_Mode"
-		gkfreqlim		invalue	"Frequency_Limit"
-		gkgatefn		invalue	"Gating_Function"
-		gkspec		invalue  "Spec_Env"
+    gkptrswitch   invalue "Pointer_Switch"
+    gkextractmode invalue "Extract_Mode"
+    gkfreqlim     invalue "Frequency_Limit"
+    gkgatefn      invalue "Gating_Function"
+    gkspec        invalue "Spec_Env"
 
-		gSfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	gSfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
-		gkfile		= abs(kfile)					
-	endif
+    gSfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk gSfile
+    kfile strcmpk Sfile_new, Sfile_old
+    gkfile = abs(kfile)
+  endif
 
-	if gkfile = 1 then
-		reinit NEW_FILE														;gkfile = 1 if the file have changed
-	endif
-	NEW_FILE:
-	gifilelen		filelen	gSfile	
-	gkphs		phasor	gkspeed/gifilelen
-				rireturn
+  if gkfile = 1 then
+    reinit NEW_FILE  ; gkfile = 1 if the file have changed
+  endif
+NEW_FILE:
+  gifilelen filelen gSfile
+  gkphs phasor gkspeed/gifilelen
+  rireturn
 endin
 
-instr	2	;pvoc INSTRUMENT
-	iporttime	=		.1														;DEFINE A VALUE FOR PORTAMENTO TIME (THIS WILL BE USED TO SMOOTH FLTK SLIDER MOVEMENTS) 
-	kporttime	linseg	0, .001, iporttime, 1, iporttime								;DEFINE A RAMPING UP, K-RATE FUNCTION THAT WILL BE USED FOR PORTAMENTO TIME (BASED ON THE I-RATE VALUE DEFINED IN THE PREVIOUS LINE). RAMPING UP THIS VALUE FROM ZERO PREVENTS VARIABLE FROM SLIDING UP TO THEIR REQUIRED INITIAL VALUES EACH TIME THE INSTRUMENT IS RESTARTED.
-	kporttime	=		kporttime * gkporttime										;SLIDER FOR PORTAMENTO TIME MULTIPLIED TO kporttime FUNCTION
-	kptr		portk	gkptr, kporttime											;APPLY PORTAMENTO TO THE SLIDER DERIVED VAIABLE 'gkptr'. A NEW VARIABLE CALLED 'kptr' IS OUTPUTTED.
-	kpch		portk	gkpch, kporttime											;APPLY PORTAMENTO TO THE SLIDER DERIVED VAIABLE 'gkpch'. A NEW VARIABLE CALLED 'kpch' IS OUTPUTTED.
-	kSwitch	changed	gkspec, gkptrswitch, gkextractmode, gkfreqlim, gkgatefn, gkfile		;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then															;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	START														;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif
+instr 2  ; Pvoc instrument
+  ; Define a value for portamento time (this will be used to smooth FLTK slider movements)
+  iporttime = .1
+  ; Define a ramping up, k-rate function that will be used for portamento time (based on
+  ; the i-rate value defined in the previous line). Ramping up this value from zero
+  ; prevents variable from sliding up to their required initial values each time the
+  ; instrument is restarted.
+  kporttime linseg 0, .001, iporttime, 1, iporttime
+  ; Slider for portamento time multiplied to kporttime function
+  kporttime = kporttime * gkporttime
+  ; Apply portamento to the slider derived vaiable 'gkptr'. A new variable called 'kptr'
+  ; is outputted.
+  kptr portk gkptr, kporttime
+  ; Apply portamento to the slider derived vaiable 'gkpch'. A new variable called 'kpch'
+  ; is outputted.
+  kpch portk gkpch, kporttime
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkspec, gkptrswitch, gkextractmode, gkfreqlim, gkgatefn, gkfile
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit START       ; Begin a reinitialisation pass from label 'start'
+  endif
 
-	START:
-	ifilelen1	filelen	gSfile													;DERIVE THE TOTAL DURATION OF THE ORIGINAL SOUND FILE FROM THE ANALYSIS FILE
-	kptr		=		kptr * ifilelen1											;REDEFINE THE VARIABLE 'kptr' TAKING INTO ACCOUNT THE ACTUAL DURATION OF THE ORIGINAL SOUND FILE (ifilelen)
-	kphs		phasor	gkspeed/ifilelen1											;DEFINE A MOVING PHASE VALUE THE FREQUENCY OF WHICH IS DIRECTLY PROPORTIONAL TO THE SPEED DEFINED BY THE FLTK SLIDER AND INVERSELY PROPORTIONAL TO THE DURATION OF THE ORIGINAL SOUND FILE
-	kphs		=		kphs * ifilelen1											;RESCALE THE AMPLITUDE OF THE MOVING PHASE VALUE ACCORDING TO THE DURATION OF THE ORIGINAL SOUND FILE
-	kptr		=		(gkptrswitch == 0 ? kptr : kphs) 								;CHECK TO SEE WHICH POINTER MODE HAS BEEN SELECTED AND DEFINE THE FINAL VALUE OF 'kptr' ACCORDINGLY
+START:
+  ; Derive the total duration of the original sound file from the analysis file
+  ifilelen1 filelen gSfile
+  ; Redefine the variable 'kptr' taking into account the actual duration of the original
+  ; sound file (ifilelen)
+  kptr = kptr * ifilelen1
+  ; Define a moving phase value the frequency of which is directly proportional to the
+  ; speed defined by the FLTK slider and inversely proportional to the duration of the
+  ; original sound file
+  kphs phasor gkspeed/ifilelen1
+  ; Rescale the amplitude of the moving phase value according to the duration of the
+  ; original sound file
+  kphs = kphs * ifilelen1
+  ; Check to see which pointer mode has been selected and define the final value of 'kptr'
+  ; accordingly
+  kptr = (gkptrswitch == 0 ? kptr : kphs)
 
-	;OUTPUT	OPCODE	REQUIRED INPUT ARGS         |OPTIONAL INPUT ARGS...
-	ares		pvoc		kptr, kpch, gSfile, i(gkspec), i(gkextractmode), i(gkfreqlim), i(gkgatefn)
+  ; Output opcode required input args         |optional input args...
+  ares pvoc kptr, kpch, gSfile, i(gkspec), i(gkextractmode), i(gkfreqlim), i(gkgatefn)
 
-			rireturn															;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-			outs		ares * gkoutgain, ares * gkoutgain								;SEND pvoc OUTPUT TO THE OUTPUTS, SCALE USING GLOBAL AMPLITUDE VARIABLE
+  rireturn  ; Return from reinitialisation pass to performance time passes
+  ; Send pvoc output to the outputs, scale using global amplitude variable
+  outs ares * gkoutgain, ares * gkoutgain
 endin
 </CsInstruments>
 <CsScore>
-;GATING FUNCTIONS USED BY PVOC (OPTIONAL)
-f 1 0 512 7 0 256 1 256 1	;50% THRESHOLD SHARP GATING
-f 2 0 512 5 1 512 .001		;INVERT AMPLITUDES
+; Gating functions used by pvoc (optional)
+f 1 0 512 7 0 256 1 256 1  ; 50% Threshold sharp gating
+f 2 0 512 5 1 512 .001     ; Invert amplitudes
 
-;INSTR | START | DURATION
-i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
+; Instr | start | duration
+i 1 0 3600  ; Instrument 1 plays for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 
@@ -103,9 +126,9 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -123,15 +146,20 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -152,15 +180,20 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -182,14 +215,14 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -208,11 +241,23 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Portamento_Amount</objectName>
@@ -230,14 +275,14 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -277,14 +322,14 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -308,6 +353,18 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -325,9 +382,9 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -352,14 +409,14 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -382,14 +439,14 @@ Limit</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -409,14 +466,14 @@ Limit</label>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -440,14 +497,14 @@ Limit</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -469,14 +526,14 @@ Limit</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -516,14 +573,14 @@ Limit</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -545,14 +602,14 @@ Limit</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -592,14 +649,14 @@ Limit</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -621,14 +678,14 @@ Limit</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -668,14 +725,14 @@ Limit</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -697,14 +754,14 @@ Limit</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -744,14 +801,14 @@ Limit</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -828,14 +885,14 @@ Limit</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -884,11 +941,23 @@ Limit</label>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   Spec Env</text>
+  <text>Spec Env</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -1,125 +1,133 @@
-;Written by Iain McCurdy 2011
+; Written by Iain McCurdy 2011
 
-;Modified for QuteCsound by René, May 2011
-;Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and QuteCsound svn rev 848
-
-
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio files, accept mono or stereo wav files
-;	Instrument 1 is activated by MIDI and by the GUI, added pitchbend
-;	Removed ifftsize, default to 2048
+; Modified for QuteCsound by René, May 2011
+; Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and
+; QuteCsound svn rev 848
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio files, accept mono or stereo wav files
+; Instrument 1 is activated by MIDI and by the GUI, added pitchbend
+; Removed ifftsize, default to 2048
+
+
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-giExp1		ftgen	0, 0, 129, -25, 0, 0.125, 128, 4.0			;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 0.125, 128, 4.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kfreeze		invalue	"Freeze"
-		gkfreeze		= (kfreeze + 1)%2
-		gktimescal	invalue	"TimeScaling"
-		kpitch		invalue	"Pitch"
-		gkpitch		tablei	kpitch, giExp1, 1
-					outvalue	"Pitch_Value", gkpitch
-		gkamp		invalue	"Amp"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kfreeze invalue "Freeze"
+    gkfreeze = (kfreeze + 1)%2
+    gktimescal invalue "TimeScaling"
+    kpitch     invalue "Pitch"
+    gkpitch tablei kpitch, giExp1, 1
+    outvalue "Pitch_Value", gkpitch
+    gkamp invalue "Amp"
 
-		;AUDIO FILE CHANGE / LOAD IN POWER OF 2 TABLES **********************************************************************************************
-		Sfile_new		strcpy	""										;INIT TO EMPTY STRING
+    ; Audio file change / load in power of 2 tables
+    ; **********************************************************************************************
+    Sfile_new strcpy ""  ; Init to empty string
 
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
+    Sfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk Sfile
+    kfile strcmpk Sfile_new, Sfile_old
 
-		gkfile_new	init		0
-		if	kfile != 0	then											;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-			gkfile_new	=	1										;Flag to inform instr 1 that a new file is loaded
-				reinit	NEW_FILE										;REINITIALIZE FROM LABEL 'NEW_FILE'
-		endif
-		NEW_FILE:
-		;FUNCTION TABLES NUMBERS OF THE SOUND FILE THAT WILL BE GRANULATED
-		ichn			filenchnls	Sfile
-		if ichn == 1 then
-			giFileL	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1				;READ MONO AUDIO FILE CHANNEL 1
-			giFileR	=		giFileL
-		else
-			giFileL	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1				;READ STEREO AUDIO FILE CHANNEL 1
-			giFileR	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 2				;READ STEREO AUDIO FILE CHANNEL 2
-		endif
-;*******************************************************************************************************************************************
-	endif
+    gkfile_new init 0
+    if kfile != 0 then  ; If a bang had been generated in the line above
+      gkfile_new = 1    ; Flag to inform instr 1 that a new file is loaded
+      reinit NEW_FILE   ; Reinitialize from label 'new_file'
+    endif
+NEW_FILE:
+    ; Function tables numbers of the sound file that will be granulated
+    ichn filenchnls Sfile
+    if ichn == 1 then
+      giFileL ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read mono audio file channel 1
+      giFileR = giFileL
+    else
+      giFileL ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read stereo audio file channel 1
+      giFileR ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 2  ; Read stereo audio file channel 2
+    endif
+    ; *******************************************************************************************************************************************
+  endif
 endin
 
 instr 1
-	if p4!=0 then														;MIDI
-		ioct		=	p4												;READ OCT VALUE FROM MIDI INPUT
-		;PITCH BEND=============================================================================================
-		iSemitoneBendRange = 12											;PITCH BEND RANGE IN SEMITONES
-		imin		= 0													;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333							;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax									;PITCH BEND VARIABLE (IN oct FORMAT)
-		kcps		=	cpsoct(ioct + kbend)								;SET FUNDAMENTAL
-		;=======================================================================================================
-	endif
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read oct value from MIDI input
+    ; Pitch
+    ; bend=============================================================================================
+    iSemitoneBendRange = 12  ; Pitch bend range in semitones
+    imin               = 0   ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kcps = cpsoct(ioct + kbend)  ; Set fundamental
+    ; =======================================================================================================
+  endif
 
-	kporttime	linseg	0, 0.001, 0.02										;CREATE A VARIABLE FUNCTION THAT RAPIDLY RAMPS UP TO A SET VALUE	
+  ; Create a variable function that rapidly ramps up to a set value
+  kporttime linseg 0, 0.001, 0.02
 
-	if p4!=0 then														;IF THIS IS A MIDI ACTIVATED NOTE... 
-		kpitch	=		kcps/cpsoct(8)									;MAP TO MIDI NOTE VALUE TO PITCH (CONVERT TO RATIO: MIDDLE C IS POINT OF UNISON)
-	else																;OTHERWISE...
-		kpitch	portk	gkpitch, kporttime								;USE THE GUI SLIDER VALUE
-	endif															;END OF THIS CONDITIONAL BRANCH
+  if p4 != 0 then  ; If this is a MIDI activated note...
+    ; Map to MIDI note value to pitch (convert to ratio: middle c is point of unison)
+    kpitch = kcps/cpsoct(8)
+  else                               ; Otherwise...
+    kpitch portk gkpitch, kporttime  ; Use the GUI slider value
+  endif                              ; End of this conditional branch
 
-	kamp		portk	gkamp, kporttime									;APPLY PORTAMENTO SMOOTHING TO AMPLITUDE SLIDER VALUE
+  kamp portk gkamp, kporttime  ; Apply portamento smoothing to amplitude slider value
 
-	if	gkfile_new = 1	then												;test if a new file is loaded by instr 10
-		gkfile_new = 0													;flag to zero for next file change
-		reinit	UPDATE2												;REINITIALIZE FROM LABEL 'NEW_FILE1'
-	endif
+  if gkfile_new = 1 then  ; test if a new file is loaded by instr 10
+    gkfile_new = 0        ; flag to zero for next file change
+    reinit UPDATE2        ; Reinitialize from label 'new_file1'
+  endif
 
-	UPDATE2:															;LABEL CALLED 'UPDATE2'
-	fsigL	pvstanal	gktimescal*gkfreeze,kamp,kpitch,giFileL
-	fsigR	pvstanal	gktimescal*gkfreeze,kamp,kpitch,giFileR
+UPDATE2:  ; Label called 'update2'
+  fsigL pvstanal gktimescal*gkfreeze, kamp, kpitch, giFileL
+  fsigR pvstanal gktimescal*gkfreeze, kamp, kpitch, giFileR
 
-	asigL	pvsynth	fsigL
-	asigR	pvsynth	fsigR
-	
-	aenv		linsegr	0, 0.05, 1, 0.05, 0									;DE-CLICKING ENVELOPE
-			outs		asigL*aenv, asigR*aenv								;SEND AUDIO TO OUTPUTS
+  asigL pvsynth fsigL
+  asigR pvsynth fsigR
+
+  aenv linsegr 0, 0.05, 1, 0.05, 0  ; De-clicking envelope
+  outs asigL*aenv, asigR*aenv       ; Send audio to outputs
 endin
 
-instr	2	;SET TIME SCALING SLIDER TO P4 DETERMINED VALUES
-		outvalue	"TimeScaling", p4
+instr 2  ; Set time scaling slider to p4 determined values
+  outvalue "TimeScaling", p4
 endin
 
-instr	3	;SET TIME SCALING SLIDER TO P4 DETERMINED VALUES
-		outvalue	"Pitch", p4
+instr 3  ; Set time scaling slider to p4 determined values
+  outvalue "Pitch", p4
 endin
 
-instr	11	;INIT
-		outvalue	"TimeScaling"	, 1.0
-		outvalue	"Pitch"		, 0.6
-		outvalue	"Amp"		, 1.0
+instr 11  ; Init
+  outvalue "TimeScaling", 1.0
+  outvalue "Pitch", 0.6
+  outvalue "Amp", 1.0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
-i 11		0		0	;INIT
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 11 0 0     ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -134,9 +142,9 @@ i 11		0		0	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -154,15 +162,20 @@ i 11		0		0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -183,15 +196,20 @@ i 11		0		0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -213,14 +231,14 @@ i 11		0		0	;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -239,11 +257,23 @@ i 11		0		0	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>TimeScaling</objectName>
@@ -261,14 +291,14 @@ i 11		0		0	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -308,14 +338,14 @@ i 11		0		0	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -339,6 +369,18 @@ i 11		0		0	;INIT
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -356,9 +398,9 @@ i 11		0		0	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -383,14 +425,14 @@ i 11		0		0	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -430,14 +472,14 @@ i 11		0		0	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -459,14 +501,14 @@ i 11		0		0	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -506,14 +548,14 @@ i 11		0		0	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -537,6 +579,18 @@ i 11		0		0	;INIT
   <eventLine>i 2 0 0.01 1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2261</objectName>
@@ -556,6 +610,18 @@ i 11		0		0	;INIT
   <eventLine>i 3 0 0.01 0.6</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Freeze</objectName>
@@ -570,11 +636,23 @@ i 11		0		0	;INIT
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Freeze</text>
+  <text>Freeze</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

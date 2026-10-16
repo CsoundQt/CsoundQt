@@ -1,148 +1,159 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
-;Modified for QuteCsound by René, January 2011, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, January 2011, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add tables for exp slider
-;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
-;	Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
-;
-;	                         compress
-;	-----------------------------------------------------------------------------------------------------------------------------
-;	'compress' is an opcode for dynamic processing of an audio signal. The signal used by the detector does not have to be
-;	the same as the signal to which dynamics processing is applied thus enabling the effect 'ducking' heard commonly in
-;	radio where the DJ cutting in with an announcement causes a dynamic dip in the music sound-bed.
-;	'compress' incorporates a noise gate, the threshold of which is controlled with the 'Noise Gate Threshold' slider.
-;	The 'Attack Time' and 'Release Time' sliders control the attack and release times of both the noise gate and the compressor.
-;	'Ratio' controls the amount of compression or expansion that will be applied.
-;	Values greater than 1 will apply higher degrees of compression, values less than 1 will dynamically
-;	expand the signal increasingly, a ratio of 1 will leave the signal unaltered.
-;	'Look Ahead Time' defines how far ahead the detector scans in order to pre-empt dynamic changes. What actually happens is
-;	that the signal to which dynamics processing is applied is delayed with respect to the detection signal but the result is the same.
-;	In this implementation the user can independently select the audio signal from which dynamics will be detected and the
-;	signal to which dynamics processing will be applied.
-;	The 'Detect Sig. Gain' slider allows the user to mix the detected signal into the output along with the compressed signal.
-;	A number of presets are provided to demonstrate some basic applications of this opcode.
+; Notes on modifications from original csd:
+; Add tables for exp slider
+; Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav
+; files
+; Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
+
+; compress
+; -----------------------------------------------------------------------------------------------------------------------------
+; 'compress' is an opcode for dynamic processing of an audio signal. The signal used by
+; the detector does not have to be
+; the same as the signal to which dynamics processing is applied thus enabling the effect
+; 'ducking' heard commonly in
+; radio where the DJ cutting in with an announcement causes a dynamic dip in the music
+; sound-bed.
+; 'compress' incorporates a noise gate, the threshold of which is controlled with the
+; 'Noise Gate Threshold' slider.
+; The 'Attack Time' and 'Release Time' sliders control the attack and release times of
+; both the noise gate and the compressor.
+; 'Ratio' controls the amount of compression or expansion that will be applied.
+; Values greater than 1 will apply higher degrees of compression, values less than 1 will
+; dynamically
+; expand the signal increasingly, a ratio of 1 will leave the signal unaltered.
+; 'Look Ahead Time' defines how far ahead the detector scans in order to pre-empt dynamic
+; changes. What actually happens is
+; that the signal to which dynamics processing is applied is delayed with respect to the
+; detection signal but the result is the same.
+; In this implementation the user can independently select the audio signal from which
+; dynamics will be detected and the
+; signal to which dynamics processing will be applied.
+; The 'Detect Sig. Gain' slider allows the user to mix the detected signal into the output
+; along with the compressed signal.
+; A number of presets are provided to demonstrate some basic applications of this opcode.
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-;TABLES FOR EXP SLIDER
-giExp1		ftgen	0, 0, 129, -25, 0, 0.001, 128, 1.0
-giExp2		ftgen	0, 0, 129, -25, 0, 0.001, 128, 2.0
-giExp100		ftgen	0, 0, 129, -25, 0, 0.125, 128, 100.0
+; Tables for exp slider
+giExp1   ftgen 0, 0, 129, -25, 0, 0.001, 128, 1.0
+giExp2   ftgen 0, 0, 129, -25, 0, 0.001, 128, 2.0
+giExp100 ftgen 0, 0, 129, -25, 0, 0.125, 128, 100.0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkInGain		invalue	"Live_Gain"
-		gkDetGain		invalue	"Detect_Gain"
-		gkthresh		invalue	"Gate_Threshold"
-		gkloknee		invalue	"Low_Knee"
-		gkhiknee		invalue	"High_Knee"
-		kratio		invalue	"Ratio"
-		gkratio		tablei	kratio, giExp100, 1
-					outvalue	"Ratio_Value", gkratio
-		katt			invalue	"Attack"
-		gkatt		tablei	katt, giExp1, 1
-					outvalue	"Attack_Value", gkatt
-		krel			invalue	"Release"
-		gkrel		tablei	krel, giExp1, 1
-					outvalue	"Release_Value", gkrel
-		gklook		invalue	"Look_Ahead"
-		kgain		invalue	"Gain"
-		gkgain		tablei	kgain, giExp2, 1
-					outvalue	"Gain_Value", gkgain
-		gkinput		invalue	"Input"
-		gkdetect		invalue	"Detect"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkInGain  invalue "Live_Gain"
+    gkDetGain invalue "Detect_Gain"
+    gkthresh  invalue "Gate_Threshold"
+    gkloknee  invalue "Low_Knee"
+    gkhiknee  invalue "High_Knee"
+    kratio    invalue "Ratio"
+    gkratio tablei kratio, giExp100, 1
+    outvalue "Ratio_Value", gkratio
+    katt invalue "Attack"
+    gkatt tablei katt, giExp1, 1
+    outvalue "Attack_Value", gkatt
+    krel invalue "Release"
+    gkrel tablei krel, giExp1, 1
+    outvalue "Release_Value", gkrel
+    gklook invalue "Look_Ahead"
+    kgain  invalue "Gain"
+    gkgain tablei kgain, giExp2, 1
+    outvalue "Gain_Value", gkgain
+    gkinput  invalue "Input"
+    gkdetect invalue "Detect"
+  endif
 endin
 
-instr	1
-	Sfile1_new	strcpy	""								;INIT TO EMPTY STRING
-	Sfile1		invalue	"_Browse1"
-	Sfile1_old	strcpyk	Sfile1_new
-	Sfile1_new	strcpyk	Sfile1
-	kfile1 		strcmpk	Sfile1_new, Sfile1_old
+instr 1
+  Sfile1_new strcpy ""  ; Init to empty string
+  Sfile1 invalue "_Browse1"
+  Sfile1_old strcpyk Sfile1_new
+  Sfile1_new strcpyk Sfile1
+  kfile1 strcmpk Sfile1_new, Sfile1_old
 
-	if	kfile1 != 0	then									;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-			reinit	NEW_FILE1								;REINITIALIZE FROM LABEL 'NEW_FILE1'
-	endif
-		
-	Sfile2_new	strcpy	""								;INIT TO EMPTY STRING
-	Sfile2		invalue	"_Browse2"
-	Sfile2_old	strcpyk	Sfile2_new
-	Sfile2_new	strcpyk	Sfile2
-	kfile2 		strcmpk	Sfile2_new, Sfile2_old
+  if kfile1 != 0 then  ; If a bang had been generated in the line above
+    reinit NEW_FILE1   ; Reinitialize from label 'new_file1'
+  endif
 
-	if	kfile2 != 0	then									;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-			reinit	NEW_FILE2								;REINITIALIZE FROM LABEL 'NEW_FILE2'
-	endif
+  Sfile2_new strcpy ""  ; Init to empty string
+  Sfile2 invalue "_Browse2"
+  Sfile2_old strcpyk Sfile2_new
+  Sfile2_new strcpyk Sfile2
+  kfile2 strcmpk Sfile2_new, Sfile2_old
 
-	if gkinput=0 then
-		aasigL, aasigR	ins
-		aasigL	=	aasigL*gkInGain
-		aasigR	=	aasigR*gkInGain
-	else
-		NEW_FILE1:
-		aasigL, aasigR	FilePlay2	Sfile1, 1, 0, 1
-		rireturn
-	endif
-	
-	if gkdetect=0 then
-		acsigL, acsigR	ins
-		acsigL	=	acsigL*gkInGain
-		acsigR	=	acsigR*gkInGain
-	else
-		NEW_FILE2:
-		acsigL, acsigR	FilePlay2	Sfile2, 1, 0, 1
-		rireturn
-	endif
-	
-	ktrig	changed	gklook
-	if ktrig=1 then
-		reinit	UPDATE
-	endif
-	UPDATE:
-	;ar 		compress 	aasig, acsig,  kthresh,  kloknee,  khiknee,  kratio,  katt,  krel, ilook
-	aCompL	compress	aasigL, acsigL, gkthresh, gkloknee, gkhiknee, gkratio, gkatt, gkrel, i(gklook)
-	aCompR	compress	aasigR, acsigR, gkthresh, gkloknee, gkhiknee, gkratio, gkatt, gkrel, i(gklook)
-			rireturn
-			outs		(aCompL*gkgain)+(acsigL*gkDetGain), (aCompR*gkgain)+(acsigR*gkDetGain)
+  if kfile2 != 0 then  ; If a bang had been generated in the line above
+    reinit NEW_FILE2   ; Reinitialize from label 'new_file2'
+  endif
+
+  if gkinput = 0 then
+    aasigL, aasigR ins
+    aasigL = aasigL*gkInGain
+    aasigR = aasigR*gkInGain
+  else
+NEW_FILE1:
+    aasigL, aasigR FilePlay2 Sfile1, 1, 0, 1
+    rireturn
+  endif
+
+  if gkdetect = 0 then
+    acsigL, acsigR ins
+    acsigL = acsigL*gkInGain
+    acsigR = acsigR*gkInGain
+  else
+NEW_FILE2:
+    acsigL, acsigR FilePlay2 Sfile2, 1, 0, 1
+    rireturn
+  endif
+
+  ktrig changed gklook
+  if ktrig = 1 then
+    reinit UPDATE
+  endif
+UPDATE:
+  ; ar compress aasig, acsig, kthresh, kloknee, khiknee, kratio, katt, krel, ilook
+  aCompL compress aasigL, acsigL, gkthresh, gkloknee, gkhiknee, gkratio, gkatt, gkrel, i(gklook)
+  aCompR compress aasigR, acsigR, gkthresh, gkloknee, gkhiknee, gkratio, gkatt, gkrel, i(gklook)
+  rireturn
+  outs (aCompL*gkgain)+(acsigL*gkDetGain), (aCompR*gkgain)+(acsigR*gkDetGain)
 endin
 
-instr	2	;PRESETS
-		outvalue	"_SetPresetIndex", p4
+instr 2  ; Presets
+  outvalue "_SetPresetIndex", p4
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -157,9 +168,9 @@ i 10		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -177,15 +188,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -203,11 +219,23 @@ i 10		0	   3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -225,15 +253,20 @@ i 10		0	   3600	;GUI
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -256,6 +289,18 @@ i 10		0	   3600	;GUI
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -273,9 +318,9 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -325,14 +370,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -372,14 +417,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -401,15 +446,20 @@ i 10		0	   3600	;GUI
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -432,6 +482,18 @@ i 10		0	   3600	;GUI
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
@@ -449,9 +511,9 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -501,14 +563,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -548,14 +610,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -577,15 +639,20 @@ i 10		0	   3600	;GUI
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -606,14 +673,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -653,14 +720,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -682,15 +749,20 @@ i 10		0	   3600	;GUI
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -711,14 +783,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -758,14 +830,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -787,14 +859,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -834,14 +906,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -863,14 +935,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -910,14 +982,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -939,14 +1011,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -986,14 +1058,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1015,14 +1087,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1062,14 +1134,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1091,14 +1163,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1138,14 +1210,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1167,14 +1239,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1214,14 +1286,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1245,6 +1317,18 @@ i 10		0	   3600	;GUI
   <eventLine>i2 0 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -1264,6 +1348,18 @@ i 10		0	   3600	;GUI
   <eventLine>i2 0 0 1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3444</objectName>
@@ -1283,6 +1379,18 @@ i 10		0	   3600	;GUI
   <eventLine>i2 0 0 2</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -1302,6 +1410,18 @@ i 10		0	   3600	;GUI
   <eventLine>i2 0 0 3</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

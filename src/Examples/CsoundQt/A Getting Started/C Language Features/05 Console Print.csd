@@ -51,11 +51,11 @@ endin
 
 instr 2
 iNumber = 21.234512
-prints "Here is the number: %i %n", iNumber 	; print as integer and go to next line
-prints "Here is the number: %f %n", iNumber	; print as float value
-prints "Here is the number: %.3f %n", iNumber	; print with 3 digits after the point
-prints "Here is the number: %t %.3f %n", iNumber ;insert a tab
-prints "Here is the number: %t %.3f %t %.2f %n ", iNumber, iNumber ; insert to tabs print value, put a tab and again
+prints "Here is the number: %i \n", iNumber 	; print as integer and go to next line
+prints "Here is the number: %f \n", iNumber	; print as float value
+prints "Here is the number: %.3f \n", iNumber	; print with 3 digits after the point
+prints "Here is the number: %t %.3f \n", iNumber ;insert a tab
+prints "Here is the number: %t %.3f %t %.2f \n ", iNumber, iNumber ; insert to tabs print value, put a tab and again
 endin
 
 instr 3

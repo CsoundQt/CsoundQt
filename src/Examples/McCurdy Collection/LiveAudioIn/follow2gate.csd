@@ -1,55 +1,63 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 January 2011 and QuteCsound svn rev 817
 
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt
+; -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-giExp1	ftgen	0, 0, 129, -25, 0, 0.0001, 128, 1.0	;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 0.0001, 128, 1.0  ; Table for exp slider
 
 
-instr 	1
-	kgain	invalue	"Gain"
-	katt		invalue	"Attack"
-	krel		invalue	"Release"
-	kthresh	invalue	"Threshold"
-	kthresh	tablei	kthresh, giExp1, 1
-			outvalue	"Threshold_Value", kthresh
-	
-	aL, aR 	ins								;READ STEREO INPUT
-	aL		=		aL * kgain				;AUDIO SIGNALS ARE SCALED BY THE FLTK GAIN CONTROL
-	aR		=		aR * kgain				;AUDIO SIGNALS ARE SCALED BY THE FLTK GAIN CONTROL
-	afollow 	follow2 	aL, katt, krel				;CREATE A AMPLITUDE FOLLOWING UNIPOLAR SIGNAL
-	kfollow	downsamp	afollow					;DOWNSAMPLE TO CREATE A K-RATE VERSION OF THE AMPLITUDE FOLLOWING SIGNAL
-	kmeter	portk	kfollow, .05				;SMOOTH THE MOVEMENT OF THE AMPLITUDE FOLLOWING SIGNAL - THIS WILL MAKE THE METERS EASIER TO VIEW
-	ktrig	changed	kmeter					;IF THE AMPLIUDE FOLLOWING SIGNAL CHANGES GENERATE A TRIGGER SIGNAL (A MOMENTARY '1' VALUE)
-	if ktrig == 1 then
-				outvalue	"Meter", kmeter		;UPDATE AMPLITUDE METER
-	endif
+instr 1
+  kgain   invalue "Gain"
+  katt    invalue "Attack"
+  krel    invalue "Release"
+  kthresh invalue "Threshold"
+  kthresh tablei kthresh, giExp1, 1
+  outvalue "Threshold_Value", kthresh
 
-	kgate	=		(kfollow < kthresh?0:1)		;CREATE A GATE SIGNAL (EITHER 1 OR ZERO DEPENDING UPON COMPARISON WITH THE THRESHOLD VALUE
-	kgate	port		kgate,.01					;SMOOTH THE OPENING AND CLOSING OF THE GATE TO PREVENT CLICKS
-			outs		aL*kgate, aR*kgate			;SEND AUDIO TO THE OUTPUTS AND APPLY THE GATING SIGNAL
+  aL, aR ins                      ; Read stereo input
+  aL = aL * kgain                 ; Audio signals are scaled by the FLTK gain control
+  aR = aR * kgain                 ; Audio signals are scaled by the FLTK gain control
+  afollow follow2 aL, katt, krel  ; Create a amplitude following unipolar signal
+  ; Downsample to create a k-rate version of the amplitude following signal
+  kfollow downsamp afollow
+  ; Smooth the movement of the amplitude following signal - this will make the meters
+  ; easier to view
+  kmeter portk kfollow, .05
+  ; If the ampliude following signal changes generate a trigger signal (a momentary '1'
+  ; value)
+  ktrig changed kmeter
+  if ktrig == 1 then
+    outvalue "Meter", kmeter  ; Update amplitude meter
+  endif
+
+  ; Create a gate signal (either 1 or zero depending upon comparison with the threshold
+  ; value
+  kgate = (kfollow < kthresh?0:1)
+  kgate port kgate, .01    ; Smooth the opening and closing of the gate to prevent clicks
+  outs aL*kgate, aR*kgate  ; Send audio to the outputs and apply the gating signal
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
+; Instr | start | duration
+i 1 0 3600  ; Instrument 1 plays for 1 hour (and keeps performance going)
 </CsScore>
 </CsoundSynthesizer>
 
@@ -63,9 +71,9 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -83,15 +91,20 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -112,14 +125,14 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -159,14 +172,14 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -188,15 +201,20 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -222,9 +240,9 @@ The left channel input only is scanned by the gate but the gate is subsequently 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
    <r>158</r>
@@ -263,9 +281,9 @@ The left channel input only is scanned by the gate but the gate is subsequently 
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -284,14 +302,14 @@ The left channel input only is scanned by the gate but the gate is subsequently 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -313,14 +331,14 @@ The left channel input only is scanned by the gate but the gate is subsequently 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -360,14 +378,14 @@ The left channel input only is scanned by the gate but the gate is subsequently 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -389,14 +407,14 @@ The left channel input only is scanned by the gate but the gate is subsequently 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -436,14 +454,14 @@ The left channel input only is scanned by the gate but the gate is subsequently 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -465,14 +483,14 @@ The left channel input only is scanned by the gate but the gate is subsequently 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -512,14 +530,14 @@ The left channel input only is scanned by the gate but the gate is subsequently 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

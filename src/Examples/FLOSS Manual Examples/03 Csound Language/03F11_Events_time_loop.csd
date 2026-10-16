@@ -62,7 +62,7 @@ aEnv      transeg   0, .005, 0, iamp, p3-.005, -10, 0
 aSine     poscil    aEnv, ifreq
 aL, aR    pan2      aSine, ipan
           outs      aL, aR
-          prints    "ibasfreq = %d, ipartial = %d, ifreq = %d%n",\
+          prints    "ibasfreq = %d, ipartial = %d, ifreq = %d\n",\
                      ibasfreq, ipartnum, ifreq
   endin
 

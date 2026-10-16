@@ -18,7 +18,7 @@ aFilt     butbp     aNois, kCfreq, kCfreq/10; filtered noise
 aBal      balance   aFilt, aNois, 1; balance amplitude
           outs      aBal, aBal
 ;;record the audiosignal with a phasor as index
-          prints    "RECORDING FILTERED NOISE!%n"
+          prints    "RECORDING FILTERED NOISE!\n"
  ;create a writing pointer in the table,
  ;moving in 5 seconds from index 0 to the end
 aindx     phasor    1/5
@@ -27,7 +27,7 @@ aindx     phasor    1/5
   endin
 
   instr 2 ;read the values of the table and play it
-          prints    "PLAYING FILTERED NOISE!%n"
+          prints    "PLAYING FILTERED NOISE!\n"
 aindx     phasor    1/5
 aSnd      table3    aindx, giFt, 1
           outs      aSnd, aSnd
@@ -35,7 +35,7 @@ aSnd      table3    aindx, giFt, 1
 
   instr 3 ;record live input
 ktim      timeinsts ; playing time of the instrument in seconds
-          prints    "PLEASE GIVE YOUR LIVE INPUT AFTER THE BEEP!%n"
+          prints    "PLEASE GIVE YOUR LIVE INPUT AFTER THE BEEP!\n"
 kBeepEnv  linseg    0, 1, 0, .01, 1, .5, 1, .01, 0
 aBeep     oscils    .2, 600, 0
           outs      aBeep*kBeepEnv, aBeep*kBeepEnv
@@ -52,7 +52,7 @@ aindx     phasor    1/5
   endin
 
   instr 4 ;read the values from the table and play it
-          prints    "PLAYING LIVE INPUT!%n"
+          prints    "PLAYING LIVE INPUT!\n"
 aindx     phasor    1/5
 aSnd      table3    aindx, giFt, 1
           outs      aSnd, aSnd

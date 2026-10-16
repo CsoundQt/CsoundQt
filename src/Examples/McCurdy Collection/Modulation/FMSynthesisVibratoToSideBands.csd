@@ -1,52 +1,62 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 
 ; Modified for QuteCsound by René, November 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 1		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 1      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine	ftgen	0, 0, 129, 10, 1	;A SINE WAVE (INTERPOLATING OSCILLATOR OPCODES ARE USED THEREFORE A SMALL TABLE SIZE (+1) CAN BE USED)
+; A sine wave (interpolating oscillator opcodes are used therefore a small table size (+1)
+; can be used)
+gisine ftgen 0, 0, 129, 10, 1
 
 
 instr 1
-	ifreq 	= 	300			;FREQUENCY OF THE CARRIER
-	
-	;VIBRATO DEPTH - GRADUALLY INCREASES - WHEN VIBRATO FREQUENCY IS HIGH (MORE THAN ABOUT 15 Hz), INCREASES IN VIBRATO DEPTH ARE PERCEIVED AS INCREASES IN THE STRENGTH AND NUMBERS OF THE SIDE BANDS, I.E. SPECTRAL RICHNESS/BRIGHTNESS OF THE TIMBRE
-	kVibratoDepth	expseg	.001, (4), 30, (8), 1000, (25), 1000, (8), 3000
-	
-	;VIBRATO FREQUENCY - GRADUALLY BUILDS, EVENTUALLY WE ARE NO LONGER ABLE TO PERCEIVE THE PITCH FLUCTUATIONS BUT INSTEAD HEAR 'SIDE BANDS'
-	kVibratoFreq	expseg	2, (9), 7, (8), 350, (20), 1000, (8), 1000
-	
-	;THE MODULATOR WAVEFORM IS CREATED
-	aVibrato		oscili	kVibratoDepth, kVibratoFreq, gisine
-	
-	;THE AUDIO OUTPUT OF THE MODULATOR WAVEFORM (aModulator) IS ADDED TO THE FREQUENCY OF THE CARRIER WAVEFORM 
-	aSignal		oscili	0.2, ifreq + aVibrato, gisine
-	dispfft aSignal, 0.1, 2048
-		  		outs 	aSignal, aSignal
-	ktrig	  	metro	10	;CREATE A REPEATING TRIGGER SIGNAL
-	if ktrig==1 then
-			outvalue	 	"Vibrato_Depth", kVibratoDepth				;UPDATE VALUE BOX 'gihVibratoDepth' WITH THE VALUE kVibratoDepth WHENEVER A TRIGGER PULSE IS RECEIVED
-			outvalue		"Vibrato_Rate", kVibratoFreq					;UPDATE VALUE BOX 'gihVibratoFreq' WITH THE VALUE kVibratoFreq WHENEVER A TRIGGER PULSE IS RECEIVED
-	endif
+  ifreq = 300  ; Frequency of the carrier
+
+  ; Vibrato depth - gradually increases - when vibrato frequency is high (more than about
+  ; 15 hz), increases in vibrato depth are perceived as increases in the strength and
+  ; numbers of the side bands, i.e. Spectral richness/brightness of the timbre
+  kVibratoDepth expseg .001, (4), 30, (8), 1000, (25), 1000, (8), 3000
+
+  ; Vibrato frequency - gradually builds, eventually we are no longer able to perceive the
+  ; pitch fluctuations but instead hear 'side bands'
+  kVibratoFreq expseg 2, (9), 7, (8), 350, (20), 1000, (8), 1000
+
+  ; The modulator waveform is created
+  aVibrato oscili kVibratoDepth, kVibratoFreq, gisine
+
+  ; The audio output of the modulator waveform (amodulator) is added to the frequency of
+  ; the carrier waveform
+  aSignal oscili 0.2, ifreq + aVibrato, gisine
+  dispfft aSignal, 0.1, 2048
+  outs    aSignal, aSignal
+  ktrig metro 10  ; Create a repeating trigger signal
+  if ktrig == 1 then
+    ; Update value box 'gihvibratodepth' with the value kvibratodepth whenever a trigger
+    ; pulse is received
+    outvalue "Vibrato_Depth", kVibratoDepth
+    ; Update value box 'gihvibratofreq' with the value kvibratofreq whenever a trigger
+    ; pulse is received
+    outvalue "Vibrato_Rate", kVibratoFreq
+  endif
 endin
 </CsInstruments>
 <CsScore>
-f 0	   3600		;DUMMY SCORE EVENT - KEEPS REALTIME PERFORMANCE GOING FOR ONE HOUR
+f 0 3600  ; Dummy score event - keeps realtime performance going for one hour
 </CsScore>
 </CsoundSynthesizer>
 

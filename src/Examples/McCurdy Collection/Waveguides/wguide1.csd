@@ -1,103 +1,109 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-;TABLES FOR EXP SLIDER
-giExp1	ftgen	0, 0, 129, -25, 0, 20.0, 128, 10000.0
-giExp2	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0
+; Tables for exp slider
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 10000.0
+giExp2 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
-instr	1	;GUI & INPUT
-;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kingain		invalue	"InputGain"
-		kfreq		invalue	"Frequency"
-		gkfreq		tablei	kfreq, giExp1, 1
-					outvalue	"Frequency_Value", gkfreq
-		kcutoff		invalue	"Cutoff"
-		gkcutoff		tablei	kcutoff, giExp2, 1
-					outvalue	"Cutoff_Value", gkcutoff
-		gkfeedback	invalue	"Feedback"
-		gkamp		invalue	"Amplitude"
-		kinput		invalue	"Input"
+instr 1  ; GUI & input
+  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kingain invalue "InputGain"
+    kfreq   invalue "Frequency"
+    gkfreq tablei kfreq, giExp1, 1
+    outvalue "Frequency_Value", gkfreq
+    kcutoff invalue "Cutoff"
+    gkcutoff tablei kcutoff, giExp2, 1
+    outvalue "Cutoff_Value", gkcutoff
+    gkfeedback invalue "Feedback"
+    gkamp      invalue "Amplitude"
+    kinput     invalue "Input"
 
-		Sfile_new		strcpy	""							;INIT TO EMPTY STRING
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
-	endif
-;INPUT
-	if	kinput==0		then									;IF INPUT 'Audio File' IS SELECTED...
-		kNew_file		changed	kfile						;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-		if	kNew_file=1	then								;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-			reinit	NEW_FILE								;BEGIN A REINITIALISATION PASS FROM LABEL 'NEW_FILE'
-		endif
-		NEW_FILE:
-		gasigL, gasigR	FilePlay2	Sfile, 1, 0, 1					;GENERATE 2 AUDIO SIGNALS FROM A SOUND FILE	
-					rireturn
-	elseif	kinput==1	then									;IF INPUT 'Live' IS SELECTED...
-		asigL, asigR	ins									;TAKE INPUT FROM COMPUTER'S AUDIO INPUT
-		gasigL	=	asigL * kingain						;SCALE USING 'Input Gain' SLIDER
-		gasigR	=	asigR * kingain						;SCALE USING 'Input Gain' SLIDER
-	else													;OTHERWISE...
-		kint		random	0.1,0.4							;INTERVAL BETWEEN IMPULSES IS RANDOMISED SLIGHTLY
-		a1		mpulse	4,kint							;GENERATE IMPULSES
-		kcfoct	randomi	6,12,2							;GENERATE RANDOM VALUES FOR FILTER CUTOFF FREQUENCY (OCT FORMAT)
-		gasigL	butlp	a1, cpsoct(kcfoct)					;LOWPASS FILTER STREAM OF CLICKS
-		gasigR	=		gasigL							;SET RIGHT CHANNEL SIGNAL TO THE SAME AS THE LEFT CHANNEL SIGNAL
-	endif
+    Sfile_new strcpy ""  ; Init to empty string
+    Sfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk Sfile
+    kfile strcmpk Sfile_new, Sfile_old
+  endif
+  ; Input
+  if kinput == 0 then  ; If input 'audio file' is selected...
+    ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+    ; variables change. (output 'kswitch' is normally zero)
+    kNew_file changed kfile
+    if kNew_file = 1 then  ; If i-rate variable change trigger is '1'...
+      reinit NEW_FILE      ; Begin a reinitialisation pass from label 'new_file'
+    endif
+NEW_FILE:
+    gasigL, gasigR FilePlay2 Sfile, 1, 0, 1  ; Generate 2 audio signals from a sound file
+    rireturn
+  elseif kinput == 1 then     ; If input 'live' is selected...
+    asigL, asigR ins          ; Take input from computer's audio input
+    gasigL = asigL * kingain  ; Scale using 'input gain' slider
+    gasigR = asigR * kingain  ; Scale using 'input gain' slider
+  else                        ; Otherwise...
+    kint random 0.1, 0.4      ; Interval between impulses is randomised slightly
+    a1 mpulse 4, kint         ; Generate impulses
+    ; Generate random values for filter cutoff frequency (oct format)
+    kcfoct randomi 6, 12, 2
+    gasigL butlp a1, cpsoct(kcfoct)  ; Lowpass filter stream of clicks
+    ; Set right channel signal to the same as the left channel signal
+    gasigR = gasigL
+  endif
 endin
 
-instr	2
-	iporttime	=		0.01									;I-RATE VARIABLE DEFINITION OF PORTAMENTO TIME
-	kporttime	linseg	0,0.01,iporttime,1,iporttime				;RAMPING UP FROM ZERO VERSION OF PORTAMENTO TIME VARIABLE
-	kfreq	portk	gkfreq, kporttime						;SMOOTH VARIABLE CHANGES WITH PORTK
-	afreq	interp	kfreq								;INTERPOLATE TO CREATE A-RATE VERSION OF K-RATE VARIABLE
+instr 2
+  iporttime = 0.01  ; I-rate variable definition of portamento time
+  ; Ramping up from zero version of portamento time variable
+  kporttime linseg 0, 0.01, iporttime, 1, iporttime
+  kfreq portk gkfreq, kporttime  ; Smooth variable changes with portk
+  afreq interp kfreq             ; Interpolate to create a-rate version of k-rate variable
 
-	;OUTPUT	OPCODE |  INPUT | DELAY/COMB_FREQ | LPF_CUTOFF_FREQ | FEEDBACK_RATIO
-	aresL 	wguide1	gasigL,        afreq,         gkcutoff,       gkfeedback
-	aresR 	wguide1	gasigR,        afreq,         gkcutoff,       gkfeedback
-	
-			outs		aresL * gkamp, aresR * gkamp				;SEND wguide OUTPUT TO THE AUDIO OUTPUTS AND SCALE USING THE GUI SLIDER VARIABLE gkamp
-			clear	gasigL, gasigR							;CLEAR GLOBAL AUDIO VARIABLES
+  ; Output opcode |  input | delay/comb_freq | lpf_cutoff_freq | feedback_ratio
+  aresL wguide1 gasigL, afreq, gkcutoff, gkfeedback
+  aresR wguide1 gasigR, afreq, gkcutoff, gkfeedback
+
+  ; Send wguide output to the audio outputs and scale using the GUI slider variable gkamp
+  outs aresL * gkamp, aresR * gkamp
+  clear gasigL, gasigR  ; Clear global audio variables
 endin
 </CsInstruments>
 <CsScore>
-i  1 0	3600		;GUI
+i 1 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -111,9 +117,9 @@ i  1 0	3600		;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -131,15 +137,20 @@ i  1 0	3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>170</r>
    <g>170</g>
    <b>170</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -160,14 +171,14 @@ i  1 0	3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -204,11 +215,23 @@ i  1 0	3600		;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -226,15 +249,20 @@ i  1 0	3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>170</r>
    <g>170</g>
    <b>170</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -257,14 +285,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -286,14 +314,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -345,14 +373,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -376,6 +404,18 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -393,9 +433,9 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -420,14 +460,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -467,14 +507,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -496,14 +536,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -543,14 +583,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -572,14 +612,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -619,14 +659,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -648,14 +688,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -695,14 +735,14 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

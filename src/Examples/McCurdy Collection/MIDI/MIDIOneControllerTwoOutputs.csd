@@ -1,40 +1,49 @@
-;Writen by Iain McCurdy, 2006
+; Writen by Iain McCurdy, 2006
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add scope for fun
+; Notes on modifications from original csd:
+; Add scope for fun
 
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
- 
-</CsOptions>    
+
+</CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 2		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 2      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	1	; SIMPLE BEEP INSTRUMENT - CAN BE ACTIVATED VIA A CONNECTED MIDI KEYBOARD
-	
-	;OUTPUT	OPCODE	CHANNEL | CTRLNUMBER | MINIMUM | MAXIMUM
-	koct1	ctrl7	1,            1,          8,        9 	;READ CONTROLLER INFORMATION FROM CONTINUOUS CONTROLLER NUMBER 1 ON MIDI CHANNEL 1 AND RESCALE TO BE WITHIN THE RANGE 8 - 9. BOTH CTRL7S REFERENCE THE SAME MIDI CONTROLLER
-	koct2	ctrl7	1,            1,          8,        7 	;READ CONTROLLER INFORMATION FROM CONTINUOUS CONTROLLER NUMBER 1 ON MIDI CHANNEL 1 AND RESCALE TO BE WITHIN THE RANGE 8 - 7. BOTH CTRL7S REFERENCE THE SAME MIDI CONTROLLER
-	
-	;OUTPUT	OPCODE	AMPLITUDE |  FREQUENCY   | F.N.
-	asig1	oscili	0.25,      cpsoct(koct1),   1			;TWO OSCILLATORS ARE CREATED WITH DIFFERENT FREQUENCIES - FREQUENCY VARIABLES MUST BE CONVERTED INTO CPS FORMAT FROM OCT FORMAT
-	asig2	oscili	0.25,      cpsoct(koct2),   1			;TWO OSCILLATORS ARE CREATED WITH DIFFERENT FREQUENCIES - FREQUENCY VARIABLES MUST BE CONVERTED INTO CPS FORMAT FROM OCT FORMAT
-	
-			outs		(asig1 + asig2), (asig1 + asig2)		;THE TWO OSCILLATORS ARE MIXED AND SENT TO THE OUTPUT
+instr 1  ; Simple beep instrument - can be activated via a connected MIDI keyboard
+
+  ; Output opcode channel | ctrlnumber | minimum | maximum
+  ; Read controller information from continuous controller number 1 on MIDI channel 1 and
+  ; rescale to be within the range 8 - 9. Both ctrl7s reference the same MIDI controller
+  koct1 ctrl7 1, 1, 8, 9
+  ; Read controller information from continuous controller number 1 on MIDI channel 1 and
+  ; rescale to be within the range 8 - 7. Both ctrl7s reference the same MIDI controller
+  koct2 ctrl7 1, 1, 8, 7
+
+  ; Output opcode amplitude |  frequency   | f.n.
+  ; Two oscillators are created with different frequencies - frequency variables must be
+  ; converted into cps format from oct format
+  asig1 oscili 0.25, cpsoct(koct1), 1
+  ; Two oscillators are created with different frequencies - frequency variables must be
+  ; converted into cps format from oct format
+  asig2 oscili 0.25, cpsoct(koct2), 1
+
+  ; The two oscillators are mixed and sent to the output
+  outs (asig1 + asig2), (asig1 + asig2)
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 129 10 1		; SINE WAVE
-i 1 0 3600		; INSTRUMENT 1 PLAYS A NOTE FOR 1 HOUR
+f 1 0 129 10 1  ; Sine wave
+i 1 0 3600      ; Instrument 1 plays a note for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

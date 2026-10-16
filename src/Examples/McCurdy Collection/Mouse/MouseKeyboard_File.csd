@@ -1,18 +1,19 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
 ; Modified for QuteCsound by René, January 2011.
 ; Thanks to Andres CABRERA for the mouse channels names.
 
-; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817 with "Widgets are an independent window" ON.
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817 with "Widgets
+; are an independent window" ON.
 
 
 /*
 Mouse Keyboard
 --------------
 This csd was originally written for use by someone who only had the use of a head-mouse for music performance.
-A graphical keyboard is drawn on the screen. Notes are played by moving the mouse over a particular key. 
-As well as activating that note, dynamic control is possible by moving the mouse vertically up the key. 
-As the user moves the mouse right to the very bottom of the key, a modulation effect is also introduced. 
+A graphical keyboard is drawn on the screen. Notes are played by moving the mouse over a particular key.
+As well as activating that note, dynamic control is possible by moving the mouse vertically up the key.
+As the user moves the mouse right to the very bottom of the key, a modulation effect is also introduced.
 No clicking is required enabling better timing in performance. The GUI window needs to be in focus for this to work.
 The user can change the functioning (or non-functioning) of the left click mouse button using the menu Mode.
 The user can choose between different stereo wav sounds using the browse button within the GUI.
@@ -21,273 +22,302 @@ The mouse relative position is given by the channels _MouseRelX and _MouseRelY.
 
 If the windows need to be resized, for example to accomodate use on a netbook, it is mandatory to manually update the values of boxes dimensions and positions in the csd file.
 
-Professional head mouse or iris tracking software can be very expensive and requires practice. 
+Professional head mouse or iris tracking software can be very expensive and requires practice.
 iNavigate is a free option for Mac OS 10.5 if the user wants to experiment with this approach.
 */
 
 
-;Notes on modifications from original csd:
-;	No automatic rescale
-;	Add control widgets in GUI
-;	Add Browser for audio file, accept mono or stereo wav files
-;	reverse volume, upper position is 0.0, bottom position (of black key) is 1.0
+; Notes on modifications from original csd:
+; No automatic rescale
+; Add control widgets in GUI
+; Add Browser for audio file, accept mono or stereo wav files
+; reverse volume, upper position is 0.0, bottom position (of black key) is 1.0
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	0,0,4096,10,1	;A SINE WAVE	
+gisine ftgen 0, 0, 4096, 10, 1  ; A sine wave
 
-;TABLE TO MAP MOUSE LOCATION ALONG THE Y-AXIS TO VARIOUS CONTROL PARAMETERS
-giampscale	ftgen	0,0,1024,7,0,240,1,1024-240,1
-gimodscale	ftgen	0,0,1024,7,0,600,0,1024-600,1
-giLPFscale	ftgen	0,0,1024,7,0,800,1,224,1
+; Table to map mouse location along the y-axis to various control parameters
+giampscale ftgen 0, 0, 1024, 7, 0, 240, 1, 1024-240, 1
+gimodscale ftgen 0, 0, 1024, 7, 0, 600, 0, 1024-600, 1
+giLPFscale ftgen 0, 0, 1024, 7, 0, 800, 1, 224, 1
 
-giOct_White	ftgen	0,0,16,-2,7,7,7,7,7,7,7,8,8,8,8,8,8,8,9										;OCT TABLE FOR WHITES KEYS
-giSemis_White	ftgen	0,0,16,-2,0,2/12,4/12,5/12,7/12,9/12,11/12,0,2/12,4/12,5/12,7/12,9/12,11/12		;SEMIS TABLE FOR WHITES KEYS
+; Oct table for whites keys
+giOct_White ftgen 0, 0, 16, -2, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 9
+; Semis table for whites keys
+giSemis_White ftgen 0, 0, 16, -2, 0, 2/12, 4/12, 5/12, 7/12, 9/12, 11/12, 0, 2/12, 4/12, 5/12, 7/12, 9/12, 11/12
 
 
-			zakinit	2,1	;INITIALISE ZAK SPACE FOR VARIABLE STORAGE
+zakinit 2, 1  ; Initialise zak space for variable storage
 
 
-instr 	1	;SENSES MOUSE POSITION AND PLAYS SOUND (ALWAYS ON)
+instr 1  ; Senses mouse position and plays sound (always on)
 
-	ktrig	metro	10
-	if ktrig = 1 then
-		kportamento	invalue	"Portamento"						;TIME IT TAKES TO SLIDE BETWEEN NOTES. TRY VALUES WITHIN THE RANGE 0 - 0.3
-		kOctaveTrans	invalue	"Octave"							;THIS DEFINES THE AMOUNT OF TRANSPOSITION IN OCTAVES, IDEALLY THIS SHOULD BE A WHOLE NUMBER, I.E. '1', '0', '-1' ETC. 
-		kClick		invalue	"Mode"							;Click OPTION:	;0 = NO LEFT CLICK IS REQUIRED TO PLAY A NOTE. A NOTE PLAYS CONTINUOUSLY
-																		;1 = IT IS REQUIRED TO LEFT CLICK TO PLAY A NOTE
-																		;2 = LEFT CLICK STOPS A NOTE PLAYING
-		kampport		invalue	"AmpPort"							;DEFINE AMPLITUDE PORTAMENTO TIME (SMOOTHING)
-		kmodfrq		invalue	"ModFrq"							;DEFINE MODULATION FREQUENCY (VIBRATO/TREMOLO)
-		kvibdep		invalue	"VibDep"							;DEFINE MAXIMUM VIBRATO DEPTH (PITCH MODULATION)
-		ktrmdep		invalue	"TrmDep"							;DEFINE MAXIMUM TREMOLO DEPTH (AMPLITUDE MODULATION)
+  ktrig metro 10
+  if ktrig = 1 then
+    ; Time it takes to slide between notes. Try values within the range 0 - 0.3
+    kportamento invalue "Portamento"
+    ; This defines the amount of transposition in octaves, ideally this should be a whole
+    ; number, i.e. '1', '0', '-1' etc.
+    kOctaveTrans invalue "Octave"
+    ; Click option: ;0 = no left click is required to play a note. A note plays
+    ; continuously
+    kClick invalue "Mode"
+    ; 1 = It is required to left click to play a note
+    ; 2 = Left click stops a note playing
+    kampport invalue "AmpPort"  ; Define amplitude portamento time (smoothing)
+    kmodfrq  invalue "ModFrq"   ; Define modulation frequency (vibrato/tremolo)
+    kvibdep  invalue "VibDep"   ; Define maximum vibrato depth (pitch modulation)
+    ktrmdep  invalue "TrmDep"   ; Define maximum tremolo depth (amplitude modulation)
 
-		;GUI FOR INSTR 2, PING PONG DELAY
-		gkDelayTime	invalue	"DelayTime"						;DELAY TIME IN SECONDS
-		gkReverbMix	invalue	"ReverbMix"						;AMOUNT OF REVERB. TRY VALUES WITHIN THE RANGE 0-1. 0=NO REVERB, 1=LOTS OF REVERB!
-		gkDelayMix	invalue	"DelayMix"						;AMOUNT OF DELAY EFFECT. TRY VALUES WITHIN THE RANGE 0-1. 0=NO DELAY, 1=LOTS OF DELAY!
+    ; GUI for instr 2, ping pong delay
+    gkDelayTime invalue "DelayTime"  ; Delay time in seconds
+    ; Amount of reverb. Try values within the range 0-1. 0=no reverb, 1=lots of reverb!
+    gkReverbMix invalue "ReverbMix"
+    ; Amount of delay effect. Try values within the range 0-1. 0=no delay, 1=lots of
+    ; delay!
+    gkDelayMix invalue "DelayMix"
 
-		;AUDIO FILE CHANGE / LOAD IN TABLES ********************************************************************************************************
-		Sfile_new		strcpy	""								;INIT TO EMPTY STRING
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
+    ; Audio file change / load in tables
+    ; ********************************************************************************************************
+    Sfile_new strcpy ""  ; Init to empty string
+    Sfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk Sfile
+    kfile strcmpk Sfile_new, Sfile_old
 
-		if	kfile != 0	then									;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-				reinit	NEW_FILE								;REINITIALIZE FROM LABEL 'NEW_FILE'
-		endif
-		NEW_FILE:
-		ichn			filenchnls	Sfile
-		if ichn == 1 then
-			giFileL	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1						;READ MONO AUDIO FILE CHANNEL 1
-			giFileR	=		giFileL
-		else
-			giFileL	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1						;READ STEREO AUDIO FILE CHANNEL 1
-			giFileR	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 2						;READ STEREO AUDIO FILE CHANNEL 2
-		endif
-		;*******************************************************************************************************************************************
-	endif
+    if kfile != 0 then  ; If a bang had been generated in the line above
+      reinit NEW_FILE   ; Reinitialize from label 'new_file'
+    endif
+NEW_FILE:
+    ichn filenchnls Sfile
+    if ichn == 1 then
+      giFileL ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read mono audio file channel 1
+      giFileR = giFileL
+    else
+      giFileL ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read stereo audio file channel 1
+      giFileR ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 2  ; Read stereo audio file channel 2
+    endif
+    ; *******************************************************************************************************************************************
+  endif
 
-;KEYS WIDGETS SIZES AND POSITIONS
+  ; Keys widgets sizes and positions
 
-	iy_all	= 100
-	ix_offset	= 2
+  iy_all    = 100
+  ix_offset = 2
 
-	;White notes 
-	iwidth_W	= 60
-	iheight_W	= 300
+  ; White notes
+  iwidth_W  = 60
+  iheight_W = 300
 
-	;ixN_W	= ix_offset + (N-1) * iwidth_W
+  ; ixN_W = ix_offset + (N-1) * iwidth_W
 
-	;Black notes
-	iwidth_B	= 40
-	iheight_B	= 200
+  ; Black notes
+  iwidth_B  = 40
+  iheight_B = 200
 
-	ix1_B	= 36		;upper left corner coordinates
-	ix2_B	= 106
-	ix3_B	= 212
-	ix4_B	= 282
-	ix5_B	= 352
-	ix6_B	= 456
-	ix7_B	= 526
-	ix8_B	= 632
-	ix9_B	= 702
-	ix10_B	= 772
+  ix1_B  = 36  ; upper left corner coordinates
+  ix2_B  = 106
+  ix3_B  = 212
+  ix4_B  = 282
+  ix5_B  = 352
+  ix6_B  = 456
+  ix7_B  = 526
+  ix8_B  = 632
+  ix9_B  = 702
+  ix10_B = 772
 
-;MOUSE POSITION IN WIDGET PANEL AND SENSE MOUSE LEFT BUTTON
-	krelx	invalue	"_MouseRelX"
-	krely	invalue	"_MouseRelY"
-	kb1		invalue	"_MouseBut1"
-	
+  ; Mouse position in widget panel and sense mouse left button
+  krelx invalue "_MouseRelX"
+  krely invalue "_MouseRelY"
+  kb1   invalue "_MouseBut1"
 
-;MOUSE ON KEYBOARD AREA
-	kon_kbd	init	0
-	if (ix_offset <= krelx && krelx <= ix_offset+15*iwidth_W && iy_all <= krely  && krely <= iy_all+iheight_W) then
-		kon_kbd	= 1
-	else
-		kon_kbd	= 0	
-	endif
 
-	ky		init	1								;amplitude init
+  ; Mouse on keyboard area
+  kon_kbd init 0
+  if (ix_offset <= krelx && krelx <= ix_offset+15*iwidth_W && iy_all <= krely && krely <= iy_all+iheight_W) then
+    kon_kbd = 1
+  else
+    kon_kbd = 0
+  endif
 
-;MOUSE ON A BLACK KEY
-	kon_Black	init	0
+  ky init 1  ; amplitude init
 
-#define BLACK_KEY(N) #(ix$N_B <= krelx && krelx <= ix$N_B + iwidth_B)#
+  ; Mouse on a black key
+  kon_Black init 0
 
-	if (iy_all <= krely && krely <= iy_all+iheight_B) then
-	
-		ky	=	(krely - iy_all)/iheight_B			;amplitude 0 to 1
-	
-		if		$BLACK_KEY(1)	then
-				kon_Black	= 1
-				koctave	= 7
-				ksemis	= 1/12
-		elseif	$BLACK_KEY(2)	then
-				kon_Black	= 1
-				koctave	= 7
-				ksemis	= 3/12
-		elseif	$BLACK_KEY(3)	then
-				kon_Black	= 1
-				koctave	= 7
-				ksemis	= 6/12
-		elseif	$BLACK_KEY(4)	then
-				kon_Black	= 1
-				koctave	= 7
-				ksemis	= 8/12
-		elseif	$BLACK_KEY(5)	then
-				kon_Black	= 1
-				koctave	= 7
-				ksemis	= 10/12
-		elseif	$BLACK_KEY(6)	then
-				kon_Black	= 1
-				koctave	= 8
-				ksemis	= 1/12
-		elseif	$BLACK_KEY(7)	then
-				kon_Black	= 1
-				koctave	= 8
-				ksemis	= 3/12
-		elseif	$BLACK_KEY(8)	then
-				kon_Black	= 1
-				koctave	= 8
-				ksemis	= 6/12
-		elseif	$BLACK_KEY(9)	then
-				kon_Black	= 1
-				koctave	= 8
-				ksemis	= 8/12
-		elseif	$BLACK_KEY(10)	then
-				kon_Black	= 1
-				koctave	= 8
-				ksemis	= 10/12
-		else
-				kon_Black	= 0
-		endif
-	else
-		kon_Black	= 0	
-	endif
+  #define BLACK_KEY(N) #(ix$N_B <= krelx && krelx <= ix$N_B + iwidth_B)#
 
-;MOUSE ON A WHITE KEY
-	kon_White	init	0
-	if (kon_kbd = 1 && kon_Black = 0) then
-		kx		= krelx - ix_offset
-		kKey		= int(kx/iwidth_W)
-		koctave	table	kKey, giOct_White
-		ksemis	table	kKey, giSemis_White
-		kon_White	= 1
-	else
-		kon_White	= 0	
-	endif
-	
-	kgate	= kon_Black + kon_White
+  if (iy_all <= krely && krely <= iy_all+iheight_B) then
 
-	;CHECK TO SEE WHICH LEFT CLICK BUTTON MODE HAS BEEN SELECTED AND IMPLEMENT THE APPROPRIATE BEHAVIOUR
-	if		kClick=1	then											;IF 'LEFT CLICK ACTIVATES NOTE' MODE HAS BEEN SELECTED...
-		ky1	=	ky * kb1
-	elseif	kClick=2	then											;IF 'LEFT CLICK DE-ACTIVATES NOTE' MODE HAS BEEN SELECTED...
-		ky1	=	ky * (1-kb1)
-	else
-		ky1	=	ky
-	endif														;END OF CONDITIONAL BRANCHING
+    ky = (krely - iy_all)/iheight_B  ; amplitude 0 to 1
 
-	kamp			table	ky1, giampscale,1							;CREATE AN AMPLITUDE VALUE ACCORDING TO Y POSITION (ky) ON KEY AND AMPLITUDE SCALING TABLE (giampscale)
-	kamp			portk	kamp*kgate, kampport						;SMOOTH AMPLITUDE VARIABLE USING portk OPCODE (A KIND OF LOW PASS FILTER FOR K-RATE SIGNALS)
-	
-	koct			portk	koctave+ksemis+kOctaveTrans, kportamento		;COMBINE OCTAVE, SEMITONES AND TRANSPOSE VALUES AND APPLY PORTAMENTO SMOOTHING
-	kmoddepth		table	ky1, gimodscale,1							;CREATE AN MODULATION DEPTH VALUE ACCORDING TO Y POSITION (ky) ON KEY AND MODULATION DEPTH SCALING TABLE (gimodscale)				;
-	kmoddepth		portk	kmoddepth, kampport							;APPLY PORTAMENTO SMOOTHING
-	kmod			oscili	kmoddepth, kmodfrq, gisine					;CREATE AN LFO FOR MODULATION
-	koct			=		koct + (kmod*kvibdep)						;APPLY VIBRATO
-	
-	ktrm			oscili	ktrmdep*.5*kmoddepth, kmodfrq, gisine			;CREATE TREMOLO LFO
-	ktrm			=		ktrm+.5									;ADD OFFSET
+    if $BLACK_KEY(1) then
+      kon_Black = 1
+      koctave   = 7
+      ksemis    = 1/12
+    elseif $BLACK_KEY(2) then
+      kon_Black = 1
+      koctave   = 7
+      ksemis    = 3/12
+    elseif $BLACK_KEY(3) then
+      kon_Black = 1
+      koctave   = 7
+      ksemis    = 6/12
+    elseif $BLACK_KEY(4) then
+      kon_Black = 1
+      koctave   = 7
+      ksemis    = 8/12
+    elseif $BLACK_KEY(5) then
+      kon_Black = 1
+      koctave   = 7
+      ksemis    = 10/12
+    elseif $BLACK_KEY(6) then
+      kon_Black = 1
+      koctave   = 8
+      ksemis    = 1/12
+    elseif $BLACK_KEY(7) then
+      kon_Black = 1
+      koctave   = 8
+      ksemis    = 3/12
+    elseif $BLACK_KEY(8) then
+      kon_Black = 1
+      koctave   = 8
+      ksemis    = 6/12
+    elseif $BLACK_KEY(9) then
+      kon_Black = 1
+      koctave   = 8
+      ksemis    = 8/12
+    elseif $BLACK_KEY(10) then
+      kon_Black = 1
+      koctave   = 8
+      ksemis    = 10/12
+    else
+      kon_Black = 0
+    endif
+  else
+    kon_Black = 0
+  endif
 
-	kmlt			=		cpsoct(koct)/cpsoct(8)						;CONVERT PITCH IN OCT FORMAT TO A PLAYBACK RATIO (BASE KEY/FREQUENCY A.440)
+  ; Mouse on a white key
+  kon_White init 0
+  if (kon_kbd = 1 && kon_Black = 0) then
+    kx   = krelx - ix_offset
+    kKey = int(kx/iwidth_W)
+    koctave table kKey, giOct_White
+    ksemis  table kKey, giSemis_White
+    kon_White = 1
+  else
+    kon_White = 0
+  endif
 
-	ilen			=		nsamp(giFileL)/sr							;DERIVE FUNCTION TABLE (SAMPLE) LENGTH (IN SECONDS)
-	aL			flooper	kamp*ktrm, kmlt, 0, ilen-2, 1, giFileL			;CREATE AUDIO SIGNAL (LEFT CHANNEL) USING flooper SAMPLE LOOPING OPCODE
-	aR			flooper	kamp*ktrm, kmlt, 0, ilen-2, 1, giFileR			;CREATE AUDIO SIGNAL (RIGHT CHANNEL) USING flooper SAMPLE LOOPING OPCODE
-				rireturn											;RETURN FROM REINITIALISATION PASS
+  kgate = kon_Black + kon_White
 
-	kcfoct		table	ky1, giLPFscale, 1							;CREATE AN FILTER CUTOFF VALUE (OCT FORMAT) ACCORDING TO Y POSITION (ky) ON KEY AND FILTER CUTOFF SCALING TABLE (giLPFscale)				;
-	kcfoct		=		(kcfoct*7)+7								;RE-RANGE AND OFFSET FILTER CUTOFF VALUE
-	kcf			=		cpsoct(kcfoct)								;CONVERT FROM OCT TO CPS FORMAT
-	kcf			portk	kcf, kampport								;APPLY PORTAMENTO SMOOTHING
-	aL			butlp	aL, kcf									;APPLY LOW-PASS FILTERING (LEFT CHANNEL)
-	aR			butlp	aR, kcf									;APPLY LOW-PASS FILTERING (RIGHT CHANNEL)
-				zawm		aL, 1									;WRITE TO ZAK VARIABLE WITH MIXING (LEFT CHANNEL)
-				zawm		aR, 2									;WRITE TO ZAK VARIABLE WITH MIXING (RIGHT CHANNEL)
-endin	
+  ; Check to see which left click button mode has been selected and implement the
+  ; appropriate behaviour
+  if kClick = 1 then  ; If 'left click activates note' mode has been selected...
+    ky1 = ky * kb1
+  elseif kClick = 2 then  ; If 'left click de-activates note' mode has been selected...
+    ky1 = ky * (1-kb1)
+  else
+    ky1 = ky
+  endif  ; End of conditional branching
 
-instr	2	; PING PONG DELAY
-	idlyFB		init		0.3										;DELAY FEEDBACK AMOUNT (0 - 1)
-	iRoomSize		init		0.9										;REVERB ROOM SIZE (0 - 1)
-	iHFDamp		init		0.5										;REVERB HIGH FREQUENCY DAMPING (0 - 1)
-		
-	ainL			zar		1										;READ ZAK AUDIO VARIABLE LEFT CHANNEL (WRITTEN BY INSTR 1)
-	ainR			zar		2										;READ ZAK AUDIO VARIABLE RIGHT CHANNEL (WRITTEN BY INSTR 1)
-	
-	;LEFT CHANNEL OFFSETTING DELAY (NO FEEDBACK!)
-	aBuffer		delayr	2.5										;INITIALISE DELAY BUFFER
-	aLeftOffset	deltap3	gkDelayTime * 0.5							;READ AUDIO FROM DELAY TAP 
-				delayw	ainL										;WRITE AUDIO INTO BUFFER
-			
-	;LEFT CHANNEL DELAY WITH FEEDBACK
-	aBuffer		delayr	5.0										;INITIALISE DELAY BUFFER
-	aDlySigL		deltap3	gkDelayTime								;READ AUDIO FROM DELAY TAP
-				delayw	aLeftOffset+(aDlySigL*idlyFB)					;WRITE AUDIO INTO BUFFER
-	
-	;RIGHT CHANNEL DELAY WITH FEEDBACK
-	aBuffer		delayr	5.0										;INITIALISE DELAY BUFFER
-	aDlySigR		deltap3	gkDelayTime								;READ AUDIO FROM DELAY TAP
-				delayw	ainR+(aDlySigR * idlyFB)						;WRITE AUDIO INTO BUFFER
-	
-	amixL		ntrpol	ainL, aDlySigL+aLeftOffset, gkDelayMix			;CREATE DRY/WET MIX FOR PING-PONG DELAY (LEFT CHANNEL)
-	amixR		ntrpol	ainR, aDlySigR, gkDelayMix					;CREATE DRY/WET MIX FOR PING-PONG DELAY (RIGHT CHANNEL)
-	
-				denorm	amixL, amixR								;DENORMALIZE BOTH CHANNELS OF AUDIO SIGNAL
-	arvbL, arvbR 	freeverb 	amixL, amixR, iRoomSize, iHFDamp , sr			;CREATE REVERB SIGNAL USING freeverb OPCODE
-	amixL		ntrpol	amixL, arvbL, gkReverbMix					;CREATE A DRY/WET MIX BETWEEN THE DRY AND THE REVERBERATED SIGNAL
-	amixR		ntrpol	amixR, arvbR, gkReverbMix					;CREATE A DRY/WET MIX BETWEEN THE DRY AND THE REVERBERATED SIGNAL
-				outs		amixL, amixR								;SEND DELAY OUTPUT SIGNALS TO THE SPEAKERS
-				zacl		1,2										;CLEAR ZAK VARIABLES
+  ; Create an amplitude value according to y position (ky) on key and amplitude scaling
+  ; table (giampscale)
+  kamp table ky1, giampscale, 1
+  ; Smooth amplitude variable using portk opcode (a kind of low pass filter for k-rate
+  ; signals)
+  kamp portk kamp*kgate, kampport
+
+  ; Combine octave, semitones and transpose values and apply portamento smoothing
+  koct portk koctave+ksemis+kOctaveTrans, kportamento
+  ; Create an modulation depth value according to y position (ky) on key and modulation
+  ; depth scaling table (gimodscale) ;
+  kmoddepth table ky1, gimodscale, 1
+  kmoddepth portk kmoddepth, kampport     ; Apply portamento smoothing
+  kmod oscili kmoddepth, kmodfrq, gisine  ; Create an LFO for modulation
+  koct = koct + (kmod*kvibdep)            ; Apply vibrato
+
+  ktrm oscili ktrmdep*.5*kmoddepth, kmodfrq, gisine  ; Create tremolo LFO
+  ktrm = ktrm+.5                                     ; Add offset
+
+  ; Convert pitch in oct format to a playback ratio (base key/frequency a.440)
+  kmlt = cpsoct(koct)/cpsoct(8)
+
+  ilen = nsamp(giFileL)/sr  ; Derive function table (sample) length (in seconds)
+  ; Create audio signal (left channel) using flooper sample looping opcode
+  aL flooper kamp*ktrm, kmlt, 0, ilen-2, 1, giFileL
+  ; Create audio signal (right channel) using flooper sample looping opcode
+  aR flooper kamp*ktrm, kmlt, 0, ilen-2, 1, giFileR
+  rireturn  ; Return from reinitialisation pass
+
+  ; Create an filter cutoff value (oct format) according to y position (ky) on key and
+  ; filter cutoff scaling table (gilpfscale) ;
+  kcfoct table ky1, giLPFscale, 1
+  kcfoct = (kcfoct*7)+7    ; Re-range and offset filter cutoff value
+  kcf    = cpsoct(kcfoct)  ; Convert from oct to cps format
+  kcf portk kcf, kampport  ; Apply portamento smoothing
+  aL butlp aL, kcf         ; Apply low-pass filtering (left channel)
+  aR butlp aR, kcf         ; Apply low-pass filtering (right channel)
+  zawm aL, 1               ; Write to zak variable with mixing (left channel)
+  zawm aR, 2               ; Write to zak variable with mixing (right channel)
+endin
+
+instr 2               ; Ping pong delay
+  idlyFB    init 0.3  ; Delay feedback amount (0 - 1)
+  iRoomSize init 0.9  ; Reverb room size (0 - 1)
+  iHFDamp   init 0.5  ; Reverb high frequency damping (0 - 1)
+
+  ainL zar 1  ; Read zak audio variable left channel (written by instr 1)
+  ainR zar 2  ; Read zak audio variable right channel (written by instr 1)
+
+  ; Left channel offsetting delay (no feedback!)
+  aBuffer delayr 2.5                     ; Initialise delay buffer
+  aLeftOffset deltap3 gkDelayTime * 0.5  ; Read audio from delay tap
+  delayw ainL                            ; Write audio into buffer
+
+  ; Left channel delay with feedback
+  aBuffer delayr 5.0                    ; Initialise delay buffer
+  aDlySigL deltap3 gkDelayTime          ; Read audio from delay tap
+  delayw aLeftOffset+(aDlySigL*idlyFB)  ; Write audio into buffer
+
+  ; Right channel delay with feedback
+  aBuffer delayr 5.0               ; Initialise delay buffer
+  aDlySigR deltap3 gkDelayTime     ; Read audio from delay tap
+  delayw ainR+(aDlySigR * idlyFB)  ; Write audio into buffer
+
+  ; Create dry/wet mix for ping-pong delay (left channel)
+  amixL ntrpol ainL, aDlySigL+aLeftOffset, gkDelayMix
+  ; Create dry/wet mix for ping-pong delay (right channel)
+  amixR ntrpol ainR, aDlySigR, gkDelayMix
+
+  denorm amixL, amixR  ; Denormalize both channels of audio signal
+  ; Create reverb signal using freeverb opcode
+  arvbL, arvbR freeverb amixL, amixR, iRoomSize, iHFDamp, sr
+  ; Create a dry/wet mix between the dry and the reverberated signal
+  amixL ntrpol amixL, arvbL, gkReverbMix
+  ; Create a dry/wet mix between the dry and the reverberated signal
+  amixR ntrpol amixR, arvbR, gkReverbMix
+  outs amixL, amixR  ; Send delay output signals to the speakers
+  zacl 1, 2          ; Clear zak variables
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1 		0	   3600		;SOUND PRODUCING INSTRUMENT
-i 2 		0	   3600		;PING-PONG DELAY AND REVERB
+; Instr | start | duration
+i 1 0 3600  ; Sound producing instrument
+i 2 0 3600  ; Ping-pong delay and reverb
 </CsScore>
 </CsoundSynthesizer>
 
@@ -301,9 +331,9 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>206</r>
-  <g>206</g>
-  <b>206</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -321,14 +351,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -352,6 +382,18 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -369,9 +411,9 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -396,15 +438,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -425,15 +472,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -454,15 +506,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -483,15 +540,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -512,15 +574,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -541,15 +608,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -570,15 +642,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -599,15 +676,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -628,15 +710,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -657,15 +744,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -686,15 +778,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -715,15 +812,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -744,15 +846,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -773,15 +880,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -802,15 +914,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -831,15 +948,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -860,15 +982,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -889,15 +1016,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -918,15 +1050,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -947,15 +1084,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -976,15 +1118,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1005,15 +1152,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1034,15 +1186,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1063,15 +1220,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1092,14 +1254,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1121,14 +1283,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1150,14 +1312,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1179,14 +1341,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1208,14 +1370,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1237,14 +1399,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1266,14 +1428,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1295,14 +1457,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1324,14 +1486,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1353,14 +1515,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1382,14 +1544,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1411,14 +1573,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1440,14 +1602,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1469,14 +1631,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1498,14 +1660,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1527,14 +1689,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1556,14 +1718,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1585,14 +1747,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1614,14 +1776,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1643,14 +1805,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1672,14 +1834,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1701,14 +1863,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1730,14 +1892,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1759,14 +1921,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1788,15 +1950,20 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1817,14 +1984,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1846,9 +2013,9 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>166</r>
@@ -1893,14 +2060,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1940,14 +2107,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1987,14 +2154,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2034,14 +2201,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2061,14 +2228,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-2</minimum>
@@ -2092,14 +2259,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2151,14 +2318,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2198,14 +2365,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2245,14 +2412,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2292,14 +2459,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2339,14 +2506,14 @@ i 2 		0	   3600		;PING-PONG DELAY AND REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

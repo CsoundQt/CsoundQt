@@ -1,45 +1,49 @@
-;Writen by Iain McCurdy, 2006
+; Writen by Iain McCurdy, 2006
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add Semitone Bend Range widget
+; Notes on modifications from original csd:
+; Add Semitone Bend Range widget
 
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
- 
-</CsOptions>    
+
+</CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	1	; SIMPLE SINE TONE SYNTHESIZER WITH PITCH BEND
-	ioct		octmidi
-	iamp		ampmidi	0.2
-	
-	;PITCH BEND INFORMATION IS READ
-	kSemitoneBendRange	invalue	"BendRange"							;PITCH BEND RANGE IN SEMITONES (WILL BE DEFINED FURTHER LATER)
-	imin 	= 0													;EQUILIBRIUM POSITION
-	imax 	= i(kSemitoneBendRange) * .0833333							;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend	pchbend	imin, imax									;PITCH BEND VARIABLE (IN oct FORMAT)
-	
-	;         	      INITIAL_LEVEL | ATTACK_TIME | ATTACK_LEVEL | DECAY_TIME | SUSTAIN_LEVEL |  RELEASE_TIME | RELEASE_LEVEL
-	aenv		linsegr	      0,           (.01),          1,           (.1),          .5,            (.2),            0 
-	
-	;OUTPUT	OPCODE	AMPLITUDE |     FREQUENCY      | FUNCTION_TABLE
-	asig		oscili	iamp*aenv,  cpsoct(ioct+kbend),        1
-			outs		asig, asig									;SEND AUDIO OUTPUT OF OSCILLATOR TO THE SPEAKERS
+instr 1  ; Simple sine tone synthesizer with pitch bend
+  ioct octmidi
+  iamp ampmidi 0.2
+
+  ; Pitch bend information is read
+  ; Pitch bend range in semitones (will be defined further later)
+  kSemitoneBendRange invalue "BendRange"
+  imin = 0                                 ; Equilibrium position
+  imax = i(kSemitoneBendRange) * .0833333  ; Max pitch displacement (in oct format)
+  kbend pchbend imin, imax                 ; Pitch bend variable (in oct format)
+
+  ; Initial_level | attack_time | attack_level | decay_time | sustain_level | release_time
+  ; | release_level
+  aenv linsegr 0, (.01), 1, (.1), .5, (.2), 0
+
+  ; Output opcode amplitude |     frequency      | function_table
+  asig oscili iamp*aenv, cpsoct(ioct+kbend), 1
+  outs asig, asig  ; Send audio output of oscillator to the speakers
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 129 10 1			;SINE WAVE
-f 0 600				;THIS LINE FUNCTIONS AS A DUMMY SCORE EVENT AND ALLOWS REALTIME MIDI PLAYING FOR 10 MINUTES
+f 1 0 129 10 1  ; Sine wave
+; This line functions as a dummy score event and allows realtime MIDI playing for 10
+; minutes
+f 0 600
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

@@ -1,86 +1,98 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, September 2010
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gilfoshape	ftgen	0, 0, 131072, 19, 0.5, 1, 180, 1	;U-SHAPE PARABOLA
-giExp3000		ftgen	0, 0, 129, -25, 0, 20.0, 128, 3000.0	;TABLE FOR EXP SLIDER
-giExp20000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0	;TABLE FOR EXP SLIDER
+gilfoshape ftgen 0, 0, 131072, 19, 0.5, 1, 180, 1       ; U-shape parabola
+giExp3000  ftgen 0, 0, 129, -25, 0, 20.0, 128, 3000.0   ; Table for exp slider
+giExp20000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	gkOscGain		invalue 	"Oscillator_Gain"					;init 0.3
-	kOscFrq		invalue 	"Oscillator_Freq"
-	gkOscFrq		tablei	kOscFrq, giExp3000, 1
-					outvalue	"Oscillator_Freq_Value", gkOscFrq		;init 100.0
-	kOscLPF		invalue 	"Tone"
-	gkOscLPF		tablei	kOscLPF, giExp20000, 1
-					outvalue	"Tone_Value", gkOscLPF				;init 4000.0
-	gkOscRes		invalue 	"Resonance"						;init 0.4
-	gkmix		invalue 	"Mix"							;init 0.5
-	gkChoDepth	invalue 	"Chorus_Modulation_Depth"			;init 0.001
-	gkChoRate		invalue 	"Chorus_Modulation_Rate"				;init 0.8
-	gkphs		invalue 	"Right_Channel_Phase"				;init 0.5
+instr 10                               ; GUI
+  gkOscGain invalue "Oscillator_Gain"  ; init 0.3
+  kOscFrq   invalue "Oscillator_Freq"
+  gkOscFrq tablei kOscFrq, giExp3000, 1
+  outvalue "Oscillator_Freq_Value", gkOscFrq  ; init 100.0
+  kOscLPF invalue "Tone"
+  gkOscLPF tablei kOscLPF, giExp20000, 1
+  outvalue "Tone_Value", gkOscLPF               ; init 4000.0
+  gkOscRes   invalue "Resonance"                ; init 0.4
+  gkmix      invalue "Mix"                      ; init 0.5
+  gkChoDepth invalue "Chorus_Modulation_Depth"  ; init 0.001
+  gkChoRate  invalue "Chorus_Modulation_Rate"   ; init 0.8
+  gkphs      invalue "Right_Channel_Phase"      ; init 0.5
 endin
 
-instr	1	;GENERATES AUDIO SIGNAL
-	asig		vco2 			gkOscGain, gkOscFrq				;GENERATE A SAWTOOTH WAVE AUDIO SIGNAL
-	gasig	moogladder	asig, gkOscLPF, gkOscRes						;LOW-PASS FILTER AUDIO SIGNAL (CREATE A GLOBAL VARIABLE OUTPUT TO BE USED IN INSTRUMENT 2)
+instr 1                          ; Generates audio signal
+  asig vco2 gkOscGain, gkOscFrq  ; Generate a sawtooth wave audio signal
+  ; Low-pass filter audio signal (create a global variable output to be used in instrument
+  ; 2)
+  gasig moogladder asig, gkOscLPF, gkOscRes
 endin
-	
-instr 	2	;CHORUS-DELAY INSTRUMENT
-	iporttime	=	0.01												;I-RATE VARIABLE DEFINITION OF PORTAMENTO TIME
-	kporttime	linseg	0,0.01,iporttime,1,iporttime						;RAMPING UP FROM ZERO VERSION OF PORTAMENTO TIME VARIABLE
-	kChoDepth	portk	gkChoDepth, kporttime							;SMOOTH VARIABLE CHANGES WITH PORTK
-	aChoDepth	interp	kChoDepth										;INTERPOLATE TO CREATE A-RATE VERSION OF K-RATE VARIABLE
 
-	amodL	osciliktp gkChoRate, gilfoshape, 0
-	amodL	=		(((amodL*aChoDepth)+aChoDepth)*.5)+.01
-	
-	amodR 	osciliktp gkChoRate, gilfoshape, gkphs							;THE PHASE OF THE RIGHT CHANNEL IS ADJUSTABLE
-	amodR	=		(((amodR*kChoDepth)+kChoDepth)*.5)+.01
-	
-	;REMEMBER THAT THE LENGTH OF THE DELAY BUFFER DEFINED WILL HAVE TO TAKE ACCOUNT OF THE SUMMED MAXIMUM OF THE STATIC CONSTANT VALUE AND MODULATING DELAY TIME
-	
-	;;;LEFT CHANNEL DELAY;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	abufferL	delayr	1.2											;CREATE A DELAY BUFFER OF 1.2 SECONDS DURATION (EQUIVALENT TO THE MAXIMUM DELAY TIME POSSIBLE USING THIS EXAMPLE)
-	adelsigL 	deltap3	amodL										;TAP THE DELAY LINE AT gkdlt SECONDS
-			delayw	gasig										;WRITE AUDIO SOURCE INTO THE BEGINNING OF THE BUFFER
+instr 2             ; Chorus-delay instrument
+  iporttime = 0.01  ; I-rate variable definition of portamento time
+  ; Ramping up from zero version of portamento time variable
+  kporttime linseg 0, 0.01, iporttime, 1, iporttime
+  kChoDepth portk gkChoDepth, kporttime  ; Smooth variable changes with portk
+  ; Interpolate to create a-rate version of k-rate variable
+  aChoDepth interp kChoDepth
 
-	;;;RIGHT CHANNEL DELAY;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;		                                                                                              	
-	abufferR	delayr	1.2											;CREATE A DELAY BUFFER OF 1.2 SECONDS DURATION (EQUIVALENT TO THE MAXIMUM DELAY TIME POSSIBLE USING THIS EXAMPLE)
-	adelsigR 	deltap3	amodR										;TAP THE DELAY LINE AT gkdlt SECONDS
-			delayw	gasig										;WRITE AUDIO SOURCE INTO THE BEGINNING OF THE BUFFER
+  amodL osciliktp gkChoRate, gilfoshape, 0
+  amodL = (((amodL*aChoDepth)+aChoDepth)*.5)+.01
 
-	aL		ntrpol	gasig, adelsigL, gkmix							;CREATE DRY/WET MIX
-	aR		ntrpol	gasig, adelsigR, gkmix					        	;CREATE DRY/WET MIX
+  ; The phase of the right channel is adjustable
+  amodR osciliktp gkChoRate, gilfoshape, gkphs
+  amodR = (((amodR*kChoDepth)+kChoDepth)*.5)+.01
 
-			outs		aL, aR										;CREATE A MIX BETWEEN THE WET AND THE DRY SIGNALS AT THE OUTPUT
-			clear	gasig										;CLEAR THE GLOBAL AUDIO SEND VARIABLE
+  ; Remember that the length of the delay buffer defined will have to take account of the
+  ; summed maximum of the static constant value and modulating delay time
+
+  ; ;;Left channel
+  ; delay;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ; Create a delay buffer of 1.2 seconds duration (equivalent to the maximum delay time
+  ; possible using this example)
+  abufferL delayr 1.2
+  adelsigL deltap3 amodL  ; Tap the delay line at gkdlt seconds
+  delayw gasig            ; Write audio source into the beginning of the buffer
+
+  ; ;;Right channel
+  ; delay;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ; Create a delay buffer of 1.2 seconds duration (equivalent to the maximum delay time
+  ; possible using this example)
+  abufferR delayr 1.2
+  adelsigR deltap3 amodR  ; Tap the delay line at gkdlt seconds
+  delayw gasig            ; Write audio source into the beginning of the buffer
+
+  aL ntrpol gasig, adelsigL, gkmix  ; Create dry/wet mix
+  aR ntrpol gasig, adelsigR, gkmix  ; Create dry/wet mix
+
+  outs aL, aR  ; Create a mix between the wet and the dry signals at the output
+  clear gasig  ; Clear the global audio send variable
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		-1		;GUI
-i  2      0         -1		;INSTRUMENT 2 PLAYS A HELD NOTE
+; Instr | start | duration
+i 10 0 -1  ; GUI
+i 2 0 -1   ; Instrument 2 plays a held note
 
-f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
+f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -93,9 +105,9 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -113,15 +125,20 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -139,11 +156,23 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Oscillator_Gain</objectName>
@@ -179,14 +208,14 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -208,14 +237,14 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -237,15 +266,20 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -272,14 +306,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -301,14 +335,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -330,14 +364,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -395,14 +429,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -424,14 +458,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -471,14 +505,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -536,14 +570,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -583,14 +617,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -612,14 +646,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -659,14 +693,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -688,14 +722,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -717,14 +751,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -746,14 +780,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -775,14 +809,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -804,14 +838,14 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

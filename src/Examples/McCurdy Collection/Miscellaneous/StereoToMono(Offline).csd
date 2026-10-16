@@ -15,40 +15,42 @@ This example could easily be adapted to convert a mono file to stereo
 
 <CsoundSynthesizer>
 <CsOptions>
-;OUTPUT FLAGS ARE FOR 24BIT WAV
--oStereoToMonoRender.wav -W  -3
+; Output flags are for 24bit wav
+-oStereoToMonoRender.wav -W -3
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 1		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 1      ; Number of channels (2=stereo)
 
-;REPLACE THIS FILE NAME WITH THE NAME OF YOUR DESIRED STEREO INPUT SOUND FILE
-#define	FILE	#"StereoInputSoundfile.wav"#
+; Replace this file name with the name of your desired stereo input sound file
+#define FILE # "StereoInputSoundfile.wav" #
 
-instr	1
-	ilen	filelen	$FILE					;DERIVE LENGTH OF INPUT SOUND FILE
-		event_i	"i", 2, 0, ilen			;TRIGGER INSTRUMENT 2
+instr 1
+  ilen filelen $FILE       ; Derive length of input sound file
+  event_i "i", 2, 0, ilen  ; Trigger instrument 2
 endin
-	
-instr	2
-	asigL, asigR	diskin2	$FILE, 1, 0, 1		;GENERATE 2 AUDIO SIGNALS FROM A STEREO SOUND FILE
 
-	;LEFT CHANNEL------------------------------------------------------------------------
-				out	asigL				;LEFT CHANNEL IS OUTPUT TO FILE
-	;------------------------------------------------------------------------------------
+instr 2
+  asigL, asigR diskin2 $FILE, 1, 0, 1  ; Generate 2 audio signals from a stereo sound file
 
-	;RIGHT CHANNEL-----------------------------------------------------------------------
-	;			out	asigR				;LEFT CHANNEL IS OUTPUT TO FILE
-	;------------------------------------------------------------------------------------
-	
-	;MIX CHANNELS------------------------------------------------------------------------
-	;			out	(asigL+asigR)*0.5		;MIX OF CHANNELS IS OUTPUT TO FILE
-	;------------------------------------------------------------------------------------
+  ; Left channel------------------------------------------------------------------------
+  out asigL  ; Left channel is output to file
+  ; ------------------------------------------------------------------------------------
+
+  ; Right channel-----------------------------------------------------------------------
+  ; Out asigr    ;left channel is output to file
+  ; ------------------------------------------------------------------------------------
+
+  ; Mix channels------------------------------------------------------------------------
+  ; Out (asigl+asigr)*0.5  ;mix of channels is output to file
+  ; ------------------------------------------------------------------------------------
 endin
 </CsInstruments>
 <CsScore>
-i 1 0 0.01	;SHORT SCORE EVENT - DURATION REQUIRED FOR OUTPUT FILE WILL BE DERIVED FROM DURATION OF INPUT FILE
+; Short score event - duration required for output file will be derived from duration of
+; input file
+i 1 0 0.01
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

@@ -1,39 +1,39 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-;	AS OF WRITING THE OPCODE 'DATE' NOT WORK PROPERLY WITH CSOUND FLOAT
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; As of writing the opcode 'date' not work properly with csound float
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-instr	1	;AUTO UPDATE - TRIGGERS INSTR 2
-	ktrig	metro		10
-			schedkwhen	ktrig, 0, 0, 2, 0, 0.01
+instr 1  ; Auto update - triggers instr 2
+  ktrig metro 10
+  schedkwhen ktrig, 0, 0, 2, 0, 0.01
 endin
 
-instr	2	
-	idate_secs	date								;READ DATE SINCE 1ST JANUARY 1970 IN SECONDS
-				outvalue	"Date", idate_secs			;SEND 'date' READING TO VALUE BOX
-	Sdate		dates							;READ DATE SINCE 1ST JANUARY 1970 AS A STRING
-				outvalue	"Dates", Sdate				;SEND 'dates' STRING TO TEXT BOX
+instr 2
+  idate_secs date              ; Read date since 1st january 1970 in seconds
+  outvalue "Date", idate_secs  ; Send 'date' reading to value box
+  Sdate dates                  ; Read date since 1st january 1970 as a string
+  outvalue "Dates", Sdate      ; Send 'dates' string to text box
 endin
 </CsInstruments>
 <CsScore>
 f 0 3600
 
-i  2 0 0.01	
+i 2 0 0.01
 </CsScore>
 </CsoundSynthesizer>
 
@@ -48,9 +48,9 @@ i  2 0 0.01
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -68,15 +68,20 @@ i  2 0 0.01
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -101,14 +106,14 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -132,6 +137,18 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <eventLine>i 2 0 0.01</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3016</objectName>
@@ -146,11 +163,23 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Auto Update</text>
+  <text>Auto Update</text>
   <image>/</image>
   <eventLine>i 1 0  -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>Dates</objectName>
@@ -169,9 +198,9 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>240</r>
@@ -196,14 +225,14 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -225,14 +254,14 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -254,14 +283,14 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

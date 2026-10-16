@@ -1,36 +1,36 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../../SourceMaterials
+--env:SSDIR+ = ../../SourceMaterials
 -m128
 </CsOptions>
 <CsInstruments>
 
-sr = 48000
-ksmps = 32
+sr     = 48000
+ksmps  = 32
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 /*****Play sound file from harddisk with some features*****/
-;written by joachim heintz, andres cabrera and victor lazzarini
-;mar 2009 / dec 2011 / aug 2025
+; written by joachim heintz, andres cabrera and victor lazzarini
+; mar 2009 / dec 2011 / aug 2025
 
 
 // software channels
-chn_S("_Browse",1)
-chn_k("loop",1)
-chn_k("skip",1)
-chn_k("convertsr",1)
-chn_S("message",2)
-chn_k("db",1)
-chn_k("progressbar",2)
-chn_S("hor",2)
-chn_S("min",2)
-chn_S("sec",2)
-chn_S("ms",2)
-chn_k("outL",2)
-chn_k("outLclip",2)
-chn_k("outR",2)
-chn_k("outRclip",2)
+chn_S( "_Browse", 1)
+chn_k( "loop", 1)
+chn_k( "skip", 1)
+chn_k( "convertsr", 1)
+chn_S( "message", 2)
+chn_k( "db", 1)
+chn_k( "progressbar", 2)
+chn_S( "hor", 2)
+chn_S( "min", 2)
+chn_S( "sec", 2)
+chn_S( "ms", 2)
+chn_k( "outL", 2)
+chn_k( "outLclip", 2)
+chn_k( "outR", 2)
+chn_k( "outRclip", 2)
 
 instr Play
 
@@ -38,92 +38,93 @@ instr Play
   file:S = chnget("_Browse")
   loop:i = chnget("loop")
   skip:i = chnget("skip")
-  cvrt:i = chnget("convertsr") ;1=yes 0=no
-  dB:k = chnget("db")
-  
+  cvrt:i = chnget("convertsr")  ; 1=yes 0=no
+  dB:k   = chnget("db")
+
   file_duration:i = filelen(file)
-  file_sr:i = filesr(file)
-  file_chns:i = filenchnls(file)
-  
+  file_sr:i       = filesr(file)
+  file_chns:i     = filenchnls(file)
+
   // prevent more than one instances to be called (not necessary with latch button, see below)
   instances:i = active("Play")
   if (instances > 1) then
-    turnoff2_i("Play",1,0)
+    turnoff2_i("Play", 1, 0)
   endif
-    
+
   // send a message if the sr of the file doesn't match the sr of the orchestra
   if (file_sr != sr) then
     if (cvrt == 1) then
       warn:S = sprintf("WARNING:\nSamplerate of the file is %d, but samplerate \
         of the orchestra is %d. Samplerate will be converted by changing speed \
         of reading.\n", file_sr, sr)
-        ;chnset(warn,"message")
+      ; chnset(warn,"message")
     elseif (cvrt == 0) then
       warn:S = sprintf("WARNING:\nSamplerate of the file is %d, but samplerate \
         of the orchestra is %d. Samplerate will not be converted, so you will \
         have changes in tempo and pitch.\n", file_sr, sr)
-        ;chnset(warn,"message")
+      ; chnset(warn,"message")
     else
       warn:S = ""
     endif
   endif
-  mess:S = sprintf("FILE INFO:\nLength = %.3f, Samplerate = %d, Channels = %d",file_duration,
-    file_sr,file_chns)
-    chnset(strcat(warn,mess),"message")
-  
-  aout[] = diskin2(file,1,skip,loop,0,1-cvrt)
+  mess:S = sprintf("FILE INFO:\nLength = %.3f, Samplerate = %d, Channels = %d", file_duration,
+  file_sr, file_chns)
+  chnset(strcat(warn, mess), "message")
+
+  aout[] = diskin2(file, 1, skip, loop, 0, 1-cvrt)
   out(aout*ampdb(dB))
-  
+
   // for fun, show progress bar and time
   tsec:k init skip
-  	progress:k = (tsec % file_duration)
-  	chnset(progress/file_duration,"progressbar")
-  	chnset(sprintfk("%02d",int(progress/3600)),"hor")
-  	chnset(sprintfk("%02d",int(progress/60)),"min")
-  	chnset(sprintfk("%02d",int(progress)),"sec")
-  	chnset(sprintfk("%03d",int(frac(progress)*1000)),"ms")
-  
-  tsec:k += 1/kr
+  progress:k = (tsec % file_duration)
+  chnset(progress/file_duration, "progressbar")
+  chnset(sprintfk( "%02d", int(progress/3600)), "hor")
+  chnset(sprintfk( "%02d", int(progress/60)), "min")
+  chnset(sprintfk( "%02d", int(progress)), "sec")
+  chnset(sprintfk( "%03d", int(frac(progress)*1000)), "ms")
+
+  tsec:k + = 1/kr
 
 endin
 
 //UDO for displaying an audio signal in widgets
-opcode CsQtMeter, 0, SSak ;see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
- S_chan_sig, S_chan_clip, aSig, kTrig	xin
- iDbRange = 60 ;shows 60 dB
- iHoldTim = 1 ;seconds to "hold the red light"
- kOn init 0
- kTim init 0
- kStart init 0
- kEnd init 0
- kMax max_k aSig, kTrig, 1
- if kTrig == 1 then
-  chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
-  if kOn == 0 && kMax > 1 then
-   kTim = 0
-   kEnd = iHoldTim
-   chnset k(1), S_chan_clip
-   kOn = 1
+; see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
+opcode CsQtMeter, 0, SSak
+  S_chan_sig, S_chan_clip, aSig, kTrig xin
+  iDbRange = 60  ; shows 60 dB
+  iHoldTim = 1   ; seconds to "hold the red light"
+  kOn    init 0
+  kTim   init 0
+  kStart init 0
+  kEnd   init 0
+  kMax max_k aSig, kTrig, 1
+  if kTrig == 1 then
+    chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
+    if kOn == 0 && kMax > 1 then
+      kTim = 0
+      kEnd = iHoldTim
+      chnset k(1), S_chan_clip
+      kOn = 1
+    endif
+    if kOn == 1 && kTim > kEnd then
+      chnset k(0), S_chan_clip
+      kOn = 0
+    endif
   endif
-  if kOn == 1 && kTim > kEnd then
-   chnset k(0), S_chan_clip
-   kOn =	0
-  endif
- endif
- kTim += ksmps/sr
+  kTim + = ksmps/sr
 endop
 
 // show the first two output channels (although you can play
 // back any number of channels if you change nchnls in the header)
 instr Monitor
 
-  aOut[] = monitor()
+  aOut[]            = monitor()
   display_trigger:k = metro(10)
-  CsQtMeter("outL","outLclip",aOut[0],display_trigger)
-  CsQtMeter("outR","outRclip",aOut[1],display_trigger)
+  CsQtMeter( "outL", "outLclip", aOut[0], display_trigger)
+  CsQtMeter( "outR", "outRclip", aOut[1], display_trigger)
 
 endin
-schedule(Monitor,0,-1)
+schedule(Monitor, 0, -1)
 
 </CsInstruments>
 <CsScore>

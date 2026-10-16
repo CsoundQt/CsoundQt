@@ -1,71 +1,77 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table for exp slider
+; Notes on modifications from original csd:
+; Add table for exp slider
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 1		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 1      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gidata		ftgen	0,0,4,-2,0
-giDataTypeFlag	=		1							;0=BINARY NON-ZERO=TEXT - THIS DEFINES THE DATA TYPE IN THE FILE SAVED TO SUBSEQUENTLY LOADED FROM DISK
-gisine		ftgen	0, 0, 1024, 10, 1				;SINE WAVE
-giexp		ftgen	0, 0, 1024, 19, .5, .5, 270, .5	;EXPONENTIAL CURVE
+gidata ftgen 0, 0, 4, -2, 0
+; 0=Binary non-zero=text - this defines the data type in the file saved to subsequently
+; loaded from disk
+giDataTypeFlag = 1
+gisine ftgen 0, 0, 1024, 10, 1                ; Sine wave
+giexp  ftgen 0, 0, 1024, 19, .5, .5, 270, .5  ; Exponential curve
 
-;TABLE FOR EXP SLIDER
-giExp1	ftgen	0, 0, 129, -25, 0,  1.0, 128, 5000.0
-giExp3	ftgen	0, 0, 129, -25, 0, 50.0, 128, 5000.0
+; Table for exp slider
+giExp1 ftgen 0, 0, 129, -25, 0, 1.0, 128, 5000.0
+giExp3 ftgen 0, 0, 129, -25, 0, 50.0, 128, 5000.0
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkSlider1 	invalue	"Slider1"
-		gkSlider11	tablei	gkSlider1, giExp1, 1
-		gkSlider2 	invalue	"Slider2"
-		gkSlider3		invalue	"Slider3"
-		gkSlider33	tablei	gkSlider3, giExp3, 1
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkSlider1 invalue "Slider1"
+    gkSlider11 tablei gkSlider1, giExp1, 1
+    gkSlider2 invalue "Slider2"
+    gkSlider3 invalue "Slider3"
+    gkSlider33 tablei gkSlider3, giExp3, 1
+  endif
 endin
 
-instr	1	;SAVE DATA
-	tableiw	i(gkSlider1), 0, gidata								;SLIDER DATA IS WRITTEN TO THE FUNCTION TABLE
-	tableiw	i(gkSlider2), 1, gidata								;SLIDER DATA IS WRITTEN TO THE FUNCTION TABLE
-	tableiw	i(gkSlider3), 2, gidata								;SLIDER DATA IS WRITTEN TO THE FUNCTION TABLE
-	ftsave	"Data.txt", giDataTypeFlag, gidata						;FUNCTION TABLE IS SAVED AS A TEXT FILE (FILE EXTENSION COULD BE ANYTHING OR NOTHING BUT MAKING IT A TEXT FILE MAKES IT EASY TO OPEN AND EXAMINE AND POSSIBLY ALTER - FOR THIS, DATA TYPE FLAG SHOULD BE NON-ZERO)
-endin
-	
-instr	2	;LOAD DATA
-			ftload	"Data.txt", giDataTypeFlag, gidata				;LOAD FILE Data.txt TO FUNCTION TABLE gidata
-	iSlider1	table	0, gidata									;READ DATA ITEM FROM TABLE
-			outvalue	"Slider1", iSlider1							;SEND DATA TO THE APPROPRIATE SLIDER
-	iSlider2	table	1, gidata									;READ DATA ITEM FROM TABLE          
-			outvalue	"Slider2", iSlider2							;SEND DATA TO THE APPROPRIATE SLIDER
-	iSlider3	table	2, gidata									;READ DATA ITEM FROM TABLE          
-			outvalue	"Slider3", iSlider3							;SEND DATA TO THE APPROPRIATE SLIDER
+instr 1                            ; Save data
+  tableiw i(gkSlider1), 0, gidata  ; Slider data is written to the function table
+  tableiw i(gkSlider2), 1, gidata  ; Slider data is written to the function table
+  tableiw i(gkSlider3), 2, gidata  ; Slider data is written to the function table
+  ; Function table is saved as a text file (file extension could be anything or nothing
+  ; but making it a text file makes it easy to open and examine and possibly alter - for
+  ; this, data type flag should be non-zero)
+  ftsave "Data.txt", giDataTypeFlag, gidata
 endin
 
-instr	3	;SOUND IS PRODUCED BY THE FOF OPCODE:
-	;ASIG 	FOF 	GKAMP  |   KFUND     |    KFORM     | GKOCT    | GKBAND | GKRIS | GKDUR | GKDEC | IOLAPS | IFNA |  IFNB |  ITOTDUR
-	asig 	fof	0.2,      gkSlider11,    gkSlider33,  gkSlider2,     50,    .003,     .1,    .007,    500,  gisine,  giexp,     3600
-			outs	asig, asig
+instr 2                                      ; Load data
+  ftload "Data.txt", giDataTypeFlag, gidata  ; Load file data.txt to function table gidata
+  iSlider1 table 0, gidata                   ; Read data item from table
+  outvalue "Slider1", iSlider1               ; Send data to the appropriate slider
+  iSlider2 table 1, gidata                   ; Read data item from table
+  outvalue "Slider2", iSlider2               ; Send data to the appropriate slider
+  iSlider3 table 2, gidata                   ; Read data item from table
+  outvalue "Slider3", iSlider3               ; Send data to the appropriate slider
+endin
+
+instr 3  ; Sound is produced by the fof opcode:
+  ; Asig fof gkamp | kfund | kform | gkoct | gkband | gkris | gkdur | gkdec | iolaps |
+  ; ifna | ifnb | itotdur
+  asig fof 0.2, gkSlider11, gkSlider33, gkSlider2, 50, .003, .1, .007, 500, gisine, giexp, 3600
+  outs asig, asig
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
-i  3 0 3600
+i 10 0 3600  ; GUI
+i 3 0 3600
 </CsScore>
 </CsoundSynthesizer>
 
@@ -81,9 +87,9 @@ i  3 0 3600
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -101,15 +107,20 @@ i  3 0 3600
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -185,14 +196,14 @@ ftsave and ftload allow the contents of function tables to be saved to and loade
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -216,6 +227,18 @@ ftsave and ftload allow the contents of function tables to be saved to and loade
   <eventLine>i 1 0 0.01</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b7826</objectName>
@@ -235,6 +258,18 @@ ftsave and ftload allow the contents of function tables to be saved to and loade
   <eventLine>i 2 0 0.01</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

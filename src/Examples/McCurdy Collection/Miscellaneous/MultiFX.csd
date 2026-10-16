@@ -1,883 +1,1018 @@
 ; =====================================================================================================================================
-;|                                                            CSOUND MULTI FX                                                          |
-;|-------------------------------------------------------------------------------------------------------------------------------------|
-;|                                                    Written by Iain McCurdy, 2010                                                    |
+; | Csound multi fx |
+; |-------------------------------------------------------------------------------------------------------------------------------------|
+; | Written by Iain McCurdy, 2010 |
 ; =====================================================================================================================================
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-;GUI is big, in QuteCsound Configuration / Widgets set 'Widgets are an independent window' to OFF
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; GUI is big, in QuteCsound Configuration / Widgets set 'Widgets are an independent
+; window' to OFF
 
-;Notes on modifications from original csd:
-;	Add temp tables for exp slider when required in instrument
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
-;	Removed macros, no usefull because QuteCsound GUI can't be automaticaly generated
-;	Increase giOnOffStatus table size from 16 to 32
-;	Removed "Instructions and Info Panel"
+; Notes on modifications from original csd:
+; Add temp tables for exp slider when required in instrument
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Removed macros, no usefull because QuteCsound GUI can't be automaticaly generated
+; Increase giOnOffStatus table size from 16 to 32
+; Removed "Instructions and Info Panel"
 
-;	                                                          Effects Modules
-;	-------------------------------------------------------------------------------------------------------------------------------------------------
-;	The GUI design and general approach has been based on so called 'stomp boxes' that might be used by an electric guitarist. Efficient use of the
-;	computer's resources is made by making each effect a unique Csound instrument which is switched on or off as needed.
-;	This example works on the computer's live input. Input is stereo and all effects are stereo in, stereo out.
-;	If you don't have live input configured on your computer you can also access a built-in sound file using the 'File Play' module.
-;
-;	Instructions for each individual effect follows:
-;
-;	VOLUME
-;	------
-;	A simple volume control. If the effect is bypassed the input signal passes through unchanged.
-;
-;	FILE-PLAY
-;	---------
-;	A file player effect. Edit code to change the sound file used. Separate volume controls for the sound file and the input sound.
-;	The main purpose of this module is to provide some audio input for auditioning effects if live audio is not available.                                                                                                                ", 	1,      5,     14,    990,    20,     5, 520
-;
-;	COMPRESSOR
-;	----------
-;	A dynamic compressor with controls for threshold (turning the knob clockwise lowers the threshold), compressions ratio (1:1 - 100:1),
-;	attack time of the compression (0.01 - 0.3 seconds) and a gain compensation control (1 - 20).
-;
-;	ENV FOLLOWER
-;	------------
-;	A dynamic envelope following low-pass filter that used Csound's moogladder low-pass filter. Controls are for the sensitivity of the envelope
-;	following, basic frequency of the filter (100-10000 Hz) and resonance of the filter.
-;
-;	DISTORTION
-;	----------
-;	A distortion effect with controls for level whenever the effect is active, drive (amount of distortion) and tone (basically a low-pass filter).
-;
-;	REVERSE
-;	-------
-;	Reverses buffered chunks of sound received in real-time at its input. The user can control the length of the buffer from 0.1 - 2 seconds.
-;
-;	PITCH SHIFTER
-;	-------------
-;	A pitch shifter that uses streaming phase vocoding technology. Controls for mix (minimum=all dry signal, maximum=all effect), pitch
-;	(-1 octave to +1 octave in semitone steps), fine (-100 cents to +100 steps) and amount of output signal fed back into the input (0% - 100%).
-;
-;	FREQUENCY SHIFTER
-;	-----------------
-;	A frequency shifter using Csound's hilbert opcode. Controls for mix (minimum=all dry signal, maximum=all effect), frequency shift (-1000 to +1000),
-;	multiplier - a value in the range -1 to +1 which is multiplied to the frequency shift value and can be used to adjust the sensitivity of the 'Freq.'
-;	control - and finally a feedback control which controls the amount of output signal that is fed back into the input (0% - 75%).
-;
-;	RING MODULATOR
-;	--------------
-;	A ring modulator effect with controls for mix (minimum=all dry signal, maximum=all effect), modulating frequency (10-5000Hz) and an envelope control
-;	which controls the amount of influence the dynamics of the input sound has over the modulating frequency.
-;
-;	PHASER
-;	------
-;	An 8 ordinate phaser effect with controls for rate (0.01 Hz - 14 Hz), depth (0 - 8 octaves), base frequency (65 - 4000 Hz) and a feedback control
-;	which controls the intensity of the effect.
-;
-;	LoFi
-;	------
-;	Digital decimation of the input signal. Controls for bit depth reduction from 16 to 2 bits and for sample rate reduction (44100Hz to 172Hz).
-;
-;	FILTER
-;	------
-;	A high-pass followed by a low-pass filter, both 48dB/octave. Controls for high-pass filter cutoff, high-pass filter cutoff and gain.
-;
-;	AUTO-PAN/TREMOLO
-;	----------------
-;	A effect that applies lfo controlled panning or amplitude modulation. Controls for LFO rate (0.1 - 50 Hz), depth of modulation, mode (auto-panning
-;	or tremolo/amplitude modulation) and LFO waveform type (sine, triangle or square).
-;
-;	STEREO CHORUS
-;	-------------
-;	A stereo chorus effect with controls for the rate of modulation (0.001 - 7 Hz), depth of modulation (0 - 0.01 secs.) and phase interval between
-;	the left and right channel LFOs (0degs - 180degs).
-;
-;	FLANGER
-;	-------
-;	A flanger effect with controls for rate of modulation (0.001 - 7 Hz), depth of modulation (0 - 0.1 secs.), delay modulation offset
-;	(0.0001 - 0.01 secs) and feedback (0% - 99%).
-;
-;	DELAY
-;	-----
-;	A delay effect with controls for effect mix (minimum=all dry signal, maximum=all effect), delay time (0.01 - 5 secs.), feedback (0% - 100%) and
-;	high frequency loss (a low-pass filter within the delay feedback loop 200 - 20000 Hz).
-;
-;	REVERB
-;	------
-;	A reverb effect that uses Csound's reverbsc opcode and with controls for effect mix (minimum=all dry signal, maximum=all effect), room size and
-;	high frequency damping.
-;
-;	EQUALIZER
-;	---------
-;	A stereo graphic equalizer. Gain controls centering around the frequencies 100Hz, 200Hz, 400Hz, 800Hz, 1600Hz, 3200Hz and 6400Hz. The lowest
-;	control is a low shelving filter and the highest is a high shelving control.
+; Effects Modules
+; -------------------------------------------------------------------------------------------------------------------------------------------------
+; The GUI design and general approach has been based on so called 'stomp boxes' that might
+; be used by an electric guitarist. Efficient use of the
+; computer's resources is made by making each effect a unique Csound instrument which is
+; switched on or off as needed.
+; This example works on the computer's live input. Input is stereo and all effects are
+; stereo in, stereo out.
+; If you don't have live input configured on your computer you can also access a built-in
+; sound file using the 'File Play' module.
+
+; Instructions for each individual effect follows:
+
+; Volume
+; ------
+; A simple volume control. If the effect is bypassed the input signal passes through
+; unchanged.
+
+; File-play
+; ---------
+; A file player effect. Edit code to change the sound file used. Separate volume controls
+; for the sound file and the input sound.
+; The main purpose of this module is to provide some audio input for auditioning effects
+; if live audio is not available. ", 1, 5, 14, 990, 20, 5, 520
+
+; Compressor
+; ----------
+; A dynamic compressor with controls for threshold (turning the knob clockwise lowers the
+; threshold), compressions ratio (1:1 - 100:1),
+; attack time of the compression (0.01 - 0.3 seconds) and a gain compensation control (1 -
+; 20).
+
+; Env follower
+; ------------
+; A dynamic envelope following low-pass filter that used Csound's moogladder low-pass
+; filter. Controls are for the sensitivity of the envelope
+; following, basic frequency of the filter (100-10000 Hz) and resonance of the filter.
+
+; Distortion
+; ----------
+; A distortion effect with controls for level whenever the effect is active, drive (amount
+; of distortion) and tone (basically a low-pass filter).
+
+; Reverse
+; -------
+; Reverses buffered chunks of sound received in real-time at its input. The user can
+; control the length of the buffer from 0.1 - 2 seconds.
+
+; Pitch shifter
+; -------------
+; A pitch shifter that uses streaming phase vocoding technology. Controls for mix
+; (minimum=all dry signal, maximum=all effect), pitch
+; (-1 octave to +1 octave in semitone steps), fine (-100 cents to +100 steps) and amount
+; of output signal fed back into the input (0% - 100%).
+
+; Frequency shifter
+; -----------------
+; A frequency shifter using Csound's hilbert opcode. Controls for mix (minimum=all dry
+; signal, maximum=all effect), frequency shift (-1000 to +1000),
+; multiplier - a value in the range -1 to +1 which is multiplied to the frequency shift
+; value and can be used to adjust the sensitivity of the 'Freq.'
+; control - and finally a feedback control which controls the amount of output signal that
+; is fed back into the input (0% - 75%).
+
+; Ring modulator
+; --------------
+; A ring modulator effect with controls for mix (minimum=all dry signal, maximum=all
+; effect), modulating frequency (10-5000Hz) and an envelope control
+; which controls the amount of influence the dynamics of the input sound has over the
+; modulating frequency.
+
+; Phaser
+; ------
+; An 8 ordinate phaser effect with controls for rate (0.01 Hz - 14 Hz), depth (0 - 8
+; octaves), base frequency (65 - 4000 Hz) and a feedback control
+; which controls the intensity of the effect.
+
+; LoFi
+; ------
+; Digital decimation of the input signal. Controls for bit depth reduction from 16 to 2
+; bits and for sample rate reduction (44100Hz to 172Hz).
+
+; Filter
+; ------
+; A high-pass followed by a low-pass filter, both 48dB/octave. Controls for high-pass
+; filter cutoff, high-pass filter cutoff and gain.
+
+; Auto-pan/tremolo
+; ----------------
+; A effect that applies lfo controlled panning or amplitude modulation. Controls for LFO
+; rate (0.1 - 50 Hz), depth of modulation, mode (auto-panning
+; or tremolo/amplitude modulation) and LFO waveform type (sine, triangle or square).
+
+; Stereo chorus
+; -------------
+; A stereo chorus effect with controls for the rate of modulation (0.001 - 7 Hz), depth of
+; modulation (0 - 0.01 secs.) and phase interval between
+; the left and right channel LFOs (0degs - 180degs).
+
+; Flanger
+; -------
+; A flanger effect with controls for rate of modulation (0.001 - 7 Hz), depth of
+; modulation (0 - 0.1 secs.), delay modulation offset
+; (0.0001 - 0.01 secs) and feedback (0% - 99%).
+
+; Delay
+; -----
+; A delay effect with controls for effect mix (minimum=all dry signal, maximum=all
+; effect), delay time (0.01 - 5 secs.), feedback (0% - 100%) and
+; high frequency loss (a low-pass filter within the delay feedback loop 200 - 20000 Hz).
+
+; Reverb
+; ------
+; A reverb effect that uses Csound's reverbsc opcode and with controls for effect mix
+; (minimum=all dry signal, maximum=all effect), room size and
+; high frequency damping.
+
+; Equalizer
+; ---------
+; A stereo graphic equalizer. Gain controls centering around the frequencies 100Hz, 200Hz,
+; 400Hz, 800Hz, 1600Hz, 3200Hz and 6400Hz. The lowest
+; control is a low shelving filter and the highest is a high shelving control.
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b32 -B4096 -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b32 -B4096 -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
-#define	UPDATE	#10#
+#define UPDATE #10#
 
-giOnOffStatus	ftgen	0,0,32,-2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0	;TABLE THAT STORES THE ON/OFF STATUS OF EACH EFFECT 0=OFF 1=ON
-gisine		ftgen	0,0,4096,10,1
-giWet		ftgen	0,0,1024,-7,0,512,1,512,1				;RESCALING FUNCTION FOR WET LEVEL CONTROL
-giDry		ftgen	0,0,1024,-7,1,512,1,512,0				;RESCALING FUNCTION FOR DRY LEVEL CONTROL
+; Table that stores the on/off status of each effect 0=off 1=on
+giOnOffStatus ftgen 0, 0, 32, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+gisine        ftgen 0, 0, 4096, 10, 1
+; Rescaling function for wet level control
+giWet ftgen 0, 0, 1024, -7, 0, 512, 1, 512, 1
+; Rescaling function for dry level control
+giDry ftgen 0, 0, 1024, -7, 1, 512, 1, 512, 0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	1	;TRIGGERED BY EFFECT ON/OFF SWITCHES - AMENDS ON/OFF STATUS TABLE ACCORDINGLY AND STARTS THE DESIRED EFFECT
-	iStatus	table	p4, giOnOffStatus						;CURRENT STATUS
-	iStatus	=		abs(iStatus - 1)						;NEW STATUS - SWAPS BETWEEN ZERO AND 1
-			tablew	iStatus, p4, giOnOffStatus				;WRITE NEW STATUS
-	if iStatus=1 then										;IF EFFECT IS NOW ON...
-			event_i	"i", p4 + 10, 0, -1						;TURN ON THE RELELVANT EFFECT. EFFECT NUMBER DERIVED FROM p4 OF BUTTON
-	endif												;END OF THIS CONDITIONAL  BRANCH
+; Triggered by effect on/off switches - amends on/off status table accordingly and starts
+; the desired effect
+instr 1
+  iStatus table p4, giOnOffStatus    ; Current status
+  iStatus = abs(iStatus - 1)         ; New status - swaps between zero and 1
+  tablew iStatus, p4, giOnOffStatus  ; Write new status
+  if iStatus = 1 then                ; If effect is now on...
+    ; Turn on the relelvant effect. Effect number derived from p4 of button
+    event_i "i", p4 + 10, 0, -1
+  endif  ; End of this conditional  branch
 endin
 
-instr	2	;INPUT (ALWAYS ON)
-	gaSigL, gaSigR	ins										;READ STEREO INPUT INTO GLOBAL AUDIO VARIABLES
+instr 2               ; Input (always on)
+  gaSigL, gaSigR ins  ; Read stereo input into global audio variables
 endin
 
 
-;THE EFFECTS...
-instr	10	;VOLUME
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use VOLUMELED widget controller for effect ON/OFF light
-	;Use VOLUMEOnOff widget button to Start/Stop effect (event i 1 0 0.01 0)
+; The effects...
+instr 10  ; Volume
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use VOLUMELED widget controller for effect ON/OFF light
+  ; Use VOLUMEOnOff widget button to Start/Stop effect (event i 1 0 0.01 0)
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1VOLUME	invalue	"Volume"
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1VOLUME invalue "Volume"
 
-				outvalue	"VOLUMELED", 1						;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+    outvalue "VOLUMELED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"VOLUMELED", 0								;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
-	gaSigL	= gaSigL*k1VOLUME								;SCALE LEFT CHANNEL AMPLITUDE USING VOLUME CONTROL KNOB
-	gaSigR	= gaSigR*k1VOLUME								;SCALE RIGHT CHANNEL AMPLITUDE USING VOLUME CONTROL KNOB
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "VOLUMELED", 0           ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
+  ; Scale left channel amplitude using volume control knob
+  gaSigL = gaSigL*k1VOLUME
+  ; Scale right channel amplitude using volume control knob
+  gaSigR = gaSigR*k1VOLUME
 endin
 
-instr	11	;FILEPLAY
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use FILEPLAYLED widget controller for effect ON/OFF light
-	;Use FILEPLAYOnOff widget button to Start/Stop effect (event i 1 0 0.01 1)
+instr 11  ; Fileplay
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use FILEPLAYLED widget controller for effect ON/OFF light
+  ; Use FILEPLAYOnOff widget button to Start/Stop effect (event i 1 0 0.01 1)
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1FILEPLAY	invalue	"File"
-		k2FILEPLAY	invalue	"Live"
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1FILEPLAY invalue "File"
+    k2FILEPLAY invalue "Live"
 
-		Sfile_new		strcpy	""							;INIT TO EMPTY STRING
-		gSfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	gSfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
+    Sfile_new strcpy ""  ; Init to empty string
+    gSfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk gSfile
+    kfile strcmpk Sfile_new, Sfile_old
 
-					outvalue	"FILEPLAYLED", 1				;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+    outvalue "FILEPLAYLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"FILEPLAYLED", 0							;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "FILEPLAYLED", 0         ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	kNew_file		changed	kfile							;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kNew_file=1	then									;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	NEW_FILE									;BEGIN A REINITIALISATION PASS FROM LABEL 'NEW_FILE'
-	endif
-	NEW_FILE:
-	;OUTPUTS		OPCODE	FILE  | SPEED|INSKIP|LOOPING (0=OFF 1=ON)
-	aFileL, aFileR	FilePlay2	gSfile,	1,	0,		1			;READ A FILE FROM DISK
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kNew_file changed kfile
+  if kNew_file = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit NEW_FILE      ; Begin a reinitialisation pass from label 'new_file'
+  endif
+NEW_FILE:
+  ; Outputs  opcode file  | speed|inskip|looping (0=off 1=on)
+  aFileL, aFileR FilePlay2 gSfile, 1, 0, 1  ; Read a file from disk
 
-	gaSigL	sum	aFileL*k1FILEPLAY, gaSigL*k2FILEPLAY			;MIX FILE PLAYER AUDIO WITH LIVE AUDIO ACCORDING TO THE SETTING OF KNOB 1 & 2 (LEFT CHANNEL)
-	gaSigR	sum	aFileR*k1FILEPLAY, gaSigR*k2FILEPLAY			;MIX FILE PLAYER AUDIO WITH LIVE AUDIO ACCORDING TO THE SETTING OF KNOB 1 & 2 (LEFT CHANNEL)
-endin
-	
-instr	12	;COMPRESSOR
-	;GUI------------------------------------------------------------------------------------------------------------------------------------
-	;Use COMPRESSORLED widget controller for effect ON/OFF light
-	;Use COMPRESSOROnOff widget button to Start/Stop effect (event i 1 0 0.01 2)
-
-	iExp1	ftgentmp	0, 0, 129, -25, 0, 1.0, 128, 100.0		;TABLE FOR EXP SLIDER
-	iExp2	ftgentmp	0, 0, 129, -25, 0, 1.0, 128, 20.0		;TABLE FOR EXP SLIDER
-
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1COMPRESSOR	invalue	"COMPRESSOR_Thresh"
-		k2COMPRESSOR	invalue	"COMPRESSOR_Ratio"
-		k2COMPRESSOR	tablei	k2COMPRESSOR, iExp1, 1
-
-		k3COMPRESSOR	invalue	"COMPRESSOR_Att"
-		k4COMPRESSOR	invalue	"COMPRESSOR_PostGain"
-		k4COMPRESSOR	tablei	k4COMPRESSOR, iExp2, 1
-
-					outvalue	"COMPRESSORLED", 1				;THIS TURNS ON THE LED FOR THE EFFECT   
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
-
-	kStatus	table	p1-10, giOnOffStatus            			;READ EFFECT ON/OFF STATUS FROM TABLE                    
-	if kStatus=0 then                               				;IF THIS EFFECT HAS BEEN TURNED OFF                      
-		outvalue	"COMPRESSORLED", 0							;SWITCH OFF THE LED                                      
-		turnoff                                 				;TURN THIS INSTRUMENT OFF                                
-	endif                                           				;END OF THIS CONDITIONAL BRANCH                          
-
-	ktrigger	changed	k2COMPRESSOR, k3COMPRESSOR				;RATIO AND ATTACK TIME ARE I-RATE SO RE-INITIALIZATION IS REQUIRED IN ORDER FOR THEM TO TAKE EFFECT
-	if ktrigger=1 then										;IF A REINITIALIZATIO  TRIGGER HAS BEEN RECEIVED...
-		reinit	UPDATE									;BEGIN A REINITIALIZATION PASS FROM LABEL 'UPDATE'
-	endif												;END OF THIS CONDITIONAL BRANCH
-
-	UPDATE:												;LABEL
-	aCompL	dam 	gaSigL, k1COMPRESSOR, 1/i(k2COMPRESSOR), 1, i(k3COMPRESSOR), 0.1		;COMPRESSOR (LEFT CHANNEL)
-	aCompR	dam 	gaSigR, k1COMPRESSOR, 1/i(k2COMPRESSOR), 1, i(k3COMPRESSOR), 0.1		;COMPRESSOR (RIGHT CHANNEL)
-			rireturn										;RETURN FROM INTIALIZATION PASS
-	gaSigL	=	aCompL*k4COMPRESSOR							;REDEFINE GLOBAL AUDIO SIGNAL WITH COMPRESSOR OUTPUT AUDIO (LEFT CHANNEL)
-	gaSigR	=	aCompR*k4COMPRESSOR							;REDEFINE GLOBAL AUDIO SIGNAL WITH COMPRESSOR OUTPUT AUDIO (RIGHT CHANNEL)
+  ; Mix file player audio with live audio according to the setting of knob 1 & 2 (left
+  ; channel)
+  gaSigL sum aFileL*k1FILEPLAY, gaSigL*k2FILEPLAY
+  ; Mix file player audio with live audio according to the setting of knob 1 & 2 (left
+  ; channel)
+  gaSigR sum aFileR*k1FILEPLAY, gaSigR*k2FILEPLAY
 endin
 
-instr	13	;ENVFOLLOWER
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use ENVFOLLOWERLED widget controller for effect ON/OFF light
-	;Use ENVFOLLOWEROnOff widget button to Start/Stop effect (event i 1 0 0.01 3)
+instr 12  ; Compressor
+  ; GUI------------------------------------------------------------------------------------------------------------------------------------
+  ; Use COMPRESSORLED widget controller for effect ON/OFF light
+  ; Use COMPRESSOROnOff widget button to Start/Stop effect (event i 1 0 0.01 2)
 
-	iExp1	ftgentmp	0, 0, 129, -25, 0, 100.0, 128, 10000.0		;TABLE FOR EXP SLIDER
+  iExp1 ftgentmp 0, 0, 129, -25, 0, 1.0, 128, 100.0  ; Table for exp slider
+  iExp2 ftgentmp 0, 0, 129, -25, 0, 1.0, 128, 20.0   ; Table for exp slider
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1ENVFOLLOWER	invalue	"ENVFOLLOWER_Sens"
-		k2ENVFOLLOWER	invalue	"ENVFOLLOWER_Freq"
-		k2ENVFOLLOWER	tablei	k2ENVFOLLOWER, iExp1, 1
-		k3ENVFOLLOWER	invalue	"ENVFOLLOWER_Res"
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1COMPRESSOR invalue "COMPRESSOR_Thresh"
+    k2COMPRESSOR invalue "COMPRESSOR_Ratio"
+    k2COMPRESSOR tablei k2COMPRESSOR, iExp1, 1
 
-					outvalue	"ENVFOLLOWERLED", 1				;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+    k3COMPRESSOR invalue "COMPRESSOR_Att"
+    k4COMPRESSOR invalue "COMPRESSOR_PostGain"
+    k4COMPRESSOR tablei k4COMPRESSOR, iExp2, 1
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"ENVFOLLOWERLED", 0							;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+    outvalue "COMPRESSORLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	aFollowL	follow2	gaSigL, 0.01, 0.05						;AMPLITUDE FOLLOWING AUDIO SIGNAL (LEFT CHANNEL)
-	aFollowR	follow2	gaSigR, 0.01, 0.05						;AMPLITUDE FOLLOWING AUDIO SIGNAL (RIGHT CHANNEL)
-	kFollowL	downsamp	aFollowL								;DOWNSAMPLE TO K-RATE (LEFT CHANNEL)
-	kFollowR	downsamp	aFollowR								;DOWNSAMPLE TO K-RATE (RIGHT CHANNEL)
-	kFrqL	=		k2ENVFOLLOWER + (cpsoct(kFollowL*k1ENVFOLLOWER*150))				;CREATE A LEFT CHANNEL MODULATING FREQUENCY BASE ON THE STATIC VALUE CREATED BY KNOB 2 AND THE AMOUNT OF DYNAMIC ENVELOPE FOLLOWING GOVERNED BY KNOB 3
-	kFrqR	=		k2ENVFOLLOWER + (cpsoct(kFollowR*k1ENVFOLLOWER*150))				;CREATE A RIGHT CHANNEL MODULATING FREQUENCY BASE ON THE STATIC VALUE CREATED BY KNOB 2 AND THE AMOUNT OF DYNAMIC ENVELOPE FOLLOWING GOVERNED BY KNOB 3
-	kFrqL	port		kFrqL, 0.05							;SMOOTH CONTROL SIGNAL USING PORTAMENTO (LEFT CHANNEL) 
-	kFrqR	port		kFrqR, 0.05							;SMOOTH CONTROL SIGNAL USING PORTAMENTO (RIGHT CHANNEL)
-	kFrqL	limit	kFrqL, 20,18000						;LIMIT FREQUENCY RANGE TO PREVENT OUT OF RANGE FREQUENCIES (LEFT CHANNEL)  
-	kFrqR	limit	kFrqR, 20,18000						;LIMIT FREQUENCY RANGE TO PREVENT OUT OF RANGE FREQUENCIES  (RIGHT CHANNEL)
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "COMPRESSORLED", 0       ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	gaSigL	moogladder	gaSigL, kFrqL, k3ENVFOLLOWER			;REDEFINE GLOBAL AUDIO SIGNAL AS FILTERED VERSION OF ITSELF (LEFT CHANNEL) 
-	gaSigR	moogladder	gaSigR, kFrqR, k3ENVFOLLOWER			;REDEFINE GLOBAL AUDIO SIGNAL AS FILTERED VERSION OF ITSELF (RIGHT CHANNEL)
+  ; Ratio and attack time are i-rate so re-initialization is required in order for them to
+  ; take effect
+  ktrigger changed k2COMPRESSOR, k3COMPRESSOR
+  if ktrigger = 1 then  ; If a reinitializatio  trigger has been received...
+    reinit UPDATE       ; Begin a reinitialization pass from label 'update'
+  endif                 ; End of this conditional branch
+
+UPDATE:  ; Label
+  ; Compressor (left channel)
+  aCompL dam gaSigL, k1COMPRESSOR, 1/i(k2COMPRESSOR), 1, i(k3COMPRESSOR), 0.1
+  ; Compressor (right channel)
+  aCompR dam gaSigR, k1COMPRESSOR, 1/i(k2COMPRESSOR), 1, i(k3COMPRESSOR), 0.1
+  rireturn  ; Return from intialization pass
+  ; Redefine global audio signal with compressor output audio (left channel)
+  gaSigL = aCompL*k4COMPRESSOR
+  ; Redefine global audio signal with compressor output audio (right channel)
+  gaSigR = aCompR*k4COMPRESSOR
 endin
 
-instr	14	;DISTORTION
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use DISTORTIONLED widget controller for effect ON/OFF light
-	;Use DISTORTIONOnOff widget button to Start/Stop effect (event i 1 0 0.01 4)
+instr 13  ; Envfollower
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use ENVFOLLOWERLED widget controller for effect ON/OFF light
+  ; Use ENVFOLLOWEROnOff widget button to Start/Stop effect (event i 1 0 0.01 3)
 
-	iExp1	ftgentmp	0, 0, 129, -25, 0, 0.01, 128, 0.4			;TABLE FOR EXP SLIDER
-	iExp2	ftgentmp	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLE FOR EXP SLIDER
+  iExp1 ftgentmp 0, 0, 129, -25, 0, 100.0, 128, 10000.0  ; Table for exp slider
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1DISTORTION	invalue	"DISTORTION_Level"
-		k2DISTORTION	invalue	"DISTORTION_Drive"
-		k2DISTORTION	tablei	k2DISTORTION, iExp1, 1
-		k3DISTORTION	invalue	"DISTORTION_Tone"
-		k3DISTORTION	tablei	k3DISTORTION, iExp2, 1
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1ENVFOLLOWER invalue "ENVFOLLOWER_Sens"
+    k2ENVFOLLOWER invalue "ENVFOLLOWER_Freq"
+    k2ENVFOLLOWER tablei k2ENVFOLLOWER, iExp1, 1
+    k3ENVFOLLOWER invalue "ENVFOLLOWER_Res"
 
-					outvalue	"DISTORTIONLED", 1				;THIS TURNS ON THE LED FOR THE EFFECT     
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+    outvalue "ENVFOLLOWERLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kStatus	table	p1-10, giOnOffStatus 					;READ EFFECT ON/OFF STATUS FROM TABLE                    
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF                      
-		outvalue	"DISTORTIONLED", 0							;SWITCH OFF THE LED                                      
-		turnoff											;TURN THIS INSTRUMENT OFF                                
-	endif												;END OF THIS CONDITIONAL BRANCH                          
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "ENVFOLLOWERLED", 0      ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	kpregain	=	(k2DISTORTION*100)							;DEFINE PREGAIN FROM KNOB 2
-	kpostgain	=	0.5 * (((1-k2DISTORTION) * 0.4) + 0.6)			;DEFINE POSTGAIN FROM KNOB 2
-	kshape1	=	0										;SHAPE 1 PARAMETER
-	kshape2	=	0										;SHAPE 2 PARAMETER
+  aFollowL follow2 gaSigL, 0.01, 0.05  ; Amplitude following audio signal (left channel)
+  aFollowR follow2 gaSigR, 0.01, 0.05  ; Amplitude following audio signal (right channel)
+  kFollowL downsamp aFollowL           ; Downsample to k-rate (left channel)
+  kFollowR downsamp aFollowR           ; Downsample to k-rate (right channel)
+  ; Create a left channel modulating frequency base on the static value created by knob 2
+  ; and the amount of dynamic envelope following governed by knob 3
+  kFrqL = k2ENVFOLLOWER + (cpsoct(kFollowL*k1ENVFOLLOWER*150))
+  ; Create a right channel modulating frequency base on the static value created by knob 2
+  ; and the amount of dynamic envelope following governed by knob 3
+  kFrqR = k2ENVFOLLOWER + (cpsoct(kFollowR*k1ENVFOLLOWER*150))
+  kFrqL port kFrqL, 0.05  ; Smooth control signal using portamento (left channel)
+  kFrqR port kFrqR, 0.05  ; Smooth control signal using portamento (right channel)
+  ; Limit frequency range to prevent out of range frequencies (left channel)
+  kFrqL limit kFrqL, 20, 18000
+  ; Limit frequency range to prevent out of range frequencies (right channel)
+  kFrqR limit kFrqR, 20, 18000
 
-	aDistL	distort1	gaSigL*32000, kpregain, kpostgain, kshape1, kshape2				;CREATE DISTORTION SIGNAL
-	aDistR	distort1	gaSigR*32000, kpregain, kpostgain, kshape1, kshape2				;CREATE DISTORTION SIGNAL
-	aDistL	butlp	aDistL/32000, k3DISTORTION				;LOWPASS FILTER DISTORTED SIGNAL (LEFT CHANNEL) 
-	aDistR	butlp	aDistR/32000, k3DISTORTION				;LOWPASS FILTER DISTORTED SIGNAL (RIGHT CHANNEL)
-	gaSigL	=		aDistL*k1DISTORTION						;REDEFINE GLOBAL AUDIO SIGNAL WITH DISTORTION OUTPUT AUDIO. AMPLITUDE SCALED BY KNOB 1. (LEFT CHANNEL) 
-	gaSigR	=		aDistR*k1DISTORTION						;REDEFINE GLOBAL AUDIO SIGNAL WITH DISTORTION OUTPUT AUDIO. AMPLITUDE SCALED BY KNOB 1. (RIGHT CHANNEL)
+  ; Redefine global audio signal as filtered version of itself (left channel)
+  gaSigL moogladder gaSigL, kFrqL, k3ENVFOLLOWER
+  ; Redefine global audio signal as filtered version of itself (right channel)
+  gaSigR moogladder gaSigR, kFrqR, k3ENVFOLLOWER
 endin
 
-instr	15	;REVERSE
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use REVERSELED widget controller for effect ON/OFF light
-	;Use REVERSEOnOff widget button to Start/Stop effect (event i 1 0 0.01 5)
+instr 14  ; Distortion
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use DISTORTIONLED widget controller for effect ON/OFF light
+  ; Use DISTORTIONOnOff widget button to Start/Stop effect (event i 1 0 0.01 4)
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1REVERSE		invalue	"REVERSE_Time"
+  iExp1 ftgentmp 0, 0, 129, -25, 0, 0.01, 128, 0.4      ; Table for exp slider
+  iExp2 ftgentmp 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
 
-					outvalue	"REVERSELED", 1				;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1DISTORTION invalue "DISTORTION_Level"
+    k2DISTORTION invalue "DISTORTION_Drive"
+    k2DISTORTION tablei k2DISTORTION, iExp1, 1
+    k3DISTORTION invalue "DISTORTION_Tone"
+    k3DISTORTION tablei k3DISTORTION, iExp2, 1
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"REVERSELED", 0							;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+    outvalue "DISTORTIONLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	ktrig	changed	k1REVERSE
-	if ktrig=1 then
-		reinit	UPDATE
-	endif
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "DISTORTIONLED", 0       ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	UPDATE:
-	itime	=	i(k1REVERSE)
-	aptr		phasor	2/itime
-	aptr		=		aptr*itime
-	ienv		ftgentmp	0,0,1024,7,0,(1024*0.01),1,(1024*0.98),1,(0.01*1024),0
- 	aenv		poscil	1, 2/itime, ienv
- 	abuffer	delayr	itime
-	atapL	deltap3	aptr
-			delayw	gaSigL
-	abuffer	delayr	itime
-	atapR	deltap3	aptr
-			delayw	gaSigR		
-			rireturn
-	gaSigL	=		atapL*aenv
-	gaSigR	=		atapR*aenv	
+  kpregain  = (k2DISTORTION*100)                      ; Define pregain from knob 2
+  kpostgain = 0.5 * (((1-k2DISTORTION) * 0.4) + 0.6)  ; Define postgain from knob 2
+  kshape1   = 0                                       ; Shape 1 parameter
+  kshape2   = 0                                       ; Shape 2 parameter
+
+  ; Create distortion signal
+  aDistL distort1 gaSigL*32000, kpregain, kpostgain, kshape1, kshape2
+  ; Create distortion signal
+  aDistR distort1 gaSigR*32000, kpregain, kpostgain, kshape1, kshape2
+  ; Lowpass filter distorted signal (left channel)
+  aDistL butlp aDistL/32000, k3DISTORTION
+  ; Lowpass filter distorted signal (right channel)
+  aDistR butlp aDistR/32000, k3DISTORTION
+  ; Redefine global audio signal with distortion output audio. Amplitude scaled by knob 1.
+  ; (left channel)
+  gaSigL = aDistL*k1DISTORTION
+  ; Redefine global audio signal with distortion output audio. Amplitude scaled by knob 1.
+  ; (right channel)
+  gaSigR = aDistR*k1DISTORTION
 endin
 
-instr	16	;PITCH_SHIFTER
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use PITCH_SHIFTERLED widget controller for effect ON/OFF light
-	;Use PITCH_SHIFTEROnOff widget button to Start/Stop effect (event i 1 0 0.01 6)
+instr 15  ; Reverse
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use REVERSELED widget controller for effect ON/OFF light
+  ; Use REVERSEOnOff widget button to Start/Stop effect (event i 1 0 0.01 5)
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1PITCH_SHIFTER	invalue	"PITCH_SHIFTER_Mix"
-		k2PITCH_SHIFTER	invalue	"PITCH_SHIFTER_Pitch"
-		k3PITCH_SHIFTER	invalue	"PITCH_SHIFTER_Fine"
-		k4PITCH_SHIFTER	invalue	"PITCH_SHIFTER_FBack"
-		
-						outvalue	"PITCH_SHIFTERLED", 1		;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1REVERSE invalue "REVERSE_Time"
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"PITCH_SHIFTERLED", 0						;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+    outvalue "REVERSELED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kWet		table	k1PITCH_SHIFTER, giWet, 1				;RESCALE WET LEVEL CONTROL ACCORDING TO FUNCTION TABLE giWet
-	kDry		table	k1PITCH_SHIFTER, giDry, 1				;RESCALE DRY LEVEL CONTROL ACCORDING TO FUNCTION TABLE giWet
-	aOutL	init		0									;INITIALIZE aOutL FOR FIRST PERFORMANCE TIME PASS
-	aOutR	init		0									;INITIALIZE aOutR FOR FIRST PERFORMANCE TIME PASS
-	kscal	=		octave((int(k2PITCH_SHIFTER)/12)+k3PITCH_SHIFTER)					;DERIVE PITCH SCALING RATIO. NOTE THAT THE 'COARSE' PITCH DIAL BECOMES STEPPED IN SEMITONE INTERVALS
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "REVERSELED", 0          ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	fsig1L 	pvsanal	gaSigL+(aOutL*k4PITCH_SHIFTER), 1024,256,1024,0					;PHASE VOCODE ANALYSE LEFT CHANNEL
-	fsig1R 	pvsanal	gaSigL+(aOutR*k4PITCH_SHIFTER), 1024,256,2048,0					;PHASE VOCODE ANALYSE RIGHT CHANNEL
-	fsig2L 	pvscale	fsig1L, kscal							;RESCALE PITCH (LEFT CHANNEL)
-	fsig2R 	pvscale	fsig1R, kscal							;RESCALE PITCH (RIGHT CHANNEL)
+  ktrig changed k1REVERSE
+  if ktrig = 1 then
+    reinit UPDATE
+  endif
 
-	aOutL 	pvsynth	fsig2L								;RESYNTHESIZE FROM FSIG (LEFT CHANNEL)
-	aOutR 	pvsynth	fsig2R								;RESYNTHESIZE FROM FSIG (RIGHT CHANNEL)
-
-	gaSigL	sum		gaSigL*kDry, aOutL*kWet					;REDEFINE GLOBAL AUDIO SIGNAL FROM MIX OF DRY AND WET SIGNALS (LEFT CHANNEL) 
-	gaSigR	sum		gaSigR*kDry, aOutR*kWet					;REDEFINE GLOBAL AUDIO SIGNAL FROM MIX OF DRY AND WET SIGNALS (RIGHT CHANNEL)
+UPDATE:
+  itime = i(k1REVERSE)
+  aptr phasor 2/itime
+  aptr = aptr*itime
+  ienv ftgentmp 0, 0, 1024, 7, 0, (1024*0.01), 1, (1024*0.98), 1, (0.01*1024), 0
+  aenv poscil 1, 2/itime, ienv
+  abuffer delayr itime
+  atapL deltap3 aptr
+  delayw gaSigL
+  abuffer delayr itime
+  atapR deltap3 aptr
+  delayw gaSigR
+  rireturn
+  gaSigL = atapL*aenv
+  gaSigR = atapR*aenv
 endin
 
-instr	17	;FREQSHIFTER
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use FREQSHIFTERLED widget controller for effect ON/OFF light
-	;Use FREQSHIFTEROnOff widget button to Start/Stop effect (event i 1 0 0.01 7)
+instr 16  ; Pitch_shifter
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use PITCH_SHIFTERLED widget controller for effect ON/OFF light
+  ; Use PITCH_SHIFTEROnOff widget button to Start/Stop effect (event i 1 0 0.01 6)
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1FREQSHIFTER	invalue	"FREQSHIFTER_Mix"
-		k2FREQSHIFTER	invalue	"FREQSHIFTER_Freq"
-		k3FREQSHIFTER	invalue	"FREQSHIFTER_Mult"
-		k4FREQSHIFTER	invalue	"FREQSHIFTER_Fback"
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1PITCH_SHIFTER invalue "PITCH_SHIFTER_Mix"
+    k2PITCH_SHIFTER invalue "PITCH_SHIFTER_Pitch"
+    k3PITCH_SHIFTER invalue "PITCH_SHIFTER_Fine"
+    k4PITCH_SHIFTER invalue "PITCH_SHIFTER_FBack"
 
-					outvalue	"FREQSHIFTERLED", 1				;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+    outvalue "PITCH_SHIFTERLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"FREQSHIFTERLED", 0							;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "PITCH_SHIFTERLED", 0    ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	kWet		table	k1FREQSHIFTER, giWet, 1					;RESCALE WET LEVEL CONTROL ACCORDING TO FUNCTION TABLE giWet
-	kDry		table	k1FREQSHIFTER, giDry, 1					;RESCALE DRY LEVEL CONTROL ACCORDING TO FUNCTION TABLE giDry
-	aOutL	init		0
-	aOutR	init		0
-	aInL		=		gaSigL + (aOutL * k4FREQSHIFTER)			;ADD FEEDBACK SIGNAL TO INPUT (AMOUNT OF FEEDBACK CONTROLLED BY 'Feedback Gain' SLIDER)
-	aInR		=		gaSigR + (aOutR * k4FREQSHIFTER)			;ADD FEEDBACK SIGNAL TO INPUT (AMOUNT OF FEEDBACK CONTROLLED BY 'Feedback Gain' SLIDER)
+  ; Rescale wet level control according to function table giwet
+  kWet table k1PITCH_SHIFTER, giWet, 1
+  ; Rescale dry level control according to function table giwet
+  kDry table k1PITCH_SHIFTER, giDry, 1
+  aOutL init 0  ; Initialize aoutl for first performance time pass
+  aOutR init 0  ; Initialize aoutr for first performance time pass
+  ; Derive pitch scaling ratio. Note that the 'coarse' pitch dial becomes stepped in
+  ; semitone intervals
+  kscal = octave((int(k2PITCH_SHIFTER)/12)+k3PITCH_SHIFTER)
 
-	arealL, aimagL	hilbert	aInL								;HILBERT OPCODE OUTPUTS TWO PHASE SHIFTED SIGNALS, EACH 90 OUT OF PHASE WITH EACH OTHER
-	arealR, aimagR	hilbert	aInR								;HILBERT OPCODE OUTPUTS TWO PHASE SHIFTED SIGNALS, EACH 90 OUT OF PHASE WITH EACH OTHER
+  ; Phase vocode analyse left channel
+  fsig1L pvsanal gaSigL+(aOutL*k4PITCH_SHIFTER), 1024, 256, 1024, 0
+  ; Phase vocode analyse right channel
+  fsig1R pvsanal gaSigL+(aOutR*k4PITCH_SHIFTER), 1024, 256, 2048, 0
+  fsig2L pvscale fsig1L, kscal  ; Rescale pitch (left channel)
+  fsig2R pvscale fsig1R, kscal  ; Rescale pitch (right channel)
 
-	kporttime	linseg	0,0.001,0.02
-	kfshift	portk	k2FREQSHIFTER*k3FREQSHIFTER, kporttime
-	;QUADRATURE OSCILLATORS. I.E. 90 OUT OF PHASE WITH RESPECT TO EACH OTHER
-	;OUTUTS	OPCODE	AMPLITUDE | FREQ. | FUNCTION_TABLE | INITIAL_PHASE (OPTIONAL;DEFAULTS TO ZERO)
-	asinL 	oscili       1,    kfshift,     gisine,          0
-	asinR 	oscili       1,    kfshift,     gisine,          0
-	acosL 	oscili       1,    kfshift,     gisine,          .25
-	acosR 	oscili       1,    kfshift,     gisine,          .25
-	
-	;RING MODULATE EACH SIGNAL USING THE QUADRATURE OSCILLATORS AS MODULATORS
-	amod1L = arealL * acosL
-	amod1R = arealR * acosR
-	amod2L = aimagL * asinL
-	amod2R = aimagR * asinR
-	
-	;UPSHIFTING OUTPUT
-	aOutL = (amod1L - amod2L)
-	aOutR = (amod1R - amod2R)
-	
-	gaSigL	sum	aOutL*kWet, gaSigL*kDry
-	gaSigR	sum	aOutR*kWet, gaSigR*kDry 
+  aOutL pvsynth fsig2L  ; Resynthesize from fsig (left channel)
+  aOutR pvsynth fsig2R  ; Resynthesize from fsig (right channel)
+
+  ; Redefine global audio signal from mix of dry and wet signals (left channel)
+  gaSigL sum gaSigL*kDry, aOutL*kWet
+  ; Redefine global audio signal from mix of dry and wet signals (right channel)
+  gaSigR sum gaSigR*kDry, aOutR*kWet
 endin
 
-instr	18	;RINGMODULATOR
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use RINGMODULATORLED widget controller for effect ON/OFF light
-	;Use RINGMODULATOROnOff widget button to Start/Stop effect (event i 1 0 0.01 8)
+instr 17  ; Freqshifter
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use FREQSHIFTERLED widget controller for effect ON/OFF light
+  ; Use FREQSHIFTEROnOff widget button to Start/Stop effect (event i 1 0 0.01 7)
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1RINGMODULATOR	invalue	"RINGMODULATOR_Mix"
-		k2RINGMODULATOR	invalue	"RINGMODULATOR_Freq"
-		k3RINGMODULATOR	invalue	"RINGMODULATOR_Env"
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1FREQSHIFTER invalue "FREQSHIFTER_Mix"
+    k2FREQSHIFTER invalue "FREQSHIFTER_Freq"
+    k3FREQSHIFTER invalue "FREQSHIFTER_Mult"
+    k4FREQSHIFTER invalue "FREQSHIFTER_Fback"
 
-						outvalue	"RINGMODULATORLED", 1		;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+    outvalue "FREQSHIFTERLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"RINGMODULATORLED", 0						;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "FREQSHIFTERLED", 0      ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	kWet		table	k1RINGMODULATOR, giWet, 1				;RESCALE WET LEVEL CONTROL ACCORDING TO FUNCTION TABLE giWet
-	kDry		table	k1RINGMODULATOR, giDry, 1				;RESCALE DRY LEVEL CONTROL ACCORDING TO FUNCTION TABLE giWet
-	kporttime	linseg	0,0.001,0.02							;PORTAMENTO VARIABLE
-	kModFrq	portk	k2RINGMODULATOR, kporttime				;SMOOTH VARIABLE CHANGES
-	kRMSL	rms		gaSigL								;FOLLOW THE RMS VALUE OF THE LEFT CHANNEL
-	kRMSR	rms		gaSigR								;FOLLOW THE RMS VALUE OF THE RIGHT CHANNEL
-	kModFrqL	=		kModFrq + (cpsoct(kRMSL*k3RINGMODULATOR*100))     ;CREATE A LEFT CHANNEL MODULATING FREQUENCY BASE ON THE STATIC VALUE CREATED BY KNOB 2 AND THE AMOUNT OF DYNAMIC ENVELOPE FOLLOWING GOVERNED BY KNOB 3
-	kModFrqR	=		kModFrq + (cpsoct(kRMSR*k3RINGMODULATOR*100))     ;CREATE A RIGHT CHANNEL MODULATING FREQUENCY BASE ON THE STATIC VALUE CREATED BY KNOB 2 AND THE AMOUNT OF DYNAMIC ENVELOPE FOLLOWING GOVERNED BY KNOB 3
+  ; Rescale wet level control according to function table giwet
+  kWet table k1FREQSHIFTER, giWet, 1
+  ; Rescale dry level control according to function table gidry
+  kDry table k1FREQSHIFTER, giDry, 1
+  aOutL init 0
+  aOutR init 0
+  ; Add feedback signal to input (amount of feedback controlled by 'feedback gain' slider)
+  aInL = gaSigL + (aOutL * k4FREQSHIFTER)
+  ; Add feedback signal to input (amount of feedback controlled by 'feedback gain' slider)
+  aInR = gaSigR + (aOutR * k4FREQSHIFTER)
 
-	aModL	poscil	1, kModFrqL, gisine  					;CREATE RING MODULATING SIGNAL (LEFT CHANNEL)
-	aModR	poscil	1, kModFrqR, gisine  					;CREATE RING MODULATING SIGNAL (RIGHT CHANNEL)
-	gaSigL	sum		gaSigL*kDry, gaSigL*aModL*kWet			;MIX DRY AND WET SIGNALS (LEFT CHANNEL)
-	gaSigR	sum		gaSigR*kDry, gaSigR*aModR*kWet			;MIX DRY AND WET SIGNALS (RIGHT CHANNEL)
+  ; Hilbert opcode outputs two phase shifted signals, each 90 out of phase with each other
+  arealL, aimagL hilbert aInL
+  ; Hilbert opcode outputs two phase shifted signals, each 90 out of phase with each other
+  arealR, aimagR hilbert aInR
+
+  kporttime linseg 0, 0.001, 0.02
+  kfshift portk k2FREQSHIFTER*k3FREQSHIFTER, kporttime
+  ; Quadrature oscillators. I.e. 90 out of phase with respect to each other
+  ; Oututs opcode amplitude | freq. | function_table | initial_phase (optional;defaults to
+  ; zero)
+  asinL oscili 1, kfshift, gisine, 0
+  asinR oscili 1, kfshift, gisine, 0
+  acosL oscili 1, kfshift, gisine, .25
+  acosR oscili 1, kfshift, gisine, .25
+
+  ; Ring modulate each signal using the quadrature oscillators as modulators
+  amod1L = arealL * acosL
+  amod1R = arealR * acosR
+  amod2L = aimagL * asinL
+  amod2R = aimagR * asinR
+
+  ; Upshifting output
+  aOutL = (amod1L - amod2L)
+  aOutR = (amod1R - amod2R)
+
+  gaSigL sum aOutL*kWet, gaSigL*kDry
+  gaSigR sum aOutR*kWet, gaSigR*kDry
 endin
 
-instr	19	;PHASER
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use PHASERLED widget controller for effect ON/OFF light
-	;Use PHASEROnOff widget button to Start/Stop effect (event i 1 0 0.01 9)
+instr 18  ; Ringmodulator
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use RINGMODULATORLED widget controller for effect ON/OFF light
+  ; Use RINGMODULATOROnOff widget button to Start/Stop effect (event i 1 0 0.01 8)
 
-	iExp1	ftgentmp	0, 0, 129, -25, 0, 0.01, 128, 14.0			;TABLE FOR EXP SLIDER
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1RINGMODULATOR invalue "RINGMODULATOR_Mix"
+    k2RINGMODULATOR invalue "RINGMODULATOR_Freq"
+    k3RINGMODULATOR invalue "RINGMODULATOR_Env"
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1PHASER		invalue	"PHASER_Rate"
-		k1PHASER		tablei	k1PHASER, iExp1, 1
-		k2PHASER		invalue	"PHASER_Depth"
-		k3PHASER		invalue	"PHASER_Freq"
-		k4PHASER		invalue	"PHASER_FBack"
+    outvalue "RINGMODULATORLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-					outvalue	"PHASERLED", 1					;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "RINGMODULATORLED", 0    ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"PHASERLED", 0								;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+  ; Rescale wet level control according to function table giwet
+  kWet table k1RINGMODULATOR, giWet, 1
+  ; Rescale dry level control according to function table giwet
+  kDry table k1RINGMODULATOR, giDry, 1
+  kporttime linseg 0, 0.001, 0.02           ; Portamento variable
+  kModFrq portk k2RINGMODULATOR, kporttime  ; Smooth variable changes
+  kRMSL rms gaSigL                          ; Follow the rms value of the left channel
+  kRMSR rms gaSigR                          ; Follow the rms value of the right channel
+  ; Create a left channel modulating frequency base on the static value created by knob 2
+  ; and the amount of dynamic envelope following governed by knob 3
+  kModFrqL = kModFrq + (cpsoct(kRMSL*k3RINGMODULATOR*100))
+  ; Create a right channel modulating frequency base on the static value created by knob 2
+  ; and the amount of dynamic envelope following governed by knob 3
+  kModFrqR = kModFrq + (cpsoct(kRMSR*k3RINGMODULATOR*100))
 
-	klfo		lfo		k2PHASER*0.5, k1PHASER, 1									;LFO FOR THE PHASER (TRIANGULAR SHAPE)
-	gaSigL	phaser1	gaSigL, cpsoct((klfo+(k2PHASER*0.5)+k3PHASER)), 8, k4PHASER			;PHASER1 IS APPLIED TO THE LEFT CHANNEL
-	gaSigR	phaser1	gaSigR, cpsoct((klfo+(k2PHASER*0.5)+k3PHASER)), 8, k4PHASER			;PHASER1 IS APPLIED TO THE RIGHT CHANNEL
+  ; Create ring modulating signal (left channel)
+  aModL poscil 1, kModFrqL, gisine
+  ; Create ring modulating signal (right channel)
+  aModR poscil 1, kModFrqR, gisine
+  gaSigL sum gaSigL*kDry, gaSigL*aModL*kWet  ; Mix dry and wet signals (left channel)
+  gaSigR sum gaSigR*kDry, gaSigR*aModR*kWet  ; Mix dry and wet signals (right channel)
 endin
 
-instr	20	;LoFi
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use LoFiLED widget controller for effect ON/OFF light
-	;Use LoFiOnOff widget button to Start/Stop effect (event i 1 0 0.01 10)
+instr 19  ; Phaser
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use PHASERLED widget controller for effect ON/OFF light
+  ; Use PHASEROnOff widget button to Start/Stop effect (event i 1 0 0.01 9)
 
-	iExp1	ftgentmp	0, 0, 129, -25, 0, 1.0, 128, 256.0			;TABLE FOR EXP SLIDER
+  iExp1 ftgentmp 0, 0, 129, -25, 0, 0.01, 128, 14.0  ; Table for exp slider
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1LoFi		invalue	"LoFi_Bits"
-		k2LoFi		invalue	"LoFi_Fold"
-		k2LoFi		tablei	k2LoFi, iExp1, 1
-					outvalue	"LoFiLED", 1					;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1PHASER invalue "PHASER_Rate"
+    k1PHASER tablei k1PHASER, iExp1, 1
+    k2PHASER invalue "PHASER_Depth"
+    k3PHASER invalue "PHASER_Freq"
+    k4PHASER invalue "PHASER_FBack"
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"LoFiLED", 0								;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+    outvalue "PHASERLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kvalues	pow	2, ((1-k1LoFi)*15)+1						;RAISES 2 TO THE POWER OF kbitdepth. THE OUTPUT VALUE REPRESENTS THE NUMBER OF POSSIBLE VALUES AT THAT PARTICULAR BIT DEPTH
-	k16bit	pow	2, 16									;RAISES 2 TO THE POWER OF 16
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "PHASERLED", 0           ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	gaSigL	=	(int((gaSigL*32768*kvalues)/k16bit)/32768)*(k16bit/kvalues)				;BIT DEPTH REDUCE AUDIO SIGNAL (LEFT CHANNEL)
-	gaSigR	=	(int((gaSigR*32768*kvalues)/k16bit)/32768)*(k16bit/kvalues)				;BIT DEPTH REDUCE AUDIO SIGNAL (RIGHT CHANNEL)
-	gaSigL	fold 	gaSigL, k2LoFi							;APPLY SAMPLING RATE FOLDOVER (LEFT CHANNEL) 
-	gaSigR	fold 	gaSigR, k2LoFi							;APPLY SAMPLING RATE FOLDOVER (RIGHT CHANNEL)		
+  klfo lfo k2PHASER*0.5, k1PHASER, 1  ; LFO for the phaser (triangular shape)
+  ; Phaser1 is applied to the left channel
+  gaSigL phaser1 gaSigL, cpsoct((klfo+(k2PHASER*0.5)+k3PHASER)), 8, k4PHASER
+  ; Phaser1 is applied to the right channel
+  gaSigR phaser1 gaSigR, cpsoct((klfo+(k2PHASER*0.5)+k3PHASER)), 8, k4PHASER
 endin
 
-instr	21	;FILTER
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use FILTERLED widget controller for effect ON/OFF light
-	;Use FILTEROnOff widget button to Start/Stop effect (event i 1 0 0.01 11)
+instr 20  ; LoFi
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use LoFiLED widget controller for effect ON/OFF light
+  ; Use LoFiOnOff widget button to Start/Stop effect (event i 1 0 0.01 10)
 
-	iExp1	ftgentmp	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLE FOR EXP SLIDER
-	iExp2	ftgentmp	0, 0, 129, -25, 0, 1.0, 128, 20.0			;TABLE FOR EXP SLIDER
+  iExp1 ftgentmp 0, 0, 129, -25, 0, 1.0, 128, 256.0  ; Table for exp slider
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1FILTER		invalue	"FILTER_HPF"
-		k1FILTER		tablei	k1FILTER, iExp1, 1
-		k2FILTER		invalue	"FILTER_LPF"
-		k2FILTER		tablei	k2FILTER, iExp1, 1
-		k3FILTER		invalue	"FILTER_Gain"
-		k3FILTER		tablei	k3FILTER, iExp2, 1
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1LoFi invalue "LoFi_Bits"
+    k2LoFi invalue "LoFi_Fold"
+    k2LoFi tablei k2LoFi, iExp1, 1
+    outvalue "LoFiLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-					outvalue	"FILTERLED", 1					;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "LoFiLED", 0             ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"FILTERLED", 0								;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+  ; Raises 2 to the power of kbitdepth. The output value represents the number of possible
+  ; values at that particular bit depth
+  kvalues pow 2, ((1-k1LoFi)*15)+1
+  k16bit  pow 2, 16  ; Raises 2 to the power of 16
 
-	kporttime	linseg	0,0.001,0.02							;RAMPING UP PORTAMENTO TIME VARIABLE
-	kHPF		portk	k1FILTER, kporttime						;APPLY PORTAMENTO TO HIGH-PASS FILTER CUTOFF VARIABLE
-	kLPF		portk	k2FILTER, kporttime						;APPLY PORTAMENTO TO HIGH-PASS FILTER CUTOFF VARIABLE
-
-	aFiltL	buthp	gaSigL, kHPF							;HIGH-PASS FILTER GLOBAL AUDIO SIGNAL (LEFT CHANNEL)
-	aFiltR	buthp	gaSigR, kHPF							;HIGH-PASS FILTER GLOBAL AUDIO SIGNAL (RIGHT CHANNEL)
-	aFiltL	buthp	aFiltL, kHPF							;HIGH-PASS FILTER AUDIO SIGNAL FROM PREVIOUS FILTER (LEFT CHANNEL) 
-	aFiltR	buthp	aFiltR, kHPF							;HIGH-PASS FILTER AUDIO SIGNAL FROM PREVIOUS FILTER (RIGHT CHANNEL)
-	aFiltL	butlp	aFiltL, kLPF							;LOW-PASS FILTER GLOBAL AUDIO SIGNAL (LEFT CHANNEL)       
-	aFiltR	butlp	aFiltR, kLPF							;LOW-PASS FILTER GLOBAL AUDIO SIGNAL (RIGHT CHANNEL)      
-	aFiltL	butlp	aFiltL, kLPF							;LOW-PASS FILTER AUDIO SIGNAL FROM PREVIOUS FILTER (LEFT CHANNEL) 
-	aFiltR	butlp	aFiltR, kLPF							;LOW-PASS FILTER AUDIO SIGNAL FROM PREVIOUS FILTER (RIGHT CHANNEL)
-	gaSigL	=		aFiltL*k3FILTER						;REDEFINE GLOBAL AUDIO LEFT CHANNEL SIGNAL WITH OUTPUT FROM LAST FILTER. RESCALE WITH GAIN CONTROL (LEFT CHANNEL)  
-	gaSigR	=		aFiltR*k3FILTER						;REDEFINE GLOBAL AUDIO RIGHT CHANNEL SIGNAL WITH OUTPUT FROM LAST FILTER. RESCALE WITH GAIN CONTROL (RIGHT CHANNEL)
+  ; Bit depth reduce audio signal (left channel)
+  gaSigL = (int((gaSigL*32768*kvalues)/k16bit)/32768)*(k16bit/kvalues)
+  ; Bit depth reduce audio signal (right channel)
+  gaSigR = (int((gaSigR*32768*kvalues)/k16bit)/32768)*(k16bit/kvalues)
+  gaSigL fold gaSigL, k2LoFi  ; Apply sampling rate foldover (left channel)
+  gaSigR fold gaSigR, k2LoFi  ; Apply sampling rate foldover (right channel)
 endin
 
-instr	22	;PANTREM
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use PANTREMLED widget controller for effect ON/OFF light
-	;Use PANTREMOnOff widget button to Start/Stop effect (event i 1 0 0.01 12)
+instr 21  ; Filter
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use FILTERLED widget controller for effect ON/OFF light
+  ; Use FILTEROnOff widget button to Start/Stop effect (event i 1 0 0.01 11)
 
-	iExp1	ftgentmp	0, 0, 129, -25, 0, 0.1, 128, 50.0			;TABLE FOR EXP SLIDER
+  iExp1 ftgentmp 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
+  iExp2 ftgentmp 0, 0, 129, -25, 0, 1.0, 128, 20.0      ; Table for exp slider
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1PANTREM		invalue	"PANTREM_Rate"
-		k1PANTREM		tablei	k1PANTREM, iExp1, 1
-		k2PANTREM		invalue	"PANTREM_Depth"
-		k3PANTREM		invalue	"PAN_TREM"
-		k4PANTREM		invalue	"PANTREM_Wave"
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1FILTER invalue "FILTER_HPF"
+    k1FILTER tablei k1FILTER, iExp1, 1
+    k2FILTER invalue "FILTER_LPF"
+    k2FILTER tablei k2FILTER, iExp1, 1
+    k3FILTER invalue "FILTER_Gain"
+    k3FILTER tablei k3FILTER, iExp2, 1
 
-					outvalue	"PANTREMLED", 1				;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+    outvalue "FILTERLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"PANTREMLED", 0							;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "FILTERLED", 0           ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	ktrig	changed	k4PANTREM								;IF LFO WAVEFORM TYPE IS CHANGED GENERATE A MOMENTARY '1' (BANG)
-	if ktrig=1 then										;IF A 'BANG' HAS BEEN GENERATED IN THE ABOVE LINE
-		reinit	UPDATE									;BEGIN A REINITIALIZATION PASS FROM LABEL 'UPDATE' SO THAT LFO WAVEFORM TYPE CAN BE UPDATED
-	endif												;END OF THIS CONDITIONAL BRANCH
+  kporttime linseg 0, 0.001, 0.02  ; Ramping up portamento time variable
+  kHPF portk k1FILTER, kporttime   ; Apply portamento to high-pass filter cutoff variable
+  kLPF portk k2FILTER, kporttime   ; Apply portamento to high-pass filter cutoff variable
 
-	UPDATE:												;LABEL CALLED UPDATE
-	klfo		lfo			k2PANTREM, k1PANTREM, i(k4PANTREM)		;CREATE AN LFO
-			rireturn										;RETURN FROM REINITIALIZATION PASS
-	klfo	=	(klfo*0.5)+0.5									;RESCALE AND OFFSET LFO SO IT STAY WITHIN THE RANGE 0 - 1 ABOUT THE VALUE 0.5
-	if k4PANTREM=2 then										;IF SQUARE WAVE MODULATION HAS BEEN CHOSEN...
-		klfo	portk	klfo, 0.001							;SMOOTH THE WAVE A TINY BIT TO PREVENT CLICKS
-	endif												;END OF THIS CONDITIONAL BRANCH	
-	if k3PANTREM=0 then										;PAN	IF PANNING MODE IS CHOSEN FROM BUTTON BANK...
-		alfo		interp	klfo								;INTERPOLATE K-RATE LFO AND CREATE A-RATE VARIABLE
-		gaSigL	=		gaSigL*sqrt(alfo)					;REDEFINE GLOBAL AUDIO LEFT CHANNEL SIGNAL WITH AUTO-PANNING
-		gaSigR	=		gaSigR*(1-sqrt(alfo))				;REDEFINE GLOBAL AUDIO RIGHT CHANNEL SIGNAL WITH AUTO-PANNING
-	elseif k3PANTREM=1 then									;TREM IF TREMELO MODE IS CHOSEN FROM BUTTON BANK...
-		klfo		=		klfo+(0.5-(k2PANTREM*0.5))			;MODIFY LFO AT ZERO DEPTH VALUE IS 1 AND AT MAX DEPTH CENTRE OF MODULATION IS 0.5
-		alfo		interp	klfo								;INTERPOLATE K-RATE LFO AND CREATE A-RATE VARIABLE
-		gaSigL	=		gaSigL*(alfo^2)					;REDEFINE GLOBAL AUDIO LEFT CHANNEL SIGNAL WITH TREMELO
-		gaSigR	=		gaSigR*(alfo^2)					;REDEFINE GLOBAL AUDIO RIGHT CHANNEL SIGNAL WITH TREMELO
-	endif												;END OF THIS CONDITIONAL BRANCH
+  aFiltL buthp gaSigL, kHPF  ; High-pass filter global audio signal (left channel)
+  aFiltR buthp gaSigR, kHPF  ; High-pass filter global audio signal (right channel)
+  ; High-pass filter audio signal from previous filter (left channel)
+  aFiltL buthp aFiltL, kHPF
+  ; High-pass filter audio signal from previous filter (right channel)
+  aFiltR buthp aFiltR, kHPF
+  aFiltL butlp aFiltL, kLPF  ; Low-pass filter global audio signal (left channel)
+  aFiltR butlp aFiltR, kLPF  ; Low-pass filter global audio signal (right channel)
+  ; Low-pass filter audio signal from previous filter (left channel)
+  aFiltL butlp aFiltL, kLPF
+  ; Low-pass filter audio signal from previous filter (right channel)
+  aFiltR butlp aFiltR, kLPF
+  ; Redefine global audio left channel signal with output from last filter. Rescale with
+  ; gain control (left channel)
+  gaSigL = aFiltL*k3FILTER
+  ; Redefine global audio right channel signal with output from last filter. Rescale with
+  ; gain control (right channel)
+  gaSigR = aFiltR*k3FILTER
 endin
 
-instr	23	;CHORUS
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use CHORUSLED widget controller for effect ON/OFF light
-	;Use CHORUSOnOff widget button to Start/Stop effect (event i 1 0 0.01 13)
+instr 22  ; Pantrem
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use PANTREMLED widget controller for effect ON/OFF light
+  ; Use PANTREMOnOff widget button to Start/Stop effect (event i 1 0 0.01 12)
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1CHORUS		invalue	"CHORUS_Rate"
-		k2CHORUS		invalue	"CHORUS_Depth"
-		k3CHORUS		invalue	"CHORUS_Width"
+  iExp1 ftgentmp 0, 0, 129, -25, 0, 0.1, 128, 50.0  ; Table for exp slider
 
-					outvalue	"CHORUSLED", 1					;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1PANTREM invalue "PANTREM_Rate"
+    k1PANTREM tablei k1PANTREM, iExp1, 1
+    k2PANTREM invalue "PANTREM_Depth"
+    k3PANTREM invalue "PAN_TREM"
+    k4PANTREM invalue "PANTREM_Wave"
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"CHORUSLED", 0								;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+    outvalue "PANTREMLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	ilfoshape		ftgentmp	0, 0, 131072, 19, 1, 0.5, 0,  0.5		;POSITIVE DOMAIN INLY SINE WAVE	
-	kporttime		linseg	0,0.001,0.02						;RAMPING UP PORTAMENTO VARIABLE
-	kChoDepth		portk	k2CHORUS*0.001, kporttime			;SMOOTH VARIABLE CHANGES WITH PORTK
-	aChoDepth		interp	kChoDepth							;INTERPOLATE TO CREATE A-RATE VERSION OF K-RATE VARIABLE
-	amodL 		osciliktp	k1CHORUS, ilfoshape, 0				;LEFT CHANNEL LFO
-	amodR 		osciliktp k1CHORUS, ilfoshape, k3CHORUS			;THE PHASE OF THE RIGHT CHANNEL LFO IS ADJUSTABLE
-	amodL		=		(amodL*aChoDepth)+.01				;RESCALE AND OFFSET LFO (LEFT CHANNEL)
-	amodR		=		(amodR*aChoDepth)+.01				;RESCALE AND OFFSET LFO (RIGHT CHANNEL)
-	aChoL		vdelay	gaSigL, amodL*1000, 1.2*1000			;CREATE VARYING DELAYED / CHORUSED SIGNAL (LEFT CHANNEL) 
-	aChoR		vdelay	gaSigR, amodR*1000, 1.2*1000			;CREATE VARYING DELAYED / CHORUSED SIGNAL (RIGHT CHANNEL)
-	gaSigL		sum 		aChoL*0.6, gaSigL*0.6                 	;MIX DRY AND WET SIGNAL (LEFT CHANNEL) 
-	gaSigR		sum 		aChoR*0.6, gaSigR*0.6				;MIX DRY AND WET SIGNAL (RIGHT CHANNEL)
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "PANTREMLED", 0          ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
+
+  ; If LFO waveform type is changed generate a momentary '1' (bang)
+  ktrig changed k4PANTREM
+  if ktrig = 1 then  ; If a 'bang' has been generated in the above line
+    ; Begin a reinitialization pass from label 'update' so that LFO waveform type can be
+    ; updated
+    reinit UPDATE
+  endif  ; End of this conditional branch
+
+UPDATE:                                        ; Label called update
+  klfo lfo k2PANTREM, k1PANTREM, i(k4PANTREM)  ; Create an LFO
+  rireturn                                     ; Return from reinitialization pass
+  ; Rescale and offset LFO so it stay within the range 0 - 1 about the value 0.5
+  klfo = (klfo*0.5)+0.5
+  if k4PANTREM = 2 then     ; If square wave modulation has been chosen...
+    klfo portk klfo, 0.001  ; Smooth the wave a tiny bit to prevent clicks
+  endif                     ; End of this conditional branch
+  if k3PANTREM = 0 then     ; Pan if panning mode is chosen from button bank...
+    alfo interp klfo        ; Interpolate k-rate LFO and create a-rate variable
+    ; Redefine global audio left channel signal with auto-panning
+    gaSigL = gaSigL*sqrt(alfo)
+    ; Redefine global audio right channel signal with auto-panning
+    gaSigR = gaSigR*(1-sqrt(alfo))
+  elseif k3PANTREM = 1 then  ; Trem if tremelo mode is chosen from button bank...
+    ; Modify LFO at zero depth value is 1 and at max depth centre of modulation is 0.5
+    klfo = klfo+(0.5-(k2PANTREM*0.5))
+    alfo interp klfo          ; Interpolate k-rate LFO and create a-rate variable
+    gaSigL = gaSigL*(alfo^2)  ; Redefine global audio left channel signal with tremelo
+    gaSigR = gaSigR*(alfo^2)  ; Redefine global audio right channel signal with tremelo
+  endif                       ; End of this conditional branch
 endin
 
-instr	24	;FLANGER
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use FLANGERLED widget controller for effect ON/OFF light
-	;Use FLANGEROnOff widget button to Start/Stop effect (event i 1 0 0.01 14)
+instr 23  ; Chorus
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use CHORUSLED widget controller for effect ON/OFF light
+  ; Use CHORUSOnOff widget button to Start/Stop effect (event i 1 0 0.01 13)
 
-	iExp1	ftgentmp	0, 0, 129, -25, 0, 0.001, 128, 7.0			;TABLE FOR EXP SLIDER
-	
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1FLANGER		invalue	"FLANGER_Rate"
-		k1FLANGER		tablei	k1FLANGER, iExp1, 1
-		k2FLANGER		invalue	"FLANGER_Depth"
-		k3FLANGER		invalue	"FLANGER_Delay"
-		k4FLANGER		invalue	"FLANGER_FBack"
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1CHORUS invalue "CHORUS_Rate"
+    k2CHORUS invalue "CHORUS_Depth"
+    k3CHORUS invalue "CHORUS_Width"
 
-					outvalue	"FLANGERLED", 1				;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+    outvalue "CHORUSLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kStatus	table	p1-10, giOnOffStatus            			;READ EFFECT ON/OFF STATUS FROM TABLE                    
-	if kStatus=0 then                            	   			;IF THIS EFFECT HAS BEEN TURNED OFF                      
-		outvalue	"FLANGERLED", 0	        		  			;SWITCH OFF THE LED                                      
-		turnoff                                		 			;TURN THIS INSTRUMENT OFF                                
-	endif                                 	          			;END OF THIS CONDITIONAL BRANCH                          
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "CHORUSLED", 0           ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	ilfoshape		ftgentmp	0, 0, 131072, 19, 0.5, 1, 180, 1		;U-SHAPE PARABOLA FOR LFO
-	kporttime		linseg	0, 0.001, 0.1 						;USE OF AN ENVELOPE VALUE THAT QUICKLY RAMPS UP FROM ZERON TO THE REQUIRED VALUE PREVENTS VARIABLES GLIDING TO THEIR REQUIRED VALUES EACH TIME THE INSTRUMENT IS STARTED
-	kdlt			portk	k3FLANGER*0.001, kporttime 			;PORTAMENTO IS APPLIED TO A VARIABLE. A NEW VARIABLE 'kdlt' IS CREATED.
-	adlt			interp	kdlt								;A NEW A-RATE VARIABLE 'adlt' IS CREATED BY INTERPOLATING THE K-RATE VARIABLE 'kdlt'                                                           
-	kdep			portk	k2FLANGER*0.001, kporttime 			;PORTAMENTO IS APPLIED TO A VARIABLE. A NEW VARIABLE 'kdlt' IS CREATED.
-	amod			oscili	kdep, k1FLANGER, ilfoshape			;OSCILLATOR THAT MAKES USE OF THE POSITIVE DOMAIN ONLY U-SHAPE PARABOLA WITH FUNCTION TABLE NUMBER gilfoshape                                                                                             
-	adlt			sum		adlt, amod						;STATIC DELAY TIME AND MODULATING DELAY TIME ARE SUMMED
-	adelsigL		flanger	gaSigL, adlt, k4FLANGER , 1.2			;FLANGER SIGNAL CREATED (LEFT CHANNEL)
-	adelsigR		flanger	gaSigR, adlt, k4FLANGER , 1.2			;FLANGER SIGNAL CREATED (RIGHT CHANNEL)
-	gaSigL		sum		gaSigL*0.5, adelsigL*0.5				;CREATE DRY/WET MIX (LEFT CHANNEL) 
-	gaSigR		sum		gaSigR*0.5, adelsigR*0.5				;CREATE DRY/WET MIX (RIGHT CHANNEL)
+  ilfoshape ftgentmp 0, 0, 131072, 19, 1, 0.5, 0, 0.5  ; Positive domain inly sine wave
+  kporttime linseg 0, 0.001, 0.02                      ; Ramping up portamento variable
+  ; Smooth variable changes with portk
+  kChoDepth portk k2CHORUS*0.001, kporttime
+  ; Interpolate to create a-rate version of k-rate variable
+  aChoDepth interp kChoDepth
+  amodL osciliktp k1CHORUS, ilfoshape, 0  ; Left channel LFO
+  ; The phase of the right channel LFO is adjustable
+  amodR osciliktp k1CHORUS, ilfoshape, k3CHORUS
+  amodL = (amodL*aChoDepth)+.01  ; Rescale and offset LFO (left channel)
+  amodR = (amodR*aChoDepth)+.01  ; Rescale and offset LFO (right channel)
+  ; Create varying delayed / chorused signal (left channel)
+  aChoL vdelay gaSigL, amodL*1000, 1.2*1000
+  ; Create varying delayed / chorused signal (right channel)
+  aChoR vdelay gaSigR, amodR*1000, 1.2*1000
+  gaSigL sum aChoL*0.6, gaSigL*0.6  ; Mix dry and wet signal (left channel)
+  gaSigR sum aChoR*0.6, gaSigR*0.6  ; Mix dry and wet signal (right channel)
 endin
 
-instr	25	;DELAY
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use DELAYLED widget controller for effect ON/OFF light
-	;Use DELAYOnOff widget button to Start/Stop effect (event i 1 0 0.01 15)
+instr 24  ; Flanger
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use FLANGERLED widget controller for effect ON/OFF light
+  ; Use FLANGEROnOff widget button to Start/Stop effect (event i 1 0 0.01 14)
 
-	iExp1	ftgentmp	0, 0, 129, -25, 0, 0.01, 128, 5.0			;TABLE FOR EXP SLIDER
+  iExp1 ftgentmp 0, 0, 129, -25, 0, 0.001, 128, 7.0  ; Table for exp slider
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1DELAY		invalue	"DELAY_Mix"
-		k2DELAY		invalue	"DELAY_Time"
-		k2DELAY		tablei	k2DELAY, iExp1, 1
-		k3DELAY		invalue	"DELAY_FBack"
-		k4DELAY		invalue	"DELAY_HFLoss"
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1FLANGER invalue "FLANGER_Rate"
+    k1FLANGER tablei k1FLANGER, iExp1, 1
+    k2FLANGER invalue "FLANGER_Depth"
+    k3FLANGER invalue "FLANGER_Delay"
+    k4FLANGER invalue "FLANGER_FBack"
 
-					outvalue	"DELAYLED", 1					;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+    outvalue "FLANGERLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE                    
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF                      
-		outvalue	"DELAYLED", 0								;SWITCH OFF THE LED                                      
-		turnoff											;TURN THIS INSTRUMENT OFF                                
-	endif												;END OF THIS CONDITIONAL BRANCH                          
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "FLANGERLED", 0          ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	kWet		table	k1DELAY, giWet, 1						;RESCALE WET LEVEL CONTROL ACCORDING TO FUNCTION TABLE giWet
-	kDry		table	k1DELAY, giDry, 1						;RESCALE DRY LEVEL CONTROL ACCORDING TO FUNCTION TABLE giWet
-	kporttime	linseg	0,0.001,0.1							;RAMPING UP PORTAMENTO TIME
-	kTime	portk	k2DELAY, kporttime*3					;APPLY PORTAMENTO SMOOTHING TO DELAY TIME PARAMETER
-	kTone	portk	k4DELAY, kporttime						;APPLY PORTAMENTO SMOOTHING TO TONE PARAMETER
-	aTime	interp	kTime								;INTERPOLATE AND CREAT A-RATE VERSION OF DELAY TIME PARAMETER
-	aBuffer	delayr	5									;READ FROM (AND INITIALIZE) BUFFER (LEFT CHANNEL)
-	atapL	deltap3	aTime								;TAP DELAY BUFFER (LEFT CHANNEL)
-	atapL	tone		atapL, kTone							;LOW-PASS FILTER DELAY TAP WITHIN DELAY BUFFER (LEFT CHANNEL) 
-			delayw	gaSigL+(atapL*k3DELAY)					;WRITE INPUT AUDIO AND FEEDBACK SIGNAL INTO DELAY BUFFER  (LEFT CHANNEL) 
-	aBuffer	delayr	5									;READ FROM (AND INITIALIZE) BUFFER (RIGHT CHANNEL)
-	atapR	deltap3	aTime								;TAP DELAY BUFFER (LEFT CHANNEL)                             
-	atapR	tone		atapR, kTone							;LOW-PASS FILTER DELAY TAP WITHIN DELAY BUFFER (LEFT CHANNEL)
-			delayw	gaSigR+(atapR*k3DELAY)					;WRITE INPUT AUDIO AND FEEDBACK SIGNAL INTO DELAY BUFFER  (LEFT CHANNEL)
-	gaSigL	sum		gaSigL*kDry, atapL*kWet					;REDEFINE GLOBAL AUDIO SIGNAL FROM MIX OF DRY AND WET SIGNALS (LEFT CHANNEL) 
-	gaSigR	sum		gaSigR*kDry, atapR*kWet					;REDEFINE GLOBAL AUDIO SIGNAL FROM MIX OF DRY AND WET SIGNALS (RIGHT CHANNEL)
+  ilfoshape ftgentmp 0, 0, 131072, 19, 0.5, 1, 180, 1  ; U-shape parabola for LFO
+  ; Use of an envelope value that quickly ramps up from zeron to the required value
+  ; prevents variables gliding to their required values each time the instrument is
+  ; started
+  kporttime linseg 0, 0.001, 0.1
+  ; Portamento is applied to a variable. A new variable 'kdlt' is created.
+  kdlt portk k3FLANGER*0.001, kporttime
+  ; A new a-rate variable 'adlt' is created by interpolating the k-rate variable 'kdlt'
+  adlt interp kdlt
+  ; Portamento is applied to a variable. A new variable 'kdlt' is created.
+  kdep portk k2FLANGER*0.001, kporttime
+  ; Oscillator that makes use of the positive domain only u-shape parabola with function
+  ; table number gilfoshape
+  amod oscili kdep, k1FLANGER, ilfoshape
+  ; Static delay time and modulating delay time are summed
+  adlt sum adlt, amod
+  adelsigL flanger gaSigL, adlt, k4FLANGER, 1.2  ; Flanger signal created (left channel)
+  adelsigR flanger gaSigR, adlt, k4FLANGER, 1.2  ; Flanger signal created (right channel)
+  gaSigL sum gaSigL*0.5, adelsigL*0.5            ; Create dry/wet mix (left channel)
+  gaSigR sum gaSigR*0.5, adelsigR*0.5            ; Create dry/wet mix (right channel)
 endin
 
-instr	26	;REVERB
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use REVERBLED widget controller for effect ON/OFF light
-	;Use REVERBOnOff widget button to Start/Stop effect (event i 1 0 0.01 16)
+instr 25  ; Delay
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use DELAYLED widget controller for effect ON/OFF light
+  ; Use DELAYOnOff widget button to Start/Stop effect (event i 1 0 0.01 15)
 
-	iExp1	ftgentmp	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLE FOR EXP SLIDER
+  iExp1 ftgentmp 0, 0, 129, -25, 0, 0.01, 128, 5.0  ; Table for exp slider
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1REVERB		invalue	"REVERB_Mix"
-		k2REVERB		invalue	"REVERB_Size"
-		k3REVERB		invalue	"REVERB_Tone"
-		k3REVERB		tablei	k3REVERB, iExp1, 1
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1DELAY invalue "DELAY_Mix"
+    k2DELAY invalue "DELAY_Time"
+    k2DELAY tablei k2DELAY, iExp1, 1
+    k3DELAY invalue "DELAY_FBack"
+    k4DELAY invalue "DELAY_HFLoss"
 
-					outvalue	"REVERBLED", 1					;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+    outvalue "DELAYLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE                    
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF                      
-		outvalue	"REVERBLED", 0								;SWITCH OFF THE LED                                      
-		turnoff										     ;TURN THIS INSTRUMENT OFF                                
-	endif												;END OF THIS CONDITIONAL BRANCH                          
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "DELAYLED", 0            ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	kWet		table	k1REVERB, giWet, 1						;RESCALE WET LEVEL CONTROL ACCORDING TO FUNCTION TABLE giWet
-	kDry		table	k1REVERB, giDry, 1						;RESCALE DRY LEVEL CONTROL ACCORDING TO FUNCTION TABLE giWet
-
-	aRvbL, aRvbR	reverbsc	gaSigL, gaSigR, k2REVERB, k3REVERB		;CREATE STEREO REVERB SIGNAL
-	gaSigL		sum		gaSigL*kDry, aRvbL*kWet			  	;REDEFINE GLOBAL AUDIO SIGNAL FROM MIX OF DRY AND WET SIGNALS (LEFT CHANNEL) 
-	gaSigR		sum		gaSigR*kDry, aRvbR*kWet			    	;REDEFINE GLOBAL AUDIO SIGNAL FROM MIX OF DRY AND WET SIGNALS (RIGHT CHANNEL)
+  ; Rescale wet level control according to function table giwet
+  kWet table k1DELAY, giWet, 1
+  ; Rescale dry level control according to function table giwet
+  kDry table k1DELAY, giDry, 1
+  kporttime linseg 0, 0.001, 0.1    ; Ramping up portamento time
+  kTime portk k2DELAY, kporttime*3  ; Apply portamento smoothing to delay time parameter
+  kTone portk k4DELAY, kporttime    ; Apply portamento smoothing to tone parameter
+  ; Interpolate and creat a-rate version of delay time parameter
+  aTime interp kTime
+  aBuffer delayr 5     ; Read from (and initialize) buffer (left channel)
+  atapL deltap3 aTime  ; Tap delay buffer (left channel)
+  ; Low-pass filter delay tap within delay buffer (left channel)
+  atapL tone atapL, kTone
+  ; Write input audio and feedback signal into delay buffer (left channel)
+  delayw gaSigL+(atapL*k3DELAY)
+  aBuffer delayr 5         ; Read from (and initialize) buffer (right channel)
+  atapR deltap3 aTime      ; Tap delay buffer (left channel)
+  atapR tone atapR, kTone  ; Low-pass filter delay tap within delay buffer (left channel)
+  ; Write input audio and feedback signal into delay buffer (left channel)
+  delayw gaSigR+(atapR*k3DELAY)
+  ; Redefine global audio signal from mix of dry and wet signals (left channel)
+  gaSigL sum gaSigL*kDry, atapL*kWet
+  ; Redefine global audio signal from mix of dry and wet signals (right channel)
+  gaSigR sum gaSigR*kDry, atapR*kWet
 endin
 
-instr	27	;EQUALIZER
-	;GUI-----------------------------------------------------------------------------------------------------------------------------------
-	;Use EQUALIZERLED widget controller for effect ON/OFF light
-	;Use EQUALIZEROnOff widget button to Start/Stop effect (event i 1 0 0.01 17)
+instr 26  ; Reverb
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use REVERBLED widget controller for effect ON/OFF light
+  ; Use REVERBOnOff widget button to Start/Stop effect (event i 1 0 0.01 16)
 
-	kUpdate	metro	$UPDATE
-	if (kUpdate == 1)	then
-		k1EQUALIZER	invalue	"EQUALIZER_100"
-		k2EQUALIZER	invalue	"EQUALIZER_200"
-		k3EQUALIZER	invalue	"EQUALIZER_400"
-		k4EQUALIZER	invalue	"EQUALIZER_800"
-		k5EQUALIZER	invalue	"EQUALIZER_1k6"
-		k6EQUALIZER	invalue	"EQUALIZER_3k2"
-		k7EQUALIZER	invalue	"EQUALIZER_6k4"
-		k8EQUALIZER	invalue	"EQUALIZER_Gain"
+  iExp1 ftgentmp 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
 
-					outvalue	"EQUALIZERLED", 1				;THIS TURNS ON THE LED FOR THE EFFECT
-	endif
-	;-----------------------------------------------------------------------------------------------------------------------------------
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1REVERB invalue "REVERB_Mix"
+    k2REVERB invalue "REVERB_Size"
+    k3REVERB invalue "REVERB_Tone"
+    k3REVERB tablei k3REVERB, iExp1, 1
 
-	kStatus	table	p1-10, giOnOffStatus					;READ EFFECT ON/OFF STATUS FROM TABLE
-	if kStatus=0 then										;IF THIS EFFECT HAS BEEN TURNED OFF
-		outvalue	"EQUALIZERLED", 0							;SWITCH OFF THE LED
-		turnoff											;TURN THIS INSTRUMENT OFF
-	endif												;END OF THIS CONDITIONAL BRANCH
+    outvalue "REVERBLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
 
-	iQ			init		1								;Q OF THE FILTERS
-	iEQcurve		ftgentmp	0,0,4096,-16,1/64,4096,7.9,64			;AMPLITUDE GAIN CURVE
-	iGainCurve	ftgentmp	0,0,4096,-16,0.5,4096,3,4			;GLOBAL GAIN CURVE
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "REVERBLED", 0           ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
 
-	k1		table	k1EQUALIZER, iEQcurve, 1					;RESCALE INPUT 1 USING THE CURVE DEFINED ABOVE
-	k2		table	k2EQUALIZER, iEQcurve, 1					;RESCALE INPUT 2 USING THE CURVE DEFINED ABOVE
-	k3		table	k3EQUALIZER, iEQcurve, 1					;RESCALE INPUT 3 USING THE CURVE DEFINED ABOVE
-	k4		table	k4EQUALIZER, iEQcurve, 1					;RESCALE INPUT 4 USING THE CURVE DEFINED ABOVE
-	k5		table	k5EQUALIZER, iEQcurve, 1					;RESCALE INPUT 5 USING THE CURVE DEFINED ABOVE
-	k6		table	k6EQUALIZER, iEQcurve, 1					;RESCALE INPUT 6 USING THE CURVE DEFINED ABOVE
-	k7		table	k7EQUALIZER, iEQcurve, 1					;RESCALE INPUT 7 USING THE CURVE DEFINED ABOVE
-	k8		table	k8EQUALIZER, iGainCurve, 1				;RESCALE INPUT 7 USING THE CURVE DEFINED ABOVE
+  ; Rescale wet level control according to function table giwet
+  kWet table k1REVERB, giWet, 1
+  ; Rescale dry level control according to function table giwet
+  kDry table k1REVERB, giDry, 1
 
-	aInL		=		gaSigL*0.15*k8							;INPUT SIGNAL (LEFT CHANNEL)
-	aInR		=		gaSigR*0.15*k8							;INPUT SIGNAL (RIGHT CHANNEL)	
-	a1L		pareq 	aInL,  100,  k1, iQ , 1					;LOW SHELVING FILTER (LEFT CHANNEL)
-	a2L		pareq 	aInL,  200,  k2, iQ , 0					;PEAKING FILTER (LEFT CHANNEL)
-	a3L		pareq 	aInL,  400,  k3, iQ , 0					;PEAKING FILTER (LEFT CHANNEL) 
-	a4L		pareq 	aInL,  800,  k4, iQ , 0					;PEAKING FILTER (LEFT CHANNEL) 
-	a5L		pareq 	aInL, 1600,  k5, iQ , 0					;PEAKING FILTER (LEFT CHANNEL) 
-	a6L		pareq 	aInL, 3200,  k6, iQ , 0					;PEAKING FILTER (LEFT CHANNEL) 
-	a7L		pareq 	aInL, 6400,  k7, iQ , 2					;HIGH SHELVING FILTER (LEFT CHANNEL) 
-	a1R		pareq 	aInR,  100,  k1, iQ , 1					;LOW SHELVING FILTER (RIGHT CHANNEL) 
-	a2R		pareq 	aInR,  200,  k2, iQ , 0					;PEAKING FILTER (RIGHT CHANNEL)
-	a3R		pareq 	aInR,  400,  k3, iQ , 0					;PEAKING FILTER (RIGHT CHANNEL) 
-	a4R		pareq 	aInR,  800,  k4, iQ , 0					;PEAKING FILTER (RIGHT CHANNEL) 
-	a5R		pareq 	aInR, 1600,  k5, iQ , 0					;PEAKING FILTER (RIGHT CHANNEL) 
-	a6R		pareq 	aInR, 3200,  k6, iQ , 0					;PEAKING FILTER (RIGHT CHANNEL) 
-	a7R		pareq 	aInR, 6400,  k7, iQ , 2					;HIGH SHELVING FILTER (RIGHT CHANNEL) 
-
-	gaSigL	sum		a1L, a2L, a3L, a4L, a5L, a6L, a7L			;SUM THE FILTER OUTPUTS (LEFT CHANNEL)
-	gaSigR	sum		a1R, a2R, a3R, a4R, a5R, a6R, a7R			;SUM THE FILTER OUTPUTS (RIGHT CHANNEL)
+  aRvbL, aRvbR reverbsc gaSigL, gaSigR, k2REVERB, k3REVERB  ; Create stereo reverb signal
+  ; Redefine global audio signal from mix of dry and wet signals (left channel)
+  gaSigL sum gaSigL*kDry, aRvbL*kWet
+  ; Redefine global audio signal from mix of dry and wet signals (right channel)
+  gaSigR sum gaSigR*kDry, aRvbR*kWet
 endin
 
-instr	99	;OUTPUT (ALWAYS ON)
-			outs		gaSigL, gaSigR							;SEND AUDIO FROM THE FINAL ACTIVE EFFECT TO THE OUTPUTS
+instr 27  ; Equalizer
+  ; GUI-----------------------------------------------------------------------------------------------------------------------------------
+  ; Use EQUALIZERLED widget controller for effect ON/OFF light
+  ; Use EQUALIZEROnOff widget button to Start/Stop effect (event i 1 0 0.01 17)
+
+  kUpdate metro $UPDATE
+  if (kUpdate == 1) then
+    k1EQUALIZER invalue "EQUALIZER_100"
+    k2EQUALIZER invalue "EQUALIZER_200"
+    k3EQUALIZER invalue "EQUALIZER_400"
+    k4EQUALIZER invalue "EQUALIZER_800"
+    k5EQUALIZER invalue "EQUALIZER_1k6"
+    k6EQUALIZER invalue "EQUALIZER_3k2"
+    k7EQUALIZER invalue "EQUALIZER_6k4"
+    k8EQUALIZER invalue "EQUALIZER_Gain"
+
+    outvalue "EQUALIZERLED", 1  ; This turns on the led for the effect
+  endif
+  ; -----------------------------------------------------------------------------------------------------------------------------------
+
+  kStatus table p1-10, giOnOffStatus  ; Read effect on/off status from table
+  if kStatus = 0 then                 ; If this effect has been turned off
+    outvalue "EQUALIZERLED", 0        ; Switch off the led
+    turnoff                           ; Turn this instrument off
+  endif                               ; End of this conditional branch
+
+  iQ init 1                                                 ; Q of the filters
+  iEQcurve   ftgentmp 0, 0, 4096, -16, 1/64, 4096, 7.9, 64  ; Amplitude gain curve
+  iGainCurve ftgentmp 0, 0, 4096, -16, 0.5, 4096, 3, 4      ; Global gain curve
+
+  k1 table k1EQUALIZER, iEQcurve, 1    ; Rescale input 1 using the curve defined above
+  k2 table k2EQUALIZER, iEQcurve, 1    ; Rescale input 2 using the curve defined above
+  k3 table k3EQUALIZER, iEQcurve, 1    ; Rescale input 3 using the curve defined above
+  k4 table k4EQUALIZER, iEQcurve, 1    ; Rescale input 4 using the curve defined above
+  k5 table k5EQUALIZER, iEQcurve, 1    ; Rescale input 5 using the curve defined above
+  k6 table k6EQUALIZER, iEQcurve, 1    ; Rescale input 6 using the curve defined above
+  k7 table k7EQUALIZER, iEQcurve, 1    ; Rescale input 7 using the curve defined above
+  k8 table k8EQUALIZER, iGainCurve, 1  ; Rescale input 7 using the curve defined above
+
+  aInL = gaSigL*0.15*k8            ; Input signal (left channel)
+  aInR = gaSigR*0.15*k8            ; Input signal (right channel)
+  a1L pareq aInL, 100, k1, iQ, 1   ; Low shelving filter (left channel)
+  a2L pareq aInL, 200, k2, iQ, 0   ; Peaking filter (left channel)
+  a3L pareq aInL, 400, k3, iQ, 0   ; Peaking filter (left channel)
+  a4L pareq aInL, 800, k4, iQ, 0   ; Peaking filter (left channel)
+  a5L pareq aInL, 1600, k5, iQ, 0  ; Peaking filter (left channel)
+  a6L pareq aInL, 3200, k6, iQ, 0  ; Peaking filter (left channel)
+  a7L pareq aInL, 6400, k7, iQ, 2  ; High shelving filter (left channel)
+  a1R pareq aInR, 100, k1, iQ, 1   ; Low shelving filter (right channel)
+  a2R pareq aInR, 200, k2, iQ, 0   ; Peaking filter (right channel)
+  a3R pareq aInR, 400, k3, iQ, 0   ; Peaking filter (right channel)
+  a4R pareq aInR, 800, k4, iQ, 0   ; Peaking filter (right channel)
+  a5R pareq aInR, 1600, k5, iQ, 0  ; Peaking filter (right channel)
+  a6R pareq aInR, 3200, k6, iQ, 0  ; Peaking filter (right channel)
+  a7R pareq aInR, 6400, k7, iQ, 2  ; High shelving filter (right channel)
+
+  gaSigL sum a1L, a2L, a3L, a4L, a5L, a6L, a7L  ; Sum the filter outputs (left channel)
+  gaSigR sum a1R, a2R, a3R, a4R, a5R, a6R, a7R  ; Sum the filter outputs (right channel)
+endin
+
+instr 99               ; Output (always on)
+  outs gaSigL, gaSigR  ; Send audio from the final active effect to the outputs
 endin
 </CsInstruments>
 <CsScore>
-i 2  0 3600	;INPUT
-i 99 0 3600	;OUTPUT
+i 2 0 3600   ; Input
+i 99 0 3600  ; Output
 </CsScore>
 </CsoundSynthesizer>
 
@@ -891,9 +1026,9 @@ i 99 0 3600	;OUTPUT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>179</r>
-  <g>179</g>
-  <b>179</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -911,15 +1046,20 @@ i 99 0 3600	;OUTPUT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -958,14 +1098,14 @@ i 99 0 3600	;OUTPUT
   <fontsize>30</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -987,14 +1127,14 @@ i 99 0 3600	;OUTPUT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1018,6 +1158,18 @@ i 99 0 3600	;OUTPUT
   <eventLine>i 1 0 0.01 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -1041,15 +1193,15 @@ i 99 0 3600	;OUTPUT
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1068,15 +1220,20 @@ i 99 0 3600	;OUTPUT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>117</g>
-   <b>0</b>
+   <r>40</r>
+   <g>88</g>
+   <b>40</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -1115,14 +1272,14 @@ i 99 0 3600	;OUTPUT
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1144,14 +1301,14 @@ i 99 0 3600	;OUTPUT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1175,6 +1332,18 @@ i 99 0 3600	;OUTPUT
   <eventLine>i 1 0 0.01 1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -1198,15 +1367,15 @@ i 99 0 3600	;OUTPUT
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -1243,14 +1412,14 @@ i 99 0 3600	;OUTPUT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1272,15 +1441,20 @@ i 99 0 3600	;OUTPUT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>68</r>
-   <g>136</g>
-   <b>204</b>
+   <r>82</r>
+   <g>133</g>
+   <b>181</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -1301,14 +1475,14 @@ i 99 0 3600	;OUTPUT
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1332,6 +1506,18 @@ i 99 0 3600	;OUTPUT
   <eventLine>i 1 0 0.01 2</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -1355,15 +1541,15 @@ i 99 0 3600	;OUTPUT
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -1454,14 +1640,14 @@ i 99 0 3600	;OUTPUT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1483,14 +1669,14 @@ i 99 0 3600	;OUTPUT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1512,14 +1698,14 @@ i 99 0 3600	;OUTPUT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1542,14 +1728,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1571,15 +1757,20 @@ Gain</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>171</r>
    <g>156</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -1600,14 +1791,14 @@ Gain</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1631,6 +1822,18 @@ Gain</label>
   <eventLine>i 1 0 0.01 3</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -1654,15 +1857,15 @@ Gain</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -1699,14 +1902,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1746,14 +1949,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1793,14 +1996,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1822,15 +2025,20 @@ Gain</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>195</r>
-   <g>0</g>
-   <b>0</b>
+   <r>95</r>
+   <g>43</g>
+   <b>43</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -1851,14 +2059,14 @@ Gain</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1882,6 +2090,18 @@ Gain</label>
   <eventLine>i 1 0 0.01 4</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -1905,15 +2125,15 @@ Gain</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -1950,14 +2170,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1997,14 +2217,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2044,14 +2264,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2073,15 +2293,20 @@ Gain</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>122</r>
    <g>122</g>
    <b>122</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -2120,14 +2345,14 @@ Gain</label>
   <fontsize>30</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2149,14 +2374,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2180,6 +2405,18 @@ Gain</label>
   <eventLine>i 1 0 0.01 5</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -2203,15 +2440,15 @@ Gain</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -2230,15 +2467,20 @@ Gain</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>209</r>
-   <g>209</g>
-   <b>0</b>
+   <r>197</r>
+   <g>197</g>
+   <b>89</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -2259,14 +2501,14 @@ Gain</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2290,6 +2532,18 @@ Gain</label>
   <eventLine>i 1 0 0.01 6</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -2313,15 +2567,15 @@ Gain</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -2412,14 +2666,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2441,14 +2695,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2470,14 +2724,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2500,14 +2754,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2529,15 +2783,20 @@ Back</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>134</r>
-   <g>0</g>
-   <b>0</b>
+   <r>64</r>
+   <g>29</g>
+   <b>29</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -2558,14 +2817,14 @@ Back</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2589,6 +2848,18 @@ Back</label>
   <eventLine>i 1 0 0.01 7</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -2612,15 +2883,15 @@ Back</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -2711,14 +2982,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2740,14 +3011,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2769,14 +3040,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2799,14 +3070,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2828,15 +3099,20 @@ Back</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>170</g>
-   <b>127</b>
+   <r>63</r>
+   <g>139</g>
+   <b>120</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -2857,14 +3133,14 @@ Back</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2888,6 +3164,18 @@ Back</label>
   <eventLine>i 1 0 0.01 8</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -2911,15 +3199,15 @@ Back</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -2956,14 +3244,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3003,14 +3291,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3050,14 +3338,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3079,15 +3367,20 @@ Back</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
+   <r>174</r>
+   <g>111</g>
+   <b>79</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -3108,14 +3401,14 @@ Back</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3139,6 +3432,18 @@ Back</label>
   <eventLine>i 1 0 0.01 9</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -3162,15 +3467,15 @@ Back</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -3261,14 +3566,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3290,14 +3595,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3319,14 +3624,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3349,14 +3654,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3378,15 +3683,20 @@ Back</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>85</r>
-   <g>0</g>
-   <b>0</b>
+   <r>39</r>
+   <g>18</g>
+   <b>18</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -3425,14 +3735,14 @@ Back</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3454,14 +3764,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3485,6 +3795,18 @@ Back</label>
   <eventLine>i 1 0 0.01 10</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -3508,15 +3830,15 @@ Back</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -3553,14 +3875,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3582,15 +3904,20 @@ Back</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>75</r>
-   <g>0</g>
-   <b>115</b>
+   <r>46</r>
+   <g>26</g>
+   <b>57</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -3611,14 +3938,14 @@ Back</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3642,6 +3969,18 @@ Back</label>
   <eventLine>i 1 0 0.01 11</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -3665,15 +4004,15 @@ Back</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -3710,14 +4049,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3757,14 +4096,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3804,14 +4143,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3833,15 +4172,20 @@ Back</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>85</g>
-   <b>255</b>
+   <r>228</r>
+   <g>103</g>
+   <b>228</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -3863,14 +4207,14 @@ TREMOLO</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3894,6 +4238,18 @@ TREMOLO</label>
   <eventLine>i 1 0 0.01 12</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -3917,15 +4273,15 @@ TREMOLO</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -3980,14 +4336,14 @@ TREMOLO</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4009,14 +4365,14 @@ TREMOLO</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4093,15 +4449,20 @@ TREMOLO</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>85</g>
-   <b>255</b>
+   <r>57</r>
+   <g>80</g>
+   <b>126</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -4123,14 +4484,14 @@ CHORUS</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4154,6 +4515,18 @@ CHORUS</label>
   <eventLine>i 1 0 0.01 13</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -4177,15 +4550,15 @@ CHORUS</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -4222,14 +4595,14 @@ CHORUS</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4269,14 +4642,14 @@ CHORUS</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4316,14 +4689,14 @@ CHORUS</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4345,15 +4718,20 @@ CHORUS</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>255</g>
-   <b>0</b>
+   <r>87</r>
+   <g>192</g>
+   <b>87</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -4374,14 +4752,14 @@ CHORUS</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4405,6 +4783,18 @@ CHORUS</label>
   <eventLine>i 1 0 0.01 14</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -4428,15 +4818,15 @@ CHORUS</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -4527,14 +4917,14 @@ CHORUS</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4556,14 +4946,14 @@ CHORUS</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4585,14 +4975,14 @@ CHORUS</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4615,14 +5005,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4644,15 +5034,20 @@ Back</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>170</r>
-   <g>0</g>
-   <b>255</b>
+   <r>105</r>
+   <g>57</g>
+   <b>126</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -4673,14 +5068,14 @@ Back</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4704,6 +5099,18 @@ Back</label>
   <eventLine>i 1 0 0.01 15</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -4727,15 +5134,15 @@ Back</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -4826,14 +5233,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4855,14 +5262,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4885,14 +5292,14 @@ Back</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4915,14 +5322,14 @@ Loss</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4944,15 +5351,20 @@ Loss</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>85</r>
-   <g>0</g>
-   <b>0</b>
+   <r>39</r>
+   <g>18</g>
+   <b>18</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -4973,14 +5385,14 @@ Loss</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5004,6 +5416,18 @@ Loss</label>
   <eventLine>i 1 0 0.01 16</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -5027,15 +5451,15 @@ Loss</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -5072,14 +5496,14 @@ Loss</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5119,14 +5543,14 @@ Loss</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5166,14 +5590,14 @@ Loss</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5195,15 +5619,20 @@ Loss</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -5224,14 +5653,14 @@ Loss</label>
   <fontsize>26</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5255,6 +5684,18 @@ Loss</label>
   <eventLine>i 1 0 0.01 17</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -5278,15 +5719,15 @@ Loss</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -5305,14 +5746,14 @@ Loss</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5340,15 +5781,15 @@ Loss</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -5373,15 +5814,15 @@ Loss</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -5406,15 +5847,15 @@ Loss</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -5439,15 +5880,15 @@ Loss</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -5472,15 +5913,15 @@ Loss</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -5505,15 +5946,15 @@ Loss</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -5538,15 +5979,15 @@ Loss</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -5571,15 +6012,15 @@ Loss</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -5598,14 +6039,14 @@ Loss</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5627,14 +6068,14 @@ Loss</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5656,14 +6097,14 @@ Loss</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5685,14 +6126,14 @@ Loss</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5714,14 +6155,14 @@ Loss</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5743,14 +6184,14 @@ Loss</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5772,14 +6213,14 @@ Loss</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5801,15 +6242,20 @@ Loss</label>
   <fontsize>30</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -5830,15 +6276,20 @@ Loss</label>
   <fontsize>30</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>117</g>
-   <b>0</b>
+   <r>40</r>
+   <g>88</g>
+   <b>40</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>20</borderradius>
   <borderwidth>3</borderwidth>
@@ -5861,6 +6312,18 @@ Loss</label>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -5878,9 +6341,9 @@ Loss</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>

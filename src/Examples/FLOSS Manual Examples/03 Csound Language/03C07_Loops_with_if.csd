@@ -10,7 +10,7 @@ count:
           print     icount
 icount    =         icount + 1
  if icount < 11 igoto count
-          prints    "i-END!%n"
+          prints    "i-END!\n"
   endin
 
   instr 2 ;k-rate loop: counts in the 100th k-cycle from 1 to 11

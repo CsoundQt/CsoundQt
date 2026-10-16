@@ -10,73 +10,73 @@ You can copy and paste from here if you need input/output signal meter.
 -o dac
 </CsOptions>
 <CsInstruments>
-sr = 44100
-ksmps = 32
-nchnls = 2 ;change to 8 if you have more inputs / outputs
-0dbfs = 1
+sr     = 44100
+ksmps  = 32
+nchnls = 2  ; change to 8 if you have more inputs / outputs
+0dbfs  = 1
 
 opcode CsQtMeter, 0, SSak
-  S_chan_sig, S_chan_clip, aSig, kTrig	xin
-  iDbRange = 60 ;shows 60 dB
-  iHoldTim = 1 ;seconds to "hold the red light"
-  kOn,kTim,kStart,kEnd init 0
-  kMax = max_k(aSig,kTrig,1)
+  S_chan_sig, S_chan_clip, aSig, kTrig xin
+  iDbRange = 60  ; shows 60 dB
+  iHoldTim = 1   ; seconds to "hold the red light"
+  kOn, kTim, kStart, kEnd init 0
+  kMax = max_k(aSig, kTrig, 1)
   if kTrig == 1 then
     chnset((iDbRange+dbfsamp(kMax)) / iDbRange, S_chan_sig)
     if (kOn == 0 && kMax > 1) then
       kTim = 0
       kEnd = iHoldTim
-      kOn = 1
+      kOn  = 1
       chnset(kOn, S_chan_clip)
     endif
     if (kOn == 1 && kTim > kEnd) then
-      kOn =	0
+      kOn = 0
       chnset(kOn, S_chan_clip)
     endif
   endif
-  kTim += ksmps/sr
+  kTim + = ksmps/sr
 endop
 
-;declare software channels for input
-chn_k("disp_in_1",2)
-chn_k("disp_in_1_clip",2)
-chn_k("disp_in_2",2)
-chn_k("disp_in_2_clip",2)
-chn_k("disp_in_3",2)
-chn_k("disp_in_3_clip",2)
-chn_k("disp_in_4",2)
-chn_k("disp_in_4_clip",2)
-chn_k("disp_in_5",2)
-chn_k("disp_in_5_clip",2)
-chn_k("disp_in_6",2)
-chn_k("disp_in_6_clip",2)
-chn_k("disp_in_7",2)
-chn_k("disp_in_7_clip",2)
-chn_k("disp_in_8",2)
-chn_k("disp_in_8_clip",2)
-;declare software channels for output
-chn_k("disp_out_1",2)
-chn_k("disp_out_1_clip",2)
-chn_k("disp_out_2",2)
-chn_k("disp_out_2_clip",2)
-chn_k("disp_out_3",2)
-chn_k("disp_out_3_clip",2)
-chn_k("disp_out_4",2)
-chn_k("disp_out_4_clip",2)
-chn_k("disp_out_5",2)
-chn_k("disp_out_5_clip",2)
-chn_k("disp_out_6",2)
-chn_k("disp_out_6_clip",2)
-chn_k("disp_out_7",2)
-chn_k("disp_out_7_clip",2)
-chn_k("disp_out_8",2)
-chn_k("disp_out_8_clip",2)
+; declare software channels for input
+chn_k( "disp_in_1", 2)
+chn_k( "disp_in_1_clip", 2)
+chn_k( "disp_in_2", 2)
+chn_k( "disp_in_2_clip", 2)
+chn_k( "disp_in_3", 2)
+chn_k( "disp_in_3_clip", 2)
+chn_k( "disp_in_4", 2)
+chn_k( "disp_in_4_clip", 2)
+chn_k( "disp_in_5", 2)
+chn_k( "disp_in_5_clip", 2)
+chn_k( "disp_in_6", 2)
+chn_k( "disp_in_6_clip", 2)
+chn_k( "disp_in_7", 2)
+chn_k( "disp_in_7_clip", 2)
+chn_k( "disp_in_8", 2)
+chn_k( "disp_in_8_clip", 2)
+; declare software channels for output
+chn_k( "disp_out_1", 2)
+chn_k( "disp_out_1_clip", 2)
+chn_k( "disp_out_2", 2)
+chn_k( "disp_out_2_clip", 2)
+chn_k( "disp_out_3", 2)
+chn_k( "disp_out_3_clip", 2)
+chn_k( "disp_out_4", 2)
+chn_k( "disp_out_4_clip", 2)
+chn_k( "disp_out_5", 2)
+chn_k( "disp_out_5_clip", 2)
+chn_k( "disp_out_6", 2)
+chn_k( "disp_out_6_clip", 2)
+chn_k( "disp_out_7", 2)
+chn_k( "disp_out_7_clip", 2)
+chn_k( "disp_out_8", 2)
+chn_k( "disp_out_8_clip", 2)
 
 instr IO
 
   // trigger for display, resulting in images per second
   ips@global:k = metro(10)
-  
+
   // receive input signals
   in_1:a = inch(1)
   in_2:a = inch(2)
@@ -86,39 +86,39 @@ instr IO
   in_6:a = inch(6)
   in_7:a = inch(7)
   in_8:a = inch(8)
-  
+
   // show input signals
-  CsQtMeter("disp_in_1","disp_in_1_clip",in_1,ips)
-  CsQtMeter("disp_in_2","disp_in_2_clip",in_2,ips)
-  CsQtMeter("disp_in_3","disp_in_3_clip",in_3,ips)
-  CsQtMeter("disp_in_4","disp_in_4_clip",in_4,ips)
-  CsQtMeter("disp_in_5","disp_in_5_clip",in_5,ips)
-  CsQtMeter("disp_in_6","disp_in_6_clip",in_6,ips)
-  CsQtMeter("disp_in_7","disp_in_7_clip",in_7,ips)
-  CsQtMeter("disp_in_8","disp_in_8_clip",in_8,ips)
-  
+  CsQtMeter( "disp_in_1", "disp_in_1_clip", in_1, ips)
+  CsQtMeter( "disp_in_2", "disp_in_2_clip", in_2, ips)
+  CsQtMeter( "disp_in_3", "disp_in_3_clip", in_3, ips)
+  CsQtMeter( "disp_in_4", "disp_in_4_clip", in_4, ips)
+  CsQtMeter( "disp_in_5", "disp_in_5_clip", in_5, ips)
+  CsQtMeter( "disp_in_6", "disp_in_6_clip", in_6, ips)
+  CsQtMeter( "disp_in_7", "disp_in_7_clip", in_7, ips)
+  CsQtMeter( "disp_in_8", "disp_in_8_clip", in_8, ips)
+
   // create some output
-  out_1:a = pinkish(ampdb(randomh:k(-20,10,3,3)))
-  out_2:a = pinkish(ampdb(randomh:k(-20,10,3,3)))
-  out_3:a = pinkish(ampdb(randomh:k(-20,10,3,3)))
-  out_4:a = pinkish(ampdb(randomh:k(-20,10,3,3)))
-  out_5:a = pinkish(ampdb(randomh:k(-20,10,3,3)))
-  out_6:a = pinkish(ampdb(randomh:k(-20,10,3,3)))
-  out_7:a = pinkish(ampdb(randomh:k(-20,10,3,3)))
-  out_8:a = pinkish(ampdb(randomh:k(-20,10,3,3)))
+  out_1:a = pinkish(ampdb(randomh:k(-20, 10, 3, 3)))
+  out_2:a = pinkish(ampdb(randomh:k(-20, 10, 3, 3)))
+  out_3:a = pinkish(ampdb(randomh:k(-20, 10, 3, 3)))
+  out_4:a = pinkish(ampdb(randomh:k(-20, 10, 3, 3)))
+  out_5:a = pinkish(ampdb(randomh:k(-20, 10, 3, 3)))
+  out_6:a = pinkish(ampdb(randomh:k(-20, 10, 3, 3)))
+  out_7:a = pinkish(ampdb(randomh:k(-20, 10, 3, 3)))
+  out_8:a = pinkish(ampdb(randomh:k(-20, 10, 3, 3)))
 
   // show output signals
-  CsQtMeter("disp_out_1","disp_out_1_clip",out_1,ips)
-  CsQtMeter("disp_out_2","disp_out_2_clip",out_2,ips)
-  CsQtMeter("disp_out_3","disp_out_3_clip",out_3,ips)
-  CsQtMeter("disp_out_4","disp_out_4_clip",out_4,ips)
-  CsQtMeter("disp_out_5","disp_out_5_clip",out_5,ips)
-  CsQtMeter("disp_out_6","disp_out_6_clip",out_6,ips)
-  CsQtMeter("disp_out_7","disp_out_7_clip",out_7,ips)
-  CsQtMeter("disp_out_8","disp_out_8_clip",out_8,ips)
+  CsQtMeter( "disp_out_1", "disp_out_1_clip", out_1, ips)
+  CsQtMeter( "disp_out_2", "disp_out_2_clip", out_2, ips)
+  CsQtMeter( "disp_out_3", "disp_out_3_clip", out_3, ips)
+  CsQtMeter( "disp_out_4", "disp_out_4_clip", out_4, ips)
+  CsQtMeter( "disp_out_5", "disp_out_5_clip", out_5, ips)
+  CsQtMeter( "disp_out_6", "disp_out_6_clip", out_6, ips)
+  CsQtMeter( "disp_out_7", "disp_out_7_clip", out_7, ips)
+  CsQtMeter( "disp_out_8", "disp_out_8_clip", out_8, ips)
 
 endin
-schedule("IO",0,-1)
+schedule("IO", 0, -1)
 
 </CsInstruments>
 <CsScore>

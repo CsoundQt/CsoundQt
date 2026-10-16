@@ -1,88 +1,100 @@
-;Written by Iain McCurdy 2006
+; Written by Iain McCurdy 2006
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
-;	"sometime" QuteCsound exits when I change FFTattributes (also get segmentation fault with FLTK original csd)???
+; Notes on modifications from original csd:
+; Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav
+; files
+; "sometime" QuteCsound exits when I change FFTattributes (also get segmentation fault
+; with FLTK original csd)???
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-giFFTattributes0	ftgen	1, 0, 4, -2,  256, 128,  256, 1
-giFFTattributes1	ftgen	2, 0, 4, -2,  512, 128,  512, 1
-giFFTattributes2	ftgen	3, 0, 4, -2, 1024, 128, 1024, 1
+giFFTattributes0 ftgen 1, 0, 4, -2, 256, 128, 256, 1
+giFFTattributes1 ftgen 2, 0, 4, -2, 512, 128, 512, 1
+giFFTattributes2 ftgen 3, 0, 4, -2, 1024, 128, 1024, 1
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkblurtime		invalue 	"Blur_Time"
-		gkOutGain			invalue 	"Output_Gain"
-		gkinput			invalue	"Input"
-		gkFFTattributes	invalue	"FFTattributes"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkblurtime      invalue "Blur_Time"
+    gkOutGain       invalue "Output_Gain"
+    gkinput         invalue "Input"
+    gkFFTattributes invalue "FFTattributes"
+  endif
 endin
 
-instr	1
-	if	gkinput=0	then													;IF 'INPUT' SWITCH IS SET TO 'Live Input' THEN IMPLEMENT THE NEXT LINE OF CODE
-		gasig	inch		1											;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
-	elseif		gkinput=1 	then										;IF 'INPUT' SWITCH IS SET TO 'Voice' THEN IMPLEMENT THE NEXT LINE OF CODE
-		Sfile1	invalue	"_Browse1"
-		;OUTPUT		OPCODE	FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		gasig, asigR	FilePlay2	Sfile1,      1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
-	else																;IF 'INPUT' SWITCH IS NOT SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
-		Sfile2	invalue	"_Browse2"
-		;OUTPUT		OPCODE	FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		gasig, asigR	FilePlay2	Sfile2,      1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
-	endif															;END OF 'IF'...'THEN' BRANCHING
-	kSwitch		changed	gkFFTattributes								;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then													;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-				reinit	START										;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif															;END OF CONDITIONAL BRANCHING
-	START:					;LABEL
-	iFFTsize		table	0, i(gkFFTattributes)+1
-	ioverlap		table	1, i(gkFFTattributes)+1
-	iwinsize		table	2, i(gkFFTattributes)+1
-	iwintype		table	3, i(gkFFTattributes)+1	
+instr 1
+  ; If 'input' switch is set to 'live input' then implement the next line of code
+  if gkinput = 0 then
+    gasig inch 1  ; Read audio from the computer's live input channel 1 (left)
+    ; If 'input' switch is set to 'voice' then implement the next line of code
+  elseif gkinput = 1 then
+    Sfile1 invalue "_Browse1"
+    ; Output  opcode file_path| speed | inskip | wraparound (1=on)
+    gasig, asigR FilePlay2 Sfile1, 1, 0, 1  ; Read a stored audio file from the hard drive
+    ; If 'input' switch is not set to 'stored file' then implement the next line of code
+  else
+    Sfile2 invalue "_Browse2"
+    ; Output  opcode file_path| speed | inskip | wraparound (1=on)
+    gasig, asigR FilePlay2 Sfile2, 1, 0, 1  ; Read a stored audio file from the hard drive
+  endif                                     ; End of 'if'...'then' branching
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkFFTattributes
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit START       ; Begin a reinitialisation pass from label 'start'
+  endif                ; End of conditional branching
+START:                 ; Label
+  iFFTsize table 0, i(gkFFTattributes)+1
+  ioverlap table 1, i(gkFFTattributes)+1
+  iwinsize table 2, i(gkFFTattributes)+1
+  iwintype table 3, i(gkFFTattributes)+1
 
-	fsig1  		pvsanal	gasig, iFFTsize, ioverlap, iwinsize, iwintype		;ANALYSE THE AUDIO SIGNAL THAT WAS CREATED IN INSTRUMENT 1. OUTPUT AN F-SIGNAL.      	
-	imaxdel		=		4											;VARIBALE THAT WILL BE USED TO DEFINE MAXIMUM DELAY TIME FOR pvsblur PROCESSING. THIS INFORMATION IS NEEDED FOR MEMORY ALLOCATION.
-	fsig2		pvsblur	fsig1, gkblurtime, imaxdel						;BLUR AMPLITUDE AND FREQUENCY VALUES OF AN F-SIGNAL
-	;OUTPUT		OPCODE	INPUT    	
-	aresyn 		pvsynth  	fsig2                      						;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
-				rireturn												;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-				outs		aresyn * gkOutGain, aresyn * gkOutGain				;SEND THE RESCALED, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
+  ; Analyse the audio signal that was created in instrument 1. Output an f-signal.
+  fsig1 pvsanal gasig, iFFTsize, ioverlap, iwinsize, iwintype
+  ; Varibale that will be used to define maximum delay time for pvsblur processing. This
+  ; information is needed for memory allocation.
+  imaxdel = 4
+  ; Blur amplitude and frequency values of an f-signal
+  fsig2 pvsblur fsig1, gkblurtime, imaxdel
+  ; Output  opcode input
+  aresyn pvsynth fsig2  ; Resynthesize the f-signal as an audio signal
+  rireturn              ; Return from reinitialisation pass to performance time passes
+  ; Send the rescaled, resynthesized signal to the audio outputs
+  outs aresyn * gkOutGain, aresyn * gkOutGain
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -98,9 +110,9 @@ i 10		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -118,15 +130,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -147,15 +164,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -181,14 +203,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -207,11 +229,23 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -229,14 +263,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -288,15 +322,20 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -317,14 +356,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -376,14 +415,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -423,14 +462,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -452,14 +491,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -499,14 +538,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -530,6 +569,18 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -547,14 +598,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -576,9 +627,9 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -603,9 +654,9 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -630,14 +681,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -661,6 +712,18 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -678,14 +741,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -707,14 +770,14 @@ It can be observed that smaller FFT size and window sizes results in less time s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

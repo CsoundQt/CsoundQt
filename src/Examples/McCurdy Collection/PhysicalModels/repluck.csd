@@ -1,156 +1,178 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add tables for exp slider
-;	Use menu for exitation signal choice
-;	INIT instrument added
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add tables for exp slider
+; Use menu for exitation signal choice
+; INIT instrument added
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine	ftgen	0,0,1024,10,1						;A SINE WAVE
-giExp1	ftgen	0, 0, 129, -25, 0, 20.0, 128, 8000.0	;TABLE FOR EXP SLIDER
-giExp2	ftgen	0, 0, 129, -25, 0,  5.0, 128, 7000.0	;TABLE FOR EXP SLIDER
+gisine ftgen 0, 0, 1024, 10, 1                     ; A sine wave
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 8000.0  ; Table for exp slider
+giExp2 ftgen 0, 0, 129, -25, 0, 5.0, 128, 7000.0   ; Table for exp slider
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkInput		invalue	"Input"
-		gkNseDur		invalue	"NoiseDur"
-		kSineTFrq		invalue	"SineTFreq"
-		gkSineTFrq	tablei	kSineTFrq, giExp1, 1
-					outvalue	"SineTFreq_Value", gkSineTFrq
-		gkSineDur		invalue	"SineBDur"
-		kSineFrq		invalue	"SineBFreq"
-		gkSineFrq		tablei	kSineFrq, giExp1, 1
-					outvalue	"SineBFreq_Value", gkSineFrq
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkInput   invalue "Input"
+    gkNseDur  invalue "NoiseDur"
+    kSineTFrq invalue "SineTFreq"
+    gkSineTFrq tablei kSineTFrq, giExp1, 1
+    outvalue "SineTFreq_Value", gkSineTFrq
+    gkSineDur invalue "SineBDur"
+    kSineFrq  invalue "SineBFreq"
+    gkSineFrq tablei kSineFrq, giExp1, 1
+    outvalue "SineBFreq_Value", gkSineFrq
 
-		gkplk		invalue	"PluckPos"
-		gkpick		invalue	"PickPos"
-		gkrefl		invalue	"Reflection"
-		kcps			invalue	"Pitch"
-		gkcps		tablei	kcps, giExp2, 1
-					outvalue	"Pitch_Value", gkcps
-		gkamp		invalue	"Amplitude"
-		gkImplsGain	invalue	"ImpGain"
-		gkOutGain		invalue	"OutGain"
+    gkplk  invalue "PluckPos"
+    gkpick invalue "PickPos"
+    gkrefl invalue "Reflection"
+    kcps   invalue "Pitch"
+    gkcps tablei kcps, giExp2, 1
+    outvalue "Pitch_Value", gkcps
+    gkamp       invalue "Amplitude"
+    gkImplsGain invalue "ImpGain"
+    gkOutGain   invalue "OutGain"
 
-		Sfile_new		strcpy	""											;INIT TO EMPTY STRING
-		gSfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	gSfile
-		gkfile 		strcmpk	Sfile_new, Sfile_old
-	endif
+    Sfile_new strcpy ""  ; Init to empty string
+    gSfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk gSfile
+    gkfile strcmpk Sfile_new, Sfile_old
+  endif
 endin
 
-instr	1	;MIDI ACTIVATED INSTRUMENT
-	icps		cpsmidi														;FREQUENCY IS READ FROM INCOMING MIDI NOTE
-	iamp		ampmidi	1													;AMPLITUDE IS READ FROM INCOMING MIDI NOTE
-	iporttime	=		0.1													;PORTAMENTO TIME
-	kporttime	linseg	0,0.01,iporttime,1,iporttime								;PORTAMENTO TIME VARIABLE THAT RAMPS UP FROM ZERO
-	kpick	portk	gkpick, kporttime										;APPLY PORTAMENTO TO 'PICK-UP POSITION' VARIABLE (PREVENTS 'ZIP' NOISE)
-	kSineTFrq	portk	gkSineTFrq, kporttime									;APPLY PORTAMENTO TO 'SINE TONE FREQUENCY' VARIABLE (MAKES MODULATION SMOOTHER)
-	kenv		expseg	1,i(gkNseDur),.00001,1,.00001								;CREATE AN AMPLITUDE ENVELOPE FOR THE NOISE BURST
+instr 1            ; MIDI activated instrument
+  icps cpsmidi     ; Frequency is read from incoming MIDI note
+  iamp ampmidi 1   ; Amplitude is read from incoming MIDI note
+  iporttime = 0.1  ; Portamento time
+  ; Portamento time variable that ramps up from zero
+  kporttime linseg 0, 0.01, iporttime, 1, iporttime
+  ; Apply portamento to 'pick-up position' variable (prevents 'zip' noise)
+  kpick portk gkpick, kporttime
+  ; Apply portamento to 'sine tone frequency' variable (makes modulation smoother)
+  kSineTFrq portk gkSineTFrq, kporttime
+  ; Create an amplitude envelope for the noise burst
+  kenv expseg 1, i(gkNseDur), .00001, 1, .00001
 
-	axcite	pinkish	kenv													;CREATE A PINK NOISE SIGNAL
+  axcite pinkish kenv  ; Create a pink noise signal
 
-	;OUTPUT	OPCODE	INPUT ARGS...
-	kSwitch	changed	gkplk												;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if 	kSwitch=1	then
-		reinit	START
-	endif
-	START:	
-	ares 	repluck 	i(gkplk), gkamp, icps, kpick, gkrefl, axcite * gkImplsGain		;REPLUCK. NOTE EXCITATION SIGNAL SCALED BY gkImplsGain WHICH IS CREATED BY A GUI SLIDER
-			rireturn
-	aenv		linsegr	1,3600,1,0.1,0											;CREATE AN AMPLITUDE ENVELOPE. THIS WILL BE USED TO PREVENT CLICKS.
-			outs 	ares*aenv*iamp, ares*aenv*iamp							;SEND AUDIO TO OUTPUTS
+  ; Output opcode input args...
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkplk
+  if kSwitch = 1 then
+    reinit START
+  endif
+START:
+  ; Repluck. Note excitation signal scaled by gkimplsgain which is created by a GUI slider
+  ares repluck i(gkplk), gkamp, icps, kpick, gkrefl, axcite * gkImplsGain
+  rireturn
+  ; Create an amplitude envelope. This will be used to prevent clicks.
+  aenv linsegr 1, 3600, 1, 0.1, 0
+  outs ares*aenv*iamp, ares*aenv*iamp  ; Send audio to outputs
 endin
 
-instr	2	;GUI ACTIVATED INSTRUMENT
-	iporttime	=		0.1													;PORTAMENTO TIME
-	kporttime	linseg	0,0.01,iporttime,1,iporttime								;PORTAMENTO TIME VARIABLE THAT RAMPS UP FROM ZERO
-	kpick	portk	gkpick, kporttime										;APPLY PORTAMENTO TO 'PICK-UP POSITION' VARIABLE (PREVENTS 'ZIP' NOISE)
-	kSineTFrq	portk	gkSineTFrq, kporttime									;APPLY PORTAMENTO TO 'SINE TONE FREQUENCY' VARIABLE (MAKES MODULATION SMOOTHER)
+instr 2            ; GUI activated instrument
+  iporttime = 0.1  ; Portamento time
+  ; Portamento time variable that ramps up from zero
+  kporttime linseg 0, 0.01, iporttime, 1, iporttime
+  ; Apply portamento to 'pick-up position' variable (prevents 'zip' noise)
+  kpick portk gkpick, kporttime
+  ; Apply portamento to 'sine tone frequency' variable (makes modulation smoother)
+  kSineTFrq portk gkSineTFrq, kporttime
 
-	if		gkInput==0	then												;IF gkinput=1, I.E. IF 'NOISE BURST' IS SELECTED...
-		kenv		expseg	1,i(gkNseDur),.00001,1,.00001							;CREATE AN AMPLITUDE ENVELOPE FOR THE NOISE BURST
-		axcite	pinkish	kenv												;CREATE A PINK NOISE SIGNAL
-	elseif	gkInput==1	then												;IF gkinput=2, I.E. IF 'SOUND FILE' IS SELECTED...
-		kNew_file	changed	gkfile											;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-		if	kNew_file=1	then												;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-			reinit	NEW_FILE												;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-		endif
-		NEW_FILE:
-		;OUTPUTS	OPCODE	FILE  | SPEED | INSKIP | LOOPING (0=OFF 1=ON)
-		axcite,aR	FilePlay2	gSfile,  1,      0,         1							;GENERATE 2 AUDIO SIGNALS FROM A STEREO SOUND FILE RIGHT CHANNEL WILL BE IGNORED
-				rireturn													;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
+  if gkInput == 0 then  ; If gkinput=1, i.e. If 'noise burst' is selected...
+    ; Create an amplitude envelope for the noise burst
+    kenv expseg 1, i(gkNseDur), .00001, 1, .00001
+    axcite pinkish kenv     ; Create a pink noise signal
+  elseif gkInput == 1 then  ; If gkinput=2, i.e. If 'sound file' is selected...
+    ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+    ; variables change. (output 'kswitch' is normally zero)
+    kNew_file changed gkfile
+    if kNew_file = 1 then  ; If i-rate variable change trigger is '1'...
+      reinit NEW_FILE      ; Begin a reinitialisation pass from label 'start'
+    endif
+NEW_FILE:
+    ; Outputs opcode file  | speed | inskip | looping (0=off 1=on)
+    ; Generate 2 audio signals from a stereo sound file right channel will be ignored
+    axcite, aR FilePlay2 gSfile, 1, 0, 1
+    rireturn  ; Return from reinitialisation pass to performance time passes
 
-	elseif	gkInput==2	then												;IF gkinput=3, I.E. IF 'SINE TONE' IS SELECTED...
-		kenv		expseg	1,i(gkSineDur),.00001,1,.00001						;CREATE AN AMPLITUDE ENVELOPE FOR THE SINE BURST
-		axcite	oscili	kenv, gkSineFrq, gisine								;CREATE A SINE TONE, FREQUENCY TAKEN FROM GUI SLIDER
-	elseif	gkInput==3	then												;IF gkinput=4, I.E. IF 'SINE BURST' IS SELECTED...
-		axcite	oscili	1, kSineTFrq, gisine								;CREATE A SINE TONE
-	endif
+  elseif gkInput == 2 then  ; If gkinput=3, i.e. If 'sine tone' is selected...
+    ; Create an amplitude envelope for the sine burst
+    kenv expseg 1, i(gkSineDur), .00001, 1, .00001
+    ; Create a sine tone, frequency taken from GUI slider
+    axcite oscili kenv, gkSineFrq, gisine
+    ; If gkinput=4, i.e. If 'sine burst' is selected...
+  elseif gkInput == 3 then
+    axcite oscili 1, kSineTFrq, gisine  ; Create a sine tone
+  endif
 
-	;OUTPUT	OPCODE		INPUT ARGS...
-	kSwitch	changed	gkcps, gkplk											;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if 	kSwitch=1	then
-		reinit	START
-	endif
-	START:	
-	ares 	repluck 	i(gkplk), gkamp, i(gkcps), kpick, gkrefl, axcite * gkImplsGain	;REPLUCK. NOTE EXCITATION SIGNAL SCALED BY gkImplsGain WHICH IS CREATED BY A GUI SLIDER
-			rireturn
-			outs 	ares * gkOutGain, ares * gkOutGain							;SEND AUDIO TO OUTPUTS, SCALE OUTPUT BY gkOutGain WHICH IS CREATED BY A GUI SLIDER
+  ; Output opcode  input args...
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkcps, gkplk
+  if kSwitch = 1 then
+    reinit START
+  endif
+START:
+  ; Repluck. Note excitation signal scaled by gkimplsgain which is created by a GUI slider
+  ares repluck i(gkplk), gkamp, i(gkcps), kpick, gkrefl, axcite * gkImplsGain
+  rireturn
+  ; Send audio to outputs, scale output by gkoutgain which is created by a GUI slider
+  outs ares * gkOutGain, ares * gkOutGain
 endin
 
-instr	3	;INIT
-		outvalue	"PluckPos"	, .98
-		outvalue	"PickPos"		, .1
-		outvalue	"Reflection"	, 0.5
-		outvalue	"Pitch"		, 0.566
-		outvalue	"Amplitude"	, 0.1
-		outvalue	"ImpGain"		, 0.15
-		outvalue	"OutGain"		, 0.7
-		outvalue	"NoiseDur"	, 0.3
-		outvalue	"SineBDur"	, 0.3
-		outvalue	"SineBFreq"	, 0.452
-		outvalue	"SineTFreq"	, 0.452
+instr 3  ; Init
+  outvalue "PluckPos", .98
+  outvalue "PickPos", .1
+  outvalue "Reflection", 0.5
+  outvalue "Pitch", 0.566
+  outvalue "Amplitude", 0.1
+  outvalue "ImpGain", 0.15
+  outvalue "OutGain", 0.7
+  outvalue "NoiseDur", 0.3
+  outvalue "SineBDur", 0.3
+  outvalue "SineBFreq", 0.452
+  outvalue "SineTFreq", 0.452
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION 
-i 10		0		3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 
-i 3		0		0.1	;INIT
+i 3 0 0.1  ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -164,9 +186,9 @@ i 3		0		0.1	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -184,15 +206,20 @@ i 3		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -213,14 +240,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -260,14 +287,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -286,11 +313,23 @@ i 3		0		0.1	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -308,14 +347,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -355,14 +394,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -384,14 +423,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -431,14 +470,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -460,14 +499,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -507,14 +546,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -536,14 +575,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -583,14 +622,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -612,14 +651,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -659,14 +698,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -688,14 +727,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -735,14 +774,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -764,15 +803,20 @@ i 3		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -793,14 +837,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -840,14 +884,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -869,14 +913,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -916,14 +960,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -945,14 +989,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -992,14 +1036,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1021,14 +1065,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1068,14 +1112,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1134,14 +1178,14 @@ This example can also be played from a MIDI keyboard.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1165,6 +1209,18 @@ This example can also be played from a MIDI keyboard.</label>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -1182,9 +1238,9 @@ This example can also be played from a MIDI keyboard.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>240</r>

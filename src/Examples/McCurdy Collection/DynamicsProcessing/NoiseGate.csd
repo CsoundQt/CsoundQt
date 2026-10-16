@@ -1,62 +1,67 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, January 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, January 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 8		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 1		;NUMBER OF CHANNELS (1=MONO, 2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE
+sr     = 44100  ; Sample rate
+ksmps  = 8      ; Number of audio samples in each control cycle
+nchnls = 1      ; Number of channels (1=mono, 2=stereo)
+0dbfs  = 1      ; Maximum amplitude
 
 
-instr 	1
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkgain		invalue	"Gain"
-		gkthresh		invalue	"Threshold"
-		gkatt		invalue	"Attack"
-		gkrel		invalue	"Release"
-		gkdelay		invalue	"Delay"
-		gkatten		invalue	"Attenuation"
-		gkmeter		invalue	"Meter"
-	endif
+instr 1
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkgain   invalue "Gain"
+    gkthresh invalue "Threshold"
+    gkatt    invalue "Attack"
+    gkrel    invalue "Release"
+    gkdelay  invalue "Delay"
+    gkatten  invalue "Attenuation"
+    gkmeter  invalue "Meter"
+  endif
 
-	aL 		inch		1							;READ AUDIO FROM LEFT CHANNEL INPUT
-	aL		=		aL * gkgain					;AUDIO SIGNALS ARE SCALED BY THE GUI GAIN CONTROL
-	kRMS		rms		aL							;RMS (ROOT MEAN SQUARE) OF THE AUDIO SIGNAL IS SCANNED
-	kdB		=		dbamp(kRMS)					;RMS OF AMPLITUDE IS CONVERTED TO DECIBELS
+  aL inch 1          ; Read audio from left channel input
+  aL = aL * gkgain   ; Audio signals are scaled by the GUI gain control
+  kRMS rms aL        ; Rms (root mean square) of the audio signal is scanned
+  kdB = dbamp(kRMS)  ; Rms of amplitude is converted to decibels
 
-	if (ktrig == 1)	then
-		outvalue	"Meter", kdB						;UPDATE AMPLITUDE METER
-	endif
+  if (ktrig == 1) then
+    outvalue "Meter", kdB  ; Update amplitude meter
+  endif
 
-	kgate	=		(kdB<gkthresh?gkatten:0)			;CREATE A GATE SIGNAL (EITHER 1 OR ZERO DEPENDING UPON COMPARISON WITH THE THRESHOLD VALUE
-	ktime	=		(kdB<gkthresh?gkrel:gkatt)		;GATE STATE CHANGE TIME IS DEFINED DEPENDING ON WHETHER THE GATE SHOULD BE CLOSED OR OPEN
-	kgate	portk	kgate, ktime					;SMOOTH THE OPENING AND CLOSING OF THE GATE TO PREVENT CLICKS
-	aL		vdelay	aL, gkdelay, 2					;DELAY THE AUDIO SIGNAL BEFORE SENDING IT TO THE OUTPUT
-			out		aL * ampdb(kgate)				;SEND AUDIO TO THE OUTPUT AND APPLY THE GATING SIGNAL (CONVERTED TO AMPLITUDE)
+  ; Create a gate signal (either 1 or zero depending upon comparison with the threshold
+  ; value
+  kgate = (kdB<gkthresh?gkatten:0)
+  ; Gate state change time is defined depending on whether the gate should be closed or
+  ; open
+  ktime = (kdB<gkthresh?gkrel:gkatt)
+  kgate portk kgate, ktime  ; Smooth the opening and closing of the gate to prevent clicks
+  aL vdelay aL, gkdelay, 2  ; Delay the audio signal before sending it to the output
+  ; Send audio to the output and apply the gating signal (converted to amplitude)
+  out aL * ampdb(kgate)
 endin
 
-instr	2	;INIT
-		outvalue	"Gain"		, 1.0
-		outvalue	"Threshold"	, -30
-		outvalue	"Attack"		, 0.01
-		outvalue	"Release"		, 0.1
-		outvalue	"Delay"		, 0.01
-		outvalue	"Attenuation"	, -40
+instr 2  ; Init
+  outvalue "Gain", 1.0
+  outvalue "Threshold", -30
+  outvalue "Attack", 0.01
+  outvalue "Release", 0.1
+  outvalue "Delay", 0.01
+  outvalue "Attenuation", -40
 endin
 </CsInstruments>
 <CsScore>
-i 1 0 3600	;INSTRUMENT 1 IS ACTIVE FOR 1 HOUR
-i 2 0 0		;INIT
+i 1 0 3600  ; Instrument 1 is active for 1 hour
+i 2 0 0     ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -69,9 +74,9 @@ i 2 0 0		;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -89,15 +94,20 @@ i 2 0 0		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -118,14 +128,14 @@ i 2 0 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -165,14 +175,14 @@ i 2 0 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -194,15 +204,20 @@ i 2 0 0		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -225,14 +240,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -254,14 +269,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -301,14 +316,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -330,14 +345,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -377,14 +392,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -406,14 +421,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -453,14 +468,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -482,14 +497,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -529,14 +544,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -558,14 +573,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -605,14 +620,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -646,9 +661,9 @@ Rather than opening and closing instantly (which would create unpleasant discont
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -667,14 +682,14 @@ Rather than opening and closing instantly (which would create unpleasant discont
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

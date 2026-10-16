@@ -1,69 +1,72 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-
-;Notes on modifications from original csd:
-;	Add Browser for audio file
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Notes on modifications from original csd:
+; Add Browser for audio file
+
+
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkamp		invalue	"Amplitude"
-		gkfreqratio	invalue	"FreqRatio"
-		gkloop		invalue	"LoopBegin"
-		gkend		invalue	"LoopEnd"
-		gkphs		invalue	"InitPhase"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkamp       invalue "Amplitude"
+    gkfreqratio invalue "FreqRatio"
+    gkloop      invalue "LoopBegin"
+    gkend       invalue "LoopEnd"
+    gkphs       invalue "InitPhase"
+  endif
 endin
 
-instr	1
-	Sfile_new		strcpy	""											;INIT TO EMPTY STRING
-	Sfile		invalue	"_Browse"
-	Sfile_old		strcpyk	Sfile_new
-	Sfile_new		strcpyk	Sfile
-	kfile 		strcmpk	Sfile_new, Sfile_old
+instr 1
+  Sfile_new strcpy ""  ; Init to empty string
+  Sfile invalue "_Browse"
+  Sfile_old strcpyk Sfile_new
+  Sfile_new strcpyk Sfile
+  kfile strcmpk Sfile_new, Sfile_old
 
-	kSwitch		changed	gkphs, kfile									;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then													;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE												;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
-	UPDATE:
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkphs, kfile
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
+UPDATE:
 
-	ifn		ftgentmp	0, 0, 0, 1, Sfile,0,0,1								;READ MONO OR STEREO AUDIO FILE CHANNEL 1
-	ifilelen	=		nsamp(ifn)										;DERIVE SOUNDFILE LENGTH (IN SAMPLES)
+  ifn ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read mono or stereo audio file channel 1
+  ifilelen = nsamp(ifn)                    ; Derive soundfile length (in samples)
 
-	aamp		interp	gkamp											;CREATE A-RATE VERSION OF AMPLITUDE SLIDER VALUE (THIS IS DEMANDED BY lposcilsa)
-	ar1, ar2	lposcilsa aamp, gkfreqratio, gkloop*ifilelen, gkend*ifilelen, ifn, i(gkphs)*ifilelen 
-			rireturn													;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-			outs		ar1, ar2											;SEND AUDIO TO OUTPUTS
+  ; Create a-rate version of amplitude slider value (this is demanded by lposcilsa)
+  aamp interp gkamp
+  ar1, ar2 lposcilsa aamp, gkfreqratio, gkloop*ifilelen, gkend*ifilelen, ifn, i(gkphs)*ifilelen
+  rireturn       ; Return from reinitialisation pass to performance time passes
+  outs ar1, ar2  ; Send audio to outputs
 endin
 
-instr	11	;INIT
-		outvalue	"Amplitude"	,0.5
-		outvalue	"FreqRatio"	,1
-		outvalue	"LoopBegin"	,0
-		outvalue	"LoopEnd"		,1
-		outvalue	"InitPhase"	,0
+instr 11  ; Init
+  outvalue "Amplitude", 0.5
+  outvalue "FreqRatio", 1
+  outvalue "LoopBegin", 0
+  outvalue "LoopEnd", 1
+  outvalue "InitPhase", 0
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
-i 11 0 0.01	;INIT
+i 10 0 3600  ; GUI
+i 11 0 0.01  ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -96,15 +99,20 @@ i 11 0 0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>181</r>
-   <g>199</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -122,11 +130,23 @@ i 11 0 0.01	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    On / Off  </text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -144,15 +164,20 @@ i 11 0 0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -174,14 +199,14 @@ i 11 0 0.01	;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -203,14 +228,14 @@ i 11 0 0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -250,14 +275,14 @@ i 11 0 0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -279,14 +304,14 @@ i 11 0 0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -326,14 +351,14 @@ i 11 0 0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -355,14 +380,14 @@ i 11 0 0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -402,14 +427,14 @@ i 11 0 0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -431,14 +456,14 @@ i 11 0 0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -478,14 +503,14 @@ i 11 0 0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -507,9 +532,9 @@ i 11 0 0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -534,14 +559,14 @@ i 11 0 0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -581,14 +606,14 @@ i 11 0 0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -610,14 +635,14 @@ i 11 0 0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -641,6 +666,18 @@ i 11 0 0.01	;INIT
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

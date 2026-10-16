@@ -1,115 +1,130 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gihalfsine	ftgen	0, 0, 1025, 9, 0.5, 1, 0	;HALF SINE  WINDOW FUNCTION USED FOR AMPLITUDE ENVELOPING
+; Half sine window function used for amplitude enveloping
+gihalfsine ftgen 0, 0, 1025, 9, 0.5, 1, 0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	gkGain	invalue	"Gain"			;init .5
-	gktrans	invalue 	"Transposition"	;init 0
-	gkdlt	invalue 	"Delay_Time"		;init .05
-	gkFB		invalue	"Feedback"		;init 0
-	gkinput	invalue	"Input"
-	gkMix		invalue	"Mix"			;init 1
+instr 10                           ; GUI
+  gkGain  invalue "Gain"           ; init .5
+  gktrans invalue "Transposition"  ; init 0
+  gkdlt   invalue "Delay_Time"     ; init .05
+  gkFB    invalue "Feedback"       ; init 0
+  gkinput invalue "Input"
+  gkMix   invalue "Mix"  ; init 1
 endin
 
-instr	1	;PLAYS FILE
-	if	gkinput=0	then
-		Sfile	invalue	"_Browse1"
-		;OUTPUT		OPCODE	FILE   | SPEED | INSKIP | LOOPING (0=OFF 1=ON)
-		asigL, asigR	FilePlay2	Sfile,     1,       0,        1
-	else
-		asigL, asigR	ins
-	endif
-	aenv			linsegr	0,0.01,1,0.01,0					;ANTI CLICK ENVELOPE WITH RELEASE STAGE
-	gasigL		=		asigL * gkGain * aenv				;RESCALE AUDIO SIGNAL WITH ON-SCREEN GAIN SLIDER
-	gasigR		=		asigR * gkGain * aenv				;RESCALE AUDIO SIGNAL WITH ON-SCREEN GAIN SLIDER
+instr 1  ; Plays file
+  if gkinput = 0 then
+    Sfile invalue "_Browse1"
+    ; Output  opcode file   | speed | inskip | looping (0=off 1=on)
+    asigL, asigR FilePlay2 Sfile, 1, 0, 1
+  else
+    asigL, asigR ins
+  endif
+  aenv linsegr 0, 0.01, 1, 0.01, 0  ; Anti click envelope with release stage
+  gasigL = asigL * gkGain * aenv    ; Rescale audio signal with on-screen gain slider
+  gasigR = asigR * gkGain * aenv    ; Rescale audio signal with on-screen gain slider
 endin
 
-instr	2	;PITCH SHIFTER
-	kporttime		linseg	0,0.001,0.005,1,0.005				;CREATE A VARIABLE FUNCTION THAT RAPIDLY RAMPS UP TO A SET VALUE
-	ktrans		portk	gktrans, kporttime					;SMOOTH CHANGES IN SLIDER VARIABLE
-	kdlt			portk	gkdlt, kporttime					;SMOOTH CHANGES IN SLIDER VARIABLE
-	adlt			interp	kdlt			;CREATE A-RATE VERSION OF kdlt
-	koctfract		=		ktrans/12							;TRANSPOSITION AS FRACTION OF AN OCTAVE
-	kratio		=		cpsoct(8+koctfract)/cpsoct(8)			;RATIO OF NEW FREQ TO A DECLARED BASE FREQUENCY (MIDDLE C)
-	krate		=		(kratio-1)/kdlt					;SUBTRACT 1/1 SPEED
-	
-	aphase1		phasor	-krate							;MOVING PHASE 1-0
-	aphase2		phasor	-krate, .5						;MOVING PHASE 1-0 - PHASE OFFSET BY 180 DEGREES (.5 RADIANS)
-	
-	agate1		tablei	aphase1, gihalfsine, 1, 0, 1			;WINDOW FUNC =HALF SINE
-	agate2		tablei	aphase2, gihalfsine, 1, 0, 1			;WINDOW FUNC =HALF SINE
+instr 2  ; Pitch shifter
+  ; Create a variable function that rapidly ramps up to a set value
+  kporttime linseg 0, 0.001, 0.005, 1, 0.005
+  ktrans portk gktrans, kporttime  ; Smooth changes in slider variable
+  kdlt   portk gkdlt, kporttime    ; Smooth changes in slider variable
+  adlt interp kdlt                 ; Create a-rate version of kdlt
+  koctfract = ktrans/12            ; Transposition as fraction of an octave
+  ; Ratio of new freq to a declared base frequency (middle c)
+  kratio = cpsoct(8+koctfract)/cpsoct(8)
+  krate  = (kratio-1)/kdlt  ; Subtract 1/1 speed
 
-	;LEFT CHANNEL===========================================================================================================================================================
-	aignore		delayr	2								;DECLARE DELAY BUFFER
-	adelsig1L		deltap3	aphase1 * adlt						;VARIABLE TAP
-	aGatedSig1L	=		adelsig1L * agate1
-				delayw	gasigL + (aGatedSig1L*gkFB)			;WRITE AUDIO TO THE BEGINNING OF THE DELAY BUFFER, MIX IN FEEDBACK SIGNAL - PROPORTION DEFINED BY gkFB
-	
-	aignore		delayr	2								;DECLARE DELAY BUFFER
-	adelsig2L		deltap3	aphase2 * adlt						;VARIABLE TAP
-	aGatedSig2L	=		adelsig2L * agate2
-				delayw	gasigL + (aGatedSig2L*gkFB)			;WRITE AUDIO TO THE BEGINNING OF THE DELAY BUFFER, MIX IN FEEDBACK SIGNAL - PROPORTION DEFINED BY gkFB
-	;=======================================================================================================================================================================
+  aphase1 phasor -krate      ; Moving phase 1-0
+  aphase2 phasor -krate, .5  ; Moving phase 1-0 - phase offset by 180 degrees (.5 radians)
 
-	;RIGHT CHANNEL==========================================================================================================================================================
-	aignore		delayr	2								;DECLARE DELAY BUFFER
-	adelsig1R		deltap3	aphase1 * adlt						;VARIABLE TAP
-	aGatedSig1R	=		adelsig1R * agate1
-				delayw	gasigR + (aGatedSig1R*gkFB)			;WRITE AUDIO TO THE BEGINNING OF THE DELAY BUFFER, MIX IN FEEDBACK SIGNAL - PROPORTION DEFINED BY gkFB
-	
-	aignore		delayr	2								;DECLARE DELAY BUFFER
-	adelsig2R		deltap3	aphase2 * adlt						;VARIABLE TAP
-	aGatedSig2R	=		adelsig2R * agate2
-				delayw	gasigR + (aGatedSig2R*gkFB)			;WRITE AUDIO TO THE BEGINNING OF THE DELAY BUFFER, MIX IN FEEDBACK SIGNAL - PROPORTION DEFINED BY gkFB
-	;=======================================================================================================================================================================
-	aGatedMixL	=		(aGatedSig1L + aGatedSig2L) * .5		;SUM AND RESCALE PITCH SHIFTER OUTPUTS (LEFT CHANNEL)
-	aGatedMixR	=		(aGatedSig1R + aGatedSig2R) * .5		;SUM AND RESCALE PITCH SHIFTER OUTPUTS (RIGHT CHANNEL)
-	aL		ntrpol	gasigL,aGatedMixL,gkMix
-	aR		ntrpol	gasigR,aGatedMixR,gkMix
-			outs	aL, aR				;SEND AUDIO TO OUTPUTS
-				clear	gasigL, gasigR						;CLEAR GLOBAL AUDIO VARIABLES
+  agate1 tablei aphase1, gihalfsine, 1, 0, 1  ; Window func =half sine
+  agate2 tablei aphase2, gihalfsine, 1, 0, 1  ; Window func =half sine
+
+  ; Left
+  ; channel===========================================================================================================================================================
+  aignore delayr 2                  ; Declare delay buffer
+  adelsig1L deltap3 aphase1 * adlt  ; Variable tap
+  aGatedSig1L = adelsig1L * agate1
+  ; Write audio to the beginning of the delay buffer, mix in feedback signal - proportion
+  ; defined by gkfb
+  delayw gasigL + (aGatedSig1L*gkFB)
+
+  aignore delayr 2                  ; Declare delay buffer
+  adelsig2L deltap3 aphase2 * adlt  ; Variable tap
+  aGatedSig2L = adelsig2L * agate2
+  ; Write audio to the beginning of the delay buffer, mix in feedback signal - proportion
+  ; defined by gkfb
+  delayw gasigL + (aGatedSig2L*gkFB)
+  ; =======================================================================================================================================================================
+
+  ; Right
+  ; channel==========================================================================================================================================================
+  aignore delayr 2                  ; Declare delay buffer
+  adelsig1R deltap3 aphase1 * adlt  ; Variable tap
+  aGatedSig1R = adelsig1R * agate1
+  ; Write audio to the beginning of the delay buffer, mix in feedback signal - proportion
+  ; defined by gkfb
+  delayw gasigR + (aGatedSig1R*gkFB)
+
+  aignore delayr 2                  ; Declare delay buffer
+  adelsig2R deltap3 aphase2 * adlt  ; Variable tap
+  aGatedSig2R = adelsig2R * agate2
+  ; Write audio to the beginning of the delay buffer, mix in feedback signal - proportion
+  ; defined by gkfb
+  delayw gasigR + (aGatedSig2R*gkFB)
+  ; =======================================================================================================================================================================
+  ; Sum and rescale pitch shifter outputs (left channel)
+  aGatedMixL = (aGatedSig1L + aGatedSig2L) * .5
+  ; Sum and rescale pitch shifter outputs (right channel)
+  aGatedMixR = (aGatedSig1R + aGatedSig2R) * .5
+  aL ntrpol gasigL, aGatedMixL, gkMix
+  aR ntrpol gasigR, aGatedMixR, gkMix
+  outs aL, aR           ; Send audio to outputs
+  clear gasigL, gasigR  ; Clear global audio variables
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		-1		;GUI
-i  2      0         -1		;INSTRUMENT 2 PLAYS A HELD NOTE
+; Instr | start | duration
+i 10 0 -1  ; GUI
+i 2 0 -1   ; Instrument 2 plays a held note
 
-f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
+f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -122,9 +137,9 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -142,15 +157,20 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -168,11 +188,23 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
@@ -208,14 +240,14 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -237,14 +269,14 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -266,15 +298,20 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -298,14 +335,14 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -327,14 +364,14 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -356,14 +393,14 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -403,14 +440,14 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -450,14 +487,14 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -479,14 +516,14 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -551,14 +588,14 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -580,14 +617,14 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -611,6 +648,18 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -628,9 +677,9 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -655,14 +704,14 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -702,14 +751,14 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

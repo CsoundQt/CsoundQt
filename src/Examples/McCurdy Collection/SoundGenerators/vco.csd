@@ -1,106 +1,110 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table for exp slider
-;	Add INIT instrument
-;	Use of QuteCsound internal midi for Pulse Width widget control by CC#1
+; Notes on modifications from original csd:
+; Add table for exp slider
+; Add INIT instrument
+; Use of QuteCsound internal midi for Pulse Width widget control by CC#1
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 16			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gisine		ftgen	0,0,131072,10,1						;TABLE THAT STORES A SINGLE CYCLE OF A SINE WAVE
-giExp1		ftgen	0, 0, 129, -25, 0, 2.0, 128, 10000.0		;TABLE FOR EXP SLIDER
+; Table that stores a single cycle of a sine wave
+gisine ftgen 0, 0, 131072, 10, 1
+giExp1 ftgen 0, 0, 129, -25, 0, 2.0, 128, 10000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SLIDERS
-		gkamp, 		invalue	"Amplitude"
-		kcps, 		invalue	"Frequency"
-		gkcps		tablei	kcps, giExp1, 1
-					outvalue	"Frequency_Value", gkcps
-		gkleak, 		invalue	"Leak"
-		gknyx, 		invalue	"Harmonics"
-		gkpw, 		invalue	"PW"
-		gkphs, 		invalue	"InitPhase"
-		;MENU
-		gkwave		invalue	"Waveform"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Sliders
+    gkamp, invalue "Amplitude"
+    kcps,  invalue "Frequency"
+    gkcps tablei kcps, giExp1, 1
+    outvalue "Frequency_Value", gkcps
+    gkleak, invalue "Leak"
+    gknyx,  invalue "Harmonics"
+    gkpw,   invalue "PW"
+    gkphs,  invalue "InitPhase"
+    ; Menu
+    gkwave invalue "Waveform"
+  endif
 endin
 
-instr	11	;INIT
-		outvalue	"Waveform"	, 2
-		outvalue	"Amplitude"	, 0.1
-		outvalue	"Frequency"	, 0.46
-		outvalue	"Leak"		, 0.0
-		outvalue	"Harmonics"	, 0.5
-		outvalue	"PW"			, 0.5
-		outvalue	"InitPhase"	, 0.0
+instr 11  ; Init
+  outvalue "Waveform", 2
+  outvalue "Amplitude", 0.1
+  outvalue "Frequency", 0.46
+  outvalue "Leak", 0.0
+  outvalue "Harmonics", 0.5
+  outvalue "PW", 0.5
+  outvalue "InitPhase", 0.0
 endin
 
-instr	1	;MIDI INPUT INSTRUMENT
-	icps		cpsmidi									;READ CYCLES PER SECOND VALUE FROM MIDI INPUT
-	iamp		ampmidi	1								;READ IN A NOTE VELOCITY VALUE FROM THE MIDI INPUT
+instr 1           ; MIDI input instrument
+  icps cpsmidi    ; Read cycles per second value from MIDI input
+  iamp ampmidi 1  ; Read in a note velocity value from the MIDI input
 
-	;PITCH BEND===========================================================================================================================================================
-	iSemitoneBendRange=	2								;PITCH BEND RANGE IN SEMITONES
-	imin		=		0								;EQUILIBRIUM POSITION
-	imax		=		iSemitoneBendRange / 12				;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend	pchbend	imin, imax						;PITCH BEND VARIABLE (IN oct FORMAT)
-	koct		=		octcps(icps)
-	kcps		=		cpsoct(koct + kbend)
-	;=====================================================================================================================================================================
+  ; Pitch
+  ; bend===========================================================================================================================================================
+  iSemitoneBendRange = 2                        ; Pitch bend range in semitones
+  imin               = 0                        ; Equilibrium position
+  imax               = iSemitoneBendRange / 12  ; Max pitch displacement (in oct format)
+  kbend pchbend imin, imax                      ; Pitch bend variable (in oct format)
+  koct = octcps(icps)
+  kcps = cpsoct(koct + kbend)
+  ; =====================================================================================================================================================================
 
-	iporttime	=		0.05								;PORTAMENTO TIME VARIABLE
-	kporttime	linseg	0,0.001,iporttime,1,iporttime			;CREATE A RAMPING UP FUNCTION TO REPRESENT PORTAMENTO TIME
-	kpw		portk	gkpw, kporttime					;APPLY PORTAMENTO SMOOTHING
-	imaxd	=		1
-	kSwitch	changed	gkleak, gknyx, gkwave, gkphs
-	if	kSwitch=1	then									;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE								;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
-	UPDATE:
-	aenv		linsegr	0,0.01,1,0.01,0					;ANTI-CLICK ENVELOPE
-	asig		vco 		aenv*iamp*gkamp, kcps, i(gkwave)+1, kpw, gisine, imaxd, i(gkleak), i(gknyx), i(gkphs)
-			rireturn									;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-			outs		asig, asig
+  iporttime = 0.05  ; Portamento time variable
+  ; Create a ramping up function to represent portamento time
+  kporttime linseg 0, 0.001, iporttime, 1, iporttime
+  kpw portk gkpw, kporttime  ; Apply portamento smoothing
+  imaxd = 1
+  kSwitch changed gkleak, gknyx, gkwave, gkphs
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
+UPDATE:
+  aenv linsegr 0, 0.01, 1, 0.01, 0  ; Anti-click envelope
+  asig vco aenv*iamp*gkamp, kcps, i(gkwave)+1, kpw, gisine, imaxd, i(gkleak), i(gknyx), i(gkphs)
+  rireturn  ; Return from reinitialisation pass to performance time passes
+  outs asig, asig
 endin
 
-instr	2	;VCO INSTRUMENT
-	iporttime	=		0.05								;PORTAMENTO TIME VARIABLE
-	kporttime	linseg	0,0.001,iporttime,1,iporttime			;CREATE A RAMPING UP FUNCTION TO REPRESENT PORTAMENTO TIME
-	kpw		portk	gkpw, kporttime					;APPLY PORTAMENTO SMOOTHING
-	imaxd	=		1
-	kSwitch	changed	gkleak, gknyx, gkwave, gkphs
-	if	kSwitch=1	then									;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE								;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
-	UPDATE:
-	aenv		linsegr	0,0.01,1,0.01,0					;ANTI-CLICK ENVELOPE
-	asig		vco 		aenv*gkamp, gkcps, i(gkwave)+1, kpw, gisine, imaxd, i(gkleak), i(gknyx), i(gkphs)
-			rireturn									;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-			outs		asig, asig
+instr 2             ; Vco instrument
+  iporttime = 0.05  ; Portamento time variable
+  ; Create a ramping up function to represent portamento time
+  kporttime linseg 0, 0.001, iporttime, 1, iporttime
+  kpw portk gkpw, kporttime  ; Apply portamento smoothing
+  imaxd = 1
+  kSwitch changed gkleak, gknyx, gkwave, gkphs
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
+UPDATE:
+  aenv linsegr 0, 0.01, 1, 0.01, 0  ; Anti-click envelope
+  asig vco aenv*gkamp, gkcps, i(gkwave)+1, kpw, gisine, imaxd, i(gkleak), i(gknyx), i(gkphs)
+  rireturn  ; Return from reinitialisation pass to performance time passes
+  outs asig, asig
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0.0	   3600	;GUI
-i 11		0.0     0.01	;INIT
+; Instr | start | duration
+i 10 0.0 3600  ; GUI
+i 11 0.0 0.01  ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -113,9 +117,9 @@ i 11		0.0     0.01	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -133,15 +137,20 @@ i 11		0.0     0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -162,14 +171,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -191,14 +200,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -265,11 +274,23 @@ i 11		0.0     0.01	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off - MIDI</text>
+  <text>On / Off - MIDI</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -287,14 +308,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -317,15 +338,20 @@ vco</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -351,14 +377,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>2</borderradius>
@@ -380,14 +406,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -409,14 +435,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -456,14 +482,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -485,14 +511,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -532,14 +558,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -561,14 +587,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -608,14 +634,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -637,14 +663,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -684,14 +710,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -713,14 +739,14 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

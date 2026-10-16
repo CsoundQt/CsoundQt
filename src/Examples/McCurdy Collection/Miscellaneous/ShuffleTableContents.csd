@@ -1,142 +1,155 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-giTable	ftgen	0,0,-12,-2, 8.00, 8.01, 8.02, 8.03, 8.04, 8.05, 8.06, 8.07, 8.08, 8.09, 8.10, 8.11	;CHROMATIC SCALE - 12 ITEMS - NEGATIVE TABLE SIZE PERMITS THE USE OF NON-ZERO TABLE SIZE
-gisine	ftgen	0, 0, 4096, 10, 1														;A SINE WAVE
+; Chromatic scale - 12 items - negative table size permits the use of non-zero table size
+giTable ftgen 0, 0, -12, -2, 8.00, 8.01, 8.02, 8.03, 8.04, 8.05, 8.06, 8.07, 8.08, 8.09, 8.10, 8.11
+gisine  ftgen 0, 0, 4096, 10, 1  ; A sine wave
 
 
-instr	1	;SHUFFLE TABLE CONTENTS
-	iNumItems		=		ftlen(giTable)									;DERIVE THE NUMBER OF ITEMS IN THE FUNCTION TABLE
-	iIndices		ftgen	0,0,-12,-2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12		;TABLE OF INDEX VALUES (+1) - SHOULD CORRESPOND TO THE NUMBER OF ITEMS IN THE ORIGINAL TABLE
-	iIndicesBuffer	ftgen	0,0,-12,-2, 0									;BUFFER TABLE FOR JUMBLED UP INDICES
-	iTableBuffer	ftgen	0,0,-12,-2, 0									;BUFFER TABLE INITIALLY CONSISTING OF ZEROES
-	kcount 		init 	1											;INITIALISE COUNTER
+instr 1                       ; Shuffle table contents
+  iNumItems = ftlen(giTable)  ; Derive the number of items in the function table
+  ; Table of index values (+1) - should correspond to the number of items in the original
+  ; table
+  iIndices       ftgen 0, 0, -12, -2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+  iIndicesBuffer ftgen 0, 0, -12, -2, 0  ; Buffer table for jumbled up indices
+  iTableBuffer   ftgen 0, 0, -12, -2, 0  ; Buffer table initially consisting of zeroes
+  kcount init 1                          ; Initialise counter
 
-	begin:															;LABEL
-	kfn			random	0,iNumItems									;RANDOM TABLE ITEM INDEX
-	kfn			=		int(kfn)										;CONVERT TO INTEGER (THIS STEP IS NOT ACTUALLY REQUIRED)
-	krandval		table	kfn, iIndices									;READ THE VALUE AT THE RANDOMLY CHOSEN INDEX LOCATION
-	;CHECK IF RANDOMLY CHOSEN ITEM HAS ALREADY BEEN CHOSEN AND INSERTED INTO NEW TABLE
-	kcheckcount	=	1												;COUNTER USED THROUGHOUT CHECKING PROCESS
+begin:                          ; Label
+  kfn random 0, iNumItems       ; Random table item index
+  kfn = int(kfn)                ; Convert to integer (this step is not actually required)
+  krandval table kfn, iIndices  ; Read the value at the randomly chosen index location
+  ; Check if randomly chosen item has already been chosen and inserted into new table
+  kcheckcount = 1  ; Counter used throughout checking process
 
-	checkbegin:														;LABEL - START OF CHECKING PROCESS
-	kcheckval		table	kcheckcount-1, iIndicesBuffer						;READ VALUE FROM TABLE ACCORDING TO CURRENT checkcount CYCLE 
-	if (kcheckval=krandval)	kgoto	begin								;IF VALUE ALREADY EXISTS, REDO THE RANDOMIZATION PROCESS
-		kcheckcount	=	kcheckcount + 1								;INCREMENT CHECK COUNTER
-	if (kcheckcount<kcount)	kgoto	checkbegin							;UNTIL ALL VALUES HAVE BEEN TESTED REPEAT CHECK FOR NEXT VALUE
-			tablew	krandval, kcount-1, iIndicesBuffer						;ONCE VALUE HAS BEEN VERIFIED WRITE TO TABLE 
-	kcount	=		kcount + 1										;INCREMENT MAIN COUNTER
-	if (kcount <= iNumItems) goto begin									;UNTIL TABLE IS FILLED REPEAT CYCLE
-	
-	;CREATE NEW TABLE IN THE BUFFER TABLE ACCORDING TO NEW ARRANGEMENT OF INDICES
-	kcount	=	1													;SET COUNTER TO '1'
+checkbegin:  ; Label - start of checking process
+  ; Read value from table according to current checkcount cycle
+  kcheckval table kcheckcount-1, iIndicesBuffer
+  ; If value already exists, redo the randomization process
+  if (kcheckval = krandval) kgoto begin
+  kcheckcount = kcheckcount + 1  ; Increment check counter
+  ; Until all values have been tested repeat check for next value
+  if (kcheckcount<kcount) kgoto checkbegin
+  tablew krandval, kcount-1, iIndicesBuffer  ; Once value has been verified write to table
+  kcount = kcount + 1                        ; Increment main counter
+  if (kcount <= iNumItems) goto begin        ; Until table is filled repeat cycle
 
-	begin2:															;BEGINNING OF LOOP LABEL
-	kndx		table	kcount-1, iIndicesBuffer								;READ INDEX VALUE FROM TABLE OF INDICES BUFFER
-	kval		table	kndx-1, giTable									;READ ITEM VALUE AT CURRENT INDEX LOCATION
-			tablew	kval, kcount-1, iTableBuffer							;WRITE READ ITEM INTO TABLE BUFFER
-	kcount	=		kcount + 1										;INCREMENT COUNTER
-	if (kcount <= iNumItems) goto begin2									;UNTIL TABLE IS COMPLETELY WRITTEN REPEAT CYCLE
-			
-			tablecopy	giTable, iTableBuffer 								;REPLACE ORIGINAL TABLE WITH BUFFER (SHUFFLED) TABLE
-			event	"i", 2, 0, 0.1										;PRINT TABLE VALUES
-			turnoff													;WHEN DONE, TURN OFF THIS INSTRUMENT
+  ; Create new table in the buffer table according to new arrangement of indices
+  kcount = 1  ; Set counter to '1'
+
+begin2:                                 ; Beginning of loop label
+  kndx table kcount-1, iIndicesBuffer   ; Read index value from table of indices buffer
+  kval table kndx-1, giTable            ; Read item value at current index location
+  tablew kval, kcount-1, iTableBuffer   ; Write read item into table buffer
+  kcount = kcount + 1                   ; Increment counter
+  if (kcount <= iNumItems) goto begin2  ; Until table is completely written repeat cycle
+
+  tablecopy giTable, iTableBuffer  ; Replace original table with buffer (shuffled) table
+  event "i", 2, 0, 0.1             ; Print table values
+  turnoff                          ; When done, turn off this instrument
 endin
 
-instr	2	;PRINT TABLE VALUES TO COMMAND LINE AND BOXES
-	iNumItems	=		ftlen(giTable)										;DERIVE THE NUMBER OF ITEMS IN THE FUNCTION TABLE
-			prints	"\\n"											;NEWLINE
-	icount	init		1												;INITIALIZE COUNTER
+instr 2                       ; Print table values to command line and boxes
+  iNumItems = ftlen(giTable)  ; Derive the number of items in the function table
+  prints "\\n"                ; Newline
+  icount init 1               ; Initialize counter
 
-	BEGIN:															;LABEL
-	ival		table	icount-1, giTable       								;READ VALUE FROM TABLE
-			print	ival												;PRINT READ VALUE
-	icount	=		icount + 1										;INCREMENT COUNTER
-	if	icount<=iNumItems	goto	BEGIN									;CHECK IF WE ARE AT THE LAST VALUE OF TABLE, IF NOT, REPEAT PRINT TASK
+BEGIN:                          ; Label
+  ival table icount-1, giTable  ; Read value from table
+  print ival                    ; Print read value
+  icount = icount + 1           ; Increment counter
+  ; Check if we are at the last value of table, if not, repeat print task
+  if icount <= iNumItems goto BEGIN
 
-	;GUI UPDATE
-	;CREATE A MACRO TO REDUCE CODE REPETITION
-#define	FLPRINT(N)
-	#
-	ipch$N	table		$N-1, giTable									;READ PITCH VALUES FROM TABLE
-			outvalue		"Item$N", ipch$N								;WRITE PITCH VALUES TO TEXT BOXES
-	#
-	;EXECUTE MACRO MULTIPLE TIMES
-	$FLPRINT(1)
-	$FLPRINT(2)
-	$FLPRINT(3)
-	$FLPRINT(4)
-	$FLPRINT(5)
-	$FLPRINT(6)
-	$FLPRINT(7)
-	$FLPRINT(8)
-	$FLPRINT(9)
-	$FLPRINT(10)
-	$FLPRINT(11)
-	$FLPRINT(12)
-	
-	turnoff															;TURN THIS INSTRUMENT OFF
+  ; GUI update
+  ; Create a macro to reduce code repetition
+  #define FLPRINT(N)
+  #
+  ipch$N table $N-1, giTable  ; Read pitch values from table
+  outvalue "Item$N", ipch$N   ; Write pitch values to text boxes
+  #
+  ; Execute macro multiple times
+  $FLPRINT(1)
+  $FLPRINT(2)
+  $FLPRINT(3)
+  $FLPRINT(4)
+  $FLPRINT(5)
+  $FLPRINT(6)
+  $FLPRINT(7)
+  $FLPRINT(8)
+  $FLPRINT(9)
+  $FLPRINT(10)
+  $FLPRINT(11)
+  $FLPRINT(12)
+
+  turnoff  ; Turn this instrument off
 endin
 
-instr	3	;TRIGGER NOTES IN SOUND GENERATING INSTRUMENT
-	iNumItems	=		ftlen(giTable)										;DERIVE THE NUMBER OF ITEMS IN THE FUNCTION TABLE
-	icount	init		1
-	igap		init		0.2
-	iwhen	init		0	
+instr 3                       ; Trigger notes in sound generating instrument
+  iNumItems = ftlen(giTable)  ; Derive the number of items in the function table
+  icount init 1
+  igap   init 0.2
+  iwhen  init 0
 
-	PLAYBEGIN:
-	ipch		table	icount-1, giTable									;READ PITCH (pch FORMAT) FROM TABLE ACCORDING TO WHERE WE ARE IN THE SEQUENCE
-			event_i	"i",4, iwhen, 0.6, ipch								;CREATE A NOTE EVENT TO BE PLAYED BY INSTR 3
-	iwhen	=		iwhen + igap										;CREATE THE TIME THE NEXT NOTE WILL BE PLAYED
-	igap		=		igap * 1.05										;GAP BETWEEN NOTES INCREASES AS WE PROGRESS RESULT IN A RALLENTANDO (SLOWING DOWN) AS THE SEQUENCE IS PLAYED
-	icount	= 		icount + 1
-	if icount<=iNumItems goto PLAYBEGIN									;CHECK IF WE ARE AT THE LAST VALUE OF TABLE, IF NOT, REPEAT PRINT TASK
+PLAYBEGIN:
+  ; Read pitch (pch format) from table according to where we are in the sequence
+  ipch table icount-1, giTable
+  event_i "i", 4, iwhen, 0.6, ipch  ; Create a note event to be played by instr 3
+  iwhen = iwhen + igap              ; Create the time the next note will be played
+  ; Gap between notes increases as we progress result in a rallentando (slowing down) as
+  ; the sequence is played
+  igap   = igap * 1.05
+  icount = icount + 1
+  ; Check if we are at the last value of table, if not, repeat print task
+  if icount <= iNumItems goto PLAYBEGIN
 
-	turnoff															;TURN THIS INSTRUMENT OFF
+  turnoff  ; Turn this instrument off
 endin
 
-instr	4	;SOUND GENERATING INSTRUMENT
-	aenv		line		0.2, p3, 0										;CREATE AN AMPLITUDE ENVELOPE
-	a1		oscili	aenv, cpspch(p4), gisine								;GENERATE AN AUDIO SIGNAL (PITCH RECEIVED FROM INSTR 2 VIA p4)
-			outs		a1, a1											;SEND AUDIO TO OUTPUTS
+instr 4                 ; Sound generating instrument
+  aenv line 0.2, p3, 0  ; Create an amplitude envelope
+  ; Generate an audio signal (pitch received from instr 2 via p4)
+  a1 oscili aenv, cpspch(p4), gisine
+  outs a1, a1  ; Send audio to outputs
 endin
 
-instr	5	;PERFORM RETROGRADE
-	iTableBuffer	ftgen	0,0,-12,-2, 0									;BUFFER TABLE INITIALLY CONSISTING OF ZEROES
-	iNumItems		=		ftlen(giTable)									;DERIVE THE NUMBER OF ITEMS IN THE FUNCTION TABLE
-	iTableBuffer	ftgen	0,0,-iNumItems,-2, 0							;BUFFER TABLE INITIALLY CONSISTING OF ZEROES
-	kcount 		init 	1											;INITIALISE COUNTER
+instr 5                                ; Perform retrograde
+  iTableBuffer ftgen 0, 0, -12, -2, 0  ; Buffer table initially consisting of zeroes
+  iNumItems = ftlen(giTable)           ; Derive the number of items in the function table
+  ; Buffer table initially consisting of zeroes
+  iTableBuffer ftgen 0, 0, -iNumItems, -2, 0
+  kcount init 1  ; Initialise counter
 
-	begin:															;LABEL
-	kval		table	iNumItems - kcount, giTable
-			tablew	kval, kcount-1, iTableBuffer
-	kcount	=		kcount + 1										;INCREMENT MAIN COUNTER
-	if (kcount <= iNumItems) goto begin									;UNTIL TABLE IS FILLED REPEAT CYCLE
-			
-			tablecopy	giTable, iTableBuffer 								;REPLACE ORIGINAL TABLE WITH BUFFER (SHUFFLED) TABLE
-			event	"i", 2, 0, 0.1										;PRINT TABLE VALUES
-			turnoff													;WHEN DONE, TURN OFF THIS INSTRUMENT
+begin:  ; Label
+  kval table iNumItems - kcount, giTable
+  tablew kval, kcount-1, iTableBuffer
+  kcount = kcount + 1                  ; Increment main counter
+  if (kcount <= iNumItems) goto begin  ; Until table is filled repeat cycle
+
+  tablecopy giTable, iTableBuffer  ; Replace original table with buffer (shuffled) table
+  event "i", 2, 0, 0.1             ; Print table values
+  turnoff                          ; When done, turn off this instrument
 endin
 </CsInstruments>
 <CsScore>
-i 2 0    0.001
+i 2 0 0.001
 f 0 3600
 </CsScore>
 </CsoundSynthesizer>
@@ -150,9 +163,9 @@ f 0 3600
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -170,15 +183,20 @@ f 0 3600
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -201,6 +219,18 @@ f 0 3600
   <eventLine>i 1 0 0.1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -218,14 +248,14 @@ f 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -247,15 +277,20 @@ f 0 3600
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -277,14 +312,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -306,15 +341,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -335,15 +375,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -364,15 +409,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -393,15 +443,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -422,15 +477,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -451,15 +511,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -480,15 +545,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -509,15 +579,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -538,15 +613,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -567,15 +647,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -596,15 +681,20 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -627,6 +717,18 @@ This example shuffles the contents of a function table in a fashion similar to s
   <eventLine>i 5 0 0.1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6390</objectName>
@@ -646,6 +748,18 @@ This example shuffles the contents of a function table in a fashion similar to s
   <eventLine>i 3 0 0.1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -663,14 +777,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -692,14 +806,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -721,14 +835,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -751,14 +865,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -780,14 +894,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -809,14 +923,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -838,14 +952,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -867,14 +981,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -896,14 +1010,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -925,14 +1039,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -954,14 +1068,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -983,14 +1097,14 @@ This example shuffles the contents of a function table in a fashion similar to s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

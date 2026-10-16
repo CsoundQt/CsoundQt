@@ -1,105 +1,114 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 
 ; Modified for QuteCsound by René, November 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	1,0,4097,10,1						;A SINE WAVE
-gitri		ftgen	2,0,4097,7,0,1024,-1,2048,1,1024,0		;A TRIANGLE WAVE
-giExp10000	ftgen	0, 0, 129, -25, 0, 1.0, 128, 10000.0	;TABLE FOR EXP SLIDER
-giExp15000	ftgen	0, 0, 129, -25, 0, 1.0, 128, 15000.0	;TABLE FOR EXP SLIDER
+gisine     ftgen 1, 0, 4097, 10, 1                             ; A sine wave
+gitri      ftgen 2, 0, 4097, 7, 0, 1024, -1, 2048, 1, 1024, 0  ; A triangle wave
+giExp10000 ftgen 0, 0, 129, -25, 0, 1.0, 128, 10000.0          ; Table for exp slider
+giExp15000 ftgen 0, 0, 129, -25, 0, 1.0, 128, 15000.0          ; Table for exp slider
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkInGain		invalue 	"Input_Gain"
-		kOscFrq		invalue 	"Sine_Tone_Frequency"
-		gkOscFrq		tablei	kOscFrq, giExp10000, 1
-					outvalue	"Sine_Tone_Frequency_Value", gkOscFrq
-		kModFrq		invalue 	"Modulation_Frequency"
-		gkModFrq		tablei	kModFrq, giExp15000, 1
-					outvalue	"Modulation_Frequency_Value", gkModFrq
-		gkDryWet		invalue 	"Mix"
-		gkOutGain		invalue 	"Output_Gain"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkInGain invalue "Input_Gain"
+    kOscFrq  invalue "Sine_Tone_Frequency"
+    gkOscFrq tablei kOscFrq, giExp10000, 1
+    outvalue "Sine_Tone_Frequency_Value", gkOscFrq
+    kModFrq invalue "Modulation_Frequency"
+    gkModFrq tablei kModFrq, giExp15000, 1
+    outvalue "Modulation_Frequency_Value", gkModFrq
+    gkDryWet  invalue "Mix"
+    gkOutGain invalue "Output_Gain"
 
-		gkinput		invalue	"Input"
-		gkAM_RM		invalue	"AM_RM"
-		gkwave		invalue 	"Wave"
+    gkinput invalue "Input"
+    gkAM_RM invalue "AM_RM"
+    gkwave  invalue "Wave"
 
-		Sfile_new		strcpy	""											;INIT TO EMPTY STRING
-		gSfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	gSfile
-		gkfile 		strcmpk	Sfile_new, Sfile_old
-	endif
+    Sfile_new strcpy ""  ; Init to empty string
+    gSfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk gSfile
+    gkfile strcmpk Sfile_new, Sfile_old
+  endif
 endin
 
-instr	1	;GENERATES AN AUDIO STREAM
-	if 		gkinput=0		then												;IF MENU 1 IS SELECTED (LIVE AUDIO IN)
-		asig		inch		1												;READ AUDIO FROM INPUT CHANNEL 1 (LEFT)
-		asig		=		asig * gkInGain									;RESCALE LIVE AUDIO INPUT AUDIO WITH 'InGain' SLIDER
-	elseif	gkinput=1		then												;IF MENU 2 IS SELECTED (SINE TONE)
-		asig		oscili	0.6,gkOscFrq,gisine									;CREATE A SINE TONE OSCILLATOR
-	else																	;ONLY OTHER OPTION IS IF MENU 4 IS SELECTED (AUDIO FILE)
-		kNew_file		changed	gkfile										;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-		if	kNew_file=1	then												;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-			reinit	NEW_FILE												;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-		endif
-		NEW_FILE:
-		;OUTPUTS		OPCODE	FILE  | SPEED | INSKIP | LOOPING (0=OFF 1=ON)
-		asig, aR		FilePlay2	gSfile,  1,      0,         1						;GENERATE 2 AUDIO SIGNALS FROM A STEREO SOUND FILE
-					rireturn												;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-	endif																;END OF CONDITIONAL BRANCHING
-	
-	if	gkAM_RM=0		then													;IF 'Amplitude Modulation' IS SELECTED
-		amod		oscilikt	0.5,gkModFrq,gkwave+1								;CREATE 'Amplitude Modulation' WAVEFORM
-		amod		=	amod + 0.5											;OFFSET 'Amplitude Modulation' WAVEFORM
-	else																	;ONLY OTHER OPTION IS IF 'Ring Modulation' IS SELECTED
-		amod		oscilikt	1,gkModFrq,gkwave+1									;CREATE RING MODULATION OSCILLATOR
-	endif																;END OF CONDITIONAL BRANCHING
-	
-	aModSig		=		asig*amod											;MULTIPLY INPUT SIGNAL BY MODULATION SIGNAL
-	amix			ntrpol	asig, aModSig, gkDryWet								;CREATE DRY/WET MIXED SIGNAL
-				outs		amix * gkOutGain, amix * gkOutGain						;SEND DRY/WET MIXED AUDIO SIGNAL TO OUTPUTS AND RESCALE USING 'gkOutGain' ON-SCREEN SLIDER
+instr 1                ; Generates an audio stream
+  if gkinput = 0 then  ; If menu 1 is selected (live audio in)
+    asig inch 1        ; Read audio from input channel 1 (left)
+    ; Rescale live audio input audio with 'ingain' slider
+    asig = asig * gkInGain
+  elseif gkinput = 1 then              ; If menu 2 is selected (sine tone)
+    asig oscili 0.6, gkOscFrq, gisine  ; Create a sine tone oscillator
+    ; Only other option is if menu 4 is selected (audio file)
+  else
+    ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+    ; variables change. (output 'kswitch' is normally zero)
+    kNew_file changed gkfile
+    if kNew_file = 1 then  ; If i-rate variable change trigger is '1'...
+      reinit NEW_FILE      ; Begin a reinitialisation pass from label 'start'
+    endif
+NEW_FILE:
+    ; Outputs  opcode file  | speed | inskip | looping (0=off 1=on)
+    ; Generate 2 audio signals from a stereo sound file
+    asig, aR FilePlay2 gSfile, 1, 0, 1
+    rireturn  ; Return from reinitialisation pass to performance time passes
+  endif       ; End of conditional branching
+
+  if gkAM_RM = 0 then                      ; IF 'Amplitude Modulation' IS SELECTED
+    amod oscilikt 0.5, gkModFrq, gkwave+1  ; CREATE 'Amplitude Modulation' WAVEFORM
+    amod = amod + 0.5                      ; OFFSET 'Amplitude Modulation' WAVEFORM
+    ; Only other option is if 'ring modulation' is selected
+  else
+    amod oscilikt 1, gkModFrq, gkwave+1  ; Create ring modulation oscillator
+  endif                                  ; End of conditional branching
+
+  aModSig = asig*amod                  ; Multiply input signal by modulation signal
+  amix ntrpol asig, aModSig, gkDryWet  ; Create dry/wet mixed signal
+  ; Send dry/wet mixed audio signal to outputs and rescale using 'gkoutgain' on-screen
+  ; slider
+  outs amix * gkOutGain, amix * gkOutGain
 endin
 
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		3600		;GUI
-i 1		0.2		3600		;AUDIO STREAM
+; Instr | start | duration
+i 10 0 3600   ; GUI
+i 1 0.2 3600  ; Audio stream
 </CsScore>
 </CsoundSynthesizer>
 

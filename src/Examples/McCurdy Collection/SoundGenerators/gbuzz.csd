@@ -1,79 +1,87 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Removed subinstr call to instrument 2 from instrument 1
-;	Use QuteCsound internal midi interface for Amplitude Multiplier (Channel 1, CC#1)
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Removed subinstr call to instrument 2 from instrument 1
+; Use QuteCsound internal midi interface for Amplitude Multiplier (Channel 1, CC#1)
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 16			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gicos	ftgen	0, 0, 65536, 9, 1, 1, 90				;FUNCTION TABLE THAT STORES A SINGLE CYCLE OF A COSINE WAVE
-giExp1	ftgen	0, 0, 129, -25, 0, 1.0, 128, 2000.0	;TABLE FOR EXP SLIDER
+; Function table that stores a single cycle of a cosine wave
+gicos  ftgen 0, 0, 65536, 9, 1, 1, 90
+giExp1 ftgen 0, 0, 129, -25, 0, 1.0, 128, 2000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	gkamp	invalue	"Amplitude"
-	kfreq	invalue	"Frequency"
-	gkfreq	tablei	kfreq, giExp1, 1
-			outvalue	"Frequency_Value", gkfreq	
-	gkmul	invalue	"AmpMult"
-	gklh		invalue	"LowestHarm"
-	gkharm	invalue	"Harmonics"
+instr 10  ; GUI
+  gkamp invalue "Amplitude"
+  kfreq invalue "Frequency"
+  gkfreq tablei kfreq, giExp1, 1
+  outvalue "Frequency_Value", gkfreq
+  gkmul  invalue "AmpMult"
+  gklh   invalue "LowestHarm"
+  gkharm invalue "Harmonics"
 endin
 
-instr	1	;MIDI INPUT INSTRUMENT
-	icps		cpsmidi										;READ CYCLES PER SECOND VALUE FROM MIDI INPUT
-	iamp		ampmidi	1									;READ IN A NOTE VELOCITY VALUE FROM THE MIDI INPUT
-	kamp		=		iamp * gkamp
+instr 1           ; MIDI input instrument
+  icps cpsmidi    ; Read cycles per second value from MIDI input
+  iamp ampmidi 1  ; Read in a note velocity value from the MIDI input
+  kamp = iamp * gkamp
 
-	;PITCH BEND===========================================================================================================================================================
-	iSemitoneBendRange=	2									;PITCH BEND RANGE IN SEMITONES
-	imin		=		0									;EQUILIBRIUM POSITION
-	imax		=		iSemitoneBendRange * .0833333				;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend	pchbend	imin, imax							;PITCH BEND VARIABLE (IN oct FORMAT)
-	koct		=		octcps(icps)
-	kfreq	=		cpsoct(koct + kbend)
-	;=====================================================================================================================================================================
+  ; Pitch
+  ; bend===========================================================================================================================================================
+  iSemitoneBendRange = 2  ; Pitch bend range in semitones
+  imin               = 0  ; Equilibrium position
+  ; Max pitch displacement (in oct format)
+  imax = iSemitoneBendRange * .0833333
+  ; Pitch bend variable (in oct format)
+  kbend pchbend imin, imax
+  koct  = octcps(icps)
+  kfreq = cpsoct(koct + kbend)
+  ; =====================================================================================================================================================================
 
-	iporttime	=		0.05									;PORTAMENTO TIME VARIABLE
-	kporttime	linseg	0,0.001,iporttime,1,iporttime				;CREATE A RAMPING UP FUNCTION TO REPRESENT PORTAMENTO TIME
-	kmulp	portk	gkmul, kporttime						;APPLY PORTAMENTO SMOOTHING
+  iporttime = 0.05  ; Portamento time variable
+  ; Create a ramping up function to represent portamento time
+  kporttime linseg 0, 0.001, iporttime, 1, iporttime
+  kmulp portk gkmul, kporttime  ; Apply portamento smoothing
 
-	;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | NO.OF_HARMONICS | LOWEST_HARMONIC | POWER | FUNCTION_TABLE
-	asig		gbuzz 	kamp,        kfreq,        gkharm,            gklh,       kmulp,       gicos
-	aenv		linsegr	0,0.01,1,0.01,0						;ANTI-CLICK ENVELOPE
-			outs		asig * aenv, asig * aenv					;SEND AUDIO OUTPUT TO THE SPEAKERS
+  ; Output opcode amplitude | frequency | no.of_harmonics | lowest_harmonic | power |
+  ; function_table
+  asig gbuzz kamp, kfreq, gkharm, gklh, kmulp, gicos
+  aenv linsegr 0, 0.01, 1, 0.01, 0  ; Anti-click envelope
+  outs asig * aenv, asig * aenv     ; Send audio output to the speakers
 endin
 
-instr	2	;GUZZ INSTRUMENT
-	iporttime	=		0.05									;PORTAMENTO TIME VARIABLE
-	kporttime	linseg	0,0.001,iporttime,1,iporttime				;CREATE A RAMPING UP FUNCTION TO REPRESENT PORTAMENTO TIME
-	kmul		portk	gkmul, kporttime						;APPLY PORTAMENTO SMOOTHING
+instr 2             ; Guzz instrument
+  iporttime = 0.05  ; Portamento time variable
+  ; Create a ramping up function to represent portamento time
+  kporttime linseg 0, 0.001, iporttime, 1, iporttime
+  kmul portk gkmul, kporttime  ; Apply portamento smoothing
 
-	;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | NO.OF_HARMONICS | LOWEST_HARMONIC | POWER | FUNCTION_TABLE
-	asig		gbuzz 	gkamp,        gkfreq,        gkharm,            gklh,       kmul,       gicos
-	aenv		linsegr	0,0.01,1,0.01,0						;ANTI-CLICK ENVELOPE
-			outs		asig * aenv, asig * aenv					;SEND AUDIO OUTPUT TO THE SPEAKERS
+  ; Output opcode amplitude | frequency | no.of_harmonics | lowest_harmonic | power |
+  ; function_table
+  asig gbuzz gkamp, gkfreq, gkharm, gklh, kmul, gicos
+  aenv linsegr 0, 0.01, 1, 0.01, 0  ; Anti-click envelope
+  outs asig * aenv, asig * aenv     ; Send audio output to the speakers
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0.0	   3600	;GUI
+; Instr | start | duration
+i 10 0.0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -86,9 +94,9 @@ i 10		0.0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -106,15 +114,20 @@ i 10		0.0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -132,11 +145,23 @@ i 10		0.0	   3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> ON / OFF (MIDI)</text>
+  <text>ON / OFF (MIDI)</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -154,14 +179,14 @@ i 10		0.0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -183,14 +208,14 @@ i 10		0.0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -212,15 +237,20 @@ i 10		0.0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -242,14 +272,14 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -289,14 +319,14 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -318,14 +348,14 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -365,14 +395,14 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -392,14 +422,14 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -423,14 +453,14 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -452,14 +482,14 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -499,14 +529,14 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -526,14 +556,14 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>

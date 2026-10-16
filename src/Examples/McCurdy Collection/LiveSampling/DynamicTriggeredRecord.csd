@@ -1,183 +1,209 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 January 2011 and QuteCsound svn rev 805
 
 
-;Notes on modifications from original csd:
-;	Macro SWITCH and modifications in instruments to get the same behaviour as FLTK button
+; Notes on modifications from original csd:
+; Macro SWITCH and modifications in instruments to get the same behaviour as FLTK button
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt
+; -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-	giaudio		ftgen	0, 0, 1048576, -7, 0, 1048576, 0	;AUDIO DATA STORAGE
+giaudio ftgen 0, 0, 1048576, -7, 0, 1048576, 0  ; Audio data storage
 
-	gkrecdur		init		0
+gkrecdur init 0
 
-				strset	400, "Record_Led"
+strset 400, "Record_Led"
 
 
 #define SWITCH(Name'Value'Instr_Led'Instr_Event)
 #
-	;To have a latched+event+value button *****************************************
-				strset	$Value, "$Name_L"
-	k$Name		init		0
+; To have a latched+event+value button *****************************************
+strset $Value, "$Name_L"
+k$Name init 0
 
-	kButton		invalue	"$Name_B"
-	kB_ON		trigger	kButton, 0.5, 0
+kButton invalue "$Name_B"
+kB_ON trigger kButton, 0.5, 0
 
-	if (k$Name == 0) then
-		schedkwhen	kB_ON, 0, 0, $Instr_Led, 0, 0, $Value, 1	;Led ON
-		schedkwhen	kB_ON, 0, 0, $Instr_Event, 0, -1			;Start instr
-	else
-		schedkwhen	kB_ON, 0, 0, $Instr_Led, 0, 0, $Value, 0	;Led OFF
-		schedkwhen	kB_ON, 0, 0, -$Instr_Event, 0, 1			;Stop instr
-	endif
-	k$Name		invalue	"$Name_L" 
-	;******************************************************************************
+if (k$Name == 0) then
+  schedkwhen kB_ON, 0, 0, $Instr_Led, 0, 0, $Value, 1  ; Led ON
+  schedkwhen kB_ON, 0, 0, $Instr_Event, 0, -1          ; Start instr
+else
+  schedkwhen kB_ON, 0, 0, $Instr_Led, 0, 0, $Value, 0  ; Led off
+  schedkwhen kB_ON, 0, 0, -$Instr_Event, 0, 1          ; Stop instr
+endif
+k$Name invalue "$Name_L"
+; ******************************************************************************
 #
 
 
-instr	10	;GUI
+instr 10  ; GUI
 
-	$SWITCH(RecReady'100'11'3)
-	$SWITCH(PlayOnce'200'11'5)
-	$SWITCH(LoopPlay'300'11'6)
-		
-	gkAutoPlayOnce		invalue	"Auto_Play_Once"
-	gkAutoLoopPlay		invalue	"Auto_Play_Looped"
-	gkResetRecReady	invalue	"Reset_Rec_Ready"
+  $SWITCH(RecReady'100'11'3)
+  $SWITCH(PlayOnce'200'11'5)
+  $SWITCH(LoopPlay'300'11'6)
 
-	gkOnThresh		invalue 	"On_Threshold"
-	gkOffThresh		invalue 	"Off_Threshold"
-	gkSpeed			invalue 	"Speed"
-	gkGain			invalue 	"Gain"
+  gkAutoPlayOnce  invalue "Auto_Play_Once"
+  gkAutoLoopPlay  invalue "Auto_Play_Looped"
+  gkResetRecReady invalue "Reset_Rec_Ready"
+
+  gkOnThresh  invalue "On_Threshold"
+  gkOffThresh invalue "Off_Threshold"
+  gkSpeed     invalue "Speed"
+  gkGain      invalue "Gain"
 endin
 
-instr	11	;LED ON/OFF
-	Sp4		strget	p4
-			outvalue	Sp4, p5
+instr 11  ; Led on/off
+  Sp4 strget p4
+  outvalue Sp4, p5
 endin
 
-instr	1	;MIDI PLAYBACK
-	icps		cpsmidi								;READ MIDI PITCH DATA FROM MIDI INPUT
-	imlt		=		icps/cpsoct(8)					;MIDDLE C IS BASE FREQUENCY
-	iamp		ampmidi	1
-	andx		line		0,1,1						;INFINITELY RISING LINE USED AS STARTING POINT FOR FILE POINTER
-	if	gkSpeed >= 0	then							;IF gkSpeed is POSITIVE (OR ZERO), I.E. FORWARDS PLAYBACK
-		andx		=	andx*sr*imlt					;RESCALE POINTER ACCORDING TO SPEED
-		kndx	downsamp	andx							;CREATE kndx, A K-RATE VERSION OF andx
-		if	kndx >= gkrecdur	then					;IF END OF RECORDING IS REACHED...
-			schedkwhen	1, 0, 0, 11, 0, 0, 200, 0	;TURN OFF PlayOnce Button Led &
-			turnoff								;TURN OFF THIS INSTRUMENT IMMEDIATELY.
-		endif
-	else
-		andx	=		(andx*sr*imlt)+i(gkrecdur)		;RESCALE POINTER ACCORDING TO SPEED
-		kndx	downsamp	andx							;CREATE kndx, A K-RATE VERSION OF andx
-		if	kndx < 0	then							;IF END OF RECORDING IS REACHED...
-			schedkwhen	1, 0, 0, 11, 0, 0, 200, 0	;TURN OFF PlayOnce Button Led &
-			turnoff								;TURN OFF THIS INSTRUMENT IMMEDIATELY.
-		endif
-	endif
-	;OUT 	OPCODE 	INDEX | FUNCTION_TABLE
-	asig		table3	andx,      giaudio				;READ AUDIO FROM AUDIO STORAGE FUNCTION TABLE
-	aenv		linsegr	0,0.001,1,0.01,0
-	asig		=		asig * gkGain * aenv * iamp
-			outs		asig, asig
+instr 1                  ; MIDI playback
+  icps cpsmidi           ; Read MIDI pitch data from MIDI input
+  imlt = icps/cpsoct(8)  ; Middle c is base frequency
+  iamp ampmidi 1
+  ; Infinitely rising line used as starting point for file pointer
+  andx line 0, 1, 1
+  ; If gkspeed is positive (or zero), i.e. Forwards playback
+  if gkSpeed >= 0 then
+    andx = andx*sr*imlt                     ; Rescale pointer according to speed
+    kndx downsamp andx                      ; Create kndx, a k-rate version of andx
+    if kndx >= gkrecdur then                ; If end of recording is reached...
+      schedkwhen 1, 0, 0, 11, 0, 0, 200, 0  ; TURN OFF PlayOnce Button Led &
+      turnoff                               ; Turn off this instrument immediately.
+    endif
+  else
+    andx = (andx*sr*imlt)+i(gkrecdur)       ; Rescale pointer according to speed
+    kndx downsamp andx                      ; Create kndx, a k-rate version of andx
+    if kndx < 0 then                        ; If end of recording is reached...
+      schedkwhen 1, 0, 0, 11, 0, 0, 200, 0  ; TURN OFF PlayOnce Button Led &
+      turnoff                               ; Turn off this instrument immediately.
+    endif
+  endif
+  ; Out  opcode  index | function_table
+  asig table3 andx, giaudio  ; Read audio from audio storage function table
+  aenv linsegr 0, 0.001, 1, 0.01, 0
+  asig = asig * gkGain * aenv * iamp
+  outs asig, asig
 endin
 
-instr	2	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
-	gasig 		inch		1						;READ CHANNEL 1 (LEFT CHANNEL IF STEREO)
+instr 2         ; Read rt audio in and create follow signal
+  gasig inch 1  ; Read channel 1 (left channel if stereo)
 
-	afollow 		follow2 	gasig, .1, .1				;CREATE A AMPLITUDE FOLLOWING UNIPOLAR SIGNAL
-	gkfollow		downsamp	afollow					;DOWNSAMPLE TO CREATE A K-RATE VERSION OF THE AMPLITUDE FOLLOWING SIGNAL
-	kmeter		downsamp	afollow					;CONVERT AMPLITUDE FOLLOWING SIGNAL TO K-RATE
-	kmeter		portk	kmeter, .1				;SMOOTH THE MOVEMENT OF THE AMPLITUDE FOLLOWING SIGNAL - THIS WILL MAKE THE METERS EASIER TO VIEW
-	kmetertrig	metro	30						;METRONOMIC TRIGGER
-	if kmetertrig = 1 then
-		outvalue	"Meter", kmeter					;UPDATE METER
-	endif
+  afollow follow2 gasig, .1, .1  ; Create a amplitude following unipolar signal
+  ; Downsample to create a k-rate version of the amplitude following signal
+  gkfollow downsamp afollow
+  kmeter   downsamp afollow  ; Convert amplitude following signal to k-rate
+  ; Smooth the movement of the amplitude following signal - this will make the meters
+  ; easier to view
+  kmeter portk kmeter, .1
+  kmetertrig metro 30  ; Metronomic trigger
+  if kmetertrig = 1 then
+    outvalue "Meter", kmeter  ; Update meter
+  endif
 endin
 
-instr	3	;RECORD_READY
-	if	gkfollow > gkOnThresh	then					;IF AMPLITUDE FOLLOWING SIGNAL IS ABOVE 'ON THRESHOLD'...
-		schedkwhen	1, 0, 0, 11, 0, 0, 400, 1		;...TURN ON 'RECORDING' RED LIGHT...
-		schedkwhen	1, 0, 0, 11, 0, 0, 100, 0		;...TURN OFF 'RECORD READY' BUTTON LIGHT
-		;SCHEDKWHEN 	KTRIGGER, KMINTIM, KMAXNUM, KINSNUM, KWHEN, KDUR
-		schedkwhen    	1, 	     0,       1,       4,      0,    -1		;AND TRIGGER RECORD
-		turnoff									; AND TURN OFF THIS INSTRUMENT IMMEDIATELY (WE DON'T WANT TO RETRIGGER RECORDING UNTIL THE CURRENT ONE HAS COMPLETED) 
-	endif										;END OF CONDITIONAL BRANCHING
+instr 3  ; Record_ready
+  ; If amplitude following signal is above 'on threshold'...
+  if gkfollow > gkOnThresh then
+    schedkwhen 1, 0, 0, 11, 0, 0, 400, 1  ; ...Turn on 'recording' red light...
+    schedkwhen 1, 0, 0, 11, 0, 0, 100, 0  ; ...Turn off 'record ready' button light
+    ; Schedkwhen  ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur
+    schedkwhen 1, 0, 1, 4, 0, -1  ; And trigger record
+    ; And turn off this instrument immediately (we don't want to retrigger recording until
+    ; the current one has completed)
+    turnoff
+  endif  ; End of conditional branching
 endin
 
-instr	4	;RECORD
-	itablen	tableng	giaudio						;INTERROGATE FUNCTION TABLE USED FOR AUDIO RECORDING TO DETERMINE ITS LENGTH - THIS WILL BE USED TO CONTROL THE MOVEMENT OF THE WRITE POINTER
-	andx		phasor	sr / itablen					;CREATE A WRITE POINTER USING phasor. FREQUENCY WILL BE DEPENDENT UPON SAMPLING RATE (sr) AND THE LENGTH OF THE TABLE USED FOR STORAGE
-	andx		=		andx * itablen					;RESCALE THE SCOPE OF THE POINTER
-	gkrecdur	downsamp	andx							;CREATE A GLOBAL K-RATE VERSION OF THE WRITE POINTER
-	aenv		linsegr	0, .005, 1, .005, 0				;CREATE 'ANTI-CLICK' AMPLITUDE ENVELOPE FOR AUDIO THAT IS WRITTEN TO THE FUNCTION TABLE
-	asig		=		gasig * aenv					;'ANTI-CLICK' AMPLITUDE ENVELOPE IS APPLIED TO AUDIO BEFORE IT IS WRITTEN TO THE TABLE
-			tablew	asig, andx, giaudio				;WRITE AUDIO TO AUDIO STORAGE TABLE
+instr 4  ; Record
+  ; Interrogate function table used for audio recording to determine its length - this
+  ; will be used to control the movement of the write pointer
+  itablen tableng giaudio
+  ; Create a write pointer using phasor. Frequency will be dependent upon sampling rate
+  ; (sr) and the length of the table used for storage
+  andx phasor sr / itablen
+  andx = andx * itablen   ; Rescale the scope of the pointer
+  gkrecdur downsamp andx  ; Create a global k-rate version of the write pointer
+  ; Create 'anti-click' amplitude envelope for audio that is written to the function table
+  aenv linsegr 0, .005, 1, .005, 0
+  ; 'Anti-click' amplitude envelope is applied to audio before it is written to the table
+  asig = gasig * aenv
+  tablew asig, andx, giaudio  ; Write audio to audio storage table
 
-	if	gkfollow < gkOffThresh	then					;IF OUR AMPLITUDE FOLLOWING VARIABLE HAS DROPPED BELOW THE 'OFF THRESHOLD'...
-		schedkwhen	1, 0, 0, 11, 0, 0, 400, 0		;...TURN OFF 'RECORDING' RED LIGHT
-		if	gkAutoLoopPlay = 1	then					;IF 'Auto Play Looped' IS ON...
-			schedkwhen	1, 0, 0, 11, 0, 0, 300, 1	;TURN ON PLAY LOOPED BUTTON LIGHT
-			schedkwhen	1, 0, 0, 6, 0, -1			;Start PLAY_LOOPED
-		elseif	gkAutoPlayOnce = 1	then				;IF 'Auto Play Once' IS ON...
-			schedkwhen	1, 0, 0, 11, 0, 0, 200, 1	;...TURN ON 'Play Once' BUTTON LIGHT
-			schedkwhen	1, 0, 0, 5, 0, -1			;Start PLAY_ONCE
-		endif									;END OF CURRENT CONDITIONAL BRANCH
-		if	gkResetRecReady = 1	then					;IF 'Reset Rec. Ready' IS ON...
-			schedkwhen	1, 0, 0, 11, 0, 0, 100, 1	;...TURN ON 'Rec. Ready' BUTTON LIGHT
-			schedkwhen	1, 0, 0, 3, 0, -1			;Start RECORD_READY
-		endif									;END OF CURRENT CONDITIONAL BRANCH
-		turnoff									;TURNOFF THIS INSTRUMENT IMMEDIATELY
-	endif										;END OF CONDITIONAL BRANCHING
+  ; If our amplitude following variable has dropped below the 'off threshold'...
+  if gkfollow < gkOffThresh then
+    schedkwhen 1, 0, 0, 11, 0, 0, 400, 0    ; ...Turn off 'recording' red light
+    if gkAutoLoopPlay = 1 then              ; IF 'Auto Play Looped' IS ON...
+      schedkwhen 1, 0, 0, 11, 0, 0, 300, 1  ; Turn on play looped button light
+      schedkwhen 1, 0, 0, 6, 0, -1          ; Start play_looped
+    elseif gkAutoPlayOnce = 1 then          ; IF 'Auto Play Once' IS ON...
+      schedkwhen 1, 0, 0, 11, 0, 0, 200, 1  ; ...Turn on 'play once' button light
+      schedkwhen 1, 0, 0, 5, 0, -1          ; Start play_once
+    endif                                   ; End of current conditional branch
+    if gkResetRecReady = 1 then             ; IF 'Reset Rec. Ready' IS ON...
+      schedkwhen 1, 0, 0, 11, 0, 0, 100, 1  ; ...Turn on 'rec. Ready' button light
+      schedkwhen 1, 0, 0, 3, 0, -1          ; Start record_ready
+    endif                                   ; End of current conditional branch
+    turnoff                                 ; Turnoff this instrument immediately
+  endif                                     ; End of conditional branching
 endin
 
-instr	5	;PLAY_ONCE
-	andx		line		0, 1, 1						;INFINITELY RISING LINE USED AS STARTING POINT FOR FILE POINTER
-	if	gkSpeed >= 0	then							;IF skSpeed is POSITIVE (OR ZERO), I.E. FORWARDS PLAYBACK
-		andx	=		andx*sr*gkSpeed				;RESCALE POINTER ACCORDING TO SPEED
-		kndx	downsamp	andx							;CREATE kndx, A K-RATE VERSION OF andx
-		if	kndx >= gkrecdur	then					;IF END OF RECORDING IS REACHED...
-			schedkwhen	1, 0, 0, 11, 0, 0, 200, 0	;...DEACTIVATE "PLAY ONCE" BUTTON &
-			turnoff								;TURN OFF THIS INSTRUMENT IMMEDIATELY.
-		endif
-	else
-		andx	=		(andx*sr*gkSpeed)+i(gkrecdur)		;RESCALE POINTER ACCORDING TO SPEED
-		kndx	downsamp	andx							;CREATE kndx, A K-RATE VERSION OF andx
-		if	kndx < 0	then							;IF END OF RECORDING IS REACHED...
-			schedkwhen	1, 0, 0, 11, 0, 0, 200, 0	;...DEACTIVATE "PLAY ONCE" BUTTON &
-			turnoff								;TURN OFF THIS INSTRUMENT IMMEDIATELY.
-		endif
-	endif
-	;OUT 	OPCODE 	INDEX | FUNCTION_TABLE
-	asig		table3	andx,      giaudio				;READ AUDIO FROM AUDIO STORAGE FUNCTION TABLE
-			outs		asig*gkGain, asig*gkGain
+instr 5  ; Play_once
+  ; Infinitely rising line used as starting point for file pointer
+  andx line 0, 1, 1
+  ; If skspeed is positive (or zero), i.e. Forwards playback
+  if gkSpeed >= 0 then
+    andx = andx*sr*gkSpeed                  ; Rescale pointer according to speed
+    kndx downsamp andx                      ; Create kndx, a k-rate version of andx
+    if kndx >= gkrecdur then                ; If end of recording is reached...
+      schedkwhen 1, 0, 0, 11, 0, 0, 200, 0  ; ...Deactivate "play once" button &
+      turnoff                               ; Turn off this instrument immediately.
+    endif
+  else
+    andx = (andx*sr*gkSpeed)+i(gkrecdur)    ; Rescale pointer according to speed
+    kndx downsamp andx                      ; Create kndx, a k-rate version of andx
+    if kndx < 0 then                        ; If end of recording is reached...
+      schedkwhen 1, 0, 0, 11, 0, 0, 200, 0  ; ...Deactivate "play once" button &
+      turnoff                               ; Turn off this instrument immediately.
+    endif
+  endif
+  ; Out  opcode  index | function_table
+  asig table3 andx, giaudio  ; Read audio from audio storage function table
+  outs asig*gkGain, asig*gkGain
 endin
 
-instr	6	;PLAY_LOOPED
-	irecdur	=		i(gkrecdur)					;DEFINE irecdur, AN I-RATE VERSION OF THE MOST RECENT VALUE OF gkrecdur (RECORDING DURATION IN SAMPLE FRAMES / TABLE POINT VALUES)
-	aptr		phasor	(sr * gkSpeed) / irecdur			;CREATE READ POINTER FREQUENCY DEPENDENT UPON SAMPLING RATE, 'Speed' SLIDER, AND irecdur 
-	aptr		=		aptr * irecdur					;RESCALE READ POINTER ACCCORDING TO irecdur VALUE SO THAT THE ENTIRE DURATION OF THE LAST RECORDING WILL BE PLAYED
-	asig		table3	aptr, giaudio					;READ AUDIO FROM FUNCTION TABLE USING table3 OPCODE
-	aenv		linsegr	1, 3600, 1, .01, 0				;CREATE AN AMPLITUDE ENVELOPE RELEASE FADE OUT TO PREVENT CLICKS IF PLAYBACK IS TERMINATED
-			outs		asig*aenv*gkGain, asig*aenv*gkGain
+instr 6  ; Play_looped
+  ; Define irecdur, an i-rate version of the most recent value of gkrecdur (recording
+  ; duration in sample frames / table point values)
+  irecdur = i(gkrecdur)
+  ; Create read pointer frequency dependent upon sampling rate, 'speed' slider, and
+  ; irecdur
+  aptr phasor (sr * gkSpeed) / irecdur
+  ; Rescale read pointer acccording to irecdur value so that the entire duration of the
+  ; last recording will be played
+  aptr = aptr * irecdur
+  asig table3 aptr, giaudio  ; Read audio from function table using table3 opcode
+  ; Create an amplitude envelope release fade out to prevent clicks if playback is
+  ; terminated
+  aenv linsegr 1, 3600, 1, .01, 0
+  outs asig*aenv*gkGain, asig*aenv*gkGain
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
-i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
+i 10 0 3600  ; GUI
+i 2 0 3600   ; Read rt audio in and create follow signal
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -210,15 +236,20 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>181</r>
-   <g>199</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -236,11 +267,23 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   Record Ready</text>
+  <text>Record Ready</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>PlayOnce_B</objectName>
@@ -255,11 +298,23 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   Play Once</text>
+  <text>Play Once</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>LoopPlay_B</objectName>
@@ -274,11 +329,23 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>       Play Looped </text>
+  <text>Play Looped</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Reset_Rec_Ready</objectName>
@@ -298,6 +365,18 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Auto_Play_Once</objectName>
@@ -312,11 +391,23 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   Auto Play Once</text>
+  <text>Auto Play Once</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Auto_Play_Looped</objectName>
@@ -331,11 +422,23 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    Auto Play Loop</text>
+  <text>Auto Play Loop</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -353,15 +456,20 @@ i  2 0 3600	;READ RT AUDIO IN AND CREATE FOLLOW SIGNAL
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -384,14 +492,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -413,14 +521,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -460,14 +568,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -489,14 +597,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -536,14 +644,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -577,9 +685,9 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -598,14 +706,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -627,14 +735,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -674,14 +782,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -703,14 +811,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -750,14 +858,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -791,9 +899,9 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -824,9 +932,9 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -857,9 +965,9 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -890,9 +998,9 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -911,14 +1019,14 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

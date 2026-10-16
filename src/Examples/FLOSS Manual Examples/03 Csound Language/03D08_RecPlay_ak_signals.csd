@@ -21,7 +21,7 @@ kFreq     randomi   400, 1000, 1; random frequency
 aSnd      poscil    .2, kFreq, giWave; play it
           outs      aSnd, aSnd
 ;;record the k-signal with a phasor as index
-          prints    "RECORDING RANDOM CONTROL SIGNAL!%n"
+          prints    "RECORDING RANDOM CONTROL SIGNAL!\n"
  ;create a writing pointer in the table,
  ;moving in 5 seconds from index 0 to the end
 kindx     phasor    1/5
@@ -30,7 +30,7 @@ kindx     phasor    1/5
   endin
 
   instr 2; read the values of the table and play it with poscil
-          prints    "PLAYING CONTROL SIGNAL!%n"
+          prints    "PLAYING CONTROL SIGNAL!\n"
 kFreq     poscil    1, 1/5, giControl
 aSnd      poscil    .2, kFreq, giWave; play it
           outs      aSnd, aSnd
@@ -38,7 +38,7 @@ aSnd      poscil    .2, kFreq, giWave; play it
 
   instr 3; record live input
 ktim      timeinsts ; playing time of the instrument in seconds
-          prints    "PLEASE GIVE YOUR LIVE INPUT AFTER THE BEEP!%n"
+          prints    "PLEASE GIVE YOUR LIVE INPUT AFTER THE BEEP!\n"
 kBeepEnv  linseg    0, 1, 0, .01, 1, .5, 1, .01, 0
 aBeep     oscils    .2, 600, 0
           outs      aBeep*kBeepEnv, aBeep*kBeepEnv
@@ -55,7 +55,7 @@ aindx     phasor    1/5
   endin
 
   instr 4; read the values from the table and play it with poscil
-          prints    "PLAYING LIVE INPUT!%n"
+          prints    "PLAYING LIVE INPUT!\n"
 aSnd      poscil    .5, 1/5, giAudio
           outs      aSnd, aSnd
   endin

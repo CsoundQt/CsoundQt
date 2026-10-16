@@ -1,140 +1,181 @@
-;WRITTEN BY IAIN MCCURDY, 2006
+; Written by iain mccurdy, 2006
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	ksmps changed from 100 to 10	to avoid the message pvsfread: analysis frame overlap must be >= ksmps
-;	Instrument 1 is activated by MIDI and by the GUI
-;	Add Browser for analysis files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; ksmps changed from 100 to 10 to avoid the message pvsfread: analysis frame overlap must
+; be >= ksmps
+; Instrument 1 is activated by MIDI and by the GUI
+; Add Browser for analysis files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../../SourceMaterials
+--env:SADIR+ = ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gasrc		init		0	;INITIALISE GLOBAL AUDIO VARIABLE TO ZERO 
+gasrc init 0  ; Initialise global audio variable to zero
 
-gisine		ftgen	0, 0, 65536, 10, 1					;SINE WAVE
-giExp2000		ftgen	0, 0, 129, -25, 0, 20.0, 128, 2000.0	;TABLE FOR EXP SLIDER
+gisine    ftgen 0, 0, 65536, 10, 1                    ; Sine wave
+giExp2000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 2000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kcps			invalue 	"CPS"
-		gkcps		tablei	kcps, giExp2000, 1
-					outvalue	"CPS_Value", gkcps				;init  200.0		
-		gkptr		invalue 	"Pointer"						;init 0.1
-		gkspd		invalue 	"Speed"						;init 1.0
-		gkinput		invalue 	"Input"						;init 1
-		gkwave		invalue 	"Wave"						;init 1
-		gkGate		invalue	"Gate"						;init 1.0
-		gkamp1		invalue 	"Excitation_Signal_Amplitude"		;init 0.0
-		gkamp2		invalue 	"Cross_Synthesis_Amplitude"		;init 0.5
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kcps invalue "CPS"
+    gkcps tablei kcps, giExp2000, 1
+    outvalue "CPS_Value", gkcps                    ; init  200.0
+    gkptr   invalue "Pointer"                      ; init 0.1
+    gkspd   invalue "Speed"                        ; init 1.0
+    gkinput invalue "Input"                        ; init 1
+    gkwave  invalue "Wave"                         ; init 1
+    gkGate  invalue "Gate"                         ; init 1.0
+    gkamp1  invalue "Excitation_Signal_Amplitude"  ; init 0.0
+    gkamp2  invalue "Cross_Synthesis_Amplitude"    ; init 0.5
+  endif
 endin
 
-instr	1	;SIGNAL GENERATOR
-	if p4!= 0	then													;MIDI
-		ioct		= p4												;READ MIDI PITCH INFORMATION FROM A MIDI KEYBOARD
-		iamp		= p5
+instr 1            ; Signal generator
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read MIDI pitch information from a MIDI keyboard
+    iamp = p5
 
-		;PITCH BEND INFORMATION IS READ
-		iSemitoneBendRange = 2										;PITCH BEND RANGE IN SEMITONES (WILL BE DEFINED FURTHER LATER)
-		imin		= 0												;EQUILIBRIUM POSITION
-		imax 	= iSemitoneBendRange * .0833333						;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax								;PITCH BEND VARIABLE (IN oct FORMAT)
+    ; Pitch bend information is read
+    ; Pitch bend range in semitones (will be defined further later)
+    iSemitoneBendRange = 2
+    imin               = 0  ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
 
-		kcps		= cpsoct(ioct + kbend)
-		kenv		linsegr	0, .01, iamp, .01, 0						;CREATE AN AMPLITUDE ENVELOPE TO PREVENT CLICKS. INCLUDES A MIDI-RELEASE STAGE
-	else															;GUI
-		iporttime	=		.01										;CREATE A RAMPING UP VALUE THAT WILL BE USED FOR PORTAMENTO TIME
-		kporttime	linseg	0, .001, iporttime, 1, iporttime				;CREATE A RAMPING UP VALUE THAT WILL BE USED FOR PORTAMENTO TIME
-		kcps		portk	gkcps, kporttime							;APPLY PORTAMENTO TO gkcps
-		kenv		linsegr	0, .01, 1, .01, 0							;CREATE AN AMPLITUDE ENVELOPE TO PREVENT CLICKS. INCLUDES A MIDI-RELEASE STAGE
-	endif
+    kcps = cpsoct(ioct + kbend)
+    ; Create an amplitude envelope to prevent clicks. Includes a MIDI-release stage
+    kenv linsegr 0, .01, iamp, .01, 0
+  else               ; GUI
+    iporttime = .01  ; Create a ramping up value that will be used for portamento time
+    ; Create a ramping up value that will be used for portamento time
+    kporttime linseg 0, .001, iporttime, 1, iporttime
+    kcps portk gkcps, kporttime  ; Apply portamento to gkcps
+    ; Create an amplitude envelope to prevent clicks. Includes a MIDI-release stage
+    kenv linsegr 0, .01, 1, .01, 0
+  endif
 
-	if	gkwave=0	then
-		asine	oscili	kenv, kcps, gisine 
-		gasrc	=		gasrc + asine								;ADD SINE TONE TO THE GLOBAL AUDIO VARIABLE gaexc. THIS MECHANISM FACILITATES MIDI POLYPHONY
-	elseif	gkwave<=3&&gkwave>0	then
-		avco		vco 		kenv, kcps, i(gkwave), 0.5, gisine, 1, 0, 22054/sr, 0			;SAWTOOTH WAVEFORM
-		gasrc	=		gasrc + avco								;ADD VCO TONE TO THE GLOBAL AUDIO VARIABLE gaexc. THIS MECHANISM FACILITATES MIDI POLYPHONY
-	else
-		anoise	noise	kenv, 0
-		gasrc	=		gasrc + anoise								;ADD NOISE SIGNAL TO THE GLOBAL AUDIO VARIABLE gaexc. THIS MECHANISM FACILITATES MIDI POLYPHONY
-	endif
+  if gkwave = 0 then
+    asine oscili kenv, kcps, gisine
+    ; Add sine tone to the global audio variable gaexc. This mechanism facilitates MIDI
+    ; polyphony
+    gasrc = gasrc + asine
+  elseif gkwave <= 3&&gkwave>0 then
+    avco vco kenv, kcps, i(gkwave), 0.5, gisine, 1, 0, 22054/sr, 0  ; Sawtooth waveform
+    ; Add vco tone to the global audio variable gaexc. This mechanism facilitates MIDI
+    ; polyphony
+    gasrc = gasrc + avco
+  else
+    anoise noise kenv, 0
+    ; Add noise signal to the global audio variable gaexc. This mechanism facilitates MIDI
+    ; polyphony
+    gasrc = gasrc + anoise
+  endif
 endin
 
-instr	3
-	if	gkinput>=1 then											;IF 'INPUT' SWITCH IS SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
-	if	gkinput!=1 kgoto	SKIP1
+instr 3
+  ; If 'input' switch is set to 'stored file' then implement the next line of code
+  if gkinput >= 1 then
+    if gkinput != 1 kgoto SKIP1
 
-	SAnalysisFile1	invalue		"_Browse1"
-	ilen1		filelen		SAnalysisFile1							;DERIVE THE FILE LENGTH (IN SECONDS) OF THE CHOSEN ANALYSIS FILE	
-	;OUTPUT		OPCODE		FREQUENCY
-	kptr			phasor		gkspd/ilen1							;CREATE A MOVING PHASE VALUE (0-1) THAT WILL BE USED AS A FILE POINTER. FREQUENCY OF PHASOR WILL BE DIRECTLY PROPORTIONAL TO SPEED SLIDER AND INVERSELY PROPORTIONAL TO THE LENGTH OF THE ANALYSIS FILE
-	ktrig		changed		kptr									;CREATE A TRIGGER (MOMENTARY 1 VALUE) EACH TIME VARIABLE kptr CHANGES
+    SAnalysisFile1 invalue "_Browse1"
+    ; Derive the file length (in seconds) of the chosen analysis file
+    ilen1 filelen SAnalysisFile1
+    ; Output  opcode  frequency
+    ; Create a moving phase value (0-1) that will be used as a file pointer. Frequency of
+    ; phasor will be directly proportional to speed slider and inversely proportional to
+    ; the length of the analysis file
+    kptr phasor gkspd/ilen1
+    ; Create a trigger (momentary 1 value) each time variable kptr changes
+    ktrig changed kptr
 
-	if ktrig=1 then
-				outvalue		"Pointer", kptr						;UPDATE 'Pointer' SLIDER WHENEVER TRIGGER IS '1' USING VALUE HELD IN THE 'VALUE' COLUMN 
-	endif
+    if ktrig = 1 then
+      ; Update 'pointer' slider whenever trigger is '1' using value held in the 'value'
+      ; column
+      outvalue "Pointer", kptr
+    endif
 
-	;OUTPUT		OPCODE		POINTER     |   FILE
-	fdest  		pvsfread		gkptr * ilen1, SAnalysisFile1				;READ AN ANALYSIS FILE FROM THE HARD DRIVE ACCORDING TO THE GIVEN FILE POINTER LOCATION. OUTPUT AN F-SIGNAL.
-				kgoto		SKIP2
-	SKIP1:
-	SAnalysisFile2	invalue		"_Browse2"
-	ilen2		filelen		SAnalysisFile2							;DERIVE THE FILE LENGTH (IN SECONDS) OF THE CHOSEN ANALYSIS FILE	
-	;OUTPUT		OPCODE		FREQUENCY
-	kptr			phasor		gkspd/ilen2							;CREATE A MOVING PHASE VALUE (0-1) THAT WILL BE USED AS A FILE POINTER. FREQUENCY OF PHASOR WILL BE DIRECTLY PROPORTIONAL TO SPEED SLIDER AND INVERSELY PROPORTIONAL TO THE LENGTH OF THE ANALYSIS FILE
-	ktrig		changed		kptr									;CREATE A TRIGGER (MOMENTARY 1 VALUE) EACH TIME VARIABLE kptr CHANGES
+    ; Output  opcode  pointer     |   file
+    ; Read an analysis file from the hard drive according to the given file pointer
+    ; location. Output an f-signal.
+    fdest pvsfread gkptr * ilen1, SAnalysisFile1
+    kgoto SKIP2
+SKIP1:
+    SAnalysisFile2 invalue "_Browse2"
+    ; Derive the file length (in seconds) of the chosen analysis file
+    ilen2 filelen SAnalysisFile2
+    ; Output  opcode  frequency
+    ; Create a moving phase value (0-1) that will be used as a file pointer. Frequency of
+    ; phasor will be directly proportional to speed slider and inversely proportional to
+    ; the length of the analysis file
+    kptr phasor gkspd/ilen2
+    ; Create a trigger (momentary 1 value) each time variable kptr changes
+    ktrig changed kptr
 
-	if ktrig=1 then
-				outvalue		"Pointer", kptr						;UPDATE 'Pointer' SLIDER WHENEVER TRIGGER IS '1' USING VALUE HELD IN THE 'VALUE' COLUMN 
-	endif
+    if ktrig = 1 then
+      ; Update 'pointer' slider whenever trigger is '1' using value held in the 'value'
+      ; column
+      outvalue "Pointer", kptr
+    endif
 
-	;OUTPUT		OPCODE		POINTER     |   FILE
-	fdest  		pvsfread		gkptr * ilen2, SAnalysisFile2				;READ AN ANALYSIS FILE FROM THE HARD DRIVE ACCORDING TO THE GIVEN FILE POINTER LOCATION. OUTPUT AN F-SIGNAL.
-	SKIP2:
-	else															;IF 'INPUT' SWITCH IS NOT SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
-	adest, aignore	ins												;READ AUDIO FROM THE COMPUTER'S LIVE INPUT (LEFT INPUT ONLY IS READ, RIGHT CHANNEL IS IGNORED IN SUBSEQUENT CODE. A STEREO VERSION COULD EASILY BE BUILT BUT THIS WOULD DOUBLE CPU DEMANDS!) 
+    ; Output  opcode  pointer     |   file
+    ; Read an analysis file from the hard drive according to the given file pointer
+    ; location. Output an f-signal.
+    fdest pvsfread gkptr * ilen2, SAnalysisFile2
+SKIP2:
+    ; If 'input' switch is not set to 'stored file' then implement the next line of code
+  else
+    ; Read audio from the computer's live input (left input only is read, right channel is
+    ; ignored in subsequent code. A stereo version could easily be built but this would
+    ; double cpu demands!)
+    adest, aignore ins
 
-	;OUTPUT		OPCODE		INPUT | FFTSIZE | OVERLAP | WINSIZE | WINTYPE
-	fdest  		pvsanal		adest,    1024,      256,     1024,       1	;ANALYSE THE AUDIO SIGNAL
-	endif														;END OF 'IF'...'THEN' BRANCHING
-		
-	fsrc  		pvsanal		gasrc, 1024, 256, 1024, 1				;ANALYSE THE EXCITATION AUDIO SIGNAL
-	fsig 		pvscross 		fsrc, fdest, gkamp1, gkamp2
+    ; Output  opcode  input | fftsize | overlap | winsize | wintype
+    fdest pvsanal adest, 1024, 256, 1024, 1  ; Analyse the audio signal
+  endif                                      ; End of 'if'...'then' branching
 
-	aresyn 		pvsynth		fsig									;RESYNTHESIZE THE NEW F-SIGNAL INTO AN AUDIO SIGNAL
-	
-	if	gkGate=1	then
-		afollow	follow2		gasrc, 0.1, 0.1						;CREATE AN AMPLITUDE FOLLOWING SIGNAL THAT FOLLOWS THE DYNAMIC ENVELOPE OF THE EXCITATION SIGNAL - THIS WILL BE USED TO GATE THE CROSS SYNTHESISED SIGNAL
-		aresyn	=			aresyn*afollow
-	endif
-				outs			aresyn, aresyn							;SEND THE RESYNTHESIZED AUDIO SIGNAL TO THE OUTPUTS 
-	gasrc		= 0												;RESET THE GLOBAL AUDIO SIGNAL TO ZERO - THIS PREVENTS A STUCK, NON-ZERO VALUE FOR gaexc IN THE SITUATION WHERE NO EXCITATION SIGNAL IS PLAYING
+  fsrc pvsanal gasrc, 1024, 256, 1024, 1  ; Analyse the excitation audio signal
+  fsig pvscross fsrc, fdest, gkamp1, gkamp2
+
+  aresyn pvsynth fsig  ; Resynthesize the new f-signal into an audio signal
+
+  if gkGate = 1 then
+    ; Create an amplitude following signal that follows the dynamic envelope of the
+    ; excitation signal - this will be used to gate the cross synthesised signal
+    afollow follow2 gasrc, 0.1, 0.1
+    aresyn = aresyn*afollow
+  endif
+  outs aresyn, aresyn  ; Send the resynthesized audio signal to the outputs
+  ; Reset the global audio signal to zero - this prevents a stuck, non-zero value for
+  ; gaexc in the situation where no excitation signal is playing
+  gasrc = 0
 endin
-	
-instr	4	;SET SPEED SLIDER TO ZERO
-		outvalue	"Speed", 0.0
+
+instr 4  ; Set speed slider to zero
+  outvalue "Speed", 0.0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START |   DURATION
-i 10		0		3600			;GUI
-i  3		0 		3600			;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERFORMANCE
+; Instr | start |   duration
+i 10 0 3600  ; GUI
+i 3 0 3600   ; Activate instrument 3 for 1 hour - also sustains realtime performance
 </CsScore>
 </CsoundSynthesizer>
 
@@ -149,9 +190,9 @@ i  3		0 		3600			;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERF
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -169,15 +210,20 @@ i  3		0 		3600			;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERF
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -198,15 +244,20 @@ i  3		0 		3600			;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERF
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -237,14 +288,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -266,14 +317,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -325,15 +376,20 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -354,14 +410,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -401,14 +457,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -430,14 +486,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -496,11 +552,23 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off   (Use if No MIDI)</text>
+  <text>On / Off   (Use if No MIDI)</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -518,15 +586,20 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -559,9 +632,9 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -580,14 +653,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -609,14 +682,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -638,14 +711,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -685,14 +758,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -716,6 +789,18 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <eventLine>i 4 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -733,15 +818,20 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -764,6 +854,18 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Cross_Synthesis_Amplitude</objectName>
@@ -781,14 +883,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -828,14 +930,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -857,14 +959,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -904,14 +1006,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -935,6 +1037,18 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -952,14 +1066,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -981,9 +1095,9 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -1008,9 +1122,9 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -1035,14 +1149,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1066,6 +1180,18 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1083,14 +1209,14 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

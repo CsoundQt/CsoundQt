@@ -1,126 +1,141 @@
-;Written by Iain McCurdy 2011
+; Written by Iain McCurdy 2011
 
-;Modified for QuteCsound by René, May 2011
-;Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and QuteCsound svn rev 848
-
-
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, accept mono or stereo wav files
+; Modified for QuteCsound by René, May 2011
+; Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and
+; QuteCsound svn rev 848
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, accept mono or stereo wav files
+
+
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1
 
 
-giFFTattributes0	ftgen	1, 0, 4, -2,  256, 128,  256, 1
-giFFTattributes1	ftgen	2, 0, 4, -2,  512, 128,  512, 1
-giFFTattributes2	ftgen	3, 0, 4, -2, 1024, 128, 1024, 1
-giFFTattributes3	ftgen	4, 0, 4, -2, 2048, 256, 2048, 1
-giFFTattributes4	ftgen	5, 0, 4, -2, 4096, 512, 4096, 1
+giFFTattributes0 ftgen 1, 0, 4, -2, 256, 128, 256, 1
+giFFTattributes1 ftgen 2, 0, 4, -2, 512, 128, 512, 1
+giFFTattributes2 ftgen 3, 0, 4, -2, 1024, 128, 1024, 1
+giFFTattributes3 ftgen 4, 0, 4, -2, 2048, 256, 2048, 1
+giFFTattributes4 ftgen 5, 0, 4, -2, 4096, 512, 4096, 1
 
-giExp1			ftgen	0, 0, 129, -25, 0, 1.0, 128, 20000.0		;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 1.0, 128, 20000.0  ; Table for exp slider
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SLIDERS
-		gkscal		invalue	"Scale"
-		gkshift		invalue	"Shift"
-		klowest		invalue	"Lowest"
-		gklowest		tablei	klowest, giExp1, 1
-					outvalue	"Lowest_Value", gklowest
-		gkgain		invalue	"Gain"
-		;SPINBOX 
-		gkcoefs		invalue	"Coefs" 
-		;MENUS
-		gkinput		invalue	"Input"
-		gkmeth		invalue	"Method"
-		gkFFTattrib	invalue	"FFTattrib"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Sliders
+    gkscal  invalue "Scale"
+    gkshift invalue "Shift"
+    klowest invalue "Lowest"
+    gklowest tablei klowest, giExp1, 1
+    outvalue "Lowest_Value", gklowest
+    gkgain invalue "Gain"
+    ; Spinbox
+    gkcoefs invalue "Coefs"
+    ; Menus
+    gkinput     invalue "Input"
+    gkmeth      invalue "Method"
+    gkFFTattrib invalue "FFTattrib"
 
-		Sfile_new		strcpy	""										;INIT TO EMPTY STRING
-		gSfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	gSfile
-		gkfile 		strcmpk	Sfile_new, Sfile_old
-	endif
+    Sfile_new strcpy ""  ; Init to empty string
+    gSfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk gSfile
+    gkfile strcmpk Sfile_new, Sfile_old
+  endif
 endin
 
-instr	1
-	kSwitch		changed		gkFFTattrib, gkfile							;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then													;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	START												;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif															;END OF CONDITIONAL BRANCHING
+instr 1
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkFFTattrib, gkfile
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit START       ; Begin a reinitialisation pass from label 'start'
+  endif                ; End of conditional branching
 
-	if		gkinput==0	then											;IF 'INPUT' SWITCH IS SET TO 'Live Input' THEN IMPLEMENT THE NEXT LINE OF CODE
-		aL		inch			1										;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
-		aR		=			aL										;SET RIGHT CHANNEL TO BE THE SAME AS THE LEFT CHANNEL AS WE ARE USING A MONO INPUT
-	else																;OTHERWISE...
-	START:
-		aL, aR	FilePlay2		gSfile, 1, 0, 1							;READ A STORED AUDIO FILE FROM THE HARD DRIVE
-	endif															;END OF 'IF'...'THEN' BRANCHING
+  ; If 'input' switch is set to 'live input' then implement the next line of code
+  if gkinput == 0 then
+    aL inch 1  ; Read audio from the computer's live input channel 1 (left)
+    ; Set right channel to be the same as the left channel as we are using a mono input
+    aR = aL
+  else  ; Otherwise...
+START:
+    aL, aR FilePlay2 gSfile, 1, 0, 1  ; Read a stored audio file from the hard drive
+  endif                               ; End of 'if'...'then' branching
 
-	iFFTsize		table		0, i(gkFFTattrib)+1							;READ FFT ATTRIBUTE FROM THE APPROPRIATE FUNCTION TABLE
-	ioverlap		table		1, i(gkFFTattrib)+1							;READ FFT ATTRIBUTE FROM THE APPROPRIATE FUNCTION TABLE
-	iwinsize		table		2, i(gkFFTattrib)+1							;READ FFT ATTRIBUTE FROM THE APPROPRIATE FUNCTION TABLE
-	iwintype		table		3, i(gkFFTattrib)+1							;READ FFT ATTRIBUTE FROM THE APPROPRIATE FUNCTION TABLE
+  ; Read fft attribute from the appropriate function table
+  iFFTsize table 0, i(gkFFTattrib)+1
+  ; Read fft attribute from the appropriate function table
+  ioverlap table 1, i(gkFFTattrib)+1
+  ; Read fft attribute from the appropriate function table
+  iwinsize table 2, i(gkFFTattrib)+1
+  ; Read fft attribute from the appropriate function table
+  iwintype table 3, i(gkFFTattrib)+1
 
-	fsig1L 		pvsanal		aL, iFFTsize, ioverlap, iwinsize, iwintype		;ANALYSE THE AUDIO SIGNAL
-	fsig1R 		pvsanal		aR, iFFTsize, ioverlap, iwinsize, iwintype		;ANALYSE THE AUDIO SIGNAL
+  fsig1L pvsanal aL, iFFTsize, ioverlap, iwinsize, iwintype  ; Analyse the audio signal
+  fsig1R pvsanal aR, iFFTsize, ioverlap, iwinsize, iwintype  ; Analyse the audio signal
 
-	imaxdel		=			4										;VARIBALE THAT WILL BE USED TO DEFINE MAXIMUM DELAY TIME FOR pvsblur PROCESSING. THIS INFORMATION IS NEEDED FOR MEMORY ALLOCATION.
-	kporttime		linseg		0,0.01,0.05    				      		;CREATE A FUNCTION THAT RAMPS UP QUICKLY FROM ZERO TO A HELD VALUE OF 0.05 THAT WILL BE USED TO DEFINE PORTAMENTO TIME
-	kscal		portk		gkscal, kporttime							;APPLY PORTAMENTO SMOOTHING TO THE SLIDER VARIABLE
-	kshift		portk		gkshift, kporttime							;APPLY PORTAMENTO SMOOTHING TO THE SLIDER VARIABLE
-	klowest		portk		gklowest, kporttime							;APPLY PORTAMENTO SMOOTHING TO THE SLIDER VARIABLE
-	kgain		portk		gkgain, kporttime							;APPLY PORTAMENTO SMOOTHING TO THE SLIDER VARIABLE
+  ; Varibale that will be used to define maximum delay time for pvsblur processing. This
+  ; information is needed for memory allocation.
+  imaxdel = 4
+  ; Create a function that ramps up quickly from zero to a held value of 0.05 that will be
+  ; used to define portamento time
+  kporttime linseg 0, 0.01, 0.05
+  kscal   portk gkscal, kporttime    ; Apply portamento smoothing to the slider variable
+  kshift  portk gkshift, kporttime   ; Apply portamento smoothing to the slider variable
+  klowest portk gklowest, kporttime  ; Apply portamento smoothing to the slider variable
+  kgain   portk gkgain, kporttime    ; Apply portamento smoothing to the slider variable
 
-	fsig2L		pvswarp		fsig1L, kscal, kshift, klowest-1, gkmeth+1, kgain, gkcoefs		;PERFORM SPECTRAL ENVELOPE WARPING ON THE FSIG
-	fsig2R		pvswarp		fsig1R, kscal, kshift, klowest-1, gkmeth+1, kgain, gkcoefs		;PERFORM SPECTRAL ENVELOPE WARPING ON THE FSIG
+  ; Perform spectral envelope warping on the fsig
+  fsig2L pvswarp fsig1L, kscal, kshift, klowest-1, gkmeth+1, kgain, gkcoefs
+  ; Perform spectral envelope warping on the fsig
+  fsig2R pvswarp fsig1R, kscal, kshift, klowest-1, gkmeth+1, kgain, gkcoefs
 
-	;OUTPUT		OPCODE		INPUT    	
-	aresynL		pvsynth  		fsig2L         							;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
-	aresynR		pvsynth  		fsig2R         							;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
-				outs			aresynL, aresynR							;SEND THE RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
+  ; Output  opcode  input
+  aresynL pvsynth fsig2L  ; Resynthesize the f-signal as an audio signal
+  aresynR pvsynth fsig2R  ; Resynthesize the f-signal as an audio signal
+  outs aresynL, aresynR   ; Send the resynthesized signal to the audio outputs
 endin
 
-instr	11	;INIT
-			outvalue "Scale"	, 1.0
-			outvalue "Shift"	, 0.0
-			outvalue "Lowest"	, 0.0
-			outvalue "Gain"	, 0.5
-			outvalue "Input"	, 1
-			outvalue "Coefs"	, 80
-			outvalue "FFTattrib", 1
+instr 11  ; Init
+  outvalue "Scale", 1.0
+  outvalue "Shift", 0.0
+  outvalue "Lowest", 0.0
+  outvalue "Gain", 0.5
+  outvalue "Input", 1
+  outvalue "Coefs", 80
+  outvalue "FFTattrib", 1
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
-i 11		0		0	;INIT
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 11 0 0     ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -135,9 +150,9 @@ i 11		0		0	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -155,15 +170,20 @@ i 11		0		0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -184,15 +204,20 @@ i 11		0		0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -219,14 +244,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -245,11 +270,23 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Scale</objectName>
@@ -267,14 +304,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -314,14 +351,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -345,6 +382,18 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -362,9 +411,9 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -389,14 +438,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -436,14 +485,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -465,14 +514,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -512,14 +561,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -541,14 +590,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -588,14 +637,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -640,14 +689,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -671,14 +720,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -725,15 +774,20 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -754,14 +808,14 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

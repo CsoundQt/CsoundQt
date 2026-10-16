@@ -1,121 +1,142 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-
-;Notes on modifications from original csd:
-;	Add Browser for audio file
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Notes on modifications from original csd:
+; Add Browser for audio file
+
+
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SLIDERS
-		gkporttime	invalue	"Portamento"
-		gkloopbegin	invalue	"LoopBegin"
-		gkloopend		invalue	"LoopEnd"
-		gkspeed		invalue	"Speed"
-		gkgain		invalue	"Gain"
-		;MENUS
-		gkloopfn		invalue	"Loop"
-		gktabletype	invalue	"TableType"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Sliders
+    gkporttime  invalue "Portamento"
+    gkloopbegin invalue "LoopBegin"
+    gkloopend   invalue "LoopEnd"
+    gkspeed     invalue "Speed"
+    gkgain      invalue "Gain"
+    ; Menus
+    gkloopfn    invalue "Loop"
+    gktabletype invalue "TableType"
+  endif
 endin
 
-instr	1
-	Sfile_new		strcpy	""												;INIT TO EMPTY STRING
-	Sfile		invalue	"_Browse"
-	Sfile_old		strcpyk	Sfile_new
-	Sfile_new		strcpyk	Sfile
-	kfile 		strcmpk	Sfile_new, Sfile_old
+instr 1
+  Sfile_new strcpy ""  ; Init to empty string
+  Sfile invalue "_Browse"
+  Sfile_old strcpyk Sfile_new
+  Sfile_new strcpyk Sfile
+  kfile strcmpk Sfile_new, Sfile_old
 
-	kSwitch		changed	gkloopfn, kfile									;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then														;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE													;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkloopfn, kfile
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
 
-	UPDATE:
-	kporttime		linseg	0, .001, 1, 1, 1									;CREATE A RAMPING UP VARIBLE FOR PORTAMENTO TIME
-	kporttime		=		kporttime * gkporttime								;MULTIPLY RAMPING UP VARIABLE FROM THE PREVIOUS LINE BY THE OUTPUT FROM THE 'PORTAMENTO TIME' SLIDER
-	kloopbegin	lineto	gkloopbegin, kporttime								;APPLY PORTAMENTO TO THE NAMED VARIABLE
-	kloopend		lineto	gkloopend, kporttime								;APPLY PORTAMENTO TO THE NAMED VARIABLE
+UPDATE:
+  kporttime linseg 0, .001, 1, 1, 1  ; Create a ramping up varible for portamento time
+  ; Multiply ramping up variable from the previous line by the output from the 'portamento
+  ; time' slider
+  kporttime = kporttime * gkporttime
+  kloopbegin lineto gkloopbegin, kporttime  ; Apply portamento to the named variable
+  kloopend   lineto gkloopend, kporttime    ; Apply portamento to the named variable
 
-	;tablei with phasor accept only (power of 2 + 1) table size
-	ifnTemp	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1								;Temporary table to get the audio file size
-	iftlen	=		ftlen(ifnTemp)											;file size
-	iftlen	pow		2, ceil(log(iftlen)/log(2))								;high nearest power of two table size
+  ; tablei with phasor accept only (power of 2 + 1) table size
+  ; Temporary table to get the audio file size
+  ifnTemp ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1
+  iftlen = ftlen(ifnTemp)                 ; file size
+  iftlen pow 2, ceil(log(iftlen)/log(2))  ; high nearest power of two table size
 
-	ifn		ftgentmp	0, 0, 1+iftlen, 1, Sfile,0,0,1							;READ MONO OR STEREO AUDIO FILE CHANNEL 1
+  ; Read mono or stereo audio file channel 1
+  ifn ftgentmp 0, 0, 1+iftlen, 1, Sfile, 0, 0, 1
 
-	ifilelen		=		nsamp(ifn)/sr										; LENGTH OF THE SAMPLE IN SECONDS
-	kloopbegin	=		kloopbegin * ifilelen								;RESCALE gkloopbegin (RANGE 0-1) TO BE WITHIN THE RANGE 0-FILE_LENGTH. THIS ALLOW THE EASY INTERCHANGE OF SOUND FILES. NEW OUTPUT VARIABLE kloopbegin.
-	kloopend		=		kloopend * ifilelen									;RESCALE gkloopend (RANGE 0-1) TO BE WITHIN THE RANGE 0-FILE_LENGTH. THIS ALLOW THE EASY INTERCHANGE OF SOUND FILES. NEW OUTPUT VARIABLE kloopend.
-	klooplen		=		kloopend - kloopbegin								;DERIVE LOOP LENGTH FROM LOOP START AND END POINTS
-	
-	;					NUMERATOR|DENOMINATOR|SUBSTUTION_VALUE_(IF_DENOMINATOR=0)
-	kphasFrq		divz		gkspeed,   klooplen,     .00001						; THE DIVZ OPCODE IS USED HERE TO PREVENT DIVISIONS BY ZERO (DIVISION BY ZERO MEANS CRASH!)
-																		; IN SITUATIONS WHERE klooplen=0 (I.E. WHEN kloopend=kloopbegin)
-																		; IN NORMAL OPERATION kphasFrq=gkspeed/klooplen
-																		; BUT IF klooplen=0 THEN kphasFrq IS GIVEN THE VALUE SUBSITUTION VALUE .00001
-					
-	kptr			phasor	kphasFrq											; POINTER IS CREATED WITH FREQUENCY kphasFrq
-	
-	iloopfn		=		i(gkloopfn)+101									;FUNCTION TABLE THAT DEFINES THE LOOP POINTER MOVEMENT: 'FORWARD' OR 'FORWARD-BACKWARD'
-	kphasFrq 		=		(iloopfn = 102 ? kphasFrq*.5 : kphasFrq)				;IF LOOP POINTER MOVEMENT IS 'FORWARD-BACKWARD' THEN POINTER FREQUENCY SHOULD BE HALVED
-	
-	;OUTPUT		OPCODE	AMPLITUDE | FREQUENCY | FUNCTION_TABLE
-	kptr			oscili	1,           kphasFrq,     iloopfn						;CREATE POINTER MOVEMENT
-	
-	kinskip		=		(kloopbegin < kloopend ? kloopbegin : kloopend)			;A NEW VARIABLE IS CREATED THAT IS DEPENDENT UPON A CONDITIONAL STATEMENT
-																		;IF kloopbegin < kloopend THEN kinskip=kloopbegin
-																		;OTHERWISE kinskip=kloopend
-																		;IN OTHER WORDS iinskip IS ALWAYS EQUAL TO WHICHEVER IS LESS BETWEEN iloopbegin AND iloopend.
-																		;THE REASON FOR USING THIS CONDITIONAL IS TO CREATE A TRUE VALUE FOR THE 'NEAREST' LOOP POINT IN THE LOOP
-																		;THE VARIABLE CREATED, iinskip, IS NEEDED IN THE NEXT LINE
-	
-	kptr			=		(kptr*abs(klooplen)) + kinskip						;kptr IS RESCALED TO MATCH THE LENGTH OF THE LOOP DEFINED BY iloopbegin AND iloopend 
-																		;AND IS ALSO RESCALED TO COMPESATE FOR ANY 'inskip' INTO THE SOUNDFILE	
-	
-	aptr			interp	kptr												;a-rate VERSION OF kptr IS CREATED
-	if		gktabletype==0	then												;THE NEXT LINE OF CODE CONDITIONALLY EXECUTED IF gktabletype==0 (GUI menu)
-		asig		table	aptr*sr, ifn										;READ GEN01 FUNCTION TABLE USING table OPCODE
-	elseif	gktabletype==1	then												;THE NEXT LINE OF CODE CONDITIONALLY EXECUTED IF gktabletype==1 (GUI menu)
-		asig		tablei	aptr*sr, ifn										;READ GEN01 FUNCTION TABLE USING tablei OPCODE
-	elseif	gktabletype==2	then												;THE NEXT LINE OF CODE CONDITIONALLY EXECUTED IF gktabletype==2 (GUI menu)
-		asig		table3	aptr*sr, ifn										;READ GEN01 FUNCTION TABLE USING tabl3 OPCODE
-	endif
-				rireturn													;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-				outs		asig * gkgain, asig * gkgain
+  ifilelen = nsamp(ifn)/sr  ; Length of the sample in seconds
+  ; Rescale gkloopbegin (range 0-1) to be within the range 0-file_length. This allow the
+  ; easy interchange of sound files. New output variable kloopbegin.
+  kloopbegin = kloopbegin * ifilelen
+  ; Rescale gkloopend (range 0-1) to be within the range 0-file_length. This allow the
+  ; easy interchange of sound files. New output variable kloopend.
+  kloopend = kloopend * ifilelen
+  klooplen = kloopend - kloopbegin  ; Derive loop length from loop start and end points
+
+  ; Numerator|denominator|substution_value_(if_denominator=0)
+  ; The divz opcode is used here to prevent divisions by zero (division by zero means
+  ; crash!)
+  kphasFrq divz gkspeed, klooplen, .00001
+  ; IN SITUATIONS WHERE klooplen=0 (I.E. WHEN kloopend=kloopbegin)
+  ; IN NORMAL OPERATION kphasFrq=gkspeed/klooplen
+  ; But if klooplen=0 then kphasfrq is given the value subsitution value .00001
+
+  kptr phasor kphasFrq  ; Pointer is created with frequency kphasfrq
+
+  ; Function table that defines the loop pointer movement: 'forward' or 'forward-backward'
+  iloopfn = i(gkloopfn)+101
+  ; If loop pointer movement is 'forward-backward' then pointer frequency should be halved
+  kphasFrq = (iloopfn = 102 ? kphasFrq*.5 : kphasFrq)
+
+  ; Output  opcode amplitude | frequency | function_table
+  kptr oscili 1, kphasFrq, iloopfn  ; Create pointer movement
+
+  ; A new variable is created that is dependent upon a conditional statement
+  kinskip = (kloopbegin < kloopend ? kloopbegin : kloopend)
+  ; IF kloopbegin < kloopend THEN kinskip=kloopbegin
+  ; OTHERWISE kinskip=kloopend
+  ; In other words iinskip is always equal to whichever is less between iloopbegin and
+  ; iloopend.
+  ; The reason for using this conditional is to create a true value for the 'nearest' loop
+  ; point in the loop
+  ; The variable created, iinskip, is needed in the next line
+
+  ; Kptr is rescaled to match the length of the loop defined by iloopbegin and iloopend
+  kptr = (kptr*abs(klooplen)) + kinskip
+  ; And is also rescaled to compesate for any 'inskip' into the soundfile
+
+  aptr interp kptr  ; A-rate version of kptr is created
+  ; The next line of code conditionally executed if gktabletype==0 (GUI menu)
+  if gktabletype == 0 then
+    asig table aptr*sr, ifn  ; Read gen01 function table using table opcode
+    ; The next line of code conditionally executed if gktabletype==1 (GUI menu)
+  elseif gktabletype == 1 then
+    asig tablei aptr*sr, ifn  ; Read gen01 function table using tablei opcode
+    ; The next line of code conditionally executed if gktabletype==2 (GUI menu)
+  elseif gktabletype == 2 then
+    asig table3 aptr*sr, ifn  ; Read gen01 function table using tabl3 opcode
+  endif
+  rireturn  ; Return from reinitialisation pass to performance time passes
+  outs asig * gkgain, asig * gkgain
 endin
 
-instr	11	;INIT
-		outvalue	"LoopBegin"	, 0.0
-		outvalue	"LoopEnd"		, 1.0
-		outvalue	"Speed"		, 1.0
-		outvalue	"Loop"		, 0 
-		outvalue	"Gain"		, 0.7
-		outvalue	"Portamento"	, 0.0
+instr 11  ; Init
+  outvalue "LoopBegin", 0.0
+  outvalue "LoopEnd", 1.0
+  outvalue "Speed", 1.0
+  outvalue "Loop", 0
+  outvalue "Gain", 0.7
+  outvalue "Portamento", 0.0
 endin
 </CsInstruments>
 <CsScore>
-f 101	    0      129          -7       0 129 1	;STRAIGHT LINE - USED FOR POINTER NORMAL LOOPING
-f 102	    0      129          -7       0 65 1 65 0	;TRIANGLE SHAPE - USED FOR POINTER FORWARD-BACKWARD LOOPING
+f 101 0 129 -7 0 129 1      ; Straight line - used for pointer normal looping
+f 102 0 129 -7 0 65 1 65 0  ; Triangle shape - used for pointer forward-backward looping
 
-i 10 0 3600	;GUI
-i 11 0 0.01	;INIT
+i 10 0 3600  ; GUI
+i 11 0 0.01  ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -148,15 +169,20 @@ i 11 0 0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>181</r>
-   <g>199</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -174,11 +200,23 @@ i 11 0 0.01	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    On / Off  </text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -196,15 +234,20 @@ i 11 0 0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -226,14 +269,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -255,14 +298,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -302,14 +345,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -331,14 +374,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -378,14 +421,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -407,9 +450,9 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -434,14 +477,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -481,14 +524,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -510,14 +553,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -557,14 +600,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -586,14 +629,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -617,6 +660,18 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -634,14 +689,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -681,14 +736,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -710,14 +765,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -769,14 +824,14 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -1,1126 +1,1145 @@
 ; "Diffamator"
 ; by Andres Cabrera
-;
+
 ; Diffamator Version 0.91
 ; by Andrés Cabrera (GUI by my wife Cristina =) )
 ; Released under the GPL license.
-; 
+
 ; CsoundQt version by Rene Djack Sept. 2010
-;
-; Diffamator is an MIDI controlled FM synth which can be randomized to find interesting sounds. It features the same algorithms available in the Yamaha DX7 synth, but might not really sound exactly like it, since not all of the synth is implemented. It can also store presets in one of its 30 memory slots.
-; 
-; SETUP
-; You will need to tell Csound to run in realtime with audio output and MIDI input, which varies according to platform.
+
+; Diffamator is an MIDI controlled FM synth which can be randomized to find interesting
+; sounds. It features the same algorithms available in the Yamaha DX7 synth, but might not
+; really sound exactly like it, since not all of the synth is implemented. It can also
+; store presets in one of its 30 memory slots.
+
+; Setup
+; You will need to tell Csound to run in realtime with audio output and MIDI input, which
+; varies according to platform.
 ; You can adjust maximum polyphony for your system with the opcode maxalloc.
-; The ksmps size has a very clear effect on the sound of feedback. Lower values yield a 'smoother' Feedback but reduces polyphony.
-; 
-; USING
-; MIDI notes (on any channel) trigger the sound. You can control each FM operator's ADSR envelope, frequency ratio and phase separately, or you can use the transformation buttons to randomize and manipulate parameters. Diffamator uses the same algorithms as the Yamaha DX7. You can find them at
+; The ksmps size has a very clear effect on the sound of feedback. Lower values yield a
+; 'smoother' Feedback but reduces polyphony.
+
+; Using
+; MIDI notes (on any channel) trigger the sound. You can control each FM operator's ADSR
+; envelope, frequency ratio and phase separately, or you can use the transformation
+; buttons to randomize and manipulate parameters. Diffamator uses the same algorithms as
+; the Yamaha DX7. You can find them at
 ; http //www.adp-gmbh.ch/csound/dx7/algorithms.html
-; 
-; The transform(q)ation buttons do the following (the letter in parenthesis determines the key that can trigger that button):
-; 
-; Rand Mus (q)- Randomizes all Operator parameters, algorithm and feedback but keeping ratios in 0.5 multiple ratios, which tend to generate harmonic spectra
-; 
-; Rand FX (w)- Exactly as before, but ratios are completely randomized, generating mostly noisy and in-harmonic spectra
-; 
-; Attackify (e)- Shortens the attack and decay times, and decreases sustain level to all operators, effectively making the sound more percussive.
-; 
+
+; The transform(q)ation buttons do the following (the letter in parenthesis determines the
+; key that can trigger that button):
+
+; Rand Mus (q)- Randomizes all Operator parameters, algorithm and feedback but keeping
+; ratios in 0.5 multiple ratios, which tend to generate harmonic spectra
+
+; Rand FX (w)- Exactly as before, but ratios are completely randomized, generating mostly
+; noisy and in-harmonic spectra
+
+; Attackify (e)- Shortens the attack and decay times, and decreases sustain level to all
+; operators, effectively making the sound more percussive.
+
 ; Padify (r)- Lengthens the attack and decay times to smooth the onset of the sound
-; 
-; + Harm (t)- Moves the frequency ratios toward multiples of 0.5, making the sound tend to a more harmonic spectrum
-; 
-; - Harm (y)- Slightly randomizes the frequency ratios, slowly turning a harmonic sound into an in-harmonic one.
-; 
+
+; + Harm (t)- Moves the frequency ratios toward multiples of 0.5, making the sound tend to
+; a more harmonic spectrum
+
+; - Harm (y)- Slightly randomizes the frequency ratios, slowly turning a harmonic sound
+; into an in-harmonic one.
+
 ; Switch + (u)- Switches Operator parameters one operator down
-; 
+
 ; Switch - (i)- Switches Operator parameters one operator up.
-; 
-; You can also use the 'i Print' button to generate a score file line which will trigger the current sound using only instrument 10 (i.e. you only need instrument 10 if you use this line. All the rest can be discarded. This is useful for using diffamator in your own compositions. In the GUI you can set the base frequency, duration and velocity of the event. Otherwise, you can modify the p-fields of the generated score event. p3 is duration, p4 is base frequency, and p5 is the velocity (1-127).
+
+; You can also use the 'i Print' button to generate a score file line which will trigger
+; the current sound using only instrument 10 (i.e. you only need instrument 10 if you use
+; this line. All the rest can be discarded. This is useful for using diffamator in your
+; own compositions. In the GUI you can set the base frequency, duration and velocity of
+; the event. Otherwise, you can modify the p-fields of the generated score event. p3 is
+; duration, p4 is base frequency, and p5 is the velocity (1-127).
 ; The lock toggle locks the algorithm so it's not modified when Diffamator is randomized.
-; 
+
 ; Other Keyboard shortcuts
 ; ---------------------
 ; o - Increments the algorithm number
 ; p - Decrements the algorithm number
-; 
+
 ; Presets
 ; -------
 ; To recall a preset, just use the preset menu.
 ; To store a new preset or modify an existing preset, use CsoundQt Preset facilities.
-; 
-; Please send problems, comments and suggestions to mantaraya36 at gmail or the csound mailing list.
-; 
+
+; Please send problems, comments and suggestions to mantaraya36 at gmail or the csound
+; mailing list.
+
 ; Enjoy!
-; 
-;
+
+
 <CsoundSynthesizer>
 <CsOptions>
--+max_str_len=4096
-;-fdm0
 </CsOptions>
 <CsInstruments>
 
-sr		= 48000
-ksmps	= 16
-nchnls	= 2
+sr     = 48000
+ksmps  = 64
+nchnls = 2
+0dbfs = 32768
 
-			maxalloc		1, 16		;Adjust maxalloc according to your system
-			massign		0, 10
+maxalloc 1, 16  ; Adjust maxalloc according to your system
+massign 0, 10
 
-gafeedback	init		0
-gisine		ftgen	0,0, 4096, 10, 1
-			seed		0
+gafeedback init 0
+gisine ftgen 0, 0, 4096, 10, 1
+seed 0
 
-instr	1		;GUI
-	ktrig	metro	10
+instr 1  ; GUI
+  ktrig metro 10
 
-	if (ktrig == 1)	then
-		;OP1
-		gkatt1		invalue		"OP1_A"
-		gkdec1		invalue		"OP1_D"
-		gksus1		invalue		"OP1_S"
-		gkrel1		invalue		"OP1_R"
-		gklvl1		invalue		"OP1_Lev"
-		gkrat1		invalue		"OP1_Ratio"
-		gkinv1		invalue		"OP1_Inv"
-		;OP2
-		gkatt2		invalue		"OP2_A"
-		gkdec2		invalue		"OP2_D"
-		gksus2		invalue		"OP2_S"
-		gkrel2		invalue		"OP2_R"
-		gklvl2		invalue		"OP2_Lev"
-		gkrat2		invalue		"OP2_Ratio"
-		gkinv2		invalue		"OP2_Inv"
-		;OP3
-		gkatt3		invalue		"OP3_A"
-		gkdec3		invalue		"OP3_D"
-		gksus3		invalue		"OP3_S"
-		gkrel3		invalue		"OP3_R"
-		gklvl3		invalue		"OP3_Lev"
-		gkrat3		invalue		"OP3_Ratio"
-		gkinv3		invalue		"OP3_Inv"
-		;OP4
-		gkatt4		invalue		"OP4_A"
-		gkdec4		invalue		"OP4_D"
-		gksus4		invalue		"OP4_S"
-		gkrel4		invalue		"OP4_R"
-		gklvl4		invalue		"OP4_Lev"
-		gkrat4		invalue		"OP4_Ratio"
-		gkinv4		invalue		"OP4_Inv"
-		;OP5
-		gkatt5		invalue		"OP5_A"
-		gkdec5		invalue		"OP5_D"
-		gksus5		invalue		"OP5_S"
-		gkrel5		invalue		"OP5_R"
-		gklvl5		invalue		"OP5_Lev"
-		gkrat5		invalue		"OP5_Ratio"
-		gkinv5		invalue		"OP5_Inv"
-		;OP6
-		gkatt6		invalue		"OP6_A"
-		gkdec6		invalue		"OP6_D"
-		gksus6		invalue		"OP6_S"
-		gkrel6		invalue		"OP6_R"
-		gklvl6		invalue		"OP6_Lev"
-		gkrat6		invalue		"OP6_Ratio"
-		gkinv6		invalue		"OP6_Inv"
+  if (ktrig == 1) then
+    ; Op1
+    gkatt1 invalue "OP1_A"
+    gkdec1 invalue "OP1_D"
+    gksus1 invalue "OP1_S"
+    gkrel1 invalue "OP1_R"
+    gklvl1 invalue "OP1_Lev"
+    gkrat1 invalue "OP1_Ratio"
+    gkinv1 invalue "OP1_Inv"
+    ; Op2
+    gkatt2 invalue "OP2_A"
+    gkdec2 invalue "OP2_D"
+    gksus2 invalue "OP2_S"
+    gkrel2 invalue "OP2_R"
+    gklvl2 invalue "OP2_Lev"
+    gkrat2 invalue "OP2_Ratio"
+    gkinv2 invalue "OP2_Inv"
+    ; Op3
+    gkatt3 invalue "OP3_A"
+    gkdec3 invalue "OP3_D"
+    gksus3 invalue "OP3_S"
+    gkrel3 invalue "OP3_R"
+    gklvl3 invalue "OP3_Lev"
+    gkrat3 invalue "OP3_Ratio"
+    gkinv3 invalue "OP3_Inv"
+    ; Op4
+    gkatt4 invalue "OP4_A"
+    gkdec4 invalue "OP4_D"
+    gksus4 invalue "OP4_S"
+    gkrel4 invalue "OP4_R"
+    gklvl4 invalue "OP4_Lev"
+    gkrat4 invalue "OP4_Ratio"
+    gkinv4 invalue "OP4_Inv"
+    ; Op5
+    gkatt5 invalue "OP5_A"
+    gkdec5 invalue "OP5_D"
+    gksus5 invalue "OP5_S"
+    gkrel5 invalue "OP5_R"
+    gklvl5 invalue "OP5_Lev"
+    gkrat5 invalue "OP5_Ratio"
+    gkinv5 invalue "OP5_Inv"
+    ; Op6
+    gkatt6 invalue "OP6_A"
+    gkdec6 invalue "OP6_D"
+    gksus6 invalue "OP6_S"
+    gkrel6 invalue "OP6_R"
+    gklvl6 invalue "OP6_Lev"
+    gkrat6 invalue "OP6_Ratio"
+    gkinv6 invalue "OP6_Inv"
 
-		gkfeedback	invalue		"Feedback"
-		gkalgo		invalue		"Algorithm"
-		gkalglock		invalue		"Lock"
-	endif
+    gkfeedback invalue "Feedback"
+    gkalgo     invalue "Algorithm"
+    gkalglock  invalue "Lock"
+  endif
 endin
 
 
-instr	2		;Rand FX
-	irand	random	0,1
-			outvalue	"OP1_Lev", irand
-	irand	random	0,1
-			outvalue	"OP2_Lev", irand
-	irand	random	0,1
-			outvalue	"OP3_Lev", irand
-	irand	random	0,1
-			outvalue	"OP4_Lev", irand
-	irand	random	0,1
-			outvalue	"OP5_Lev", irand
-	irand	random	0,1
-			outvalue	"OP6_Lev", irand
-	irand	random	0,3
-			outvalue	"OP1_Ratio", irand
-	irand	random	0,3
-			outvalue	"OP2_Ratio", irand
-	irand	random	0,3
-			outvalue	"OP3_Ratio", irand
-	irand	random	0,3
-			outvalue	"OP4_Ratio", irand
-	irand	random	0,3
-			outvalue	"OP5_Ratio", irand
-	irand	random	0,3
-			outvalue	"OP6_Ratio", irand
-	irand	random	0,1
-			outvalue	"OP1_A", irand
-	irand	random	0,1
-			outvalue	"OP2_A", irand
-	irand	random	0,1
-			outvalue	"OP3_A", irand
-	irand	random	0,1
-			outvalue	"OP4_A", irand
-	irand	random	0,1
-			outvalue	"OP5_A", irand
-	irand	random	0,1
-			outvalue	"OP6_A", irand
-	irand	random	-0.5,0
-			outvalue	"OP1_D", irand
-	irand	random	0,0.5
-			outvalue	"OP2_D", irand
-	irand	random	0,0.5
-			outvalue	"OP3_D", irand
-	irand	random	0,0.5
-			outvalue	"OP4_D", irand
-	irand	random	0,0.5
-			outvalue	"OP5_D", irand
-	irand	random	0,0.5
-			outvalue	"OP6_D", irand
-	irand	random	0,1
-			outvalue	"OP1_S", irand
-	irand	random	0,1
-			outvalue	"OP2_S", irand
-	irand	random	0,1
-			outvalue	"OP3_S", irand
-	irand	random	0,1
-			outvalue	"OP4_S", irand
-	irand	random	0,1
-			outvalue	"OP5_S", irand
-	irand	random	0,1
-			outvalue	"OP6_S", irand
-	irand	random	0,3
-			outvalue	"OP1_R", irand
-	irand	random	0,3
-			outvalue	"OP2_R", irand
-	irand	random	0,3
-			outvalue	"OP3_R", irand
-	irand	random	0,3
-			outvalue	"OP4_R", irand
-	irand	random	0,3
-			outvalue	"OP5_R", irand
-	irand	random	0,3
-			outvalue	"OP6_R", irand
-	if (i(gkalglock)==0) then
-		irand	random	1,32
-		irand	=		int(irand)
-				outvalue	"Algorithm", irand
-	endif
-	irand	random	0,1
-			outvalue	"Feedback", irand
+instr 2  ; Rand FX
+  irand random 0, 1
+  outvalue "OP1_Lev", irand
+  irand random 0, 1
+  outvalue "OP2_Lev", irand
+  irand random 0, 1
+  outvalue "OP3_Lev", irand
+  irand random 0, 1
+  outvalue "OP4_Lev", irand
+  irand random 0, 1
+  outvalue "OP5_Lev", irand
+  irand random 0, 1
+  outvalue "OP6_Lev", irand
+  irand random 0, 3
+  outvalue "OP1_Ratio", irand
+  irand random 0, 3
+  outvalue "OP2_Ratio", irand
+  irand random 0, 3
+  outvalue "OP3_Ratio", irand
+  irand random 0, 3
+  outvalue "OP4_Ratio", irand
+  irand random 0, 3
+  outvalue "OP5_Ratio", irand
+  irand random 0, 3
+  outvalue "OP6_Ratio", irand
+  irand random 0, 1
+  outvalue "OP1_A", irand
+  irand random 0, 1
+  outvalue "OP2_A", irand
+  irand random 0, 1
+  outvalue "OP3_A", irand
+  irand random 0, 1
+  outvalue "OP4_A", irand
+  irand random 0, 1
+  outvalue "OP5_A", irand
+  irand random 0, 1
+  outvalue "OP6_A", irand
+  irand random -0.5, 0
+  outvalue "OP1_D", irand
+  irand random 0, 0.5
+  outvalue "OP2_D", irand
+  irand random 0, 0.5
+  outvalue "OP3_D", irand
+  irand random 0, 0.5
+  outvalue "OP4_D", irand
+  irand random 0, 0.5
+  outvalue "OP5_D", irand
+  irand random 0, 0.5
+  outvalue "OP6_D", irand
+  irand random 0, 1
+  outvalue "OP1_S", irand
+  irand random 0, 1
+  outvalue "OP2_S", irand
+  irand random 0, 1
+  outvalue "OP3_S", irand
+  irand random 0, 1
+  outvalue "OP4_S", irand
+  irand random 0, 1
+  outvalue "OP5_S", irand
+  irand random 0, 1
+  outvalue "OP6_S", irand
+  irand random 0, 3
+  outvalue "OP1_R", irand
+  irand random 0, 3
+  outvalue "OP2_R", irand
+  irand random 0, 3
+  outvalue "OP3_R", irand
+  irand random 0, 3
+  outvalue "OP4_R", irand
+  irand random 0, 3
+  outvalue "OP5_R", irand
+  irand random 0, 3
+  outvalue "OP6_R", irand
+  if (i(gkalglock) == 0) then
+    irand random 1, 32
+    irand = int(irand)
+    outvalue "Algorithm", irand
+  endif
+  irand random 0, 1
+  outvalue "Feedback", irand
 endin
 
-instr	3		;Rand Mus
-	irand	random	0,1
-			outvalue	"OP1_Lev", irand
-	irand	random	0,1
-			outvalue	"OP2_Lev", irand
-	irand	random	0,1
-			outvalue	"OP3_Lev", irand
-	irand	random	0,1
-			outvalue	"OP4_Lev", irand
-	irand	random	0,1
-			outvalue	"OP5_Lev", irand
-	irand	random	0,1
-			outvalue	"OP6_Lev", irand
-	irand	random	0,11
-	irand	=		(int(irand)/2)+0.5	
-			outvalue	"OP1_Ratio", irand
-	irand	random	0,11
-	irand	=		(int(irand)/2)+0.5	
-			outvalue	"OP2_Ratio", irand
-	irand	random	0,11
-	irand	=		(int(irand)/2)+0.5	
-			outvalue	"OP3_Ratio", irand
-	irand	random	0,11
-	irand	=		(int(irand)/2)+0.5	
-			outvalue	"OP4_Ratio", irand
-	irand	random	0,11
-	irand	=		(int(irand)/2)+0.5	
-			outvalue	"OP5_Ratio", irand
-	irand	random	0,11
-	irand	=		(int(irand)/2)+0.5	
-			outvalue	"OP6_Ratio", irand
-	irand	random	0,1
-			outvalue	"OP1_A", irand
-	irand	random	0,1
-			outvalue	"OP2_A", irand
-	irand	random	0,1
-			outvalue	"OP3_A", irand
-	irand	random	0,1
-			outvalue	"OP4_A", irand
-	irand	random	0,1
-			outvalue	"OP5_A", irand
-	irand	random	0,1
-			outvalue	"OP6_A", irand
-	irand	random	0,0.5
-			outvalue	"OP1_D", irand
-	irand	random	0,0.5
-			outvalue	"OP2_D", irand
-	irand	random	0,0.5
-			outvalue	"OP3_D", irand
-	irand	random	0,0.5
-			outvalue	"OP4_D", irand
-	irand	random	0,0.5
-			outvalue	"OP5_D", irand
-	irand	random	0,0.5
-			outvalue	"OP6_D", irand
-	irand	random	0,1
-			outvalue	"OP1_S", irand
-	irand	random	0,1
-			outvalue	"OP2_S", irand
-	irand	random	0,1
-			outvalue	"OP3_S", irand
-	irand	random	0,1
-			outvalue	"OP4_S", irand
-	irand	random	0,1
-			outvalue	"OP5_S", irand
-	irand	random	0,1
-			outvalue	"OP6_S", irand
-	irand	random	0,3
-			outvalue	"OP1_R", irand
-	irand	random	0,3
-			outvalue	"OP2_R", irand
-	irand	random	0,3
-			outvalue	"OP3_R", irand
-	irand	random	0,3
-			outvalue	"OP4_R", irand
-	irand	random	0,3
-			outvalue	"OP5_R", irand
-	irand	random	0,3
-			outvalue	"OP6_R", irand
-	if (i(gkalglock)==0) then
-		irand	random	1,32
-		irand	=		int(irand)
-				outvalue	"Algorithm", irand
-	endif
-	irand	random	0,0.5
-			outvalue	"Feedback", irand
+instr 3  ; Rand Mus
+  irand random 0, 1
+  outvalue "OP1_Lev", irand
+  irand random 0, 1
+  outvalue "OP2_Lev", irand
+  irand random 0, 1
+  outvalue "OP3_Lev", irand
+  irand random 0, 1
+  outvalue "OP4_Lev", irand
+  irand random 0, 1
+  outvalue "OP5_Lev", irand
+  irand random 0, 1
+  outvalue "OP6_Lev", irand
+  irand random 0, 11
+  irand = (int(irand)/2)+0.5
+  outvalue "OP1_Ratio", irand
+  irand random 0, 11
+  irand = (int(irand)/2)+0.5
+  outvalue "OP2_Ratio", irand
+  irand random 0, 11
+  irand = (int(irand)/2)+0.5
+  outvalue "OP3_Ratio", irand
+  irand random 0, 11
+  irand = (int(irand)/2)+0.5
+  outvalue "OP4_Ratio", irand
+  irand random 0, 11
+  irand = (int(irand)/2)+0.5
+  outvalue "OP5_Ratio", irand
+  irand random 0, 11
+  irand = (int(irand)/2)+0.5
+  outvalue "OP6_Ratio", irand
+  irand random 0, 1
+  outvalue "OP1_A", irand
+  irand random 0, 1
+  outvalue "OP2_A", irand
+  irand random 0, 1
+  outvalue "OP3_A", irand
+  irand random 0, 1
+  outvalue "OP4_A", irand
+  irand random 0, 1
+  outvalue "OP5_A", irand
+  irand random 0, 1
+  outvalue "OP6_A", irand
+  irand random 0, 0.5
+  outvalue "OP1_D", irand
+  irand random 0, 0.5
+  outvalue "OP2_D", irand
+  irand random 0, 0.5
+  outvalue "OP3_D", irand
+  irand random 0, 0.5
+  outvalue "OP4_D", irand
+  irand random 0, 0.5
+  outvalue "OP5_D", irand
+  irand random 0, 0.5
+  outvalue "OP6_D", irand
+  irand random 0, 1
+  outvalue "OP1_S", irand
+  irand random 0, 1
+  outvalue "OP2_S", irand
+  irand random 0, 1
+  outvalue "OP3_S", irand
+  irand random 0, 1
+  outvalue "OP4_S", irand
+  irand random 0, 1
+  outvalue "OP5_S", irand
+  irand random 0, 1
+  outvalue "OP6_S", irand
+  irand random 0, 3
+  outvalue "OP1_R", irand
+  irand random 0, 3
+  outvalue "OP2_R", irand
+  irand random 0, 3
+  outvalue "OP3_R", irand
+  irand random 0, 3
+  outvalue "OP4_R", irand
+  irand random 0, 3
+  outvalue "OP5_R", irand
+  irand random 0, 3
+  outvalue "OP6_R", irand
+  if (i(gkalglock) == 0) then
+    irand random 1, 32
+    irand = int(irand)
+    outvalue "Algorithm", irand
+  endif
+  irand random 0, 0.5
+  outvalue "Feedback", irand
 endin
 
-instr	4		;Rand more harm
-	irat		=		i(gkrat1)
-	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
-	
-	print irat
-	print inewrat
-	
-			outvalue 	"OP1_Ratio", inewrat
-	irat		=		i(gkrat2)
-	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
-			outvalue	"OP2_Ratio", inewrat
-	irat		=		i(gkrat3)
-	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
-			outvalue	"OP3_Ratio", inewrat
-	irat		=		i(gkrat4)
-	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
-			outvalue	"OP4_Ratio", inewrat
-	irat		=		i(gkrat5)
-	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
-			outvalue	"OP5_Ratio", inewrat
-	irat		=		i(gkrat6)
-	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
-			outvalue	"OP6_Ratio", inewrat
+instr 4  ; Rand more harm
+  irat    = i(gkrat1)
+  inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
+
+  print irat
+  print inewrat
+
+  outvalue "OP1_Ratio", inewrat
+  irat    = i(gkrat2)
+  inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
+  outvalue "OP2_Ratio", inewrat
+  irat    = i(gkrat3)
+  inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
+  outvalue "OP3_Ratio", inewrat
+  irat    = i(gkrat4)
+  inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
+  outvalue "OP4_Ratio", inewrat
+  irat    = i(gkrat5)
+  inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
+  outvalue "OP5_Ratio", inewrat
+  irat    = i(gkrat6)
+  inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
+  outvalue "OP6_Ratio", inewrat
 endin
 
-instr	5		;Rand less harm
-	irat		=		i(gkrat1)
-	irand	random	-0.02,0.02
-	inew		=		irat + irand
-			outvalue	"OP1_Ratio", inew
-	irat		=		i(gkrat2)
-	irand	random	-0.02,0.02
-	inew		=		irat + irand
-			outvalue	"OP2_Ratio", inew
-	irat		=		i(gkrat3)
-	irand	random	-0.02,0.02
-	inew		=		irat + irand
-			outvalue	"OP3_Ratio", inew
-	irat		=		i(gkrat4)
-	irand	random	-0.02,0.02
-	inew		=		irat + irand
-			outvalue	"OP4_Ratio", inew
-	irat		=		i(gkrat5)
-	irand	random	-0.02,0.02
-	inew		=		irat + irand
-			outvalue	"OP5_Ratio", inew
-	irat		=		i(gkrat6)
-	irand	random	-0.02,0.02
-	inew		=		irat + irand
-			outvalue	"OP6_Ratio", inew
+instr 5  ; Rand less harm
+  irat = i(gkrat1)
+  irand random -0.02, 0.02
+  inew = irat + irand
+  outvalue "OP1_Ratio", inew
+  irat = i(gkrat2)
+  irand random -0.02, 0.02
+  inew = irat + irand
+  outvalue "OP2_Ratio", inew
+  irat = i(gkrat3)
+  irand random -0.02, 0.02
+  inew = irat + irand
+  outvalue "OP3_Ratio", inew
+  irat = i(gkrat4)
+  irand random -0.02, 0.02
+  inew = irat + irand
+  outvalue "OP4_Ratio", inew
+  irat = i(gkrat5)
+  irand random -0.02, 0.02
+  inew = irat + irand
+  outvalue "OP5_Ratio", inew
+  irat = i(gkrat6)
+  irand random -0.02, 0.02
+  inew = irat + irand
+  outvalue "OP6_Ratio", inew
 endin
 
-instr	6		;Attackify
-	ival		=		i(gkatt1)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP1_A", ival
-	ival		=		i(gkatt2)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP2_A", ival
-	ival		=		i(gkatt3)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP3_A", ival
-	ival		=		i(gkatt4)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP4_A", ival
-	ival		=		i(gkatt5)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP5_A", ival
-	ival		=		i(gkatt6)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP6_A", ival
-	ival		=		i(gkdec1)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP1_D", ival
-	ival		=		i(gkdec2)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP2_D", ival
-	ival		=		i(gkdec3)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP3_D", ival
-	ival		=		i(gkdec4)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP4_D", ival
-	ival		=		i(gkdec5)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP5_D", ival
-	ival		=		i(gkdec6)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP6_D", ival
-	ival		=		i(gksus1)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP1_S", ival
-	ival		=		i(gksus2)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP2_S", ival
-	ival		=		i(gksus3)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP3_S", ival
-	ival		=		i(gksus4)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP4_S", ival
-	ival		=		i(gksus5)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP5_S", ival
-	ival		=		i(gksus6)
-	ival		=		(ival>0.01?ival-0.01:ival)
-			outvalue	"OP6_S", ival
+instr 6  ; Attackify
+  ival = i(gkatt1)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP1_A", ival
+  ival = i(gkatt2)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP2_A", ival
+  ival = i(gkatt3)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP3_A", ival
+  ival = i(gkatt4)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP4_A", ival
+  ival = i(gkatt5)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP5_A", ival
+  ival = i(gkatt6)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP6_A", ival
+  ival = i(gkdec1)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP1_D", ival
+  ival = i(gkdec2)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP2_D", ival
+  ival = i(gkdec3)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP3_D", ival
+  ival = i(gkdec4)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP4_D", ival
+  ival = i(gkdec5)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP5_D", ival
+  ival = i(gkdec6)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP6_D", ival
+  ival = i(gksus1)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP1_S", ival
+  ival = i(gksus2)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP2_S", ival
+  ival = i(gksus3)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP3_S", ival
+  ival = i(gksus4)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP4_S", ival
+  ival = i(gksus5)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP5_S", ival
+  ival = i(gksus6)
+  ival = (ival>0.01?ival-0.01:ival)
+  outvalue "OP6_S", ival
 endin
 
-instr	7		;Padify
-	ival		=		i(gkatt1)
-	ival		=		(ival<0.99?ival+0.01:ival)
-			outvalue	"OP1_A", ival
-	ival		=		i(gkatt2)
-	ival		=		(ival<0.99?ival+0.01:ival)
-			outvalue	"OP2_A", ival
-	ival		=		i(gkatt3)
-	ival		=		(ival<0.99?ival+0.01:ival)
-			outvalue	"OP3_A", ival
-	ival		=		i(gkatt4)
-	ival		=		(ival<0.99?ival+0.01:ival)
-			outvalue	"OP4_A", ival
-	ival		=		i(gkatt5)
-	ival		=		(ival<0.99?ival+0.01:ival)
-			outvalue	"OP5_A", ival
-	ival		=		i(gkatt6)
-	ival		=		(ival<0.99?ival+0.01:ival)
-			outvalue	"OP6_A", ival
-	ival		=		i(gkdec1)
-	ival		=		(ival<0.495?ival+0.005:ival)
-			outvalue	"OP1_D", ival
-	ival		=		i(gkdec2)
-	ival		=		(ival<0.495?ival+0.005:ival)
-			outvalue	"OP2_D", ival
-	ival		=		i(gkdec3)
-	ival		=		(ival<0.495?ival+0.005:ival)
-			outvalue	"OP3_D", ival
-	ival		=		i(gkdec4)
-	ival		=		(ival<0.495?ival+0.005:ival)
-			outvalue	"OP4_D", ival
-	ival		=		i(gkdec5)
-	ival		=		(ival<0.495?ival+0.005:ival)
-			outvalue	"OP5_D", ival
-	ival		=		i(gkdec6)
-	ival		=		(ival<0.495?ival+0.005:ival)
-			outvalue	"OP6_D", ival
+instr 7  ; Padify
+  ival = i(gkatt1)
+  ival = (ival<0.99?ival+0.01:ival)
+  outvalue "OP1_A", ival
+  ival = i(gkatt2)
+  ival = (ival<0.99?ival+0.01:ival)
+  outvalue "OP2_A", ival
+  ival = i(gkatt3)
+  ival = (ival<0.99?ival+0.01:ival)
+  outvalue "OP3_A", ival
+  ival = i(gkatt4)
+  ival = (ival<0.99?ival+0.01:ival)
+  outvalue "OP4_A", ival
+  ival = i(gkatt5)
+  ival = (ival<0.99?ival+0.01:ival)
+  outvalue "OP5_A", ival
+  ival = i(gkatt6)
+  ival = (ival<0.99?ival+0.01:ival)
+  outvalue "OP6_A", ival
+  ival = i(gkdec1)
+  ival = (ival<0.495?ival+0.005:ival)
+  outvalue "OP1_D", ival
+  ival = i(gkdec2)
+  ival = (ival<0.495?ival+0.005:ival)
+  outvalue "OP2_D", ival
+  ival = i(gkdec3)
+  ival = (ival<0.495?ival+0.005:ival)
+  outvalue "OP3_D", ival
+  ival = i(gkdec4)
+  ival = (ival<0.495?ival+0.005:ival)
+  outvalue "OP4_D", ival
+  ival = i(gkdec5)
+  ival = (ival<0.495?ival+0.005:ival)
+  outvalue "OP5_D", ival
+  ival = i(gkdec6)
+  ival = (ival<0.495?ival+0.005:ival)
+  outvalue "OP6_D", ival
 endin
 
-instr	8		;Switch +
-	ival		=		i(gklvl5)
-			outvalue	"OP6_Lev", ival
-	ival		=		i(gklvl4)
-			outvalue	"OP5_Lev", ival
-	ival		=		i(gklvl3)
-			outvalue	"OP4_Lev", ival
-	ival		=		i(gklvl2)
-			outvalue	"OP3_Lev", ival
-	ival		=		i(gklvl1)
-			outvalue	"OP2_Lev", ival
-	ival		=		i(gklvl6)
-			outvalue	"OP1_Lev", ival
-	ival		=		i(gkrat5)
-			outvalue	"OP6_Ratio", ival
-	ival		=		i(gkrat4)
-			outvalue	"OP5_Ratio", ival
-	ival		=		i(gkrat3)
-			outvalue	"OP4_Ratio", ival
-	ival		=		i(gkrat2)
-			outvalue	"OP3_Ratio", ival
-	ival		=		i(gkrat1)
-			outvalue	"OP2_Ratio", ival
-	ival		=		i(gkrat6)
-			outvalue	"OP1_Ratio", ival
-	ival		=		i(gkinv5)
-			outvalue	"OP6_Inv", ival
-	ival		=		i(gkinv4)
-			outvalue	"OP5_Inv", ival
-	ival		=		i(gkinv3)
-			outvalue	"OP4_Inv", ival
-	ival		=		i(gkinv2)
-			outvalue	"OP3_Inv", ival
-	ival		=		i(gkinv1)
-			outvalue	"OP2_Inv", ival
-	ival		=		i(gkinv6)
-			outvalue	"OP1_Inv", ival
-	ival		=		i(gkatt5)
-			outvalue	"OP6_A", ival
-	ival		=		i(gkatt4)
-			outvalue	"OP5_A", ival
-	ival		=		i(gkatt3)
-			outvalue	"OP4_A", ival
-	ival		=		i(gkatt2)
-			outvalue	"OP3_A", ival
-	ival		=		i(gkatt1)
-			outvalue	"OP2_A", ival
-	ival		=		i(gkatt6)
-			outvalue	"OP1_A", ival
-	ival		=		i(gkdec5)
-			outvalue	"OP6_D", ival
-	ival		=		i(gkdec4)
-			outvalue	"OP5_D", ival
-	ival		=		i(gkdec3)
-			outvalue	"OP4_D", ival
-	ival		=		i(gkdec2)
-			outvalue	"OP3_D", ival
-	ival		=		i(gkdec1)
-			outvalue	"OP2_D", ival
-	ival		=		i(gkdec6)
-			outvalue	"OP1_D", ival
-	ival		=		i(gksus5)
-			outvalue	"OP6_S", ival
-	ival		=		i(gksus4)
-			outvalue	"OP5_S", ival
-	ival		=		i(gksus3)
-			outvalue	"OP4_S", ival
-	ival		=		i(gksus2)
-			outvalue	"OP3_S", ival
-	ival		=		i(gksus1)
-			outvalue	"OP2_S", ival
-	ival		=		i(gksus6)
-			outvalue	"OP1_S", ival
-	ival		=		i(gkrel5)
-			outvalue	"OP6_R", ival
-	ival		=		i(gkrel4)
-			outvalue	"OP5_R", ival
-	ival		=		i(gkrel3)
-			outvalue	"OP4_R", ival
-	ival		=		i(gkrel2)
-			outvalue	"OP3_R", ival
-	ival		=		i(gkrel1)
-			outvalue	"OP2_R", ival
-	ival		=		i(gkrel6)
-			outvalue	"OP1_R", ival
+instr 8  ; Switch +
+  ival = i(gklvl5)
+  outvalue "OP6_Lev", ival
+  ival = i(gklvl4)
+  outvalue "OP5_Lev", ival
+  ival = i(gklvl3)
+  outvalue "OP4_Lev", ival
+  ival = i(gklvl2)
+  outvalue "OP3_Lev", ival
+  ival = i(gklvl1)
+  outvalue "OP2_Lev", ival
+  ival = i(gklvl6)
+  outvalue "OP1_Lev", ival
+  ival = i(gkrat5)
+  outvalue "OP6_Ratio", ival
+  ival = i(gkrat4)
+  outvalue "OP5_Ratio", ival
+  ival = i(gkrat3)
+  outvalue "OP4_Ratio", ival
+  ival = i(gkrat2)
+  outvalue "OP3_Ratio", ival
+  ival = i(gkrat1)
+  outvalue "OP2_Ratio", ival
+  ival = i(gkrat6)
+  outvalue "OP1_Ratio", ival
+  ival = i(gkinv5)
+  outvalue "OP6_Inv", ival
+  ival = i(gkinv4)
+  outvalue "OP5_Inv", ival
+  ival = i(gkinv3)
+  outvalue "OP4_Inv", ival
+  ival = i(gkinv2)
+  outvalue "OP3_Inv", ival
+  ival = i(gkinv1)
+  outvalue "OP2_Inv", ival
+  ival = i(gkinv6)
+  outvalue "OP1_Inv", ival
+  ival = i(gkatt5)
+  outvalue "OP6_A", ival
+  ival = i(gkatt4)
+  outvalue "OP5_A", ival
+  ival = i(gkatt3)
+  outvalue "OP4_A", ival
+  ival = i(gkatt2)
+  outvalue "OP3_A", ival
+  ival = i(gkatt1)
+  outvalue "OP2_A", ival
+  ival = i(gkatt6)
+  outvalue "OP1_A", ival
+  ival = i(gkdec5)
+  outvalue "OP6_D", ival
+  ival = i(gkdec4)
+  outvalue "OP5_D", ival
+  ival = i(gkdec3)
+  outvalue "OP4_D", ival
+  ival = i(gkdec2)
+  outvalue "OP3_D", ival
+  ival = i(gkdec1)
+  outvalue "OP2_D", ival
+  ival = i(gkdec6)
+  outvalue "OP1_D", ival
+  ival = i(gksus5)
+  outvalue "OP6_S", ival
+  ival = i(gksus4)
+  outvalue "OP5_S", ival
+  ival = i(gksus3)
+  outvalue "OP4_S", ival
+  ival = i(gksus2)
+  outvalue "OP3_S", ival
+  ival = i(gksus1)
+  outvalue "OP2_S", ival
+  ival = i(gksus6)
+  outvalue "OP1_S", ival
+  ival = i(gkrel5)
+  outvalue "OP6_R", ival
+  ival = i(gkrel4)
+  outvalue "OP5_R", ival
+  ival = i(gkrel3)
+  outvalue "OP4_R", ival
+  ival = i(gkrel2)
+  outvalue "OP3_R", ival
+  ival = i(gkrel1)
+  outvalue "OP2_R", ival
+  ival = i(gkrel6)
+  outvalue "OP1_R", ival
 endin
 
-instr	9		;Switch -
-	ival		=		i(gklvl2)
-			outvalue	"OP1_Lev", ival
-	ival		=		i(gklvl3)
-			outvalue	"OP2_Lev", ival
-	ival		=		i(gklvl4)
-			outvalue	"OP3_Lev", ival
-	ival		=		i(gklvl5)
-			outvalue	"OP4_Lev", ival
-	ival		=		i(gklvl6)
-			outvalue	"OP5_Lev", ival
-	ival		=		i(gklvl1)
-			outvalue	"OP6_Lev", ival
-	ival		=		i(gkrat2)
-			outvalue	"OP1_Ratio", ival
-	ival		=		i(gkrat3)
-			outvalue	"OP2_Ratio", ival
-	ival		=		i(gkrat4)
-			outvalue	"OP3_Ratio", ival
-	ival		=		i(gkrat5)
-			outvalue	"OP4_Ratio", ival
-	ival		=		i(gkrat6)
-			outvalue	"OP5_Ratio", ival
-	ival		=		i(gkrat1)
-			outvalue	"OP6_Ratio", ival
-	ival		=		i(gkinv2)
-			outvalue	"OP1_Inv", ival
-	ival		=		i(gkinv3)
-			outvalue	"OP2_Inv", ival
-	ival		=		i(gkinv4)
-			outvalue	"OP3_Inv", ival
-	ival		=		i(gkinv5)
-			outvalue	"OP4_Inv", ival
-	ival		=		i(gkinv6)
-			outvalue	"OP5_Inv", ival
-	ival		=		i(gkinv1)
-			outvalue	"OP6_Inv", ival
-	ival		=		i(gkatt2)
-			outvalue	"OP1_A", ival
-	ival		=		i(gkatt3)
-			outvalue	"OP2_A", ival
-	ival		=		i(gkatt4)
-			outvalue	"OP3_A", ival
-	ival		=		i(gkatt5)
-			outvalue	"OP4_A", ival
-	ival		=		i(gkatt6)
-			outvalue	"OP5_A", ival
-	ival		=		i(gkatt1)
-			outvalue	"OP6_A", ival
-	ival		=		i(gkdec2)
-			outvalue	"OP1_D", ival
-	ival		=		i(gkdec3)
-			outvalue	"OP2_D", ival
-	ival		=		i(gkdec4)
-			outvalue	"OP3_D", ival
-	ival		=		i(gkdec5)
-			outvalue	"OP4_D", ival
-	ival		=		i(gkdec6)
-			outvalue	"OP5_D", ival
-	ival		=		i(gkdec1)
-			outvalue	"OP6_D", ival
-	ival		=		i(gksus2)
-			outvalue	"OP1_S", ival
-	ival		=		i(gksus3)
-			outvalue	"OP2_S", ival
-	ival		=		i(gksus4)
-			outvalue	"OP3_S", ival
-	ival		=		i(gksus5)
-			outvalue	"OP4_S", ival
-	ival		=		i(gksus6)
-			outvalue	"OP5_S", ival
-	ival		=		i(gksus1)
-			outvalue	"OP6_S", ival
-	ival		=		i(gkrel2)
-			outvalue	"OP1_R", ival
-	ival		=		i(gkrel3)
-			outvalue	"OP2_R", ival
-	ival		=		i(gkrel4)
-			outvalue	"OP3_R", ival
-	ival		=		i(gkrel5)
-			outvalue	"OP4_R", ival
-	ival		=		i(gkrel6)
-			outvalue	"OP5_R", ival
-	ival		=		i(gkrel1)
-			outvalue	"OP6_R", ival
+instr 9  ; Switch -
+  ival = i(gklvl2)
+  outvalue "OP1_Lev", ival
+  ival = i(gklvl3)
+  outvalue "OP2_Lev", ival
+  ival = i(gklvl4)
+  outvalue "OP3_Lev", ival
+  ival = i(gklvl5)
+  outvalue "OP4_Lev", ival
+  ival = i(gklvl6)
+  outvalue "OP5_Lev", ival
+  ival = i(gklvl1)
+  outvalue "OP6_Lev", ival
+  ival = i(gkrat2)
+  outvalue "OP1_Ratio", ival
+  ival = i(gkrat3)
+  outvalue "OP2_Ratio", ival
+  ival = i(gkrat4)
+  outvalue "OP3_Ratio", ival
+  ival = i(gkrat5)
+  outvalue "OP4_Ratio", ival
+  ival = i(gkrat6)
+  outvalue "OP5_Ratio", ival
+  ival = i(gkrat1)
+  outvalue "OP6_Ratio", ival
+  ival = i(gkinv2)
+  outvalue "OP1_Inv", ival
+  ival = i(gkinv3)
+  outvalue "OP2_Inv", ival
+  ival = i(gkinv4)
+  outvalue "OP3_Inv", ival
+  ival = i(gkinv5)
+  outvalue "OP4_Inv", ival
+  ival = i(gkinv6)
+  outvalue "OP5_Inv", ival
+  ival = i(gkinv1)
+  outvalue "OP6_Inv", ival
+  ival = i(gkatt2)
+  outvalue "OP1_A", ival
+  ival = i(gkatt3)
+  outvalue "OP2_A", ival
+  ival = i(gkatt4)
+  outvalue "OP3_A", ival
+  ival = i(gkatt5)
+  outvalue "OP4_A", ival
+  ival = i(gkatt6)
+  outvalue "OP5_A", ival
+  ival = i(gkatt1)
+  outvalue "OP6_A", ival
+  ival = i(gkdec2)
+  outvalue "OP1_D", ival
+  ival = i(gkdec3)
+  outvalue "OP2_D", ival
+  ival = i(gkdec4)
+  outvalue "OP3_D", ival
+  ival = i(gkdec5)
+  outvalue "OP4_D", ival
+  ival = i(gkdec6)
+  outvalue "OP5_D", ival
+  ival = i(gkdec1)
+  outvalue "OP6_D", ival
+  ival = i(gksus2)
+  outvalue "OP1_S", ival
+  ival = i(gksus3)
+  outvalue "OP2_S", ival
+  ival = i(gksus4)
+  outvalue "OP3_S", ival
+  ival = i(gksus5)
+  outvalue "OP4_S", ival
+  ival = i(gksus6)
+  outvalue "OP5_S", ival
+  ival = i(gksus1)
+  outvalue "OP6_S", ival
+  ival = i(gkrel2)
+  outvalue "OP1_R", ival
+  ival = i(gkrel3)
+  outvalue "OP2_R", ival
+  ival = i(gkrel4)
+  outvalue "OP3_R", ival
+  ival = i(gkrel5)
+  outvalue "OP4_R", ival
+  ival = i(gkrel6)
+  outvalue "OP5_R", ival
+  ival = i(gkrel1)
+  outvalue "OP6_R", ival
 endin
 
-instr	10		;FM synth
+instr 10  ; FM synth
 
-			midinoteoncps	p4,p5
+  midinoteoncps p4, p5
 
-	icps		init			p4
-	iveloc	init			((p5/127)*11000)+4000
+  icps   init p4
+  iveloc init ((p5/127)*11000)+4000
 
-			mididefault	i(gkalgo),p6
-			mididefault	i(gkfeedback),p7
-			mididefault	i(gkatt1), p8
-			mididefault	i(gkdec1), p9
-			mididefault	i(gksus1), p10
-			mididefault	i(gkrel1), p11
-			mididefault	i(gkrat1), p12
-			mididefault	i(gklvl1), p13
+  mididefault i(gkalgo), p6
+  mididefault i(gkfeedback), p7
+  mididefault i(gkatt1), p8
+  mididefault i(gkdec1), p9
+  mididefault i(gksus1), p10
+  mididefault i(gkrel1), p11
+  mididefault i(gkrat1), p12
+  mididefault i(gklvl1), p13
 
-	acps1	init			icps*-p12
-	ifn1		init			gisine
+  acps1 init icps*-p12
+  ifn1  init gisine
 
-			mididefault	i(gkatt2), p14
-			mididefault	i(gkdec2), p15
-			mididefault	i(gksus2), p16
-			mididefault	i(gkrel2), p17
-			mididefault	i(gkrat2), p18
-			mididefault	i(gklvl2), p19
+  mididefault i(gkatt2), p14
+  mididefault i(gkdec2), p15
+  mididefault i(gksus2), p16
+  mididefault i(gkrel2), p17
+  mididefault i(gkrat2), p18
+  mididefault i(gklvl2), p19
 
-	acps2	init			icps*-p18
-	ifn2		init			gisine
+  acps2 init icps*-p18
+  ifn2  init gisine
 
-			mididefault	i(gkatt3), p20
-			mididefault	i(gkdec3), p21
-			mididefault	i(gksus3), p22
-			mididefault	i(gkrel3), p23
-			mididefault	i(gkrat3), p24
-			mididefault	i(gklvl3), p25
+  mididefault i(gkatt3), p20
+  mididefault i(gkdec3), p21
+  mididefault i(gksus3), p22
+  mididefault i(gkrel3), p23
+  mididefault i(gkrat3), p24
+  mididefault i(gklvl3), p25
 
-	acps3	init			icps*-p24
-	ifn3		init			gisine
+  acps3 init icps*-p24
+  ifn3  init gisine
 
-			mididefault	i(gkatt4), p26
-			mididefault	i(gkdec4), p27
-			mididefault	i(gksus4), p28
-			mididefault	i(gkrel4), p29
-			mididefault	i(gkrat4), p30
-			mididefault	i(gklvl4), p31
+  mididefault i(gkatt4), p26
+  mididefault i(gkdec4), p27
+  mididefault i(gksus4), p28
+  mididefault i(gkrel4), p29
+  mididefault i(gkrat4), p30
+  mididefault i(gklvl4), p31
 
-	acps4	init		 	icps*-p30
-	ifn4		init			gisine
+  acps4 init icps*-p30
+  ifn4  init gisine
 
-			mididefault	i(gkatt5), p32
-			mididefault	i(gkdec5), p33
-			mididefault	i(gksus5), p34
-			mididefault	i(gkrel5), p35
-			mididefault	i(gkrat5), p36
-			mididefault	i(gklvl5), p37
+  mididefault i(gkatt5), p32
+  mididefault i(gkdec5), p33
+  mididefault i(gksus5), p34
+  mididefault i(gkrel5), p35
+  mididefault i(gkrat5), p36
+  mididefault i(gklvl5), p37
 
-	acps5	init			icps*-p36
-	ifn5		init			gisine
+  acps5 init icps*-p36
+  ifn5  init gisine
 
-			mididefault	i(gkatt6), p38
-			mididefault	i(gkdec6), p39
-			mididefault	i(gksus6), p40
-			mididefault	i(gkrel6), p41
-			mididefault	i(gkrat6), p42
-			mididefault	i(gklvl6), p43
+  mididefault i(gkatt6), p38
+  mididefault i(gkdec6), p39
+  mididefault i(gksus6), p40
+  mididefault i(gkrel6), p41
+  mididefault i(gkrat6), p42
+  mididefault i(gklvl6), p43
 
-	acps6	init			icps*-p42
-	ifn6		init			gisine
+  acps6 init icps*-p42
+  ifn6  init gisine
 
-	kamp		init			iveloc
+  kamp init iveloc
 
-	ialgo	= p6
+  ialgo = p6
 
-	;--------------OP6
-	;Check if op6 has feedback
-	if (ialgo==2)||(ialgo==8)||(ialgo==9)||(ialgo==10)|| (ialgo==12)||(ialgo==15)||(ialgo==15)||(ialgo==18)|| (ialgo==20)||(ialgo==21)||(ialgo==27)||(ialgo==28)|| (ialgo==30) then
-		afrq6 = acps6  ;no feedback
-	else
-		afrq6 = acps6 + (gafeedback*acps6)  ;feedback
-	endif
+  ; --------------Op6
+  ; Check if op6 has feedback
+  if (ialgo == 2)||(ialgo == 8)||(ialgo == 9)||(ialgo == 10)|| (ialgo == 12)||(ialgo == 15)||(ialgo == 15)||(ialgo == 18)|| (ialgo == 20)||(ialgo == 21)||(ialgo == 27)||(ialgo == 28)|| (ialgo == 30) then
+    afrq6 = acps6  ; no feedback
+  else
+    afrq6 = acps6 + (gafeedback*acps6)  ; feedback
+  endif
 
-	aphs6 phasor afrq6
-	aop6  tablei	aphs6, ifn6, 1
-	aenv6 mxadsr	p38,p39,p40,p41
-	aop6 = aop6 * aenv6
+  aphs6 phasor afrq6
+  aop6 tablei aphs6, ifn6, 1
+  aenv6 mxadsr p38, p39, p40, p41
+  aop6 = aop6 * aenv6
 
-	;Check if op6 feeds the feedback loop
-	if (ialgo==2)||(ialgo==8)||(ialgo==9)||(ialgo==10)|| (ialgo==12)||(ialgo==15)||(ialgo==15)||(ialgo==18)|| (ialgo==20)||(ialgo==21)||(ialgo==27)||(ialgo==28)|| (ialgo==30) goto nofb6
-		gafeedback = aop6 * p7
-	nofb6:
-		;Check if op6 doesn't modulate
-		if (ialgo==28)||(ialgo==30)||(ialgo==32) then
-			aop6 = aop6 * -p43 * kamp
-		else
-			aop6 = aop6 * -p43
-		endif
+  ; Check if op6 feeds the feedback loop
+  if (ialgo == 2)||(ialgo == 8)||(ialgo == 9)||(ialgo == 10)|| (ialgo == 12)||(ialgo == 15)||(ialgo == 15)||(ialgo == 18)|| (ialgo == 20)||(ialgo == 21)||(ialgo == 27)||(ialgo == 28)|| (ialgo == 30) goto nofb6
+  gafeedback = aop6 * p7
+nofb6:
+  ; Check if op6 doesn't modulate
+  if (ialgo == 28)||(ialgo == 30)||(ialgo == 32) then
+    aop6 = aop6 * -p43 * kamp
+  else
+    aop6 = aop6 * -p43
+  endif
 
-	;--------------OP5
+  ; --------------Op5
 
-	;Check if op5 has feedback
-	if (ialgo==28)||(ialgo==30) then
-		afrq5 = acps5 + (gafeedback*acps5)  ;feedback
-	;Check if not modulated
-	elseif (ialgo==10)||(ialgo==11)||(ialgo==12)||(ialgo==13)|| (ialgo==14)||(ialgo==15)||(ialgo==20)||(ialgo==26)|| (ialgo==27)||(ialgo==32) then
-		afrq5 = acps5  ;no modulation
-	else
-		afrq5 = acps5 + (aop6*acps5) ;modulated by op6
-	endif
+  ; Check if op5 has feedback
+  if (ialgo == 28)||(ialgo == 30) then
+    afrq5 = acps5 + (gafeedback*acps5)  ; feedback
+    ; Check if not modulated
+  elseif (ialgo == 10)||(ialgo == 11)||(ialgo == 12)||(ialgo == 13)|| (ialgo == 14)||(ialgo == 15)||(ialgo == 20)||(ialgo == 26)|| (ialgo == 27)||(ialgo == 32) then
+    afrq5 = acps5  ; no modulation
+  else
+    afrq5 = acps5 + (aop6*acps5)  ; modulated by op6
+  endif
 
-	aphs5 phasor afrq5
-	aop5  tablei	aphs5, ifn5, 1
-	aenv5 mxadsr	p32, p33, p34, p35
-	aop5 = aop5 * aenv5
+  aphs5 phasor afrq5
+  aop5 tablei aphs5, ifn5, 1
+  aenv5 mxadsr p32, p33, p34, p35
+  aop5 = aop5 * aenv5
 
-	;Check if op5 feeds the feedback loop
-	if (ialgo==6)||(ialgo==28)||(ialgo==30) then
-		gafeedback = aop5 * p7
-	endif
-	;Check if op5 doesn't modulate
-	if (ialgo==5)||(ialgo==6)||(ialgo==19)||(ialgo==21)|| (ialgo==22)||(ialgo==23)||(ialgo==24)||(ialgo==25)|| (ialgo==29)||(ialgo==31)||(ialgo==32) then
-		aop5 = aop5 * -p37 * kamp
-	else
-		aop5 = aop5 * -p37
-	endif
+  ; Check if op5 feeds the feedback loop
+  if (ialgo == 6)||(ialgo == 28)||(ialgo == 30) then
+    gafeedback = aop5 * p7
+  endif
+  ; Check if op5 doesn't modulate
+  if (ialgo == 5)||(ialgo == 6)||(ialgo == 19)||(ialgo == 21)|| (ialgo == 22)||(ialgo == 23)||(ialgo == 24)||(ialgo == 25)|| (ialgo == 29)||(ialgo == 31)||(ialgo == 32) then
+    aop5 = aop5 * -p37 * kamp
+  else
+    aop5 = aop5 * -p37
+  endif
 
-	;--------------OP4
+  ; --------------Op4
 
-	;Check if op4 has feedback
-	if (ialgo==8) then
-		afrq4 = acps4 + (gafeedback*acps4)  ;feedback
-	;Check if modulated
-	elseif (ialgo==1)||(ialgo==2)||(ialgo==3)||(ialgo==4)|| (ialgo==18)||(ialgo==20)||(ialgo==26)|| (ialgo==27)||(ialgo==28)||(ialgo==30) then
-		afrq4 = acps4 + (aop5*acps4) ;modulated by op5
-	elseif (ialgo==10)||(ialgo==11)||(ialgo==14)||(ialgo==15)|| (ialgo==19)||(ialgo==21)||(ialgo==22)||(ialgo==23)|| (ialgo==24)||(ialgo==25) then
-		afrq4 = acps4 + (aop6*acps4) ;modulated by op6
-	else
-		afrq4 = acps4  ;no modulation
-	endif
+  ; Check if op4 has feedback
+  if (ialgo == 8) then
+    afrq4 = acps4 + (gafeedback*acps4)  ; feedback
+    ; Check if modulated
+  elseif (ialgo == 1)||(ialgo == 2)||(ialgo == 3)||(ialgo == 4)|| (ialgo == 18)||(ialgo == 20)||(ialgo == 26)|| (ialgo == 27)||(ialgo == 28)||(ialgo == 30) then
+    afrq4 = acps4 + (aop5*acps4)  ; modulated by op5
+  elseif (ialgo == 10)||(ialgo == 11)||(ialgo == 14)||(ialgo == 15)|| (ialgo == 19)||(ialgo == 21)||(ialgo == 22)||(ialgo == 23)|| (ialgo == 24)||(ialgo == 25) then
+    afrq4 = acps4 + (aop6*acps4)  ; modulated by op6
+  else
+    afrq4 = acps4  ; no modulation
+  endif
 
-	aphs4	phasor	afrq4
-	aop4		tablei	aphs4, ifn4, 1
-	aenv4	mxadsr	p26,p27,p28,p29
-	aop4		=		aop4 * aenv4
+  aphs4 phasor afrq4
+  aop4 tablei aphs4, ifn4, 1
+  aenv4 mxadsr p26, p27, p28, p29
+  aop4 = aop4 * aenv4
 
-	;Check if op4 feeds the feedback loop
-	if (ialgo==4) then
-		gafeedback = aop4 * p7
-	endif
-	;Check if op4 doesn't modulate
-	if (ialgo==3)||(ialgo==4)||(ialgo==10)||(ialgo==11)|| (ialgo==19)||(ialgo==20)||(ialgo==21)||(ialgo==22)|| (ialgo==23)||(ialgo==24)||(ialgo==25)||(ialgo==26)|| (ialgo==27)||(ialgo==31)||(ialgo==32) then
-		aop4 = aop4 * -p31 * kamp
-	else
-		aop4 = aop4 * -p31
-	endif
+  ; Check if op4 feeds the feedback loop
+  if (ialgo == 4) then
+    gafeedback = aop4 * p7
+  endif
+  ; Check if op4 doesn't modulate
+  if (ialgo == 3)||(ialgo == 4)||(ialgo == 10)||(ialgo == 11)|| (ialgo == 19)||(ialgo == 20)||(ialgo == 21)||(ialgo == 22)|| (ialgo == 23)||(ialgo == 24)||(ialgo == 25)||(ialgo == 26)|| (ialgo == 27)||(ialgo == 31)||(ialgo == 32) then
+    aop4 = aop4 * -p31 * kamp
+  else
+    aop4 = aop4 * -p31
+  endif
 
-	;--------------OP3
+  ; --------------Op3
 
-	;Check if op3 has feedback
-	if (ialgo==10)||(ialgo==18)||(ialgo==20)||(ialgo==21)|| (ialgo==27) then
-		afrq3 = acps3 + (gafeedback*acps3)  ;feedback
-	;Check if modulated
-	elseif (ialgo==1)||(ialgo==2)||(ialgo==5)||(ialgo==6)|| (ialgo==9)||(ialgo==12) then
-		afrq3 = acps3 + (aop4*acps3) ;modulated by op4
-	elseif (ialgo==7)||(ialgo==8)||(ialgo==9) then
-		afrq3 = acps3 + (aop4*acps3) + (aop5*acps3) ;modulated by op4+op5
-	elseif (ialgo==12)||(ialgo==13) then
-		afrq3 = acps3 + (aop4*acps3) + (aop5*acps3) + (aop6*acps3)
-	;modulated by op4+op5+op6
-	elseif (ialgo==14)||(ialgo==15)||(ialgo==16)||(ialgo==17)|| (ialgo==28)||(ialgo==29)||(ialgo==30) then
-		afrq3 = acps3 + (aop4*acps3) ;modulated by op4
-	elseif (ialgo==22)||(ialgo==24) then
-		afrq3 = acps3 + (aop6*acps3) ;modulated by op6
-	else
-		afrq3 = acps3  ;no modulation
-	endif
+  ; Check if op3 has feedback
+  if (ialgo == 10)||(ialgo == 18)||(ialgo == 20)||(ialgo == 21)|| (ialgo == 27) then
+    afrq3 = acps3 + (gafeedback*acps3)  ; feedback
+    ; Check if modulated
+  elseif (ialgo == 1)||(ialgo == 2)||(ialgo == 5)||(ialgo == 6)|| (ialgo == 9)||(ialgo == 12) then
+    afrq3 = acps3 + (aop4*acps3)  ; modulated by op4
+  elseif (ialgo == 7)||(ialgo == 8)||(ialgo == 9) then
+    afrq3 = acps3 + (aop4*acps3) + (aop5*acps3)  ; modulated by op4+op5
+  elseif (ialgo == 12)||(ialgo == 13) then
+    afrq3 = acps3 + (aop4*acps3) + (aop5*acps3) + (aop6*acps3)
+    ; modulated by op4+op5+op6
+  elseif (ialgo == 14)||(ialgo == 15)||(ialgo == 16)||(ialgo == 17)|| (ialgo == 28)||(ialgo == 29)||(ialgo == 30) then
+    afrq3 = acps3 + (aop4*acps3)  ; modulated by op4
+  elseif (ialgo == 22)||(ialgo == 24) then
+    afrq3 = acps3 + (aop6*acps3)  ; modulated by op6
+  else
+    afrq3 = acps3  ; no modulation
+  endif
 
-	aphs3	phasor	afrq3
-	aop3		tablei	aphs3, ifn3, 1
-	aenv3	mxadsr	p20,p21, p22, p23
-	aop3		=		aop3 * aenv3
+  aphs3 phasor afrq3
+  aop3 tablei aphs3, ifn3, 1
+  aenv3 mxadsr p20, p21, p22, p23
+  aop3 = aop3 * aenv3
 
-	;Check if op4 feeds the feedback loop
-	if (ialgo==10)||(ialgo==18)||(ialgo==20)||(ialgo==21)|| (ialgo==27) then
-		gafeedback = aop3 * p7
-	endif
-	;Check if op3 doesn't modulate
-	if (ialgo==1)||(ialgo==2)||(ialgo==5)||(ialgo==6)|| (ialgo==7)||(ialgo==8)||(ialgo==9)||(ialgo==12)|| (ialgo==13)||(ialgo==14)||(ialgo==15)||(ialgo==22)|| (ialgo==24)||(ialgo==25)||(ialgo==28)||(ialgo==29)|| (ialgo==30)||(ialgo==31)||(ialgo==32) then
-		aop3 = aop3 * -p25 * kamp
-	else
-		aop3 = aop3 * -p25
-	endif
+  ; Check if op4 feeds the feedback loop
+  if (ialgo == 10)||(ialgo == 18)||(ialgo == 20)||(ialgo == 21)|| (ialgo == 27) then
+    gafeedback = aop3 * p7
+  endif
+  ; Check if op3 doesn't modulate
+  if (ialgo == 1)||(ialgo == 2)||(ialgo == 5)||(ialgo == 6)|| (ialgo == 7)||(ialgo == 8)||(ialgo == 9)||(ialgo == 12)|| (ialgo == 13)||(ialgo == 14)||(ialgo == 15)||(ialgo == 22)|| (ialgo == 24)||(ialgo == 25)||(ialgo == 28)||(ialgo == 29)|| (ialgo == 30)||(ialgo == 31)||(ialgo == 32) then
+    aop3 = aop3 * -p25 * kamp
+  else
+    aop3 = aop3 * -p25
+  endif
 
-	;--------------OP2
+  ; --------------Op2
 
-	;Check if op2 has feedback
-	if (ialgo==2)||(ialgo==9)||(ialgo==12)||(ialgo==15)|| (ialgo==17) then
-		afrq2 = acps2 + (gafeedback*acps2)  ;feedback
-	;Check if modulated
-	elseif (ialgo==3)||(ialgo==4)||(ialgo==10)||(ialgo==11)|| (ialgo==19)||(ialgo==20)||(ialgo==21)||(ialgo==23)|| (ialgo==26)||(ialgo==27) then
-		afrq2 = acps2 + (aop3*acps2) ;modulated by op3
-	else
-		afrq2 = acps2  ;no modulation
-	endif
+  ; Check if op2 has feedback
+  if (ialgo == 2)||(ialgo == 9)||(ialgo == 12)||(ialgo == 15)|| (ialgo == 17) then
+    afrq2 = acps2 + (gafeedback*acps2)  ; feedback
+    ; Check if modulated
+  elseif (ialgo == 3)||(ialgo == 4)||(ialgo == 10)||(ialgo == 11)|| (ialgo == 19)||(ialgo == 20)||(ialgo == 21)||(ialgo == 23)|| (ialgo == 26)||(ialgo == 27) then
+    afrq2 = acps2 + (aop3*acps2)  ; modulated by op3
+  else
+    afrq2 = acps2  ; no modulation
+  endif
 
-	aphs2 phasor afrq2
-	aop2  tablei	aphs2, ifn2, 1
-	aenv2 mxadsr	p14, p15, p16, p17
-	aop2 = aop2 * aenv2
+  aphs2 phasor afrq2
+  aop2 tablei aphs2, ifn2, 1
+  aenv2 mxadsr p14, p15, p16, p17
+  aop2 = aop2 * aenv2
 
-	;Check if op4 feeds the feedback loop
-	if (ialgo==2)||(ialgo==9)||(ialgo==12)||(ialgo==15)|| (ialgo==17) then
-		gafeedback = aop2 * p7
-	endif
-	;Check if op2 doesn't modulate
-	if (ialgo==20)||(ialgo==21)||(ialgo==23)||(ialgo==24)|| (ialgo==25)||(ialgo==26)||(ialgo==27)||(ialgo==29)|| (ialgo==30)||(ialgo==31)||(ialgo==32) then
-		aop2 = aop2 * -p19 * kamp
-	else
-		aop2 = aop2 * -p19
-	endif
+  ; Check if op4 feeds the feedback loop
+  if (ialgo == 2)||(ialgo == 9)||(ialgo == 12)||(ialgo == 15)|| (ialgo == 17) then
+    gafeedback = aop2 * p7
+  endif
+  ; Check if op2 doesn't modulate
+  if (ialgo == 20)||(ialgo == 21)||(ialgo == 23)||(ialgo == 24)|| (ialgo == 25)||(ialgo == 26)||(ialgo == 27)||(ialgo == 29)|| (ialgo == 30)||(ialgo == 31)||(ialgo == 32) then
+    aop2 = aop2 * -p19 * kamp
+  else
+    aop2 = aop2 * -p19
+  endif
 
-	;--------------OP1
+  ; --------------Op1
 
-	;op1 never has feedback
-	;Check if NOT modulated
-	if (ialgo==23)||(ialgo==24)||(ialgo==25)||(ialgo==26)|| (ialgo==27)||(ialgo==29)||(ialgo==30)||(ialgo==31)|| (ialgo==32) then
-		afrq1 = acps1 ;no modulation
-	elseif (ialgo==16)||(ialgo==17) then
-		afrq1 = acps1 + (aop2*acps1) + (aop3*acps1) + (aop5*acps1)
-	;modulated by op2, op3 and op5
-	elseif (ialgo==18) then
-		afrq1 = acps1 + (aop2*acps1) + (aop3*acps1) + (aop4*acps1)
-	;modulated by op2, op3 and op4
-	elseif (ialgo==20)||(ialgo==21) then
-		afrq1 = acps1 + (aop3*acps1) ;modulated by op3
-	else
-		afrq1 = acps1 + (aop2*acps1)  ;modulated by op2
-	endif
+  ; op1 never has feedback
+  ; Check if NOT modulated
+  if (ialgo == 23)||(ialgo == 24)||(ialgo == 25)||(ialgo == 26)|| (ialgo == 27)||(ialgo == 29)||(ialgo == 30)||(ialgo == 31)|| (ialgo == 32) then
+    afrq1 = acps1  ; no modulation
+  elseif (ialgo == 16)||(ialgo == 17) then
+    afrq1 = acps1 + (aop2*acps1) + (aop3*acps1) + (aop5*acps1)
+    ; modulated by op2, op3 and op5
+  elseif (ialgo == 18) then
+    afrq1 = acps1 + (aop2*acps1) + (aop3*acps1) + (aop4*acps1)
+    ; modulated by op2, op3 and op4
+  elseif (ialgo == 20)||(ialgo == 21) then
+    afrq1 = acps1 + (aop3*acps1)  ; modulated by op3
+  else
+    afrq1 = acps1 + (aop2*acps1)  ; modulated by op2
+  endif
 
-	aphs1	phasor	afrq1
-	aop1		tablei	aphs1, ifn1, 1
-	aenv1	mxadsr	p8, p9, p10, p11
-	aop1		=		aop1 * aenv1
+  aphs1 phasor afrq1
+  aop1 tablei aphs1, ifn1, 1
+  aenv1 mxadsr p8, p9, p10, p11
+  aop1 = aop1 * aenv1
 
-	;op1 never modulates
-	aop1		=		aop1 * -p13 * kamp
+  ; op1 never modulates
+  aop1 = aop1 * -p13 * kamp
 
-	;------------MIX OPS
-	if (ialgo==1 ) then
-		aout = aop1 + aop3
-	elseif (ialgo==2 ) then
-		aout = aop1 + aop3
-	elseif (ialgo==3 ) then
-		aout = aop1 + aop4
-	elseif (ialgo==4 ) then
-		aout = aop1 + aop4
-	elseif (ialgo==5 ) then
-		aout = aop1 + aop3 + aop5
-	elseif (ialgo==6 ) then
-		aout = aop1 + aop3 + aop5
-	elseif (ialgo==7 ) then
-		aout = aop1 + aop3
-	elseif (ialgo==8 ) then
-		aout = aop1 + aop3
-	elseif (ialgo==9 ) then
-		aout = aop1 + aop3
-	elseif (ialgo==10 ) then
-		aout = aop1 + aop4
-	elseif (ialgo==11 ) then
-		aout = aop1 + aop4
-	elseif (ialgo==12 ) then
-		aout = aop1 + aop3
-	elseif (ialgo==13 ) then
-		aout = aop1 + aop3
-	elseif (ialgo==14 ) then
-		aout = aop1 + aop3
-	elseif (ialgo==15 ) then
-		aout = aop1 + aop3
-	elseif (ialgo==16 ) then
-		aout = aop1
-	elseif (ialgo==17 ) then
-		aout = aop1
-	elseif (ialgo==18 ) then
-		aout = aop1
-	elseif (ialgo==19 ) then
-		aout = aop1 + aop4 + aop5
-	elseif (ialgo==20 ) then
-		aout = aop1 + aop2 + aop4
-	elseif (ialgo==21 ) then
-		aout = aop1 + aop2 + aop4 + aop5
-	elseif (ialgo==22 ) then
-		aout = aop1 + aop3 + aop4 + aop5
-	elseif (ialgo==23 ) then
-		aout = aop1 + aop2 + aop4 + aop5
-	elseif (ialgo==24 ) then
-		aout = aop1 + aop2 + aop3 + aop4 + aop5
-	elseif (ialgo==25 ) then
-		aout = aop1 + aop2 + aop3 + aop4 + aop5
-	elseif (ialgo==26 ) then
-		aout = aop1 + aop2 + aop4
-	elseif (ialgo==27 ) then
-		aout = aop1 + aop2 + aop4
-	elseif (ialgo==28 ) then
-		aout = aop1 + aop3 + aop6
-	elseif (ialgo==29 ) then
-		aout = aop1 + aop2 + aop3 + aop5
-	elseif (ialgo==30 ) then
-		aout = aop1 + aop2 + aop3 + aop6
-	elseif (ialgo==31 ) then
-		aout = aop1 + aop2 + aop3 + aop4 + aop5
-	elseif (ialgo==32 ) then
-		aout = aop1 + aop2 + aop3 + aop4 + aop5 + aop6
-	endif
-	outs  aout, aout
+  ; ------------Mix ops
+  if (ialgo == 1) then
+    aout = aop1 + aop3
+  elseif (ialgo == 2) then
+    aout = aop1 + aop3
+  elseif (ialgo == 3) then
+    aout = aop1 + aop4
+  elseif (ialgo == 4) then
+    aout = aop1 + aop4
+  elseif (ialgo == 5) then
+    aout = aop1 + aop3 + aop5
+  elseif (ialgo == 6) then
+    aout = aop1 + aop3 + aop5
+  elseif (ialgo == 7) then
+    aout = aop1 + aop3
+  elseif (ialgo == 8) then
+    aout = aop1 + aop3
+  elseif (ialgo == 9) then
+    aout = aop1 + aop3
+  elseif (ialgo == 10) then
+    aout = aop1 + aop4
+  elseif (ialgo == 11) then
+    aout = aop1 + aop4
+  elseif (ialgo == 12) then
+    aout = aop1 + aop3
+  elseif (ialgo == 13) then
+    aout = aop1 + aop3
+  elseif (ialgo == 14) then
+    aout = aop1 + aop3
+  elseif (ialgo == 15) then
+    aout = aop1 + aop3
+  elseif (ialgo == 16) then
+    aout = aop1
+  elseif (ialgo == 17) then
+    aout = aop1
+  elseif (ialgo == 18) then
+    aout = aop1
+  elseif (ialgo == 19) then
+    aout = aop1 + aop4 + aop5
+  elseif (ialgo == 20) then
+    aout = aop1 + aop2 + aop4
+  elseif (ialgo == 21) then
+    aout = aop1 + aop2 + aop4 + aop5
+  elseif (ialgo == 22) then
+    aout = aop1 + aop3 + aop4 + aop5
+  elseif (ialgo == 23) then
+    aout = aop1 + aop2 + aop4 + aop5
+  elseif (ialgo == 24) then
+    aout = aop1 + aop2 + aop3 + aop4 + aop5
+  elseif (ialgo == 25) then
+    aout = aop1 + aop2 + aop3 + aop4 + aop5
+  elseif (ialgo == 26) then
+    aout = aop1 + aop2 + aop4
+  elseif (ialgo == 27) then
+    aout = aop1 + aop2 + aop4
+  elseif (ialgo == 28) then
+    aout = aop1 + aop3 + aop6
+  elseif (ialgo == 29) then
+    aout = aop1 + aop2 + aop3 + aop5
+  elseif (ialgo == 30) then
+    aout = aop1 + aop2 + aop3 + aop6
+  elseif (ialgo == 31) then
+    aout = aop1 + aop2 + aop3 + aop4 + aop5
+  elseif (ialgo == 32) then
+    aout = aop1 + aop2 + aop3 + aop4 + aop5 + aop6
+  endif
+  outs aout, aout
 endin
 
-instr	12	;Keyboard input
-	kres, kkeydown		sensekey
-	
-	;printk2 kres
-	
-	if (kres==113) then					;q
-		event	"i", 3, 0, 0			;Randomize Mus
-	elseif (kres==119) then				;w
-		event	"i", 2, 0, 0			;Randomize FX
-	elseif (kres==101) then				;e
-		event	"i", 6, 0, 0			;Attackify
-	elseif (kres==114) then				;r
-		event	"i", 7, 0, 0			;Padify
-	elseif (kres==116) then				;t
-		event	"i", 4, 0, 0			;+ harm
-	elseif (kres==121) then				;y
-		event	"i", 5, 0, 0			;- harm
-	elseif (kres==117) then				;u
-		event	"i", 8, 0, 0			;switch +
-	elseif (kres==105) then				;i
-		event	"i", 9, 0, 0			;switch -
-	elseif (kres==111) then				;o 
-		kalgo	= gkalgo -1			;algorithm -1
-		event	"i", 13, 0, 0, kalgo	
-	elseif (kres==112) then				;p
-		kalgo	= gkalgo +1			;algorithm +1
-		event	"i", 13, 0, 0, kalgo
-	endif
+instr 12  ; Keyboard input
+  kres, kkeydown sensekey
+
+  ; printk2 kres
+
+  if (kres == 113) then      ; q
+    event "i", 3, 0, 0       ; Randomize Mus
+  elseif (kres == 119) then  ; w
+    event "i", 2, 0, 0       ; Randomize FX
+  elseif (kres == 101) then  ; e
+    event "i", 6, 0, 0       ; Attackify
+  elseif (kres == 114) then  ; r
+    event "i", 7, 0, 0       ; Padify
+  elseif (kres == 116) then  ; t
+    event "i", 4, 0, 0       ; + harm
+  elseif (kres == 121) then  ; y
+    event "i", 5, 0, 0       ; - harm
+  elseif (kres == 117) then  ; u
+    event "i", 8, 0, 0       ; switch +
+  elseif (kres == 105) then  ; i
+    event "i", 9, 0, 0       ; switch -
+  elseif (kres == 111) then  ; o
+    kalgo = gkalgo -1        ; algorithm -1
+    event "i", 13, 0, 0, kalgo
+  elseif (kres == 112) then  ; p
+    kalgo = gkalgo +1        ; algorithm +1
+    event "i", 13, 0, 0, kalgo
+  endif
 endin
 
-instr	13	;Keyboard Algo change
-	kalgo	wrap		p4, 1, 32
-			outvalue	"Algorithm", kalgo
+instr 13  ; Keyboard Algo change
+  kalgo wrap p4, 1, 32
+  outvalue "Algorithm", kalgo
 endin
 
-instr	17	;Print i line
-	ialgo	= i(gkalgo)
-	ifeedback	= i(gkfeedback)
-	iatt1	= i(gkatt1)
-	idec1	= i(gkdec1)
-	isus1	= i(gksus1)
-	irel1	= i(gkrel1)
-	ilvl1	= i(gklvl1)
-	irat1	= i(gkrat1)
-	iinv1	= i(gkinv1)
+instr 17  ; Print i line
+  ialgo     = i(gkalgo)
+  ifeedback = i(gkfeedback)
+  iatt1     = i(gkatt1)
+  idec1     = i(gkdec1)
+  isus1     = i(gksus1)
+  irel1     = i(gkrel1)
+  ilvl1     = i(gklvl1)
+  irat1     = i(gkrat1)
+  iinv1     = i(gkinv1)
 
-	iatt2	= i(gkatt2)
-	idec2	= i(gkdec2)
-	isus2	= i(gksus2)
-	irel2	= i(gkrel2)
-	ilvl2	= i(gklvl2)
-	irat2	= i(gkrat2)
-	iinv2	= i(gkinv2)
+  iatt2 = i(gkatt2)
+  idec2 = i(gkdec2)
+  isus2 = i(gksus2)
+  irel2 = i(gkrel2)
+  ilvl2 = i(gklvl2)
+  irat2 = i(gkrat2)
+  iinv2 = i(gkinv2)
 
-	iatt3	= i(gkatt3)
-	idec3	= i(gkdec3)
-	isus3	= i(gksus3)
-	irel3	= i(gkrel3)
-	ilvl3	= i(gklvl3)
-	irat3	= i(gkrat3)
-	iinv3	= i(gkinv3)
+  iatt3 = i(gkatt3)
+  idec3 = i(gkdec3)
+  isus3 = i(gksus3)
+  irel3 = i(gkrel3)
+  ilvl3 = i(gklvl3)
+  irat3 = i(gkrat3)
+  iinv3 = i(gkinv3)
 
-	iatt4	= i(gkatt4)
-	idec4	= i(gkdec4)
-	isus4	= i(gksus4)
-	irel4	= i(gkrel4)
-	ilvl4	= i(gklvl4)
-	irat4	= i(gkrat4)
-	iinv4	= i(gkinv4)
+  iatt4 = i(gkatt4)
+  idec4 = i(gkdec4)
+  isus4 = i(gksus4)
+  irel4 = i(gkrel4)
+  ilvl4 = i(gklvl4)
+  irat4 = i(gkrat4)
+  iinv4 = i(gkinv4)
 
-	iatt5	= i(gkatt5)
-	idec5	= i(gkdec5)
-	isus5	= i(gksus5)
-	irel5	= i(gkrel5)
-	ilvl5	= i(gklvl5)
-	irat5	= i(gkrat5)
-	iinv5	= i(gkinv5)
+  iatt5 = i(gkatt5)
+  idec5 = i(gkdec5)
+  isus5 = i(gksus5)
+  irel5 = i(gkrel5)
+  ilvl5 = i(gklvl5)
+  irat5 = i(gkrat5)
+  iinv5 = i(gkinv5)
 
-	iatt6	= i(gkatt6)
-	idec6	= i(gkdec6)
-	isus6	= i(gksus6)
-	irel6	= i(gkrel6)
-	ilvl6	= i(gklvl6)
-	irat6	= i(gkrat6)
-	iinv6	= i(gkinv6)
+  iatt6 = i(gkatt6)
+  idec6 = i(gkdec6)
+  isus6 = i(gksus6)
+  irel6 = i(gkrel6)
+  ilvl6 = i(gklvl6)
+  irat6 = i(gkrat6)
+  iinv6 = i(gkinv6)
 
-	kdur invalue "mididur"
-	idur	= i(kdur)
-	knote invalue "midinote"
-	inote = i(knote)
-	ifreq	= 440.0 * 2 ^ ((inote - 69)/12 )
-	kveloc invalue "midiveloc"
-	iveloc	= i(kveloc)
-	
-	prints "i 10  0  %f  %f %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %i %i %i %i %i \n",\
-		idur, ifreq, iveloc, ialgo, ifeedback, \
-		iatt1, idec1, isus1, irel1, irat1 ,ilvl1, \
-		iatt2, idec2, isus2, irel2, irat2, ilvl2, \
-		iatt3, idec3, isus3, irel3, irat3, ilvl3, \
-		iatt4, idec4, isus4, irel4, irat4, ilvl4, \
-		iatt5, idec5, isus5, irel5, irat5, ilvl5, \
-		iatt6, idec6, isus6, irel6, irat6, ilvl6, \
-		iinv1, iinv2, iinv3, iinv4, iinv5, iinv6
+  kdur invalue "mididur"
+  idur = i(kdur)
+  knote invalue "midinote"
+  inote = i(knote)
+  ifreq = 440.0 * 2 ^ ((inote - 69)/12)
+  kveloc invalue "midiveloc"
+  iveloc = i(kveloc)
+
+  prints "i 10 0 %f %f %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %i %i %i %i %i \n", \
+    idur, ifreq, iveloc, ialgo, ifeedback, \
+    iatt1, idec1, isus1, irel1, irat1, ilvl1, \
+    iatt2, idec2, isus2, irel2, irat2, ilvl2, \
+    iatt3, idec3, isus3, irel3, irat3, ilvl3, \
+    iatt4, idec4, isus4, irel4, irat4, ilvl4, \
+    iatt5, idec5, isus5, irel5, irat5, ilvl5, \
+    iatt6, idec6, isus6, irel6, irat6, ilvl6, \
+    iinv1, iinv2, iinv3, iinv4, iinv5, iinv6
 endin
 
-instr	18	;Play note
-	ialgo	= i(gkalgo)
-	ifeedback	= i(gkfeedback)
-	iatt1	= i(gkatt1)
-	idec1	= i(gkdec1)
-	isus1	= i(gksus1)
-	irel1	= i(gkrel1)
-	ilvl1	= i(gklvl1)
-	irat1	= i(gkrat1)
-	iinv1	= i(gkinv1)
+instr 18  ; Play note
+  ialgo     = i(gkalgo)
+  ifeedback = i(gkfeedback)
+  iatt1     = i(gkatt1)
+  idec1     = i(gkdec1)
+  isus1     = i(gksus1)
+  irel1     = i(gkrel1)
+  ilvl1     = i(gklvl1)
+  irat1     = i(gkrat1)
+  iinv1     = i(gkinv1)
 
-	iatt2	= i(gkatt2)
-	idec2	= i(gkdec2)
-	isus2	= i(gksus2)
-	irel2	= i(gkrel2)
-	ilvl2	= i(gklvl2)
-	irat2	= i(gkrat2)
-	iinv2	= i(gkinv2)
+  iatt2 = i(gkatt2)
+  idec2 = i(gkdec2)
+  isus2 = i(gksus2)
+  irel2 = i(gkrel2)
+  ilvl2 = i(gklvl2)
+  irat2 = i(gkrat2)
+  iinv2 = i(gkinv2)
 
-	iatt3	= i(gkatt3)
-	idec3	= i(gkdec3)
-	isus3	= i(gksus3)
-	irel3	= i(gkrel3)
-	ilvl3	= i(gklvl3)
-	irat3	= i(gkrat3)
-	iinv3	= i(gkinv3)
+  iatt3 = i(gkatt3)
+  idec3 = i(gkdec3)
+  isus3 = i(gksus3)
+  irel3 = i(gkrel3)
+  ilvl3 = i(gklvl3)
+  irat3 = i(gkrat3)
+  iinv3 = i(gkinv3)
 
-	iatt4	= i(gkatt4)
-	idec4	= i(gkdec4)
-	isus4	= i(gksus4)
-	irel4	= i(gkrel4)
-	ilvl4	= i(gklvl4)
-	irat4	= i(gkrat4)
-	iinv4	= i(gkinv4)
+  iatt4 = i(gkatt4)
+  idec4 = i(gkdec4)
+  isus4 = i(gksus4)
+  irel4 = i(gkrel4)
+  ilvl4 = i(gklvl4)
+  irat4 = i(gkrat4)
+  iinv4 = i(gkinv4)
 
-	iatt5	= i(gkatt5)
-	idec5	= i(gkdec5)
-	isus5	= i(gksus5)
-	irel5	= i(gkrel5)
-	ilvl5	= i(gklvl5)
-	irat5	= i(gkrat5)
-	iinv5	= i(gkinv5)
+  iatt5 = i(gkatt5)
+  idec5 = i(gkdec5)
+  isus5 = i(gksus5)
+  irel5 = i(gkrel5)
+  ilvl5 = i(gklvl5)
+  irat5 = i(gkrat5)
+  iinv5 = i(gkinv5)
 
-	iatt6	= i(gkatt6)
-	idec6	= i(gkdec6)
-	isus6	= i(gksus6)
-	irel6	= i(gkrel6)
-	ilvl6	= i(gklvl6)
-	irat6	= i(gkrat6)
-	iinv6	= i(gkinv6)
+  iatt6 = i(gkatt6)
+  idec6 = i(gkdec6)
+  isus6 = i(gksus6)
+  irel6 = i(gkrel6)
+  ilvl6 = i(gklvl6)
+  irat6 = i(gkrat6)
+  iinv6 = i(gkinv6)
 
-	kdur invalue "mididur"
-	idur	= i(kdur)
-	knote invalue "midinote"
-	inote = i(knote)
-	ifreq	= 440.0 * 2 ^ ((inote - 69)/12 )
-	kveloc invalue "midiveloc"
-	iveloc	= i(kveloc)
-	
-	Sevent1 sprintf "i 10  0  %f  %f %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ", \
-		idur, ifreq, iveloc, ialgo, ifeedback, \
-		iatt1, idec1, isus1, irel1, irat1 ,ilvl1, \
-		iatt2, idec2, isus2, irel2, irat2, ilvl2, \
-		iatt3, idec3, isus3, irel3, irat3, ilvl3, \
-		iatt4, idec4, isus4, irel4, irat4, ilvl4 
-		
-	Sevent2 sprintf "%f %f %f %f %f %f %f %f %f %f %f %f %i %i %i %i %i %i \n",  \ 
-		iatt5, idec5, isus5, irel5, irat5, ilvl5, \
-		iatt6, idec6, isus6, irel6, irat6, ilvl6, \
-		iinv1, iinv2, iinv3, iinv4, iinv5, iinv6
-	Sevent strcat Sevent1, Sevent2
-	scoreline_i Sevent
+  kdur invalue "mididur"
+  idur = i(kdur)
+  knote invalue "midinote"
+  inote = i(knote)
+  ifreq = 440.0 * 2 ^ ((inote - 69)/12)
+  kveloc invalue "midiveloc"
+  iveloc = i(kveloc)
+
+  Sevent1 sprintf "i 10 0 %f %f %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ", \
+    idur, ifreq, iveloc, ialgo, ifeedback, \
+    iatt1, idec1, isus1, irel1, irat1, ilvl1, \
+    iatt2, idec2, isus2, irel2, irat2, ilvl2, \
+    iatt3, idec3, isus3, irel3, irat3, ilvl3, \
+    iatt4, idec4, isus4, irel4, irat4, ilvl4
+
+  Sevent2 sprintf "%f %f %f %f %f %f %f %f %f %f %f %f %i %i %i %i %i %i \n", \
+    iatt5, idec5, isus5, irel5, irat5, ilvl5, \
+    iatt6, idec6, isus6, irel6, irat6, ilvl6, \
+    iinv1, iinv2, iinv3, iinv4, iinv5, iinv6
+  Sevent strcat Sevent1, Sevent2
+  scoreline_i Sevent
 endin
 </CsInstruments>
 <CsScore>
-i 1 0 3600		;GUI controls
-i 12 0 3600		;Keyboard input
+i 1 0 3600   ; GUI controls
+i 12 0 3600  ; Keyboard input
 </CsScore>
 </CsoundSynthesizer>
 
@@ -1137,6 +1156,8 @@ i 10  2  3.000000  440.000000 100 23 0.270588 0.302909 0.387075 0.268992 1.93231
     
 i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318 1.082074 0.806773 0.675024 0.160935 0.000418 0.091414 1.950530 0.821397 0.103666 0.001935 0.658787 0.737449 0.762221 0.742802 0.112710 0.001273 0.136764 2.771899 0.210006 0.204091 0.660871 0.111000 0.560500 2.473292 1.065975 0.029706 0.159895 0.059344 0.425518 2.537653 0.606392 0.516453 0 1 0 0 1 0 
     </EventPanel>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -1147,9 +1168,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>248</r>
-  <g>242</g>
-  <b>210</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1158,7 +1179,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>91</width>
   <height>132</height>
   <uuid>{ddefd7af-22f4-40ce-a66f-83c075867c7b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1168,16 +1191,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -1189,7 +1219,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>44</width>
   <height>27</height>
   <uuid>{4ab7fff4-fdc7-44d8-a795-9d0fb247211c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1199,16 +1231,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1220,13 +1259,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{9e13da35-ce6a-4581-abec-2c5395a24f1f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.26794010</value>
+  <value>0.49835068</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1239,7 +1280,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{f640f134-49d6-4294-b510-f0b4ee893f92}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1249,16 +1292,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1270,7 +1320,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{ab147300-6f87-48ca-a1fa-1ae56bae29ee}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1280,16 +1332,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1301,13 +1360,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{a92533d8-c015-4de0-a136-76bc296de24d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.00784610</value>
+  <value>0.10133688</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1320,7 +1381,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{e8154a5e-f96b-4a16-a41c-b45763b58b76}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1330,16 +1393,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1351,13 +1421,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{6b7dcbf2-c631-415b-9bfd-5d1f108316d9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00781716</value>
+  <value>0.70705181</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1370,7 +1442,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{f4a75829-da47-4da2-8cd4-6b52fba5e175}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1380,16 +1454,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1401,13 +1482,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{e5c6b99d-3423-4958-864e-bbffe3d7fafe}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.41834235</value>
+  <value>2.94571319</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1420,7 +1503,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>91</width>
   <height>132</height>
   <uuid>{c12f4db8-8eb1-4fcd-81b6-c579b404b42a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1430,16 +1515,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -1451,7 +1543,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>44</width>
   <height>27</height>
   <uuid>{1ec74f70-9037-4f13-be48-5d4ac24f16e2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1461,16 +1555,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1482,13 +1583,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{871077d5-13ce-4ad8-a12a-ebc4180b0c86}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.15406355</value>
+  <value>0.65454272</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1501,7 +1604,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{14b69b38-828e-4612-8d64-e7181ff09a46}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1511,16 +1616,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1532,7 +1644,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{ae1c88aa-5651-4ff9-a116-f10101b5e7bf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1542,16 +1656,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1563,13 +1684,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{05ec1dfd-fdaf-4381-8048-ae47a50cf679}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.00825546</value>
+  <value>0.07781593</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1582,7 +1705,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{9aa62bc0-ec02-47c0-8918-8cbdb6a6d8e8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1592,16 +1717,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1613,13 +1745,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{36e27d45-a162-4fd9-9d98-2e439b3f91ec}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00134029</value>
+  <value>0.54908940</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1632,7 +1766,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{f14ff09e-86a8-4abe-9fd6-00447f7c50d1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1642,16 +1778,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1663,13 +1806,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{2c345a9a-0d6e-4381-aeee-d4b74b2316cf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>0.68942636</value>
+  <value>1.22813765</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1682,7 +1827,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>91</width>
   <height>132</height>
   <uuid>{e9cf9368-f199-422a-a096-ba1e1bcd7f3b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1692,16 +1839,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -1713,7 +1867,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>91</width>
   <height>132</height>
   <uuid>{693d4506-9a51-4058-985c-b8581f402b81}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1723,16 +1879,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -1744,7 +1907,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>44</width>
   <height>27</height>
   <uuid>{c314c6ce-baa9-4b6e-861d-76cbc8164424}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1754,16 +1919,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1775,13 +1947,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{33f07b85-57c7-4dac-aecd-8a88397672a2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.11952523</value>
+  <value>0.29235475</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1794,7 +1968,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{a7943c1f-4aa4-4d82-ad39-3f46ecf4f619}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1804,16 +1980,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1825,7 +2008,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{9212c445-ec73-439d-bc54-98c5e1236338}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1835,16 +2020,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1856,13 +2048,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{d37dc860-9122-4463-941a-baf3d9964fb7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.00428255</value>
+  <value>0.49564779</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1875,7 +2069,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{37c5f99a-8b65-407e-ad71-a7e956dc3bdc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1885,16 +2081,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1906,13 +2109,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{f72b09db-2caa-4461-825b-62ec9795be78}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00911442</value>
+  <value>0.38982629</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1925,7 +2130,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>26</height>
   <uuid>{359bb3cb-c925-48b4-8abd-2b6da04a65ea}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1935,16 +2142,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1956,13 +2170,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{0325a2d5-bbc5-4209-809b-f3882f92c49a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>0.21356234</value>
+  <value>1.42357425</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1975,7 +2191,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>44</width>
   <height>27</height>
   <uuid>{5bf58f22-4e3b-40e7-9bdf-c808c70568ff}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1985,16 +2203,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2006,13 +2231,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{27f72d99-dcf9-41eb-957f-b961a831e299}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00030442</value>
+  <value>0.35719278</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2025,7 +2252,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{3b5533e4-b730-4d8c-a76e-d234d3b0ccf7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2035,16 +2264,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2056,7 +2292,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{d629506d-32d0-4866-8aa1-3fcf0a1198b2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2066,16 +2304,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2087,13 +2332,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{a46c3e5c-a08b-430b-b712-eca9cdeafb6f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.00177382</value>
+  <value>0.01545678</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2106,7 +2353,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{3e25a99a-5fd1-4a17-a7a8-01ea5dcd76e1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2116,16 +2365,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2137,13 +2393,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{a77c4ed0-b2d4-460a-9364-8960bc569e44}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.36083108</value>
+  <value>0.01406065</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2156,7 +2414,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{5065db68-fa84-4b6d-b436-9b0aa90fef62}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2166,16 +2426,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2187,13 +2454,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{95170189-8693-4ad0-8208-2e11a78f0c92}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>0.11849165</value>
+  <value>1.39722600</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2206,7 +2475,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>91</width>
   <height>132</height>
   <uuid>{a44a27e9-15d5-4d50-ab7f-8d2490eef4da}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2216,16 +2487,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -2237,7 +2515,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>91</width>
   <height>132</height>
   <uuid>{6adf61be-3364-4131-8f55-f072b796fc7b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2247,16 +2527,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -2268,7 +2555,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>44</width>
   <height>27</height>
   <uuid>{085b71a0-b11a-4225-9654-35fbb949e00b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2278,16 +2567,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2299,13 +2595,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{00476cf1-49a1-443c-b2d0-e5a58fffb07b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00048555</value>
+  <value>0.53913566</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2318,7 +2616,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{622367d2-a460-4762-931c-92a7f2a49ee8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2328,16 +2628,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2349,7 +2656,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{49a67124-8182-47c5-ab92-c1805b3b781b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2359,16 +2668,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2380,13 +2696,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{de3ea287-8def-4d60-ab7f-227e03a58b89}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.00556565</value>
+  <value>0.33241980</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2399,7 +2717,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{53710c5e-8350-4c6e-8336-1a38e2e4c553}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2409,16 +2729,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2430,13 +2757,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{68f9c5c8-0c0e-44b9-a40f-5513b3ea32c7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.03035997</value>
+  <value>0.28283300</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2449,7 +2778,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{ea4be0a7-eb52-4298-815e-56c0eda60ddd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2459,16 +2790,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2480,13 +2818,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{aef1719c-c106-4de5-8877-a83bcb0e303a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>2.75318646</value>
+  <value>2.52905209</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2499,7 +2839,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>44</width>
   <height>27</height>
   <uuid>{9a9b8c07-51d2-4ad6-acab-fc4d4414d32f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2509,16 +2851,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2530,13 +2879,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{1cb2460b-4f1e-4960-9e4d-bb8b12b2fe3a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.34034353</value>
+  <value>0.68009821</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2549,7 +2900,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{30e4b087-6716-45a8-8fba-8355aed7a984}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2559,16 +2912,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2580,7 +2940,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{deb8e31d-4ca0-47b2-af38-ecd75175fa61}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2590,16 +2952,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2611,13 +2980,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{39bbe82d-bf66-4390-af28-728bf48bf553}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.00144197</value>
+  <value>0.03844963</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2630,7 +3001,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{6161e0da-63d2-4955-81de-c9b45001bf87}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2640,16 +3013,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2661,13 +3041,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{8175dd03-fb0b-4510-95a1-5e64decf4956}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00835408</value>
+  <value>0.05965799</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2680,7 +3062,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>21</width>
   <height>25</height>
   <uuid>{5159ef4a-2efc-4ed3-9ed2-c2f6d7eab744}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2690,16 +3074,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2711,13 +3102,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{14a72510-ba4d-4aaa-8abe-af9434462a84}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>2.70617104</value>
+  <value>2.02723173</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2730,7 +3123,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>110</width>
   <height>132</height>
   <uuid>{ab79e93c-b7b3-49d3-99a9-9557d60ff47e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2740,16 +3135,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -2761,7 +3163,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>30</width>
   <height>25</height>
   <uuid>{ccb66377-6a5d-4fe4-b4a1-cf14951aec10}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2771,16 +3175,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2792,13 +3203,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{0b032eae-9a65-4ae9-9c6a-35c7d53551bc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.69100642</value>
+  <value>0.99475863</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2811,7 +3224,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>62</width>
   <height>25</height>
   <uuid>{07822872-42f0-4f92-8750-01a4be5f8a8d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2819,20 +3234,20 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>3</value>
+  <value>0.5</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2841,7 +3256,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>52</width>
   <height>28</height>
   <uuid>{a0de1639-3c30-416d-89b7-7b96e822642a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2851,16 +3268,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2872,7 +3296,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>46</width>
   <height>20</height>
   <uuid>{eca47157-c2db-455e-9f7b-8aad20172dab}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2886,6 +3312,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2894,7 +3332,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>110</width>
   <height>132</height>
   <uuid>{e1cde249-7bb8-44ce-9fb2-395be9a224e8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2904,16 +3344,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -2925,7 +3372,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>46</width>
   <height>20</height>
   <uuid>{4057129d-e5b6-4d43-a7b3-cc89da41cf95}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2939,6 +3388,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2947,7 +3408,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>52</width>
   <height>28</height>
   <uuid>{c270ed88-7208-44a7-aa63-808b356052fc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2957,16 +3420,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2978,7 +3448,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>62</width>
   <height>25</height>
   <uuid>{5bb7f949-bc2e-4ecd-9c4f-144cb3889d0d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2986,9 +3458,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>230</r>
@@ -2999,7 +3471,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2.5</value>
+  <value>2</value>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>OP2_Lev</objectName>
@@ -3008,13 +3480,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{52cdd897-93c5-4ce6-8363-2f1b80beffab}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.35206032</value>
+  <value>0.19704068</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3027,7 +3501,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>30</width>
   <height>25</height>
   <uuid>{ea9733e5-ac29-4c5c-a47c-9b048a04a3d5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3037,16 +3513,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3058,7 +3541,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>110</width>
   <height>132</height>
   <uuid>{af72e9b9-4b6e-44f2-8413-bffb1cb613fe}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3068,16 +3553,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3089,7 +3581,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>110</width>
   <height>132</height>
   <uuid>{f1d52ecc-c75d-4487-a694-811e6b319e94}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3099,16 +3593,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3120,7 +3621,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>110</width>
   <height>132</height>
   <uuid>{b20aee5e-5a24-4ea4-b83b-2ccea0bce9db}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3130,16 +3633,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3151,7 +3661,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>110</width>
   <height>132</height>
   <uuid>{d4538d22-9d29-4ab0-babe-6e3880343362}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3161,16 +3673,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3182,7 +3701,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>30</width>
   <height>25</height>
   <uuid>{d0cad3ed-cbd0-42eb-b558-ac39a311d778}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3192,16 +3713,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3213,13 +3741,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{8af14ba4-ad9f-4ba8-85ec-45a83238fdbb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.48741713</value>
+  <value>0.26691155</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3232,7 +3762,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>62</width>
   <height>25</height>
   <uuid>{6fd61b15-bc21-41f0-888d-526675b6ec12}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3240,9 +3772,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>230</r>
@@ -3253,7 +3785,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>2</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3262,7 +3794,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>52</width>
   <height>28</height>
   <uuid>{75b940ac-1a6b-42bd-bd7d-350b91f07b43}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3272,16 +3806,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3293,7 +3834,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>46</width>
   <height>20</height>
   <uuid>{2ee5c696-e953-46b9-a0fc-3c0a6b50644f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3307,6 +3850,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3315,7 +3870,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>30</width>
   <height>25</height>
   <uuid>{2153f47f-3c8e-49a3-839d-7530547ad92c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3325,16 +3882,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3346,13 +3910,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>20</width>
   <height>100</height>
   <uuid>{546eff0f-e7a8-40f3-9450-9fffe360958f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.60054684</value>
+  <value>0.54287818</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3365,7 +3931,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>62</width>
   <height>25</height>
   <uuid>{62157ee3-b7e1-404a-925d-973bfa2e48d5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3373,9 +3941,347 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="background">
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
+  </bgcolor>
+  <resolution>0.00100000</resolution>
+  <minimum>0</minimum>
+  <maximum>6</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>2</value>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>439</x>
+  <y>54</y>
+  <width>52</width>
+  <height>28</height>
+  <uuid>{f8f4438c-2393-4e88-a0d2-0668418f10a2}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Ratio</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>OP4_Inv</objectName>
+  <x>443</x>
+  <y>85</y>
+  <width>46</width>
+  <height>20</height>
+  <uuid>{93af235b-99d6-4ecb-9ec7-7d1421350c86}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Inv</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>398</x>
+  <y>247</y>
+  <width>30</width>
+  <height>25</height>
+  <uuid>{3a7b8370-8a35-4dbd-ac77-95671033afef}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Lev</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>OP5_Lev</objectName>
+  <x>403</x>
+  <y>148</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{37c7aa17-e643-4e75-bf58-6969b2ed6c31}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.98748860</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBSpinBox" version="2">
+  <objectName>OP5_Ratio</objectName>
+  <x>429</x>
+  <y>165</y>
+  <width>62</width>
+  <height>25</height>
+  <uuid>{1b153ca8-1cc5-4578-850d-6ba111c78a82}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="background">
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
+  </bgcolor>
+  <resolution>0.00100000</resolution>
+  <minimum>0</minimum>
+  <maximum>6</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>2.5</value>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>440</x>
+  <y>187</y>
+  <width>52</width>
+  <height>28</height>
+  <uuid>{5afb0f34-ac97-41ee-a1a0-4d5b556a218f}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Ratio</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>OP5_Inv</objectName>
+  <x>444</x>
+  <y>218</y>
+  <width>46</width>
+  <height>20</height>
+  <uuid>{ba06f48d-fd4f-4ea2-b22d-8b6e6a8f48ef}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Inv</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>398</x>
+  <y>380</y>
+  <width>30</width>
+  <height>25</height>
+  <uuid>{dbbb48a6-cb9b-41b5-ba70-42bb632a52a6}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Lev</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>OP6_Lev</objectName>
+  <x>403</x>
+  <y>281</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{9f825ec8-2820-4a22-b358-03e0db0f6f49}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.39838231</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBSpinBox" version="2">
+  <objectName>OP6_Ratio</objectName>
+  <x>430</x>
+  <y>298</y>
+  <width>62</width>
+  <height>25</height>
+  <uuid>{04bcd67b-1f71-4738-a580-5d34453e3158}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>230</r>
@@ -3390,278 +4296,14 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>439</x>
-  <y>54</y>
-  <width>52</width>
-  <height>28</height>
-  <uuid>{f8f4438c-2393-4e88-a0d2-0668418f10a2}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>Ratio</label>
-  <alignment>left</alignment>
-  <valignment>top</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBButton" version="2">
-  <objectName>OP4_Inv</objectName>
-  <x>443</x>
-  <y>85</y>
-  <width>46</width>
-  <height>20</height>
-  <uuid>{93af235b-99d6-4ecb-9ec7-7d1421350c86}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Inv</text>
-  <image>/</image>
-  <eventLine/>
-  <latch>true</latch>
-  <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
-  <fontsize>10</fontsize>
- </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
-  <x>398</x>
-  <y>247</y>
-  <width>30</width>
-  <height>25</height>
-  <uuid>{3a7b8370-8a35-4dbd-ac77-95671033afef}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>Lev</label>
-  <alignment>left</alignment>
-  <valignment>top</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBVSlider" version="2">
-  <objectName>OP5_Lev</objectName>
-  <x>403</x>
-  <y>148</y>
-  <width>20</width>
-  <height>100</height>
-  <uuid>{37c7aa17-e643-4e75-bf58-6969b2ed6c31}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <minimum>0.00000000</minimum>
-  <maximum>1.00000000</maximum>
-  <value>0.82928985</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>-1.00000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject type="BSBSpinBox" version="2">
-  <objectName>OP5_Ratio</objectName>
-  <x>429</x>
-  <y>165</y>
-  <width>62</width>
-  <height>25</height>
-  <uuid>{1b153ca8-1cc5-4578-850d-6ba111c78a82}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <alignment>left</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>230</r>
-   <g>230</g>
-   <b>230</b>
-  </bgcolor>
-  <resolution>0.00100000</resolution>
-  <minimum>0</minimum>
-  <maximum>6</maximum>
-  <randomizable group="0">false</randomizable>
-  <value>3.5</value>
- </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
-  <x>440</x>
-  <y>187</y>
-  <width>52</width>
-  <height>28</height>
-  <uuid>{5afb0f34-ac97-41ee-a1a0-4d5b556a218f}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>Ratio</label>
-  <alignment>left</alignment>
-  <valignment>top</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBButton" version="2">
-  <objectName>OP5_Inv</objectName>
-  <x>444</x>
-  <y>218</y>
-  <width>46</width>
-  <height>20</height>
-  <uuid>{ba06f48d-fd4f-4ea2-b22d-8b6e6a8f48ef}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Inv</text>
-  <image>/</image>
-  <eventLine/>
-  <latch>true</latch>
-  <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
-  <fontsize>10</fontsize>
- </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
-  <x>398</x>
-  <y>380</y>
-  <width>30</width>
-  <height>25</height>
-  <uuid>{dbbb48a6-cb9b-41b5-ba70-42bb632a52a6}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>Lev</label>
-  <alignment>left</alignment>
-  <valignment>top</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBVSlider" version="2">
-  <objectName>OP6_Lev</objectName>
-  <x>403</x>
-  <y>281</y>
-  <width>20</width>
-  <height>100</height>
-  <uuid>{9f825ec8-2820-4a22-b358-03e0db0f6f49}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <minimum>0.00000000</minimum>
-  <maximum>1.00000000</maximum>
-  <value>0.81146699</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>-1.00000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject type="BSBSpinBox" version="2">
-  <objectName>OP6_Ratio</objectName>
-  <x>430</x>
-  <y>298</y>
-  <width>62</width>
-  <height>25</height>
-  <uuid>{04bcd67b-1f71-4738-a580-5d34453e3158}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <alignment>left</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>230</r>
-   <g>230</g>
-   <b>230</b>
-  </bgcolor>
-  <resolution>0.00100000</resolution>
-  <minimum>0</minimum>
-  <maximum>6</maximum>
-  <randomizable group="0">false</randomizable>
-  <value>0</value>
- </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
   <x>440</x>
   <y>320</y>
   <width>52</width>
   <height>28</height>
   <uuid>{49db844e-1ce5-4ffc-b207-de4b4c79db06}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3671,16 +4313,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3692,7 +4341,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>46</width>
   <height>20</height>
   <uuid>{79864394-9898-4781-bbfb-184658696f75}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3706,6 +4357,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3714,7 +4377,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>124</width>
   <height>256</height>
   <uuid>{84e29a83-2929-41ab-b8ea-22cd0e58fe3f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3724,16 +4389,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3745,7 +4417,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>100</width>
   <height>20</height>
   <uuid>{487c8bfd-d023-43ea-b959-dac28c1e341d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3759,6 +4433,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8243</objectName>
@@ -3767,7 +4453,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>100</width>
   <height>20</height>
   <uuid>{a5dc696a-15ba-47c2-9cf7-5788a868b0d4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3781,6 +4469,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b7964</objectName>
@@ -3789,7 +4489,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>100</width>
   <height>20</height>
   <uuid>{a21166bb-8c6d-48a7-8005-837613fc83b5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3803,6 +4505,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8274</objectName>
@@ -3811,7 +4525,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>100</width>
   <height>20</height>
   <uuid>{c2e1dc15-bcc8-4ee5-9a36-334ce7a3f448}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3825,6 +4541,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b7886</objectName>
@@ -3833,7 +4561,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>100</width>
   <height>20</height>
   <uuid>{2e11e07e-5d93-42b2-8886-62ae9b5e75bb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3847,6 +4577,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8299</objectName>
@@ -3855,7 +4597,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>100</width>
   <height>20</height>
   <uuid>{a509c2de-6235-4dd2-9449-757808be3cef}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3869,6 +4613,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3672</objectName>
@@ -3877,7 +4633,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>100</width>
   <height>20</height>
   <uuid>{c1d6dfa2-27a8-4abb-9977-4570671e6f3a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3891,6 +4649,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b9859</objectName>
@@ -3899,7 +4669,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>100</width>
   <height>20</height>
   <uuid>{b419a8fc-7dfb-4c6f-84f5-88a7ffdd888a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3913,6 +4685,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3921,7 +4705,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>124</width>
   <height>143</height>
   <uuid>{0e2489b0-38b6-49c2-ad4a-62bf29752149}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3931,17 +4717,24 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
+  <bordermode>true</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
@@ -3952,7 +4745,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>124</width>
   <height>132</height>
   <uuid>{e9e01339-1445-4ee9-a24c-11caa98c0f74}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -3962,16 +4757,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3983,28 +4785,36 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>118</width>
   <height>43</height>
   <uuid>{db54a1ce-2e3f-4ef4-a765-6721f66610e4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Diffamator
-</label>
+  <label>Diffamator</label>
   <alignment>center</alignment>
-  <valignment>top</valignment>
+  <valignment>center</valignment>
   <font>Liberation Sans</font>
-  <fontsize>24</fontsize>
+  <fontsize>20</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>255</r>
    <g>255</g>
    <b>127</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordercolor>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
+  </bordercolor>
+  <bordermode>true</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
@@ -4015,7 +4825,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>126</width>
   <height>185</height>
   <uuid>{cc0440f6-06ca-42e1-8c45-53a27c91a649}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4025,16 +4837,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -4046,7 +4865,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>125</width>
   <height>76</height>
   <uuid>{bfaa2588-192b-4a5e-a47a-a70150baf979}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4056,16 +4877,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>219</r>
    <g>203</g>
    <b>161</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -4077,13 +4905,15 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>115</width>
   <height>21</height>
   <uuid>{58a81e21-97d6-4731-8910-53f1f0537605}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.04375662</value>
+  <value>0.19296116</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4096,7 +4926,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>48</width>
   <height>28</height>
   <uuid>{6bef771a-4786-43cb-a9c1-3d8f9e0d0728}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4104,9 +4936,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>230</r>
@@ -4117,7 +4949,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <minimum>1</minimum>
   <maximum>32</maximum>
   <randomizable group="0">false</randomizable>
-  <value>30</value>
+  <value>13</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4126,7 +4958,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>67</width>
   <height>26</height>
   <uuid>{0d6b632a-a3b0-4bb7-a494-f884804d1a97}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4134,19 +4968,26 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
+  <fontsize>11</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
+  </bordercolor>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -4157,7 +4998,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>69</width>
   <height>25</height>
   <uuid>{c6f8304a-e803-4196-9b00-b1356a228da1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4165,19 +5008,26 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
+  <fontsize>11</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
+  </bordercolor>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -4188,7 +5038,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>119</width>
   <height>30</height>
   <uuid>{f2e13afc-4068-4d76-90c2-2765a4b0bede}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -4365,7 +5217,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>65</width>
   <height>21</height>
   <uuid>{7b81436f-ee9d-441a-b954-c9debb293494}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4379,6 +5233,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4750</objectName>
@@ -4387,7 +5253,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>100</width>
   <height>20</height>
   <uuid>{478b85b5-5666-4fc9-85df-6fe39e82bdb1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4401,6 +5269,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>midinote</objectName>
@@ -4409,7 +5289,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>30</width>
   <height>20</height>
   <uuid>{6178a00b-9991-4d50-bdcf-0d551d62c7d0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4417,19 +5299,24 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <value>60.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>5.00000000</minimum>
   <maximum>100.00000000</maximum>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>2</borderwidth>
@@ -4443,7 +5330,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>30</width>
   <height>20</height>
   <uuid>{30f711f8-7c4c-4b23-bfae-839797614164}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4451,19 +5340,24 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <value>83.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>5.00000000</minimum>
   <maximum>100.00000000</maximum>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>2</borderwidth>
@@ -4477,7 +5371,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>80</width>
   <height>25</height>
   <uuid>{7ab39d44-4919-44d3-93c7-2138c56bc609}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4487,16 +5383,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4508,7 +5411,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>80</width>
   <height>25</height>
   <uuid>{d48aa18b-4a28-4c83-a362-403736b357ad}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4518,16 +5423,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4539,7 +5451,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>100</width>
   <height>20</height>
   <uuid>{1037b6f2-2b24-42d6-803e-12bef76e2701}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4553,6 +5467,18 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>mididur</objectName>
@@ -4561,7 +5487,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>30</width>
   <height>20</height>
   <uuid>{3d8cd06f-a792-4cb8-ae3c-3630b115d9ca}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4569,19 +5497,24 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <value>1.18000000</value>
   <resolution>0.01000000</resolution>
   <minimum>0.00000000</minimum>
   <maximum>9.00000000</maximum>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>2</borderwidth>
@@ -4595,7 +5528,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>80</width>
   <height>25</height>
   <uuid>{b07a50ec-6dcf-4da2-bc5e-a9299c7d506d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4605,16 +5540,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4626,7 +5568,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <width>111</width>
   <height>82</height>
   <uuid>{03c821aa-f92a-4202-8232-368655a79ec2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4636,16 +5580,23 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

@@ -1,103 +1,112 @@
-;Written by Iain McCurdy 2009
+; Written by Iain McCurdy 2009
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav
+; files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 256	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 256    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-;TABLES THAT STORE FFT ANALYSIS ATTRIBUTES DATA
-giFFTattributes0	ftgen	1, 0, 4, -2,  512, 256, 1024, 1
-giFFTattributes1	ftgen	2, 0, 4, -2, 1024, 256, 1024, 1
-giFFTattributes2	ftgen	3, 0, 4, -2, 2048, 256, 2048, 1
-giFFTattributes3	ftgen	4, 0, 4, -2, 4096, 256, 4096, 1
+; Tables that store fft analysis attributes data
+giFFTattributes0 ftgen 1, 0, 4, -2, 512, 256, 1024, 1
+giFFTattributes1 ftgen 2, 0, 4, -2, 1024, 256, 1024, 1
+giFFTattributes2 ftgen 3, 0, 4, -2, 2048, 256, 2048, 1
+giFFTattributes3 ftgen 4, 0, 4, -2, 4096, 256, 4096, 1
 
-;TABLE FOR EXP SLIDER
-giExp2			ftgen	0, 0, 129, -25, 0, 0.25, 128, 2.0
+; Table for exp slider
+giExp2 ftgen 0, 0, 129, -25, 0, 0.25, 128, 2.0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kfmod			invalue 	"Rescale_Frequencies"
-		gkfmod			tablei	kfmod, giExp2, 1
-						outvalue	"Rescale_Frequencies_Value", gkfmod	;init 1.0	
-		gknoscs			invalue  "No_Oscs"
-		gkbinoffset		invalue  "Bin_Offset"
-		gkbinincr			invalue  "Bin_Increment"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kfmod invalue "Rescale_Frequencies"
+    gkfmod tablei kfmod, giExp2, 1
+    outvalue "Rescale_Frequencies_Value", gkfmod  ; init 1.0
+    gknoscs     invalue "No_Oscs"
+    gkbinoffset invalue "Bin_Offset"
+    gkbinincr   invalue "Bin_Increment"
 
-		gkinput			invalue	"Input"
-		gkFFTattributes	invalue	"FFTattributes"	
-	endif
+    gkinput         invalue "Input"
+    gkFFTattributes invalue "FFTattributes"
+  endif
 endin
 
-instr 	1
-	if	gkinput=0	then																		;IF 'INPUT' SWITCH IS SET TO 'Live Input' THEN IMPLEMENT THE NEXT LINE OF CODE
-		asig		inch		1																;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
-	else																					;IF 'INPUT' SWITCH IS SET TO 'Sound File' THEN IMPLEMENT THE NEXT LINE OF CODE
-		Sfile	invalue	"_Browse"
-		;OUTPUT	OPCODE	FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig, aR	FilePlay2	Sfile,       1,      0,        1										;READ A STORED AUDIO FILE FROM THE HARD DRIVE
-	endif																				;END OF 'IF'...'THEN' BRANCHING
+instr 1
+  ; If 'input' switch is set to 'live input' then implement the next line of code
+  if gkinput = 0 then
+    asig inch 1  ; Read audio from the computer's live input channel 1 (left)
+    ; If 'input' switch is set to 'sound file' then implement the next line of code
+  else
+    Sfile invalue "_Browse"
+    ; Output opcode file_path| speed | inskip | wraparound (1=on)
+    asig, aR FilePlay2 Sfile, 1, 0, 1  ; Read a stored audio file from the hard drive
+  endif                                ; End of 'if'...'then' branching
 
-	iFFTsize	table	0, i(gkFFTattributes)+1													;READ FFT SIZE FROM APPROPRIATE TABLE    
-	kSwitch	changed	gkFFTattributes, gknoscs, gkbinoffset, gkbinincr								;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
+  iFFTsize table 0, i(gkFFTattributes)+1  ; Read fft size from appropriate table
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkFFTattributes, gknoscs, gkbinoffset, gkbinincr
 
-	if	kSwitch=1	then																		;IF I-RATE VARIABLE IS CHANGED...
-		reinit	UPDATE																	;BEGIN A REINITIALISATION PASS IN ORDER TO EFFECT THIS CHANGE. BEGIN THIS PASS AT LABEL ENTITLED 'UPDATE' AND CONTINUE UNTIL rireturn OPCODE 
-	endif																				;END OF CONDITIONAL BRANCHING
+  if kSwitch = 1 then  ; If i-rate variable is changed...
+    ; Begin a reinitialisation pass in order to effect this change. Begin this pass at
+    ; label entitled 'update' and continue until rireturn opcode
+    reinit UPDATE
+  endif  ; End of conditional branching
 
-	UPDATE:																				;LABEL - BEGIN RE-INITIALIZATION PASS FROM HERE
-	iFFTsize	table	0, i(gkFFTattributes)+1													;READ FFT SIZE FROM APPROPRIATE TABLE    
-	ioverlap	table	1, i(gkFFTattributes)+1													;READ OVERLAP SIZE FROM APPROPRIATE TABLE
-	iwinsize	table	2, i(gkFFTattributes)+1														;READ WINDOW SIZE FROM APPROPRIATE TABLE 
-	iwintype	table	3, i(gkFFTattributes)+1													;READ WINDOW TYPE FROM APPROPRIATE TABLE 	
+UPDATE:                                   ; Label - begin re-initialization pass from here
+  iFFTsize table 0, i(gkFFTattributes)+1  ; Read fft size from appropriate table
+  ioverlap table 1, i(gkFFTattributes)+1  ; Read overlap size from appropriate table
+  iwinsize table 2, i(gkFFTattributes)+1  ; Read window size from appropriate table
+  iwintype table 3, i(gkFFTattributes)+1  ; Read window type from appropriate table
 
-	fsig1  	pvsanal	asig, iFFTsize, ioverlap, iwinsize, iwintype									;ANALYSE THE AUDIO SIGNAL. OUTPUT AN F-SIGNAL.
+  ; Analyse the audio signal. Output an f-signal.
+  fsig1 pvsanal asig, iFFTsize, ioverlap, iwinsize, iwintype
 
-	;THE limit OPCODE IS USED TO LIMIT THE VALUE USED FOR NUMBER OF OSCILLATORS (inoscs)
-	;AS IF THIS EXCEEDS THE NUMBER OF BINS USED IN THE ORIGINAL ANALYSIS CSOUND WILL CRASH.
-	;THE NUMBER OF BINS IS FFTsize DIVIDED BY 2, + 1
-	;BIN OFFSET (binoffset) AND BIN INCREMENT (binincr) MUST ALSO BE TAKEN INTO ACCOUNT AS
-	;THEY WILL INFLUENCE TO WHAT HIGHEST FFT BIN pvsadsyn ATTEMPTS TO READ FROM
-	inoscs	limit	i(gknoscs), 0, (((iFFTsize*0.5)+1)-i(gkbinoffset))/i(gkbinincr)
+  ; The limit opcode is used to limit the value used for number of oscillators (inoscs)
+  ; As if this exceeds the number of bins used in the original analysis csound will crash.
+  ; The number of bins is fftsize divided by 2, + 1
+  ; Bin offset (binoffset) and bin increment (binincr) must also be taken into account as
+  ; They will influence to what highest fft bin pvsadsyn attempts to read from
+  inoscs limit i(gknoscs), 0, (((iFFTsize*0.5)+1)-i(gkbinoffset))/i(gkbinincr)
 
-;	print	inoscs																		;FOR THE USERS INFORMATION THE ACTUAL NUMBER OF OSCILLATORS
-	aresyn 	pvsadsyn fsig1, inoscs, gkfmod , i(gkbinoffset), i(gkbinincr)							;RESYNTHESIZE FROM THE fsig USING pvsadsyn
-	;OUTPUT	OPCODE		INPUT
-			outs		aresyn, aresyn															;SEND THE RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
+  ; Print inoscs ;for the users information the actual number of oscillators
+  ; Resynthesize from the fsig using pvsadsyn
+  aresyn pvsadsyn fsig1, inoscs, gkfmod, i(gkbinoffset), i(gkbinincr)
+  ; Output opcode  input
+  outs aresyn, aresyn  ; Send the resynthesized signal to the audio outputs
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -112,9 +121,9 @@ i 10		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -132,15 +141,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -161,15 +175,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -191,14 +210,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -217,11 +236,23 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -239,15 +270,20 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -268,14 +304,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -332,14 +368,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -379,14 +415,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -408,15 +444,20 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -439,6 +480,18 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
@@ -481,9 +534,9 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -508,14 +561,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -535,14 +588,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -564,14 +617,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -595,14 +648,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -624,14 +677,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -651,14 +704,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -682,14 +735,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -1,59 +1,66 @@
-;Writen by Iain McCurdy, 2008
+; Writen by Iain McCurdy, 2008
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-gkTime		init	1	;INITIALISE VARIABLE FOR TIME GAP BETWEEN KEY PRESSES
-gkDlyTim		init	1	;INITIALISE DELAY TIME VARIABLE USED IN THE DELAY EFFECT IN INSTR 4
+gkTime   init 1  ; Initialise variable for time gap between key presses
+gkDlyTim init 1  ; Initialise delay time variable used in the delay effect in instr 4
 
 
-instr	1	;MIDI TRIGGERED INSTRUMENT - RECEIVES 'TAPS'
-			event_i		"i", p1+2, 0, 0.001, i(gkTime)			;TRIGGER TEMPO CALCULATING INSTRUMENT
-			event_i		"i", p1+1, 0, -1						;START 'TIMER' INSTRUMENT (-1 DURATION INDICATES A MONPHONIC HELD NOTE)
-			outvalue		"Delay_Time", i(gkDlyTim)				;SEND CURRENT DELAY TIME VALUE TO THE ON-SCREEN VALUATOR BOX
-			turnoff											;TURNOFF THIS INSTRUMENT IMMEDIATELY
+instr 1                                   ; MIDI triggered instrument - receives 'taps'
+  event_i "i", p1+2, 0, 0.001, i(gkTime)  ; Trigger tempo calculating instrument
+  ; Start 'timer' instrument (-1 duration indicates a monphonic held note)
+  event_i "i", p1+1, 0, -1
+  ; Send current delay time value to the on-screen valuator box
+  outvalue "Delay_Time", i(gkDlyTim)
+  turnoff  ; Turnoff this instrument immediately
 endin
 
-instr	2	;TIMER TO MEASURE TIME GAP BETWEEN KEY PRESSES
-	gkTime	timeinsts											;timeinsts OUTPUTS THE TIME SINCE THE START OF THE THIS NOTE BEING TRIGGERED
+instr 2  ; Timer to measure time gap between key presses
+  ; Timeinsts outputs the time since the start of the this note being triggered
+  gkTime timeinsts
 endin
 
-instr	3	;CALCULATE CURRENT TEMPO BASED ON TIME GAP BETWEEN THE LAST TWO KEY PRESSES
-	gkDlyTim	init	p4											;SET DELAY TIME (FOR DELAY EFFECT IN INSTR 4) TO CURRENT TIME GAP VALUE
-	iTempo	=	60/p4										;DERIVE TEMPO FROM TIME GAP
-			outvalue		"Tempo", iTempo						;SEND CURRENT DELAY TIME VALUE TO THE ON-SCREEN VALUATOR BOX
+instr 3  ; Calculate current tempo based on time gap between the last two key presses
+  ; Set delay time (for delay effect in instr 4) to current time gap value
+  gkDlyTim init p4
+  iTempo = 60/p4            ; Derive tempo from time gap
+  outvalue "Tempo", iTempo  ; Send current delay time value to the on-screen valuator box
 endin
 
-instr	4	;DELAY INSTRUMENT - TAKES LIVE AUDIO IN AS ITS INPUT
-	iMaxDlyTim	init		10									;INITIALISE VARIABLE FOR MAXIMUM DELAY TIME
-	kDlyTim		limit	gkDlyTim, 0.001, iMaxDlyTim				;LIMIT DELAY TIME TO PREVENT CRASHES
+; Delay instrument - takes live audio in as its input
+instr 4
+  iMaxDlyTim init 10                         ; Initialise variable for maximum delay time
+  kDlyTim limit gkDlyTim, 0.001, iMaxDlyTim  ; Limit delay time to prevent crashes
 
-	ain1			inch		1									;READ AUDIO FROM LIVE INPUT CHANNEL 1
-	aFeedback		init		0									;INITIALISE FEEDBACK SIGNAL FOR FIRST k PASS
-	aBuffer		delayr	iMaxDlyTim							;DEFINE AUDIO BUFFER FOR DELAY
-	aTap			deltap3	kDlyTim								;READ AUDIO FROM A DELAY TAP FROM WITHIN THIS BUFFER
-				delayw	ain1+(aFeedback)						;WRITE AUDIO INTO THE DELAY BUFFER (MIXTURE OF LIVE IN AND FEEDBACK LOOP)
-	aFeedback		=		aTap*.5								;DEFINE THE AUDIO FEEDBACK SIGNAL FOR THE NEXT k PASS
-				outs		(aTap+ain1)*.5, (aTap+ain1)*.5			;SEND AUDIO TO OUTPUTS (AND ATTENUATE)
+  ain1 inch 1                ; Read audio from live input channel 1
+  aFeedback init 0           ; Initialise feedback signal for first k pass
+  aBuffer delayr iMaxDlyTim  ; Define audio buffer for delay
+  aTap deltap3 kDlyTim       ; Read audio from a delay tap from within this buffer
+  ; Write audio into the delay buffer (mixture of live in and feedback loop)
+  delayw ain1+(aFeedback)
+  ; Define the audio feedback signal for the next k pass
+  aFeedback = aTap*.5
+  outs (aTap+ain1)*.5, (aTap+ain1)*.5  ; Send audio to outputs (and attenuate)
 endin
 </CsInstruments>
 <CsScore>
-i 1 0 0.001	;INSTR 1 (SHORT NOTE)
-i 4 0 3600	;INSTR 4 (DELAY) PLAYS FOR 1 HOUR 
+i 1 0 0.001  ; Instr 1 (short note)
+i 4 0 3600   ; Instr 4 (delay) plays for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

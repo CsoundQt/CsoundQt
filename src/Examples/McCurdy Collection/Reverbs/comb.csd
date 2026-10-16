@@ -1,97 +1,101 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
-;	Add init instrument
-;	Delayed reverb start to avoid "INIT ERROR in instr 2: illegal loop time" error
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Add init instrument
+; Delayed reverb start to avoid "INIT ERROR in instr 2: illegal loop time" error
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 100		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-giExp1	ftgen	0, 0, 129, -25, 0, 0.0001, 128, 0.1	;TABLE FOR EXP SLIDER
-giExp2	ftgen	0, 0, 129, -25, 0, 0.0001, 128, 10.0	;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 0.0001, 128, 0.1   ; Table for exp slider
+giExp2 ftgen 0, 0, 129, -25, 0, 0.0001, 128, 10.0  ; Table for exp slider
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkingain		invalue	"LiveGain"
-		klpt			invalue	"LoopTime"
-		gklpt		tablei	klpt, giExp1, 1
-					outvalue	"LoopTime_Value", gklpt	
-		krvt			invalue	"RvbTime"
-		gkrvt		tablei	krvt, giExp2, 1
-					outvalue	"RvbTime_Value", gkrvt	
-		gkamp		invalue	"Amplitude"
-		gkinput		invalue	"Input"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkingain invalue "LiveGain"
+    klpt     invalue "LoopTime"
+    gklpt tablei klpt, giExp1, 1
+    outvalue "LoopTime_Value", gklpt
+    krvt invalue "RvbTime"
+    gkrvt tablei krvt, giExp2, 1
+    outvalue "RvbTime_Value", gkrvt
+    gkamp   invalue "Amplitude"
+    gkinput invalue "Input"
+  endif
 endin
 
-instr	1	;PLAYS FILE AND OUTPUTS GLOBAL VARIABLES
+instr 1  ; Plays file and outputs global variables
 
-	if	gkinput==0	then									;IF FILE INPUT IS SELECTED...
-		Sfile		invalue	"_Browse1"
-		gasigL, gasigR	FilePlay2	Sfile, 1, 0, 1					;GENERATE 2 AUDIO SIGNALS FROM A SOUND FILE (NOTE THE USE OF GLOBAL VARIABLES)		
-	else													;OTHERWISE
-		asigL, asigR	ins									;TAKE INPUT FROM COMPUTER'S AUDIO INPUT
-		gasigL	=	asigL * gkingain						;SCALE USING 'Input Gain' SLIDER
-		gasigR	=	asigR * gkingain						;SCALE USING 'Input Gain' SLIDER
-	endif												;END OF CONDITIONAL BRANCHING
+  if gkinput == 0 then  ; If file input is selected...
+    Sfile invalue "_Browse1"
+    ; Generate 2 audio signals from a sound file (note the use of global variables)
+    gasigL, gasigR FilePlay2 Sfile, 1, 0, 1
+  else                         ; Otherwise
+    asigL, asigR ins           ; Take input from computer's audio input
+    gasigL = asigL * gkingain  ; Scale using 'input gain' slider
+    gasigR = asigR * gkingain  ; Scale using 'input gain' slider
+  endif                        ; End of conditional branching
 endin
 
-instr	2	;REVERB - ALWAYS ON
-	kSwitch	changed	gklpt								;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then										;IF kSwitch=1 THEN
-		reinit	UPDATE									;BEGIN A REINITIALIZATION PASS FROM LABEL 'UPDATE'
-	endif												;END OF CONDITIONAL BRANCHING
-	UPDATE:												;A LABEL
-	;OUTPUT	OPCODE | INPUT | REVERB_TIME | LOOP_TIME_(DELAY_TIME)
-	aresL	comb 	gasigL,     gkrvt,       i(gklpt) 
-	aresR	comb 	gasigR,     gkrvt,       i(gklpt) 
-			rireturn										;RETURN TO PERFORMANCE TIME PASSES
-			outs		aresL * gkamp, aresR * gkamp				;SEND comb OUTPUT TO THE AUDIO OUTPUTS AND SCALE USING THE GUI SLIDER VARIABLE gkamp
-			clear	gasigL, gasigR							;CLEAR GLOBAL AUDIO VARIABLES
+instr 2  ; Reverb - always on
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gklpt
+  if kSwitch = 1 then  ; IF kSwitch=1 THEN
+    reinit UPDATE      ; Begin a reinitialization pass from label 'update'
+  endif                ; End of conditional branching
+UPDATE:                ; A label
+  ; Output opcode | input | reverb_time | loop_time_(delay_time)
+  aresL comb gasigL, gkrvt, i(gklpt)
+  aresR comb gasigR, gkrvt, i(gklpt)
+  rireturn  ; Return to performance time passes
+  ; Send comb output to the audio outputs and scale using the GUI slider variable gkamp
+  outs aresL * gkamp, aresR * gkamp
+  clear gasigL, gasigR  ; Clear global audio variables
 endin
 
-instr	11	;INIT
-			outvalue	"LoopTime"	, 0.45
-			outvalue	"RvbTime"		, 0.66
-			outvalue	"Amplitude"	, .7
+instr 11  ; Init
+  outvalue "LoopTime", 0.45
+  outvalue "RvbTime", 0.66
+  outvalue "Amplitude", .7
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0.0	   3600	;GUI
-i  2		0.5	   3600	;REVERB INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
-i 11		0.0		0.1	;INIT
+; Instr | start | duration
+i 10 0.0 3600  ; GUI
+i 2 0.5 3600   ; Reverb instrument plays for 1 hour (and keeps performance going)
+i 11 0.0 0.1   ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -104,9 +108,9 @@ i 11		0.0		0.1	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -124,15 +128,20 @@ i 11		0.0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -150,11 +159,23 @@ i 11		0.0		0.1	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -172,14 +193,14 @@ i 11		0.0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -201,14 +222,14 @@ i 11		0.0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -230,15 +251,20 @@ i 11		0.0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -261,14 +287,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -315,14 +341,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -346,6 +372,18 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -363,9 +401,9 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -390,14 +428,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -437,14 +475,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -466,14 +504,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -513,14 +551,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -542,14 +580,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -589,14 +627,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -618,14 +656,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -665,15 +703,20 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
@@ -694,14 +737,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -723,14 +766,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -752,14 +795,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -781,14 +824,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -810,14 +853,14 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

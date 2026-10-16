@@ -1,94 +1,99 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-;This instrument use the files impuls20.aiff and mandpluk.aiff
-
-
-;Notes on modifications from original csd:
-;	Add tables for exp slider
-;	INIT instrument added
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; This instrument use the files impuls20.aiff and mandpluk.aiff
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; Notes on modifications from original csd:
+; Add tables for exp slider
+; INIT instrument added
+
+
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-giwfn1	ftgen	1, 0, 256, 1, "impuls20.aiff", 0, 0, 0		;WAVEFORM SUGGESTED BY THE CSOUND MANUAL
-giwfn2	ftgen	2, 0, 256, -7, 1, 128, 1, 0, -1, 128, -1	;SQUARE WAVE
-giafn	ftgen	0, 0, 8192, 1, "mandpluk.aiff", 0, 0, 0		;ATTACK WAVEFORM
-givfn	ftgen	0, 0, 256, 10, 1						;VIBRATO WAVEFORM
+; Waveform suggested by the csound manual
+giwfn1 ftgen 1, 0, 256, 1, "impuls20.aiff", 0, 0, 0
+giwfn2 ftgen 2, 0, 256, -7, 1, 128, 1, 0, -1, 128, -1  ; Square wave
+giafn  ftgen 0, 0, 8192, 1, "mandpluk.aiff", 0, 0, 0   ; Attack waveform
+givfn  ftgen 0, 0, 256, 10, 1                          ; Vibrato waveform
 
-giExp1	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
 
 
-instr	10	;GUI and SYNCHRONIZE MIDI MOD. WHEEL AND GUI 'Vibrato Amplitude' SLIDER
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkamp		invalue	"Amp"
-		kfreq		invalue	"Freq"
-		gkfreq		tablei	kfreq, giExp1, 1
-					outvalue	"Freq_Value", gkfreq
-		gkfiltq		invalue	"FiltReso"
-		kfiltrate		invalue	"FiltRate"
-		gkfiltrate	=		kfiltrate * 0.0001
-		gkvibf		invalue	"VibFreq"
-		gkvamp		invalue	"VibAmp"
-		gkwfn		invalue	"Waveform"
-	endif
+instr 10  ; GUI and synchronize MIDI mod. Wheel and GUI 'vibrato amplitude' slider
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkamp invalue "Amp"
+    kfreq invalue "Freq"
+    gkfreq tablei kfreq, giExp1, 1
+    outvalue "Freq_Value", gkfreq
+    gkfiltq   invalue "FiltReso"
+    kfiltrate invalue "FiltRate"
+    gkfiltrate = kfiltrate * 0.0001
+    gkvibf invalue "VibFreq"
+    gkvamp invalue "VibAmp"
+    gkwfn  invalue "Waveform"
+  endif
 
-	kvamp	ctrl7	1,1,0,0.1								;READ MODULATION WHEEL VALUES
-	ktrig	changed	kvamp								;CHECK TO SEE IF MOD. WHEEL HAS MOVED. OUTPUT A VALUE OF 1 IF IT HAS, OTHERWISE ZERO
-	
-	if ktrig == 1 then
-		outvalue	"VibAmp", kvamp							;UPDATE GUI SLIDER FOR VIBRATO AMPLITUDE IF ktrig=1
-	endif
+  kvamp ctrl7 1, 1, 0, 0.1  ; Read modulation wheel values
+  ; Check to see if mod. Wheel has moved. Output a value of 1 if it has, otherwise zero
+  ktrig changed kvamp
+
+  if ktrig == 1 then
+    outvalue "VibAmp", kvamp  ; Update GUI slider for vibrato amplitude if ktrig=1
+  endif
 endin
 
-instr	1	;MIDI ACTIVATED INSTRUMENT
-	ioct		octmidi										;READ NOTE VALUES FROM MIDI INPUT IN THE 'OCT' FORMAT
-	;PITCH BEND INFORMATION IS READ
-	iSemitoneBendRange = 2									;PITCH BEND RANGE IN SEMITONES (WILL BE DEFINED FURTHER LATER)
-	imin		=		0									;EQUILIBRIUM POSITION
-	imax		=		iSemitoneBendRange * .0833333				;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend	pchbend	imin, imax							;PITCH BEND VARIABLE (IN oct FORMAT)
-	kfreq	=	cpsoct(ioct+ kbend)
+instr 1         ; MIDI activated instrument
+  ioct octmidi  ; Read note values from MIDI input in the 'oct' format
+  ; Pitch bend information is read
+  ; Pitch bend range in semitones (will be defined further later)
+  iSemitoneBendRange = 2
+  imin               = 0  ; Equilibrium position
+  ; Max pitch displacement (in oct format)
+  imax = iSemitoneBendRange * .0833333
+  ; Pitch bend variable (in oct format)
+  kbend pchbend imin, imax
+  kfreq = cpsoct(ioct+ kbend)
 
-	iwfn	=	i(gkwfn)+1
-	aenv		linsegr	1,3600,1,0.01,0						;ANTI-CLICK ENVELOPE
-	ares 	moog 	gkamp, kfreq, gkfiltq, gkfiltrate, gkvibf, gkvamp, giafn, iwfn, givfn
-			outs		ares*aenv, ares*aenv					;SEND AUDIO TO OUTPUTS
+  iwfn = i(gkwfn)+1
+  aenv linsegr 1, 3600, 1, 0.01, 0  ; Anti-click envelope
+  ares moog gkamp, kfreq, gkfiltq, gkfiltrate, gkvibf, gkvamp, giafn, iwfn, givfn
+  outs ares*aenv, ares*aenv  ; Send audio to outputs
 endin
 
-instr	2	;GUI ACTIVATED INSTRUMENT
-	iwfn	=	i(gkwfn)+1
-	ares 	moog 	gkamp, gkfreq, gkfiltq, gkfiltrate, gkvibf, gkvamp, giafn, iwfn, givfn
-			outs		ares, ares							;SEND AUDIO TO OUTPUTS
+instr 2  ; GUI activated instrument
+  iwfn = i(gkwfn)+1
+  ares moog gkamp, gkfreq, gkfiltq, gkfiltrate, gkvibf, gkvamp, giafn, iwfn, givfn
+  outs ares, ares  ; Send audio to outputs
 endin
 
-instr	3	;INIT
-			outvalue	"Amp"		, 0.03
-			outvalue	"Freq"		, 0.4
-			outvalue	"FiltReso"	, 0.85
-			outvalue	"FiltRate"	, 0.3
-			outvalue	"VibFreq"		, 5
-			outvalue	"VibAmp"		, 0
-			outvalue	"Waveform"	, 0
+instr 3  ; Init
+  outvalue "Amp", 0.03
+  outvalue "Freq", 0.4
+  outvalue "FiltReso", 0.85
+  outvalue "FiltRate", 0.3
+  outvalue "VibFreq", 5
+  outvalue "VibAmp", 0
+  outvalue "Waveform", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION 
-i 10		0		3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 
-i 3		0		0.1	;INIT
+i 3 0 0.1  ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -101,9 +106,9 @@ i 3		0		0.1	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -121,15 +126,20 @@ i 3		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -150,14 +160,14 @@ i 3		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -197,14 +207,14 @@ i 3		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -226,15 +236,20 @@ i 3		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -256,14 +271,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -282,11 +297,23 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -304,14 +331,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -351,14 +378,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -380,14 +407,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -427,14 +454,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -456,14 +483,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -503,14 +530,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -532,14 +559,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -579,14 +606,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -608,14 +635,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -655,14 +682,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -709,14 +736,14 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

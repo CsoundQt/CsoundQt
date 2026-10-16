@@ -1,158 +1,175 @@
-;Written by Iain McCurdy 2009
+; Written by Iain McCurdy 2009
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav
+; files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-				zakinit	1,1
+zakinit 1, 1
 
-gisine			ftgen	0, 0, 4096, 10, 1  				;SINE WAVE
-;TABLES THAT STORE FFT ANALYSIS ATTRIBUTES DATA
-giFFTattributes0	ftgen	1, 0, 4, -2,  512, 256, 1024, 1
-giFFTattributes1	ftgen	2, 0, 4, -2, 1024, 256, 1024, 1
-giFFTattributes2	ftgen	3, 0, 4, -2, 2048, 128, 2048, 1
-giFFTattributes3	ftgen	4, 0, 4, -2, 4096, 128, 4096, 1
+gisine ftgen 0, 0, 4096, 10, 1  ; Sine wave
+; Tables that store fft analysis attributes data
+giFFTattributes0 ftgen 1, 0, 4, -2, 512, 256, 1024, 1
+giFFTattributes1 ftgen 2, 0, 4, -2, 1024, 256, 1024, 1
+giFFTattributes2 ftgen 3, 0, 4, -2, 2048, 128, 2048, 1
+giFFTattributes3 ftgen 4, 0, 4, -2, 4096, 128, 4096, 1
 
-;TABLE FOR EXP SLIDER
-giExp10000		ftgen	0, 0, 129, -25, 0, 20.0, 128, 10000
+; Table for exp slider
+giExp10000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 10000
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkpow			invalue		"Power"
-		kfreq			invalue		"Frequency"
-		gkfreq			tablei		kfreq, giExp10000, 1
-						outvalue		"Frequency_Value", gkfreq
-		gkmltfreq			invalue		"Mult_Frequency"
-		gkDrySigGain		invalue		"Dry_Signal"
-		gkFiltSigGain		invalue		"Filter_Signal"
-		gkResSigGain		invalue		"Resultant_Signal"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkpow invalue "Power"
+    kfreq invalue "Frequency"
+    gkfreq tablei kfreq, giExp10000, 1
+    outvalue "Frequency_Value", gkfreq
+    gkmltfreq     invalue "Mult_Frequency"
+    gkDrySigGain  invalue "Dry_Signal"
+    gkFiltSigGain invalue "Filter_Signal"
+    gkResSigGain  invalue "Resultant_Signal"
 
-		gkOnOff			invalue		"On_Off"
-		ktrigOn			trigger		gkOnOff, 0.5, 0
-						schedkwhen	ktrigOn, 0, 0, 1, 0, -1		;start instr 1
-		ktrigOff			trigger		gkOnOff, 0.5, 1
-						schedkwhen	ktrigOff, 0, 0, -1, 0, 1		;stop instr 1
+    gkOnOff invalue "On_Off"
+    ktrigOn trigger gkOnOff, 0.5, 0
+    schedkwhen ktrigOn, 0, 0, 1, 0, -1  ; start instr 1
+    ktrigOff trigger gkOnOff, 0.5, 1
+    schedkwhen ktrigOff, 0, 0, -1, 0, 1  ; stop instr 1
 
-		gkpartials		invalue		"Partials"
-		gkoffset			invalue		"Offset"
+    gkpartials invalue "Partials"
+    gkoffset   invalue "Offset"
 
-		ktrig			changed	gkpartials, gkoffset
-		if ktrig = 1 then
-				event "i", 1, 0, 0.01	
-		endif
+    ktrig changed gkpartials, gkoffset
+    if ktrig = 1 then
+      event "i", 1, 0, 0.01
+    endif
 
-		gkmode			invalue		"Mode"
-		gkinput			invalue		"Input"
-		gkFFTattributes	invalue		"FFTattributes"	
-	endif
+    gkmode          invalue "Mode"
+    gkinput         invalue "Input"
+    gkFFTattributes invalue "FFTattributes"
+  endif
 endin
 
-instr 1																	;GENERATES PARTIAL INSTANCES FOR FILTER SIGNAL
-	turnon	3															;TURN ON INSTR 3 (FILTERING INSTRUMENT) WITH A HELD NOTE
-	turnoff2	2, 0, 1														;CLEAR ALL INSTANCES OF INSTR 2 (FILTER SIGNAL PARTIALS) BEFORE STARTING AGAIN
-	kcount init i(gkoffset)+1												;SET INITIAL VALUE OF COUNTER
-	begin:																;LABEL
-	;         P1 | P2 | P3 |    P4
-	event "i",2,    0, 3600,  kcount											;TRIGGER INSTR 2 - I.E. A PARTIAL
-	kcount = kcount + 1														;INCREMENT COUNTER
-	if (kcount <= i(gkpartials)) kgoto begin									;IF MAX NUMBER OF PARTIALS NOT YET REACHED GO BACK TO LABEL 'BEGIN'
-	turnoff																;TUNOFF THIS INSTRUMENT - ITS JOB OS DONE
-endin
- 
-instr 2		;PARTIAL FOR FILTER SIGNAL (MAY BE CALLED MULTIPLE TIME BY INSTR 1)
-	if gkOnOff=0 then														;IF ON/OFF BUTTON IS OFF...
-		turnoff															;TURN OFF THIS INSTRUMENT IMMEDIATELY
-	endif																;END OF CONDITIONAL BRANCHING
-	iporttime	= 0.1														;GENERATE A RAMPING-UP VARIABLE FOR PORTAMENTO TIME
-	kporttime	linseg	0,0.001,iporttime,1,iporttime								;GENERATE A RAMPING-UP VARIABLE FOR PORTAMENTO TIME
-	kfreq	portk	gkfreq, kporttime										;APPLY PORTAMENTO TO SMOOTH SLIDER MOVEMENT
-	kpow		portk	gkpow, kporttime										;APPLY PORTAMENTO TO SMOOTH SLIDER MOVEMENT
-	kmltfreq	portk	gkmltfreq, kporttime									;APPLY PORTAMENTO TO SMOOTH SLIDER MOVEMENT
-
-	if		gkmode=1	then
-		kfrq	limit	p4*kfreq*(kmltfreq^p4), 20, sr/2							;LIMIT FREQUENCY OF PARTIAL TO BELOW NYQUIST FREQ.
-	elseif	gkmode=2	then
-		kfrq	limit	gkfreq*(1+gkmltfreq^(p4-1)), 20, sr/2						;LIMIT FREQUENCY OF PARTIAL TO BELOW NYQUIST FREQ.
-	endif
-
-	a1		oscili	(1/gkpartials)*(kpow^p4), kfrq, gisine						;GENERATE A PARTIAL
-			zawm		a1, 1												;ADD IT TO ZAK VARIABLE
+instr 1     ; Generates partial instances for filter signal
+  turnon 3  ; Turn on instr 3 (filtering instrument) with a held note
+  ; Clear all instances of instr 2 (filter signal partials) before starting again
+  turnoff2 2, 0, 1
+  kcount init i(gkoffset)+1  ; Set initial value of counter
+begin:                       ; Label
+  ; P1 | p2 | p3 |    p4
+  event "i", 2, 0, 3600, kcount  ; Trigger instr 2 - i.e. A partial
+  kcount = kcount + 1            ; Increment counter
+  ; If max number of partials not yet reached go back to label 'begin'
+  if (kcount <= i(gkpartials)) kgoto begin
+  turnoff  ; Tunoff this instrument - its job os done
 endin
 
-instr 	3	;FILTERING INSTRUMENT
-	kSwitch		changed		gkFFTattributes								;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then														;IF I-RATE VARIABLE IS CHANGED...
-		reinit	UPDATE													;BEGIN A REINITIALISATION PASS IN ORDER TO EFFECT THIS CHANGE. BEGIN THIS PASS AT LABEL ENTITLED 'UPDATE' AND CONTINUE UNTIL rireturn OPCODE 
-	endif																;END OF CONDITIONAL BRANCHING
-	UPDATE:																;LABEL
-	if		gkinput=0	then													;IF 'INPUT' SWITCH IS SET TO 'Live Input' THEN IMPLEMENT THE NEXT LINE OF CODE
-		asig		inch		1												;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
-	else																	;IF 'INPUT' SWITCH IS NOT SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
-		Sfile	invalue	"_Browse"
-		;OUTPUT		OPCODE	FILE_PATH | SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig, asigR	FilePlay2	Sfile,      1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
-	endif																;END OF 'IF'...'THEN' BRANCHING
-	if		gkOnOff!=0	kgoto	CONTINUE									;SENSE FLTK ON/OFF SWITCH. IF ON, SKIP THE NEXT LINE
-		turnoff															;TURN THIS INSTRUMENT OFF IMMEDIATELY               
-	CONTINUE:																;LABEL                                              
+; Partial for filter signal (may be called multiple time by instr 1)
+instr 2
+  if gkOnOff = 0 then  ; If on/off button is off...
+    turnoff            ; Turn off this instrument immediately
+  endif                ; End of conditional branching
+  iporttime = 0.1      ; Generate a ramping-up variable for portamento time
+  ; Generate a ramping-up variable for portamento time
+  kporttime linseg 0, 0.001, iporttime, 1, iporttime
+  kfreq    portk gkfreq, kporttime     ; Apply portamento to smooth slider movement
+  kpow     portk gkpow, kporttime      ; Apply portamento to smooth slider movement
+  kmltfreq portk gkmltfreq, kporttime  ; Apply portamento to smooth slider movement
 
-	iFFTsize	table	0, i(gkFFTattributes)+1									;READ FFT SIZE FROM APPROPRIATE TABLE    
-	ioverlap	table	1, i(gkFFTattributes)+1									;READ OVERLAP SIZE FROM APPROPRIATE TABLE
-	iwinsize	table	2, i(gkFFTattributes)+1									;READ WINDOW SIZE FROM APPROPRIATE TABLE 
-	iwintype	table	3, i(gkFFTattributes)+1									;READ WINDOW TYPE FROM APPROPRIATE TABLE
+  if gkmode = 1 then
+    ; Limit frequency of partial to below nyquist freq.
+    kfrq limit p4*kfreq*(kmltfreq^p4), 20, sr/2
+  elseif gkmode = 2 then
+    ; Limit frequency of partial to below nyquist freq.
+    kfrq limit gkfreq*(1+gkmltfreq^(p4-1)), 20, sr/2
+  endif
 
-	fsigIn	pvsanal	asig, iFFTsize, ioverlap, iwinsize, iwintype					;ANALYSE THE AUDIO SIGNAL. OUTPUT AN F-SIGNAL.
+  a1 oscili (1/gkpartials)*(kpow^p4), kfrq, gisine  ; Generate a partial
+  zawm a1, 1                                        ; Add it to zak variable
+endin
 
-	aFiltSig	zar		1													;READ IN FILTER SIGNAL FROM ZAK VARIABLE
-	aBalSig	oscili	1,1000,gisine											;SPECIFY A BALANCING SIGNAL REFERENCE
-	aFiltSig	balance	aFiltSig, aBalSig										;BALANCE FILTER SIGNAL
-	kenv		linseg	0,0.1,1,1,1											;AMP ENVELOPE
+instr 3  ; Filtering instrument
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkFFTattributes
+  if kSwitch = 1 then  ; If i-rate variable is changed...
+    ; Begin a reinitialisation pass in order to effect this change. Begin this pass at
+    ; label entitled 'update' and continue until rireturn opcode
+    reinit UPDATE
+  endif  ; End of conditional branching
+UPDATE:  ; Label
+  ; If 'input' switch is set to 'live input' then implement the next line of code
+  if gkinput = 0 then
+    asig inch 1  ; Read audio from the computer's live input channel 1 (left)
+    ; If 'input' switch is not set to 'stored file' then implement the next line of code
+  else
+    Sfile invalue "_Browse"
+    ; Output  opcode file_path | speed | inskip | wraparound (1=on)
+    asig, asigR FilePlay2 Sfile, 1, 0, 1  ; Read a stored audio file from the hard drive
+  endif                                   ; End of 'if'...'then' branching
+  ; Sense FLTK on/off switch. If on, skip the next line
+  if gkOnOff != 0 kgoto CONTINUE
+  turnoff  ; Turn this instrument off immediately
+CONTINUE:  ; Label
 
-	fsigFilt	pvsanal	aFiltSig*kenv, iFFTsize, ioverlap, iwinsize, iwintype			;ANALYSE THE FILTER AUDIO SIGNAL. OUTPUT AN F-SIGNAL.
-	fsigOut	pvsfilter	fsigIn, fsigFilt, 1										;PERFORM fsig FILTERING
+  iFFTsize table 0, i(gkFFTattributes)+1  ; Read fft size from appropriate table
+  ioverlap table 1, i(gkFFTattributes)+1  ; Read overlap size from appropriate table
+  iwinsize table 2, i(gkFFTattributes)+1  ; Read window size from appropriate table
+  iwintype table 3, i(gkFFTattributes)+1  ; Read window type from appropriate table
 
-	aresyn 	pvsynth  	fsigOut								                    ;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
+  ; Analyse the audio signal. Output an f-signal.
+  fsigIn pvsanal asig, iFFTsize, ioverlap, iwinsize, iwintype
 
-	aout		sum		asig*gkDrySigGain, aFiltSig*gkFiltSigGain, aresyn*gkResSigGain	;MIXER
-			outs		aout, aout											;SEND THE RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
-			zacl		0,1
+  aFiltSig zar 1                      ; Read in filter signal from zak variable
+  aBalSig oscili 1, 1000, gisine      ; Specify a balancing signal reference
+  aFiltSig balance aFiltSig, aBalSig  ; Balance filter signal
+  kenv linseg 0, 0.1, 1, 1, 1         ; Amp envelope
+
+  ; Analyse the filter audio signal. Output an f-signal.
+  fsigFilt pvsanal aFiltSig*kenv, iFFTsize, ioverlap, iwinsize, iwintype
+  fsigOut pvsfilter fsigIn, fsigFilt, 1  ; Perform fsig filtering
+
+  aresyn pvsynth fsigOut  ; Resynthesize the f-signal as an audio signal
+
+  aout sum asig*gkDrySigGain, aFiltSig*gkFiltSigGain, aresyn*gkResSigGain  ; Mixer
+  ; Send the resynthesized signal to the audio outputs
+  outs aout, aout
+  zacl 0, 1
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -166,9 +183,9 @@ i 10		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -186,15 +203,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -215,15 +237,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -252,14 +279,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -278,11 +305,23 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -300,15 +339,20 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -329,14 +373,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -393,15 +437,20 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -422,14 +471,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -449,14 +498,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -478,14 +527,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -509,14 +558,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -536,14 +585,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -567,14 +616,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -596,14 +645,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -643,14 +692,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -672,14 +721,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -719,14 +768,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -748,14 +797,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -795,14 +844,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -824,15 +873,20 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -853,14 +907,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -900,14 +954,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -929,14 +983,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -976,14 +1030,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1005,14 +1059,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1052,14 +1106,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1081,15 +1135,20 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -1112,6 +1171,18 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
@@ -1154,9 +1225,9 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -1181,14 +1252,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

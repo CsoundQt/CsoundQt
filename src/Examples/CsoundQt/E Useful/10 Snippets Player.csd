@@ -1,257 +1,262 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../../SourceMaterials
+--env:SSDIR+ = ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 
 /*Soundfile Snippets Player
 joachim heintz, may 2011*/
 
-sr = 44100
-ksmps = 32
+sr     = 44100
+ksmps  = 32
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 
-;ascii numbers for key shortcuts (32=space, 112='p', 110='n')
-gikeynxt  =         32 ;next sound
-gikeyls   =         112 ;next sound one less
-gikeymr   =         110 ;next sound one in advance 
+; ascii numbers for key shortcuts (32=space, 112='p', 110='n')
+gikeynxt = 32   ; next sound
+gikeyls  = 112  ; next sound one less
+gikeymr  = 110  ; next sound one in advance
 
-;declare string channel
-chn_S     "_MBrowse", 1
+; declare string channel
+chn_S "_MBrowse", 1
 
-  opcode StrayGetEl, ii, Sijj
-;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
-Stray, ielindx, isepA, isepB xin
-;DEFINE THE SEPARATORS
-isep1     =         (isepA == -1 ? 32 : isepA)
-isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1      sprintf   "%c", isep1
-Sep2      sprintf   "%c", isep2
-;INITIALIZE SOME PARAMETERS
-ilen      strlen    Stray
-istartsel =         -1; startindex for searched element
-iendsel   =         -1; endindex for searched element
-iel       =         0; actual number of element while searching
-iwarleer  =         1
-indx      =         0
- if ilen == 0 igoto end ;don't go into the loop if Stray is empty
+opcode StrayGetEl, ii, Sijj
+  ; returns the startindex and the endindex (= the first space after the element) for
+  ; ielindex in String. if startindex returns -1, the element has not been found
+  Stray, ielindx, isepA, isepB xin
+  ; Define the separators
+  isep1 = (isepA == -1 ? 32 : isepA)
+  isep2 = (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+  Sep1 sprintf "%c", isep1
+  Sep2 sprintf "%c", isep2
+  ; Initialize some parameters
+  ilen strlen Stray
+  istartsel = -1  ; startindex for searched element
+  iendsel   = -1  ; endindex for searched element
+  iel       = 0   ; actual number of element while searching
+  iwarleer  = 1
+  indx      = 0
+  if ilen == 0 igoto end  ; don't go into the loop if Stray is empty
 loop:
-Snext     strsub    Stray, indx, indx+1; next sign
-isep1p    strcmp    Snext, Sep1; returns 0 if Snext is sep1
-isep2p    strcmp    Snext, Sep2; 0 if Snext is sep2
-;NEXT SIGN IS NOT SEP1 NOR SEP2
-if isep1p != 0 && isep2p != 0 then
- if iwarleer == 1 then; first character after a separator 
-  if iel == ielindx then; if searched element index
-istartsel =         indx; set it
-iwarleer  =         0
-  else 			;if not searched element index
-iel       =         iel+1; increase it
-iwarleer  =         0; log that it's not a separator 
-  endif 
- endif 
-;NEXT SIGN IS SEP1 OR SEP2
-else 
- if istartsel > -1 then; if this is first selector after searched element
-iendsel   =         indx; set iendsel
-          igoto     end ;break
- else	
-iwarleer  =         1
- endif 
-endif
-          loop_lt   indx, 1, ilen, loop 
-end:      xout      istartsel, iendsel
-  endop 
+  Snext strsub Stray, indx, indx+1  ; next sign
+  isep1p strcmp Snext, Sep1         ; returns 0 if Snext is sep1
+  isep2p strcmp Snext, Sep2         ; 0 if Snext is sep2
+  ; Next sign is not sep1 nor sep2
+  if isep1p != 0 && isep2p != 0 then
+    if iwarleer == 1 then     ; first character after a separator
+      if iel == ielindx then  ; if searched element index
+        istartsel = indx      ; set it
+        iwarleer  = 0
+      else                ; if not searched element index
+        iel      = iel+1  ; increase it
+        iwarleer = 0      ; log that it's not a separator
+      endif
+    endif
+    ; Next sign is sep1 or sep2
+  else
+    if istartsel > -1 then  ; if this is first selector after searched element
+      iendsel = indx        ; set iendsel
+      igoto end             ; break
+    else
+      iwarleer = 1
+    endif
+  endif
+  loop_lt indx, 1, ilen, loop
+end: xout istartsel, iendsel
+endop
 
-  opcode StrayLen, i, Sjj
-;returns the number of elements in Stray. elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1
-Stray, isepA, isepB xin
-;DEFINE THE SEPARATORS
-isep1     =         (isepA == -1 ? 32 : isepA)
-isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1      sprintf   "%c", isep1
-Sep2      sprintf   "%c", isep2
-;INITIALIZE SOME PARAMETERS
-ilen      strlen    Stray
-icount    =         0; number of elements
-iwarsep   =         1
-indx      =         0
- if ilen == 0 igoto end ;don't go into the loop if String is empty
+opcode StrayLen, i, Sjj
+  ; returns the number of elements in Stray. elements are defined by two separators as
+  ; ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab).
+  ; if just one separator is used, isep2 equals isep1
+  Stray, isepA, isepB xin
+  ; Define the separators
+  isep1 = (isepA == -1 ? 32 : isepA)
+  isep2 = (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+  Sep1 sprintf "%c", isep1
+  Sep2 sprintf "%c", isep2
+  ; Initialize some parameters
+  ilen strlen Stray
+  icount  = 0  ; number of elements
+  iwarsep = 1
+  indx    = 0
+  if ilen == 0 igoto end  ; don't go into the loop if String is empty
 loop:
-Snext     strsub    Stray, indx, indx+1; next sign
-isep1p    strcmp    Snext, Sep1; returns 0 if Snext is sep1
-isep2p    strcmp    Snext, Sep2; 0 if Snext is sep2
- if isep1p == 0 || isep2p == 0 then; if sep1 or sep2
-iwarsep   =         1; tell the log so
- else 				; if not 
-  if iwarsep == 1 then	; and has been sep1 or sep2 before
-icount    =         icount + 1; increase counter
-iwarsep   =         0; and tell you are ot sep1 nor sep2 
-  endif 
- endif	
-          loop_lt   indx, 1, ilen, loop 
-end:      xout      icount
-  endop 
+  Snext strsub Stray, indx, indx+1    ; next sign
+  isep1p strcmp Snext, Sep1           ; returns 0 if Snext is sep1
+  isep2p strcmp Snext, Sep2           ; 0 if Snext is sep2
+  if isep1p == 0 || isep2p == 0 then  ; if sep1 or sep2
+    iwarsep = 1                       ; tell the log so
+  else                                ; if not
+    if iwarsep == 1 then              ; and has been sep1 or sep2 before
+      icount  = icount + 1            ; increase counter
+      iwarsep = 0                     ; and tell you are ot sep1 nor sep2
+    endif
+  endif
+  loop_lt indx, 1, ilen, loop
+end: xout icount
+endop
 
-  opcode	ShowLED_a, 0, Sakkk
-;shows an audiosignal in an outvalue channel, in dB or raw amplitudes
-;Soutchan: string as name of the outvalue channel
-;asig: audio signal to be shown
-;kdispfreq: refresh frequency of the display (Hz)
-;kdb: 1 = show as db, 0 = show as raw amplitudes (both in the range 0-1)
-;kdbrange: if idb=1: which dB range is shown
-Soutchan, asig, ktrig, kdb, kdbrange	xin
-kdispval	max_k	asig, ktrig, 1
-	if kdb != 0 then
-kdb 		= 		dbfsamp(kdispval)
-kval 		= 		(kdbrange + kdb) / kdbrange
-	else
-kval		=		kdispval
-	endif
-	if ktrig == 1 then
-		outvalue	Soutchan, kval
-	endif
-  endop
+opcode ShowLED_a, 0, Sakkk
+  ; shows an audiosignal in an outvalue channel, in dB or raw amplitudes
+  ; Soutchan: string as name of the outvalue channel
+  ; asig: audio signal to be shown
+  ; kdispfreq: refresh frequency of the display (Hz)
+  ; kdb: 1 = show as db, 0 = show as raw amplitudes (both in the range 0-1)
+  ; kdbrange: if idb=1: which dB range is shown
+  Soutchan, asig, ktrig, kdb, kdbrange xin
+  kdispval max_k asig, ktrig, 1
+  if kdb != 0 then
+    kdb  = dbfsamp(kdispval)
+    kval = (kdbrange + kdb) / kdbrange
+  else
+    kval = kdispval
+  endif
+  if ktrig == 1 then
+    outvalue Soutchan, kval
+  endif
+endop
 
-  opcode ShowOver_a, 0, Sakk
-;shows if asig has been larger than 1 and stays khold seconds
-;Soutchan: string as name of the outvalue channel
-;kdispfreq: refresh frequency of the display (Hz)
-Soutchan, asig, ktrig, khold	xin
-kon		init		0
-ktim		times
-kstart		init		0
-kend		init		0
-khold		=		(khold < .01 ? .01 : khold); avoiding too short hold times
-kmax		max_k		asig, ktrig, 1
-	if kon == 0 && kmax > 1 && ktrig == 1 then
-kstart		=		ktim
-kend		=		kstart + khold
-		outvalue	Soutchan, kmax
-kon		=		1
-	endif
-	if kon == 1 && ktim > kend && ktrig == 1 then
-		outvalue	Soutchan, 0
-kon		=		0
-	endif
-  endop
-  
-  opcode Once, k, kpo
-;returns kin only if it equals icomp (default == 1) and if kin has been changed compared to the previous k-cycle. otherwise i0 (default 0) is returned
-kin, icomp, i0 xin
-knew      changed   kin
- if (knew == 1) && (kin == icomp) then
-kout      =         icomp
- else
-kout      =         i0
- endif
-          xout      kout
-  endop
-  
-  opcode FilePlay2, aa, Skoo
-;gives stereo output regardless your soundfile is mono or stereo
-Sfil, kspeed, iskip, iloop	xin
-ichn		filenchnls	Sfil
-if ichn == 1 then
-aL		diskin2	Sfil, kspeed, iskip, iloop
-aR		=		aL
-else
-aL, aR		diskin2	Sfil, kspeed, iskip, iloop
-endif
-		xout		aL, aR
-  endop  
+opcode ShowOver_a, 0, Sakk
+  ; shows if asig has been larger than 1 and stays khold seconds
+  ; Soutchan: string as name of the outvalue channel
+  ; kdispfreq: refresh frequency of the display (Hz)
+  Soutchan, asig, ktrig, khold xin
+  kon init 0
+  ktim times
+  kstart init 0
+  kend   init 0
+  khold = (khold < .01 ? .01 : khold)  ; avoiding too short hold times
+  kmax max_k asig, ktrig, 1
+  if kon == 0 && kmax > 1 && ktrig == 1 then
+    kstart = ktim
+    kend   = kstart + khold
+    outvalue Soutchan, kmax
+    kon = 1
+  endif
+  if kon == 1 && ktim > kend && ktrig == 1 then
+    outvalue Soutchan, 0
+    kon = 0
+  endif
+endop
 
-  opcode KeyOnce, kk, kkk
-;returns '1' just in the k-cycle a certain key has been pressed (kdown) or released (kup)
-key, kd, kascii    xin ;sensekey output and ascii code of the key (e.g. 32 for space)
-knew      changed   key
-kdown     =         (key == kascii && knew == 1 && kd == 1 ? 1 : 0)
-kup       =         (key == kascii && knew == 1 && kd == 0 ? 1 : 0)
-          xout      kdown, kup
-  endop
+opcode Once, k, kpo
+  ; returns kin only if it equals icomp (default == 1) and if kin has been changed
+  ; compared to the previous k-cycle. otherwise i0 (default 0) is returned
+  kin, icomp, i0 xin
+  knew changed kin
+  if (knew == 1) && (kin == icomp) then
+    kout = icomp
+  else
+    kout = i0
+  endif
+  xout kout
+endop
+
+opcode FilePlay2, aa, Skoo
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
+endop
+
+opcode KeyOnce, kk, kkk
+  ; returns '1' just in the k-cycle a certain key has been pressed (kdown) or released
+  ; (kup)
+  key, kd, kascii xin  ; sensekey output and ascii code of the key (e.g. 32 for space)
+  knew changed key
+  kdown = (key == kascii && knew == 1 && kd == 1 ? 1 : 0)
+  kup   = (key == kascii && knew == 1 && kd == 0 ? 1 : 0)
+  xout kdown, kup
+endop
 
 instr 1
-          turnon    99
-Sfiles    chnget    "_MBrowse" ;selection of sound files
-gkgaindb  chnget    "gaindb"
-knext     chnget    "next"
-knextfil  chnget    "nextfil" ;number of soundfile
-knextfil  =         (knextfil == 0 ? 1 : knextfil)
+  turnon 99
+  Sfiles   chnget "_MBrowse"  ; selection of sound files
+  gkgaindb chnget "gaindb"
+  knext    chnget "next"
+  knextfil chnget "nextfil"  ; number of soundfile
+  knextfil = (knextfil == 0 ? 1 : knextfil)
 
-;;connecting the soundfiles with strset numbers
-inumfils  StrayLen  Sfiles, 124 ;how many files (separated by '|') to load
-iload     =         0
-  load:
-ist, ien  StrayGetEl Sfiles, iload, 124
-Sfil      strsub     Sfiles, ist, ien
-          strset     iload+1, Sfil
-          loop_lt    iload, 1, inumfils, load
-          
-;;set value for next file with keys one up or down
-key, kd   sensekey   
-keyls,k0  KeyOnce    key, kd, gikeyls
-keymr,k0  KeyOnce    key, kd, gikeymr
- if keyls == 1 then
-knextfil  =          knextfil-1
-          outvalue   "nextfil", knextfil
- elseif keymr == 1 then
-knextfil  =          knextfil+1
-          outvalue   "nextfil", knextfil
- endif
+  ; ;connecting the soundfiles with strset numbers
+  inumfils StrayLen Sfiles, 124  ; how many files (separated by '|') to load
+  iload = 0
+load:
+  ist, ien StrayGetEl Sfiles, iload, 124
+  Sfil strsub Sfiles, ist, ien
+  strset iload+1, Sfil
+  loop_lt iload, 1, inumfils, load
 
-;;triggering next sound
- ;with the button widget
-kplnxt    Once       knext
- ;or with key 
-keynxt,k0 KeyOnce    key, kd, gikeynxt
- 
- if kplnxt == 1 || keynxt == 1 then 
-  if knextfil <= inumfils then 
-          outvalue   "nextfil", knextfil+1
-          event      "i", 10, 0, 1, knextfil
-  else ;file is not valid
-          event      "i", 9, 0, 1, knextfil, inumfils
+  ; ;set value for next file with keys one up or down
+  key, kd sensekey
+  keyls, k0 KeyOnce key, kd, gikeyls
+  keymr, k0 KeyOnce key, kd, gikeymr
+  if keyls == 1 then
+    knextfil = knextfil-1
+    outvalue "nextfil", knextfil
+  elseif keymr == 1 then
+    knextfil = knextfil+1
+    outvalue "nextfil", knextfil
   endif
- endif
+
+  ; ;triggering next sound
+  ; with the button widget
+  kplnxt Once knext
+  ; or with key
+  keynxt, k0 KeyOnce key, kd, gikeynxt
+
+  if kplnxt == 1 || keynxt == 1 then
+    if knextfil <= inumfils then
+      outvalue "nextfil", knextfil+1
+      event    "i", 10, 0, 1, knextfil
+    else  ; file is not valid
+      event "i", 9, 0, 1, knextfil, inumfils
+    endif
+  endif
 
 endin
 
-instr 9 ;error because required strset number is larger than number of files
-ifil      =          p4
-inumfils  =          p5
-Smess     sprintf    "Can't play file number %d!\nJust %d files are in the pool.", ifil, inumfils
-          outvalue   "messages", Smess
+instr 9  ; error because required strset number is larger than number of files
+  ifil     = p4
+  inumfils = p5
+  Smess sprintf "Can't play file number %d!\nJust %d files are in the pool.", ifil, inumfils
+  outvalue "messages", Smess
 endin
 
 instr 10
-ifilnr    =          p4
-Sfil      strget     ifilnr
-ifilen    filelen    Sfil
-p3        =          ifilen
-aL, aR    FilePlay2  Sfil, 1
-          outs       aL*ampdb(gkgaindb), aR*ampdb(gkgaindb)
-;show messages
-ilslash   strrindex  Sfil, "/"
-Sname     strsub     Sfil, ilslash+1
-Smess     sprintf    "Playing file number %d:\n'%s'.", ifilnr, Sname
-ktim      timeinstk
- if ktim == 1 then
-          outvalue   "messages", Smess
- endif
+  ifilnr = p4
+  Sfil strget ifilnr
+  ifilen filelen Sfil
+  p3 = ifilen
+  aL, aR FilePlay2 Sfil, 1
+  outs aL*ampdb(gkgaindb), aR*ampdb(gkgaindb)
+  ; show messages
+  ilslash strrindex Sfil, "/"
+  Sname strsub Sfil, ilslash+1
+  Smess sprintf "Playing file number %d:\n'%s'.", ifilnr, Sname
+  ktim timeinstk
+  if ktim == 1 then
+    outvalue "messages", Smess
+  endif
 endin
 
-instr 99; show output
-aL, aR    monitor
-kTrigDisp metro    10
-          ShowLED_a "outL", aL, kTrigDisp, 1, 50
-          ShowLED_a "outR", aR, kTrigDisp, 1, 50
-          ShowOver_a "outLover", aL/0dbfs, kTrigDisp, 1
-          ShowOver_a "outRover", aR/0dbfs, kTrigDisp, 1
+instr 99  ; show output
+  aL, aR monitor
+  kTrigDisp metro 10
+  ShowLED_a  "outL", aL, kTrigDisp, 1, 50
+  ShowLED_a  "outR", aR, kTrigDisp, 1, 50
+  ShowOver_a "outLover", aL/0dbfs, kTrigDisp, 1
+  ShowOver_a "outRover", aR/0dbfs, kTrigDisp, 1
 endin
 </CsInstruments>
-<CsScore> 
+<CsScore>
 i 1 0 10000
 </CsScore>
 </CsoundSynthesizer>

@@ -1,66 +1,75 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, November 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, November 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gir 			ftgen 	1, 0, 131072, 10, 1						;SINE WAVE FUNCTION TABLE
-giExp20000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLES FOR EXP SLIDER
+gir        ftgen 1, 0, 131072, 10, 1                    ; Sine wave function table
+giExp20000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Tables for exp slider
 
 
-instr	1	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kfco			invalue	"Filter_Cutoff"
-		gkfco		tablei	kfco, giExp20000, 1
-					outvalue	"Filter_Cutoff_Value", gkfco
-		gkres		invalue	"Resonance"
-		gkdist		invalue	"Distortion"
-		gkasym		invalue	"Asymmetry"
-		kfrq			invalue	"Oscillator_Frequency"
-		gkfrq		tablei	kfrq, giExp20000, 1
-					outvalue	"Oscillator_Frequency_Value", gkfrq
+instr 1  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kfco invalue "Filter_Cutoff"
+    gkfco tablei kfco, giExp20000, 1
+    outvalue "Filter_Cutoff_Value", gkfco
+    gkres  invalue "Resonance"
+    gkdist invalue "Distortion"
+    gkasym invalue "Asymmetry"
+    kfrq   invalue "Oscillator_Frequency"
+    gkfrq tablei kfrq, giExp20000, 1
+    outvalue "Oscillator_Frequency_Value", gkfrq
 
-		gkgain		invalue	"Amplitude"
-		gkskip		invalue	"Initialisation"
-	endif
+    gkgain invalue "Amplitude"
+    gkskip invalue "Initialisation"
+  endif
 endin
 
-instr	2
-	kporttime		linseg	0,0.001,0.005,1,0.005						;CREATE A VARIABLE FUNCTION THAT RAPIDLY RAMPS UP TO A SET VALUE	
-	kfrq			portk	gkfrq, kporttime							;SMOOTH MOVEMENT OF SLIDER VARIABLE
-	kfco			portk	gkfco, kporttime							;SMOOTH MOVEMENT OF SLIDER VARIABLE
+instr 2
+  ; Create a variable function that rapidly ramps up to a set value
+  kporttime linseg 0, 0.001, 0.005, 1, 0.005
+  kfrq portk gkfrq, kporttime  ; Smooth movement of slider variable
+  kfco portk gkfco, kporttime  ; Smooth movement of slider variable
 
-	asig			vco 		1, kfrq, 1, 0								;GENERATE A TRIANGLE WAVE AUDIO SIGNAL (NOTE THAT tbvcf EXPECTS A SIGNAL WITHIN THE RANGE -1 TO 1)
-	kSwitch		changed	gkskip									;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then												;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	START											;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif
-	START:
-	kporttime		linseg	0,.01,.01,1,.01							;kporttime ramps up to a held value of .01 in .01 of a second
-	kfco			portk	gkfco, kporttime							;PORTAMENTO IS APPLIED TO THE SLIDER VARIABLE gkfco IN ORDER TO SMOOTH ITS MOVEMENT SLIGHTLY
-	ares 		tbvcf 	asig, kfco, gkres, gkdist, gkasym, i(gkskip)
-				outs		ares * gkgain, ares * gkgain					;FILTER OUTPUT IS SENT TO THE AUDIO OUTPUTS AND SCALED UP IN ORDER TO BE AUDIBLE
+  ; Generate a triangle wave audio signal (note that tbvcf expects a signal within the
+  ; range -1 to 1)
+  asig vco 1, kfrq, 1, 0
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkskip
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit START       ; Begin a reinitialisation pass from label 'start'
+  endif
+START:
+  ; kporttime ramps up to a held value of .01 in .01 of a second
+  kporttime linseg 0, .01, .01, 1, .01
+  ; Portamento is applied to the slider variable gkfco in order to smooth its movement
+  ; slightly
+  kfco portk gkfco, kporttime
+  ares tbvcf asig, kfco, gkres, gkdist, gkasym, i(gkskip)
+  ; Filter output is sent to the audio outputs and scaled up in order to be audible
+  outs ares * gkgain, ares * gkgain
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1		0	   3600		;GUI
+; Instr | start | duration
+i 1 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -74,9 +83,9 @@ i 1		0	   3600		;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -94,15 +103,20 @@ i 1		0	   3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -123,15 +137,20 @@ i 1		0	   3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -156,14 +175,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -182,11 +201,23 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Filter_Cutoff_Value</objectName>
@@ -204,14 +235,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -251,14 +282,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -298,14 +329,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -324,11 +355,23 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  No Initialisation</text>
+  <text>No Initialisation</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -346,14 +389,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -375,14 +418,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -404,14 +447,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -451,14 +494,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -498,14 +541,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -527,14 +570,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -574,14 +617,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -621,14 +664,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -650,14 +693,14 @@ The input signal used in this example is a sawtooth waveform, the frequency of w
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

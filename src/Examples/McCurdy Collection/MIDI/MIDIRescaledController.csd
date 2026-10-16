@@ -1,40 +1,49 @@
-;Writen by Iain McCurdy, 2006
+; Writen by Iain McCurdy, 2006
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add koct display
+; Notes on modifications from original csd:
+; Add koct display
 
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
- 
-</CsOptions>    
+
+</CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 2		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 2      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	1	;BEEP INSTRUMENT - ACTIVATED BY A SCORE NOTE - FREQUENCY VARIABLE USING CONTROLLER 1
-	
-	;OUTPUT	OPCODE	CHANNEL | CTRLNUMBER | MINIMUM | MAXIMUM | F.N._USED_TO_RESCALE_SLIDER_VALUES
-	koct		ctrl7	1,            1,          0,        1,      2 					;READ CONTROLLER INFORMATION FROM CONTINUOUS CONTROLLER NUMBER 1 ON MIDI CHANNEL 1, RESCALE TO BE WITHIN THE RANGE 0 - 1 THEN RESCALE AGAIN ACCORDING TO FUNCTION TABLE NO. 2
-	
-			outvalue	"ctrl1", koct
-	
-	;OUTPUT	OPCODE	AMPLITUDE |    FREQ.    | F.N.
-	asig		oscili	0.2,       cpsoct(koct),   1									;FREQUENCY IS CONVERTED FROM 'OCT' FORMAT INTO 'CPS' (CYCLES PER SECOND) FORMAT AS OSCILI EXPECTS	
-			outs		asig, asig												;SEND AUDIO SIGNAL TO THE OUTPUTS
+; Beep instrument - activated by a score note - frequency variable using controller 1
+instr 1
+
+  ; Output opcode channel | ctrlnumber | minimum | maximum |
+  ; f.n._used_to_rescale_slider_values
+  ; Read controller information from continuous controller number 1 on MIDI channel 1,
+  ; rescale to be within the range 0 - 1 then rescale again according to function table
+  ; no. 2
+  koct ctrl7 1, 1, 0, 1, 2
+
+  outvalue "ctrl1", koct
+
+  ; Output opcode amplitude |    freq.    | f.n.
+  ; Frequency is converted from 'oct' format into 'cps' (cycles per second) format as
+  ; oscili expects
+  asig oscili 0.2, cpsoct(koct), 1
+  outs asig, asig  ; Send audio signal to the outputs
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 129 10 1			;SINE WAVE
-f 2 0 129 -7 8 64 9 64 7	;RESCALING FUNCTION (NOTE: UN-NORMALIZED FUNCTION - THE USE OF A MINUS SIGN IN THE GEN ROUTINE NUMBER). REFER TO CSOUND MANUAL REGARDING GEN 07 FOR MORE INFORMATION
-i 1 0 3600			;INSTRUMENT 1 PLAYS A NOTE FOR 1 HOUR
+f 1 0 129 10 1  ; Sine wave
+; Rescaling function (note: un-normalized function - the use of a minus sign in the gen
+; routine number). Refer to csound manual regarding gen 07 for more information
+f 2 0 129 -7 8 64 9 64 7
+i 1 0 3600  ; Instrument 1 plays a note for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

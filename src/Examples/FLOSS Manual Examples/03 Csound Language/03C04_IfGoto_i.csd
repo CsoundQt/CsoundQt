@@ -14,10 +14,10 @@ ifilchnls filenchnls Sfile
 if ifilchnls == 1 igoto mono; condition if true
  igoto stereo; else condition
 mono:
-          prints     "The file is mono!%n"
+          prints     "The file is mono!\n"
           igoto      continue
 stereo:
-          prints     "The file is stereo!%n"
+          prints     "The file is stereo!\n"
 continue:
   endin
 

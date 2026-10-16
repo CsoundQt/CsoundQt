@@ -1,48 +1,50 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-instr	1	;ALWAYS ON - SEE SCORE
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkinput		invalue	"Input"
-		gkmin		invalue	"Minimum"
-		gkmax		invalue	"Maximum"
-		gkmode		invalue	"Mode"
-	endif
+instr 1  ; Always on - see score
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkinput invalue "Input"
+    gkmin   invalue "Minimum"
+    gkmax   invalue "Maximum"
+    gkmode  invalue "Mode"
+  endif
 
-	ktrigger	changed	gkinput						;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'ktrigger' IF gkinput CHANGES (gkoutput SLIDER WILL BE UPDATED)
+  ; Generate a momentary '1' pulse in output 'ktrigger' if gkinput changes (gkoutput
+  ; slider will be updated)
+  ktrigger changed gkinput
 
-	if	gkmode=0	then								;IF MODE 0 (limit) IS SELECTED..
-		koutput	limit	gkinput, gkmin, gkmax		;APPLY 'limit' TO gkinput VALUES
-	elseif	gkmode=1	then							;IF MODE 1 (mirror) IS SELECTED..
-		koutput	mirror	gkinput, gkmin, gkmax		;APPLY 'mirror' TO gkinput VALUES
-	else											;IF MODE 2 (wrap) IS SELECTED..
-		koutput	wrap		gkinput, gkmin, gkmax		;APPLY 'wrap' TO gkinput VALUES
-	endif										;END OF CONDITIONAL BRANCHING
+  if gkmode = 0 then                      ; If mode 0 (limit) is selected..
+    koutput limit gkinput, gkmin, gkmax   ; APPLY 'limit' TO gkinput VALUES
+  elseif gkmode = 1 then                  ; If mode 1 (mirror) is selected..
+    koutput mirror gkinput, gkmin, gkmax  ; APPLY 'mirror' TO gkinput VALUES
+  else                                    ; If mode 2 (wrap) is selected..
+    koutput wrap gkinput, gkmin, gkmax    ; APPLY 'wrap' TO gkinput VALUES
+  endif                                   ; End of conditional branching
 
-	if ktrigger = 1 then
-		outvalue	"Output", koutput					;UPDATE gkoutput SLIDER
-	endif
+  if ktrigger = 1 then
+    outvalue "Output", koutput  ; UPDATE gkoutput SLIDER
+  endif
 endin
 </CsInstruments>
 <CsScore>
-i  1 0 3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR
+i 1 0 3600  ; Instrument 1 plays for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -55,9 +57,9 @@ i  1 0 3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -75,15 +77,20 @@ i  1 0 3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -109,14 +116,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -138,15 +145,20 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -167,14 +179,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -196,14 +208,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -225,14 +237,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -272,14 +284,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -301,14 +313,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -330,14 +342,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -359,14 +371,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -388,14 +400,14 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -453,15 +465,15 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>241</r>
+   <g>241</g>
+   <b>109</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -486,15 +498,15 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>241</r>
+   <g>241</g>
+   <b>109</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -519,15 +531,15 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>255</g>
-   <b>0</b>
+   <r>87</r>
+   <g>192</g>
+   <b>87</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
 </bsbPanel>

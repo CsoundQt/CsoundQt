@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 -nm128
---env:SSDIR+=../../SourceMaterials
+--env:SSDIR+ = ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 
@@ -9,94 +9,94 @@
 joachim heintz june 2010, aug 2025**/
 
 0dbfs = 1
-ksmps = 128 ;if you want to avoid that some samples without sound are added at the end
-            ;of the soundfile, use ksmps=1. but this will be slower for large files 
+ksmps = 128  ; if you want to avoid that some samples without sound are added at the end
+; of the soundfile, use ksmps=1. but this will be slower for large files
 
 //returns number of Sel in Str
-  opcode StrMems, i, SS
-Str, Sel   xin 
-iSumEls    =          0
-iLen       strlen     Str
-iIndx      =          0
-Sub        strcpy     Str
+opcode StrMems, i, SS
+  Str, Sel xin
+  iSumEls = 0
+  iLen strlen Str
+  iIndx = 0
+  Sub strcpy Str
   until iIndx == iLen do
-iPos       strindex   Sub, Sel
-   if iPos > -1 then
-iSumEls    =          iSumEls+1
-Sub        strsub     Sub, iPos+1
-iIndx      =          iPos+1
-   else
-iIndx      =          iLen
-   endif
+    iPos strindex Sub, Sel
+    if iPos > -1 then
+      iSumEls = iSumEls+1
+      Sub strsub Sub, iPos+1
+      iIndx = iPos+1
+    else
+      iIndx = iLen
+    endif
   od
-           xout       iSumEls
-  endop
+  xout iSumEls
+endop
 
 // converts _MBrowse output to array
-opcode Mbrowse2Array,S[],S
+opcode Mbrowse2Array, S[], S
   String xin
   // how many occurrences of | in String
-  iNum = StrMems(String,"|")
+  iNum = StrMems(String, "|")
   // create array for substrings
   Sout[] init iNum+1
   // go through
   istart = 0
-  ipos = 0
-  indx = 0
+  ipos   = 0
+  indx   = 0
   while (ipos >= 0) do
-    Substring = strsub(String,istart)
-    ipos = strindex(Substring,"|")
-    Sname = strsub(Substring,0,ipos)
+    Substring  = strsub(String, istart)
+    ipos       = strindex(Substring, "|")
+    Sname      = strsub(Substring, 0, ipos)
     Sout[indx] = Sname
-    istart += ipos+1
-    indx += 1
+    istart + = ipos+1
+    indx   + = 1
   od
   xout Sout
 endop
-  
-chn_S("_MBrowse",1)
-chn_S("_Browse",1)
+
+chn_S( "_MBrowse", 1)
+chn_S( "_Browse", 1)
 
 instr Main
 
   // user input
-  infiles:S = chnget("_MBrowse") ;filenames, separated by '|'
-  
+  infiles:S = chnget("_MBrowse")  ; filenames, separated by '|'
+
   // convert to array of filenames
   Infiles@global:S[] = Mbrowse2Array(infiles)
- 
+
   // get longest file duration and ensure not to omit samples if ksmps != 1
   file_duration:i init 0
   for i in [0 ... lenarray(Infiles)-1] do
     file_duration = (filelen(Infiles[i]) > file_duration) ? filelen(Infiles[i]) : file_duration
   od
-  file_duration = (ksmps == 1) ? file_duration : file_duration + ksmps/sr 
+  file_duration = (ksmps == 1) ? file_duration : file_duration + ksmps/sr
 
   // create global audio array for the multichannel file
   Outarray@global:a[] init lenarray(Infiles)
-    
+
   // call as many instances of ReadFile as needed
   for i in [0 ... lenarray(Infiles)-1] do
-    schedule(ReadFile,0,file_duration,i)
+    schedule(ReadFile, 0, file_duration, i)
   od
-  
+
   // call instrument to collect the single audio streams and write to disk
-  schedule(Collect,0,file_duration)
+  schedule(Collect, 0, file_duration)
 
 endin
 
 instr ReadFile
 
-  indx = p4
+  indx           = p4
   Outarray[indx] = diskin:a(Infiles[indx])
 
 endin
 
 instr Collect
 
-  fout(chnget:S("_Browse"),18,Outarray) // change 18 for other output format options
+  fout(chnget:S("_Browse"), 18, Outarray) // change 18 for other output format options
   if release() == 1 then
-    printks("File %s with %d channels written to disk!\n",0,chnget:S("_Browse"),lenarray(Infiles))
+    printks("File %s with %d channels written to disk!\n", 0, chnget:S("_Browse"), lenarray(Infiles))
   endif
 
 endin

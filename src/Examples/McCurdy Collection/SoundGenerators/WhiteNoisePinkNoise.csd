@@ -1,43 +1,43 @@
-;Written by Iain McCurdy
+; Written by Iain McCurdy
 
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 16			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-instr	10	;GUI
-	gkwhiteamp	invalue	"WhiteAmp"
-	gkbeta		invalue	"Beta"
-	gkpinkamp		invalue	"PinkAmp"
+instr 10  ; GUI
+  gkwhiteamp invalue "WhiteAmp"
+  gkbeta     invalue "Beta"
+  gkpinkamp  invalue "PinkAmp"
 endin
 
-instr	1	;WHITE NOISE
-	asig 	noise 	gkwhiteamp, gkbeta		;GENERATE WHITE NOISE
-			outs		asig, asig			;SEND AUDIO SIGNAL TO OUTPUTS
+instr 1                          ; White noise
+  asig noise gkwhiteamp, gkbeta  ; Generate white noise
+  outs asig, asig                ; Send audio signal to outputs
 endin
 
-instr	2	;PINK NOISE
-	asig		pinkish	gkpinkamp 	    		;GENERATE PINK NOISE
-			outs		asig, asig			;SEND AUDIO SIGNAL TO OUTPUTS
+instr 2                   ; Pink noise
+  asig pinkish gkpinkamp  ; Generate pink noise
+  outs asig, asig         ; Send audio signal to outputs
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0.0	   3600	;GUI
+; Instr | start | duration
+i 10 0.0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -50,9 +50,9 @@ i 10		0.0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -70,15 +70,20 @@ i 10		0.0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -100,15 +105,20 @@ Pink Noise</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -131,14 +141,14 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>2</borderradius>
@@ -160,14 +170,14 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -189,14 +199,14 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -236,14 +246,14 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -265,14 +275,14 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -314,6 +324,18 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -331,14 +353,14 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -360,15 +382,20 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -389,14 +416,14 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -418,14 +445,14 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -467,6 +494,18 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -484,14 +523,14 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -1,100 +1,117 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add limits for min/max frequencies
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add limits for min/max frequencies
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 64		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 64     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-giExp10000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 10000.0	;TABLE FOR EXP SLIDER
+giExp10000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 10000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	klimit	init	0
-	idelta	=	10.0
+instr 10  ; GUI
+  klimit init 0
+  idelta = 10.0
 
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkInGain		invalue 	"Input_Gain"
-		gkGateThresh	invalue 	"Gate_Threshold"
-		kmincps		invalue 	"Min_Freq"
-		gkmincps		tablei	kmincps, giExp10000, 1
-		kmaxcps		invalue 	"Max_Freq"
-		gkmaxcps		tablei	kmaxcps, giExp10000, 1
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkInGain     invalue "Input_Gain"
+    gkGateThresh invalue "Gate_Threshold"
+    kmincps      invalue "Min_Freq"
+    gkmincps tablei kmincps, giExp10000, 1
+    kmaxcps invalue "Max_Freq"
+    gkmaxcps tablei kmaxcps, giExp10000, 1
 
-	if gkmincps > gkmaxcps - idelta then
-		gkmincps	=	gkmaxcps - idelta
-		klimit	=	1
-	else
-		klimit	=	0
-	endif
-					outvalue	"Min_Freq_Value", gkmincps
-					outvalue	"Max_Freq_Value", gkmaxcps
-					outvalue	"Limit", klimit
-	endif
+    if gkmincps > gkmaxcps - idelta then
+      gkmincps = gkmaxcps - idelta
+      klimit   = 1
+    else
+      klimit = 0
+    endif
+    outvalue "Min_Freq_Value", gkmincps
+    outvalue "Max_Freq_Value", gkmaxcps
+    outvalue "Limit", klimit
+  endif
 endin
 
-instr	1
-	aL			inch		1									;READ FIRST/LEFT AUDIO INPUT TO THE COMPUTER
-	aL			=		aL * gkInGain							;RESCALE AUDIO SIGNAL USING INPUT GAIN CONTROL
+instr 1
+  aL inch 1           ; Read first/left audio input to the computer
+  aL = aL * gkInGain  ; Rescale audio signal using input gain control
 
-	;;;;;;;;;AUDIO GATE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	afollow 		follow2 	aL, .0001, .03							;CREATE A AMPLITUDE FOLLOWING UNIPOLAR SIGNAL
-	kfollow		downsamp	afollow								;DOWNSAMPLE TO CREATE A K-RATE VERSION OF THE AMPLITUDE FOLLOWING SIGNAL
-	kgate		=		(kfollow<gkGateThresh?0:1)				;CREATE A GATE SIGNAL (EITHER 1 OR ZERO DEPENDING UPON COMPARISON WITH THE THRESHOLD VALUE
-	kgateport		port		kgate,.01								;SMOOTH THE OPENING AND CLOSING OF THE GATE TO PREVENT CLICKS
-	aL			=		aL*kgateport							;APPLY THE GATING SIGNAL
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ; ;;;;;;;;Audio
+  ; gate;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  afollow follow2 aL, .0001, .03  ; Create a amplitude following unipolar signal
+  ; Downsample to create a k-rate version of the amplitude following signal
+  kfollow downsamp afollow
+  ; Create a gate signal (either 1 or zero depending upon comparison with the threshold
+  ; value
+  kgate = (kfollow<gkGateThresh?0:1)
+  ; Smooth the opening and closing of the gate to prevent clicks
+  kgateport port kgate, .01
+  aL = aL*kgateport  ; Apply the gating signal
+  ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-	;CREATE A PITCH TRACKING VARIABLE AND AN AMPLITUDE TRACKING VARIABLE USING THE 'pitchamdf' OPCODE - IMPROVED RESULTS CAN BE ACHIEVED BY FIRST ATTENUATING THE AMPLITUDE OF THE INPUT SIGNAL, YOU WILL NOTICE THAT 'aL' IS FIRST DIVIDED BY 10
-	kSwitch		changed	gkmincps, gkmaxcps						;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if 	kSwitch=1	then											;IF A CHANGE HAS BEEN DETECTED...
-				reinit	UPDATE								;BEGIN A REINITIALISATION PASS BEGINNING AT LABEL 'UPDATE'
-	endif													;END OF CONDITIONAL BRANCHING
+  ; Create a pitch tracking variable and an amplitude tracking variable using the
+  ; 'pitchamdf' opcode - improved results can be achieved by first attenuating the
+  ; amplitude of the input signal, you will notice that 'al' is first divided by 10
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkmincps, gkmaxcps
+  if kSwitch = 1 then  ; If a change has been detected...
+    reinit UPDATE      ; Begin a reinitialisation pass beginning at label 'update'
+  endif                ; End of conditional branching
 
-	UPDATE:													;LABEL
-	kcps, krms 	pitchamdf	aL, i(gkmincps), i(gkmaxcps)				;TRACK PITCH AND RMS
-				rireturn										;END OF INITIALISATION PASS
+UPDATE:                                              ; Label
+  kcps, krms pitchamdf aL, i(gkmincps), i(gkmaxcps)  ; Track pitch and rms
+  rireturn                                           ; End of initialisation pass
 
-	arms			interp	krms*10								;RECALIBRATE THE AMPLITUDE FOLLOWING SIGNAL UPWARDS - ALSO INTERPOLATE TO CREATE AN A-RATE SIGNAL TO PREVENT CLICKS AS THE AMPLITUDE FLUCTUATES
-	asig			oscili	1, kcps, 1							;CREATE A SYNTHESIZED TONE THAT MIMICS THE FREQUENCY AND AMPLITUDE ATTRIBUTES OF THE INPUT SIGNAL
-	ares 		gain 	asig, krms
-				outs		ares, ares							;SEND THE SYNTHESIZED TONE TO THE OUTPUTS
+  ; Recalibrate the amplitude following signal upwards - also interpolate to create an
+  ; a-rate signal to prevent clicks as the amplitude fluctuates
+  arms interp krms*10
+  ; Create a synthesized tone that mimics the frequency and amplitude attributes of the
+  ; input signal
+  asig oscili 1, kcps, 1
+  ares gain asig, krms
+  outs ares, ares  ; Send the synthesized tone to the outputs
 
-	;;;;;;;;UPDATE METERS;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
-	ktrigger		metro	20									;UPDATE RATE FOR METERS
-	if	kgate = 0	then											;IF GATE IS ON...
-		krms	=	0											;SET RMS TO MINIMUM - THIS IS TO PREVENT ERRATIC METER MOVEMENT WHEN GATE IS ON
-		kcps	=	20											;SET CPS TO MINIMUM - THIS IS TO PREVENT ERRATIC METER MOVEMENT WHEN GATE IS ON
-	endif													;END OF CONDITIONAL BRANCHING
+  ; ;;;;;;;Update
+  ; meters;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ktrigger metro 20  ; Update rate for meters
+  if kgate = 0 then  ; If gate is on...
+    ; Set rms to minimum - this is to prevent erratic meter movement when gate is on
+    krms = 0
+    ; Set cps to minimum - this is to prevent erratic meter movement when gate is on
+    kcps = 20
+  endif  ; End of conditional branching
 
-	if	ktrigger = 1	then
-				outvalue	"rms", krms							;UPDATE GUI METERS
-				outvalue	"cps", log10(kcps)						;UPDATE GUI METERS
-	endif
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  if ktrigger = 1 then
+    outvalue "rms", krms         ; Update GUI meters
+    outvalue "cps", log10(kcps)  ; Update GUI meters
+  endif
+  ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 1024 10 1 .2 .15 .1 .2 .1 .05 .02 .01		;A RICH TONE - USED BY THE PITCH TRACKING SYNTHESIZER
-f 2 0 131072 10 1							;A SINE WAVE
+; A rich tone - used by the pitch tracking synthesizer
+f 1 0 1024 10 1 .2 .15 .1 .2 .1 .05 .02 .01
+f 2 0 131072 10 1  ; A sine wave
 
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI AND AUDIO INPUTS
+; Instr | start | duration
+i 10 0 3600  ; GUI and audio inputs
 </CsScore>
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
@@ -106,9 +123,9 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -126,15 +143,20 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -155,15 +177,20 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -186,9 +213,9 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
    <r>158</r>
@@ -215,14 +242,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -262,14 +289,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -291,14 +318,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -338,14 +365,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -367,14 +394,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -414,14 +441,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -443,14 +470,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -490,14 +517,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -516,11 +543,23 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>rms</objectName>
@@ -550,9 +589,9 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -571,14 +610,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -612,9 +651,9 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -633,14 +672,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -674,9 +713,9 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -695,14 +734,14 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

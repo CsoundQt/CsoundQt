@@ -1,112 +1,113 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
-;Modified for QuteCsound by René, January 2011, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-
-;Notes on modifications from original csd:
-;	Add tables for exp slider
-;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
+; Modified for QuteCsound by René, January 2011, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Notes on modifications from original csd:
+; Add tables for exp slider
+; Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav
+; files
+
+
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-;TABLES FOR EXP SLIDER
-giExp1		ftgen	0, 0, 129, -25, 0, 0.001, 128, 1.0
-giExp100		ftgen	0, 0, 129, -25, 0, 0.01, 128, 100.0
-giExp32768	ftgen	0, 0, 129, -25, 0, 1.0, 128, 32768.0
+; Tables for exp slider
+giExp1     ftgen 0, 0, 129, -25, 0, 0.001, 128, 1.0
+giExp100   ftgen 0, 0, 129, -25, 0, 0.01, 128, 100.0
+giExp32768 ftgen 0, 0, 129, -25, 0, 1.0, 128, 32768.0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kthreshold	invalue 	"Threshold"
-		gkthreshold	tablei	kthreshold, giExp32768, 1
-					outvalue	"Threshold_Value", gkthreshold
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kthreshold invalue "Threshold"
+    gkthreshold tablei kthreshold, giExp32768, 1
+    outvalue "Threshold_Value", gkthreshold
 
-		kcomp1		invalue 	"Compr_Up"
-		gkcomp1		tablei	kcomp1, giExp100, 1
-					outvalue	"Compr_Up_Value", gkcomp1
+    kcomp1 invalue "Compr_Up"
+    gkcomp1 tablei kcomp1, giExp100, 1
+    outvalue "Compr_Up_Value", gkcomp1
 
-		kcomp2		invalue 	"Compr_Low"
-		gkcomp2		tablei	kcomp2, giExp100, 1
-					outvalue	"Compr_Low_Value", gkcomp2
+    kcomp2 invalue "Compr_Low"
+    gkcomp2 tablei kcomp2, giExp100, 1
+    outvalue "Compr_Low_Value", gkcomp2
 
-		krtime		invalue 	"Rise"
-		gkrtime		tablei	krtime, giExp1, 1
-					outvalue	"Rise_Value", gkrtime
+    krtime invalue "Rise"
+    gkrtime tablei krtime, giExp1, 1
+    outvalue "Rise_Value", gkrtime
 
-		kftime		invalue 	"Fall"
-		gkftime		tablei	kftime, giExp1, 1
-					outvalue	"Fall_Value", gkftime
+    kftime invalue "Fall"
+    gkftime tablei kftime, giExp1, 1
+    outvalue "Fall_Value", gkftime
 
-		kgain		invalue 	"Gain"
-		gkgain		tablei	kgain, giExp100, 1
-					outvalue	"Gain_Value", gkgain
+    kgain invalue "Gain"
+    gkgain tablei kgain, giExp100, 1
+    outvalue "Gain_Value", gkgain
 
-		gkInGain		invalue 	"Live_Gain"
-		gkinput		invalue	"Input"
-	endif
+    gkInGain invalue "Live_Gain"
+    gkinput  invalue "Input"
+  endif
 endin
 
-instr	1
-	Sfile_new		strcpy	""								;INIT TO EMPTY STRING
-	Sfile		invalue	"_Browse"
-	Sfile_old		strcpyk	Sfile_new
-	Sfile_new		strcpyk	Sfile
-	kfile 		strcmpk	Sfile_new, Sfile_old
+instr 1
+  Sfile_new strcpy ""  ; Init to empty string
+  Sfile invalue "_Browse"
+  Sfile_old strcpyk Sfile_new
+  Sfile_new strcpyk Sfile
+  kfile strcmpk Sfile_new, Sfile_old
 
-	if	kfile != 0	then									;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-			reinit	NEW_FILE								;REINITIALIZE FROM LABEL 'NEW_FILE'
-	endif
-		
-	if gkinput=0 then
-		aSigL, aSigR	ins
-		aSigL	=	aSigL*gkInGain
-		aSigR	=	aSigR*gkInGain
-	else
-		NEW_FILE:
-		aSigL, aSigR	FilePlay2	Sfile, 1, 0, 1
-		rireturn
-	endif
-	
-	ktrig	changed	gkcomp1, gkcomp2, gkrtime, gkftime
-	if ktrig=1 then
-		reinit	UPDATE
-	endif
-	UPDATE:
-	aCompL	dam		aSigL, gkthreshold, i(gkcomp1), i(gkcomp2), i(gkrtime), i(gkftime)
-	aCompR	dam		aSigR, gkthreshold, i(gkcomp1), i(gkcomp2), i(gkrtime), i(gkftime)
-			rireturn
-			outs		aCompL*gkgain, aCompR*gkgain
+  if kfile != 0 then  ; If a bang had been generated in the line above
+    reinit NEW_FILE   ; Reinitialize from label 'new_file'
+  endif
+
+  if gkinput = 0 then
+    aSigL, aSigR ins
+    aSigL = aSigL*gkInGain
+    aSigR = aSigR*gkInGain
+  else
+NEW_FILE:
+    aSigL, aSigR FilePlay2 Sfile, 1, 0, 1
+    rireturn
+  endif
+
+  ktrig changed gkcomp1, gkcomp2, gkrtime, gkftime
+  if ktrig = 1 then
+    reinit UPDATE
+  endif
+UPDATE:
+  aCompL dam aSigL, gkthreshold, i(gkcomp1), i(gkcomp2), i(gkrtime), i(gkftime)
+  aCompR dam aSigR, gkthreshold, i(gkcomp1), i(gkcomp2), i(gkrtime), i(gkftime)
+  rireturn
+  outs aCompL*gkgain, aCompR*gkgain
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -120,9 +121,9 @@ i 10		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -140,15 +141,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -166,11 +172,23 @@ i 10		0	   3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
@@ -190,6 +208,18 @@ i 10		0	   3600	;GUI
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -207,9 +237,9 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -259,14 +289,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -306,14 +336,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -335,14 +365,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -382,14 +412,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -411,14 +441,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -458,14 +488,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -487,14 +517,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -534,14 +564,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -563,14 +593,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -610,14 +640,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -639,14 +669,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -686,14 +716,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -715,14 +745,14 @@ i 10		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -762,14 +792,14 @@ i 10		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -791,15 +821,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -823,14 +858,14 @@ The rise and fall response times of the compresser can be modified individually.
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -1,101 +1,114 @@
-;Written by Iain McCurdy 2006
+; Written by Iain McCurdy 2006
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav
+; files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-giFFTattributes0	ftgen	1, 0, 4, -2,  512, 256, 1024, 1
-giFFTattributes1	ftgen	2, 0, 4, -2, 1024, 256, 1024, 1
-giFFTattributes2	ftgen	3, 0, 4, -2, 2048, 128, 2048, 1
-giFFTattributes3	ftgen	4, 0, 4, -2, 4096, 128, 4096, 1
+giFFTattributes0 ftgen 1, 0, 4, -2, 512, 256, 1024, 1
+giFFTattributes1 ftgen 2, 0, 4, -2, 1024, 256, 1024, 1
+giFFTattributes2 ftgen 3, 0, 4, -2, 2048, 128, 2048, 1
+giFFTattributes3 ftgen 4, 0, 4, -2, 4096, 128, 4096, 1
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkOutGain			invalue 	"Output_Gain"				;init 0.7
-		gkinput			invalue	"Input"					;init 1
-		gkFFTattributes	invalue	"FFTattributes"			;init 1
-		kfreeze			invalue	"Freeze"
-		if (kfreeze == 0) then
-			gkfreeza	= 0
-			gkfreezf	= 0
-		elseif (kfreeze == 1) then
-			gkfreeza	= 1
-			gkfreezf	= 0
-		elseif (kfreeze == 2) then
-			gkfreeza	= 0
-			gkfreezf	= 1
-		else
-			gkfreeza	= 1
-			gkfreezf	= 1
-		endif
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkOutGain       invalue "Output_Gain"    ; init 0.7
+    gkinput         invalue "Input"          ; init 1
+    gkFFTattributes invalue "FFTattributes"  ; init 1
+    kfreeze         invalue "Freeze"
+    if (kfreeze == 0) then
+      gkfreeza = 0
+      gkfreezf = 0
+    elseif (kfreeze == 1) then
+      gkfreeza = 1
+      gkfreezf = 0
+    elseif (kfreeze == 2) then
+      gkfreeza = 0
+      gkfreezf = 1
+    else
+      gkfreeza = 1
+      gkfreezf = 1
+    endif
+  endif
 endin
 
-instr	1
-	if	gkinput=0	then															;IF 'INPUT' SWITCH IS SET TO 'Live Input' THEN IMPLEMENT THE NEXT LINE OF CODE
-		asig		inch		1													;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
-	elseif		gkinput=1 && (gkfreeza + gkfreezf)!=2 	then							;IF 'INPUT' SWITCH IS SET TO 'Voice' AND FREEZE ALL IS NOT ACTIVATED THEN IMPLEMENT THE NEXT LINE OF CODE
-		Sfile1	invalue		"_Browse1"
-		;OUTPUT		OPCODE		FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig, asigR	FilePlay2		Sfile1,     1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
-	elseif		gkinput=2	then													;IF 'INPUT' SWITCH IS SET TO 'Drum Loop' THEN IMPLEMENT THE NEXT LINE OF CODE
-		Sfile2	invalue		"_Browse2"
-		;OUTPUT		OPCODE		FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig, asigR	FilePlay2		Sfile2,     1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
-	endif																	;END OF 'IF'...'THEN' BRANCHING
-	kSwitch		changed		gkFFTattributes									;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then															;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	START														;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif																	;END OF CONDITIONAL BRANCHING
-	START:																	;LABEL
-	iFFTsize	table		0, i(gkFFTattributes)+1									;READ FFT ATTRIBUT FROM TABLE
-	ioverlap	table		1, i(gkFFTattributes)+1									;READ FFT ATTRIBUT FROM TABLE
-	iwinsize	table		2, i(gkFFTattributes)+1									;READ FFT ATTRIBUT FROM TABLE
-	iwintype	table		3, i(gkFFTattributes)+1									;READ FFT ATTRIBUT FROM TABLE
+instr 1
+  ; If 'input' switch is set to 'live input' then implement the next line of code
+  if gkinput = 0 then
+    asig inch 1  ; Read audio from the computer's live input channel 1 (left)
+    ; If 'input' switch is set to 'voice' and freeze all is not activated then implement
+    ; the
+    ; next line of code
+  elseif gkinput = 1 && (gkfreeza + gkfreezf) != 2 then
+    Sfile1 invalue "_Browse1"
+    ; Output  opcode  file_path| speed | inskip | wraparound (1=on)
+    asig, asigR FilePlay2 Sfile1, 1, 0, 1  ; Read a stored audio file from the hard drive
+    ; If 'input' switch is set to 'drum loop' then implement the next line of code
+  elseif gkinput = 2 then
+    Sfile2 invalue "_Browse2"
+    ; Output  opcode  file_path| speed | inskip | wraparound (1=on)
+    asig, asigR FilePlay2 Sfile2, 1, 0, 1  ; Read a stored audio file from the hard drive
+  endif                                    ; End of 'if'...'then' branching
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkFFTattributes
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    ; Begin a reinitialisation pass from label 'start'
+    reinit START
+  endif                                   ; End of conditional branching
+START:                                    ; Label
+  iFFTsize table 0, i(gkFFTattributes)+1  ; Read fft attribut from table
+  ioverlap table 1, i(gkFFTattributes)+1  ; Read fft attribut from table
+  iwinsize table 2, i(gkFFTattributes)+1  ; Read fft attribut from table
+  iwintype table 3, i(gkFFTattributes)+1  ; Read fft attribut from table
 
-	fsig1  	pvsanal		asig, iFFTsize, ioverlap, iwinsize, iwintype					;ANALYSE THE AUDIO SIGNAL THAT WAS CREATED IN INSTRUMENT 1. OUTPUT AN F-SIGNAL.
-	;OUTPUT	OPCODE		INPUT | FREEZE_AMPLITUDES | FREEZE_FREQUECIES
-	fsig2 	pvsfreeze 	fsig1,       gkfreeza,          gkfreezf					;FREEZE AMPLITUDES OR FREQUENCIES (OR NEITHER) ACCORDING TO THE SWITCHES gkfreeza AND gkfreezf
-	;OUTPUT	OPCODE		INPUT
-	aresyn 	pvsynth  		fsig2                      								;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
-			rireturn															;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-			outs			aresyn * gkOutGain, aresyn * gkOutGain						;SEND THE RESCALED, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
+  ; Analyse the audio signal that was created in instrument 1. Output an f-signal.
+  fsig1 pvsanal asig, iFFTsize, ioverlap, iwinsize, iwintype
+  ; Output opcode  input | freeze_amplitudes | freeze_frequecies
+  ; Freeze amplitudes or frequencies (or neither) according to the switches gkfreeza and
+  ; gkfreezf
+  fsig2 pvsfreeze fsig1, gkfreeza, gkfreezf
+  ; Output opcode  input
+  aresyn pvsynth fsig2  ; Resynthesize the f-signal as an audio signal
+  rireturn              ; Return from reinitialisation pass to performance time passes
+  ; Send the rescaled, resynthesized signal to the audio outputs
+  outs aresyn * gkOutGain, aresyn * gkOutGain
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -109,9 +122,9 @@ i 10		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -129,15 +142,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -158,15 +176,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -194,14 +217,14 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -220,11 +243,23 @@ If this happens just cycle the 'On/Off' switch.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Freeze</objectName>
@@ -277,14 +312,14 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -336,14 +371,14 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -365,15 +400,20 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -394,14 +434,14 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -458,14 +498,14 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -505,14 +545,14 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -536,6 +576,18 @@ If this happens just cycle the 'On/Off' switch.</label>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -553,9 +605,9 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -580,14 +632,14 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -609,14 +661,14 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -638,9 +690,9 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -667,6 +719,18 @@ If this happens just cycle the 'On/Off' switch.</label>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -684,14 +748,14 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -713,14 +777,14 @@ If this happens just cycle the 'On/Off' switch.</label>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

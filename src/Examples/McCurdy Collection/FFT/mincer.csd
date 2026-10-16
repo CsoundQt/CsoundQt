@@ -1,125 +1,138 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
-;Modified for QuteCsound by René, November 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, November 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add Browser for audio files
-;	Instrument 1 is activated by MIDI and by the GUI, portamento added
-;	Add Init instrument 4
+; Notes on modifications from original csd:
+; Add Browser for audio files
+; Instrument 1 is activated by MIDI and by the GUI, portamento added
+; Add Init instrument 4
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1
 
 
-giFFTsizes	ftgen	0,0,8,-2,128,256,512,1024,2048,4096,8192	;FFT SIZES
+giFFTsizes ftgen 0, 0, 8, -2, 128, 256, 512, 1024, 2048, 4096, 8192  ; Fft sizes
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkptr		invalue	"Manual_Pointer"
-		gkspeed		invalue	"Pointer_Speed"
-		gkpitch		invalue	"Pitch"
-		gkamp		invalue	"Amp"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkptr   invalue "Manual_Pointer"
+    gkspeed invalue "Pointer_Speed"
+    gkpitch invalue "Pitch"
+    gkamp   invalue "Amp"
 
-		gklock		invalue	"Lock"
-		gkPtrMode		invalue	"PtrMode"
-		gkFFTsize		invalue	"FFTsize"
-	endif
+    gklock    invalue "Lock"
+    gkPtrMode invalue "PtrMode"
+    gkFFTsize invalue "FFTsize"
+  endif
 endin
 
 instr 1
-	if p4!=0 then																	;MIDI
-		ioct		= p4																;READ OCT VALUE FROM MIDI INPUT
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read oct value from MIDI input
 
-		;PITCH BEND===========================================================================================================================================================
-		iSemitoneBendRange = 24														;PITCH BEND RANGE IN SEMITONES
-		imin		= 0																;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333										;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax												;PITCH BEND VARIABLE (IN oct FORMAT)
-		kfreq	=	cpsoct(ioct + kbend) / cpsoct(8)									;(CONVERT TO RATIO: MIDDLE C IS POINT OF UNISON)
-		;=====================================================================================================================================================================
-	else																			;GUI
-		kfreq		= gkpitch														;SET FUNDEMENTAL TO SLIDER "pitch"
-	endif
+    ; Pitch
+    ; bend===========================================================================================================================================================
+    iSemitoneBendRange = 24  ; Pitch bend range in semitones
+    imin               = 0   ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    ; (Convert to ratio: middle c is point of unison)
+    kfreq = cpsoct(ioct + kbend) / cpsoct(8)
+    ; =====================================================================================================================================================================
+  else               ; GUI
+    kfreq = gkpitch  ; Set fundemental to slider "pitch"
+  endif
 
-	kporttime		linseg	0,0.001,0.02												;CREATE A VARIABLE FUNCTION THAT RAPIDLY RAMPS UP TO A SET VALUE	
-	kpitch		portk	kfreq, kporttime											;CUTOFF FREQ. IS A SMOOTHED VERSION OF SLIDER FOR CUTOFF FREQUENCY
+  ; Create a variable function that rapidly ramps up to a set value
+  kporttime linseg 0, 0.001, 0.02
+  ; Cutoff freq. Is a smoothed version of slider for cutoff frequency
+  kpitch portk kfreq, kporttime
 
 
-	Sfile_new		strcpy	""					;INIT TO EMPTY STRING
+  Sfile_new strcpy ""  ; Init to empty string
 
-	Sfile		invalue	"_Browse"
-	Sfile_old		strcpyk	Sfile_new
-	Sfile_new		strcpyk	Sfile
-	kfile 		strcmpk	Sfile_new, Sfile_old
+  Sfile invalue "_Browse"
+  Sfile_old strcpyk Sfile_new
+  Sfile_new strcpyk Sfile
+  kfile strcmpk Sfile_new, Sfile_old
 
-	if	kfile != 0	then															;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-			reinit	NEW_FILE														;REINITIALIZE FROM LABEL 'UPDATE'
-	endif
-	NEW_FILE:
-		
-	ifile	ftgentmp	0, 0, 0, 1, Sfile,0,0,1											;READ MONO OR STEREO AUDIO FILE CHANNEL 1
-	ilen		=	nsamp(ifile)/sr													;DERIVE FILE LENGTH IN SECONDS
-			rireturn																;RETURN FROM REINITIALIZATION PASS
+  if kfile != 0 then  ; If a bang had been generated in the line above
+    reinit NEW_FILE   ; Reinitialize from label 'update'
+  endif
+NEW_FILE:
 
-	kptr		=	gkptr*ilen														;POINTER IN SECONDS (AS OPPOSED TO 0-1)	
-				outvalue	"Manual_Pointer_Value", kptr									;UPDATE POINTER VALUE IN SECONDS DISPLAY BOX
-	kptr			portk	kptr, kporttime											;APPLY PORTAMENTO TO POINTER VARIABLE
-	if gkPtrMode=0 then																;IF 'MANUAL POINTER' POINTER MODE HAS BEEN CHOSEN...
-		atimpt	interp	kptr														;POINTER TAKEN DIRECTLY FROM FLTK SLIDER
-	elseif gkPtrMode=1 then															;OR IF SPEED POINTER MODE HAS BEEN CHOSEN... 
-		kspeed	portk	gkspeed, kporttime											;APPLY PORTAMENTO SMOOTHING TO SPEED SLIDER 
-		atimpt	phasor	kspeed/ilen												;CREATE A MOVING PHASE VALUE PROPORTIONAL TO SPEED AND INVERSELY PROPOERTIONAL TO FILE LENGTH
-		atimpt	=		atimpt * ilen												;RESCALE MOVING PHASE VALUE TO ENCOMPASS ENTIRE SOUND FILE
-	endif																		;END OF THIS CONDITIONAL BRANCH
+  ifile ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read mono or stereo audio file channel 1
+  ilen = nsamp(ifile)/sr                     ; Derive file length in seconds
+  rireturn                                   ; Return from reinitialization pass
 
-	kamp			portk	gkamp, kporttime											;APPLY PORTAMENTO SMOOTHING TO AMPLITUDE SLIDER VALUE
-	
-	ktrigger		changed	gkFFTsize													;IF gkFFTsize CHANGES GENERATE A '1' (BANG)
-	if ktrigger=1 then																;IF THE ABOVE LINE HAS GENERATED A '1'...
-			reinit	UPDATE2														;BEGIN A REINITIALIZATION PASS FROM LABEL 'UPDATE2'
-	endif																		;END OF THIS CONDITIONAL BRANCH
-	UPDATE2:																		;LABEL CALLED 'UPDATE2'
-	ifftsize	table	i(gkFFTsize), giFFTsizes											;DERIVE CHOSEN FFT SIZE FROM ON SCREEN BUTTON BANK AND FFTsizes FUNCTION TABLE
-	asig 	mincer 	atimpt, kamp, kpitch, ifile, gklock, ifftsize	;,idecim]				;ktab AND klock SEEM TO BE REVERSED WITH RESPECT TO THEIR DOCUMENTATION IN THE MANUAL
-			rireturn
-	aenv		linsegr	0,0.05,1,0.05,0												;DE-CLICKING ENVELOPE
-			outs		asig*aenv, asig*aenv											;SEND AUDIO TO OUTPUTS
+  kptr = gkptr*ilen                      ; Pointer in seconds (as opposed to 0-1)
+  outvalue "Manual_Pointer_Value", kptr  ; Update pointer value in seconds display box
+  kptr portk kptr, kporttime             ; Apply portamento to pointer variable
+  ; If 'manual pointer' pointer mode has been chosen...
+  if gkPtrMode = 0 then
+    atimpt interp kptr               ; Pointer taken directly from FLTK slider
+  elseif gkPtrMode = 1 then          ; Or if speed pointer mode has been chosen...
+    kspeed portk gkspeed, kporttime  ; Apply portamento smoothing to speed slider
+    ; Create a moving phase value proportional to speed and inversely propoertional to
+    ; file length
+    atimpt phasor kspeed/ilen
+    atimpt = atimpt * ilen  ; Rescale moving phase value to encompass entire sound file
+  endif                     ; End of this conditional branch
+
+  kamp portk gkamp, kporttime  ; Apply portamento smoothing to amplitude slider value
+
+  ktrigger changed gkFFTsize  ; If gkfftsize changes generate a '1' (bang)
+  if ktrigger = 1 then        ; If the above line has generated a '1'...
+    reinit UPDATE2            ; Begin a reinitialization pass from label 'update2'
+  endif                       ; End of this conditional branch
+UPDATE2:                      ; Label called 'update2'
+  ; Derive chosen fft size from on screen button bank and fftsizes function table
+  ifftsize table i(gkFFTsize), giFFTsizes
+  ; ,Idecim] ;ktab and klock seem to be reversed with respect to their documentation in
+  ; the manual
+  asig mincer atimpt, kamp, kpitch, ifile, gklock, ifftsize
+  rireturn
+  aenv linsegr 0, 0.05, 1, 0.05, 0  ; De-clicking envelope
+  outs asig*aenv, asig*aenv         ; Send audio to outputs
 endin
 
-instr	2	;SET TIME SCALING SLIDER TO P4 DETERMINED VALUES
-	outvalue	"Pointer_Speed", p4
+instr 2  ; Set time scaling slider to p4 determined values
+  outvalue "Pointer_Speed", p4
 endin
 
-instr	3	;SET PITCH SCALING SLIDER TO P4 DETERMINED VALUES
-	outvalue	"Pitch", p4
+instr 3  ; Set pitch scaling slider to p4 determined values
+  outvalue "Pitch", p4
 endin
 
-instr	4	;INIT
-	outvalue	"Amp", 1.0
-	outvalue	"Lock", 1
-	outvalue	"Pitch", 1.0
-	outvalue	"FFTsize", 3
-	outvalue	"Pointer_Speed", 1.0
-	outvalue	"PtrMode", 1
-	outvalue	"Manual_Pointer", 0.1
+instr 4  ; Init
+  outvalue "Amp", 1.0
+  outvalue "Lock", 1
+  outvalue "Pitch", 1.0
+  outvalue "FFTsize", 3
+  outvalue "Pointer_Speed", 1.0
+  outvalue "PtrMode", 1
+  outvalue "Manual_Pointer", 0.1
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
-i  4      0.1       0	;INIT
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 4 0.1 0    ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -135,9 +148,9 @@ i  4      0.1       0	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -155,15 +168,20 @@ i  4      0.1       0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -184,15 +202,20 @@ i  4      0.1       0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -215,14 +238,14 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -241,11 +264,23 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -263,15 +298,20 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -337,14 +377,14 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -384,14 +424,14 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -413,15 +453,20 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -444,6 +489,18 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -461,9 +518,9 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -510,11 +567,23 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Lock On / Off</text>
+  <text>Lock On / Off</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -532,14 +601,14 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -561,14 +630,14 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -608,14 +677,14 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -637,14 +706,14 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -684,14 +753,14 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -713,14 +782,14 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -760,14 +829,14 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -791,6 +860,18 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <eventLine>i2 0 0 1 </eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8762</objectName>
@@ -810,6 +891,18 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <eventLine>i2 0 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3581</objectName>
@@ -829,6 +922,18 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <eventLine>i3 0 0 1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

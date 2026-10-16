@@ -1,285 +1,362 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, October 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, October 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;An INIT preset is called at the start of csound (inst 100), a valid (mono or stereo) audio file have to be selected and preset 0 saved before playing.
+; An INIT preset is called at the start of csound (inst 100), a valid (mono or stereo)
+; audio file have to be selected and preset 0 saved before playing.
 
-;Notes on modifications from original csd:
-;	Add Browser for audio files and power of two tables for ftgentmp opcode, accept mono or stereo wav files
-;	Add table(s) for exp slider
-;	Instrument 1 is activated by MIDI and by the GUI
-;	Removed Recording instrument, included in QuteCsound
-;	Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
+; Notes on modifications from original csd:
+; Add Browser for audio files and power of two tables for ftgentmp opcode, accept mono or
+; stereo wav files
+; Add table(s) for exp slider
+; Instrument 1 is activated by MIDI and by the GUI
+; Removed Recording instrument, included in QuteCsound
+; Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
 
-;	                   Schedkwhen Granulation
-;	-------------------------------------------------------------------------------------------------------------------------
-;	This example implements granular synthesis by using schedkwhen to create note events from within the orchestra in
-;	realtime. None of Csound's built-in opcodes for granular synthesis are used.
-;	The advantage of this approach is that the method of grain generation is not defined by the opcode and that further
-;	processing can be applied to individual grains rather than just to the accumulated output of grains. The downside is
-;	that there is likely to be greater CPU strain for dense granulations.
-;	In this implemenation grain-by-grain procedures are represented through ring modulation and band-pass filtering.
-;	Processes upon the accumlated output of the granular synthesizer are represented by global filtering (low-pass and
-;	high-pass) and by reverb. Grain-by-grain processes are carried out in the instrument that actually renders the audio
-;	for grains whereas global procedures are carried out in a separate, always on, instrument.
-;	The pointer which defines the location within the sound file from which grains are read is defined by the GUI slider
-;	'Pointer'. The pointer can also be modulated by an LFO. To deactivate the LFO reduce its amplitude to zero.
-;	Certain paramaters of the ring modulator and the band-pass filter can be randomized from grain to grain. The range from
-;	which random values are chosen are represented by two mini sliders stacked one upon the other.
-;	The pitch of grains can me modulated in a variety of ways. 'Pitch (oct)' modulates the pitch of all grains by the same
-;	constant number of octaves. 'Random Octave' defines a range from which random modulations on a grain-by-grain basis are
-;	applied. 'Pitch Offset Range (Octaves)' define the range from which transpositions by octave intervals are applied.
-;	The attack and the decay portions of each grain envelope are defined as well as a continuous morph between straight and
-;	exponential envelope segements.
-;	This example can also be triggered via a MIDI ketboard. MIDI note values will modulate any transposition set in the GUI
-;	interface about a unison point corresponding to middle C.
+; Schedkwhen Granulation
+; -------------------------------------------------------------------------------------------------------------------------
+; This example implements granular synthesis by using schedkwhen to create note events
+; from within the orchestra in
+; realtime. None of Csound's built-in opcodes for granular synthesis are used.
+; The advantage of this approach is that the method of grain generation is not defined by
+; the opcode and that further
+; processing can be applied to individual grains rather than just to the accumulated
+; output of grains. The downside is
+; that there is likely to be greater CPU strain for dense granulations.
+; In this implemenation grain-by-grain procedures are represented through ring modulation
+; and band-pass filtering.
+; Processes upon the accumlated output of the granular synthesizer are represented by
+; global filtering (low-pass and
+; high-pass) and by reverb. Grain-by-grain processes are carried out in the instrument
+; that actually renders the audio
+; for grains whereas global procedures are carried out in a separate, always on,
+; instrument.
+; The pointer which defines the location within the sound file from which grains are read
+; is defined by the GUI slider
+; 'Pointer'. The pointer can also be modulated by an LFO. To deactivate the LFO reduce its
+; amplitude to zero.
+; Certain paramaters of the ring modulator and the band-pass filter can be randomized from
+; grain to grain. The range from
+; which random values are chosen are represented by two mini sliders stacked one upon the
+; other.
+; The pitch of grains can me modulated in a variety of ways. 'Pitch (oct)' modulates the
+; pitch of all grains by the same
+; constant number of octaves. 'Random Octave' defines a range from which random
+; modulations on a grain-by-grain basis are
+; applied. 'Pitch Offset Range (Octaves)' define the range from which transpositions by
+; octave intervals are applied.
+; The attack and the decay portions of each grain envelope are defined as well as a
+; continuous morph between straight and
+; exponential envelope segements.
+; This example can also be triggered via a MIDI ketboard. MIDI note values will modulate
+; any transposition set in the GUI
+; interface about a unison point corresponding to middle C.
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 8		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 8      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
 
-gisin		ftgen	0, 0, 512, 10, 1	;SINE WAVE
+gisin ftgen 0, 0, 512, 10, 1  ; Sine wave
 
-;TABLE FOR EXP SLIDER
-giExp1		ftgen	0, 0, 129, -25, 0,  0.00001, 128,     1.0
-giExp003_1	ftgen	0, 0, 129, -25, 0,  0.003,   128,     1.0
-giExp10		ftgen	0, 0, 129, -25, 0,  0.001,   128,    10.0
-giExp30		ftgen	0, 0, 129, -25, 0,  0.001,   128,    30.0
-giExp1000		ftgen	0, 0, 129, -25, 0,  0.5,     128,  1000.0
-giExp20000	ftgen	0, 0, 129, -25, 0,  20.0,    128, 20000.0
+; Table for exp slider
+giExp1     ftgen 0, 0, 129, -25, 0, 0.00001, 128, 1.0
+giExp003_1 ftgen 0, 0, 129, -25, 0, 0.003, 128, 1.0
+giExp10    ftgen 0, 0, 129, -25, 0, 0.001, 128, 10.0
+giExp30    ftgen 0, 0, 129, -25, 0, 0.001, 128, 30.0
+giExp1000  ftgen 0, 0, 129, -25, 0, 0.5, 128, 1000.0
+giExp20000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0
 
-gasendL		init		0										;INITIALIZE GLOBAL AUDIO VARIABLES USED TO SEND AUDIO FROM GRAIN RENDERING INSTRUMENT
-gasendR		init		0    									;INITIALIZE GLOBAL AUDIO VARIABLES USED TO SEND AUDIO FROM GRAIN RENDERING INSTRUMENT
+; Initialize global audio variables used to send audio from grain rendering instrument
+gasendL init 0
+; Initialize global audio variables used to send audio from grain rendering instrument
+gasendR init 0
 
 
-;;;USER DEFINED OPCODES (UDOS);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ;;User defined opcodes
+; (udos);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;A USER DEFINED OPCODE IS CREATED FOR REVERB SO THAT ksmps CAN BE SET TO 1
-opcode	reverbsr, aa, aakk
-	setksmps	1
-	ainsigL, ainsigR, kfblvl, kfco	xin
-	arvbL, arvbR 	reverbsc 	ainsigL, ainsigR, kfblvl, kfco
-				xout		arvbL, arvbR
+; A user defined opcode is created for reverb so that ksmps can be set to 1
+opcode reverbsr, aa, aakk
+  setksmps 1
+  ainsigL, ainsigR, kfblvl, kfco xin
+  arvbL, arvbR reverbsc ainsigL, ainsigR, kfblvl, kfco
+  xout arvbL, arvbR
 endop
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-;On / Off Buttons
-		gkRvbOnOff	invalue	"RVBOnOff"
-		gkRMOnOff		invalue	"RMOnOff"
-		gkBPFOnOff	invalue	"BPFOnOff"
-		gkFiltOnOff	invalue	"FiltOnOff"
-;Sliders
-;Main
-		gkgain		invalue	"Output_Amp"
-		gkampdepth	invalue	"Amp_Rnd_Offset"
-		gkwidth		invalue	"Rnd_Pan_Amount"
-;Grain Pointer
-		gkptr		invalue	"Pointer"
-		gkptr_OS		invalue	"Grain_Pointer_Offset"
-		gkLFOamp		invalue	"Pointer_LFO_Amp"
-		kLFOfrq		invalue	"Pointer_LFO_Freq"
-		gkLFOfrq		tablei	kLFOfrq, giExp1, 1
-					outvalue	"Pointer_LFO_Freq_Value", gkLFOfrq	
-;Grain Density and Grain Size
-		kGPS			invalue	"Grains_per_Second"
-		gkGPS		tablei	kGPS, giExp1000, 1
-					outvalue	"Grains_per_Second_Value", gkGPS	
-		gkgap_OS		invalue	"Grain_Gap_Jitter"
-		kdurMin		invalue	"Grain_Dur_Min"
-		gkdurMin		tablei	kdurMin, giExp003_1, 1
-					outvalue	"Grain_Dur_Min_Value", gkdurMin	
-		kdurMax		invalue	"Grain_Dur_Max"
-		gkdurMax		tablei	kdurMax, giExp003_1, 1
-					outvalue	"Grain_Dur_Max_Value", gkdurMax	
-;Grain Envelope
-		gkatt		invalue	"Attack"
-		gkdec		invalue	"Decay"
-		gkEnvType		invalue	"Envelope"
-;Grain Pitch
-		gkoct		invalue	"Pitch"
-		gkrndoctavemin	invalue	"Rnd_Octave_Min"
-		gkrndoctavemax	invalue	"Rnd_Octave_Max"
-		gkpchosrange	invalue	"Pitch_Offset_Range"
-;Grain-by-Grain Ring Modulation
-		gkRMmix		invalue	"RM_Mix"
-		gkRMfreqmin	invalue	"RM_Freq_Min"
-		gkRMfreqmax	invalue	"RM_Freq_Max"
-;Grain-by-Grain Bandpass Filtering
-		gkBPFmix		invalue	"BPF_Mix"
-		gkBPFcutmin	invalue	"BPF_Cutoff_Min"
-		gkBPFcutmax	invalue	"BPF_Cutoff_Max"
-		kBPFbwmin		invalue	"BPF_Bandwidth_Min"
-		gkBPFbwmin	tablei	kBPFbwmin, giExp10, 1
-					outvalue	"BPF_Bandwidth_Min_Value", gkBPFbwmin		
-		kBPFbwmax		invalue	"BPF_Bandwidth_Max"
-		gkBPFbwmax	tablei	kBPFbwmax, giExp30, 1
-					outvalue	"BPF_Bandwidth_Max_Value", gkBPFbwmax	
-		gkBPFgain		invalue	"BPF_Gain"
-;Global Filtering
-		kHPFcf		invalue	"HPF_Cutoff"
-		gkHPFcf		tablei	kHPFcf, giExp20000, 1
-					outvalue	"HPF_Cutoff_Value", gkHPFcf			
-		kLPFcf		invalue	"LPF_Cutoff"
-		gkLPFcf		tablei	kLPFcf, giExp20000, 1
-					outvalue	"LPF_Cutoff_Value", gkLPFcf			
-;Reverb
-		gkRvbDryWet	invalue	"RVB_Mix"
-		gkfblvl		invalue	"RVB_Size"
-		gkfco		invalue	"RVB_Cutoff"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; On / Off Buttons
+    gkRvbOnOff  invalue "RVBOnOff"
+    gkRMOnOff   invalue "RMOnOff"
+    gkBPFOnOff  invalue "BPFOnOff"
+    gkFiltOnOff invalue "FiltOnOff"
+    ; Sliders
+    ; Main
+    gkgain     invalue "Output_Amp"
+    gkampdepth invalue "Amp_Rnd_Offset"
+    gkwidth    invalue "Rnd_Pan_Amount"
+    ; Grain Pointer
+    gkptr    invalue "Pointer"
+    gkptr_OS invalue "Grain_Pointer_Offset"
+    gkLFOamp invalue "Pointer_LFO_Amp"
+    kLFOfrq  invalue "Pointer_LFO_Freq"
+    gkLFOfrq tablei kLFOfrq, giExp1, 1
+    outvalue "Pointer_LFO_Freq_Value", gkLFOfrq
+    ; Grain Density and Grain Size
+    kGPS invalue "Grains_per_Second"
+    gkGPS tablei kGPS, giExp1000, 1
+    outvalue "Grains_per_Second_Value", gkGPS
+    gkgap_OS invalue "Grain_Gap_Jitter"
+    kdurMin  invalue "Grain_Dur_Min"
+    gkdurMin tablei kdurMin, giExp003_1, 1
+    outvalue "Grain_Dur_Min_Value", gkdurMin
+    kdurMax invalue "Grain_Dur_Max"
+    gkdurMax tablei kdurMax, giExp003_1, 1
+    outvalue "Grain_Dur_Max_Value", gkdurMax
+    ; Grain Envelope
+    gkatt     invalue "Attack"
+    gkdec     invalue "Decay"
+    gkEnvType invalue "Envelope"
+    ; Grain Pitch
+    gkoct          invalue "Pitch"
+    gkrndoctavemin invalue "Rnd_Octave_Min"
+    gkrndoctavemax invalue "Rnd_Octave_Max"
+    gkpchosrange   invalue "Pitch_Offset_Range"
+    ; Grain-by-Grain Ring Modulation
+    gkRMmix     invalue "RM_Mix"
+    gkRMfreqmin invalue "RM_Freq_Min"
+    gkRMfreqmax invalue "RM_Freq_Max"
+    ; Grain-by-Grain Bandpass Filtering
+    gkBPFmix    invalue "BPF_Mix"
+    gkBPFcutmin invalue "BPF_Cutoff_Min"
+    gkBPFcutmax invalue "BPF_Cutoff_Max"
+    kBPFbwmin   invalue "BPF_Bandwidth_Min"
+    gkBPFbwmin tablei kBPFbwmin, giExp10, 1
+    outvalue "BPF_Bandwidth_Min_Value", gkBPFbwmin
+    kBPFbwmax invalue "BPF_Bandwidth_Max"
+    gkBPFbwmax tablei kBPFbwmax, giExp30, 1
+    outvalue "BPF_Bandwidth_Max_Value", gkBPFbwmax
+    gkBPFgain invalue "BPF_Gain"
+    ; Global Filtering
+    kHPFcf invalue "HPF_Cutoff"
+    gkHPFcf tablei kHPFcf, giExp20000, 1
+    outvalue "HPF_Cutoff_Value", gkHPFcf
+    kLPFcf invalue "LPF_Cutoff"
+    gkLPFcf tablei kLPFcf, giExp20000, 1
+    outvalue "LPF_Cutoff_Value", gkLPFcf
+    ; Reverb
+    gkRvbDryWet invalue "RVB_Mix"
+    gkfblvl     invalue "RVB_Size"
+    gkfco       invalue "RVB_Cutoff"
 
-;AUDIO FILE CHANGE / LOAD IN POWER OF 2 TABLES **********************************************************************************************
-;Have put all this stuff in instr 10 to reduce the respons time when playing with midi
+    ; Audio file change / load in power of 2 tables
+    ; **********************************************************************************************
+    ; Have put all this stuff in instr 10 to reduce the respons time when playing with
+    ; midi
 
-		Sfile_new		strcpy	""													;INIT TO EMPTY STRING
+    Sfile_new strcpy ""  ; Init to empty string
 
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
+    Sfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk Sfile
+    kfile strcmpk Sfile_new, Sfile_old
 
-		gkfile_new	init		0
-		if	kfile != 0	then														;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-			gkfile_new	=	1													;Flag to inform instr 1 that a new file is loaded
-				reinit	NEW_FILE													;REINITIALIZE FROM LABEL 'NEW_FILE'
-		endif
-		NEW_FILE:
-		;opcode accept only power of 2 table size
-		ifnTemp		ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1								;Temporary table to get the audio file size
-		iftlen		= ftlen(ifnTemp)												;file size
-		iftlen2		pow	2, ceil(log(iftlen)/log(2))									;high nearest power of two table size
+    gkfile_new init 0
+    if kfile != 0 then  ; If a bang had been generated in the line above
+      gkfile_new = 1    ; Flag to inform instr 1 that a new file is loaded
+      reinit NEW_FILE   ; Reinitialize from label 'new_file'
+    endif
+NEW_FILE:
+    ; opcode accept only power of 2 table size
+    ; Temporary table to get the audio file size
+    ifnTemp ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1
+    iftlen = ftlen(ifnTemp)                  ; file size
+    iftlen2 pow 2, ceil(log(iftlen)/log(2))  ; high nearest power of two table size
 
-		;FUNCTION TABLE NUMBER OF THE SOUND FILE THAT WILL BE GRANULATED
-		giFile		ftgentmp	0, 0, iftlen2, 1, Sfile, 0, 0, 1							;READ MONO or STEREO AUDIO FILE CHANNEL 1
-;*******************************************************************************************************************************************
-	endif
+    ; Function table number of the sound file that will be granulated
+    ; Read mono or stereo audio file channel 1
+    giFile ftgentmp 0, 0, iftlen2, 1, Sfile, 0, 0, 1
+    ; *******************************************************************************************************************************************
+  endif
 endin
 
-instr	1	;GRAIN TRIGGERING INSTRUMENT
-	if p4!=0 then																	;MIDI
-		iPitchRatio	=	cpsoct(p4)/cpsoct(8)										;MAP TO MIDI OCT VALUE TO PITCH (CONVERT TO RATIO: MIDDLE C IS POINT OF UNISON)
-	else																			;OTHERWISE...
-		iPitchRatio	=	1														;PITCH RATIO IS JUST 1
-	endif																		;END OF THIS CONDITIONAL BRANCH
+instr 1            ; Grain triggering instrument
+  if p4 != 0 then  ; MIDI
+    ; Map to MIDI oct value to pitch (convert to ratio: middle c is point of unison)
+    iPitchRatio = cpsoct(p4)/cpsoct(8)
+  else               ; Otherwise...
+    iPitchRatio = 1  ; Pitch ratio is just 1
+  endif              ; End of this conditional branch
 
-	iporttime		=			0.05													;PORTAMENTO TIME
-	gkporttime	linseg		0,.01,iporttime,1,iporttime								;gkporttime WILL RAMP UP AND HOLD THE VALUE iporttime
-	kGPS			portk		gkGPS, gkporttime										;APPLY PORTAMENTO TO GRAINS-PER-SECOND VARIABLE
-	ktrigger		metro		gkGPS												;CREATE A METRICAL TRIGGER (MOMENTARY 1s) USING GRAINS-PER-SECOND AS A FREQUENCY CONTROL
-	kptr			portk		gkptr, gkporttime										;APPLY PORTAMENTO TO POINTER VARIABLE
-	kLFO			lfo			(gkLFOamp * 0.5), gkLFOfrq, 1								;TRIANGLE WAVEFORM LFO TO CREATE AN LFO POINTER
-	kptr			=			kptr + (kLFO + 0.5)										;ADD POINTER VARIABLE TO POINTER LFO
-	kptr			wrap			kptr, 0, 1											;WRAP OUT OF RANGE VALUE FOR POINTER BETWEEN ZERO AND 1
-	giSampleLen 	= 			(nsamp(giFile))/sr										;DERIVE SAMPLE LENGTH IN SECONDS
-	kptr			=			kptr * giSampleLen										;RESCALE POINTER ACCORDING TO SAMPLE LENGTH
-	;			OPCODE	 	KTRIGGER, KMINTIME, KMAXNUM, KINSNUM, KWHEN, KDUR,  P4     P5
-				schedkwhen	ktrigger,    0,        0,       2,      0,     0,  kptr, iPitchRatio		;TRIGGER INSTR 2 ACCORDING TO TRIGGER. SEND POINTER VALUE VIA P-FIELD 4, SEND MIDI PITCH RATIO VIA P5
-endin
-	
-instr	2	;SCHEDKWHEN TRIGGERED INSTRUMENT. ON FOR JUST AN INSTANCE. THIS INSTRUMENT DEFINES GRAIN DURATION, ADDS GRAIN GAP OFFSET, AND TRIGGERS THE GRAIN SOUNDING INSTRUMENT
-	idur			random		i(gkdurMin), i(gkdurMax)									;DERIVE A GRAIN DURATION ACCORDING TO DURATION RANGE SETTINGS 
-	igap_OS		random		0, i(gkgap_OS)											;DERIVE A GRAIN GAP OFFSET ACCORDING TO GUI VARIABLE "Grain Gap Offset"
-				event_i		"i", 3, igap_OS, idur, p4, p5								;TRIGGER INSTRUMENT 3 (GRAIN SOUNDING INSTRUMENT). PASS POINTER VALUE VIA P-FIELD 4. GRAIN GAP OFFSET IS IMPLEMENTED USING P2/'WHEN' PARAMETER FIELD. SEND MIDI PITCH RATIO VIA P5
-endin
-		
-instr		3	;GRAIN SOUNDING INSTRUMENT
-	iwidth 		=			i(gkwidth)											;DERIVE AN I-RATE VERSION OF gkwidth
-	iampdepth 	=			i(gkampdepth)											;DERIVE AN I-RATE VERSION OF gkampdepth
-	iptr_OS		=			i(gkptr_OS)											;DERIVE AN I-RATE VERSION OF gkptr_OS (POINTER OFFSET)
-	ioct_OS		random		-i(gkpchosrange), i(gkpchosrange)							;DERIVE CONTINUOUS TRANSPOSITION CONSTANT
-	irndoctave	random		i(gkrndoctavemin), i(gkrndoctavemax)						;DERIVE OCTAVE INTERVAL TRANSPOSITION CONSTANT
-	ipchrto		=			cpsoct(8+int(irndoctave)+i(gkoct)+ioct_OS)/cpsoct(8)			;CREATE A PITCH RATIO (TO UNISON) CONSTANT COMBINING ALL TRANSPOSITION CONSTANTS
-	ipchrto		=			ipchrto * p5											;SCALE PITCH RATIO WITH P5 WHICH, TRACED BACK THROUGH INSTR 2 TO INSTR 1, IS MIDI PITCH RATIO
-	iskip		=			p4 + rnd(iptr_OS)										;DEFINE 'IN-SKIP' INTO THE SOUND FILE (IN SECONDS) FROM POINTER VALUE PASSED FROM CALLER INSTRUMENT AND RANDOM POINTER OFFSET	
-	iatt			=			i(gkatt)												;DERIVE AN I-RATE VERSION OF gkatt (ATTACK TIME)
-	idec			=			i(gkdec)												;DERIVE AN I-RATE VERSION OF gkdec (DECAY TIME)
-
-	if	iatt+idec>1	then															;IF ATTACK TIME AND DECAY TIME ARE GREATER THAN 1 THEN THE VALUES SHOULD BE RESCALED SO THAT THE SUM IS EQUAL TO 1
-		iatt		=	iatt/(iatt+idec)												;RESCALE iatt
-		idec		=	idec/(iatt+idec)												;RESCALE idec
-	endif																		;END OF CONDITIONAL BRANCHING
-
-	aenvL		linseg		0, (iatt * p3), 1, ((1-iatt-idec) * p3), 1, (idec * p3), 0				;DEFINE GRAIN AMPLITUDE ENVELOPE (STRAIGHT SEGMENTS)
-	aenvE		expsega		.0001, (iatt * p3),	1, ((1-iatt-idec) * p3), 1, (idec * p3), .0001		;DEFINE GRAIN AMPLITUDE ENVELOPE (EXPONENTIAL SEGMENTS)	
-	aenv			ntrpol		aenvL, aenvE, gkEnvType											;CREATE A RESULTANT ENVELOPE THAT IS A CONTINUOUS MORPH BETWEEN THE STRAIGHT AND EXPONENTIAL VERSIONS ABOVE
-	iamp 		= 			(1 - rnd(iampdepth))*i(gkgain)									;DERIVE AMPLITUDE FROM 'Gain' SLIDER AND FROM 'Random Amplitude Depth' SLIDER
-	ipan			random		-iwidth, iwidth												;DERIVE A PANNING POSITION FOR THIS GRAIN FROM 'Random Panning Amount' SLIDER
-	ipan 		= 			ipan + .5														;OFFSET ipan by +0.5
-	aptr			line			iskip, p3 / ipchrto, iskip+p3										;DEFINE A MOVING POINTER FUNCTION TO READ GRAIN FROM FUNCTION TABLE CONTAINING SOURCE AUDIO
-	asig  		tablei		aptr * sr, giFile												;READ AUDIO FROM SOURCE SOUND FUNCTION TABLE. I.E. CREATE GRAIN
-	;GRAIN-BY-GRAIN RING MODULATION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	if	gkRMOnOff=1	then															;IF BAND-PASS FILTERING ON/OFF SWITCH IS ON...
-		iRMfreq	random		i(gkRMfreqmin), i(gkRMfreqmax)							;DEFINE RANDOM RING MODULATION FREQUENCY
-		anoRM	=			1													;A-RATE CONSTANT VALUE OF '1'
-		amod		oscil		1, iRMfreq, gisin										;CREATE RING MODULATING OSCILATOR
-		amod		ntrpol		anoRM, amod, gkRMmix									;CREATE A MIX BETWEEN RING MODULATING OSCILATOR AND CONSTANT VALUE '1'
-		asig		=			asig * amod											;RING MODULATE AUDIO SIGNAL
-	endif																		;END OF CONDITIONAL BRANCHING
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	;GRAIN-BY-GRAIN BAND-PASS FILTERING;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	if	gkBPFOnOff=1	then															;IF BAND-PASS FILTERING ON/OFF SWITCH IS ON...
-		iBPFcut	random		i(gkBPFcutmin), i(gkBPFcutmax)							;DEFINE RANDOM FILTER CUTOFF VALUE (IN OCT FORMAT)
-		iBPFfrq	=			cpsoct(iBPFcut)										;CONVERT TO CPS FORMAT
-		iBPFbw	random		i(gkBPFbwmin), i(gkBPFbwmax)								;DEFINE RANDOM BANDWIDTH VALUE
-		aBPF 	reson 		asig, iBPFfrq, iBPFbw*iBPFfrq, 1							;FILTER AUDIO USING reson OPCODE
-		asig		ntrpol		asig, aBPF*i(gkBPFgain), gkBPFmix							;CREATE MIX BETWEEN THE FILTERED SOUND AND THE DRY SOUND
-	endif																		;END OF CONDITIONAL BRANCHING
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;		
-	asig 		= 	asig * aenv * iamp												;APPLY AMPLITUDE CONSTANT AND GRAIN ENVELOPE
-	gasendL		=	gasendL + (asig * ipan)											;APPLY PANNING VARIABLE AND CREATE LEFT CHANNEL ACCUMULATED OUTPUT 
-	gasendR		=	gasendR + (asig * (1 - ipan))										;APPLY PANNING VARIABLE AND CREATE RIGHT CHANNEL ACCUMULATED OUTPUT
-endin
-		
-instr	4	;GLOBAL PROCESSING OF GRANULAR OUTPUT & REVERB INSTRUMENT
-	asigL	=	gasendL															;READ ACCUMULATED AUDIO SENT BY GRAIN RENDERING INSTRUMENT AND CREATE A LOCAL AUDIO VARIABLE OUTPUT (THIS IS TO ALLOW REDEFINITION OF THE VARIABLE WITHIN THE SAME LINE OF CODE - NOT POSSIBLE WITH GLOBAL VARIABLES)
-	asigR	=	gasendR															;READ ACCUMULATED AUDIO SENT BY GRAIN RENDERING INSTRUMENT AND CREATE A LOCAL AUDIO VARIABLE OUTPUT (THIS IS TO ALLOW REDEFINITION OF THE VARIABLE WITHIN THE SAME LINE OF CODE - NOT POSSIBLE WITH GLOBAL VARIABLES)
-	if	gkFiltOnOff=1	then															;IF GLOBAL FILTERING ON/OFF SWITCH IS ON...
-		kHPFcf	portk	gkHPFcf, gkporttime											;APPLY PORTAMENTO TO HIGH-PASS FILTER CUTOFF VARIABLE
-		kLPFcf	portk	gkLPFcf, gkporttime  										;APPLY PORTAMENTO TO LOW-PASS FILTER CUTOFF VARIABLE
-		asigL	buthp	asigL, kHPFcf												;APPLY HIGH-PASS FILTER TO LEFT CHANNEL AUDIO...
-		asigL	buthp	asigL, kHPFcf												;...AND AGAIN TO SHARPEN CUTOFF SLOPE
-		asigR	buthp	asigR, kHPFcf												;APPLY HIGH-PASS FILTER TO LEFT CHANNEL AUDIO...
-		asigR	buthp	asigR, kHPFcf												;...AND AGAIN TO SHARPEN CUTOFF SLOPE           	
-		asigL	butlp	asigL, kLPFcf												;APPLY LOW-PASS FILTER TO LEFT CHANNEL AUDIO...
-		asigL	butlp	asigL, kLPFcf												;...AND AGAIN TO SHARPEN CUTOFF SLOPE           
-		asigR	butlp	asigR, kLPFcf												;APPLY LOW-PASS FILTER TO RIGHT CHANNEL AUDIO...
-		asigR	butlp	asigR, kLPFcf												;...AND AGAIN TO SHARPEN CUTOFF SLOPE           
-	endif																		;END OF CONDITIONAL BRANCHING
-	aSigL	=		asigL * (1 - gkRvbDryWet)										;SCALE AUDIO SIGNAL WITH GUI AMPLITUDE SLIDER AND GRAIN CLOUD ENVELOPE
-	aSigR	=		asigR * (1 - gkRvbDryWet)										;SCALE AUDIO SIGNAL WITH GUI AMPLITUDE SLIDER AND GRAIN CLOUD ENVELOPE
-			outs	 	aSigL, aSigR													;SEND AUDIO TO OUTPUTS
-
-	if	gkRvbOnOff=1 then															;IF REVERB ON/OFF SWITCH IS ON...
-			denorm	asigL, asigR													;...DENORMALIZE BOTH CHANNELS OF AUDIO SIGNAL
-	arvbL, arvbR 	reverbsr 	asigL  * gkRvbDryWet, asigR  * gkRvbDryWet, gkfblvl, gkfco			;CREATE REVERBERATED SIGNAL (USING UDO DEFINED ABOVE)
-			outs		arvbL, arvbR													;SEND REVERBERATED SIGNAL TO AUDIO OUTPUTS
-	endif																		;END OF CONDITIONAL BRANCHING
-			clear	gasendL, gasendR												;ZERO GLOBAL AUDIO VARIABLES USED TO SEND ACCUMULATED GRAINS
+  iporttime = 0.05  ; Portamento time
+  ; gkporttime WILL RAMP UP AND HOLD THE VALUE iporttime
+  gkporttime linseg 0, .01, iporttime, 1, iporttime
+  kGPS portk gkGPS, gkporttime  ; Apply portamento to grains-per-second variable
+  ; Create a metrical trigger (momentary 1s) using grains-per-second as a frequency
+  ; control
+  ktrigger metro gkGPS
+  kptr portk gkptr, gkporttime            ; Apply portamento to pointer variable
+  kLFO lfo (gkLFOamp * 0.5), gkLFOfrq, 1  ; Triangle waveform LFO to create an LFO pointer
+  kptr = kptr + (kLFO + 0.5)              ; Add pointer variable to pointer LFO
+  ; Wrap out of range value for pointer between zero and 1
+  kptr wrap kptr, 0, 1
+  giSampleLen = (nsamp(giFile))/sr  ; Derive sample length in seconds
+  kptr        = kptr * giSampleLen  ; Rescale pointer according to sample length
+  ; Opcode   ktrigger, kmintime, kmaxnum, kinsnum, kwhen, kdur,  p4     p5
+  ; Trigger instr 2 according to trigger. Send pointer value via p-field 4, send MIDI
+  ; pitch ratio via p5
+  schedkwhen ktrigger, 0, 0, 2, 0, 0, kptr, iPitchRatio
 endin
 
-instr	100	;INIT
-		outvalue	"_SetPresetIndex", 0
+; Schedkwhen triggered instrument. On for just an instance. This instrument defines grain
+; duration, adds grain gap offset, and triggers the grain sounding instrument
+instr 2
+  ; Derive a grain duration according to duration range settings
+  idur random i(gkdurMin), i(gkdurMax)
+  ; Derive a grain gap offset according to GUI variable "grain gap offset"
+  igap_OS random 0, i(gkgap_OS)
+  ; Trigger instrument 3 (grain sounding instrument). Pass pointer value via p-field 4.
+  ; Grain gap offset is implemented using p2/'when' parameter field. Send MIDI pitch ratio
+  ; via p5
+  event_i "i", 3, igap_OS, idur, p4, p5
+endin
+
+instr 3                      ; Grain sounding instrument
+  iwidth    = i(gkwidth)     ; Derive an i-rate version of gkwidth
+  iampdepth = i(gkampdepth)  ; Derive an i-rate version of gkampdepth
+  iptr_OS   = i(gkptr_OS)    ; Derive an i-rate version of gkptr_os (pointer offset)
+  ; Derive continuous transposition constant
+  ioct_OS random -i(gkpchosrange), i(gkpchosrange)
+  ; Derive octave interval transposition constant
+  irndoctave random i(gkrndoctavemin), i(gkrndoctavemax)
+  ; Create a pitch ratio (to unison) constant combining all transposition constants
+  ipchrto = cpsoct(8+int(irndoctave)+i(gkoct)+ioct_OS)/cpsoct(8)
+  ; Scale pitch ratio with p5 which, traced back through instr 2 to instr 1, is MIDI pitch
+  ; ratio
+  ipchrto = ipchrto * p5
+  ; Define 'in-skip' into the sound file (in seconds) from pointer value passed from
+  ; caller instrument and random pointer offset
+  iskip = p4 + rnd(iptr_OS)
+  iatt  = i(gkatt)  ; Derive an i-rate version of gkatt (attack time)
+  idec  = i(gkdec)  ; Derive an i-rate version of gkdec (decay time)
+
+  ; If attack time and decay time are greater than 1 then the values should be rescaled so
+  ; that the sum is equal to 1
+  if iatt+idec>1 then
+    iatt = iatt/(iatt+idec)  ; Rescale iatt
+    idec = idec/(iatt+idec)  ; Rescale idec
+  endif                      ; End of conditional branching
+
+  ; Define grain amplitude envelope (straight segments)
+  aenvL linseg 0, (iatt * p3), 1, ((1-iatt-idec) * p3), 1, (idec * p3), 0
+  ; Define grain amplitude envelope (exponential segments)
+  aenvE expsega .0001, (iatt * p3), 1, ((1-iatt-idec) * p3), 1, (idec * p3), .0001
+  ; Create a resultant envelope that is a continuous morph between the straight and
+  ; exponential versions above
+  aenv ntrpol aenvL, aenvE, gkEnvType
+  ; Derive amplitude from 'gain' slider and from 'random amplitude depth' slider
+  iamp = (1 - rnd(iampdepth))*i(gkgain)
+  ; Derive a panning position for this grain from 'random panning amount' slider
+  ipan random -iwidth, iwidth
+  ipan = ipan + .5  ; OFFSET ipan by +0.5
+  ; Define a moving pointer function to read grain from function table containing source
+  ; audio
+  aptr line iskip, p3 / ipchrto, iskip+p3
+  ; Read audio from source sound function table. I.e. Create grain
+  asig tablei aptr * sr, giFile
+  ; Grain-by-grain ring
+  ; modulation;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  if gkRMOnOff = 1 then  ; If band-pass filtering on/off switch is on...
+    ; Define random ring modulation frequency
+    iRMfreq random i(gkRMfreqmin), i(gkRMfreqmax)
+    anoRM = 1                     ; A-rate constant value of '1'
+    amod oscil 1, iRMfreq, gisin  ; Create ring modulating oscilator
+    ; Create a mix between ring modulating oscilator and constant value '1'
+    amod ntrpol anoRM, amod, gkRMmix
+    asig = asig * amod  ; Ring modulate audio signal
+  endif                 ; End of conditional branching
+  ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ; Grain-by-grain band-pass
+  ; filtering;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  if gkBPFOnOff = 1 then  ; If band-pass filtering on/off switch is on...
+    ; Define random filter cutoff value (in oct format)
+    iBPFcut random i(gkBPFcutmin), i(gkBPFcutmax)
+    iBPFfrq = cpsoct(iBPFcut)                    ; Convert to cps format
+    iBPFbw random i(gkBPFbwmin), i(gkBPFbwmax)   ; Define random bandwidth value
+    aBPF reson asig, iBPFfrq, iBPFbw*iBPFfrq, 1  ; Filter audio using reson opcode
+    ; Create mix between the filtered sound and the dry sound
+    asig ntrpol asig, aBPF*i(gkBPFgain), gkBPFmix
+  endif  ; End of conditional branching
+  ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  asig = asig * aenv * iamp  ; Apply amplitude constant and grain envelope
+  ; Apply panning variable and create left channel accumulated output
+  gasendL = gasendL + (asig * ipan)
+  ; Apply panning variable and create right channel accumulated output
+  gasendR = gasendR + (asig * (1 - ipan))
+endin
+
+instr 4  ; Global processing of granular output & reverb instrument
+  ; Read accumulated audio sent by grain rendering instrument and create a local audio
+  ; variable output (this is to allow redefinition of the variable within the same line of
+  ; code - not possible with global variables)
+  asigL = gasendL
+  ; Read accumulated audio sent by grain rendering instrument and create a local audio
+  ; variable output (this is to allow redefinition of the variable within the same line of
+  ; code - not possible with global variables)
+  asigR = gasendR
+  if gkFiltOnOff = 1 then  ; If global filtering on/off switch is on...
+    ; Apply portamento to high-pass filter cutoff variable
+    kHPFcf portk gkHPFcf, gkporttime
+    ; Apply portamento to low-pass filter cutoff variable
+    kLPFcf portk gkLPFcf, gkporttime
+    asigL buthp asigL, kHPFcf  ; Apply high-pass filter to left channel audio...
+    asigL buthp asigL, kHPFcf  ; ...And again to sharpen cutoff slope
+    asigR buthp asigR, kHPFcf  ; Apply high-pass filter to left channel audio...
+    asigR buthp asigR, kHPFcf  ; ...And again to sharpen cutoff slope
+    asigL butlp asigL, kLPFcf  ; Apply low-pass filter to left channel audio...
+    asigL butlp asigL, kLPFcf  ; ...And again to sharpen cutoff slope
+    asigR butlp asigR, kLPFcf  ; Apply low-pass filter to right channel audio...
+    asigR butlp asigR, kLPFcf  ; ...And again to sharpen cutoff slope
+  endif                        ; End of conditional branching
+  ; Scale audio signal with GUI amplitude slider and grain cloud envelope
+  aSigL = asigL * (1 - gkRvbDryWet)
+  ; Scale audio signal with GUI amplitude slider and grain cloud envelope
+  aSigR = asigR * (1 - gkRvbDryWet)
+  outs aSigL, aSigR  ; Send audio to outputs
+
+  if gkRvbOnOff = 1 then  ; If reverb on/off switch is on...
+    denorm asigL, asigR   ; ...Denormalize both channels of audio signal
+    ; Create reverberated signal (using udo defined above)
+    arvbL, arvbR reverbsr asigL * gkRvbDryWet, asigR * gkRvbDryWet, gkfblvl, gkfco
+    outs arvbL, arvbR     ; Send reverberated signal to audio outputs
+  endif                   ; End of conditional branching
+  clear gasendL, gasendR  ; Zero global audio variables used to send accumulated grains
+endin
+
+instr 100  ; Init
+  outvalue "_SetPresetIndex", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		3600		;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 
-i 4		0		3600		;GLOBAL PROCESSING OF GRANULAR OUTPUT & REVERB
-i 100     0.1		 0		;INIT
+i 4 0 3600   ; Global processing of granular output & reverb
+i 100 0.1 0  ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -293,9 +370,9 @@ i 100     0.1		 0		;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -313,15 +390,20 @@ i 100     0.1		 0		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>85</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -339,11 +421,23 @@ i 100     0.1		 0		;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -361,15 +455,20 @@ i 100     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>60</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -390,14 +489,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -437,14 +536,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -466,14 +565,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -513,14 +612,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -542,14 +641,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -589,14 +688,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -618,15 +717,20 @@ i 100     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>80</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -647,14 +751,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -694,14 +798,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -723,14 +827,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -770,14 +874,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -799,14 +903,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -846,14 +950,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -875,14 +979,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -922,14 +1026,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -951,15 +1055,20 @@ i 100     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>100</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -980,14 +1089,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1027,14 +1136,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1056,14 +1165,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1103,14 +1212,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1132,14 +1241,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1179,14 +1288,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1208,14 +1317,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1255,14 +1364,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1284,15 +1393,20 @@ i 100     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>120</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1315,6 +1429,18 @@ i 100     0.1		 0		;INIT
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1332,15 +1458,20 @@ i 100     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>140</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1361,14 +1492,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1408,14 +1539,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1437,14 +1568,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1484,14 +1615,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1513,14 +1644,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1560,14 +1691,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1589,15 +1720,20 @@ i 100     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>120</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1618,14 +1754,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1665,14 +1801,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1694,14 +1830,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1741,14 +1877,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1770,14 +1906,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1817,14 +1953,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1846,14 +1982,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1893,14 +2029,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1922,15 +2058,20 @@ i 100     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>100</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1951,14 +2092,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1998,14 +2139,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2027,14 +2168,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2074,14 +2215,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2103,14 +2244,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2150,14 +2291,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2181,6 +2322,18 @@ i 100     0.1		 0		;INIT
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2198,15 +2351,20 @@ i 100     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>80</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -2227,14 +2385,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2274,14 +2432,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2303,14 +2461,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2350,14 +2508,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2381,6 +2539,18 @@ i 100     0.1		 0		;INIT
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2398,14 +2568,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2445,14 +2615,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2474,14 +2644,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2521,14 +2691,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2550,14 +2720,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2597,14 +2767,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2626,14 +2796,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2673,14 +2843,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2702,15 +2872,20 @@ i 100     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>60</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -2731,14 +2906,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2778,14 +2953,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2807,14 +2982,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2854,14 +3029,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2885,6 +3060,18 @@ i 100     0.1		 0		;INIT
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2902,14 +3089,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2949,14 +3136,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2978,15 +3165,20 @@ i 100     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>140</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -3009,6 +3201,18 @@ i 100     0.1		 0		;INIT
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -3026,9 +3230,9 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -3053,14 +3257,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3100,14 +3304,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3129,14 +3333,14 @@ i 100     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3176,14 +3380,14 @@ i 100     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

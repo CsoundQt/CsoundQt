@@ -1,99 +1,115 @@
-;Written by Iain McCurdy
+; Written by Iain McCurdy
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add audio file browser and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add audio file browser and use of FilePlay2 udo, now accept mono or stereo wav files
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt
+; -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 64		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 64     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkatt		invalue	"Attack"
-		gkrel		invalue	"Release"
-		gksensitivity	invalue	"Sensitivity"
-		gkoffset		invalue	"Filter_Cutoff"
-		gkres		invalue	"Filter_Resonance"
-		gkspeed		invalue	"File_Speed"
-		gkmix		invalue	"Filter_Mix"
-		gkamp		invalue   "Output_Gain"
-		gkingain		invalue 	"Input_Gain"
-		gkinput		invalue	"Input"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkatt         invalue "Attack"
+    gkrel         invalue "Release"
+    gksensitivity invalue "Sensitivity"
+    gkoffset      invalue "Filter_Cutoff"
+    gkres         invalue "Filter_Resonance"
+    gkspeed       invalue "File_Speed"
+    gkmix         invalue "Filter_Mix"
+    gkamp         invalue "Output_Gain"
+    gkingain      invalue "Input_Gain"
+    gkinput       invalue "Input"
+  endif
 endin
 
-instr	1
-		Sfile_new		strcpy	""									;INIT TO EMPTY STRING
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
+instr 1
+  Sfile_new strcpy ""  ; Init to empty string
+  Sfile invalue "_Browse"
+  Sfile_old strcpyk Sfile_new
+  Sfile_new strcpyk Sfile
+  kfile strcmpk Sfile_new, Sfile_old
 
-		if	kfile != 0	then										;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-				reinit	NEW_FILE									;REINITIALIZE FROM LABEL 'NEW_FILE'
-		endif
+  if kfile != 0 then  ; If a bang had been generated in the line above
+    reinit NEW_FILE   ; Reinitialize from label 'new_file'
+  endif
 
-	if	gkinput=0	then												;IF INPUT SWITCH IS SET TO 'LIVE INPUT' THEN... 
-		aL, aR	ins												;READ THE LIVE AUDIO INPUT TO THE COMPUTER
-		aL	=	aL * gkingain										;SCALE LIVE INPUT WITH FLTK SLIDER	
-		aR	=	aR * gkingain       							  	;SCALE LIVE INPUT WITH FLTK SLIDER
-	else
-		NEW_FILE:
-		;OUTPUT	OPCODE	FILE_PATH | SPEED  | INSKIP | LOOPING_0=OFF/1=ON
-		aL, aR	FilePlay2	Sfile,      gkspeed,   0,        1				;CREATE AN AUDIO SIGNAL
-				rireturn
-	endif														;END OF CONDITIONAL BRANCHING
+  if gkinput = 0 then   ; If input switch is set to 'live input' then...
+    aL, aR ins          ; Read the live audio input to the computer
+    aL = aL * gkingain  ; Scale live input with FLTK slider
+    aR = aR * gkingain  ; Scale live input with FLTK slider
+  else
+NEW_FILE:
+    ; Output opcode file_path | speed  | inskip | looping_0=off/1=on
+    aL, aR FilePlay2 Sfile, gkspeed, 0, 1  ; Create an audio signal
+    rireturn
+  endif  ; End of conditional branching
 
-	;LEFT CHANNEL===========================================================================================================================================================
-	afollowL		follow2		aL, gkatt, gkrel						;CREATE AN ENVELOPE FOLLOWING SIGNAL FROM THE AUDIO SIGNAL
-	kfollowL		downsamp		afollowL								;DOWNSAMPLE AMPLITUDE FOLLOWING SIGNAL DOWN TO K-RATE					
-	kcfoctL		=			(kfollowL * gksensitivity) + gkoffset		;RE-SCALE THIS SIGNAL USING THE SENSITIVITY AND OFFSET SETTINGS - OUTPUT WILL BE USED AS A FILTER CUTOFF VALUE IN OCT FORMAT
-	kcfoctL		limit		kcfoctL, 4, 14							;LIMIT THE RANGE OF THE CUTOFF FREQUENCY (REMEMBER: OCT FORMAT)
-	afiltL		moogladder	aL, cpsoct(kcfoctL), gkres				;FILTER THE AUDIO SIGNAL USING THE moogladder RESONANT LOWPASS FILTER
-	amixL		ntrpol		aL, afiltL, gkmix						;CREATE A DRY/WET MIX BETWEEN THE ORIGINAL SIGNAL AND THE FILTERED SIGNAL
-	;=======================================================================================================================================================================
+  ; Left
+  ; channel===========================================================================================================================================================
+  ; Create an envelope following signal from the audio signal
+  afollowL follow2 aL, gkatt, gkrel
+  kfollowL downsamp afollowL  ; Downsample amplitude following signal down to k-rate
+  ; Re-scale this signal using the sensitivity and offset settings - output will be used
+  ; as a filter cutoff value in oct format
+  kcfoctL = (kfollowL * gksensitivity) + gkoffset
+  ; Limit the range of the cutoff frequency (remember: oct format)
+  kcfoctL limit kcfoctL, 4, 14
+  ; Filter the audio signal using the moogladder resonant lowpass filter
+  afiltL moogladder aL, cpsoct(kcfoctL), gkres
+  ; Create a dry/wet mix between the original signal and the filtered signal
+  amixL ntrpol aL, afiltL, gkmix
+  ; =======================================================================================================================================================================
 
-	;RIGHT CHANNEL==========================================================================================================================================================
-	afollowR		follow2		aR, gkatt, gkrel						;CREATE AN ENVELOPE FOLLOWING SIGNAL FROM THE AUDIO SIGNAL
-	kfollowR		downsamp		afollowR								;DOWNSAMPLE AMPLITUDE FOLLOWING SIGNAL DOWN TO K-RATE					
-	kcfoctR		=			(kfollowR * gksensitivity) + gkoffset		;RE-SCALE THIS SIGNAL USING THE SENSITIVITY AND OFFSET SETTINGS - OUTPUT WILL BE USED AS A FILTER CUTOFF VALUE IN OCT FORMAT
-	kcfoctR		limit		kcfoctR, 4, 14							;LIMIT THE RANGE OF THE CUTOFF FREQUENCY (REMEMBER: OCT FORMAT)
-	afiltR		moogladder	aR, cpsoct(kcfoctR), gkres				;FILTER THE AUDIO SIGNAL USING THE moogladder RESONANT LOWPASS FILTER
-	amixR		ntrpol		aR, afiltR, gkmix						;CREATE A DRY/WET MIX BETWEEN THE ORIGINAL SIGNAL AND THE FILTERED SIGNAL
-	;=======================================================================================================================================================================
+  ; Right
+  ; channel==========================================================================================================================================================
+  ; Create an envelope following signal from the audio signal
+  afollowR follow2 aR, gkatt, gkrel
+  kfollowR downsamp afollowR  ; Downsample amplitude following signal down to k-rate
+  ; Re-scale this signal using the sensitivity and offset settings - output will be used
+  ; as a filter cutoff value in oct format
+  kcfoctR = (kfollowR * gksensitivity) + gkoffset
+  ; Limit the range of the cutoff frequency (remember: oct format)
+  kcfoctR limit kcfoctR, 4, 14
+  ; Filter the audio signal using the moogladder resonant lowpass filter
+  afiltR moogladder aR, cpsoct(kcfoctR), gkres
+  ; Create a dry/wet mix between the original signal and the filtered signal
+  amixR ntrpol aR, afiltR, gkmix
+  ; =======================================================================================================================================================================
 
-				outs			amixL * gkamp, amixR * gkamp				;SEND DRY/WET MIX TO THE SPEAKERS - RESCALE WITH GAIN CONTROL
+  ; Send dry/wet mix to the speakers - rescale with gain control
+  outs amixL * gkamp, amixR * gkamp
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -106,9 +122,9 @@ i 10		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -126,15 +142,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -155,15 +176,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -190,9 +216,9 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
    <r>158</r>
@@ -219,14 +245,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -266,14 +292,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -295,14 +321,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -342,14 +368,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -371,14 +397,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -418,14 +444,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -444,11 +470,23 @@ The user can choose between using a stored file or the live input as the source 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -466,15 +504,20 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>4</borderradius>
   <borderwidth>1</borderwidth>
@@ -495,14 +538,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -542,14 +585,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -598,6 +641,18 @@ The user can choose between using a stored file or the live input as the source 
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -615,9 +670,9 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>240</r>
@@ -642,14 +697,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -689,14 +744,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -718,14 +773,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -765,14 +820,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -794,14 +849,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -841,14 +896,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -870,14 +925,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -917,14 +972,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -946,14 +1001,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -993,14 +1048,14 @@ The user can choose between using a stored file or the live input as the source 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

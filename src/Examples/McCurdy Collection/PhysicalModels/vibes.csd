@@ -1,114 +1,121 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add Browser for impulse file
-;	INIT instrument added
-;	Use event_i and instrument 5 to simulate a FLsetVal_i opcode
-;	Removed subinstr opcode in midi instrument 1 because midi note was played with previous freq and amp values (only with my csd, original FLTK csd is ok)
+; Notes on modifications from original csd:
+; Add Browser for impulse file
+; INIT instrument added
+; Use event_i and instrument 5 to simulate a FLsetVal_i opcode
+; Removed subinstr opcode in midi instrument 1 because midi note was played with previous
+; freq and amp values (only with my csd, original FLTK csd is ok)
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-givibfn	ftgen	0,0,4096,10,1			;A SINE WAVE
+givibfn ftgen 0, 0, 4096, 10, 1  ; A sine wave
 
 
-instr	2	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkamp		invalue	"Amp"
-		gkfreq		invalue	"Freq"
-		gkhrd		invalue	"Hardness"
-		gkpos		invalue	"Position"
-		gkvibf		invalue 	"VibFreq"
-		gkvamp		invalue 	"VibAmp"
-		gkdec		invalue 	"Decay"
-		gkdoubles		invalue 	"Doubles"
-		gktriples		invalue 	"Triples"
+instr 2  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkamp     invalue "Amp"
+    gkfreq    invalue "Freq"
+    gkhrd     invalue "Hardness"
+    gkpos     invalue "Position"
+    gkvibf    invalue "VibFreq"
+    gkvamp    invalue "VibAmp"
+    gkdec     invalue "Decay"
+    gkdoubles invalue "Doubles"
+    gktriples invalue "Triples"
 
-;AUDIO FILE CHANGE / LOAD IN TABLES ********************************************************************************************************
-		Sfile_new		strcpy	""							;INIT TO EMPTY STRING
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
+    ; Audio file change / load in tables
+    ; ********************************************************************************************************
+    Sfile_new strcpy ""  ; Init to empty string
+    Sfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk Sfile
+    kfile strcmpk Sfile_new, Sfile_old
 
-		if	kfile != 0	then								;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-				reinit	NEW_FILE							;REINITIALIZE FROM LABEL 'NEW_FILE'
-		endif
-		NEW_FILE:
-		ilen		filelen	Sfile							;Find length
-		isr		filesr	Sfile							;Find sample rate
-		isamps	=		ilen * isr						;Total number of samples
+    if kfile != 0 then  ; If a bang had been generated in the line above
+      reinit NEW_FILE   ; Reinitialize from label 'new_file'
+    endif
+NEW_FILE:
+    ilen filelen Sfile   ; Find length
+    isr filesr Sfile     ; Find sample rate
+    isamps = ilen * isr  ; Total number of samples
 
-		isize	init		1
-		LOOP:
-		isize	=		isize * 2
-		if (isize < isamps) igoto LOOP						;Loop until isize is greater than number of samples
+    isize init 1
+LOOP:
+    isize = isize * 2
+    if (isize < isamps) igoto LOOP  ; Loop until isize is greater than number of samples
 
-		gimp		ftgen	0, 0, isize, 1, Sfile, 0, 0, 1		;READ AUDIO FILE CHANNEL 1
-;*******************************************************************************************************************************************
-	endif
+    gimp ftgen 0, 0, isize, 1, Sfile, 0, 0, 1  ; Read audio file channel 1
+    ; *******************************************************************************************************************************************
+  endif
 endin
 
-instr	1	;MIDI ACTIVATED INSTRUMENT
-	ifreq	cpsmidi										;FREQUENCY IS READ FROM INCOMING MIDI NOTE
-	iamp		ampmidi	0.5									;AMPLITUDE IS READ FROM INCOMING MIDI NOTE
+instr 1             ; MIDI activated instrument
+  ifreq cpsmidi     ; Frequency is read from incoming MIDI note
+  iamp ampmidi 0.5  ; Amplitude is read from incoming MIDI note
 
-			event_i	"i", 5, 0, 0.1, ifreq					;SEND FREQUENCY VALUE TO FREQUENCY SLIDER
+  event_i "i", 5, 0, 0.1, ifreq  ; Send frequency value to frequency slider
 
-	kSwitch	changed	gkhrd, gkpos, gkdec						;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then
-		reinit	START
-	endif
-	START:
-	ares 	vibes 	i(gkamp), ifreq, i(gkhrd), i(gkpos), gimp, gkvibf, gkvamp, givibfn, i(gkdec)
-			rireturn
-	aenv		linsegr	1,3600,1,0.1,0							;CREATE AN AMPLITUDE ENVELOPE. THIS WILL BE USED TO PREVENT CLICKS.
-			outs 	ares*aenv, ares*aenv					;SEND AUDIO TO OUTPUTS
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkhrd, gkpos, gkdec
+  if kSwitch = 1 then
+    reinit START
+  endif
+START:
+  ares vibes i(gkamp), ifreq, i(gkhrd), i(gkpos), gimp, gkvibf, gkvamp, givibfn, i(gkdec)
+  rireturn
+  ; Create an amplitude envelope. This will be used to prevent clicks.
+  aenv linsegr 1, 3600, 1, 0.1, 0
+  outs ares*aenv, ares*aenv  ; Send audio to outputs
 endin
 
-instr	3	;GUI BUTTON ACTIVATED INSTRUMENT
-	kSwitch	changed		gkamp, gkhrd, gkpos, gkdec			;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then
-		reinit	START
-	endif
-	START:
-	ares 	vibes 	i(gkamp), i(gkfreq), i(gkhrd), i(gkpos), gimp, gkvibf, gkvamp, givibfn, i(gkdec)
-			rireturn
-			outs 	ares, ares
+instr 3  ; GUI button activated instrument
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkamp, gkhrd, gkpos, gkdec
+  if kSwitch = 1 then
+    reinit START
+  endif
+START:
+  ares vibes i(gkamp), i(gkfreq), i(gkhrd), i(gkpos), gimp, gkvibf, gkvamp, givibfn, i(gkdec)
+  rireturn
+  outs ares, ares
 endin
 
-instr	4	;INIT
-		outvalue	"Amp"		, 0.3
-		outvalue	"Freq"		, 250
-		outvalue	"Hardness"	, 0.5
-		outvalue	"Position"	, 0.4
-		outvalue	"VibFreq"		, 0.5
-		outvalue	"VibAmp"		, 0.8
-		outvalue	"Decay"		, 1.0
+instr 4  ; Init
+  outvalue "Amp", 0.3
+  outvalue "Freq", 250
+  outvalue "Hardness", 0.5
+  outvalue "Position", 0.4
+  outvalue "VibFreq", 0.5
+  outvalue "VibAmp", 0.8
+  outvalue "Decay", 1.0
 endin
 
-instr	5	;UPDATE
-		outvalue	"Freq", p4								;SEND FREQUENCY VALUE TO FREQUENCY SLIDER
+instr 5                ; Update
+  outvalue "Freq", p4  ; Send frequency value to frequency slider
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION 
-i 2		0		3600	;GUI
-i 4		0		0.1	;INIT
+; Instr | start | duration
+i 2 0 3600  ; GUI
+i 4 0 0.1   ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -121,9 +128,9 @@ i 4		0		0.1	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -141,15 +148,20 @@ i 4		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -170,14 +182,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -217,14 +229,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -246,14 +258,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -293,14 +305,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -322,14 +334,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -369,14 +381,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -398,14 +410,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -445,14 +457,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -474,14 +486,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -521,14 +533,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -550,15 +562,20 @@ i 4		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -582,14 +599,14 @@ Carrefull, audio file may give loud output !</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -613,6 +630,18 @@ Carrefull, audio file may give loud output !</label>
   <eventLine>i 3 0 -1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -630,14 +659,14 @@ Carrefull, audio file may give loud output !</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -677,14 +706,14 @@ Carrefull, audio file may give loud output !</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -706,14 +735,14 @@ Carrefull, audio file may give loud output !</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -737,6 +766,18 @@ Carrefull, audio file may give loud output !</label>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -754,9 +795,9 @@ Carrefull, audio file may give loud output !</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>240</r>
@@ -781,14 +822,14 @@ Carrefull, audio file may give loud output !</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -828,14 +869,14 @@ Carrefull, audio file may give loud output !</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

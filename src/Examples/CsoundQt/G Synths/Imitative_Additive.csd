@@ -1,826 +1,838 @@
 <CsoundSynthesizer>
 <CsOptions>
---midi-key=4 --midi-velocity-amp=5 -m128
---env:SSDIR+=../../SourceMaterials
+--midi-key   = 4 --midi-velocity-amp = 5 -m128
+--env:SSDIR+ = ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 /***Imitative Additive Synthesis***/
-;example for CsoundQt
-;joachim heintz mar 2011
+; example for CsoundQt
+; joachim heintz mar 2011
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 128
 nchnls = 1
-0dbfs = 1
+0dbfs  = 1
 
-;============================================================================;
-;============================================================================;
-;                GENERAL VALUES FOR FOURIER TRANSFORMATION                   ;
-;============================================================================;
-;============================================================================;
+; ============================================================================;
+; ============================================================================;
+; General values for fourier transformation                   ;
+; ============================================================================;
+; ============================================================================;
 
-gifftsiz  =         1024 ;fft size
-giovlap   =         gifftsiz / 4 ;overlap
-giwinsiz  =         gifftsiz * 2 ;window size
-giwintyp  =         1 ;von hann window
+gifftsiz = 1024          ; fft size
+giovlap  = gifftsiz / 4  ; overlap
+giwinsiz = gifftsiz * 2  ; window size
+giwintyp = 1             ; von hann window
 
-giamps		ftgen		0, 0, gifftsiz/2+1, 2, 0  ;table for bin amps
-giampcpy	ftgen		0, 0, gifftsiz/2+1, 2, 0  ;needed for the TabIndxNMax_k opcode
-gifreqs	ftgen		0, 0, gifftsiz/2+1, 2, 0  ;table for bin freqs
-gimaxindc	ftgen		0, 0, gifftsiz/2+1, 2, 0  ;indices for temporal maxima of giamps
-gisine		ftgen		0, 0, 2^10, 10, 1
-		massign	0, 10 ;send all midi key events to instr 10
-		
-		chn_S "_MBrowse", 1 ;declare string channel
-				
-;============================================================================;
-;============================================================================;
-;                    FUNCTIONS (USER DEFINED OPCODES)                        ;
-;============================================================================;
-;============================================================================;
+giamps    ftgen 0, 0, gifftsiz/2+1, 2, 0  ; table for bin amps
+giampcpy  ftgen 0, 0, gifftsiz/2+1, 2, 0  ; needed for the TabIndxNMax_k opcode
+gifreqs   ftgen 0, 0, gifftsiz/2+1, 2, 0  ; table for bin freqs
+gimaxindc ftgen 0, 0, gifftsiz/2+1, 2, 0  ; indices for temporal maxima of giamps
+gisine    ftgen 0, 0, 2^10, 10, 1
+massign 0, 10  ; send all midi key events to instr 10
 
-;OPCODES FOR USING STRINGS AS ARRAYS
-;(see http://www.csounds.com/journal/issue13/StringsAsArrays.html)
+chn_S "_MBrowse", 1  ; declare string channel
 
-  opcode StrayGetEl, ii, Sijj
-;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
-Stray, ielindx, isepA, isepB xin
-;DEFINE THE SEPARATORS
-isep1     =         (isepA == -1 ? 32 : isepA)
-isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1      sprintf   "%c", isep1
-Sep2      sprintf   "%c", isep2
-;INITIALIZE SOME PARAMETERS
-ilen      strlen    Stray
-istartsel =         -1; startindex for searched element
-iendsel   =         -1; endindex for searched element
-iel       =         0; actual number of element while searching
-iwarleer  =         1
-indx      =         0
- if ilen == 0 igoto end ;don't go into the loop if Stray is empty
+; ============================================================================;
+; ============================================================================;
+; Functions (user defined opcodes)                        ;
+; ============================================================================;
+; ============================================================================;
+
+; Opcodes for using strings as arrays
+; (see http://www.csounds.com/journal/issue13/StringsAsArrays.html)
+
+opcode StrayGetEl, ii, Sijj
+  ; returns the startindex and the endindex (= the first space after the element) for
+  ; ielindex in String. if startindex returns -1, the element has not been found
+  Stray, ielindx, isepA, isepB xin
+  ; Define the separators
+  isep1 = (isepA == -1 ? 32 : isepA)
+  isep2 = (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+  Sep1 sprintf "%c", isep1
+  Sep2 sprintf "%c", isep2
+  ; Initialize some parameters
+  ilen strlen Stray
+  istartsel = -1  ; startindex for searched element
+  iendsel   = -1  ; endindex for searched element
+  iel       = 0   ; actual number of element while searching
+  iwarleer  = 1
+  indx      = 0
+  if ilen == 0 igoto end  ; don't go into the loop if Stray is empty
 loop:
-Snext     strsub    Stray, indx, indx+1; next sign
-isep1p    strcmp    Snext, Sep1; returns 0 if Snext is sep1
-isep2p    strcmp    Snext, Sep2; 0 if Snext is sep2
-;NEXT SIGN IS NOT SEP1 NOR SEP2
-if isep1p != 0 && isep2p != 0 then
- if iwarleer == 1 then; first character after a separator 
-  if iel == ielindx then; if searched element index
-istartsel =         indx; set it
-iwarleer  =         0
-  else 			;if not searched element index
-iel       =         iel+1; increase it
-iwarleer  =         0; log that it's not a separator 
-  endif 
- endif 
-;NEXT SIGN IS SEP1 OR SEP2
-else 
- if istartsel > -1 then; if this is first selector after searched element
-iendsel   =         indx; set iendsel
-          igoto     end ;break
- else	
-iwarleer  =         1
- endif 
-endif
-          loop_lt   indx, 1, ilen, loop 
-end:      xout      istartsel, iendsel
-  endop 
-
-  opcode StrayLen, i, Sjj
-;returns the number of elements in Stray. elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1
-Stray, isepA, isepB xin
-;DEFINE THE SEPARATORS
-isep1     =         (isepA == -1 ? 32 : isepA)
-isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1      sprintf   "%c", isep1
-Sep2      sprintf   "%c", isep2
-;INITIALIZE SOME PARAMETERS
-ilen      strlen    Stray
-icount    =         0; number of elements
-iwarsep   =         1
-indx      =         0
- if ilen == 0 igoto end ;don't go into the loop if String is empty
-loop:
-Snext     strsub    Stray, indx, indx+1; next sign
-isep1p    strcmp    Snext, Sep1; returns 0 if Snext is sep1
-isep2p    strcmp    Snext, Sep2; 0 if Snext is sep2
- if isep1p == 0 || isep2p == 0 then; if sep1 or sep2
-iwarsep   =         1; tell the log so
- else 				; if not 
-  if iwarsep == 1 then	; and has been sep1 or sep2 before
-icount    =         icount + 1; increase counter
-iwarsep   =         0; and tell you are ot sep1 nor sep2 
-  endif 
- endif	
-          loop_lt   indx, 1, ilen, loop 
-end:      xout      icount
-  endop 
-
-
-;OPCODES FOR TABLE OPERATIONS
-
-  opcode TabMinVal_k, k, ii
-ift, iftlen xin
-kminval   tab       0, ift
-kndx      =         1  
-loop:
-kval      tab       kndx, ift
-kmaxval   =         (kval < kminval ? kval : kminval)
-          loop_lt   kndx, 1, iftlen, loop
-          xout      kminval
-  endop
-
-  opcode TabMaxValIndx_k, kk, iikk
-;returns the maximum value of a function table and its index
-ift, iftlen, kstrt, kshft xin; ftable, length, startindex, how many values to shift for the next value
-kndx      =         kstrt
-kresultindx =       kstrt
-kresultval tab      kstrt, ift; first value in the table as comparision
-loop:
-kval      tab       kndx, ift
-if kval > kresultval then
-kresultindx =	      kndx
-kresultval =        kval
-endif
-          loop_lt   kndx, kshft, iftlen, loop
-          xout      kresultval, kresultindx
-  endop
-  
-  opcode TabIndxNMax_k, 0, iiiik
-;returns the indices of the first khowmany largest values in iftsrc and writes them in iftdest
-;bin 0 is omitted (shift value in TabMaxValIndx_k)
-iftsrc, isrclen, iftcpy, iftdest, khowmany xin
-          tablecopy iftcpy, iftsrc ;leave iftsrc (= amp table) untouched
-kmin      TabMinVal_k iftcpy, isrclen; smallest value in iftsrc
-kwritindx =         0
-loop:
-kval, kndx TabMaxValIndx_k iftcpy, isrclen, 1, 1; gets index for maximum
-          tabw      kmin-1, kndx, iftcpy ;replace this maximum by kmin-1
-          tabw      kndx, kwritindx, iftdest ;write the index to index table
-          loop_lt   kwritindx, 1, khowmany, loop
-  endop
-  
-  
-;MISCELLANEOUS
-    
-  opcode BufPlay1, a, ii
-ifn, iskip xin
-icps      =         1 / (ftlen(ifn) / ftsr(ifn))
-iphs      =         iskip / (ftlen(ifn) / ftsr(ifn))
-asig      poscil3   1, icps, ifn, iphs
-          xout      asig
-  endop
-  
-  opcode Stayed, k, kk
-;outputs 1 if kin has not changed since ksec seconds, otherwise outputs 0
-kin, ksec xin
-kout      init      0
-knumk     =         ksec * kr ;number of control cycles for ksec
-kinit     init      1
-kcount    init      0
- if kinit == 1 then ;just once, at the beginning
-kprevious =         kin
-kinit     =         0
- endif
- if kin == kprevious then
-kcount    =         kcount + 1
- else
-kcount    =         0
-kprevious =         kin
- endif
- if kcount > knumk then
-kout      =         1
- else
-kout      =         0
- endif
-          xout      kout
-  endop
-  
-  opcode ShowLED_a, 0, Sakkk
-;Shows an audio signal in an outvalue channel. You can choose to show the value in dB or in raw amplitudes.
-;Soutchan: string with the name of the outvalue channel
-;asig: audio signal which is to displayed
-;kdispfreq: refresh frequency (Hz)
-;kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
-;kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything from a signal below -36 dB)
-Soutchan, asig, kdispfreq, kdb, kdbrange xin
-kdispval  max_k     asig, kdispfreq, 1
- if kdb != 0 then
-kdb       =         dbfsamp(kdispval)
-kval      =         (kdbrange + kdb) / kdbrange
- else
-kval      =         kdispval
- endif
-          outvalue  Soutchan, kval
-  endop
-
-  opcode ShowOver_a, 0, Sakk
-;Shows if the incoming audio signal was more than 1 and stays there for some time
-;Soutchan: string with the name of the outvalue channel
-;asig: audio signal which is to displayed
-;kdispfreq: refresh frequency (Hz)
-;khold: time in seconds to "hold the red light"
-Soutchan, asig, kdispfreq, khold xin
-kon       init      0
-ktim      times
-kstart    init      0
-kend      init      0
-khold     =         (khold < .01 ? .01 : khold) ;avoiding too short hold times
-kmax      max_k     asig/0dbfs, kdispfreq, 1
- if kon == 0 && kmax > 1 then
-kstart    =         ktim
-kend      =         kstart + khold
-          outvalue  Soutchan, kmax
-kon       =         1
- endif
- if kon == 1 && ktim > kend then
-          outvalue  Soutchan, 0
-kon       =         0
- endif
-  endop
-  
-
-;============================================================================;
-;============================================================================;
-;                            INSTRUMENT BLOCKS                               ;
-;============================================================================;
-;============================================================================;
-
-  instr 1 ;always on
-          turnon    999 ;monitoring the audio output
-          
-
-;============================================================================;
-;                RECEIVING USER INPUT FROM THE WIDGET PANEL                  ;
-;============================================================================;
-
- ;INPUT TO BE ANALYZED
-Sfiles    chnget   "_MBrowse" ;selection of sound files
-kinch     invalue   "inch" ;number of live input channel
-kgain     invalue   "gain" ;live input gain (dB)
-kselsamp  invalue   "sample" ;1 = select sample input
-gksampnr  invalue   "sampnr" ;1, 2, ... for selecting a sample from the sf bank
-keysel    invalue   "keysel" ;1=enable selection of sample by computer number keys
-ksellive  invalue   "live" ;1 = select live input
-kdolive   invalue   "dolive" ;when button pressed, live input to be analyzed
-
- ;ANALYSIS PARAMETERS
-kpos      invalue   "pos" ;position in buffer (0-1)
-kfast     invalue   "fast" ;how fast to react to position changes (sec)
-kpartsana invalue   "numpartsana" ;number of strongest partials to analyze
-kmanpos   invalue   "manpos" ;manually selected position
-krandpos  invalue   "randpos" ;random position selected
-krndpos1  invalue   "rndpos1" ;lower limit for random pointer (0-1)
-krndpos2  invalue   "rndpos2" ;upper limit for random pointer (0-1)
-khopmove  invalue   "hopmove" ;hop move selected
-khopmvsiz invalue   "hopmovsiz" ;size of hopping in fractions of the table
-
- ;PLAYBACK PARAMETERS
-gkvol     invalue   "vol" ;overall volume (dB)
-gkmaxdur  invalue   "maxdur" ;maximum duration of a note in seconds
-gkhowmany invalue   "numpartspl" ;how many partials to be played back
-gkshiftpl invalue   "shiftpl" ;number of strongest partials to skip for playback
-gkrefpch  invalue   "refpch" ;midi note number for playing at original pitch
-gkstcent  invalue   "stcent" ;how many cents to transpose for adjacent semitones on the midi keyboard
-gkrndfqdv invalue   "rndfqdv" ;maximal partial random frequency deviation (cent)
-gkrdampdv invalue   "rndampdv" ;maximal partial random amplitude deviation (dB)
-gkrddurdv invalue   "rnddurdv" ;maximal partial random duration deviation (%)
-gkatt     invalue   "att" ;attack time (sec)
-gkdec     invalue   "dec" ;decay time (sec)
-gksus     invalue   "sus" ;sustain level (0-1)
-gkrel     invalue   "rel" ;release time (sec)
-
- ;PRINT AND EXPORT
-kprint    invalue   "print" ;1 = print current values
-kexp1     invalue   "exp1" ;export printout
-gSfexp1   invalue   "_Browse1" ;file for printout export
-kexp2     invalue   "exp2" ;export amp-freq
-gSfexp2   invalue   "_Browse2" ;file for amp-freq export
-kexp3     invalue   "exp3" ;export as tables with multipliers
-gSfexp3   invalue   "_Browse3" ;file for table multiplier export
-
- ;REGULATING THE SWITCH BETWEEN CERTAIN BUTTONS
-  ;analysis source
-ksllivnew changed   ksellive
-kslsmpnew changed kselsamp
- if kslsmpnew == 1 && kselsamp == 1 then
-          outvalue  "live", 0
- elseif ksllivnew == 1 && ksellive == 1 then
-          outvalue  "sample", 0
- endif
-  ;pointer method
-kmnposnew changed   kmanpos
-krdposnew changed   krandpos
-khopmvnew changed   khopmove
- if kmnposnew == 1 && kmanpos == 1 then
-          outvalue  "randpos", 0
-          outvalue  "hopmove", 0
- elseif krdposnew == 1 && krandpos == 1 then
-          outvalue  "manpos", 0
-          outvalue  "hopmove", 0
-knewrdpos =         1
- elseif khopmvnew == 1 && khopmove == 1 then
-          outvalue  "manpos", 0
-          outvalue  "randpos", 0
-knewhpmv  =         1
- endif
- 
- ;CALCULATING A NEW POSITION IF RANDOM OR HOPMOVE SELECTED
-  ;if note-on message has been received
-kst,k0,k0,k0	midiin
- if kst == 144 then
-  ;calculate new random position if selected
-  if krandpos == 1 then
-kpos      random    krndpos1, krndpos2
-          outvalue  "pos", kpos
-knewrdpos =         1
-  ;calculate new hop position if selected
-  elseif khopmove == 1 then
-kpos      =         frac(kpos+khopmvsiz)
-kpos      =         (kpos < 0 ? 1-kpos : kpos)
-          outvalue  "pos", kpos
-knewhpmv  =         1
-  endif
- endif
-
- ;ENABLE COMPUTER KEYS FOR SWITCHING
-if keysel == 1 then
-key,k0    sensekey	
-keychange changed   key
- if keychange == 1 && k0 == 1 then ;new key down
-  if key > 47 && key < 58 then ;number keys 0-9
-          event     "i", 3, 0, .1, key
-  elseif key == 112 || key == 114 || key == 104 then ;p/r/h
-          event     "i", 4, 0, .1, key
-  elseif key == 115 || key == 108 then ;s/l
-          event     "i", 5, 0, .1, key
-  endif
- endif
-endif		
-
-
-
-;============================================================================;
-;                        SETTING SOME BASIC VALUES                           ;
-;============================================================================;
-
-iftdatlen =         ftlen(giamps) ;length of amp/freq tables
-iftmaxlen =         ftlen(gimaxindc) ;length of maxima table
-kwritten  init      0 ;1 = having written new values in giamps/gifreqs
-kwritliv  init      0 ;write the fft-analysis of the live signal ...
-kwritsmp  init      0 ;... or of the selected sample position to the tables
-
-
-;============================================================================;
-;           LOADING INPUT FILES AND CALCULATING POINTER POSITION             ;
-;============================================================================;
-
- ;LOADING THE SELECTED FILES IN FUNCTION TABLES 1, 2, ... AND STORING SF LENGTHS
-inumfils  StrayLen  Sfiles, 124 ;how many files (separated by '|') to load
-giftsflns ftgen     0, 0, -inumfils, -2, 0 ;empty table for sound file lenghths
-iload     =         0
-  load:
-ist, ien  StrayGetEl Sfiles, iload, 124
-Sfil      strsub     Sfiles, ist, ien
-inoth     ftgen      iload+1, 0, 0, 1, Sfil, 0, 0, 1 ;storing sf data in table 1, 2, ...
-ilen      filelen    Sfil
-          tabw_i     ilen, iload, giftsflns ;storing sf lenghts in table giftsflns
-          loop_lt    iload, 1, inumfils, load		
-
- ;CALCULATING AND SHOWING THE POSITION OF THE POINTER
-kthissamp =         (gksampnr > inumfils ? inumfils : gksampnr)
-kfilen    tab       kthissamp-1, giftsflns	
-kpossec   =         kpos * kfilen ;position in sec
-          outvalue  "position", kpossec
-
- ;SHOWING WHENEVER A NEW SAMPLE HAS BEEN SELECTED
-  newfile:
-itable    =         i(kthissamp)
-ist, ien  StrayGetEl Sfiles, itable-1, 124
-Sfil      strsub    Sfiles, ist, ien
-ilslash   strrindex Sfil, "/"
-Sname     strsub    Sfil, ilslash+1
-Showname  sprintf   "File selected:\n'%s'", Sname
-          rireturn
-knewtable changed   kthissamp
- if knewtable == 1 then
-          reinit    newfile
-          outvalue  "showname", Showname
-          outvalue  "showtab", -kthissamp
- endif
-
-
-
-;============================================================================;
-;                           RECEIVING LIVE INPUT                             ;
-;============================================================================;
-
-ain       inch      kinch
-ain       =         ain*ampdb(kgain)
-kdisp     metro     10
-          ShowLED_a "livein", ain, kdisp, 1, 50
-          ShowOver_a "livein_over", ain, kdisp, 1
-		
-		
-		
-;============================================================================;
-;  CONTINUOUSLY STREAMING FFT SIGNALS FROM LIVE AND FROM THE SELECTED SAMPLE ;
-;============================================================================;
- 
- ;STREAMING THE FFT LIVE SIGNAL
-flive     pvsanal   ain, gifftsiz, giovlap, giwinsiz, giwintyp
- ;STREAMING THE FFT SIGNAL FROM THE SELECTED SAMPLE WHENEVER A NEW POSITION IS GIVEN 
-knewpos   changed   kpos, kthissamp, kslsmpnew, kmnposnew, krdposnew, khopmvnew
- if knewpos == 1 then
-          reinit    readsampnew
- endif
-readsampnew:
-fsamp     pvstanal  0, 1, 1, kthissamp, 0, 0, i(kpossec), gifftsiz, giovlap, 0
-          rireturn
-
-
-
-;============================================================================;
-;           SELECT INPUT AND SET VARIABLES FOR WRITING THE TABLES            ;
-;============================================================================;
-		
- ;SET kwritliv=1 IN THE k-CYCLE THE "dolive" BUTTON HAS BEEN PRESSED
- if ksellive == 1 then ;live source must be selected
-klivenew  changed   kdolive
-  if klivenew == 1 && kdolive == 1 then 
-kwritliv  =         1
-  endif
-  
- ;SET writesamp=1 IF A NEW POINTER POSITION HAS BEEN SET,
- ;SELECTOR HAS CHANGED OR BUTTON HAS BEEN SWITCHED
- elseif kselsamp == 1 then ;sample source selected
-   ;manual position
-  if kmanpos == 1 then
-kpstayed  Stayed    kpos, kfast ;returns 1 if pos has not changed for kfast seconds
-knewpos   changed   kpstayed
-   if (knewpos == 1 && kpstayed == 1) || knewtable == 1 || kslsmpnew == 1 then 
-kwritsmp  =         1
-   endif
-  ;random position
-  elseif knewrdpos == 1 then
-kwritsmp  =         1
-  ;hop position
-  elseif knewhpmv == 1 then
-kwritsmp  =         1
-  endif
- endif
-
-
-
-;============================================================================;
-;        FILL THE TABLES WITH THE CURRENT AMPLTITUDE/FREQUENCY VALUES        ;
-;============================================================================;
-
- ;INITIALIZE COUNTERS
-ksmpcnt   init      0
-klivcnt   init      0
-
- ;LIVE INPUT SELECTED
-if kwritliv == 1 then
-kwritten  pvsftw    flive, giamps, gifreqs 
- if kwritten == 1 then
-klivcnt   =         klivcnt + 1
-          printks   "      New live values written! (%d)\n", 0, klivcnt
-kwritliv  =         0
- endif
- 
- ;SOUND FILE INPUT SELECTED
-elseif kwritsmp == 1 then
-kwritten  pvsftw    fsamp, giamps, gifreqs
- if kwritten == 1 then
-ksmpcnt   =         ksmpcnt + 1
-          printks   "   New sample values written (%d)!\n", 0, ksmpcnt
-kwritsmp  =         0
-knewrdpos =         0
-knewhpmv  =         0
- endif
-endif
-
-
-
-;================================================================================;
-;ANALYZE BIN AMPLITUDES AND FILL INDEX-TABLE IF AMP/FREQ-TABLES HAVE BEEN UPDATED;
-;================================================================================;
-
- if kwritten == 1 then ;writing via pvsftw has been finished
-          TabIndxNMax_k giamps, iftdatlen, giampcpy, gimaxindc, kpartsana
-gkthsnman =         kpartsana ;number of partials in this analysis
-
-
-
-;============================================================================;
-;            PRINT VALUES IF DESIRED AND IF NEW VALUES AVAILABLE             ;
-;============================================================================;
-
-  if kprint == 1 && kwritten == 1 then
-kprntndx  =         0
-   if kselsamp == 1 then
-Sprint    sprintfk  "File '%s' at position %f seconds:\n", Sname, kpossec
-   elseif ksellive == 1 then
-Sprint    sprintfk  "%s\n", "Live input:"
-   else
-Sprint    =         ""
-   endif
-  printout:
-ktabindx  tab       kprntndx, gimaxindc
-kamp      tab       ktabindx, giamps 
-kfreq     tab       ktabindx, gifreqs 
-Snew      sprintfk  "%s%.2d) amp = %f, freq = %f, bin = %d\n", Sprint, kprntndx+1, kamp, kfreq, ktabindx
-Sprint    strcpyk   Snew
-          loop_lt   kprntndx, 1, kpartsana, printout
-          outvalue  "values", Sprint
-gSexpt1   strcpyk   Sprint
+  Snext strsub Stray, indx, indx+1  ; next sign
+  isep1p strcmp Snext, Sep1         ; returns 0 if Snext is sep1
+  isep2p strcmp Snext, Sep2         ; 0 if Snext is sep2
+  ; Next sign is not sep1 nor sep2
+  if isep1p != 0 && isep2p != 0 then
+    if iwarleer == 1 then     ; first character after a separator
+      if iel == ielindx then  ; if searched element index
+        istartsel = indx      ; set it
+        iwarleer  = 0
+      else                ; if not searched element index
+        iel      = iel+1  ; increase it
+        iwarleer = 0      ; log that it's not a separator
+      endif
+    endif
+    ; Next sign is sep1 or sep2
   else
-          outvalue  "values", ""
+    if istartsel > -1 then  ; if this is first selector after searched element
+      iendsel = indx        ; set iendsel
+      igoto end             ; break
+    else
+      iwarleer = 1
+    endif
   endif
- endif
+  loop_lt indx, 1, ilen, loop
+end: xout istartsel, iendsel
+endop
+
+opcode StrayLen, i, Sjj
+  ; returns the number of elements in Stray. elements are defined by two separators as
+  ; ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab).
+  ; if just one separator is used, isep2 equals isep1
+  Stray, isepA, isepB xin
+  ; Define the separators
+  isep1 = (isepA == -1 ? 32 : isepA)
+  isep2 = (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+  Sep1 sprintf "%c", isep1
+  Sep2 sprintf "%c", isep2
+  ; Initialize some parameters
+  ilen strlen Stray
+  icount  = 0  ; number of elements
+  iwarsep = 1
+  indx    = 0
+  if ilen == 0 igoto end  ; don't go into the loop if String is empty
+loop:
+  Snext strsub Stray, indx, indx+1    ; next sign
+  isep1p strcmp Snext, Sep1           ; returns 0 if Snext is sep1
+  isep2p strcmp Snext, Sep2           ; 0 if Snext is sep2
+  if isep1p == 0 || isep2p == 0 then  ; if sep1 or sep2
+    iwarsep = 1                       ; tell the log so
+  else                                ; if not
+    if iwarsep == 1 then              ; and has been sep1 or sep2 before
+      icount  = icount + 1            ; increase counter
+      iwarsep = 0                     ; and tell you are ot sep1 nor sep2
+    endif
+  endif
+  loop_lt indx, 1, ilen, loop
+end: xout icount
+endop
+
+
+; Opcodes for table operations
+
+opcode TabMinVal_k, k, ii
+  ift, iftlen xin
+  kminval tab 0, ift
+  kndx = 1
+loop:
+  kval tab kndx, ift
+  kmaxval = (kval < kminval ? kval : kminval)
+  loop_lt kndx, 1, iftlen, loop
+  xout kminval
+endop
+
+opcode TabMaxValIndx_k, kk, iikk
+  ; returns the maximum value of a function table and its index
+  ; ftable, length, startindex, how many values to shift for the next value
+  ift, iftlen, kstrt, kshft xin
+  kndx        = kstrt
+  kresultindx = kstrt
+  kresultval tab kstrt, ift  ; first value in the table as comparision
+loop:
+  kval tab kndx, ift
+  if kval > kresultval then
+    kresultindx = kndx
+    kresultval  = kval
+  endif
+  loop_lt kndx, kshft, iftlen, loop
+  xout kresultval, kresultindx
+endop
+
+opcode TabIndxNMax_k, 0, iiiik
+  ; returns the indices of the first khowmany largest values in iftsrc and writes them in
+  ; iftdest
+  ; bin 0 is omitted (shift value in TabMaxValIndx_k)
+  iftsrc, isrclen, iftcpy, iftdest, khowmany xin
+  tablecopy iftcpy, iftsrc          ; leave iftsrc (= amp table) untouched
+  kmin TabMinVal_k iftcpy, isrclen  ; smallest value in iftsrc
+  kwritindx = 0
+loop:
+  kval, kndx TabMaxValIndx_k iftcpy, isrclen, 1, 1  ; gets index for maximum
+  tabw kmin-1, kndx, iftcpy                         ; replace this maximum by kmin-1
+  tabw kndx, kwritindx, iftdest                     ; write the index to index table
+  loop_lt kwritindx, 1, khowmany, loop
+endop
+
+
+; Miscellaneous
+
+opcode BufPlay1, a, ii
+  ifn, iskip xin
+  icps = 1 / (ftlen(ifn) / ftsr(ifn))
+  iphs = iskip / (ftlen(ifn) / ftsr(ifn))
+  asig poscil3 1, icps, ifn, iphs
+  xout asig
+endop
+
+opcode Stayed, k, kk
+  ; outputs 1 if kin has not changed since ksec seconds, otherwise outputs 0
+  kin, ksec xin
+  kout init 0
+  knumk = ksec * kr  ; number of control cycles for ksec
+  kinit  init 1
+  kcount init 0
+  if kinit == 1 then  ; just once, at the beginning
+    kprevious = kin
+    kinit     = 0
+  endif
+  if kin == kprevious then
+    kcount = kcount + 1
+  else
+    kcount    = 0
+    kprevious = kin
+  endif
+  if kcount > knumk then
+    kout = 1
+  else
+    kout = 0
+  endif
+  xout kout
+endop
+
+opcode ShowLED_a, 0, Sakkk
+  ; Shows an audio signal in an outvalue channel. You can choose to show the value in dB
+  ; or in raw amplitudes.
+  ; Soutchan: string with the name of the outvalue channel
+  ; asig: audio signal which is to displayed
+  ; kdispfreq: refresh frequency (Hz)
+  ; kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
+  ; kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything
+  ; from a signal below -36 dB)
+  Soutchan, asig, kdispfreq, kdb, kdbrange xin
+  kdispval max_k asig, kdispfreq, 1
+  if kdb != 0 then
+    kdb  = dbfsamp(kdispval)
+    kval = (kdbrange + kdb) / kdbrange
+  else
+    kval = kdispval
+  endif
+  outvalue Soutchan, kval
+endop
+
+opcode ShowOver_a, 0, Sakk
+  ; Shows if the incoming audio signal was more than 1 and stays there for some time
+  ; Soutchan: string with the name of the outvalue channel
+  ; asig: audio signal which is to displayed
+  ; kdispfreq: refresh frequency (Hz)
+  ; khold: time in seconds to "hold the red light"
+  Soutchan, asig, kdispfreq, khold xin
+  kon init 0
+  ktim times
+  kstart init 0
+  kend   init 0
+  khold = (khold < .01 ? .01 : khold)  ; avoiding too short hold times
+  kmax max_k asig/0dbfs, kdispfreq, 1
+  if kon == 0 && kmax > 1 then
+    kstart = ktim
+    kend   = kstart + khold
+    outvalue Soutchan, kmax
+    kon = 1
+  endif
+  if kon == 1 && ktim > kend then
+    outvalue Soutchan, 0
+    kon = 0
+  endif
+endop
+
+
+; ============================================================================;
+; ============================================================================;
+; Instrument blocks                               ;
+; ============================================================================;
+; ============================================================================;
+
+instr 1       ; always on
+  turnon 999  ; monitoring the audio output
+
+
+  ; ============================================================================;
+  ; Receiving user input from the widget panel                  ;
+  ; ============================================================================;
+
+  ; Input to be analyzed
+  Sfiles chnget "_MBrowse"   ; selection of sound files
+  kinch    invalue "inch"    ; number of live input channel
+  kgain    invalue "gain"    ; live input gain (dB)
+  kselsamp invalue "sample"  ; 1 = select sample input
+  gksampnr invalue "sampnr"  ; 1, 2, ... for selecting a sample from the sf bank
+  keysel   invalue "keysel"  ; 1=enable selection of sample by computer number keys
+  ksellive invalue "live"    ; 1 = select live input
+  kdolive  invalue "dolive"  ; when button pressed, live input to be analyzed
+
+  ; Analysis parameters
+  kpos      invalue "pos"          ; position in buffer (0-1)
+  kfast     invalue "fast"         ; how fast to react to position changes (sec)
+  kpartsana invalue "numpartsana"  ; number of strongest partials to analyze
+  kmanpos   invalue "manpos"       ; manually selected position
+  krandpos  invalue "randpos"      ; random position selected
+  krndpos1  invalue "rndpos1"      ; lower limit for random pointer (0-1)
+  krndpos2  invalue "rndpos2"      ; upper limit for random pointer (0-1)
+  khopmove  invalue "hopmove"      ; hop move selected
+  khopmvsiz invalue "hopmovsiz"    ; size of hopping in fractions of the table
+
+  ; Playback parameters
+  gkvol     invalue "vol"         ; overall volume (dB)
+  gkmaxdur  invalue "maxdur"      ; maximum duration of a note in seconds
+  gkhowmany invalue "numpartspl"  ; how many partials to be played back
+  gkshiftpl invalue "shiftpl"     ; number of strongest partials to skip for playback
+  gkrefpch  invalue "refpch"      ; midi note number for playing at original pitch
+  ; how many cents to transpose for adjacent semitones on the midi keyboard
+  gkstcent  invalue "stcent"
+  gkrndfqdv invalue "rndfqdv"   ; maximal partial random frequency deviation (cent)
+  gkrdampdv invalue "rndampdv"  ; maximal partial random amplitude deviation (dB)
+  gkrddurdv invalue "rnddurdv"  ; maximal partial random duration deviation (%)
+  gkatt     invalue "att"       ; attack time (sec)
+  gkdec     invalue "dec"       ; decay time (sec)
+  gksus     invalue "sus"       ; sustain level (0-1)
+  gkrel     invalue "rel"       ; release time (sec)
+
+  ; Print and export
+  kprint  invalue "print"     ; 1 = print current values
+  kexp1   invalue "exp1"      ; export printout
+  gSfexp1 invalue "_Browse1"  ; file for printout export
+  kexp2   invalue "exp2"      ; export amp-freq
+  gSfexp2 invalue "_Browse2"  ; file for amp-freq export
+  kexp3   invalue "exp3"      ; export as tables with multipliers
+  gSfexp3 invalue "_Browse3"  ; file for table multiplier export
+
+  ; Regulating the switch between certain buttons
+  ; analysis source
+  ksllivnew changed ksellive
+  kslsmpnew changed kselsamp
+  if kslsmpnew == 1 && kselsamp == 1 then
+    outvalue "live", 0
+  elseif ksllivnew == 1 && ksellive == 1 then
+    outvalue "sample", 0
+  endif
+  ; pointer method
+  kmnposnew changed kmanpos
+  krdposnew changed krandpos
+  khopmvnew changed khopmove
+  if kmnposnew == 1 && kmanpos == 1 then
+    outvalue "randpos", 0
+    outvalue "hopmove", 0
+  elseif krdposnew == 1 && krandpos == 1 then
+    outvalue "manpos", 0
+    outvalue "hopmove", 0
+    knewrdpos = 1
+  elseif khopmvnew == 1 && khopmove == 1 then
+    outvalue "manpos", 0
+    outvalue "randpos", 0
+    knewhpmv = 1
+  endif
+
+  ; Calculating a new position if random or hopmove selected
+  ; if note-on message has been received
+  kst, k0, k0, k0 midiin
+  if kst == 144 then
+    ; calculate new random position if selected
+    if krandpos == 1 then
+      kpos random krndpos1, krndpos2
+      outvalue "pos", kpos
+      knewrdpos = 1
+      ; calculate new hop position if selected
+    elseif khopmove == 1 then
+      kpos = frac(kpos+khopmvsiz)
+      kpos = (kpos < 0 ? 1-kpos : kpos)
+      outvalue "pos", kpos
+      knewhpmv = 1
+    endif
+  endif
+
+  ; Enable computer keys for switching
+  if keysel == 1 then
+    key, k0 sensekey
+    keychange changed key
+    if keychange == 1 && k0 == 1 then  ; new key down
+      if key > 47 && key < 58 then     ; number keys 0-9
+        event "i", 3, 0, .1, key
+      elseif key == 112 || key == 114 || key == 104 then  ; p/r/h
+        event "i", 4, 0, .1, key
+      elseif key == 115 || key == 108 then  ; s/l
+        event "i", 5, 0, .1, key
+      endif
+    endif
+  endif
 
 
 
-;============================================================================;
-;                          EXPORT VALUES IF DESIRED                          ;
-;============================================================================;
+  ; ============================================================================;
+  ; Setting some basic values                           ;
+  ; ============================================================================;
 
-kexp1new  changed   kexp1
-kexp2new  changed   kexp2
-kexp3new  changed   kexp3
-
- ;EXPORT IN THE SAME FORMAT AS IN THE WIDGET PANEL
-if kexp1new == 1 && kexp1 == 1 then
-          event     "i", 6, 0, .1
-          
- ;EXPORT AS RAW AMP-FREQ PAIR PER LINE
-elseif kexp2new == 1 && kexp2 == 1 then
-kexpt2ndx =         0
- if kselsamp == 1 then
-gSexpt2   sprintfk  "Amp-Freq values for file '%s' at position %f seconds:\n", Sname, kpossec
- elseif ksellive == 1 then
-gSexpt2   sprintfk  "%s\n", "Amp-Freq values for live input:"
- endif
-  expt2:
-ktabindx  tab       kexpt2ndx, gimaxindc
-kamp      tab       ktabindx, giamps 
-kfreq     tab       ktabindx, gifreqs 
-Snew      sprintfk  "%s%f %f\n", gSexpt2, kamp, kfreq
-gSexpt2   strcpyk   Snew
-          loop_lt   kexpt2ndx, 1, kpartsana, expt2
-          event     "i", 7, 0, .1
-          
- ;EXPORT AS MULTIPLIERS IN FUNCTION TABLES
-elseif kexp3new == 1 && kexp3 == 1 then
-kexpt3cnt init      0 ;counter
-kexpt3cnt =         kexpt3cnt+1
-  ;get reference frequency for frequency multiplier = 1
-ktabindx  tab       0, gimaxindc
-kfreq0	   tab       ktabindx, gifreqs ;frequency corresponding to strongest amplitude
- if kselsamp == 1 then
-Sexpt3    sprintfk  "Amp-Freq multiplier for file '%s' at position %f seconds.\nPitch at frequency multiplier 1 was %f Hz.\n", Sname, kpossec, kfreq0
- elseif ksellive == 1 then
-Sexpt3	   sprintfk  "Amp-Freq multiplier for live input.\nPitch at frequency multiplier 1 was %f Hz.\n", kfreq0
- endif
-Samptab   sprintfk  "giAmp%d ftgen 0, 0, -%d, -2", kexpt3cnt, kpartsana
-Sfreqtab  sprintfk  "giFreq%d ftgen 0, 0, -%d, -2", kexpt3cnt, kpartsana
-kexpt3ndx =         0
-  expt3:
-ktabindx  tab	      kexpt3ndx, gimaxindc
-kamp      tab       ktabindx, giamps 
-kfreq     tab       ktabindx, gifreqs 
-kfmult	   =         kfreq/kfreq0
-Snewamp   sprintfk  "%s, %f", Samptab, kamp
-Snewfreq  sprintfk  "%s, %f", Sfreqtab, kfmult
-Samptab   strcpyk   Snewamp
-Sfreqtab  strcpyk   Snewfreq
-          loop_lt   kexpt3ndx, 1, kpartsana, expt3
-gSexpt3   sprintfk  "%s%s\n%s\n\n", Sexpt3, Samptab, Sfreqtab
-          event     "i", 8, 0, .1
-endif
-
-kwritten  =         0 ;reset kwritten at the end of each k-cycle
-
-  endin
-  
+  iftdatlen = ftlen(giamps)     ; length of amp/freq tables
+  iftmaxlen = ftlen(gimaxindc)  ; length of maxima table
+  kwritten init 0               ; 1 = having written new values in giamps/gifreqs
+  kwritliv init 0               ; write the fft-analysis of the live signal ...
+  kwritsmp init 0               ; ... or of the selected sample position to the tables
 
 
-;============================================================================;
-;           SUBINSTRUMENT FOR LISTENING TO THE SELECTED SAMPLE               ;
-;============================================================================;
-  
-  instr 2 
-itab      =         i(gksampnr) ;number of ftable (1, 2, ...)
-idur      tab_i     itab-1, giftsflns ;get length of sample
-p3        =         idur
-aout      poscil3   1, 1/p3, itab
-          out       aout*ampdb(gkvol)
-  endin
+  ; ============================================================================;
+  ; Loading input files and calculating pointer position             ;
+  ; ============================================================================;
+
+  ; Loading the selected files in function tables 1, 2, ... And storing sf lengths
+  inumfils StrayLen Sfiles, 124           ; how many files (separated by '|') to load
+  giftsflns ftgen 0, 0, -inumfils, -2, 0  ; empty table for sound file lenghths
+  iload = 0
+load:
+  ist, ien StrayGetEl Sfiles, iload, 124
+  Sfil strsub Sfiles, ist, ien
+  inoth ftgen iload+1, 0, 0, 1, Sfil, 0, 0, 1  ; storing sf data in table 1, 2, ...
+  ilen filelen Sfil
+  tabw_i ilen, iload, giftsflns  ; storing sf lenghts in table giftsflns
+  loop_lt iload, 1, inumfils, load
+
+  ; Calculating and showing the position of the pointer
+  kthissamp = (gksampnr > inumfils ? inumfils : gksampnr)
+  kfilen tab kthissamp-1, giftsflns
+  kpossec = kpos * kfilen  ; position in sec
+  outvalue "position", kpossec
+
+  ; Showing whenever a new sample has been selected
+newfile:
+  itable = i(kthissamp)
+  ist, ien StrayGetEl Sfiles, itable-1, 124
+  Sfil strsub Sfiles, ist, ien
+  ilslash strrindex Sfil, "/"
+  Sname strsub Sfil, ilslash+1
+  Showname sprintf "File selected:\n'%s'", Sname
+  rireturn
+  knewtable changed kthissamp
+  if knewtable == 1 then
+    reinit newfile
+    outvalue "showname", Showname
+    outvalue "showtab", -kthissamp
+  endif
 
 
 
-;============================================================================;
-;    SUBINSTRUMENTS FOR PERFORMING ACTIONS BY COMPUTER KEYBOARD SHORTCUTS    ;
-;============================================================================;
-  
- ;MAKE LIVE SNAPSHOT AND CHANGE THE SAMPLE NUMBER 
-  instr 3 
-ikey      =         p4 ;48-57
-kcyc      timeinstk
- if ikey == 48 then
-          outvalue  "dolive", 1
- else
-          outvalue  "sampnr", ikey-48
- endif
- if kcyc == 2 then
-          outvalue  "dolive", 0
-          turnoff
- endif
-  endin
-  
- ;CHANGE THE POINTER MODE
-  instr 4
-ikey      =         p4 
- if ikey == 112 then ;p = manual pointer
-          outvalue  "manpos", 1
- elseif ikey == 114 then ;r = random pointer
-          outvalue  "randpos", 1
- elseif ikey == 104 then ;h = hop move
-          outvalue  "hopmove", 1
- endif
-          turnoff
-  endin
+  ; ============================================================================;
+  ; Receiving live input                             ;
+  ; ============================================================================;
 
- ;SWITCH BETWEEN SAMPLE/LIVE MODE
-  instr 5
-ikey      =         p4 
- if ikey == 115 then ;s = sample as input
-          outvalue  "sample", 1
- elseif ikey == 108 then ;l = live input
-          outvalue  "live", 1
- endif
-          turnoff
-  endin
+  ain inch kinch
+  ain = ain*ampdb(kgain)
+  kdisp metro 10
+  ShowLED_a  "livein", ain, kdisp, 1, 50
+  ShowOver_a "livein_over", ain, kdisp, 1
 
 
 
-;============================================================================;
-;          SUBINSTRUMENTS FOR WRITING VALUES TO THE EXPORT TEXTFILE          ;
-;============================================================================;
+  ; ============================================================================;
+  ; Continuously streaming fft signals from live and from the selected sample ;
+  ; ============================================================================;
 
- ;ADD VALUES IN THE SAME FORMAT AS IN THE WIDGET PANEL TO THE APPROPRIATE FILE 
-  instr 6 
-          fprints   gSfexp1, gSexpt1
-          fprints   gSfexp1, "%n"
-          printf_i  "Values written to file '%s'\n", 1, gSfexp1
-          turnoff
-  endin
- 
- ;ADD VALUES AS RAW AMP-FREQ PAIRS TO THE APPROPRIATE FILE  
-  instr 7
-          fprints   gSfexp2, gSexpt2
-          fprints   gSfexp2, "%n"
-          printf_i  "Values written to file '%s'\n", 1, gSfexp2
-          turnoff
-  endin
-  
- ;ADD VALUES AS AMP-FREQ MULTIPLIERS TO THE APPROPRIATE FILE   
-  instr 8 
-          fprints   gSfexp3, gSexpt3
-          printf_i  "Values written to file '%s'\n", 1, gSfexp3
-          turnoff
-  endin
+  ; Streaming the fft live signal
+  flive pvsanal ain, gifftsiz, giovlap, giwinsiz, giwintyp
+  ; Streaming the fft signal from the selected sample whenever a new position is given
+  knewpos changed kpos, kthissamp, kslsmpnew, kmnposnew, krdposnew, khopmvnew
+  if knewpos == 1 then
+    reinit readsampnew
+  endif
+readsampnew:
+  fsamp pvstanal 0, 1, 1, kthissamp, 0, 0, i(kpossec), gifftsiz, giovlap, 0
+  rireturn
 
 
 
-;============================================================================;
-;             SUBINSTRUMENTS FOR TERMINATING THE SAMPLE LISTENING            ;
-;============================================================================;
+  ; ============================================================================;
+  ; Select input and set variables for writing the tables            ;
+  ; ============================================================================;
 
-  instr 9 
-          turnoff2  2, 0, 0
-  endin
-  
-  
+  ; Set kwritliv=1 in the k-cycle the "dolive" button has been pressed
+  if ksellive == 1 then  ; live source must be selected
+    klivenew changed kdolive
+    if klivenew == 1 && kdolive == 1 then
+      kwritliv = 1
+    endif
 
-;============================================================================;  
-;============================================================================;
-;            MIDI-TRIGGERED INSTRUMENT FOR THE ADDITIVE SYNTHESIS            ;
-;============================================================================;
-;============================================================================;
-  
-  instr 10 
-  
-;============================================================================;
-;                           RECEIVING BASIC VALUES                           ;
-;============================================================================;
-
-inote     =         p4 ;midi note number
-imidamp   =         p5 ;midi velocity (0-1)
-insnum	   =         100 + (inote/100) ;fractional number to differentiate keys
-irefpch   =         i(gkrefpch)
-istcent   =         i(gkstcent) ;cent difference for each semitone
-icentdif  =         (inote-irefpch) * istcent	
-ihowmany  =         i(gkhowmany)
-ishift	   =         i(gkshiftpl)
-imax      =         i(gkthsnman) ;number of partials analyzed
-ihowmany  =         (ihowmany+ishift > imax ? imax-ishift : ihowmany)
-imaxdur   =         i(gkmaxdur) ;maximum duration for one note (sec)
-irndampdv =         i(gkrdampdv) ;max amp deviation (dB)
-irndfqdv  =         i(gkrndfqdv) ;max freq deviation (cent)
-irnddurdv =         i(gkrddurdv) ;max dur deviation (%)
-ivol      =         i(gkvol) ;overall volume (dB)
-idur      =         i(gkmaxdur) ;duration of each note (without random deviations)
-idur      =         (idur < 0.1) ? 0.1 : idur ;make sure there will not be zero duration
+    ; Set writesamp=1 if a new pointer position has been set,
+    ; Selector has changed or button has been switched
+  elseif kselsamp == 1 then  ; sample source selected
+    ; manual position
+    if kmanpos == 1 then
+      kpstayed Stayed kpos, kfast  ; returns 1 if pos has not changed for kfast seconds
+      knewpos changed kpstayed
+      if (knewpos == 1 && kpstayed == 1) || knewtable == 1 || kslsmpnew == 1 then
+        kwritsmp = 1
+      endif
+      ; random position
+    elseif knewrdpos == 1 then
+      kwritsmp = 1
+      ; hop position
+    elseif knewhpmv == 1 then
+      kwritsmp = 1
+    endif
+  endif
 
 
 
-;============================================================================;
-;          GETTING THE SUM OF ALL SELECTED AMPLITUDES FOR SCALING            ;
-;============================================================================;
+  ; ============================================================================;
+  ; Fill the tables with the current ampltitude/frequency values        ;
+  ; ============================================================================;
 
-indx      =         ishift
-iampsum   =         0
+  ; Initialize counters
+  ksmpcnt init 0
+  klivcnt init 0
+
+  ; Live input selected
+  if kwritliv == 1 then
+    kwritten pvsftw flive, giamps, gifreqs
+    if kwritten == 1 then
+      klivcnt = klivcnt + 1
+      printks " New live values written! (%d)\n", 0, klivcnt
+      kwritliv = 0
+    endif
+
+    ; Sound file input selected
+  elseif kwritsmp == 1 then
+    kwritten pvsftw fsamp, giamps, gifreqs
+    if kwritten == 1 then
+      ksmpcnt = ksmpcnt + 1
+      printks " New sample values written (%d)!\n", 0, ksmpcnt
+      kwritsmp  = 0
+      knewrdpos = 0
+      knewhpmv  = 0
+    endif
+  endif
+
+
+
+  ; ================================================================================;
+  ; Analyze bin amplitudes and fill index-table if amp/freq-tables have been updated;
+  ; ================================================================================;
+
+  if kwritten == 1 then  ; writing via pvsftw has been finished
+    TabIndxNMax_k giamps, iftdatlen, giampcpy, gimaxindc, kpartsana
+    gkthsnman = kpartsana  ; number of partials in this analysis
+
+
+
+    ; ============================================================================;
+    ; Print values if desired and if new values available             ;
+    ; ============================================================================;
+
+    if kprint == 1 && kwritten == 1 then
+      kprntndx = 0
+      if kselsamp == 1 then
+        Sprint sprintfk "File '%s' at position %f seconds:\n", Sname, kpossec
+      elseif ksellive == 1 then
+        Sprint sprintfk "%s\n", "Live input:"
+      else
+        Sprint = ""
+      endif
+printout:
+      ktabindx tab kprntndx, gimaxindc
+      kamp     tab ktabindx, giamps
+      kfreq    tab ktabindx, gifreqs
+      Snew sprintfk "%s%.2d) amp = %f, freq = %f, bin = %d\n", Sprint, kprntndx+1, kamp, kfreq, ktabindx
+      Sprint strcpyk Snew
+      loop_lt kprntndx, 1, kpartsana, printout
+      outvalue "values", Sprint
+      gSexpt1 strcpyk Sprint
+    else
+      outvalue "values", ""
+    endif
+  endif
+
+
+
+  ; ============================================================================;
+  ; Export values if desired                          ;
+  ; ============================================================================;
+
+  kexp1new changed kexp1
+  kexp2new changed kexp2
+  kexp3new changed kexp3
+
+  ; Export in the same format as in the widget panel
+  if kexp1new == 1 && kexp1 == 1 then
+    event "i", 6, 0, .1
+
+    ; Export as raw amp-freq pair per line
+  elseif kexp2new == 1 && kexp2 == 1 then
+    kexpt2ndx = 0
+    if kselsamp == 1 then
+      gSexpt2 sprintfk "Amp-Freq values for file '%s' at position %f seconds:\n", Sname, kpossec
+    elseif ksellive == 1 then
+      gSexpt2 sprintfk "%s\n", "Amp-Freq values for live input:"
+    endif
+expt2:
+    ktabindx tab kexpt2ndx, gimaxindc
+    kamp     tab ktabindx, giamps
+    kfreq    tab ktabindx, gifreqs
+    Snew sprintfk "%s%f %f\n", gSexpt2, kamp, kfreq
+    gSexpt2 strcpyk Snew
+    loop_lt kexpt2ndx, 1, kpartsana, expt2
+    event "i", 7, 0, .1
+
+    ; Export as multipliers in function tables
+  elseif kexp3new == 1 && kexp3 == 1 then
+    kexpt3cnt init 0  ; counter
+    kexpt3cnt = kexpt3cnt+1
+    ; get reference frequency for frequency multiplier = 1
+    ktabindx tab 0, gimaxindc
+    kfreq0   tab ktabindx, gifreqs  ; frequency corresponding to strongest amplitude
+    if kselsamp == 1 then
+      Sexpt3 sprintfk "Amp-Freq multiplier for file '%s' at position %f seconds.\nPitch at frequency multiplier 1 was %f Hz.\n", Sname, kpossec, kfreq0
+    elseif ksellive == 1 then
+      Sexpt3 sprintfk "Amp-Freq multiplier for live input.\nPitch at frequency multiplier 1 was %f Hz.\n", kfreq0
+    endif
+    Samptab  sprintfk "giAmp%d ftgen 0, 0, -%d, -2", kexpt3cnt, kpartsana
+    Sfreqtab sprintfk "giFreq%d ftgen 0, 0, -%d, -2", kexpt3cnt, kpartsana
+    kexpt3ndx = 0
+expt3:
+    ktabindx tab kexpt3ndx, gimaxindc
+    kamp     tab ktabindx, giamps
+    kfreq    tab ktabindx, gifreqs
+    kfmult = kfreq/kfreq0
+    Snewamp  sprintfk "%s, %f", Samptab, kamp
+    Snewfreq sprintfk "%s, %f", Sfreqtab, kfmult
+    Samptab  strcpyk Snewamp
+    Sfreqtab strcpyk Snewfreq
+    loop_lt kexpt3ndx, 1, kpartsana, expt3
+    gSexpt3 sprintfk "%s%s\n%s\n\n", Sexpt3, Samptab, Sfreqtab
+    event "i", 8, 0, .1
+  endif
+
+  kwritten = 0  ; reset kwritten at the end of each k-cycle
+
+endin
+
+
+
+; ============================================================================;
+; Subinstrument for listening to the selected sample               ;
+; ============================================================================;
+
+instr 2
+  itab = i(gksampnr)            ; number of ftable (1, 2, ...)
+  idur tab_i itab-1, giftsflns  ; get length of sample
+  p3 = idur
+  aout poscil3 1, 1/p3, itab
+  out aout*ampdb(gkvol)
+endin
+
+
+
+; ============================================================================;
+; Subinstruments for performing actions by computer keyboard shortcuts    ;
+; ============================================================================;
+
+; Make live snapshot and change the sample number
+instr 3
+  ikey = p4  ; 48-57
+  kcyc timeinstk
+  if ikey == 48 then
+    outvalue "dolive", 1
+  else
+    outvalue "sampnr", ikey-48
+  endif
+  if kcyc == 2 then
+    outvalue "dolive", 0
+    turnoff
+  endif
+endin
+
+; Change the pointer mode
+instr 4
+  ikey = p4
+  if ikey == 112 then  ; p = manual pointer
+    outvalue "manpos", 1
+  elseif ikey == 114 then  ; r = random pointer
+    outvalue "randpos", 1
+  elseif ikey == 104 then  ; h = hop move
+    outvalue "hopmove", 1
+  endif
+  turnoff
+endin
+
+; Switch between sample/live mode
+instr 5
+  ikey = p4
+  if ikey == 115 then  ; s = sample as input
+    outvalue "sample", 1
+  elseif ikey == 108 then  ; l = live input
+    outvalue "live", 1
+  endif
+  turnoff
+endin
+
+
+
+; ============================================================================;
+; Subinstruments for writing values to the export textfile          ;
+; ============================================================================;
+
+; Add values in the same format as in the widget panel to the appropriate file
+instr 6
+  fprints gSfexp1, gSexpt1
+  fprints gSfexp1, "%n"
+  printf_i "Values written to file '%s'\n", 1, gSfexp1
+  turnoff
+endin
+
+; Add values as raw amp-freq pairs to the appropriate file
+instr 7
+  fprints gSfexp2, gSexpt2
+  fprints gSfexp2, "%n"
+  printf_i "Values written to file '%s'\n", 1, gSfexp2
+  turnoff
+endin
+
+; Add values as amp-freq multipliers to the appropriate file
+instr 8
+  fprints gSfexp3, gSexpt3
+  printf_i "Values written to file '%s'\n", 1, gSfexp3
+  turnoff
+endin
+
+
+
+; ============================================================================;
+; Subinstruments for terminating the sample listening            ;
+; ============================================================================;
+
+instr 9
+  turnoff2 2, 0, 0
+endin
+
+
+
+; ============================================================================;
+; ============================================================================;
+; MIDI-triggered instrument for the additive synthesis            ;
+; ============================================================================;
+; ============================================================================;
+
+instr 10
+
+  ; ============================================================================;
+  ; Receiving basic values                           ;
+  ; ============================================================================;
+
+  inote     = p4                 ; midi note number
+  imidamp   = p5                 ; midi velocity (0-1)
+  insnum    = 100 + (inote/100)  ; fractional number to differentiate keys
+  irefpch   = i(gkrefpch)
+  istcent   = i(gkstcent)  ; cent difference for each semitone
+  icentdif  = (inote-irefpch) * istcent
+  ihowmany  = i(gkhowmany)
+  ishift    = i(gkshiftpl)
+  imax      = i(gkthsnman)  ; number of partials analyzed
+  ihowmany  = (ihowmany+ishift > imax ? imax-ishift : ihowmany)
+  imaxdur   = i(gkmaxdur)   ; maximum duration for one note (sec)
+  irndampdv = i(gkrdampdv)  ; max amp deviation (dB)
+  irndfqdv  = i(gkrndfqdv)  ; max freq deviation (cent)
+  irnddurdv = i(gkrddurdv)  ; max dur deviation (%)
+  ivol      = i(gkvol)      ; overall volume (dB)
+  ; duration of each note (without random deviations)
+  idur = i(gkmaxdur)
+  idur = (idur < 0.1) ? 0.1 : idur  ; make sure there will not be zero duration
+
+
+
+  ; ============================================================================;
+  ; Getting the sum of all selected amplitudes for scaling            ;
+  ; ============================================================================;
+
+  indx    = ishift
+  iampsum = 0
 loop1:
-itabindx  tab_i     indx, gimaxindc ;bekommt index für stärkste, zweitstärkste usw amp aus gimaxindc
-iamp      tab_i     itabindx, giamps ;get 1., 2., etc strongest amps
-iampsum   =         iampsum + iamp
-          loop_lt   indx, 1, ihowmany+ishift, loop1
-indx      =         ishift	
+  ; bekommt index für stärkste, zweitstärkste usw amp aus gimaxindc
+  itabindx tab_i indx, gimaxindc
+  iamp     tab_i itabindx, giamps  ; get 1., 2., etc strongest amps
+  iampsum = iampsum + iamp
+  loop_lt indx, 1, ihowmany+ishift, loop1
+  indx = ishift
 
 
 
-;============================================================================;
-;   TRIGGERING THE INSTANCES OF THE SUBINSTRUMENT FOR PLAYING THE PARTIALS   ;
-;============================================================================;
+  ; ============================================================================;
+  ; Triggering the instances of the subinstrument for playing the partials   ;
+  ; ============================================================================;
 
-loop2:				
- ;AMPLITUDES
-itabindx  tab_i     indx, gimaxindc ;get index for ordered amps from gimaxindc
-iptamp	   tab_i     itabindx, giamps ;get 1., 2., etc strongest amps
-iptamp	   =         iptamp * imidamp ;following midi velocity
-iptdbvar  rnd31     irndampdv, 0 ;dB deviation
-iptamp	   =         ampdb(ivol) * iptamp * ampdb(iptdbvar) ;resulting amp
- ;FREQUENCIES
-iptfq     tab_i     itabindx, gifreqs ;get related freq to selected amp
-iptfq     =         cent(icentdif) * iptfq ;transposed depending on key pressed
-iptfqvar  rnd31     irndfqdv, 0 ;cent deviation
-iptfq     =         iptfq * cent(iptfqvar)
- ;DURATIONS
-iptdurvar rnd31     irnddurdv, 0 ;percent of duration deviation (100=twice,-100=half as long)
-iptdur	   =         idur * 2^(iptdurvar/100)
-          event_i   "i", insnum, 0, iptdur, iptamp, iptfq, iampsum ;call instr 100.nn 
-          loop_lt   indx, 1, ihowmany+ishift, loop2
-          
-          
-          
-;============================================================================;
-;  STOPPING THE INSTANCES OF THE SUBINSTRUMENT IF MIDI-KEY HAS BEEN RAISED   ;
-;============================================================================;
-
-krel      release
- if krel == 1 then
-          turnoff2  insnum, 4, 1
- endif
-  endin
-  
+loop2:
+  ; Amplitudes
+  ; get index for ordered amps from gimaxindc
+  itabindx tab_i indx, gimaxindc
+  iptamp   tab_i itabindx, giamps                  ; get 1., 2., etc strongest amps
+  iptamp = iptamp * imidamp                        ; following midi velocity
+  iptdbvar rnd31 irndampdv, 0                      ; dB deviation
+  iptamp = ampdb(ivol) * iptamp * ampdb(iptdbvar)  ; resulting amp
+  ; Frequencies
+  iptfq tab_i itabindx, gifreqs   ; get related freq to selected amp
+  iptfq = cent(icentdif) * iptfq  ; transposed depending on key pressed
+  iptfqvar rnd31 irndfqdv, 0      ; cent deviation
+  iptfq = iptfq * cent(iptfqvar)
+  ; Durations
+  ; percent of duration deviation (100=twice,-100=half as long)
+  iptdurvar rnd31 irnddurdv, 0
+  iptdur = idur * 2^(iptdurvar/100)
+  event_i "i", insnum, 0, iptdur, iptamp, iptfq, iampsum  ; call instr 100.nn
+  loop_lt indx, 1, ihowmany+ishift, loop2
 
 
-;============================================================================;
-;                   SUBINSTRUMENT FOR PLAYING ONE PARTIAL                    ;
-;============================================================================;
-    
-  instr 100 
- ;GET VALUES FROM INSTR 10 AND FROM WIDGETS
-iamp      =         p4
-ifreq     =         p5
-iampsum   =         p6
-iatt      =         i(gkatt)
-idec      =         i(gkdec)
-isus      =         i(gksus)
-irel      =         i(gkrel)
 
- ;PLAY A SINE WITH ADSR ENVELOPE
-apart     poscil    iamp, ifreq, gisine
-aenv      madsr     iatt, idec, isus, irel
-          out	      apart*aenv/iampsum
-  endin		  
-  
-  
-  
-;============================================================================;
-;     COLLECTING ALL OUTGOING AUDIO AND SENDING IT TO THE METER DISPLAY      ;
-;============================================================================;
+  ; ============================================================================;
+  ; Stopping the instances of the subinstrument if MIDI-key has been raised   ;
+  ; ============================================================================;
 
-  instr 999 
-ktrigdisp metro     10
-aout      monitor	
-          ShowLED_a "out", aout, ktrigdisp, 1, 48
-          ShowOver_a "out_over", aout, ktrigdisp, 2
-  endin
-  
-  
+  krel release
+  if krel == 1 then
+    turnoff2 insnum, 4, 1
+  endif
+endin
+
+
+
+; ============================================================================;
+; Subinstrument for playing one partial                    ;
+; ============================================================================;
+
+instr 100
+  ; Get values from instr 10 and from widgets
+  iamp    = p4
+  ifreq   = p5
+  iampsum = p6
+  iatt    = i(gkatt)
+  idec    = i(gkdec)
+  isus    = i(gksus)
+  irel    = i(gkrel)
+
+  ; Play a sine with adsr envelope
+  apart poscil iamp, ifreq, gisine
+  aenv madsr iatt, idec, isus, irel
+  out apart*aenv/iampsum
+endin
+
+
+
+; ============================================================================;
+; Collecting all outgoing audio and sending it to the meter display      ;
+; ============================================================================;
+
+instr 999
+  ktrigdisp metro 10
+  aout monitor
+  ShowLED_a  "out", aout, ktrigdisp, 1, 48
+  ShowOver_a "out_over", aout, ktrigdisp, 2
+endin
+
+
 </CsInstruments>
 <CsScore>
 i 1 0 36000
@@ -840,9 +852,9 @@ i 1 0 36000
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>170</r>
-  <g>170</g>
-  <b>127</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -898,19 +910,19 @@ i 1 0 36000
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
@@ -935,19 +947,19 @@ i 1 0 36000
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
@@ -972,19 +984,19 @@ i 1 0 36000
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
@@ -1009,19 +1021,19 @@ i 1 0 36000
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
@@ -1046,14 +1058,14 @@ i 1 0 36000
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1083,19 +1095,19 @@ i 1 0 36000
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
@@ -1120,19 +1132,19 @@ i 1 0 36000
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
@@ -1157,14 +1169,14 @@ i 1 0 36000
   <fontsize>40</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1203,19 +1215,19 @@ When the "Print current values" button is activated, the analyzed partials are s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
@@ -1273,14 +1285,14 @@ When the "Print current values" button is activated, the analyzed partials are s
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1310,19 +1322,19 @@ When the "Print current values" button is activated, the analyzed partials are s
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
@@ -1352,17 +1364,17 @@ When the "Print current values" button is activated, the analyzed partials are s
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>45</r>
+   <g>208</g>
+   <b>45</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -1390,17 +1402,17 @@ When the "Print current values" button is activated, the analyzed partials are s
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -1479,14 +1491,14 @@ Snapshot!</text>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1586,14 +1598,14 @@ Snapshot!</text>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1620,14 +1632,14 @@ Snapshot!</text>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -1654,14 +1666,14 @@ Snapshot!</text>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1688,14 +1700,14 @@ Snapshot!</text>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -1761,14 +1773,14 @@ L = Live Input,
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1868,19 +1880,19 @@ L = Live Input,
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
@@ -1905,9 +1917,9 @@ L = Live Input,
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>239</r>
@@ -1983,17 +1995,17 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00ff00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -2016,14 +2028,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2053,14 +2065,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2120,14 +2132,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>248</r>
+   <g>248</g>
+   <b>54</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2157,14 +2169,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2194,14 +2206,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2266,14 +2278,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2338,14 +2350,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2555,17 +2567,17 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>45</r>
+   <g>208</g>
+   <b>45</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -2593,17 +2605,17 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -2646,14 +2658,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2683,14 +2695,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2717,14 +2729,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.10000000</resolution>
   <minimum>0.1</minimum>
@@ -2751,14 +2763,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2785,14 +2797,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -2854,14 +2866,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2888,14 +2900,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.01000000</resolution>
   <minimum>-1</minimum>
@@ -2954,14 +2966,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -2985,14 +2997,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -3019,14 +3031,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3053,14 +3065,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -3087,14 +3099,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3124,14 +3136,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3158,14 +3170,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -3192,14 +3204,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3226,14 +3238,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -3260,14 +3272,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3294,14 +3306,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -3328,14 +3340,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3362,14 +3374,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -3396,14 +3408,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3430,14 +3442,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.10000000</resolution>
   <minimum>0.1</minimum>
@@ -3464,14 +3476,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3506,11 +3518,11 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00ff00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
@@ -3544,11 +3556,11 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00ff00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
@@ -3582,11 +3594,11 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00ff00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
@@ -3620,11 +3632,11 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00ff00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
@@ -3653,14 +3665,14 @@ L = Live Input,
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3690,14 +3702,14 @@ L = Live Input,
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3727,14 +3739,14 @@ L = Live Input,
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3764,14 +3776,14 @@ L = Live Input,
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3801,14 +3813,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3838,14 +3850,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3875,14 +3887,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3912,14 +3924,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3949,14 +3961,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4018,14 +4030,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.10000000</resolution>
   <minimum>0</minimum>
@@ -4049,14 +4061,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.10000000</resolution>
   <minimum>0.1</minimum>
@@ -4083,14 +4095,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4117,14 +4129,14 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00000100</resolution>
   <minimum>0</minimum>
@@ -4151,14 +4163,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4188,14 +4200,14 @@ L = Live Input,
   <fontsize>30</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4230,14 +4242,14 @@ L = Live Input,
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>

@@ -1,121 +1,123 @@
-;Writen by Iain McCurdy, 2008
+; Writen by Iain McCurdy, 2008
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add instr	6 for bar display
+; Notes on modifications from original csd:
+; Add instr 6 for bar display
 
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	0,0,65537,10,1		;A SINE WAVE
+gisine ftgen 0, 0, 65537, 10, 1  ; A sine wave
 
-giSubDiv		=	1000					;SUBDIVISION OF THE BEAT (ESSENTIALLY THIS WILL DETERMINE THE PRECISION OF THE QUANTIZING EFFECT
-gkTempoClock	init	0					;INITIALISE VARIABLE FOR MAIN CLOCK	
+; Subdivision of the beat (essentially this will determine the precision of the quantizing
+; effect
+giSubDiv = 1000
+gkTempoClock init 0  ; Initialise variable for main clock
 
-			;maxalloc	4,1				;POLYPHONY CONTROL FOR THE SOUND PREODUCING INSTRUMENT
+; Maxalloc 4,1    ;polyphony control for the sound preoducing instrument
 
 
-instr	10	;GUI
-	gkLiveQuantize		invalue		"On_Off"	;lance i2
-		kB_ON		trigger		gkLiveQuantize, 0.5, 0
-					schedkwhen	kB_ON, 0, 0, 2, 0, -1	;Start instr
+instr 10                           ; GUI
+  gkLiveQuantize invalue "On_Off"  ; lance i2
+  kB_ON trigger gkLiveQuantize, 0.5, 0
+  schedkwhen kB_ON, 0, 0, 2, 0, -1  ; Start instr
 
-	gkTempo			invalue		"Tempo"
-	gkNoteVal			invalue		"Beat"
-	gkMetroGain		invalue		"Metronone"
+  gkTempo     invalue "Tempo"
+  gkNoteVal   invalue "Beat"
+  gkMetroGain invalue "Metronone"
 endin
 
-instr	1	;MIDI TRIGGERED INSTRUMENT
-	icps		cpsmidi
-	iamp		veloc	0,0.2
-	idelay	=		frac(i(gkTempoClock))
-	idelay	=		(1-idelay)*(60/(i(gkTempo)*i(gkNoteVal)))
-			event_i	"i", p1+3, idelay, 1, icps, iamp
+instr 1  ; MIDI triggered instrument
+  icps cpsmidi
+  iamp veloc 0, 0.2
+  idelay = frac(i(gkTempoClock))
+  idelay = (1-idelay)*(60/(i(gkTempo)*i(gkNoteVal)))
+  event_i "i", p1+3, idelay, 1, icps, iamp
 endin
 
-instr	2	;TURNS ON THE QUANTIZER
-	gkTempoClock	init		0					;INITIALISE VARIABLE FOR MAIN CLOCK	
-	if	gkLiveQuantize!=0	goto	CONTINUE
-		turnoff
+instr 2                ; Turns on the quantizer
+  gkTempoClock init 0  ; Initialise variable for main clock
+  if gkLiveQuantize != 0 goto CONTINUE
+  turnoff
 
-	CONTINUE:
-	kTrigger		metro		(gkTempo*giSubDiv*gkNoteVal)/60
-				schedkwhen	kTrigger, 0, 0, p1+1, 0, 0.001
+CONTINUE:
+  kTrigger metro (gkTempo*giSubDiv*gkNoteVal)/60
+  schedkwhen kTrigger, 0, 0, p1+1, 0, 0.001
 
-	kMetronome	metro		gkTempo/240
-	kbeat		=			240/gkTempo
-				schedkwhen	kMetronome, 0, 0, 5, 0,         .05, 600, 0
-				schedkwhen	kMetronome, 0, 0, 5, kbeat*.25, .05, 300, 1
-				schedkwhen	kMetronome, 0, 0, 5, kbeat*.50, .05, 300, 2
-				schedkwhen	kMetronome, 0, 0, 5, kbeat*.75, .05, 300, 3	
+  kMetronome metro gkTempo/240
+  kbeat = 240/gkTempo
+  schedkwhen kMetronome, 0, 0, 5, 0, .05, 600, 0
+  schedkwhen kMetronome, 0, 0, 5, kbeat*.25, .05, 300, 1
+  schedkwhen kMetronome, 0, 0, 5, kbeat*.50, .05, 300, 2
+  schedkwhen kMetronome, 0, 0, 5, kbeat*.75, .05, 300, 3
 endin
 
-instr	3	;INCREMENT THE CLOCK BY 1 SUBDIVISION
-	kTempoClock	=	gkTempoClock + (1/giSubDiv)
-	gkTempoClock	=	kTempoClock
-				turnoff	
+instr 3  ; Increment the clock by 1 subdivision
+  kTempoClock  = gkTempoClock + (1/giSubDiv)
+  gkTempoClock = kTempoClock
+  turnoff
 endin
 
-instr	4	;SOUND PRODUCING INSTRUMENT
-	aenv		expseg	0.0001, 0.01, 1, p3-0.01, 0.0001
-	a1		oscili	aenv*p5, p4, gisine
-			outs		a1, a1
+instr 4  ; Sound producing instrument
+  aenv expseg 0.0001, 0.01, 1, p3-0.01, 0.0001
+  a1 oscili aenv*p5, p4, gisine
+  outs a1, a1
 endin
 
-instr	5	;METRONOME SOUND GENERATOR
-	if	gkLiveQuantize=0	then
-		turnoff
-	endif
+instr 5  ; Metronome sound generator
+  if gkLiveQuantize = 0 then
+    turnoff
+  endif
 
-	aenv		linseg		0, 0.001,1, p3-0.001,0
-	asig		oscili		0.2*aenv*i(gkMetroGain), p4, gisine
-			outs			asig, asig
+  aenv linseg 0, 0.001, 1, p3-0.001, 0
+  asig oscili 0.2*aenv*i(gkMetroGain), p4, gisine
+  outs asig, asig
 
-			schedkwhen	1, 0, 0, 6, 0, 0, p5 	;START (ONLY INIT) BAR DISPLAY INSTR
+  schedkwhen 1, 0, 0, 6, 0, 0, p5  ; Start (only init) bar display instr
 endin
 
-instr	6	;BAR DISPLAY
-	;All leds OFF
-	outvalue	"Bar1", 0
-	outvalue	"Bar2", 0
-	outvalue	"Bar3", 0
-	outvalue	"Bar4", 0
+instr 6  ; Bar display
+  ; All leds OFF
+  outvalue "Bar1", 0
+  outvalue "Bar2", 0
+  outvalue "Bar3", 0
+  outvalue "Bar4", 0
 
-	;One led ON
-	if p4 = 0 igoto BAR1
-	if p4 = 1 igoto BAR2
-	if p4 = 2 igoto BAR3
-	if p4 = 3 igoto BAR4	
-	
-	BAR1:
-	outvalue	"Bar1", 1
-	igoto END
-	BAR2:
-	outvalue	"Bar2", 1
-	igoto END
-	BAR3:
-	outvalue	"Bar3", 1
-	igoto END
-	BAR4:
-	outvalue	"Bar4", 1
-	igoto END
-	END:
+  ; One led ON
+  if p4 = 0 igoto BAR1
+  if p4 = 1 igoto BAR2
+  if p4 = 2 igoto BAR3
+  if p4 = 3 igoto BAR4
+
+BAR1:
+  outvalue "Bar1", 1
+  igoto END
+BAR2:
+  outvalue "Bar2", 1
+  igoto END
+BAR3:
+  outvalue "Bar3", 1
+  igoto END
+BAR4:
+  outvalue "Bar4", 1
+  igoto END
+END:
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI - REAL TIME PERFORMANCE FOR 1 HOUR
+i 10 0 3600  ; GUI - real time performance for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

@@ -1,75 +1,78 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-
-;Notes on modifications from original csd:
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
-;	Use reinit
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=null
+; Notes on modifications from original csd:
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Use reinit
+
+
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	1	;WAVESET
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kreset		invalue	"Reset"
-		krep			invalue	"Repeats"
-		kgain		invalue 	"Gain"
-		kinput		invalue	"Input" 	
+instr 1  ; Waveset
+  ktrig metro 10
+  if (ktrig == 1) then
+    kreset invalue "Reset"
+    krep   invalue "Repeats"
+    kgain  invalue "Gain"
+    kinput invalue "Input"
 
-		Sfile_new		strcpy	""									;INIT TO EMPTY STRING
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
-	endif
+    Sfile_new strcpy ""  ; Init to empty string
+    Sfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk Sfile
+    kfile strcmpk Sfile_new, Sfile_old
+  endif
 
-	kSwitch	changed	kfile, kinput, kreset							;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed kfile, kinput, kreset
 
-	if	kSwitch == 1	then											;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	REINIT											;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif
+  if kSwitch == 1 then  ; If i-rate variable change trigger is '1'...
+    reinit REINIT       ; Begin a reinitialisation pass from label 'start'
+  endif
 
-	REINIT:
-	if	kinput=0	then												;CHECK STATUS OF kinput (GUI BUTTON)
-		asig, aR	FilePlay2	Sfile, 1, 0, 1								;READ IN SOUND FILE FROM DISK
-	else
-		asig, aR	ins												;READ THE COMPUTER'S LIVE AUDIO INPUT
-	endif														;END OF if... BRANCHING
+REINIT:
+  if kinput = 0 then                   ; Check status of kinput (GUI button)
+    asig, aR FilePlay2 Sfile, 1, 0, 1  ; Read in sound file from disk
+  else
+    asig, aR ins  ; Read the computer's live audio input
+  endif           ; End of if... Branching
 
-	;OUTPUT	OPCODE	INPUT | REPEATS | INPUT_DURATION (OPTIONAL)
-	ares 	waveset	asig,   krep,      5*60*sr						;PASS THE AUDIO SIGNAL THROUGH waveset OPCODE. Input duration is defined in samples.
-																;in this example the expression given equats to a 5 minute buffer
-			outs		ares * kgain, ares * kgain						;SEND waveset OUTPUT TO THE SPEAKERS
+  ; Output opcode input | repeats | input_duration (optional)
+  ; PASS THE AUDIO SIGNAL THROUGH waveset OPCODE. Input duration is defined in samples.
+  ares waveset asig, krep, 5*60*sr
+  ; in this example the expression given equats to a 5 minute buffer
+  outs ares * kgain, ares * kgain  ; Send waveset output to the speakers
 endin
 </CsInstruments>
 <CsScore>
-f 0 3600		;PLAYS FOR ONE HOUR
+f 0 3600  ; Plays for one hour
 </CsScore>
 </CsoundSynthesizer>
 
@@ -84,9 +87,9 @@ f 0 3600		;PLAYS FOR ONE HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -104,15 +107,20 @@ f 0 3600		;PLAYS FOR ONE HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -135,14 +143,14 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -161,11 +169,23 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
@@ -185,6 +205,18 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -202,9 +234,9 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -229,14 +261,14 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -258,14 +290,14 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -287,14 +319,14 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -336,6 +368,18 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -353,14 +397,14 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -380,14 +424,14 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -436,14 +480,14 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

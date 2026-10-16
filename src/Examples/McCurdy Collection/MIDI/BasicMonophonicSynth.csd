@@ -1,95 +1,99 @@
-;Writen by Iain McCurdy, 2006
+; Writen by Iain McCurdy, 2006
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-;INITIALISE GLOBAL VARIABLES
-gkcps		init	0
-gkNumInstr1	init	0
-gkvib		init	0
+; Initialise global variables
+gkcps       init 0
+gkNumInstr1 init 0
+gkvib       init 0
 
 
-instr	1
-	icps			cpsmidi						;READ VALUES FOR FREQUENCY FROM A MIDI KEYBOARD 
-	gkcps		=		icps					;CREATE A K-RATE GLOBAL VARIABLE FROM MIDI FREQ. VALUES
-	
-	;CREATE A VIBRATO FUNCTION - THIS ENVELOPE WILL BE TRIGGERED WITH EACH NEW NEW THAT IS PRESSED WHETHER LEGATO OR NOT
-	ivibamp		=		.1
-	ivibdelayTim	=		.3
-	ivibRiseTim	=		1
-	kvibenv		expseg	.001, (ivibdelayTim), .001, (ivibRiseTim), ivibamp, (1), ivibamp
-	kvibfreq		=		6
-	ivibwave		=		1
-	kvib			oscil	kvibenv, kvibfreq, ivibwave
-	gkvib		=		kvib+1
-	
-	;INSTR 2 IS INSTRUCTED TO PLAY A VERY LONG NOTE - ONLY ONE NOTE AT A TIME IS ALLOWED
-	;						KTRIGGER, KMINTIM, KMAXNUM, KINSNUM, KWHEN, KDUR 
-				schedkwhen      1,           0,       1,       2,      0,   3600
+instr 1
+  icps cpsmidi  ; Read values for frequency from a MIDI keyboard
+  gkcps = icps  ; Create a k-rate global variable from MIDI freq. Values
+
+  ; Create a vibrato function - this envelope will be triggered with each new new that is
+  ; pressed whether legato or not
+  ivibamp      = .1
+  ivibdelayTim = .3
+  ivibRiseTim  = 1
+  kvibenv expseg .001, (ivibdelayTim), .001, (ivibRiseTim), ivibamp, (1), ivibamp
+  kvibfreq = 6
+  ivibwave = 1
+  kvib oscil kvibenv, kvibfreq, ivibwave
+  gkvib = kvib+1
+
+  ; Instr 2 is instructed to play a very long note - only one note at a time is allowed
+  ; Ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur
+  schedkwhen 1, 0, 1, 2, 0, 3600
 endin
-			
-instr	2
 
-	kporttime_gui	invalue		"Portamento"
+instr 2
 
-	kreleaseflag	release
-	gkNumInstr1 	active 		1								;SENSE THE NUMBER OF NOTES ARE BEING PLAYED BY INSTR 1
-	if	gkNumInstr1!=0||kreleaseflag=1	kgoto KEEP_PLAYING			;IF INSTR 1 IS PLAYING AT LEAST ONE NOTE THEN INSTR 2 MUSTN'T TURN ITSELF OFF
-															;I.E. SKIP THE NEXT LINE...
-	turnoff													;INSTR 2 TURNS ITSELF OFF
-	KEEP_PLAYING:												;SKIP TO HERE IF INSTR 1 IS STILL PLAYING
-	
-	;CREATE PORTAMENTO ON PITCH PARAMETER
-	kporttime		linseg	0, .01, 1, 1, 1
-	kporttime		=		kporttime * kporttime_gui
-	kcps			portk	gkcps, kporttime
-	
-	;CREATE AN OSILLATOR USING THE vco OPCODE
-	iwave		=		1
-	kpw			=		.5
-	ifn			=		1
-	imaxd		=		1
-	ileak		=		0
-	inyx			=		.5
-	asig			vco 		0.3, kcps*gkvib, iwave, kpw, ifn, imaxd, ileak, inyx
-	
-	;FILTER ENVELOPE - ALL LEVELS ARE GIVEN IN OCT FORMAT
-	iFAttTim		=		.1									;ATTACK TIME
-	iFAttLev		=		7									;ATTACK LEVEL
-	iFDecTim		=		.1									;DECAY TIME
-	iFSusLev		=		5									;SUSTAIN LEVEL
-	iFRelTim		=		0.01									;RELEASE TIME
-	;CREATE AN ENVELOPE WITH A MIDI RELEASE SEGMENT TO INFLUENCE THE FILTER CUTOFF
-	kFEnv		linsegr	0, iFAttTim, iFAttLev, iFDecTim, iFSusLev, iFRelTim, 0
-	kCFOct		=		6									;BASE LEVEL OF THE FILTER (BEFORE THE ENVELOPE IS ADDED)
-	kCFcps		=		cpsoct(kCFOct+kFEnv)					;FINAL FILTER CUTOFF VALUE (IN CPS) INCORPORATING THE FILTER ENVELOPE AND THE FILTER BASE LEVEL
-	kres			=		.5									;RESOSNANCE
-	iscale 		= 		1
-	;CREATE A FILTERED VERSION OF THE OSCILLATOR SIGNAL
-	aFilt		moogvcf	asig, kCFcps, kres ,iscale
-	;SEND FILTERED SIGNAL TO OUTPUT
-	aenv			linsegr	0,0.001,1,0.01,0						;ANTI CLICK ENVELOPE
-				outs		aFilt * aenv, aFilt * aenv
+  kporttime_gui invalue "Portamento"
+
+  kreleaseflag release
+  gkNumInstr1 active 1  ; Sense the number of notes are being played by instr 1
+  ; If instr 1 is playing at least one note then instr 2 mustn't turn itself off
+  if gkNumInstr1 != 0||kreleaseflag = 1 kgoto KEEP_PLAYING
+  ; I.e. Skip the next line...
+  turnoff      ; Instr 2 turns itself off
+KEEP_PLAYING:  ; Skip to here if instr 1 is still playing
+
+  ; Create portamento on pitch parameter
+  kporttime linseg 0, .01, 1, 1, 1
+  kporttime = kporttime * kporttime_gui
+  kcps portk gkcps, kporttime
+
+  ; Create an osillator using the vco opcode
+  iwave = 1
+  kpw   = .5
+  ifn   = 1
+  imaxd = 1
+  ileak = 0
+  inyx  = .5
+  asig vco 0.3, kcps*gkvib, iwave, kpw, ifn, imaxd, ileak, inyx
+
+  ; Filter envelope - all levels are given in oct format
+  iFAttTim = .1    ; Attack time
+  iFAttLev = 7     ; Attack level
+  iFDecTim = .1    ; Decay time
+  iFSusLev = 5     ; Sustain level
+  iFRelTim = 0.01  ; Release time
+  ; Create an envelope with a MIDI release segment to influence the filter cutoff
+  kFEnv linsegr 0, iFAttTim, iFAttLev, iFDecTim, iFSusLev, iFRelTim, 0
+  kCFOct = 6  ; Base level of the filter (before the envelope is added)
+  ; Final filter cutoff value (in cps) incorporating the filter envelope and the filter
+  ; base level
+  kCFcps = cpsoct(kCFOct+kFEnv)
+  kres   = .5  ; Resosnance
+  iscale = 1
+  ; Create a filtered version of the oscillator signal
+  aFilt moogvcf asig, kCFcps, kres, iscale
+  ; Send filtered signal to output
+  aenv linsegr 0, 0.001, 1, 0.01, 0  ; Anti click envelope
+  outs aFilt * aenv, aFilt * aenv
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 131072 10 1		;A SINE WAVE - USED BY BOTH THE VIBRATO AND THE vco
-f 0 3600				;DUMMY SCORE EVENT - REAL TIME PERFORMANCE FOR 1 HOUR
+f 1 0 131072 10 1  ; A sine wave - used by both the vibrato and the vco
+f 0 3600           ; Dummy score event - real time performance for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

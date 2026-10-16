@@ -1,13 +1,13 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../../SourceMaterials
+--env:SSDIR+ = ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 1 ;necessary for this solution
+sr     = 44100
+ksmps  = 1  ; necessary for this solution
 nchnls = 1
-0dbfs = 1
+0dbfs  = 1
 
 ; By Andres Cabrera 2009
 ; and joachim heintz 2025 (version for csound 7)
@@ -16,91 +16,91 @@ nchnls = 1
 instr Main
 
   ; Receive the file names from the text boxes
-  infile:S = invalue("_Browse1")
+  infile:S  = invalue("_Browse1")
   outfile:S = invalue("_Browse2")
-  
+
   ; Check duration and sample rate
   infile_len:i = filelen(infile)
-  infile_sr:i = filesr(infile)
-  
+  infile_sr:i  = filesr(infile)
+
   ; Receive decimation value and type
   decimation:i = invalue("decimation")
-  type:i = invalue("type")
-  
+  type:i       = invalue("type")
+
   ; Start and end
   start:i = invalue("start") / 1000
-  end:i = invalue:i("end")/1000
-  end = (end > infile_len) ? infile_len : end
-  p3 = end - start
-  
+  end:i   = invalue:i("end")/1000
+  end     = (end > infile_len) ? infile_len : end
+  p3      = end - start
+
   ; Clear result display
-  outvalue("result","")
-    
+  outvalue("result", "")
+
   ; Now do all in one k-cycle
   count_samples:k init 0
   while (count_samples < p3*sr) do
-    
+
     ; Read file beginning with start time
-    stream_all:a[] = diskin(infile,1,start)
-  
+    stream_all:a[] = diskin(infile, 1, start)
+
     ; only use first channel and convert to k-rate
     stream:k = k(stream_all[0])
-    
+
     ; set initial values for analysis
-    accum:k init 0
-    counter:k init 0
+    accum:k         init 0
+    counter:k       init 0
     print_counter:k init 0
-    
+
     // if peak
     if (type == 0) then
-    
+
       // on the run ...
       if (counter < decimation) then
-      
+
         if (abs(stream) > abs(accum)) then
           accum = stream
         endif
-        counter += 1
-        
-      // ... reaching decimation value
+        counter + = 1
+
+        // ... reaching decimation value
       else
-        fprintks(outfile,"%f\n",accum)
-        print_counter += 1
+        fprintks(outfile, "%f\n", accum)
+        print_counter + = 1
         counter = 0
-        accum = 0
+        accum   = 0
       endif
-      
-    // if average
+
+      // if average
     else
-    
+
       // on the run ...
       if (counter < decimation) then
-        accum += abs(stream)
-        counter += 1
-        
-      // ... reaching decimation value
+        accum   + = abs(stream)
+        counter + = 1
+
+        // ... reaching decimation value
       else
-        fprintks(outfile,"%f\n",accum/counter)
-        print_counter += 1
+        fprintks(outfile, "%f\n", accum/counter)
+        print_counter + = 1
         counter = 0
-        accum = 0
+        accum   = 0
       endif
-    
+
     endif
-  
-    // increment counting 
-    count_samples += 1
-      
+
+    // increment counting
+    count_samples + = 1
+
   od
-  
+
   // print result to widget
-  outvalue("result",sprintfk("Written %d values to %s%s!",print_counter,pwd(),outfile))
-  
+  outvalue("result", sprintfk("Written %d values to %s%s!", print_counter, pwd(), outfile))
+
   // stop csound
-  event("e",0,0)
+  event("e", 0, 0)
 
 endin
-schedule(Main,0,1)
+schedule(Main, 0, 1)
 
 
 </CsInstruments>

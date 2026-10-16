@@ -3,259 +3,262 @@
 --midi-key-cps=4 --midi-velocity=5
 </CsOptions>
 <CsInstruments>
-;************************************************************
-;        FORMANT SYNTHESIZER WITH GLOTTAL PARAMETERS
-;                  Andreas Bergsland, 2009
-;************************************************************
-       sr     = 44100
-       ksmps  = 16
-       nchnls = 2
+; ************************************************************
+; Formant synthesizer with glottal parameters
+; Andreas Bergsland, 2009
+; ************************************************************
+sr     = 44100
+ksmps  = 16
+nchnls = 2
 
 
-giSine   ftgen   0, 0, 1024, 10, 1
+giSine ftgen 0, 0, 1024, 10, 1
 
 ; *****************************************************
-;                               TRIGGER INSTRUMENT
-;******************************************************
+; Trigger instrument
+; ******************************************************
 
-massign 1,2
+massign 1, 2
 
-instr   1
-;               Get value for global source
-kOpenQ  invalue "OQ"
-kSpeedQ invalue "SQ"
-;               On value
-kon             invalue "on"
-;               Trigger play instrument
-konchanged changed kon
-ktrig = kon * konchanged ; only turn on when it's 1 and its just changed to 1
-schedkwhen      ktrig, 0, 2, 10, 0, 100, kOpenQ, kSpeedQ
+instr 1
+  ; Get value for global source
+  kOpenQ  invalue "OQ"
+  kSpeedQ invalue "SQ"
+  ; On value
+  kon invalue "on"
+  ; Trigger play instrument
+  konchanged changed kon
+  ktrig = kon * konchanged  ; only turn on when it's 1 and its just changed to 1
+  schedkwhen ktrig, 0, 2, 10, 0, 100, kOpenQ, kSpeedQ
 
-if (konchanged == 1 && kon == 0) then
-		turnoff2 10, 2, 0
-endif
+  if (konchanged == 1 && kon == 0) then
+    turnoff2 10, 2, 0
+  endif
 
-; Turn off MIDI triggered note
-kstatus, kchan, kdata1, kdata2 midiin
-if (kstatus == 128) then
-		turnoff2 10, 2, 0
-endif
+  ; Turn off MIDI triggered note
+  kstatus, kchan, kdata1, kdata2 midiin
+  if (kstatus == 128) then
+    turnoff2 10, 2, 0
+  endif
 
-kspectrum invalue "spectrum"
-kchanged changed kspectrum
-if (kchanged == 1 || (konchanged == 1 && kon == 0) \
-	|| kstatus == 144) then
-	if (kspectrum == 1) then
-		outvalue "graph", 2
-	else
-		outvalue "graph", -102
-	endif
+  kspectrum invalue "spectrum"
+  kchanged changed kspectrum
+  if (kchanged == 1 || (konchanged == 1 && kon == 0) \
+    || kstatus == 144) then
+  if (kspectrum == 1) then
+    outvalue "graph", 2
+  else
+    outvalue "graph", -102
+  endif
 endif
 endin
 
-instr 2 ; MIDI trigger
-; turn off sound from button
-outvalue "on", 0
-turnoff2 10, 1, 0
+instr 2  ; MIDI trigger
+  ; turn off sound from button
+  outvalue "on", 0
+  turnoff2 10, 1, 0
 
-icps cpsmidi
-outvalue "f0", icps
-kOpenQ  invalue "OQ"
-kSpeedQ invalue "SQ"
-schedkwhen 1, 0, 2, 10, 0, 100, kOpenQ, kSpeedQ
-turnoff
+  icps cpsmidi
+  outvalue "f0", icps
+  kOpenQ  invalue "OQ"
+  kSpeedQ invalue "SQ"
+  schedkwhen 1, 0, 2, 10, 0, 100, kOpenQ, kSpeedQ
+  turnoff
 endin
 
 ; *************************************************************
-;                       FORMANT SYNTHESIZER INSTRUMENT
-instr   10
+; Formant synthesizer instrument
+instr 10
 
-;                       Get formant parameters
-kcutoff1        invalue "Cutoff1"
-kreson1 invalue "Reson1"
-kcutoff2        invalue "Cutoff2"
-kreson2 invalue "Reson2"
-kcutoff3        invalue "Cutoff3"
-kreson3 invalue "Reson3"
-kcutoff4        invalue "Cutoff4"
-kreson4 invalue "Reson4"
+  ; Get formant parameters
+  kcutoff1 invalue "Cutoff1"
+  kreson1  invalue "Reson1"
+  kcutoff2 invalue "Cutoff2"
+  kreson2  invalue "Reson2"
+  kcutoff3 invalue "Cutoff3"
+  kreson3  invalue "Reson3"
+  kcutoff4 invalue "Cutoff4"
+  kreson4  invalue "Reson4"
 
-iflen   =       4096
+  iflen = 4096
 
-;               Get glottal parameters
-iOpenQ  =       p4
-iSQ     =       p5 * 12/14              ; Speed quotient - compensate for the number of open vs closed segments in the ftable linseg
+  ; Get glottal parameters
+  iOpenQ = p4
+  ; Speed quotient - compensate for the number of open vs closed segments in the ftable
+  ; linseg
+  iSQ = p5 * 12/14
 
-iOpen   =       iOpenQ * iflen
-iClose  =       iflen - iOpen
-ip              =       iOpen/26                        ; Calculate duration for segments in the open phase
-iO              =       ip * iSQ                        ; Apply speed quotient for opening
-iC              =       ip / iSQ                        ; and closing phase
+  iOpen  = iOpenQ * iflen
+  iClose = iflen - iOpen
+  ip     = iOpen/26  ; Calculate duration for segments in the open phase
+  iO     = ip * iSQ  ; Apply speed quotient for opening
+  iC     = ip / iSQ  ; and closing phase
 
-iOp     =       14*iO                           ; Scale so that values fits the open phase
-iCl     =       12*iC
-iT      =       (iOp + iCl)/iOpen
+  iOp = 14*iO  ; Scale so that values fits the open phase
+  iCl = 12*iC
+  iT  = (iOp + iCl)/iOpen
 
-iO      =       iO / iT                         ; Calulate open
-iC      =       iC / iT                         ; and closed segments
+  iO = iO / iT  ; Calulate open
+  iC = iC / iT  ; and closed segments
 
-;       Values for a glottal waveform taken from Inger Karlsson (1988), "Glottal waveform parameters for different speaker types" (Could be mapped more accurately)
-i0      =       0       ;t1
-i1      =       .02
-i2      =       .05
-i3      =       .1
-i4      =       .15
-i5      =       .24
-i6      =       .33
-i7      =       .45
-i8      =       .575
-i9      =       .645
-i10     =       .775
-i11     =       .845
-i12     =       .945
-i13     =       .985
-i14     =       .99     ; ca.t2
-i15     =       .95
-i16     =       .8
-i17     =       .57
-i18     =       .3      ;ca.t3
-i19     =       .11
-i20     =       .06
-i21     =       .04
-i22     =       .02
-i23     =       .01
-i24     =       .002
-i25     =       .001
-i26     =       0       ;t4
+  ; Values for a glottal waveform taken from Inger Karlsson (1988), "Glottal waveform
+  ; parameters for different speaker types" (Could be mapped more accurately)
+  i0  = 0  ; t1
+  i1  = .02
+  i2  = .05
+  i3  = .1
+  i4  = .15
+  i5  = .24
+  i6  = .33
+  i7  = .45
+  i8  = .575
+  i9  = .645
+  i10 = .775
+  i11 = .845
+  i12 = .945
+  i13 = .985
+  i14 = .99  ; ca.t2
+  i15 = .95
+  i16 = .8
+  i17 = .57
+  i18 = .3  ; ca.t3
+  i19 = .11
+  i20 = .06
+  i21 = .04
+  i22 = .02
+  i23 = .01
+  i24 = .002
+  i25 = .001
+  i26 = 0  ; t4
 
-;               Make ftable for glottal waveform
-isource ftgen   102, 0, iflen, 7, i0, iO, i1, iO, i2, iO, i3, iO, i4, iO, i5, iO, i6, iO, i7, iO, i8, \
-                                       iO, i9, iO,i10,iO,i11,iO,i12,iO,i13,iO,i14,iC,i15, iC, i16, iC, i17,\
-                                       iC,i18,iC,i19,iC,i20,iC,i21,iC,i22,iC,i23,iC,i24,iC,i25,iC, i26, iClose, 0
+  ; Make ftable for glottal waveform
+  isource ftgen 102, 0, iflen, 7, i0, iO, i1, iO, i2, iO, i3, iO, i4, iO, i5, iO, i6, iO, i7, iO, i8, \
+    iO, i9, iO, i10, iO, i11, iO, i12, iO, i13, iO, i14, iC, i15, iC, i16, iC, i17, \
+    iC, i18, iC, i19, iC, i20, iC, i21, iC, i22, iC, i23, iC, i24, iC, i25, iC, i26, iClose, 0
 
-kf0     invalue "f0"
-kamp    linen   4000, .2, p3, .35
-
-
-;***************************************************************
-;                       JITTER, three different opcodes
-kcpsMin =       8
-kcpsMax =       20
-kjitamp =       .025
-kjit1 jspline kjitamp, kcpsMin, kcpsMax
-
-kjitamp =       .027
-kcpsMin =       2
-kcpsMax =       20
-kjit2   jitter  2.7, 2, 20
-
-ktotamp =       .027
-kamp1   =       .2
-kcps1   =       1.5
-kamp2   =       .25
-kcps2   =       4.5
-kamp3   =       .3
-kcps3   =       15.5
-kjit3   jitter2 ktotamp, kamp1, kcps1, kamp2, kcps2, kamp3, kcps3
-
-kjitOn  invalue "JitOn"
-kjit            =       kjit3 * kjitOn
-
-;***************************************************************
-;               VIBRATO
-
-kvibamp expseg  0.001, p3*.3, 1.5, p3*.7, 2.5
-ivibfrek        =               5.6
-kvibrand        randh   .1, ivibfrek
-kvibfrek        =               ivibfrek + kvibrand
-
-kvibOn  invalue "Vib"
-kvib            oscil   kvibamp * kvibOn, kvibfrek, giSine
+  kf0 invalue "f0"
+  kamp linen 4000, .2, p3, .35
 
 
+  ; ***************************************************************
+  ; JITTER, three different opcodes
+  kcpsMin = 8
+  kcpsMax = 20
+  kjitamp = .025
+  kjit1 jspline kjitamp, kcpsMin, kcpsMax
 
-;***************************************************************
-;                       SHIMMER
+  kjitamp = .027
+  kcpsMin = 2
+  kcpsMax = 20
+  kjit2 jitter 2.7, 2, 20
 
-kShimOn invalue "ShimOn"
-iavgshim        =       (ampdb(0.39)/ampdb(0))-1
-print   iavgshim
-kshimamp        =       kamp * iavgshim * kShimOn
-kcpsMin =       8
-kcpsMAx =       20
-kshim jspline kshimamp, kcpsMin, kcpsMax
-;*****************************************************************
+  ktotamp = .027
+  kamp1   = .2
+  kcps1   = 1.5
+  kamp2   = .25
+  kcps2   = 4.5
+  kamp3   = .3
+  kcps3   = 15.5
+  kjit3 jitter2 ktotamp, kamp1, kcps1, kamp2, kcps2, kamp3, kcps3
 
-;*****************************************************************
-;               Overshoot
+  kjitOn invalue "JitOn"
+  kjit = kjit3 * kjitOn
 
-kOShoot invalue "OShoot"
-if0             =       i(kf0)
-iOShoot =       i(kOShoot)
-iamount =       .08 * if0 * iOShoot
+  ; ***************************************************************
+  ; Vibrato
 
-kOShoot linseg  iamount, .06, 0, p3-.05, 0
-;******************************************************************
+  kvibamp expseg 0.001, p3*.3, 1.5, p3*.7, 2.5
+  ivibfrek = 5.6
+  kvibrand randh .1, ivibfrek
+  kvibfrek = ivibfrek + kvibrand
 
-; *****************************************************************
-;               MAKE SOURCE SOUND
-
-; Noise
-kNoise  invalue "Noise"
-anoise  rand    kamp * kNoise
-anoise  butbp   anoise, 4500, 4000
-
-; Glottal pulses
-avoiced oscili  kamp + kshim, kf0 + (kjit*kf0) + kvib + kOShoot, isource
-
-alyd    =       avoiced  + anoise
-;******************************************************************
-;               FORMANT FILTERS - reson with double filtering
-
-aform1  reson   alyd,   kcutoff1, kreson1 * kcutoff1 / 100
-aform1  reson   aform1, kcutoff1, kreson1 * kcutoff1 / 100
-aform2  reson   alyd,   kcutoff2, kreson2 * kcutoff2 / 100
-aform2  reson   aform2, kcutoff2, kreson2 * kcutoff2 / 100
-aform3  reson   alyd,   kcutoff3, kreson3 * kcutoff3 / 100
-aform3  reson   aform3, kcutoff3, kreson3 * kcutoff3 / 100
-aform4  reson   alyd,   kcutoff4, kreson4 * kcutoff4 / 100
-aform4  reson   aform4, kcutoff4, kreson4 * kcutoff4 / 100
-
-;               add formant jitter (experimental)
-kcutoff1        =       kcutoff1 + kcutoff1*kjit3*.3
-kcutoff2        =       kcutoff2 + kcutoff2*kjit3*.3
-kcutoff3        =       kcutoff3 + kcutoff3*kjit3*.3
-kcutoff4        =       kcutoff4 + kcutoff4*kjit3*.3
-
-;aform4 reson   alyd,   kcutoff4, kreson4 * kcutoff4 / 100
-;aform3 reson   aform4, kcutoff3, kreson3 * kcutoff3 / 100
-;aform2 reson   aform3, kcutoff2, kreson2 * kcutoff2 / 100
-;aform1 reson   aform2, kcutoff1, kreson1 * kcutoff1 / 100
-
-;               balance
-abal1   balance aform1, alyd
-abal2   balance aform2, alyd
-abal3   balance aform3, alyd
-abal4   balance aform4, alyd
-
-;               get formant amps
-kFamp1  invalue "FormAmp1"
-kFamp2  invalue "FormAmp2"
-kFamp3  invalue "FormAmp3"
-kFamp4  invalue "FormAmp4"
+  kvibOn invalue "Vib"
+  kvib oscil kvibamp * kvibOn, kvibfrek, giSine
 
 
-;               Mix
-afilt   =       abal1 * kFamp1 +abal2 * kFamp2 +abal3 * kFamp3 + abal4*kFamp4
 
-;               Master Volume
-kMasterVol invalue      "Vol"
-aout            =       afilt * kMasterVol
+  ; ***************************************************************
+  ; Shimmer
 
-;               View spectrum
-dispfft afilt, 1, 2048 , .05, 0
+  kShimOn invalue "ShimOn"
+  iavgshim = (ampdb(0.39)/ampdb(0))-1
+  print iavgshim
+  kshimamp = kamp * iavgshim * kShimOn
+  kcpsMin  = 8
+  kcpsMAx  = 20
+  kshim jspline kshimamp, kcpsMin, kcpsMax
+  ; *****************************************************************
 
-outs    aout, aout
+  ; *****************************************************************
+  ; Overshoot
+
+  kOShoot invalue "OShoot"
+  if0     = i(kf0)
+  iOShoot = i(kOShoot)
+  iamount = .08 * if0 * iOShoot
+
+  kOShoot linseg iamount, .06, 0, p3-.05, 0
+  ; ******************************************************************
+
+  ; *****************************************************************
+  ; Make source sound
+
+  ; Noise
+  kNoise invalue "Noise"
+  anoise rand kamp * kNoise
+  anoise butbp anoise, 4500, 4000
+
+  ; Glottal pulses
+  avoiced oscili kamp + kshim, kf0 + (kjit*kf0) + kvib + kOShoot, isource
+
+  alyd = avoiced + anoise
+  ; ******************************************************************
+  ; FORMANT FILTERS - reson with double filtering
+
+  aform1 reson alyd, kcutoff1, kreson1 * kcutoff1 / 100
+  aform1 reson aform1, kcutoff1, kreson1 * kcutoff1 / 100
+  aform2 reson alyd, kcutoff2, kreson2 * kcutoff2 / 100
+  aform2 reson aform2, kcutoff2, kreson2 * kcutoff2 / 100
+  aform3 reson alyd, kcutoff3, kreson3 * kcutoff3 / 100
+  aform3 reson aform3, kcutoff3, kreson3 * kcutoff3 / 100
+  aform4 reson alyd, kcutoff4, kreson4 * kcutoff4 / 100
+  aform4 reson aform4, kcutoff4, kreson4 * kcutoff4 / 100
+
+  ; add formant jitter (experimental)
+  kcutoff1 = kcutoff1 + kcutoff1*kjit3*.3
+  kcutoff2 = kcutoff2 + kcutoff2*kjit3*.3
+  kcutoff3 = kcutoff3 + kcutoff3*kjit3*.3
+  kcutoff4 = kcutoff4 + kcutoff4*kjit3*.3
+
+  ; aform4 reson   alyd,   kcutoff4, kreson4 * kcutoff4 / 100
+  ; aform3 reson   aform4, kcutoff3, kreson3 * kcutoff3 / 100
+  ; aform2 reson   aform3, kcutoff2, kreson2 * kcutoff2 / 100
+  ; aform1 reson   aform2, kcutoff1, kreson1 * kcutoff1 / 100
+
+  ; balance
+  abal1 balance aform1, alyd
+  abal2 balance aform2, alyd
+  abal3 balance aform3, alyd
+  abal4 balance aform4, alyd
+
+  ; get formant amps
+  kFamp1 invalue "FormAmp1"
+  kFamp2 invalue "FormAmp2"
+  kFamp3 invalue "FormAmp3"
+  kFamp4 invalue "FormAmp4"
+
+
+  ; Mix
+  afilt = abal1 * kFamp1 +abal2 * kFamp2 +abal3 * kFamp3 + abal4*kFamp4
+
+  ; Master Volume
+  kMasterVol invalue "Vol"
+  aout = afilt * kMasterVol
+
+  ; View spectrum
+  dispfft afilt, 1, 2048, .05, 0
+
+  outs aout, aout
 
 endin
 
@@ -291,9 +294,9 @@ Options:
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>212</r>
-  <g>198</g>
-  <b>156</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -314,19 +317,19 @@ Options:
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
@@ -376,7 +379,7 @@ Options:
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On</text>
+  <text>On</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
@@ -435,19 +438,19 @@ Options:
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
@@ -492,19 +495,19 @@ Options:
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
@@ -529,14 +532,14 @@ Options:
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -566,14 +569,14 @@ Options:
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -603,19 +606,19 @@ Options:
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
@@ -640,19 +643,19 @@ Options:
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
@@ -677,19 +680,19 @@ Options:
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
@@ -714,19 +717,19 @@ Options:
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
@@ -751,14 +754,14 @@ Options:
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -788,14 +791,14 @@ Options:
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -842,14 +845,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -913,14 +916,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -950,14 +953,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1004,14 +1007,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1061,19 +1064,19 @@ Options:
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
@@ -1098,14 +1101,14 @@ Options:
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1155,14 +1158,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>0</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1212,14 +1215,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>1</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1269,14 +1272,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>0</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1326,14 +1329,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>1</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1383,14 +1386,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>0</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1440,14 +1443,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>1</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1497,14 +1500,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1554,14 +1557,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1611,14 +1614,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1668,14 +1671,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>0</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1725,14 +1728,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>1</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1782,14 +1785,14 @@ Options:
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1819,14 +1822,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1856,14 +1859,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1893,14 +1896,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1930,14 +1933,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1967,14 +1970,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2004,14 +2007,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2041,14 +2044,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2078,14 +2081,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2115,14 +2118,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2152,14 +2155,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2189,14 +2192,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2226,14 +2229,14 @@ Options:
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2280,14 +2283,14 @@ Options:
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2318,13 +2321,13 @@ Options:
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -2349,13 +2352,13 @@ Options:
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>

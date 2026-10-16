@@ -1,97 +1,105 @@
-;Written by Iain McCurdy 2011
+; Written by Iain McCurdy 2011
 
-;Modified for QuteCsound by René, May 2011
-;Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and QuteCsound svn rev 848
-
-
-;Notes on modifications from original csd:
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Modified for QuteCsound by René, May 2011
+; Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and
+; QuteCsound svn rev 848
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Notes on modifications from original csd:
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+
+
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../../SourceMaterials --env:SSDIR+=../../SourceMaterials
+--env:SADIR+ = ../../SourceMaterials --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 1		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 1      ; Number of channels (2=stereo)
 
 
-;STENCILLING FFT ANALYSIS IS STORED IN A GEN 43 FUNCTION TABLE (-VE GEN NUMBER SO THAT POST NORMALISATION IS SKIPPED)
-;TABLE SIZE SHOUDL BE AT LEAST FFT_SIZE/2
-ginoise	ftgen	0, 0, 131072, -43, "noise.pvx", 0
+; Stencilling fft analysis is stored in a gen 43 function table (-ve gen number so that
+; post normalisation is skipped)
+; Table size shoudl be at least fft_size/2
+ginoise ftgen 0, 0, 131072, -43, "noise.pvx", 0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkgain		invalue	"Gain"
-		gklevel		invalue	"Level"
-		gkDryWet		invalue	"DryWet"
-		gkOutGain		invalue	"OutGain"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkgain    invalue "Gain"
+    gklevel   invalue "Level"
+    gkDryWet  invalue "DryWet"
+    gkOutGain invalue "OutGain"
 
-		Sfile_new		strcpy	""								;INIT TO EMPTY STRING
-		gSfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	gSfile
-		gkfile 		strcmpk	Sfile_new, Sfile_old
-	endif
+    Sfile_new strcpy ""  ; Init to empty string
+    gSfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk gSfile
+    gkfile strcmpk Sfile_new, Sfile_old
+  endif
 endin
 
-instr	1
-	kNew_file		changed	gkfile								;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kNew_file=1	then										;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	NEW_FILE										;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif
+instr 1
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kNew_file changed gkfile
+  if kNew_file = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit NEW_FILE      ; Begin a reinitialisation pass from label 'start'
+  endif
 
-	NEW_FILE:
-	asigin, asigR	FilePlay2	gSfile,  1,      0,         1				;GENERATE 2 AUDIO SIGNALS FROM A STEREO SOUND FILE
-				rireturn										;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
+NEW_FILE:
+  ; Generate 2 audio signals from a stereo sound file
+  asigin, asigR FilePlay2 gSfile, 1, 0, 1
+  rireturn  ; Return from reinitialisation pass to performance time passes
 
-	fsigin 		pvsanal	asigin, 1024, 256, 1024, 1				;ANALYSE THE AUDIO SIGNAL. OUTPUT AN F-SIGNAL.      	
-	
-	/*
-	;pvread ON THE SAMPLE FILE CAN ALSO BE USED
-#define	ANALYSISFILE	#"sample.pvx"#
-	ilen		filelen		$ANALYSISFILE
-	gkspeed		=		0.5
-	kptr		phasor		gkspeed/ilen
-	fsigin		pvsfread	kptr*ilen,$ANALYSISFILE
-	*/
+  ; Analyse the audio signal. Output an f-signal.
+  fsigin pvsanal asigin, 1024, 256, 1024, 1
 
-	fres		pvstencil	fsigin, gkgain, gklevel, ginoise				;APPLY STENCIL GATING
-	aresyn 	pvsynth  	fres										;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
-	amix		ntrpol	asigin, aresyn, gkDryWet						;CREATE A MIX BETWEEN THE DRY (UNFILTERED) AND WET (FILTERED) SOUND
-			out		amix * gkOutGain							;SEND THE RESCALED, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
+  /*
+  ; Pvread on the sample file can also be used
+  #define ANALYSISFILE # "sample.pvx" #
+  ilen filelen $ANALYSISFILE
+  gkspeed = 0.5
+  kptr phasor gkspeed/ilen
+  fsigin pvsfread kptr*ilen, $ANALYSISFILE
+  */
+
+  fres pvstencil fsigin, gkgain, gklevel, ginoise  ; Apply stencil gating
+  ; Resynthesize the f-signal as an audio signal
+  aresyn pvsynth fres
+  ; Create a mix between the dry (unfiltered) and wet (filtered) sound
+  amix ntrpol asigin, aresyn, gkDryWet
+  out amix * gkOutGain  ; Send the rescaled, resynthesized signal to the audio outputs
 endin
 
-instr	11	;INIT
-	outvalue	"Gain"	, 0.0
-	outvalue	"Level"	, 10.0
-	outvalue	"DryWet"	, 1.0
-	outvalue	"OutGain"	, 1.0
+instr 11  ; Init
+  outvalue "Gain", 0.0
+  outvalue "Level", 10.0
+  outvalue "DryWet", 1.0
+  outvalue "OutGain", 1.0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
-i 11		0		0	;INIT
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 11 0 0     ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -106,9 +114,9 @@ i 11		0		0	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -126,15 +134,20 @@ i 11		0		0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -155,15 +168,20 @@ i 11		0		0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -185,14 +203,14 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -211,11 +229,23 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
@@ -233,14 +263,14 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -280,14 +310,14 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -311,6 +341,18 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -328,9 +370,9 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -355,14 +397,14 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -402,14 +444,14 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -431,14 +473,14 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -478,14 +520,14 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -507,14 +549,14 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -554,14 +596,14 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

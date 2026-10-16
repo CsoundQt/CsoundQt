@@ -1,147 +1,163 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Macro SWITCH and modifications in instruments to get the same behaviour as FLTK button
-;	Pause change to avoid high cpu load
+; Notes on modifications from original csd:
+; Macro SWITCH and modifications in instruments to get the same behaviour as FLTK button
+; Pause change to avoid high cpu load
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt
+; -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-	giaudio		ftgen	0, 0, 1048576, -7, 0, 1048576, 0	;AUDIO DATA STORAGE
+giaudio ftgen 0, 0, 1048576, -7, 0, 1048576, 0  ; Audio data storage
 
-	gkrecdur		init		0
+gkrecdur init 0
 
 
 #define SWITCH(Name'Value'Instr_Led'Instr_Event)
 #
-	;To have a latched+event+value button *****************************************
-				strset	$Value, "$Name_L"
-	k$Name		init		0
+; To have a latched+event+value button *****************************************
+strset $Value, "$Name_L"
+k$Name init 0
 
-	kButton		invalue	"$Name_B"
-	kB_ON		trigger	kButton, 0.5, 0
+kButton invalue "$Name_B"
+kB_ON trigger kButton, 0.5, 0
 
-	if (k$Name == 0) then
-		schedkwhen	kB_ON, 0, 0, $Instr_Led, 0, 0, $Value, 1	;Led ON
-		schedkwhen	kB_ON, 0, 0, $Instr_Event, 0, -1			;Start instr
-	else
-		schedkwhen	kB_ON, 0, 0, $Instr_Led, 0, 0, $Value, 0	;Led OFF
-		schedkwhen	kB_ON, 0, 0, -$Instr_Event, 0, 1			;Stop instr
-	endif
-	k$Name		invalue	"$Name_L" 
-	;******************************************************************************
+if (k$Name == 0) then
+  schedkwhen kB_ON, 0, 0, $Instr_Led, 0, 0, $Value, 1  ; Led ON
+  schedkwhen kB_ON, 0, 0, $Instr_Event, 0, -1          ; Start instr
+else
+  schedkwhen kB_ON, 0, 0, $Instr_Led, 0, 0, $Value, 0  ; Led off
+  schedkwhen kB_ON, 0, 0, -$Instr_Event, 0, 1          ; Stop instr
+endif
+k$Name invalue "$Name_L"
+; ******************************************************************************
 #
 
 
-instr	1	;GUI
-	$SWITCH(Record'100'2'11)
-	$SWITCH(PlayStop'200'2'13)
+instr 1  ; GUI
+  $SWITCH(Record'100'2'11)
+  $SWITCH(PlayStop'200'2'13)
 
-	gkPause		invalue	"Pause"
-	gkSpeed		invalue	"Speed"
-	gkLoopBeg		invalue	"LoopBeg"
-	gkLoopEnd		invalue	"LoopEnd"
+  gkPause   invalue "Pause"
+  gkSpeed   invalue "Speed"
+  gkLoopBeg invalue "LoopBeg"
+  gkLoopEnd invalue "LoopEnd"
 endin
 
-instr	2	;LED ON/OFF
-	Sp4		strget	p4
-			outvalue	Sp4, p5
+instr 2  ; Led on/off
+  Sp4 strget p4
+  outvalue Sp4, p5
 endin
 
-instr	11	;RECORD
-	if	gkPause = 1	then									;IF PAUSE BUTTON IS ACTIVATED...
-		kgoto	END										;GOTO 'END' LABEL
-	endif												;END OF CONDITIONAL BRANCHING
+instr 11               ; Record
+  if gkPause = 1 then  ; If pause button is activated...
+    kgoto END          ; Goto 'end' label
+  endif                ; End of conditional branching
 
-	itablelen	tableng	giaudio
+  itablelen tableng giaudio
 
-	ain		inch		1									;READ AUDIO FROM LIVE INPUT CHANNEL 1
-	andx		line		0, itablelen/sr, 1						;CREATE A POINTER FOR WRITING TO TABLE - FREQUENCY OF POINTER IS DEPENDENT UPON TABLE LENGTH AND SAMPLE RATE
-	andx		=		andx * itablelen						;RESCALE POINTER ACCORDING TO LENGTH OF FUNCTION TABLE 
-	gkrecdur	downsamp	andx									;CREATE A K-RATE GLOBAL VARIABLE THAT WILL BE USED BY THE 'PLAYBACK' INSTRUMENT TO DETERMINE THE LENGTH OF RECORDED DATA			
+  ain inch 1  ; Read audio from live input channel 1
+  ; Create a pointer for writing to table - frequency of pointer is dependent upon table
+  ; length and sample rate
+  andx line 0, itablelen/sr, 1
+  andx = andx * itablelen  ; Rescale pointer according to length of function table
+  ; Create a k-rate global variable that will be used by the 'playback' instrument to
+  ; determine the length of recorded data
+  gkrecdur downsamp andx
 
-			;OPCODE  INPUT | INDEX | TABLE
-			tablew	ain,   andx,  giaudio					;WRITE AUDIO TO AUDIO STORAGE TABLE
+  ; Opcode  input | index | table
+  tablew ain, andx, giaudio  ; Write audio to audio storage table
 
-	if	gkrecdur >= itablelen	then							;IF MAXIMUM RECORD TIME IS REACHED...
-		schedkwhen	1, 0, 0, 2, 0, 0, 100, 0					;Record Led OFF
-		turnoff											;TURN OFF THIS INSTRUMENT IMMEDIATELY.
-	endif												;END OF CONDITIONAL BRANCHING
-	END:
-endin
-		
-instr	12	;PLAYBACK LOOPED INSTRUMENT
-	if	gkPause = 1	then									;IF PAUSE BUTTON IS ACTIVATED... 
-		kgoto	END										;GOTO 'END' LABEL
-	endif												;END OF CONDITIONAL BRANCHING
-
-	iporttime	=		0.02
-	kporttime	linseg	0,0.001,iporttime,1,iporttime
-	kLoopBeg	portk	gkLoopBeg, kporttime
-	kLoopEnd	portk	gkLoopEnd, kporttime
-	
-	kLoopBeg	=	kLoopBeg * gkrecdur							;RESCALE gkLoopBeg (RANGE 0-1) TO BE WITHIN THE RANGE 0-FILE_LENGTH. NEW OUTPUT VARIABLE kLoopBeg.
-	kLoopEnd	=	kLoopEnd * gkrecdur							;RESCALE gkLoopEnd (RANGE 0-1) TO BE WITHIN THE RANGE 0-FILE_LENGTH. NEW OUTPUT VARIABLE kLoopEnd.
-	kLoopLen	=	kLoopEnd - kLoopBeg							;DERIVE LOOP LENGTH FROM LOOP START AND END POINTS
-
-	;        OPCODE 	NUMERATOR | DENOMINATOR | SUBSTUTION_VALUE_(IF_DENOMINATOR=0)
-	kPhasFrq	divz		gkSpeed,   (kLoopLen/sr),   .00001			;SAFELY DIVIDE, PROVIDING ALTERNATIVE VALUE INCASE DENOMINATOR IS ZERO 
-	andx		phasor	kPhasFrq								;DEFINE PHASOR POINTER FOR TABLE INDEX
-	kLoopBeg	=	(kLoopBeg < kLoopEnd ? kLoopBeg : kLoopEnd)		;CHECK IF LOOP-BEGINNING AND LOOP-END SLIDERS HAVE BEEN REVERSED
-	andx		=	(andx*abs(kLoopLen)) + kLoopBeg				;RESCALE INDEX POINTER ACCORDING TO LOOP LENGTH AND LOOP BEGINING
-
-	;OUT 	OPCODE 	INDEX | FUNCTION_TABLE
-	asig		tablei	andx,    giaudio						;READ AUDIO FROM AUDIO STORAGE FUNCTION TABLE
-			outs		asig, asig							;SEND AUDIO TO OUTPUTS
-	END:
+  if gkrecdur >= itablelen then          ; If maximum record time is reached...
+    schedkwhen 1, 0, 0, 2, 0, 0, 100, 0  ; Record Led OFF
+    turnoff                              ; Turn off this instrument immediately.
+  endif                                  ; End of conditional branching
+END:
 endin
 
-instr	13	;PLAY THEN STOP
-	if	gkPause = 1	then									;IF PAUSE BUTTON IS ACTIVATED... 
-		kgoto	END										;GOTO 'END' LABEL
-	endif												;END OF CONDITIONAL BRANCHING
+instr 12               ; Playback looped instrument
+  if gkPause = 1 then  ; If pause button is activated...
+    kgoto END          ; Goto 'end' label
+  endif                ; End of conditional branching
 
-	kLoopBeg	=	gkLoopBeg * gkrecdur						;RESCALE gkLoopBeg (RANGE 0-1) TO BE WITHIN THE RANGE 0-FILE_LENGTH. NEW OUTPUT VARIABLE kLoopBeg.
-	kLoopEnd	=	gkLoopEnd * gkrecdur						;RESCALE gkLoopEnd (RANGE 0-1) TO BE WITHIN THE RANGE 0-FILE_LENGTH. NEW OUTPUT VARIABLE kLoopEnd.
+  iporttime = 0.02
+  kporttime linseg 0, 0.001, iporttime, 1, iporttime
+  kLoopBeg portk gkLoopBeg, kporttime
+  kLoopEnd portk gkLoopEnd, kporttime
 
-	if	kLoopEnd > kLoopBeg	then
-		andx	line		0,1,1
-		andx	=		(andx*gkSpeed*sr)+kLoopBeg
-		kndx	downsamp	andx									;CREATE kndx, A K-RATE VERSION OF andx
-		if	kndx > kLoopEnd	then							;IF END OF RECORDING IS REACHED...
-			schedkwhen	1, 0, 0, 2, 0, 0, 200, 0				;PlayStop Led OFF
-			turnoff										;TURN OFF THIS INSTRUMENT IMMEDIATELY.
-		endif
-	else
-		andx	line	0,1,-1
-		andx	=		(andx*gkSpeed*sr)+kLoopBeg
-		kndx	downsamp	andx									;CREATE kndx, A K-RATE VERSION OF andx
-		if	kndx < kLoopEnd	then							;IF END OF RECORDING IS REACHED...
-			schedkwhen	1, 0, 0, 2, 0, 0, 200, 0				;PlayStop Led OFF
-			turnoff										;TURN OFF THIS INSTRUMENT IMMEDIATELY.
-		endif
-	endif												;END OF CONDITIONAL BRANCHING
+  ; Rescale gkloopbeg (range 0-1) to be within the range 0-file_length. New output
+  ; variable kloopbeg.
+  kLoopBeg = kLoopBeg * gkrecdur
+  ; Rescale gkloopend (range 0-1) to be within the range 0-file_length. New output
+  ; variable kloopend.
+  kLoopEnd = kLoopEnd * gkrecdur
+  kLoopLen = kLoopEnd - kLoopBeg  ; Derive loop length from loop start and end points
 
-	;OUT 	OPCODE	INDEX | FUNCTION_TABLE
-	asig		tablei	andx,    giaudio						;READ AUDIO FROM AUDIO STORAGE FUNCTION TABLE
-			outs		asig, asig							;SEND AUDIO TO OUTPUTS
-	END:
+  ; Opcode  numerator | denominator | substution_value_(if_denominator=0)
+  ; Safely divide, providing alternative value incase denominator is zero
+  kPhasFrq divz gkSpeed, (kLoopLen/sr), .00001
+  andx phasor kPhasFrq  ; Define phasor pointer for table index
+  ; Check if loop-beginning and loop-end sliders have been reversed
+  kLoopBeg = (kLoopBeg < kLoopEnd ? kLoopBeg : kLoopEnd)
+  ; Rescale index pointer according to loop length and loop begining
+  andx = (andx*abs(kLoopLen)) + kLoopBeg
+
+  ; Out  opcode  index | function_table
+  asig tablei andx, giaudio  ; Read audio from audio storage function table
+  outs asig, asig            ; Send audio to outputs
+END:
+endin
+
+instr 13               ; Play then stop
+  if gkPause = 1 then  ; If pause button is activated...
+    kgoto END          ; Goto 'end' label
+  endif                ; End of conditional branching
+
+  ; Rescale gkloopbeg (range 0-1) to be within the range 0-file_length. New output
+  ; variable kloopbeg.
+  kLoopBeg = gkLoopBeg * gkrecdur
+  ; Rescale gkloopend (range 0-1) to be within the range 0-file_length. New output
+  ; variable kloopend.
+  kLoopEnd = gkLoopEnd * gkrecdur
+
+  if kLoopEnd > kLoopBeg then
+    andx line 0, 1, 1
+    andx = (andx*gkSpeed*sr)+kLoopBeg
+    kndx downsamp andx                     ; Create kndx, a k-rate version of andx
+    if kndx > kLoopEnd then                ; If end of recording is reached...
+      schedkwhen 1, 0, 0, 2, 0, 0, 200, 0  ; PlayStop Led OFF
+      turnoff                              ; Turn off this instrument immediately.
+    endif
+  else
+    andx line 0, 1, -1
+    andx = (andx*gkSpeed*sr)+kLoopBeg
+    kndx downsamp andx                     ; Create kndx, a k-rate version of andx
+    if kndx < kLoopEnd then                ; If end of recording is reached...
+      schedkwhen 1, 0, 0, 2, 0, 0, 200, 0  ; PlayStop Led OFF
+      turnoff                              ; Turn off this instrument immediately.
+    endif
+  endif  ; End of conditional branching
+
+  ; Out  opcode index | function_table
+  asig tablei andx, giaudio  ; Read audio from audio storage function table
+  outs asig, asig            ; Send audio to outputs
+END:
 endin
 </CsInstruments>
 <CsScore>
-i 1 0 3600	;GUI
+i 1 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -174,15 +190,20 @@ i 1 0 3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>181</r>
-   <g>199</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -200,11 +221,23 @@ i 1 0 3600	;GUI
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>       Rec</text>
+  <text>Rec</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Pause</objectName>
@@ -219,11 +252,23 @@ i 1 0 3600	;GUI
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    Pause</text>
+  <text>Pause</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -241,15 +286,20 @@ i 1 0 3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -272,14 +322,14 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -301,14 +351,14 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -348,14 +398,14 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -374,11 +424,23 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>      Play</text>
+  <text>Play</text>
   <image>/</image>
   <eventLine>i 12 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>PlayStop_B</objectName>
@@ -393,11 +455,23 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    Play Stop</text>
+  <text>Play Stop</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>LoopBeg</objectName>
@@ -427,9 +501,9 @@ If record is pressed for a second time the original recording is overwritten. Ma
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -460,9 +534,9 @@ If record is pressed for a second time the original recording is overwritten. Ma
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -481,14 +555,14 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -522,9 +596,9 @@ If record is pressed for a second time the original recording is overwritten. Ma
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -555,9 +629,9 @@ If record is pressed for a second time the original recording is overwritten. Ma
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
 </bsbPanel>

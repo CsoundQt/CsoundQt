@@ -1,126 +1,142 @@
-;Written by Iain McCurdy, 2009. 
-;Parts of this example are based on the two examples given in the Csound Manual originally written by Sean Costello.
+; Written by Iain McCurdy, 2009.
+; Parts of this example are based on the two examples given in the Csound Manual
+; originally written by Sean Costello.
 
-;Modified for QuteCsound by René, October 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, October 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 1		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE (BECAUSE OF THE USE OF A FEEDBACK LOOP kr MUST EQUAL sr)
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr = 44100  ; Sample rate
+; Number of audio samples in each control cycle (because of the use of a feedback loop kr
+; must equal sr)
+ksmps  = 1
+nchnls = 2  ; Number of channels (2=stereo)
 
 
-gisine		ftgen	1, 0, 131072, 10, 1
-giExp10000	ftgen	0, 0, 129, -25, 0, 1.0, 128, 10000.0		;TABLE FOR EXP SLIDER
+gisine     ftgen 1, 0, 131072, 10, 1
+giExp10000 ftgen 0, 0, 129, -25, 0, 1.0, 128, 10000.0  ; Table for exp slider
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	1	;GUI
+instr 1  ; GUI
 
-	Sfile_new			strcpy		""						;INIT TO EMPTY STRING
+  Sfile_new strcpy ""  ; Init to empty string
 
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkfshift			invalue 	"Frequency_Shift"
-		gkfshiftmlt		invalue 	"Frequency_Shift_Multiplier"
-		gkingain			invalue 	"Input_Gain"
-		kVCOfrq			invalue	"Saw_Freq"
-		gkVCOfrq			tablei	kVCOfrq, giExp10000, 1
-						outvalue	"Saw_Freq_Value", gkVCOfrq
-		gkUpShiftGain		invalue 	"Up-Shift_Gain"
-		gkDownShiftGain	invalue 	"Down-Shift_Gain"
-		gkFB_Gain			invalue 	"Feedback_Gain"
-		gkdwmix			invalue 	"Dry_Wet_Mix"
-		gkoutgain			invalue 	"Output_Gain"
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkfshift    invalue "Frequency_Shift"
+    gkfshiftmlt invalue "Frequency_Shift_Multiplier"
+    gkingain    invalue "Input_Gain"
+    kVCOfrq     invalue "Saw_Freq"
+    gkVCOfrq tablei kVCOfrq, giExp10000, 1
+    outvalue "Saw_Freq_Value", gkVCOfrq
+    gkUpShiftGain   invalue "Up-Shift_Gain"
+    gkDownShiftGain invalue "Down-Shift_Gain"
+    gkFB_Gain       invalue "Feedback_Gain"
+    gkdwmix         invalue "Dry_Wet_Mix"
+    gkoutgain       invalue "Output_Gain"
 
-		kfshift		=		gkfshift * gkfshiftmlt					;FREQUENCY VALUE IS DERIVED FROM PRODUCT OF 'Frequency Shift' AND 'Frequency Shift Multiplier' SLIDER
-		ktrig1		changed	kfshift
-		if ktrig1 ==1 then
-					outvalue	"Frequency_Shift_Value", kfshift			;VALUE DISPLAY BOX IS UPDATED WHENEVER kshift CHANGES
-		endif
+    ; Frequency value is derived from product of 'frequency shift' and 'frequency shift
+    ; multiplier' slider
+    kfshift = gkfshift * gkfshiftmlt
+    ktrig1 changed kfshift
+    if ktrig1 == 1 then
+      ; Value display box is updated whenever kshift changes
+      outvalue "Frequency_Shift_Value", kfshift
+    endif
 
-		gksoundfile	invalue	"Input"
+    gksoundfile invalue "Input"
 
-		gSfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	gSfile
-		gkfile 		strcmpk	Sfile_new, Sfile_old
-	endif
+    gSfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk gSfile
+    gkfile strcmpk Sfile_new, Sfile_old
+  endif
 endin
 
-instr	2	;HILBERT FILTERING INSTRUMENT
-	amix		init		0											;INITIALISE amix SIGNAL (NEEDED FOR FEEDBACK SIGNAL ON INITIAL PASS) 
+instr 2        ; Hilbert filtering instrument
+  amix init 0  ; Initialise amix signal (needed for feedback signal on initial pass)
 
-	kfshift	=		gkfshift * gkfshiftmlt							;FREQUENCY VALUE IS DERIVED FROM PRODUCT OF 'Frequency Shift' AND 'Frequency Shift Multiplier' SLIDER
-	
-	kporttime	linseg	0, 0.001, 0.05, 1, 0.05							;PORTAMENTO FUNCTION RISES FROM ZERO
-	kVCOfrq	portk	gkVCOfrq, kporttime								;PORTAMENTO APPLIED TO VARIABLE
-	kfshift	portk	kfshift, kporttime								;PORTAMENTO APPLIED TO VARIABLE
-	
-	;SOURCE SOUND IS SELECTED
-	if	gksoundfile==0	then											;IF BUTTON-BANK VALUE IS 0...
-		ain	inch	1												;ain IS LIVE INPUT
-		ain	=	ain * gkingain										;LIVE INPUT MULTIPLIED BY INPUT GAIN SLIDER VALUE
-	elseif	gksoundfile==1	then										;IF BUTTON-BANK VALUE IS 1...
-		kNew_file		changed	gkfile								;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-		if	kNew_file==1	then										;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-			reinit	NEW_FILE										;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-		endif
-		NEW_FILE:
-		;OUTPUTS 		OPCODE FILE  | SPEED | INSKIP | LOOPING (0=OFF 1=ON)
-		ain, asigR	FilePlay2	gSfile, 	 1,       0,       1   			;ain IS SAMPLE FILE
-			rireturn												;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-	else
-		ain	vco	10000, kVCOfrq, 1, 0.5, gisine						;ain IS SAW WAVEFORM SAMPLE         
-	endif                                              		   			;END OF CONDITIONAL BRANCHING
-	
-	ain			=		ain + (amix * gkFB_Gain)						;ADD FEEDBACK SIGNAL TO INPUT (AMOUNT OF FEEDBACK CONTROLLED BY 'Feedback Gain' SLIDER)
-	areal, aimag	hilbert	ain										;HILBERT OPCODE OUTPUTS TWO PHASE SHIFTED SIGNALS, EACH 90 OUT OF PHASE WITH EACH OTHER
-	
-	;QUADRATURE OSCILLATORS. I.E. 90 OUT OF PHASE WITH RESPECT TO EACH OTHER
-	;OUTUTS	OPCODE	AMPLITUDE | FREQ. | FUNCTION_TABLE | INITIAL_PHASE (OPTIONAL;DEFAULTS TO ZERO)
-	asin 	oscili       1,    kfshift,     gisine,          0
-	acos 	oscili       1,    kfshift,     gisine,          .25
-	;RING MODULATE EACH SIGNAL USING THE QUADRATURE OSCILLATORS AS MODULATORS
-	amod1		= areal * acos
-	amod2		= aimag * asin
-	;UPSHIFTING OUTPUT
-	aupshift		= (amod1 - amod2)
-	;DOWNSHIFTING OUTPUT
-	adownshift	= (amod1 + amod2)
-	;CREATE A MIX OF THE UPSHIFTING OUTPUT SIGNAL AND THE DOWNSHIFTING OUTPUT SIGNAL. MIX IS CONTROLLED BY FLTK SLIDERS 'Up-Shift Gain' AND 'Down-Shift Gain'
-	amix		sum		aupshift * gkUpShiftGain, adownshift * gkDownShiftGain
-	;CREATE A DRY/WET MIX
-	amix		ntrpol	ain, amix, gkdwmix								;DRY/WET MIX IS CREATED
-			outs		amix * gkoutgain, amix * gkoutgain					;SEND AUDIO TO OUTPUT AND SCALE USING THE FLTK SLIDER DERIVED VARIABLE gKoutgain
+  ; Frequency value is derived from product of 'frequency shift' and 'frequency shift
+  ; multiplier' slider
+  kfshift = gkfshift * gkfshiftmlt
+
+  kporttime linseg 0, 0.001, 0.05, 1, 0.05  ; Portamento function rises from zero
+  kVCOfrq portk gkVCOfrq, kporttime         ; Portamento applied to variable
+  kfshift portk kfshift, kporttime          ; Portamento applied to variable
+
+  ; Source sound is selected
+  if gksoundfile == 0 then      ; If button-bank value is 0...
+    ain inch 1                  ; Ain is live input
+    ain = ain * gkingain        ; Live input multiplied by input gain slider value
+  elseif gksoundfile == 1 then  ; If button-bank value is 1...
+    ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+    ; variables change. (output 'kswitch' is normally zero)
+    kNew_file changed gkfile
+    if kNew_file == 1 then  ; If i-rate variable change trigger is '1'...
+      reinit NEW_FILE       ; Begin a reinitialisation pass from label 'start'
+    endif
+NEW_FILE:
+    ; Outputs   opcode file  | speed | inskip | looping (0=off 1=on)
+    ain, asigR FilePlay2 gSfile, 1, 0, 1  ; Ain is sample file
+    ; Return from reinitialisation pass to performance time passes
+    rireturn
+  else
+    ain vco 10000, kVCOfrq, 1, 0.5, gisine  ; Ain is saw waveform sample
+  endif                                     ; End of conditional branching
+
+  ; Add feedback signal to input (amount of feedback controlled by 'feedback gain' slider)
+  ain = ain + (amix * gkFB_Gain)
+  ; Hilbert opcode outputs two phase shifted signals, each 90 out of phase with each other
+  areal, aimag hilbert ain
+
+  ; Quadrature oscillators. I.e. 90 out of phase with respect to each other
+  ; Oututs opcode amplitude | freq. | function_table | initial_phase (optional;defaults to
+  ; zero)
+  asin oscili 1, kfshift, gisine, 0
+  acos oscili 1, kfshift, gisine, .25
+  ; Ring modulate each signal using the quadrature oscillators as modulators
+  amod1 = areal * acos
+  amod2 = aimag * asin
+  ; Upshifting output
+  aupshift = (amod1 - amod2)
+  ; Downshifting output
+  adownshift = (amod1 + amod2)
+  ; Create a mix of the upshifting output signal and the downshifting output signal. Mix
+  ; is controlled by FLTK sliders 'up-shift gain' and 'down-shift gain'
+  amix sum aupshift * gkUpShiftGain, adownshift * gkDownShiftGain
+  ; Create a dry/wet mix
+  amix ntrpol ain, amix, gkdwmix  ; Dry/wet mix is created
+  ; Send audio to output and scale using the FLTK slider derived variable gkoutgain
+  outs amix * gkoutgain, amix * gkoutgain
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION 
-i 1		0	   3600		;GUI 
+; Instr | start | duration
+i 1 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -134,9 +150,9 @@ i 1		0	   3600		;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -154,15 +170,20 @@ i 1		0	   3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -183,15 +204,20 @@ i 1		0	   3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -213,14 +239,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -239,11 +265,23 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Shift_Value</objectName>
@@ -261,14 +299,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -308,14 +346,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -337,14 +375,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -384,14 +422,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -413,15 +451,20 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -472,15 +515,20 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -501,14 +549,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -548,14 +596,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -577,14 +625,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -624,14 +672,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -653,14 +701,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -682,9 +730,9 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -711,6 +759,18 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Up-Shift_Gain</objectName>
@@ -728,14 +788,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -775,14 +835,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -804,14 +864,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -851,14 +911,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -880,14 +940,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -927,14 +987,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -956,14 +1016,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1003,14 +1063,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1032,14 +1092,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1079,14 +1139,14 @@ hilbert is an infinite impulse response (IIR) filter that outputs two signals th
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

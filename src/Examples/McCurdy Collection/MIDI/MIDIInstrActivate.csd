@@ -1,41 +1,43 @@
-;Writen by Iain McCurdy, 2006
+; Writen by Iain McCurdy, 2006
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Number of MIDI activated instrument display
+; Notes on modifications from original csd:
+; Number of MIDI activated instrument display
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
- 
-</CsOptions>    
+
+</CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 128	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 128    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	1	; SIMPLE BEEP INSTRUMENT - CAN BE ACTIVATED VIA A CONNECTED MIDI KEYBOARD
-			turnon	2
-	;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | FUNCTION_TABLE
-	asig		oscili	0.2,           440,         1
+instr 1  ; Simple beep instrument - can be activated via a connected MIDI keyboard
+  turnon 2
+  ; Output opcode amplitude | frequency | function_table
+  asig oscili 0.2, 440, 1
 
-			outs		asig, asig	;SEND AUDIO OUTPUT OF OSCILLATOR TO THE SPEAKERS
+  outs asig, asig  ; Send audio output of oscillator to the speakers
 endin
 
-instr	2	;show Active instr
-	kinstr	active	1
+instr 2  ; show Active instr
+  kinstr active 1
 
-	Sinstr	sprintfk	"%01d", kinstr
-			outvalue	"Active", Sinstr
+  Sinstr sprintfk "%01d", kinstr
+  outvalue "Active", Sinstr
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 1024 10 1	; SINE WAVE
-f 0 600			; THIS LINE FUNCTIONS AS A DUMMY SCORE EVENT AND ALLOWS REALTIME MIDI PLAYING FOR 10 MINUTES
+f 1 0 1024 10 1  ; Sine wave
+; This line functions as a dummy score event and allows realtime MIDI playing for 10
+; minutes
+f 0 600
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

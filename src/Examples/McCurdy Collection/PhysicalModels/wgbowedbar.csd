@@ -1,91 +1,91 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-;BOWED BAR PHYSICAL MODEL - RATHER UNSTABLE
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Bowed bar physical model - rather unstable
 
-;Notes on modifications from original csd:
-;	Add tables for exp slider
-;	INIT instrument added
-;	Removed subinstr opcode in midi instrument 1
+; Notes on modifications from original csd:
+; Add tables for exp slider
+; INIT instrument added
+; Removed subinstr opcode in midi instrument 1
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-givibfn	ftgen	0,0,4096,10,1							;A SINE WAVE
-giExp1	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLE FOR EXP SLIDER
+givibfn ftgen 0, 0, 4096, 10, 1                      ; A sine wave
+giExp1  ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
 
 
-instr	2	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkamp		invalue	"Amp"
-		kfreq		invalue	"Freq"
-		gkfreq		tablei	kfreq, giExp1, 1
-					outvalue	"Freq_Value", gkfreq
-		gkpos		invalue	"BowPos"
-		gkbowpres		invalue	"BowPress"
-		gkgain		invalue	"GainFilter"
-		gkconst		invalue	"Integ"
-		gkbowpos		invalue	"BowPosVel"
-		gklow		invalue	"LowFreq"
-		gktvel		invalue	"BowVel"
-	endif
+instr 2  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkamp invalue "Amp"
+    kfreq invalue "Freq"
+    gkfreq tablei kfreq, giExp1, 1
+    outvalue "Freq_Value", gkfreq
+    gkpos     invalue "BowPos"
+    gkbowpres invalue "BowPress"
+    gkgain    invalue "GainFilter"
+    gkconst   invalue "Integ"
+    gkbowpos  invalue "BowPosVel"
+    gklow     invalue "LowFreq"
+    gktvel    invalue "BowVel"
+  endif
 endin
 
-instr	1	;MIDI INPUT INSTRUMENT
-	icps			cpsmidi													;READ CYCLES PER SECOND VALUE FROM MIDI INPUT
-	iamp			ampmidi		1											;READ IN A NOTE VELOCITY VALUE FROM THE MIDI INPUT
+instr 1           ; MIDI input instrument
+  icps cpsmidi    ; Read cycles per second value from MIDI input
+  iamp ampmidi 1  ; Read in a note velocity value from the MIDI input
 
-	kSwitch		changed		gkconst, gktvel, gkbowpos, gklow
-	if	kSwitch=1	then														;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE													;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
-	UPDATE:
-	abowedbar     	wgbowedbar 	iamp, icps, gkpos, gkbowpres, gkgain, i(gkconst), i(gktvel), i(gkbowpos), i(gklow)
-				rireturn													;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-	aenv			linsegr		1, 0.05, 0									;ANTI-CLICK ENVELOPE
-				outs 		abowedbar * aenv, abowedbar * aenv
+  kSwitch changed gkconst, gktvel, gkbowpos, gklow
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
+UPDATE:
+  abowedbar wgbowedbar iamp, icps, gkpos, gkbowpres, gkgain, i(gkconst), i(gktvel), i(gkbowpos), i(gklow)
+  rireturn                 ; Return from reinitialisation pass to performance time passes
+  aenv linsegr 1, 0.05, 0  ; Anti-click envelope
+  outs abowedbar * aenv, abowedbar * aenv
 endin
 
-instr	3	;wgbowedbar INSTRUMENT
-	kSwitch		changed		gkconst, gktvel, gkbowpos, gklow
-	if	kSwitch=1	then														;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE													;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
-	UPDATE:
-	abowedbar     	wgbowedbar 	gkamp, gkfreq, gkpos, gkbowpres, gkgain, i(gkconst), i(gktvel), i(gkbowpos), i(gklow)
-				rireturn													;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-	aenv			linsegr		1, 0.05, 0									;ANTI-CLICK ENVELOPE
-				outs 		abowedbar * aenv, abowedbar * aenv
+instr 3  ; wgbowedbar INSTRUMENT
+  kSwitch changed gkconst, gktvel, gkbowpos, gklow
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
+UPDATE:
+  abowedbar wgbowedbar gkamp, gkfreq, gkpos, gkbowpres, gkgain, i(gkconst), i(gktvel), i(gkbowpos), i(gklow)
+  rireturn                 ; Return from reinitialisation pass to performance time passes
+  aenv linsegr 1, 0.05, 0  ; Anti-click envelope
+  outs abowedbar * aenv, abowedbar * aenv
 endin
 
-instr	4	;INIT
-		outvalue	"Amp"		, 0.3
-		outvalue	"Freq"		, 0.4337
-		outvalue	"BowPos"		, .7
-		outvalue	"BowPress"	, 3
-		outvalue	"GainFilter"	, .95
-		outvalue	"Integ"		, 0.2
-		outvalue	"BowVel"		, 0
-		outvalue	"BowPosVel"	, 0
-		outvalue	"LowFreq"		, 0
+instr 4  ; Init
+  outvalue "Amp", 0.3
+  outvalue "Freq", 0.4337
+  outvalue "BowPos", .7
+  outvalue "BowPress", 3
+  outvalue "GainFilter", .95
+  outvalue "Integ", 0.2
+  outvalue "BowVel", 0
+  outvalue "BowPosVel", 0
+  outvalue "LowFreq", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION 
-i 2		0		3600	;GUI
-i 4		0		0.1	;INIT
+; Instr | start | duration
+i 2 0 3600  ; GUI
+i 4 0 0.1   ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -98,9 +98,9 @@ i 4		0		0.1	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -118,15 +118,20 @@ i 4		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -147,14 +152,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -194,14 +199,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -223,14 +228,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -270,14 +275,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -299,14 +304,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -346,14 +351,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -375,14 +380,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -422,14 +427,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -451,14 +456,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -498,14 +503,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -527,15 +532,20 @@ i 4		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -557,14 +567,14 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -583,11 +593,23 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i 3 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -605,14 +627,14 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -652,14 +674,14 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -706,14 +728,14 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -735,14 +757,14 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -782,14 +804,14 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -811,14 +833,14 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -858,14 +880,14 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

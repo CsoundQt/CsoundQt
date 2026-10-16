@@ -1,78 +1,84 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add tables for exp slider
-;	INIT instrument added
+; Notes on modifications from original csd:
+; Add tables for exp slider
+; INIT instrument added
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-;TABLES FOR EXP SLIDER
-giExp1	ftgen	0, 0, 129, -25, 0, 0.001, 128, 1.0
-giExp2	ftgen	0, 0, 129, -25, 0, 200.0, 128, 8000.0
+; Tables for exp slider
+giExp1 ftgen 0, 0, 129, -25, 0, 0.001, 128, 1.0
+giExp2 ftgen 0, 0, 129, -25, 0, 200.0, 128, 8000.0
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkamp		invalue	"Amplitude"
-		kdettack		invalue	"Dettack"						;.001,     1,  -1,    23,   iddettack,    490,    25,     5,   100
-		gkdettack		tablei	kdettack, giExp1, 1
-					outvalue	"Dettack_Value", gkdettack
-		gknum		invalue	"NbBells"
-		gkdamp		invalue	"Damping"
-		gkmaxshake	invalue	"EnergyFB"
-		kfreq		invalue	"Freq"						;200,   8000,  -1,    23,   idfreq,       490,    25,     5,   300
-		gkfreq		tablei	kfreq, giExp2, 1
-					outvalue	"Freq_Value", gkfreq
-		kfreq1		invalue	"Freq1"						;200,   8000,  -1,    23,   idfreq1,      490,    25,     5,   350
-		gkfreq1		tablei	kfreq1, giExp2, 1
-					outvalue	"Freq1_Value", gkfreq1
-		kfreq2		invalue	"Freq2"						;200,   8000,  -1,    23,   idfreq2,      490,    25,     5,   400
-		gkfreq2		tablei	kfreq2, giExp2, 1
-					outvalue	"Freq2_Value", gkfreq2
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkamp invalue "Amplitude"
+    ; .001, 1, -1, 23, iddettack, 490, 25, 5, 100
+    kdettack invalue "Dettack"
+    gkdettack tablei kdettack, giExp1, 1
+    outvalue "Dettack_Value", gkdettack
+    gknum      invalue "NbBells"
+    gkdamp     invalue "Damping"
+    gkmaxshake invalue "EnergyFB"
+    ; 200, 8000, -1, 23, idfreq, 490, 25, 5, 300
+    kfreq invalue "Freq"
+    gkfreq tablei kfreq, giExp2, 1
+    outvalue "Freq_Value", gkfreq
+    ; 200, 8000, -1, 23, idfreq1, 490, 25, 5, 350
+    kfreq1 invalue "Freq1"
+    gkfreq1 tablei kfreq1, giExp2, 1
+    outvalue "Freq1_Value", gkfreq1
+    ; 200, 8000, -1, 23, idfreq2, 490, 25, 5, 400
+    kfreq2 invalue "Freq2"
+    gkfreq2 tablei kfreq2, giExp2, 1
+    outvalue "Freq2_Value", gkfreq2
+  endif
 endin
 
-instr	1
-	kSwitch		changed		gkamp, gkdettack ,gknum ,gkdamp ,gkmaxshake, gkfreq, gkfreq1, gkfreq2	;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if kSwitch=1	then
-		reinit	BEGIN
-	endif
-	BEGIN:
-	asleighbells	sleighbells	gkamp, i(gkdettack) , i(gknum), i(gkdamp) , i(gkmaxshake), i(gkfreq) , i(gkfreq1), i(gkfreq2)
-				rireturn
-				outs 		asleighbells, asleighbells
+instr 1
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkamp, gkdettack, gknum, gkdamp, gkmaxshake, gkfreq, gkfreq1, gkfreq2
+  if kSwitch = 1 then
+    reinit BEGIN
+  endif
+BEGIN:
+  asleighbells sleighbells gkamp, i(gkdettack), i(gknum), i(gkdamp), i(gkmaxshake), i(gkfreq), i(gkfreq1), i(gkfreq2)
+  rireturn
+  outs asleighbells, asleighbells
 endin
 
-instr	2	;INIT
-		outvalue			"Amplitude"	, 0.6
-		outvalue			"Dettack"		, 0.34
-		outvalue			"NbBells"		, 23
-		outvalue			"Damping"		, .17
-		outvalue			"EnergyFB"	, 0.0
-		outvalue			"Freq"		, 0.68
-		outvalue			"Freq1"		, 0.89
-		outvalue			"Freq2"		, 0.945
+instr 2  ; Init
+  outvalue "Amplitude", 0.6
+  outvalue "Dettack", 0.34
+  outvalue "NbBells", 23
+  outvalue "Damping", .17
+  outvalue "EnergyFB", 0.0
+  outvalue "Freq", 0.68
+  outvalue "Freq1", 0.89
+  outvalue "Freq2", 0.945
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION 
-i 10		0		3600	;GUI
-i 2		0		0.1	;INIT
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 2 0 0.1    ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -85,9 +91,9 @@ i 2		0		0.1	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -105,15 +111,20 @@ i 2		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -134,14 +145,14 @@ i 2		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -181,14 +192,14 @@ i 2		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -212,6 +223,18 @@ i 2		0		0.1	;INIT
   <eventLine>i 1 0 -1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -229,14 +252,14 @@ i 2		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -276,14 +299,14 @@ i 2		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -305,14 +328,14 @@ i 2		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -352,14 +375,14 @@ i 2		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -381,14 +404,14 @@ i 2		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -428,14 +451,14 @@ i 2		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -457,14 +480,14 @@ i 2		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -504,14 +527,14 @@ i 2		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -534,14 +557,14 @@ sleigbells is a semi-physical model of sleighbells. It is one of the PhISEM perc
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -563,14 +586,14 @@ sleigbells is a semi-physical model of sleighbells. It is one of the PhISEM perc
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -610,14 +633,14 @@ sleigbells is a semi-physical model of sleighbells. It is one of the PhISEM perc
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -639,14 +662,14 @@ sleigbells is a semi-physical model of sleighbells. It is one of the PhISEM perc
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -686,14 +709,14 @@ sleigbells is a semi-physical model of sleighbells. It is one of the PhISEM perc
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -715,14 +738,14 @@ sleigbells is a semi-physical model of sleighbells. It is one of the PhISEM perc
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -762,14 +785,14 @@ sleigbells is a semi-physical model of sleighbells. It is one of the PhISEM perc
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

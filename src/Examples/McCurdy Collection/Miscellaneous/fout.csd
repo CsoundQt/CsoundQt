@@ -1,118 +1,126 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table for exp slider
-;	No Button Bank in QuteCsound, change i2 to i11, i12, i13 and i14
+; Notes on modifications from original csd:
+; Add table for exp slider
+; No Button Bank in QuteCsound, change i2 to i11, i12, i13 and i14
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gasig	init		0								;INITIALISE GLOBAL AUDIO VARIABLE TO SILENCE
+gasig init 0  ; Initialise global audio variable to silence
 
-gisine	ftgen	0, 0, 65536, 10, 1					;A SINE WAVE FUNCTION TABLE
-giExp1	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0	;TABLE FOR EXP SLIDER
+gisine ftgen 0, 0, 65536, 10, 1                     ; A sine wave function table
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kfreq		invalue	"Freq"
-		gkfreq		tablei	kfreq, giExp1, 1
-					outvalue	"Freq_Value", gkfreq
-		gkamp		invalue	"OscAmp"
-		gkPBamp		invalue	"PlayAmp"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kfreq invalue "Freq"
+    gkfreq tablei kfreq, giExp1, 1
+    outvalue "Freq_Value", gkfreq
+    gkamp   invalue "OscAmp"
+    gkPBamp invalue "PlayAmp"
+  endif
 endin
 
-instr	11	;Button Stop
-	outvalue	"Record_L",	0
-	outvalue	"Play_L",		0
-	outvalue	"Pause_L",	0
-	outvalue	"Stop_L",		1
-	gkFunction	init		0
+instr 11  ; Button Stop
+  outvalue "Record_L", 0
+  outvalue "Play_L", 0
+  outvalue "Pause_L", 0
+  outvalue "Stop_L", 1
+  gkFunction init 0
 endin
 
-instr	12	;Button Record
-	outvalue	"Stop_L",		0
-	outvalue	"Play_L",		0
-	outvalue	"Record_L",	1
-	gkFunction	init		1
-	event_i	"i", 3, 0, 3600			;TRIGGER 'RECORD'INSTRUMENT
-
-endin
-
-instr	13	;Button Playback
-	outvalue	"Stop_L",		0
-	outvalue	"Record_L",	0
-	outvalue	"Play_L",		1
-	gkFunction	init		2
-	event_i	"i", 4, 0, 0.01			;TRIGGER 'PLAYBACK' INSTRUMENT
+instr 12  ; Button Record
+  outvalue "Stop_L", 0
+  outvalue "Play_L", 0
+  outvalue "Record_L", 1
+  gkFunction init 1
+  event_i "i", 3, 0, 3600  ; Trigger 'record'instrument
 
 endin
 
-instr	14	;Button Pause
-	kPause	invalue	"Pause_L"
-	kPause	= (kPause+1) % 2
-			outvalue	"Pause_L", kPause
-	gkPause	= kPause
-			turnoff
+instr 13  ; Button Playback
+  outvalue "Stop_L", 0
+  outvalue "Record_L", 0
+  outvalue "Play_L", 1
+  gkFunction init 2
+  event_i "i", 4, 0, 0.01  ; Trigger 'playback' instrument
+
 endin
 
-instr	1	;OSCILLATOR
-	iporttime		=		0.05
-	kporttime		linseg	0,0.01,iporttime,1,iporttime
-	kfreq		portk	gkfreq, kporttime
-	kamp			portk	gkamp, kporttime
-
-	;OUTPUT		OPCODE	AMPLITUDE | FREQUENCY | FUNCTION_TABLE
-	gasig		oscil	kamp,        kfreq,      gisine		;CREATE AN OSCILLATOR BASED ON THE SINE WAVE CREATED IN FUNCTION TABLE gisine
-				outs		gasig, gasig						;OUTPUT OSCILLATOR SIGNAL TO THE SPEAKERS
+instr 14  ; Button Pause
+  kPause invalue "Pause_L"
+  kPause = (kPause+1) % 2
+  outvalue "Pause_L", kPause
+  gkPause = kPause
+  turnoff
 endin
 
-instr	3	;RECORD SOUND USING fout
-	if	gkFunction!=1	then									;SENSE IF 'Record' SWITCH IS NOT OFF (IN WHICH CASE SKIP THE NEXT LINE)
-		turnoff											;TURN THIS INSTRUMENT OFF IMMEDIATELY
-	endif
+instr 1  ; Oscillator
+  iporttime = 0.05
+  kporttime linseg 0, 0.01, iporttime, 1, iporttime
+  kfreq portk gkfreq, kporttime
+  kamp  portk gkamp, kporttime
 
-	if	gkPause=1	goto	SKIP
-	;		OPCODE	FILENAME     | FORMAT | OUT1  | OUT2 etc...
-			fout		"output.wav",    4,     gasig				;FORMAT '4' CREATES A 16 BIT WAV FILE. SEE THE CSOUND MANUAL FOR INFORMATION REGARDING OTHER FORMATS AVAILABLE. 
-	SKIP:
-	gasig	= 0											;GLOBAL AUDIO VARIABLE IS RESET TO ZERO (TO PREVENT, FROZEN NON-ZERO VALUES WHEN INSTRUMENT 1 IS SWITCHED OFF)
+  ; Output  opcode amplitude | frequency | function_table
+  ; Create an oscillator based on the sine wave created in function table gisine
+  gasig oscil kamp, kfreq, gisine
+  outs gasig, gasig  ; Output oscillator signal to the speakers
 endin
 
-instr	4	;PLAYBACK
-	if	gkFunction!=2	then									;SENSE IF 'Function' SWITCH IS NOT OFF (IN WHICH CASE SKIP THE NEXT LINE)
-		turnoff											;TURN THIS INSTRUMENT OFF IMMEDIATELY
-	endif
-	ifilelen	filelen	"output.wav"							;DERIVE ifilelen FROM RECORDED FILE
-	p3		=		ifilelen								;p3 (NOTE DURATION) WILL BE EQUAL TO DURATION OF RECORDED FILE
+instr 3  ; Record sound using fout
+  ; Sense if 'record' switch is not off (in which case skip the next line)
+  if gkFunction != 1 then
+    turnoff  ; Turn this instrument off immediately
+  endif
 
-	asig		soundin	"output.wav", 0						;READ SOUND FROM STORED FILE USING soundin
-			outs		asig * gkPBamp, asig * gkPBamp			;SEND AUDIO TO OUTPUTS
-			event_i	"i", 5, p3, 0.001						;TRIGGER INSTRUMENT TO DEACTIVATE PLAY BUTTON
+  if gkPause = 1 goto SKIP
+  ; Opcode filename     | format | out1  | out2 etc...
+  ; Format '4' creates a 16 bit wav file. See the csound manual for information regarding
+  ; other formats available.
+  fout "output.wav", 4, gasig
+SKIP:
+  ; Global audio variable is reset to zero (to prevent, frozen non-zero values when
+  ; instrument 1 is switched off)
+  gasig = 0
 endin
-	
-instr	5	;DEACTIVATE PLAY BUTTON
-			event_i	"i", 11, 0, 0							;TRIGGER INSTRUMENT 11 TO DEACTIVATE PLAY BUTTON
+
+instr 4  ; Playback
+  ; Sense if 'function' switch is not off (in which case skip the next line)
+  if gkFunction != 2 then
+    turnoff  ; Turn this instrument off immediately
+  endif
+  ifilelen filelen "output.wav"  ; Derive ifilelen from recorded file
+  ; P3 (note duration) will be equal to duration of recorded file
+  p3 = ifilelen
+
+  asig soundin "output.wav", 0         ; Read sound from stored file using soundin
+  outs asig * gkPBamp, asig * gkPBamp  ; Send audio to outputs
+  event_i "i", 5, p3, 0.001            ; Trigger instrument to deactivate play button
+endin
+
+instr 5                  ; Deactivate play button
+  event_i "i", 11, 0, 0  ; Trigger instrument 11 to deactivate play button
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
-i 11 0 0		;init
+i 10 0 3600  ; GUI
+i 11 0 0     ; init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -125,9 +133,9 @@ i 11 0 0		;init
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -145,15 +153,20 @@ i 11 0 0		;init
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -175,14 +188,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -204,15 +217,20 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -230,11 +248,23 @@ This example illustrates a method of rendering a realtime performance to the har
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Oscillator ON / OFF</text>
+  <text>Oscillator ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -252,14 +282,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -299,14 +329,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -328,14 +358,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -375,14 +405,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -404,14 +434,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -451,14 +481,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -482,6 +512,18 @@ This example illustrates a method of rendering a realtime performance to the har
   <eventLine>i 11 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -499,14 +541,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -528,14 +570,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -557,14 +599,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -586,14 +628,14 @@ This example illustrates a method of rendering a realtime performance to the har
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -621,15 +663,15 @@ This example illustrates a method of rendering a realtime performance to the har
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -650,6 +692,18 @@ This example illustrates a method of rendering a realtime performance to the har
   <eventLine>i 12 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -673,15 +727,15 @@ This example illustrates a method of rendering a realtime performance to the har
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -702,6 +756,18 @@ This example illustrates a method of rendering a realtime performance to the har
   <eventLine>i 13 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -725,15 +791,15 @@ This example illustrates a method of rendering a realtime performance to the har
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -754,6 +820,18 @@ This example illustrates a method of rendering a realtime performance to the har
   <eventLine>i 14 0 0.01</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -777,15 +855,15 @@ This example illustrates a method of rendering a realtime performance to the har
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
 </bsbPanel>

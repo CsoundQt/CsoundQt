@@ -1,165 +1,183 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-			zakinit	3,3								;INITIALISE ZAK SPACE (3 A-RATE AND 3 K-RATE VARIABLES)
-			massign	0,1								;ALL MIDI NOTES DIRECTED TO INSTRUMENT 1
+zakinit 3, 3  ; Initialise zak space (3 a-rate and 3 k-rate variables)
+massign 0, 1  ; All MIDI notes directed to instrument 1
 
-gkQ			init		0.0
+gkQ init 0.0
 
-gisine		ftgen	0,0,131072,10,1					;FUNCTION TABLE THAT STORES A SINGLE CYCLE OF A SINE WAVE
+; Function table that stores a single cycle of a sine wave
+gisine ftgen 0, 0, 131072, 10, 1
 
-;TABLES FOR EXP SLIDER
-giExp1		ftgen	0, 0, 129, -25, 0, 20.0, 128, 5000.0
-giExp2		ftgen	0, 0, 129, -25, 0, 10.0, 128, 10000.0
-giExp3		ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0
+; Tables for exp slider
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 5000.0
+giExp2 ftgen 0, 0, 129, -25, 0, 10.0, 128, 10000.0
+giExp3 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0
 
-;FUNCTION TABLES STORING MODAL FREQUENCY RATIOS===================================================================================================================================
-;single
-girtos1		ftgen	0,0,2, -2,	1,	1
+; Function tables storing modal frequency
+; ratios===================================================================================================================================
+; single
+girtos1 ftgen 0, 0, 2, -2, 1, 1
 
-;dahina
-girtos2		ftgen	0,0,-6,-2,	1,	2.89,	4.95,	6.99,	8.01,	9.02
+; dahina
+girtos2 ftgen 0, 0, -6, -2, 1, 2.89, 4.95, 6.99, 8.01, 9.02
 
-;banyan
-girtos3		ftgen	0,0,-6,-2,	1, 	2.0, 	3.01, 	4.01, 	4.69, 	5.63
+; banyan
+girtos3 ftgen 0, 0, -6, -2, 1, 2.0, 3.01, 4.01, 4.69, 5.63
 
-;xylophone
-girtos4		ftgen	0,0,-6,-2,	1, 	3.932, 	9.538,	16.688,	24.566,	31.147
+; xylophone
+girtos4 ftgen 0, 0, -6, -2, 1, 3.932, 9.538, 16.688, 24.566, 31.147
 
-;tibetan bowl (180mm)
-girtos5		ftgen	0,0,-7,-2,	1, 	2.77828,	5.18099, 	8.16289,	11.66063,	15.63801,	19.99
+; tibetan bowl (180mm)
+girtos5 ftgen 0, 0, -7, -2, 1, 2.77828, 5.18099, 8.16289, 11.66063, 15.63801, 19.99
 
-;spinel sphere with diameter of 3.6675mm
-girtos6		ftgen	0,0,-24,-2,	1,	1.026513174725,	1.4224916858532,	1.4478690202098,	1.4661959580455,	1.499452545408,	1.7891839345101,	1.8768994627782,	1.9645945254541,	1.9786543873113,	2.0334612432847,	2.1452852391916,	2.1561524686621,	2.2533435661294,	2.2905090816065,	2.3331798413917,	2.4567715528268,	2.4925556408289,	2.5661806088514,	2.6055768738808,	2.6692760296751,	2.7140956766436,	2.7543617293425,	2.7710411870043 
+; spinel sphere with diameter of 3.6675mm
+girtos6 ftgen 0, 0, -24, -2, 1, 1.026513174725, 1.4224916858532, 1.4478690202098, 1.4661959580455, 1.499452545408, 1.7891839345101, 1.8768994627782, 1.9645945254541, 1.9786543873113, 2.0334612432847, 2.1452852391916, 2.1561524686621, 2.2533435661294, 2.2905090816065, 2.3331798413917, 2.4567715528268, 2.4925556408289, 2.5661806088514, 2.6055768738808, 2.6692760296751, 2.7140956766436, 2.7543617293425, 2.7710411870043
 
-;pot lid
-girtos7		ftgen	0,0,-6,-2,	1, 	3.2, 	6.23, 	6.27, 	9.92, 	14.15
+; pot lid
+girtos7 ftgen 0, 0, -6, -2, 1, 3.2, 6.23, 6.27, 9.92, 14.15
 
-;red cedar wood plate
-girtos8		ftgen	0,0,-4,-2,	1, 	1.47, 	2.09, 	2.56
+; red cedar wood plate
+girtos8 ftgen 0, 0, -4, -2, 1, 1.47, 2.09, 2.56
 
-;tubular bell
-girtos9		ftgen	0,0,-10,-2,	272/437,	538/437,	874/437,	1281/437,	1755/437,	2264/437,	2813/437,	3389/437,	4822/437,	5255/437
+; tubular bell
+girtos9 ftgen 0, 0, -10, -2, 272/437, 538/437, 874/437, 1281/437, 1755/437, 2264/437, 2813/437, 3389/437, 4822/437, 5255/437
 
-;redwood wood plate
-girtos10		ftgen	0,0,-4,-2,	1, 1.47, 2.11, 2.57
+; redwood wood plate
+girtos10 ftgen 0, 0, -4, -2, 1, 1.47, 2.11, 2.57
 
-;douglas fir wood plate
-girtos11		ftgen	0,0,-4,-2,	1, 1.42, 2.11, 2.47
+; douglas fir wood plate
+girtos11 ftgen 0, 0, -4, -2, 1, 1.42, 2.11, 2.47
 
-;uniform wooden bar
-girtos12		ftgen	0,0,-6,-2,	1, 2.572, 4.644, 6.984, 9.723, 12
+; uniform wooden bar
+girtos12 ftgen 0, 0, -6, -2, 1, 2.572, 4.644, 6.984, 9.723, 12
 
-;uniform aluminum bar
-girtos13		ftgen	0,0,-6,-2,	1, 2.756, 5.423, 8.988, 13.448, 18.680
+; uniform aluminum bar
+girtos13 ftgen 0, 0, -6, -2, 1, 2.756, 5.423, 8.988, 13.448, 18.680
 
-;vibraphone 1
-girtos14		ftgen	0,0,-6,-2,	1, 3.984, 10.668, 17.979, 23.679, 33.642
+; vibraphone 1
+girtos14 ftgen 0, 0, -6, -2, 1, 3.984, 10.668, 17.979, 23.679, 33.642
 
-;vibraphone 2
-girtos15		ftgen	0,0,-6,-2,	1, 3.997, 9.469, 15.566, 20.863, 29.440
+; vibraphone 2
+girtos15 ftgen 0, 0, -6, -2, 1, 3.997, 9.469, 15.566, 20.863, 29.440
 
-;Chalandi plates
-girtos16		ftgen	0,0,-5,-2,	1, 1.72581, 5.80645, 7.41935, 13.91935
+; Chalandi plates
+girtos16 ftgen 0, 0, -5, -2, 1, 1.72581, 5.80645, 7.41935, 13.91935
 
-;tibetan bowl (152 mm)
-girtos17		ftgen	0,0,-7,-2,	1, 2.66242, 4.83757, 7.51592, 10.64012, 14.21019, 18.14027
+; tibetan bowl (152 mm)
+girtos17 ftgen 0, 0, -7, -2, 1, 2.66242, 4.83757, 7.51592, 10.64012, 14.21019, 18.14027
 
-;tibetan bowl (140 mm)
-girtos18		ftgen	0,0,-5,-2,	1, 2.76515, 5.12121, 7.80681, 10.78409
+; tibetan bowl (140 mm)
+girtos18 ftgen 0, 0, -5, -2, 1, 2.76515, 5.12121, 7.80681, 10.78409
 
-;wine glass
-girtos19		ftgen	0,0,-5,-2,	1, 2.32, 4.25, 6.63, 9.38
+; wine glass
+girtos19 ftgen 0, 0, -5, -2, 1, 2.32, 4.25, 6.63, 9.38
 
-;small handbell
-girtos20		ftgen	0,0,-22,-2,	1, 1.0019054878049, 1.7936737804878, 1.8009908536585, 2.5201981707317, 2.5224085365854, 2.9907012195122, 2.9940548780488, 3.7855182926829, 3.8061737804878, 4.5689024390244, 4.5754573170732, 5.0296493902439, 5.0455030487805, 6.0759908536585, 5.9094512195122, 6.4124237804878, 6.4430640243902, 7.0826219512195, 7.0923780487805, 7.3188262195122, 7.5551829268293 
+; small handbell
+girtos20 ftgen 0, 0, -22, -2, 1, 1.0019054878049, 1.7936737804878, 1.8009908536585, 2.5201981707317, 2.5224085365854, 2.9907012195122, 2.9940548780488, 3.7855182926829, 3.8061737804878, 4.5689024390244, 4.5754573170732, 5.0296493902439, 5.0455030487805, 6.0759908536585, 5.9094512195122, 6.4124237804878, 6.4430640243902, 7.0826219512195, 7.0923780487805, 7.3188262195122, 7.5551829268293
 
-;user definable
-girtos21		ftgen	0,0,-24,-2,	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24
+; user definable
+girtos21 ftgen 0, 0, -24, -2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24
 
-;TABLE OF SCALING FACTORS FOR INDIVIDUAL Q VALUES
-giQs			ftgen	0,0,-24,-2,	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-;TABLE OF SCALING FACTORS FOR INDIVIDUAL AMP VALUES
-giAmps		ftgen	0,0,-24,-2,	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-
-
-;TECHNIQUE OF ITERATION WITHIN A UDO WAS INSPIRED BY STEVEN YI'S ARTICLE IN SUMMER 2006 CSOUND JOURNAL - THANKS STEVEN!
-;USER DEFINED OPCODES=============================================================================================================================================================
+; Table of scaling factors for individual q values
+giQs ftgen 0, 0, -24, -2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+; Table of scaling factors for individual amp values
+giAmps ftgen 0, 0, -24, -2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 
 
-opcode	modemodule, 0, akiii	;MODE UDO (K-RATE BASE FREQUENCY) - USED FOR NON-MIDI MODE 
-	ain, kbase, icount, ialgfn, imodes  xin						;NAME INPUT VARIABLES
-	krto		table	icount-1, ialgfn						;READ FREQUENCY RATIO FOR CURRENT MODE ACCORDING TO ITERATION COUNTER
-	kfrq		=		krto * kbase							;DERIVE MODAL FREQUENCY FROM PRODUCT OF RATIO AND BASE FREQUENCY
+; Technique of iteration within a udo was inspired by steven yi's article in summer 2006
+; csound journal - thanks steven!
+; User defined
+; opcodes=============================================================================================================================================================
 
-	if	kfrq > 14000 || krto = 0	goto	SKIP						;LIMIT MODAL FREQUENCY UPPER LIMIT TO PREVENT EXPLOSIONS BY SKIPPING CODE IF MAXIMUM VALUE IS EXCEEDED (WITH A LITTLE HEADROOM)
-		kQ		table	icount-1, giQs
-		kAmp		table	icount-1, giAmps
-		a1		mode		ain, kfrq, gkQ*kQ					;CREATE MODE SIGNAL
-				zawm		a1*kAmp, 0						;MIX MODE SIGNAL INTO THE ACCUMULATING ZAK AUDIO CHANNEL 
-		icount	=	icount + 1							;INCREMENT COUNTER IN PREPARTION FOR NEXT MODE
-		if	icount <= imodes	then							;IF ALL THE MODES IN THIS CURRENT INSTRUMENT HAVE NOT YET BEEN CREATED...
-			modemodule	ain, kbase, icount, ialgfn, imodes		;...CALL modemodule UDO AGAIN WITH INCREMENTED COUNTER
-		endif											;END OF CONDITIONAL BRANCHING
-	SKIP:												;LABEL 'SKIP'
-endop													;END OF UDO
 
-opcode	modemodulei, 0, aiiii	;MODE UDO (I-RATE BASE FREQUENCY) - USED FOR MIDI MODE 
-	ain, ibase, icount, ialgfn, imodes  xin						;NAME INPUT VARIABLES
-	irto		table	icount-1, ialgfn						;READ FREQUENCY RATIO FOR CURRENT MODE ACCORDING TO ITERATION COUNTER
-	ifrq		=		irto * ibase							;DERIVE MODAL FREQUENCY FROM PRODUCT OF RATIO AND BASE FREQUENCY
+; Mode udo (k-rate base frequency) - used for non-MIDI mode
+opcode modemodule, 0, akiii
+  ain, kbase, icount, ialgfn, imodes xin  ; Name input variables
+  ; Read frequency ratio for current mode according to iteration counter
+  krto table icount-1, ialgfn
+  kfrq = krto * kbase  ; Derive modal frequency from product of ratio and base frequency
 
-	if	ifrq > 14000	goto	SKIP								;LIMIT MODAL FREQUENCY UPPER LIMIT TO PREVENT EXPLOSIONS BY SKIPPING CODE IF MAXIMUM VALUE IS EXCEEDED (WITH A LITTLE HEADROOM)
-		a1		mode		ain, ifrq, gkQ						;CREATE MODE SIGNAL
-				zawm		a1, 0							;MIX MODE SIGNAL INTO THE ACCUMULATING ZAK AUDIO CHANNEL 
-		icount	=	icount + 1							;INCREMENT COUNTER IN PREPARTION FOR NEXT MODE
-		if	icount <= imodes	then							;IF ALL THE MODES IN THIS CURRENT INSTRUMENT HAVE NOT YET BEEN CREATED...
-			modemodulei	ain, ibase, icount, ialgfn, imodes		;...CALL modemodule UDO AGAIN WITH INCREMENTED COUNTER
-		endif											;END OF CONDITIONAL BRANCHING
-	SKIP:												;LABEL 'SKIP'
+  ; Limit modal frequency upper limit to prevent explosions by skipping code if maximum
+  ; value is exceeded (with a little headroom)
+  if kfrq > 14000 || krto = 0 goto SKIP
+  kQ   table icount-1, giQs
+  kAmp table icount-1, giAmps
+  a1 mode ain, kfrq, gkQ*kQ  ; Create mode signal
+  zawm a1*kAmp, 0            ; Mix mode signal into the accumulating zak audio channel
+  icount = icount + 1        ; Increment counter in prepartion for next mode
+  ; If all the modes in this current instrument have not yet been created...
+  if icount <= imodes then
+    ; ...Call modemodule udo again with incremented counter
+    modemodule ain, kbase, icount, ialgfn, imodes
+  endif  ; End of conditional branching
+SKIP:    ; Label 'skip'
+endop    ; End of udo
+
+; Mode udo (i-rate base frequency) - used for MIDI mode
+opcode modemodulei, 0, aiiii
+  ain, ibase, icount, ialgfn, imodes xin  ; Name input variables
+  ; Read frequency ratio for current mode according to iteration counter
+  irto table icount-1, ialgfn
+  ifrq = irto * ibase  ; Derive modal frequency from product of ratio and base frequency
+
+  ; Limit modal frequency upper limit to prevent explosions by skipping code if maximum
+  ; value is exceeded (with a little headroom)
+  if ifrq > 14000 goto SKIP
+  a1 mode ain, ifrq, gkQ  ; Create mode signal
+  zawm a1, 0              ; Mix mode signal into the accumulating zak audio channel
+  icount = icount + 1     ; Increment counter in prepartion for next mode
+  ; If all the modes in this current instrument have not yet been created...
+  if icount <= imodes then
+    ; ...Call modemodule udo again with incremented counter
+    modemodulei ain, ibase, icount, ialgfn, imodes
+  endif  ; End of conditional branching
+SKIP:    ; Label 'skip'
 endop
 
-opcode	dopplerUDO, aa, akkk	;DOPPLER UDO
-	ain, krate, kDopDep, kPanDep  xin							;NAME INPUT VARIABLES
-			setksmps	1									;CONTROL RATE WITHIN UDO IS 1
-	ioffset	init		ksmps/sr								;DELAY OFFSET TIME
-	adlt		oscil	kDopDep,krate,gisine					;MODULATING DELAY TIME
-	kpan		oscil	kPanDep,krate,gisine					;MODULATING PANNING VARIABLE
-	abuf		delayr	(0.01)+ioffset							;SET FOR MAXIMUM POSSIBLE DELAY TIME
-	atap		deltap3	adlt+kDopDep+ioffset					;TAP THE DELAY BUFFER
-			delayw	ain									;WRITE AUDIO INTO DELAY BUFFER
-	a1,a2	pan2		atap, kpan + 0.5 + kPanDep				;PAN AUDIO FROM DELAY TAP
-			xout		a1, a2								;SEND AUDIO TO CALLER INSTRUMENT
-endop													;END OF UDO
+opcode dopplerUDO, aa, akkk               ; Doppler udo
+  ain, krate, kDopDep, kPanDep xin        ; Name input variables
+  setksmps 1                              ; Control rate within udo is 1
+  ioffset init ksmps/sr                   ; Delay offset time
+  adlt oscil kDopDep, krate, gisine       ; Modulating delay time
+  kpan oscil kPanDep, krate, gisine       ; Modulating panning variable
+  abuf delayr (0.01)+ioffset              ; Set for maximum possible delay time
+  atap deltap3 adlt+kDopDep+ioffset       ; Tap the delay buffer
+  delayw ain                              ; Write audio into delay buffer
+  a1, a2 pan2 atap, kpan + 0.5 + kPanDep  ; Pan audio from delay tap
+  xout a1, a2                             ; Send audio to caller instrument
+endop                                     ; End of udo
 
-opcode	reverbsr, aa, aakk		;REVERB UDO (USE OF A UDO FOR REVERB IS TO ALLOW THE SETTING OF A K-RATE INDEPENDENT OF THE GLOBAL K-RATE
-				setksmps	1								;CONTROL RATE WITHIN UDO IS 1
-	ainsigL, ainsigR, kfblvl, kfco	xin						;NAME INPUT VARIABLES
-	arvbL, arvbR 	reverbsc	ainsigL, ainsigR, kfblvl, kfco		;USE reverbsc OPCODE
-				xout		arvbL, arvbR						;SEND AUDIO TO CALLER INSTRUMENT
-endop													;END OF UDO
-;=================================================================================================================================================================================
+; Reverb udo (use of a udo for reverb is to allow the setting of a k-rate independent of
+; the global k-rate
+opcode reverbsr, aa, aakk
+  setksmps 1                                            ; Control rate within udo is 1
+  ainsigL, ainsigR, kfblvl, kfco xin                    ; Name input variables
+  arvbL, arvbR reverbsc ainsigL, ainsigR, kfblvl, kfco  ; USE reverbsc OPCODE
+  xout arvbL, arvbR                                     ; Send audio to caller instrument
+endop                                                   ; End of udo
+; =================================================================================================================================================================================
 
-;declare software channels to GUI
+; declare software channels to GUI
 chn_k "BaseFreq_Value", 2
 chn_k "Q_Value", 2
 chn_k "LPF_Value", 2
@@ -167,433 +185,456 @@ chn_k "HPF_Value", 2
 
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkinput	chnget	"Input"
-		gksound	chnget	"Sound"
-		gkmodes	chnget	"Modes"
-		gkDopOn	chnget	"Doppler"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkinput chnget "Input"
+    gksound chnget "Sound"
+    gkmodes chnget "Modes"
+    gkDopOn chnget "Doppler"
 
-		;MODAL FREQUENCY RATIO INPUT BOXES FOR USER DEFINABLE ALGORITHM (ALGORITHM 21)
-		gkrto1	chnget	"Ratio01"
-		gkrto2	chnget	"Ratio02"
-		gkrto3	chnget	"Ratio03"
-		gkrto4	chnget	"Ratio04"
-		gkrto5	chnget	"Ratio05"
-		gkrto6	chnget	"Ratio06"
-		gkrto7	chnget	"Ratio07"
-		gkrto8	chnget	"Ratio08"
-		gkrto9	chnget	"Ratio09"
-		gkrto10	chnget	"Ratio10"
-		gkrto11	chnget	"Ratio11"
-		gkrto12	chnget	"Ratio12"
-		gkrto13	chnget	"Ratio13"
-		gkrto14	chnget	"Ratio14"
-		gkrto15	chnget	"Ratio15"
-		gkrto16	chnget	"Ratio16"
-		gkrto17	chnget	"Ratio17"
-		gkrto18	chnget	"Ratio18"
-		gkrto19	chnget	"Ratio19"
-		gkrto20	chnget	"Ratio20"
-		gkrto21	chnget	"Ratio21"
-		gkrto22	chnget	"Ratio22"
-		gkrto23	chnget	"Ratio23"
-		gkrto24	chnget	"Ratio24"
+    ; Modal frequency ratio input boxes for user definable algorithm (algorithm 21)
+    gkrto1  chnget "Ratio01"
+    gkrto2  chnget "Ratio02"
+    gkrto3  chnget "Ratio03"
+    gkrto4  chnget "Ratio04"
+    gkrto5  chnget "Ratio05"
+    gkrto6  chnget "Ratio06"
+    gkrto7  chnget "Ratio07"
+    gkrto8  chnget "Ratio08"
+    gkrto9  chnget "Ratio09"
+    gkrto10 chnget "Ratio10"
+    gkrto11 chnget "Ratio11"
+    gkrto12 chnget "Ratio12"
+    gkrto13 chnget "Ratio13"
+    gkrto14 chnget "Ratio14"
+    gkrto15 chnget "Ratio15"
+    gkrto16 chnget "Ratio16"
+    gkrto17 chnget "Ratio17"
+    gkrto18 chnget "Ratio18"
+    gkrto19 chnget "Ratio19"
+    gkrto20 chnget "Ratio20"
+    gkrto21 chnget "Ratio21"
+    gkrto22 chnget "Ratio22"
+    gkrto23 chnget "Ratio23"
+    gkrto24 chnget "Ratio24"
 
-		gkrto1	=	gkrto1 * 0.01
-		gkrto2	=	gkrto2 * 0.01
-		gkrto3	=	gkrto3 * 0.01
-		gkrto4	=	gkrto4 * 0.01
-		gkrto5	=	gkrto5 * 0.01
-		gkrto6	=	gkrto6 * 0.01
-		gkrto7	=	gkrto7 * 0.01
-		gkrto8	=	gkrto8 * 0.01
-		gkrto9	=	gkrto9 * 0.01
-		gkrto10	=	gkrto10 * 0.01
-		gkrto11	=	gkrto11 * 0.01
-		gkrto12	=	gkrto12 * 0.01
-		gkrto13	=	gkrto13 * 0.01
-		gkrto14	=	gkrto14 * 0.01
-		gkrto15	=	gkrto15 * 0.01
-		gkrto16	=	gkrto16 * 0.01
-		gkrto17	=	gkrto17 * 0.01
-		gkrto18	=	gkrto18 * 0.01
-		gkrto19	=	gkrto19 * 0.01
-		gkrto20	=	gkrto20 * 0.01
-		gkrto21	=	gkrto21 * 0.01
-		gkrto22	=	gkrto22 * 0.01
-		gkrto23	=	gkrto23 * 0.01
-		gkrto24	=	gkrto24 * 0.01
+    gkrto1  = gkrto1 * 0.01
+    gkrto2  = gkrto2 * 0.01
+    gkrto3  = gkrto3 * 0.01
+    gkrto4  = gkrto4 * 0.01
+    gkrto5  = gkrto5 * 0.01
+    gkrto6  = gkrto6 * 0.01
+    gkrto7  = gkrto7 * 0.01
+    gkrto8  = gkrto8 * 0.01
+    gkrto9  = gkrto9 * 0.01
+    gkrto10 = gkrto10 * 0.01
+    gkrto11 = gkrto11 * 0.01
+    gkrto12 = gkrto12 * 0.01
+    gkrto13 = gkrto13 * 0.01
+    gkrto14 = gkrto14 * 0.01
+    gkrto15 = gkrto15 * 0.01
+    gkrto16 = gkrto16 * 0.01
+    gkrto17 = gkrto17 * 0.01
+    gkrto18 = gkrto18 * 0.01
+    gkrto19 = gkrto19 * 0.01
+    gkrto20 = gkrto20 * 0.01
+    gkrto21 = gkrto21 * 0.01
+    gkrto22 = gkrto22 * 0.01
+    gkrto23 = gkrto23 * 0.01
+    gkrto24 = gkrto24 * 0.01
 
-		;SLIDERS
-		kbase	chnget	"BaseFreq"
-		gkbase	tablei	kbase, giExp1, 1
-				chnset	gkbase, "BaseFreq_Value"
-		kQ		chnget	"Q"
-		gkQ		tablei	kQ, giExp2, 1
-				chnset	gkQ, "Q_Value"
-		gkdensity	chnget	"Density"
-		kPinkLP	chnget	"LPF"
-		gkPinkLP	tablei	kPinkLP, giExp3, 1
-				chnset gkPinkLP, "LPF_Value"
-		kPinkHP	chnget	"HPF"
-		gkPinkHP	tablei	kPinkHP, giExp3, 1
-				chnset gkPinkHP, "HPF_Value"
-		gkDopRate	chnget	"Rate"
-		gkDopDep	chnget	"DopplerDepth"
-		gkPanDep	chnget	"PanDepth"
-		gkRvbSnd	chnget	"RvbSend"
-		gkRvbSze	chnget	"RvbSize"
-		gkOutGain	chnget	"OutGain"
+    ; Sliders
+    kbase chnget "BaseFreq"
+    gkbase tablei kbase, giExp1, 1
+    chnset gkbase, "BaseFreq_Value"
+    kQ chnget "Q"
+    gkQ tablei kQ, giExp2, 1
+    chnset gkQ, "Q_Value"
+    gkdensity chnget "Density"
+    kPinkLP   chnget "LPF"
+    gkPinkLP tablei kPinkLP, giExp3, 1
+    chnset gkPinkLP, "LPF_Value"
+    kPinkHP chnget "HPF"
+    gkPinkHP tablei kPinkHP, giExp3, 1
+    chnset gkPinkHP, "HPF_Value"
+    gkDopRate chnget "Rate"
+    gkDopDep  chnget "DopplerDepth"
+    gkPanDep  chnget "PanDepth"
+    gkRvbSnd  chnget "RvbSend"
+    gkRvbSze  chnget "RvbSize"
+    gkOutGain chnget "OutGain"
 
-		;Q sliders
-		gkQ1		chnget	"Q01"
-		gkQ2		chnget	"Q02"
-		gkQ3		chnget	"Q03"
-		gkQ4		chnget	"Q04"
-		gkQ5		chnget	"Q05"
-		gkQ6		chnget	"Q06"
-		gkQ7		chnget	"Q07"
-		gkQ8		chnget	"Q08"
-		gkQ9		chnget	"Q09"
-		gkQ10	chnget	"Q10"
-		gkQ11	chnget	"Q11"
-		gkQ12	chnget	"Q12"
-		gkQ13	chnget	"Q13"
-		gkQ14	chnget	"Q14"
-		gkQ15	chnget	"Q15"
-		gkQ16	chnget	"Q16"
-		gkQ17	chnget	"Q17"
-		gkQ18	chnget	"Q18"
-		gkQ19	chnget	"Q19"
-		gkQ20	chnget	"Q20"
-		gkQ21	chnget	"Q21"
-		gkQ22	chnget	"Q22"
-		gkQ23	chnget	"Q23"
-		gkQ24	chnget	"Q24"
+    ; Q sliders
+    gkQ1  chnget "Q01"
+    gkQ2  chnget "Q02"
+    gkQ3  chnget "Q03"
+    gkQ4  chnget "Q04"
+    gkQ5  chnget "Q05"
+    gkQ6  chnget "Q06"
+    gkQ7  chnget "Q07"
+    gkQ8  chnget "Q08"
+    gkQ9  chnget "Q09"
+    gkQ10 chnget "Q10"
+    gkQ11 chnget "Q11"
+    gkQ12 chnget "Q12"
+    gkQ13 chnget "Q13"
+    gkQ14 chnget "Q14"
+    gkQ15 chnget "Q15"
+    gkQ16 chnget "Q16"
+    gkQ17 chnget "Q17"
+    gkQ18 chnget "Q18"
+    gkQ19 chnget "Q19"
+    gkQ20 chnget "Q20"
+    gkQ21 chnget "Q21"
+    gkQ22 chnget "Q22"
+    gkQ23 chnget "Q23"
+    gkQ24 chnget "Q24"
 
-		;Amp sliders
-		gkAmp1	chnget	"Amp01"
-		gkAmp2	chnget	"Amp02"
-		gkAmp3	chnget	"Amp03"
-		gkAmp4	chnget	"Amp04"
-		gkAmp5	chnget	"Amp05"
-		gkAmp6	chnget	"Amp06"
-		gkAmp7	chnget	"Amp07"
-		gkAmp8	chnget	"Amp08"
-		gkAmp9	chnget	"Amp09"
-		gkAmp10	chnget	"Amp10"
-		gkAmp11	chnget	"Amp11"
-		gkAmp12	chnget	"Amp12"
-		gkAmp13	chnget	"Amp13"
-		gkAmp14	chnget	"Amp14"
-		gkAmp15	chnget	"Amp15"
-		gkAmp16	chnget	"Amp16"
-		gkAmp17	chnget	"Amp17"
-		gkAmp18	chnget	"Amp18"
-		gkAmp19	chnget	"Amp19"
-		gkAmp20	chnget	"Amp20"
-		gkAmp21	chnget	"Amp21"
-		gkAmp22	chnget	"Amp22"
-		gkAmp23	chnget	"Amp23"
-		gkAmp24	chnget	"Amp24"
+    ; Amp sliders
+    gkAmp1  chnget "Amp01"
+    gkAmp2  chnget "Amp02"
+    gkAmp3  chnget "Amp03"
+    gkAmp4  chnget "Amp04"
+    gkAmp5  chnget "Amp05"
+    gkAmp6  chnget "Amp06"
+    gkAmp7  chnget "Amp07"
+    gkAmp8  chnget "Amp08"
+    gkAmp9  chnget "Amp09"
+    gkAmp10 chnget "Amp10"
+    gkAmp11 chnget "Amp11"
+    gkAmp12 chnget "Amp12"
+    gkAmp13 chnget "Amp13"
+    gkAmp14 chnget "Amp14"
+    gkAmp15 chnget "Amp15"
+    gkAmp16 chnget "Amp16"
+    gkAmp17 chnget "Amp17"
+    gkAmp18 chnget "Amp18"
+    gkAmp19 chnget "Amp19"
+    gkAmp20 chnget "Amp20"
+    gkAmp21 chnget "Amp21"
+    gkAmp22 chnget "Amp22"
+    gkAmp23 chnget "Amp23"
+    gkAmp24 chnget "Amp24"
 
-		ktrig1	changed	gksound		;IF SOUND CHOICE CHANGES GENERATE A MOMENTARY '1' (BANG)
-		if	ktrig1=1	then
-			reinit	RESTART
-		endif
-		RESTART:
-		if		i(gksound)==0	then		;Single
-			iBase	=	0.5077195	;330
-			iQ		=	0.6666600	;1000
-		elseif	i(gksound)==1	then		;Dahina
-			iBase	=	0.3648900	;150
-			iQ		=	0.2329580	;50
-		elseif	i(gksound)==2	then		;Banyan
-			iBase	=	0.5183400	;350
-			iQ		=	0.5491000	;444
-		elseif	i(gksound)==3	then		;Xylophone
-			iBase	=	0.3765900	;160
-			iQ		=	0.4336500	;200
-		elseif	i(gksound)==4	then		;Tibetan Bowl (180mm)
-			iBase	=	0.4350800	;221
-			iQ		=	0.7808000	;2200
-		elseif	i(gksound)==5	then		;Spinel Sphere
-			iBase	=	0.7079800	;997.25
-			iQ		=	0.3010000	;80
-		elseif	i(gksound)==6	then		;Pot Lid
-			iBase	=	0.4574400	;250
-			iQ		=	0.7254200	;1500
-		elseif	i(gksound)==7	then		;Red Cedar Wood Plate
-			iBase	=	0.6439000	;700
-			iQ		=	0.3333200	;100
-		elseif	i(gksound)==8	then		;Tubular Bell
-			iBase	=	0.5585450	;437
-			iQ		=	0.7669800	;2000
-		elseif	i(gksound)==9	then		;Redwood Wood Plate
-			iBase	=	0.7084800	;1000
-			iQ		=	0.3333200	;100
-		elseif	i(gksound)==10	then		;Douglas Fir Wood Plate
-			iBase	=	0.7415300	;1200
-			iQ		=	0.3920000	;150
-		elseif	i(gksound)==11	then		;Uniform Wooden Bar
-			iBase	=	0.6439000	;700
-			iQ		=	0.4923900	;300
-		elseif	i(gksound)==12	then		;Uniform Aluminium Bar
-			iBase	=	0.5060400	;327
-			iQ		=	0.6666600	;1000
-		elseif	i(gksound)==13	then		;Vibraphone 1
-			iBase	=	0.5598000	;440
-			iQ		=	0.7669800	;2000
-		elseif	i(gksound)==14	then		;Vibraphone 2
-			iBase	=	0.5598000	;440
-			iQ		=	0.7669800	;2000
-		elseif	i(gksound)==15	then		;Chalandi Plates
-			iBase	=	0.2049000	;62
-			iQ		=	0.5662750	;500
-		elseif	i(gksound)==16	then		;Tibetan Bowl (152mm)
-			iBase	=	0.4987000	;314
-			iQ		=	0.7808000	;2200
-		elseif	i(gksound)==17	then		;Tibetan Bowl (140mm)
-			iBase	=	0.5928300	;528
-			iQ		=	0.7808000	;2200
-		elseif	i(gksound)==18	then		;Wine Glass
-			iBase	=	0.7048270	;980
-			iQ		=	0.7253370	;1500
-		elseif	i(gksound)==19	then		;Small Hand Bell
-			iBase	=	0.7577000	;1312
-			iQ		=	0.7992690	;2500
-		elseif	i(gksound)==20	then		;User
-			iBase	=	0.7577000	;User value
-			iQ		=	0.7992690	;User value
-		endif
+    ktrig1 changed gksound  ; If sound choice changes generate a momentary '1' (bang)
+    if ktrig1 = 1 then
+      reinit RESTART
+    endif
+RESTART:
+    if i(gksound) == 0 then       ; Single
+      iBase = 0.5077195           ; 330
+      iQ    = 0.6666600           ; 1000
+    elseif i(gksound) == 1 then   ; Dahina
+      iBase = 0.3648900           ; 150
+      iQ    = 0.2329580           ; 50
+    elseif i(gksound) == 2 then   ; Banyan
+      iBase = 0.5183400           ; 350
+      iQ    = 0.5491000           ; 444
+    elseif i(gksound) == 3 then   ; Xylophone
+      iBase = 0.3765900           ; 160
+      iQ    = 0.4336500           ; 200
+    elseif i(gksound) == 4 then   ; Tibetan Bowl (180mm)
+      iBase = 0.4350800           ; 221
+      iQ    = 0.7808000           ; 2200
+    elseif i(gksound) == 5 then   ; Spinel Sphere
+      iBase = 0.7079800           ; 997.25
+      iQ    = 0.3010000           ; 80
+    elseif i(gksound) == 6 then   ; Pot Lid
+      iBase = 0.4574400           ; 250
+      iQ    = 0.7254200           ; 1500
+    elseif i(gksound) == 7 then   ; Red Cedar Wood Plate
+      iBase = 0.6439000           ; 700
+      iQ    = 0.3333200           ; 100
+    elseif i(gksound) == 8 then   ; Tubular Bell
+      iBase = 0.5585450           ; 437
+      iQ    = 0.7669800           ; 2000
+    elseif i(gksound) == 9 then   ; Redwood Wood Plate
+      iBase = 0.7084800           ; 1000
+      iQ    = 0.3333200           ; 100
+    elseif i(gksound) == 10 then  ; Douglas Fir Wood Plate
+      iBase = 0.7415300           ; 1200
+      iQ    = 0.3920000           ; 150
+    elseif i(gksound) == 11 then  ; Uniform Wooden Bar
+      iBase = 0.6439000           ; 700
+      iQ    = 0.4923900           ; 300
+    elseif i(gksound) == 12 then  ; Uniform Aluminium Bar
+      iBase = 0.5060400           ; 327
+      iQ    = 0.6666600           ; 1000
+    elseif i(gksound) == 13 then  ; Vibraphone 1
+      iBase = 0.5598000           ; 440
+      iQ    = 0.7669800           ; 2000
+    elseif i(gksound) == 14 then  ; Vibraphone 2
+      iBase = 0.5598000           ; 440
+      iQ    = 0.7669800           ; 2000
+    elseif i(gksound) == 15 then  ; Chalandi Plates
+      iBase = 0.2049000           ; 62
+      iQ    = 0.5662750           ; 500
+    elseif i(gksound) == 16 then  ; Tibetan Bowl (152mm)
+      iBase = 0.4987000           ; 314
+      iQ    = 0.7808000           ; 2200
+    elseif i(gksound) == 17 then  ; Tibetan Bowl (140mm)
+      iBase = 0.5928300           ; 528
+      iQ    = 0.7808000           ; 2200
+    elseif i(gksound) == 18 then  ; Wine Glass
+      iBase = 0.7048270           ; 980
+      iQ    = 0.7253370           ; 1500
+    elseif i(gksound) == 19 then  ; Small Hand Bell
+      iBase = 0.7577000           ; 1312
+      iQ    = 0.7992690           ; 2500
+    elseif i(gksound) == 20 then  ; User
+      iBase = 0.7577000           ; User value
+      iQ    = 0.7992690           ; User value
+    endif
 
-		gialgfn	init		girtos1+i(gksound)				;MODAL ALGORITHM FUNCTION TABLE NUMBER
-		gimodes	=		ftlen(gialgfn)					;FIND THE NUMBER OF MODES IN CURRENT INSTRUMENT FROM FUNCTION TABLE
+    gialgfn init girtos1+i(gksound)  ; Modal algorithm function table number
+    ; Find the number of modes in current instrument from function table
+    gimodes = ftlen(gialgfn)
 
-				event_i	"i", 11, 0, 0.01, iBase, iQ, gimodes
-	endif
+    event_i "i", 11, 0, 0.01, iBase, iQ, gimodes
+  endif
 endin
 
-instr	11	;outvalue_i
-			outvalue	"BaseFreq"	, p4
-			outvalue	"Q"			, p5
-			outvalue	"Modes"		, p6
-			turnoff
+instr 11  ; outvalue_i
+  outvalue "BaseFreq", p4
+  outvalue "Q", p5
+  outvalue "Modes", p6
+  turnoff
 endin
 
-instr	12	;INIT
-;Init of Modal Ratios
-	outvalue	"Ratio01",  100			;scale is x 100 in Scroll Number box
-	outvalue	"Ratio02",  200
-	outvalue	"Ratio03",  300
-	outvalue	"Ratio04",  400
-	outvalue	"Ratio05",  500
-	outvalue	"Ratio06",  600
-	outvalue	"Ratio07",  700
-	outvalue	"Ratio08",  800
-	outvalue	"Ratio09",  900
-	outvalue	"Ratio10", 1000
-	outvalue	"Ratio11", 1100
-	outvalue	"Ratio12", 1200
-	outvalue	"Ratio13", 1300
-	outvalue	"Ratio14", 1400
-	outvalue	"Ratio15", 1500
-	outvalue	"Ratio16", 1600
-	outvalue	"Ratio17", 1700
-	outvalue	"Ratio18", 1800
-	outvalue	"Ratio19", 1900
-	outvalue	"Ratio20", 2000
-	outvalue	"Ratio21", 2100
-	outvalue	"Ratio22", 2200
-	outvalue	"Ratio23", 2300
-	outvalue	"Ratio24", 2400
+instr 12  ; Init
+  ; Init of Modal Ratios
+  outvalue "Ratio01", 100  ; scale is x 100 in Scroll Number box
+  outvalue "Ratio02", 200
+  outvalue "Ratio03", 300
+  outvalue "Ratio04", 400
+  outvalue "Ratio05", 500
+  outvalue "Ratio06", 600
+  outvalue "Ratio07", 700
+  outvalue "Ratio08", 800
+  outvalue "Ratio09", 900
+  outvalue "Ratio10", 1000
+  outvalue "Ratio11", 1100
+  outvalue "Ratio12", 1200
+  outvalue "Ratio13", 1300
+  outvalue "Ratio14", 1400
+  outvalue "Ratio15", 1500
+  outvalue "Ratio16", 1600
+  outvalue "Ratio17", 1700
+  outvalue "Ratio18", 1800
+  outvalue "Ratio19", 1900
+  outvalue "Ratio20", 2000
+  outvalue "Ratio21", 2100
+  outvalue "Ratio22", 2200
+  outvalue "Ratio23", 2300
+  outvalue "Ratio24", 2400
 
-;Init of Q sliders
-	outvalue	"Q01", 1.0
-	outvalue	"Q02", 1.0
-	outvalue	"Q03", 1.0
-	outvalue	"Q04", 1.0
-	outvalue	"Q05", 1.0
-	outvalue	"Q06", 1.0
-	outvalue	"Q07", 1.0
-	outvalue	"Q08", 1.0
-	outvalue	"Q09", 1.0
-	outvalue	"Q10", 1.0
-	outvalue	"Q11", 1.0
-	outvalue	"Q12", 1.0
-	outvalue	"Q13", 1.0
-	outvalue	"Q14", 1.0
-	outvalue	"Q15", 1.0
-	outvalue	"Q16", 1.0
-	outvalue	"Q17", 1.0
-	outvalue	"Q18", 1.0
-	outvalue	"Q19", 1.0
-	outvalue	"Q20", 1.0
-	outvalue	"Q21", 1.0
-	outvalue	"Q22", 1.0
-	outvalue	"Q23", 1.0
-	outvalue	"Q24", 1.0
+  ; Init of Q sliders
+  outvalue "Q01", 1.0
+  outvalue "Q02", 1.0
+  outvalue "Q03", 1.0
+  outvalue "Q04", 1.0
+  outvalue "Q05", 1.0
+  outvalue "Q06", 1.0
+  outvalue "Q07", 1.0
+  outvalue "Q08", 1.0
+  outvalue "Q09", 1.0
+  outvalue "Q10", 1.0
+  outvalue "Q11", 1.0
+  outvalue "Q12", 1.0
+  outvalue "Q13", 1.0
+  outvalue "Q14", 1.0
+  outvalue "Q15", 1.0
+  outvalue "Q16", 1.0
+  outvalue "Q17", 1.0
+  outvalue "Q18", 1.0
+  outvalue "Q19", 1.0
+  outvalue "Q20", 1.0
+  outvalue "Q21", 1.0
+  outvalue "Q22", 1.0
+  outvalue "Q23", 1.0
+  outvalue "Q24", 1.0
 
-;Init of Amp  Ratios
-	outvalue	"Amp01", 1.0
-	outvalue	"Amp02", 1.0
-	outvalue	"Amp03", 1.0
-	outvalue	"Amp04", 1.0
-	outvalue	"Amp05", 1.0
-	outvalue	"Amp06", 1.0
-	outvalue	"Amp07", 1.0
-	outvalue	"Amp08", 1.0
-	outvalue	"Amp09", 1.0
-	outvalue	"Amp10", 1.0
-	outvalue	"Amp11", 1.0
-	outvalue	"Amp12", 1.0
-	outvalue	"Amp13", 1.0
-	outvalue	"Amp14", 1.0
-	outvalue	"Amp15", 1.0
-	outvalue	"Amp16", 1.0
-	outvalue	"Amp17", 1.0
-	outvalue	"Amp18", 1.0
-	outvalue	"Amp19", 1.0
-	outvalue	"Amp20", 1.0
-	outvalue	"Amp21", 1.0
-	outvalue	"Amp22", 1.0
-	outvalue	"Amp23", 1.0
-	outvalue	"Amp24", 1.0
+  ; Init of Amp  Ratios
+  outvalue "Amp01", 1.0
+  outvalue "Amp02", 1.0
+  outvalue "Amp03", 1.0
+  outvalue "Amp04", 1.0
+  outvalue "Amp05", 1.0
+  outvalue "Amp06", 1.0
+  outvalue "Amp07", 1.0
+  outvalue "Amp08", 1.0
+  outvalue "Amp09", 1.0
+  outvalue "Amp10", 1.0
+  outvalue "Amp11", 1.0
+  outvalue "Amp12", 1.0
+  outvalue "Amp13", 1.0
+  outvalue "Amp14", 1.0
+  outvalue "Amp15", 1.0
+  outvalue "Amp16", 1.0
+  outvalue "Amp17", 1.0
+  outvalue "Amp18", 1.0
+  outvalue "Amp19", 1.0
+  outvalue "Amp20", 1.0
+  outvalue "Amp21", 1.0
+  outvalue "Amp22", 1.0
+  outvalue "Amp23", 1.0
+  outvalue "Amp24", 1.0
 
-	outvalue	"Sound"		, 4
-	outvalue	"Density"		, 1
-	outvalue	"Rate"		, 0.5
-	outvalue	"DopplerDepth"	, 0.0001
-	outvalue	"PanDepth"	, 0.1
-	outvalue	"RvbSend"		, 0.3
-	outvalue	"RvbSize"		, 0.8
-	outvalue	"OutGain"		, 0.5
-	outvalue	"LPF"		, 1.0	;20000 Hz
-	outvalue	"HPF"		, 0.0	;20 Hz
+  outvalue "Sound", 4
+  outvalue "Density", 1
+  outvalue "Rate", 0.5
+  outvalue "DopplerDepth", 0.0001
+  outvalue "PanDepth", 0.1
+  outvalue "RvbSend", 0.3
+  outvalue "RvbSize", 0.8
+  outvalue "OutGain", 0.5
+  outvalue "LPF", 1.0  ; 20000 Hz
+  outvalue "HPF", 0.0  ; 20 Hz
 endin
 
-instr	99	;WRITE VALUES TO TABLES
-	;DEFINE MACRO CONTAINING CODE FOR WRITING GUI VARIABLES INTO TABLE 
-#define	WRITE_TO_TABLE(N)
-	#
-	tablew	gkQ$N, $N-1, giQs						;WRITE GUI SLIDER VARIABLE INTO TABLE
-	tablew	gkAmp$N, $N-1, giAmps					;WRITE GUI SLIDER VARIABLE INTO TABLE
-	tablew	gkrto$N, $N-1, girtos21					;WRITE GUI SLIDER VARIABLE INTO TABLE
-	#
-	$WRITE_TO_TABLE(1) 
-	$WRITE_TO_TABLE(2) 
-	$WRITE_TO_TABLE(3) 
-	$WRITE_TO_TABLE(4) 
-	$WRITE_TO_TABLE(5) 
-	$WRITE_TO_TABLE(6) 
-	$WRITE_TO_TABLE(7) 
-	$WRITE_TO_TABLE(8) 
-	$WRITE_TO_TABLE(9) 
-	$WRITE_TO_TABLE(10)
-	$WRITE_TO_TABLE(11)
-	$WRITE_TO_TABLE(12)
-	$WRITE_TO_TABLE(13)
-	$WRITE_TO_TABLE(14)
-	$WRITE_TO_TABLE(15)
-	$WRITE_TO_TABLE(16)
-	$WRITE_TO_TABLE(17)
-	$WRITE_TO_TABLE(18)
-	$WRITE_TO_TABLE(19)
-	$WRITE_TO_TABLE(20)
-	$WRITE_TO_TABLE(21)
-	$WRITE_TO_TABLE(22)
-	$WRITE_TO_TABLE(23)
-	$WRITE_TO_TABLE(24)
+instr 99  ; Write values to tables
+  ; Define macro containing code for writing GUI variables into table
+  #define WRITE_TO_TABLE(N)
+  #
+  tablew gkQ$N, $N-1, giQs        ; Write GUI slider variable into table
+  tablew gkAmp$N, $N-1, giAmps    ; Write GUI slider variable into table
+  tablew gkrto$N, $N-1, girtos21  ; Write GUI slider variable into table
+  #
+  $WRITE_TO_TABLE(1)
+  $WRITE_TO_TABLE(2)
+  $WRITE_TO_TABLE(3)
+  $WRITE_TO_TABLE(4)
+  $WRITE_TO_TABLE(5)
+  $WRITE_TO_TABLE(6)
+  $WRITE_TO_TABLE(7)
+  $WRITE_TO_TABLE(8)
+  $WRITE_TO_TABLE(9)
+  $WRITE_TO_TABLE(10)
+  $WRITE_TO_TABLE(11)
+  $WRITE_TO_TABLE(12)
+  $WRITE_TO_TABLE(13)
+  $WRITE_TO_TABLE(14)
+  $WRITE_TO_TABLE(15)
+  $WRITE_TO_TABLE(16)
+  $WRITE_TO_TABLE(17)
+  $WRITE_TO_TABLE(18)
+  $WRITE_TO_TABLE(19)
+  $WRITE_TO_TABLE(20)
+  $WRITE_TO_TABLE(21)
+  $WRITE_TO_TABLE(22)
+  $WRITE_TO_TABLE(23)
+  $WRITE_TO_TABLE(24)
 endin
 
-instr	1	;MIDI ACTIVATED INSTRUMENT
-	kamp		init		1											;CONSTANT STRIKE AMPLITUDE
-	apulse	mpulse	kamp, 0										;STRIKE IMPULSE
-	icfoct	veloc	8,13											;SET CUTOFF FREQUENCY FOR FILTERING STRIKE IMPULSE ACCORDING TO KEY VELOCITY
-	apulse	butlp	apulse,cpsoct(icfoct)							;FILTER STRIKE IMPULSE
+instr 1                  ; MIDI activated instrument
+  kamp init 1            ; Constant strike amplitude
+  apulse mpulse kamp, 0  ; Strike impulse
+  ; Set cutoff frequency for filtering strike impulse according to key velocity
+  icfoct veloc 8, 13
+  apulse butlp apulse, cpsoct(icfoct)  ; Filter strike impulse
 
-	ibase	cpsmidi												;BASE FREQUENCY FOR MODE RESONATORS DERIVED FROM MIDI NOTE NUMBER
-	icount	init		1											;INITIALIZE COUNTER USED INB COUNTING OUT THE REQUIRED NUMBER OF MODES
-			modemodulei	apulse, ibase, icount, gialgfn, gimodes			;CALL modemodule USER DEFINED OPCODE
-	aout		zar		0											;READ FROM ACCUMULATED ZAK CHANNEL
-	idur		init		(i(gkQ)/ibase)*2								;ESTIMATE NOTE DURATION
-			xtratim	idur											;EXTEND NOTE BEYOND MIDI NOTE OFF
-	aout		=		(aout*gkOutGain) / gimodes
+  ibase cpsmidi  ; Base frequency for mode resonators derived from MIDI note number
+  icount init 1  ; Initialize counter used inb counting out the required number of modes
+  ; Call modemodule user defined opcode
+  modemodulei apulse, ibase, icount, gialgfn, gimodes
+  aout zar 0                  ; Read from accumulated zak channel
+  idur init (i(gkQ)/ibase)*2  ; Estimate note duration
+  xtratim idur                ; Extend note beyond MIDI note off
+  aout = (aout*gkOutGain) / gimodes
 
-	if	gkDopOn=1	then												;IF 'Doppler' SWITCH IS 'ON'... 
-		a1,a2	dopplerUDO	aout, gkDopRate, gkDopDep, gkPanDep		;CALL 'dopplerUDO' UDO
-				outs			a1,a2								;SEND AUDIO TO OUTPUTS                                                
-				zawm			a1*gkRvbSnd, 1							;SEND SOME OF THE AUDIO TO THE REVERB VIA ZAK PATCHING (LEFT CHANNEL) 
-				zawm			a2*gkRvbSnd, 2                     		;SEND SOME OF THE AUDIO TO THE REVERB VIA ZAK PATCHING (RIGHT CHANNEL)
-	else                                               				     ;OTHERWISE...                                                         
-				outs			aout, aout							;SEND AUDIO TO OUTPUTS                                                
-				zawm			aout*gkRvbSnd, 1						;SEND SOME OF THE AUDIO TO THE REVERB VIA ZAK PATCHING (LEFT CHANNEL) 
-				zawm			aout*gkRvbSnd, 2						;SEND SOME OF THE AUDIO TO THE REVERB VIA ZAK PATCHING (RIGHT CHANNEL)
-	endif														;END OF CONDITIONAL BRANCH                                            
-			zacl		0, 0	
+  ; If 'doppler' switch is 'on'...
+  if gkDopOn = 1 then
+    a1, a2 dopplerUDO aout, gkDopRate, gkDopDep, gkPanDep  ; CALL 'dopplerUDO' UDO
+    outs a1, a2                                            ; Send audio to outputs
+    ; Send some of the audio to the reverb via zak patching (left channel)
+    zawm a1*gkRvbSnd, 1
+    ; Send some of the audio to the reverb via zak patching (right channel)
+    zawm a2*gkRvbSnd, 2
+  else               ; Otherwise...
+    outs aout, aout  ; Send audio to outputs
+    ; Send some of the audio to the reverb via zak patching (left channel)
+    zawm aout*gkRvbSnd, 1
+    ; Send some of the audio to the reverb via zak patching (right channel)
+    zawm aout*gkRvbSnd, 2
+  endif  ; End of conditional branch
+  zacl 0, 0
 endin
 
-instr	2	;GUI MODE RESONATORS INSTRUMENT (CALLS A UDO MULTIPLE TIMES ACCORDING TO THE NUMBER OF MODES IN THE SELECTED MODE ALGORITHM)
-	kporttime		linseg	0,0.01,0.01								;CREATE A RAMPING UP ENVELOPE
-	if 	gkinput==0	then
-		;GENERATE AN IMPULSE SIGNAL===============================================================================================================================================
-		kintvl	random	0.05, 0.3									;RANDOMIZED INTERVAL BETWEEN STRIKES
-		kamp		init		1										;CONSTANT STRIKE AMPLITUDE
-		apulse	mpulse	 kamp, kintvl*(1/gkdensity)					;STRIKE IMPULSE
-		kcfoct	randomi	4,12,5									;RANDOMIZE CUTOFF FREQUENCY FOR FILTERING STRIKE IMPULSE
-		apulse	butlp	apulse,cpsoct(kcfoct)						;FILTER STRIKE IMPULSE
-		;=========================================================================================================================================================================
-	else
-		apulse	pinkish	0.1										;A PINK NOISE SIGNAL
-		kPinkLP	portk	gkPinkLP, kporttime							;SMOOTH GUI SLIDER VARIABLE
-		kPinkHP	portk	gkPinkHP, kporttime							;SMOOTH GUI SLIDER VARIABLE
-		apulse	butlp	apulse, kPinkLP							;APPLY FILTER TO PINK NOISE SIGNAL
-		apulse	buthp	apulse, kPinkHP							;APPLY FILTER TO PINK NOISE SIGNAL
-	endif
+; GUI mode resonators instrument (calls a udo multiple times according to the number of
+; modes in the selected mode algorithm)
+instr 2
+  kporttime linseg 0, 0.01, 0.01  ; Create a ramping up envelope
+  if gkinput == 0 then
+    ; Generate an impulse
+    ; signal===============================================================================================================================================
+    kintvl random 0.05, 0.3                   ; Randomized interval between strikes
+    kamp init 1                               ; Constant strike amplitude
+    apulse mpulse kamp, kintvl*(1/gkdensity)  ; Strike impulse
+    ; Randomize cutoff frequency for filtering strike impulse
+    kcfoct randomi 4, 12, 5
+    apulse butlp apulse, cpsoct(kcfoct)  ; Filter strike impulse
+    ; =========================================================================================================================================================================
+  else
+    apulse pinkish 0.1                 ; A pink noise signal
+    kPinkLP portk gkPinkLP, kporttime  ; Smooth GUI slider variable
+    kPinkHP portk gkPinkHP, kporttime  ; Smooth GUI slider variable
+    apulse butlp apulse, kPinkLP       ; Apply filter to pink noise signal
+    apulse buthp apulse, kPinkHP       ; Apply filter to pink noise signal
+  endif
 
-	kbase	portk	gkbase, kporttime								;APPLY PORTAMENTO SMOOTHING TO GUI SLIDER VARIABLE
+  kbase portk gkbase, kporttime  ; Apply portamento smoothing to GUI slider variable
 
-	ktrig	changed	gksound										;IF SOUND CHOICE CHANGES GENERATE A MOMENTARY '1' (BANG)
-	if	ktrig=1	then												;IF A TRIGGER HAS BEEN GENERATED...
-		reinit	RESTART											;BEGIN A REINITIALIZATION PASS FROM LABEL RESTART
-	endif														;END OF CONDITIONAL BRANCHING
-	RESTART:														;LABEL 'RESTART'
-	icount	init		1											;INITIALIZE COUNTER USED INB COUNTING OUT THE REQUIRED NUMBER OF MODES
-			modemodule	apulse, kbase, icount, gialgfn, gimodes			;CALL modemodule USER DEFINED OPCODE
-	aout		zar		0											;READ FROM ACCUMULATED ZAK CHANNEL
-	aout		=		(aout * gkOutGain) / gimodes						;RESCALE AMPLITUDE OF AUDIO SIGNAL ACCORDING TO NUMBER OF MODES PRESENT AND RESCALE ALSO ACCORDING TO 'Output Gain' SLIDER
-			rireturn												;RETURN FROM REINITIALIZATION PASS
-	if	gkDopOn=1	then												;IF 'Doppler' SWITCH IS 'ON'...                                       
-		a1,a2	dopplerUDO	aout, gkDopRate, gkDopDep, gkPanDep		;CALL 'dopplerUDO' UDO                                           
-			outs		a1,a2										;SEND AUDIO TO OUTPUTS                                                
-			zawm		a1 * gkRvbSnd, 1								;SEND SOME OF THE AUDIO TO THE REVERB VIA ZAK PATCHING (LEFT CHANNEL) 
-			zawm		a2 * gkRvbSnd, 2								;SEND SOME OF THE AUDIO TO THE REVERB VIA ZAK PATCHING (RIGHT CHANNEL)
-	else															;OTHERWISE...                                                         
-			outs		aout, aout									;SEND AUDIO TO OUTPUTS                                                
-			zawm		aout * gkRvbSnd, 1								;SEND SOME OF THE AUDIO TO THE REVERB VIA ZAK PATCHING (LEFT CHANNEL) 
-			zawm		aout * gkRvbSnd, 2								;SEND SOME OF THE AUDIO TO THE REVERB VIA ZAK PATCHING (RIGHT CHANNEL)
-	endif														;END OF CONDITIONAL BRANCH                                            
-			zacl		0, 0											;CLEAR ZAK AUDIO CHANNELS FROM 0 - 0                                  
+  ktrig changed gksound  ; If sound choice changes generate a momentary '1' (bang)
+  if ktrig = 1 then      ; If a trigger has been generated...
+    reinit RESTART       ; Begin a reinitialization pass from label restart
+  endif                  ; End of conditional branching
+RESTART:                 ; Label 'restart'
+  ; Initialize counter used inb counting out the required number of modes
+  icount init 1
+  ; Call modemodule user defined opcode
+  modemodule apulse, kbase, icount, gialgfn, gimodes
+  aout zar 0  ; Read from accumulated zak channel
+  ; Rescale amplitude of audio signal according to number of modes present and rescale
+  ; also according to 'output gain' slider
+  aout = (aout * gkOutGain) / gimodes
+  ; Return from reinitialization pass
+  rireturn
+  ; If 'doppler' switch is 'on'...
+  if gkDopOn = 1 then
+    a1, a2 dopplerUDO aout, gkDopRate, gkDopDep, gkPanDep  ; CALL 'dopplerUDO' UDO
+    outs a1, a2                                            ; Send audio to outputs
+    ; Send some of the audio to the reverb via zak patching (left channel)
+    zawm a1 * gkRvbSnd, 1
+    ; Send some of the audio to the reverb via zak patching (right channel)
+    zawm a2 * gkRvbSnd, 2
+  else               ; Otherwise...
+    outs aout, aout  ; Send audio to outputs
+    ; Send some of the audio to the reverb via zak patching (left channel)
+    zawm aout * gkRvbSnd, 1
+    ; Send some of the audio to the reverb via zak patching (right channel)
+    zawm aout * gkRvbSnd, 2
+  endif      ; End of conditional branch
+  zacl 0, 0  ; Clear zak audio channels from 0 - 0
 endin
 
-instr	1000	;REVERB	
-	ainL			zar		1										;READ IN AUDIO FROM ZAK CHANNELS
-	ainR			zar		2										;READ IN AUDIO FROM ZAK CHANNELS
-				denorm	ainL, ainR								;...DENORMALIZE BOTH CHANNELS OF AUDIO SIGNAL
-	arvbL, arvbR 	reverbsr 	ainL, ainR, gkRvbSze, 10000					;CREATE REVERBERATED SIGNAL (USING UDO DEFINED ABOVE)
-				outs		arvbL, arvbR								;SEND AUDIO TO OUTPUTS
-				zacl		1,2										;CLEAR ZAK AUDIO CHANNELS
+instr 1000           ; Reverb
+  ainL zar 1         ; Read in audio from zak channels
+  ainR zar 2         ; Read in audio from zak channels
+  denorm ainL, ainR  ; ...Denormalize both channels of audio signal
+  ; Create reverberated signal (using udo defined above)
+  arvbL, arvbR reverbsr ainL, ainR, gkRvbSze, 10000
+  outs arvbL, arvbR  ; Send audio to outputs
+  zacl 1, 2          ; Clear zak audio channels
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0.0	   3600	;GUI
-i 12		0.0     0.01	;INIT
+; Instr | start | duration
+i 10 0.0 3600  ; GUI
+i 12 0.0 0.01  ; Init
 
-i 99 	0.0     3600	;UPDATE FUNCTION TABLES FOR INDIVIDUAL Q CONTROL AND AMPLITUDE CONTROL
-i 1000	0.0     3600	;REVERB
+i 99 0.0 3600    ; Update function tables for individual q control and amplitude control
+i 1000 0.0 3600  ; Reverb
 </CsScore>
 </CsoundSynthesizer>
 
@@ -607,9 +648,9 @@ i 1000	0.0     3600	;REVERB
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -627,15 +668,20 @@ i 1000	0.0     3600	;REVERB
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -656,14 +702,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -685,14 +731,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -732,14 +778,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -761,14 +807,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -808,14 +854,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -837,14 +883,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -884,15 +930,20 @@ i 1000	0.0     3600	;REVERB
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -913,15 +964,20 @@ i 1000	0.0     3600	;REVERB
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -944,6 +1000,18 @@ i 1000	0.0     3600	;REVERB
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>Q01</objectName>
@@ -979,14 +1047,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1026,14 +1094,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1073,14 +1141,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1120,14 +1188,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1167,14 +1235,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1214,14 +1282,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1261,14 +1329,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1308,14 +1376,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1355,14 +1423,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1402,14 +1470,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1449,14 +1517,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1496,14 +1564,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1543,14 +1611,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1590,14 +1658,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1637,14 +1705,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1684,14 +1752,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1731,14 +1799,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1778,14 +1846,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1825,14 +1893,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1872,14 +1940,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1919,14 +1987,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1966,14 +2034,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2013,14 +2081,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2060,14 +2128,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2107,14 +2175,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2154,14 +2222,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2201,14 +2269,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2248,14 +2316,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2295,14 +2363,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2342,14 +2410,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2389,14 +2457,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2436,14 +2504,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2483,14 +2551,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2530,14 +2598,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2577,14 +2645,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2624,14 +2692,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2671,14 +2739,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2718,14 +2786,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2765,14 +2833,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2812,14 +2880,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2859,14 +2927,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2906,14 +2974,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2953,14 +3021,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3000,14 +3068,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3047,14 +3115,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3094,14 +3162,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3141,14 +3209,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3188,14 +3256,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3217,14 +3285,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3246,14 +3314,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3275,14 +3343,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3322,14 +3390,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3369,14 +3437,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3416,14 +3484,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3463,14 +3531,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3510,14 +3578,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3537,9 +3605,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -3572,14 +3640,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3599,9 +3667,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -3634,14 +3702,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3661,9 +3729,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -3696,14 +3764,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3723,9 +3791,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -3758,14 +3826,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3785,9 +3853,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -3820,14 +3888,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3847,9 +3915,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -3882,14 +3950,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3909,9 +3977,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -3944,14 +4012,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3971,9 +4039,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4006,14 +4074,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4033,9 +4101,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4068,14 +4136,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4095,9 +4163,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4130,14 +4198,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4157,9 +4225,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4192,14 +4260,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4219,9 +4287,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4254,14 +4322,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4281,9 +4349,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4316,14 +4384,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4343,9 +4411,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4378,14 +4446,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4405,9 +4473,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4440,14 +4508,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4467,9 +4535,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4502,14 +4570,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4529,9 +4597,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4564,14 +4632,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4591,9 +4659,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4626,14 +4694,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4653,9 +4721,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4688,14 +4756,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4715,9 +4783,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4750,14 +4818,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4777,9 +4845,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4812,14 +4880,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4839,9 +4907,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4874,14 +4942,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4901,9 +4969,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4936,14 +5004,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4963,9 +5031,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
@@ -4998,14 +5066,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5145,9 +5213,9 @@ i 1000	0.0     3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
@@ -5180,14 +5248,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5209,14 +5277,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5256,14 +5324,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5285,14 +5353,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5332,14 +5400,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5361,14 +5429,14 @@ i 1000	0.0     3600	;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5409,14 +5477,14 @@ Mode is a filtering opcode which is intended to be used as a resonator for modal
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>2</borderradius>
@@ -5460,11 +5528,23 @@ Mode is a filtering opcode which is intended to be used as a resonator for modal
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i2 0 -1</eventLine>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

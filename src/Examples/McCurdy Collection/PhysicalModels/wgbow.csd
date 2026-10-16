@@ -1,139 +1,152 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;DEMONSTRATION OF THE wgbow OPCODE. THIS IS A PHYSICALLY MODELLED BOWED STRING INSTRUMENT BASED ON WORK BY PERRY COOK
+; Demonstration of the wgbow opcode. This is a physically modelled bowed string instrument
+; based on work by perry cook
 
-;kamp - AMPLITUDE
+; Kamp - amplitude
 
-;kfreq - THE FUNDEMENTAL OF THE TONE PRODUCED
+; Kfreq - the fundemental of the tone produced
 
-;kpres - PRESSURE OF THE BOW UPON THE STRING
-;	THE OPCODE AUTHOR, JOHN FFITCH, SUGGESTS THAT WE CHOOSE VALUES WITHIN THE RANGE 1 to 5
-;	HE ALSO SUGGESTS THAT A VALUE OF 3 REFLECTS NORMAL PLAYING PRESSURE
+; Kpres - pressure of the bow upon the string
+; The opcode author, john ffitch, suggests that we choose values within the range 1 to 5
+; He also suggests that a value of 3 reflects normal playing pressure
 
-;krat - POSITION OF THE BOW ALONG THE LENGTH OF THE STRING
-;	THE OPCODE AUTHOR SUGGESTS THAT WE CHOOSE VALUES WITHIN THE RANGE .025 to 0.23
-;	HE ALSO SUGGESTS THAT A VALUE OF .127236 REFLECTS A NORMAL BOWING POSITION
-;	STRING EFFECTS SUCH AS 'SUL PONTICELLO' (AT THE BRIDGE) AND 'FLAUTANDO' (OVER THE NECK) CAN BE IMITATED USING THIS PARAMETER
-;	A VALUE OF .025 REFLECTS A 'SUL PONTICELLO' STYLE OF PLAYING AND PRODUCES A THINNER TONE
-;	A VALUE OF .23 REFLECTS A 'FLAUTANDO' STYLE OF PLAYING AND PRODUCES A FLUTE-LIKE TONE
-;	THESE SUGGESTED SETTINGS FOR krat ARE BASED UPON A CONVENTIONAL PLAYING TECHNIQUE OF A BOWED INSTRUMENT.
-;	IF VALUES ARE CHOSEN BEYOND THESE LIMITS OTHER UNCONVENTIONAL SOUNDS ARE POSSIBLE.
-;	0 = THE STRING BEING BOWED AT THE NUT (NECK), 1 = THE STRING BEING BOWED AT THE BRIDGE
-;	IN ACTUALITY VALUES OF 0 AND 1 WILL PRODUCE SILENCE
-;	VALUES CLOSE TO ZERO OR CLOSE TO 1 WILL PRODUCE A THIN, HARD SOUND (BOWED NEAR THE NECK END OR NEAR THE BRIDGE)
-;	A VALUE OF .5 WILL PRODUCE A SOFT FLUTEY SOUND (STRING BOWED HALFWAY ALONG ITS LENGTH)
+; Krat - position of the bow along the length of the string
+; The opcode author suggests that we choose values within the range .025 to 0.23
+; He also suggests that a value of .127236 reflects a normal bowing position
+; String effects such as 'sul ponticello' (at the bridge) and 'flautando' (over the neck)
+; can be imitated using this parameter
+; A value of .025 reflects a 'sul ponticello' style of playing and produces a thinner tone
+; A value of .23 reflects a 'flautando' style of playing and produces a flute-like tone
+; These suggested settings for krat are based upon a conventional playing technique of a
+; bowed instrument.
+; If values are chosen beyond these limits other unconventional sounds are possible.
+; 0 = The string being bowed at the nut (neck), 1 = the string being bowed at the bridge
+; In actuality values of 0 and 1 will produce silence
+; Values close to zero or close to 1 will produce a thin, hard sound (bowed near the neck
+; end or near the bridge)
+; A value of .5 will produce a soft flutey sound (string bowed halfway along its length)
 
-;kvibf/kvibamp - THIS OPCODE IMPLEMENTS VIBRATO THAT GOES BEYOND JUST FREQUENCY MODULATION AND INCLUDES MODULATION 
-;	-UPON SEVERAL OTHER ASPECTS OF THE SOUND INCLUDING AMPLITUDE MODULATION
-;	A USEFUL RANGE FOR kvibamp (AMPLITUDE OF VIBRATO) IS 0-.1 WHERE 0=NO VIBRATO AND .1=A LOT OF VIBRATO
-;	kvibf IS USED TO CONTROL VIBRATO FREQUENCY, A NATURAL VIBRATYO FREQUENCY IS ABOUT 5 HZ
+; Kvibf/kvibamp - this opcode implements vibrato that goes beyond just frequency
+; modulation and includes modulation
+; -Upon several other aspects of the sound including amplitude modulation
+; A useful range for kvibamp (amplitude of vibrato) is 0-.1 where 0=no vibrato and .1=a
+; lot of vibrato
+; Kvibf is used to control vibrato frequency, a natural vibratyo frequency is about 5 hz
 
-;ifn - A FUNCTION TABLE WAVEFORM MUST BE GIVEN TO DEFINE THE SHAPE OF THE VIBRATO, 
-;	-THIS SHOULD NORMALLY BE A SINE WAVE.
+; Ifn - a function table waveform must be given to define the shape of the vibrato,
+; -This should normally be a sine wave.
 
-;THE OPCODE OFFERS 1 FURTHER *OPTIONAL* PARAMETER:
+; The opcode offers 1 further *optional* parameter:
 
-;iminfreq - A MINIMUM FREQUENCY SETTING GIVEN TO THE ALGORITHM
-;	- TYPICALLY THIS IS SET TO A VALUE BELOW THE FREQUENCY SETTING GIVEN BY kfreq (IF OMITTED IT DEFAULTS TO 50HZ)
-;	- IF kfreq GOES BELOW iminfreq THE SETTING FOR kfreq NO LONGER REFLECTS THE PITCH THAT IS ACTUALLY HEARD.
-
-
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-;Notes on modifications from original csd:
-;	Add tables for exp slider
-;	INIT instrument added
+; Iminfreq - a minimum frequency setting given to the algorithm
+; - Typically this is set to a value below the frequency setting given by kfreq (if
+; omitted it defaults to 50hz)
+; - If kfreq goes below iminfreq the setting for kfreq no longer reflects the pitch that
+; is actually heard.
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+
+; Notes on modifications from original csd:
+; Add tables for exp slider
+; INIT instrument added
+
+
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine	ftgen	0, 0, 4096, 10, 1						;SINE WAVE (USED FOR VIBRATO)
-giExp1	ftgen	0, 0, 129, -25, 0, 20.0, 128, 4000.0		;TABLE FOR EXP SLIDER
-giExp2	ftgen	0, 0, 129, -25, 0, 0.01, 128, 90.0			;TABLE FOR EXP SLIDER
-giExp3	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLE FOR EXP SLIDER
+gisine ftgen 0, 0, 4096, 10, 1                      ; Sine wave (used for vibrato)
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 4000.0   ; Table for exp slider
+giExp2 ftgen 0, 0, 129, -25, 0, 0.01, 128, 90.0     ; Table for exp slider
+giExp3 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
 
 
-instr	2	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkamp		invalue	"Amp"
-		kfreq		invalue	"Freq"
-		gkfreq		tablei	kfreq, giExp1, 1
-					outvalue	"Freq_Value", gkfreq
-		kpres		invalue	"BowPress"
-		gkpres		tablei	kpres, giExp2, 1
-					outvalue	"BowPress_Value", gkpres
-		gkrat		invalue	"BowPos"
-		gkvibf		invalue	"VibFreq"
-		gkvibamp		invalue	"VibAmp"
-		kminfreq		invalue	"MinFreq"
-		gkminfreq		tablei	kminfreq, giExp3, 1
-					outvalue	"MinFreq_Value", gkminfreq
-	endif
+instr 2  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkamp invalue "Amp"
+    kfreq invalue "Freq"
+    gkfreq tablei kfreq, giExp1, 1
+    outvalue "Freq_Value", gkfreq
+    kpres invalue "BowPress"
+    gkpres tablei kpres, giExp2, 1
+    outvalue "BowPress_Value", gkpres
+    gkrat    invalue "BowPos"
+    gkvibf   invalue "VibFreq"
+    gkvibamp invalue "VibAmp"
+    kminfreq invalue "MinFreq"
+    gkminfreq tablei kminfreq, giExp3, 1
+    outvalue "MinFreq_Value", gkminfreq
+  endif
 endin
 
-instr	1	;MIDI ACTIVATED INSTRUMENT
-	ioct		octmidi											;READ NOTE VALUES FROM MIDI INPUT IN THE 'OCT' FORMAT
-	iamp		ampmidi	1										;AMPLITUDE IS READ FROM INCOMING MIDI NOTE
+instr 1           ; MIDI activated instrument
+  ioct octmidi    ; Read note values from MIDI input in the 'oct' format
+  iamp ampmidi 1  ; Amplitude is read from incoming MIDI note
 
-	;kpres	aftouch	1, 5										;AFTERTOUCH CONTROL OF BOW PRESSURE
-	;kpres	ctrl7	1, 1, 1, 5								;MOD. WHEEL CONTROL OF BOW PRESSURE
-	kpres	=	gkpres
+  ; Kpres aftouch 1, 5          ;aftertouch control of bow pressure
+  ; Kpres ctrl7 1, 1, 1, 5        ;mod. Wheel control of bow pressure
+  kpres = gkpres
 
-	;PITCH BEND INFORMATION IS READ
-	iSemitoneBendRange=	2										;PITCH BEND RANGE IN SEMITONES (WILL BE DEFINED FURTHER LATER)
-	imin 	=		0										;EQUILIBRIUM POSITION
-	imax		=		iSemitoneBendRange * .0833333					;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend	pchbend	imin, imax								;PITCH BEND VARIABLE (IN oct FORMAT)
-	kfreq	=		cpsoct(ioct+ kbend)
+  ; Pitch bend information is read
+  ; Pitch bend range in semitones (will be defined further later)
+  iSemitoneBendRange = 2
+  imin               = 0  ; Equilibrium position
+  ; Max pitch displacement (in oct format)
+  imax = iSemitoneBendRange * .0833333
+  ; Pitch bend variable (in oct format)
+  kbend pchbend imin, imax
+  kfreq = cpsoct(ioct+ kbend)
 
-	aenv		linsegr	1, 3600, 1, 0.01, 0							;ANTI-CLICK ENVELOPE
-	abow		wgbow	gkamp*iamp, kfreq, kpres, gkrat, gkvibf, gkvibamp, gisine, i(gkminfreq)
-			outs		abow * aenv, abow * aenv						;SEND AUDIO TO OUTPUTS
+  aenv linsegr 1, 3600, 1, 0.01, 0  ; Anti-click envelope
+  abow wgbow gkamp*iamp, kfreq, kpres, gkrat, gkvibf, gkvibamp, gisine, i(gkminfreq)
+  outs abow * aenv, abow * aenv  ; Send audio to outputs
 endin
 
-instr	3	;GUI TRIGGERED INSTRUMENT
-	kSwitch	changed	gkminfreq									;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then
-		reinit	START
-	endif
+instr 3  ; GUI triggered instrument
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkminfreq
+  if kSwitch = 1 then
+    reinit START
+  endif
 
-	iporttime	=		0.01
-	kporttime	linseg	0, 0.01, iporttime, 1, iporttime
-	krat		portk	gkrat, kporttime
-	kpres	portk	gkpres, kporttime
-	kfreq	portk	gkfreq, kporttime
-	START:
-	abow		wgbow	gkamp, kfreq, kpres, krat, gkvibf, gkvibamp, gisine, i(gkminfreq)
-			rireturn
-			outs 	abow, abow
+  iporttime = 0.01
+  kporttime linseg 0, 0.01, iporttime, 1, iporttime
+  krat  portk gkrat, kporttime
+  kpres portk gkpres, kporttime
+  kfreq portk gkfreq, kporttime
+START:
+  abow wgbow gkamp, kfreq, kpres, krat, gkvibf, gkvibamp, gisine, i(gkminfreq)
+  rireturn
+  outs abow, abow
 endin
 
-instr	4	;INIT
-		outvalue	"Amp"	, 0.3
-		outvalue	"Freq"	, 0.404
-		outvalue	"BowPress", 0.6264
-		outvalue	"BowPos"	, .127236
-		outvalue	"VibFreq"	, 4.5
-		outvalue	"VibAmp"	, .008
-		outvalue	"MinFreq"	, 0.0
+instr 4  ; Init
+  outvalue "Amp", 0.3
+  outvalue "Freq", 0.404
+  outvalue "BowPress", 0.6264
+  outvalue "BowPos", .127236
+  outvalue "VibFreq", 4.5
+  outvalue "VibAmp", .008
+  outvalue "MinFreq", 0.0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION 
-i 2		0		3600	;GUI
-i 4		0		0.1	;INIT
+; Instr | start | duration
+i 2 0 3600  ; GUI
+i 4 0 0.1   ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -146,9 +159,9 @@ i 4		0		0.1	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -166,15 +179,20 @@ i 4		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -195,14 +213,14 @@ i 4		0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -242,14 +260,14 @@ i 4		0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -271,15 +289,20 @@ i 4		0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -301,14 +324,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -327,11 +350,23 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i 3 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -349,14 +384,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -396,14 +431,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -425,14 +460,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -472,14 +507,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -501,14 +536,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -548,14 +583,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -577,14 +612,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -624,14 +659,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -653,14 +688,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -700,14 +735,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -729,14 +764,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -776,14 +811,14 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

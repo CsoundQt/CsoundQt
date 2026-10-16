@@ -1,41 +1,44 @@
-;Writen by Iain McCurdy, 2006
+; Writen by Iain McCurdy, 2006
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add scope for fun
+; Notes on modifications from original csd:
+; Add scope for fun
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
- 
-</CsOptions>    
+
+</CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 128	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 128    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	1	; SIMPLE BEEP INSTRUMENT - CAN BE ACTIVATED VIA A CONNECTED MIDI KEYBOARD
+instr 1  ; Simple beep instrument - can be activated via a connected MIDI keyboard
 
-	icps		cpsmidi
-	iamp		ampmidi	0.2
-	
-	; linsegr IS USED TO CREATE AN ADSR STYLE ENVELOPE
-	; ATTACK LEVEL IS HIGHER THAN SUSTAIN LEVEL GIVING THE NOTE A HARD ATTACK
-	;               INITIAL_LEVEL | ATTACK_TIME | ATTACK_LEVEL | DECAY_TIME | SUSTAIN_LEVEL |  RELEASE_TIME | RELEASE_LEVEL
-	aenv		linsegr	0,           (.01),          1,           (.1),          .5,            (.5),            0 
+  icps cpsmidi
+  iamp ampmidi 0.2
 
-	;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | FUNCTION_TABLE
-	asig		oscili	iamp*aenv,      icps,        1
-			outs		asig, asig	;SEND AUDIO OUTPUT OF OSCILLATOR TO THE SPEAKERS
+  ; Linsegr is used to create an adsr style envelope
+  ; Attack level is higher than sustain level giving the note a hard attack
+  ; Initial_level | attack_time | attack_level | decay_time | sustain_level | release_time
+  ; | release_level
+  aenv linsegr 0, (.01), 1, (.1), .5, (.5), 0
+
+  ; Output opcode amplitude | frequency | function_table
+  asig oscili iamp*aenv, icps, 1
+  outs asig, asig  ; Send audio output of oscillator to the speakers
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 1024 10 1	; SINE WAVE
-f 0 600			; THIS LINE FUNCTIONS AS A DUMMY SCORE EVENT AND ALLOWS REALTIME MIDI PLAYING FOR 10 MINUTES
+f 1 0 1024 10 1  ; Sine wave
+; This line functions as a dummy score event and allows realtime MIDI playing for 10
+; minutes
+f 0 600
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

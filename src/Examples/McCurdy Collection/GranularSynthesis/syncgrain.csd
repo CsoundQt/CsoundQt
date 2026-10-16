@@ -1,194 +1,231 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, October 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, October 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;An INIT preset is called at the start of csound (inst 2), a valid (mono or stereo) audio file have to be selected and preset 0 saved before playing.
+; An INIT preset is called at the start of csound (inst 2), a valid (mono or stereo) audio
+; file have to be selected and preset 0 saved before playing.
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio files, accept mono or stereo wav files
-;	Instrument 1 is activated by MIDI and by the GUI
-;	Removed Recording instrument, included in QuteCsound
-;	Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio files, accept mono or stereo wav files
+; Instrument 1 is activated by MIDI and by the GUI
+; Removed Recording instrument, included in QuteCsound
+; Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
 
-;	                          syncgrain
-;	----------------------------------------------------------------------------------------------------------------------------
-;	Syncgrain offers granular synthesis upon a stored sound file stored in a gen 1 function table.
-;	Syncgrain's strength lies in its use of k-rate control for its main input arguments which encourages real time manipulation.
-;	Another distinctive feature of syncgrain is the interaction between the density (kfreq), grain size (kgrsize) and progress
-;	rate (kprate). Density or grain frequency (kfreq) defines the number of grains per second. Higher values for grain density
-;	have the effect of increasing the progress rate through the sound file (kprate). Increasing the grain size also increases the
-;	rate of progress through the sound file.
-;	The progress rate  (kprate) defines the location from where a grain will begin playback as a fraction of the previous grain's
-;	entire trajectory. If progress rate is given a value of 1 then a grain will begin exactly where the previous grain finished.
-;	If progress rate is given a value of 0.5 then it will begin at the halfway point of the previous grain's trajectory.
-;	Negative values for progress rate cause the progress pointer to move backwards through the file (but playback of each grain
-;	is still forwards).
-;	The user is required to provide an amplitude envelope which is stored in a function table. In this example the user is provided
-;	with six grain envelopes from which to choose.
-;	Details are provided on the interface. Some additional functions have been added that are not part of the original opcode:
-;	'Grain Density' (frequency) and 'Grain Size' can be randomized. The 'Freeze' button sets the 'Progress Rate' slider to zero
-;	thereby effectively freezing progress through the sound file.
-;	This instrument can also be activated via MIDI. MIDI pitch values can be mapped to grain density and/or to the pitch of the
-;	material contained within the grain. In the latter mapping option, middle C is the point at which no transposition occurs.
-;	Using MIDI activation, polyphony is possible.
-;	The attack and release times of an amplitude envelope applied to the entire grain cloud can be modulated by the user using two
-;	on screen sliders. These controls are probably most useful when triggering this example via MIDI.
+; syncgrain
+; ----------------------------------------------------------------------------------------------------------------------------
+; Syncgrain offers granular synthesis upon a stored sound file stored in a gen 1 function
+; table.
+; Syncgrain's strength lies in its use of k-rate control for its main input arguments
+; which encourages real time manipulation.
+; Another distinctive feature of syncgrain is the interaction between the density (kfreq),
+; grain size (kgrsize) and progress
+; rate (kprate). Density or grain frequency (kfreq) defines the number of grains per
+; second. Higher values for grain density
+; have the effect of increasing the progress rate through the sound file (kprate).
+; Increasing the grain size also increases the
+; rate of progress through the sound file.
+; The progress rate (kprate) defines the location from where a grain will begin playback
+; as a fraction of the previous grain's
+; entire trajectory. If progress rate is given a value of 1 then a grain will begin
+; exactly where the previous grain finished.
+; If progress rate is given a value of 0.5 then it will begin at the halfway point of the
+; previous grain's trajectory.
+; Negative values for progress rate cause the progress pointer to move backwards through
+; the file (but playback of each grain
+; is still forwards).
+; The user is required to provide an amplitude envelope which is stored in a function
+; table. In this example the user is provided
+; with six grain envelopes from which to choose.
+; Details are provided on the interface. Some additional functions have been added that
+; are not part of the original opcode:
+; 'Grain Density' (frequency) and 'Grain Size' can be randomized. The 'Freeze' button sets
+; the 'Progress Rate' slider to zero
+; thereby effectively freezing progress through the sound file.
+; This instrument can also be activated via MIDI. MIDI pitch values can be mapped to grain
+; density and/or to the pitch of the
+; material contained within the grain. In the latter mapping option, middle C is the point
+; at which no transposition occurs.
+; Using MIDI activation, polyphony is possible.
+; The attack and release times of an amplitude envelope applied to the entire grain cloud
+; can be modulated by the user using two
+; on screen sliders. These controls are probably most useful when triggering this example
+; via MIDI.
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-; WINDOWING FUNCTIONS USED TO DYNAMICALLY SHAPE THE GRAINS
-; NUM | INIT_TIME | SIZE | GEN_ROUTINE | PARTIAL_NUM | STRENGTH | PHASE
-;GRAIN ENVELOPE WINDOW FUNCTION TABLES:
-giwfn1	ftgen	0,  0, 131072,  9,   .5,      1, 0 					; HALF SINE
-giwfn2	ftgen	0,  0, 131072,  7,    0,   3072, 1, 128000, 0			; PERCUSSIVE - STRAIGHT SEGMENTS
-giwfn3	ftgen	0,  0, 131072,  5, .001,   3072, 1, 128000, .001			; PERCUSSIVE - EXPONENTIAL SEGMENTS
-giwfn4	ftgen	0,  0, 131072,  7,    0,   1536, 1, 128000, 1, 1536, 0		; GATE - WITH DE-CLICKING RAMP UP AND RAMP DOWN SEGMENTS
-giwfn5	ftgen	0,  0, 131072,  7,    0, 128000, 1,   3072, 0			; REVERSE PERCUSSIVE - STRAIGHT SEGMENTS
-giwfn6	ftgen	0,  0, 131072,  5, .001, 128000, 1,   3072, .001			; REVERSE PERCUSSIVE - EXPONENTIAL SEGMENTS
+; Windowing functions used to dynamically shape the grains
+; Num | init_time | size | gen_routine | partial_num | strength | phase
+; Grain envelope window function tables:
+giwfn1 ftgen 0, 0, 131072, 9, .5, 1, 0               ; Half sine
+giwfn2 ftgen 0, 0, 131072, 7, 0, 3072, 1, 128000, 0  ; Percussive - straight segments
+; Percussive - exponential segments
+giwfn3 ftgen 0, 0, 131072, 5, .001, 3072, 1, 128000, .001
+; Gate - with de-clicking ramp up and ramp down segments
+giwfn4 ftgen 0, 0, 131072, 7, 0, 1536, 1, 128000, 1, 1536, 0
+; Reverse percussive - straight segments
+giwfn5 ftgen 0, 0, 131072, 7, 0, 128000, 1, 3072, 0
+; Reverse percussive - exponential segments
+giwfn6 ftgen 0, 0, 131072, 5, .001, 128000, 1, 3072, .001
 
-;TABLE FOR EXP SLIDER
-giExp1	ftgen	0, 0, 129, -25, 0, 0.001, 128, 1.0
-giExp2000	ftgen	0, 0, 129, -25, 0,   1.0, 128, 2000.0
+; Table for exp slider
+giExp1    ftgen 0, 0, 129, -25, 0, 0.001, 128, 1.0
+giExp2000 ftgen 0, 0, 129, -25, 0, 1.0, 128, 2000.0
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkMIDItoDensity	invalue	"MtoDensity"
-		gkMIDItoPitch		invalue	"MtoPitch"
-		gkwfn			invalue	"Grain_Envelope"
-		kfreeze			invalue	"Freeze"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkMIDItoDensity invalue "MtoDensity"
+    gkMIDItoPitch   invalue "MtoPitch"
+    gkwfn           invalue "Grain_Envelope"
+    kfreeze         invalue "Freeze"
 
-		gkamp			invalue 	"Amplitude"
-		kfreq			invalue 	"Density"
-		gkfreq			tablei	kfreq, giExp2000, 1
-						outvalue	"Density_Value", gkfreq
-		gkpitch			invalue	"Pitch"
-		gkprate			invalue	"Progress_Rate"
-		
-						if kfreeze=1 then
-							outvalue	"Progress_Rate",0
-						endif
-		
-		kgrsize			invalue	"Grain_Size"
-		gkgrsize			tablei	kgrsize, giExp1, 1
-						outvalue	"Grain_Size_Value", gkgrsize
-		gkfreqOS			invalue	"Grain_Density_Offset"
-		gksizeOS			invalue	"Grain_Size_Rnd_Offset"
-		gkAtt			invalue	"Attack_Time"
-		gkRel			invalue	"Release_Time"
+    gkamp invalue "Amplitude"
+    kfreq invalue "Density"
+    gkfreq tablei kfreq, giExp2000, 1
+    outvalue "Density_Value", gkfreq
+    gkpitch invalue "Pitch"
+    gkprate invalue "Progress_Rate"
 
-;AUDIO FILE CHANGE / LOAD IN TABLES ********************************************************************************************************
-;Have put all this stuff in instr 10 to reduce the respons time when playing with midi
+    if kfreeze = 1 then
+      outvalue "Progress_Rate", 0
+    endif
 
-		Sfile_new		strcpy	""											;INIT TO EMPTY STRING
+    kgrsize invalue "Grain_Size"
+    gkgrsize tablei kgrsize, giExp1, 1
+    outvalue "Grain_Size_Value", gkgrsize
+    gkfreqOS invalue "Grain_Density_Offset"
+    gksizeOS invalue "Grain_Size_Rnd_Offset"
+    gkAtt    invalue "Attack_Time"
+    gkRel    invalue "Release_Time"
 
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
+    ; Audio file change / load in tables
+    ; ********************************************************************************************************
+    ; Have put all this stuff in instr 10 to reduce the respons time when playing with
+    ; midi
 
-		gkfile_new	init		0
-		if	kfile != 0	then												;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-			gkfile_new	=	1											;Flag to inform instr 1 that a new file is loaded
-				reinit	NEW_FILE											;REINITIALIZE FROM LABEL 'NEW_FILE'
-		endif
-		NEW_FILE:
+    Sfile_new strcpy ""  ; Init to empty string
 
-		;FUNCTION TABLES NUMBERS OF THE SOUND FILE THAT WILL BE GRANULATED
-		ichn			filenchnls	Sfile
-		if ichn == 1 then
-			giFileL	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1					;READ MONO AUDIO FILE CHANNEL 1
-			giFileR	=		giFileL
-		else
-			giFileL	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1					;READ STEREO AUDIO FILE CHANNEL 1
-			giFileR	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 2					;READ STEREO AUDIO FILE CHANNEL 2
-		endif
+    Sfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk Sfile
+    kfile strcmpk Sfile_new, Sfile_old
 
-;*******************************************************************************************************************************************
-	endif
+    gkfile_new init 0
+    if kfile != 0 then  ; If a bang had been generated in the line above
+      gkfile_new = 1    ; Flag to inform instr 1 that a new file is loaded
+      reinit NEW_FILE   ; Reinitialize from label 'new_file'
+    endif
+NEW_FILE:
+
+    ; Function tables numbers of the sound file that will be granulated
+    ichn filenchnls Sfile
+    if ichn == 1 then
+      giFileL ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read mono audio file channel 1
+      giFileR = giFileL
+    else
+      giFileL ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read stereo audio file channel 1
+      giFileR ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 2  ; Read stereo audio file channel 2
+    endif
+
+    ; *******************************************************************************************************************************************
+  endif
 endin
 
-instr	1	;SYNCGRAIN INSTRUMENT
-	if p4!=0 then															;MIDI
-		ioct		=	p4													;READ OCT VALUE FROM MIDI INPUT
-		icps		=	cpsoct(ioct)											;CONVERT TO CPS
-		;PITCH BEND============================================================================================================
-		iSemitoneBendRange = 12												;PITCH BEND RANGE IN SEMITONES
-		imin		= 0														;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333								;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax										;PITCH BEND VARIABLE (IN oct FORMAT)
-		kcps		=	cpsoct(ioct + kbend)									;SET FUNDAMENTAL
-		;=======================================================================================================================
-	endif
+instr 1                  ; Syncgrain instrument
+  if p4 != 0 then        ; MIDI
+    ioct = p4            ; Read oct value from MIDI input
+    icps = cpsoct(ioct)  ; Convert to cps
+    ; Pitch
+    ; bend============================================================================================================
+    iSemitoneBendRange = 12  ; Pitch bend range in semitones
+    imin               = 0   ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kcps = cpsoct(ioct + kbend)  ; Set fundamental
+    ; =======================================================================================================================
+  endif
 
-	iporttime = 		0.1													;PORTAMENTO TIME
-	kporttime	linseg	0,0.01,iporttime,1,iporttime								;USE OF A RAMPING UP ENVELOPE PREVENTS GLIDING PARAMETERS EACH TIME A NOTE IS RESTARTED
+  iporttime = 0.1  ; Portamento time
+  ; Use of a ramping up envelope prevents gliding parameters each time a note is restarted
+  kporttime linseg 0, 0.01, iporttime, 1, iporttime
 
-	if p4!=0 && gkMIDItoPitch=1 then											;IF THIS IS A MIDI ACTIVATED NOTE AND MIDI-TO-PITCH SWITCH IS ON... 
-		kpitch	=		kcps/cpsoct(8)										;MAP TO MIDI NOTE VALUE TO PITCH (CONVERT TO RATIO: MIDDLE C IS POINT OF UNISON)
-	else																	;OTHERWISE...
-		kpitch	portk	gkpitch, kporttime									;USE THE SLIDER VALUE
-	endif																;END OF THIS CONDITIONAL BRANCH
+  ; If this is a MIDI activated note and MIDI-to-pitch switch is on...
+  if p4 != 0 && gkMIDItoPitch = 1 then
+    ; Map to MIDI note value to pitch (convert to ratio: middle c is point of unison)
+    kpitch = kcps/cpsoct(8)
+  else                               ; Otherwise...
+    kpitch portk gkpitch, kporttime  ; Use the slider value
+  endif                              ; End of this conditional branch
 
-	if p4!=0 && gkMIDItoDensity=1 then											;IF THIS IS A MIDI ACTIVATED NOTE AND MIDI-TO-PITCH SWITCH IS ON... 
-		kfreq	=		icps
-	else																	;OTHERWISE...
-		kfreq	portk	gkfreq, kporttime									;USE THE GUI SLIDER VALUE
-	endif																;END OF THIS CONDITIONAL BRANCH
+  ; If this is a MIDI activated note and MIDI-to-pitch switch is on...
+  if p4 != 0 && gkMIDItoDensity = 1 then
+    kfreq = icps
+  else                             ; Otherwise...
+    kfreq portk gkfreq, kporttime  ; Use the GUI slider value
+  endif                            ; End of this conditional branch
 
-	if	gkfile_new = 1	then													;test if a new file is loaded by instr 10
-		gkfile_new	=	0												;flag to zero for next file change
-			reinit	START												;REINITIALIZE FROM LABEL 'NEW_FILE1'
-	endif
+  if gkfile_new = 1 then  ; test if a new file is loaded by instr 10
+    gkfile_new = 0        ; flag to zero for next file change
+    reinit START          ; Reinitialize from label 'new_file1'
+  endif
 
-	kSwitch	changed	gkwfn
-	if kSwitch=1	then
-		reinit	START
-	endif	
+  kSwitch changed gkwfn
+  if kSwitch = 1 then
+    reinit START
+  endif
 
-	kgrsize	portk	gkgrsize, kporttime
-	kprate	portk	gkprate, kporttime
-	iolaps	=		2000													;NUMBER OF ALLOWED OVERLAPS - BEST JUST TO GIVE THIS A LARGE CONSTANT VALUE
+  kgrsize portk gkgrsize, kporttime
+  kprate  portk gkprate, kporttime
+  ; Number of allowed overlaps - best just to give this a large constant value
+  iolaps = 2000
 
-	kfreqOS	rand		gkfreqOS												;kfreqOS IS A K-RATE RANDOM NUMBER WITHIN THE RANGE -gkfreqOS TO gkfreqOS
-	kfreqOS	=		kfreqOS * kfreq										;kfreqOS IS REDEFINED RELATIVE TO THE CURRENT VALUE OF kfreq 
-	
-	kgrsizeOS	gauss	gksizeOS												;kgrsizeOS IS A K-RATE GAUSSIAN RANDOM NUMBER WITHIN THE RANGE -gksizeOS TO gksizeOS
-	kgrsizeOS	=		kgrsizeOS * kgrsize										;kgrsizeOS IS REDEFINED RELATIVE TO THE CURRENT VALUE OF kgrsize 
+  ; Kfreqos is a k-rate random number within the range -gkfreqos to gkfreqos
+  kfreqOS rand gkfreqOS
+  kfreqOS = kfreqOS * kfreq  ; Kfreqos is redefined relative to the current value of kfreq
 
-	START:
-	iwfn		=		giwfn1 + i(gkwfn)										;FUNCTION TABLE NUMBER FOR WINDOWING FUNCTION IS DERIVED
-	asigL 	syncgrain	gkamp, kfreq+kfreqOS, kpitch, kgrsize+kgrsizeOS, kprate, giFileL, iwfn, iolaps	; LEFT CHANNEL
-	asigR 	syncgrain	gkamp, kfreq+kfreqOS, kpitch, kgrsize+kgrsizeOS, kprate, giFileR, iwfn, iolaps	; RIGHT CHANNEL
-			rireturn
-	aenv		expsegr	0.0001,i(gkAtt),1,i(gkRel),0.0001							;CLOUD AMPLITUDE ENVELOPE
-	asigL	=		asigL * aenv											;APPLY AMPLITUDE ENVELOPE
-	asigR	=		asigR * aenv											;APPLY AMPLITUDE ENVELOPE
-			outs 	asigL, asigR
+  ; Kgrsizeos is a k-rate gaussian random number within the range -gksizeos to gksizeos
+  kgrsizeOS gauss gksizeOS
+  ; Kgrsizeos is redefined relative to the current value of kgrsize
+  kgrsizeOS = kgrsizeOS * kgrsize
+
+START:
+  iwfn = giwfn1 + i(gkwfn)  ; Function table number for windowing function is derived
+  ; Left channel
+  asigL syncgrain gkamp, kfreq+kfreqOS, kpitch, kgrsize+kgrsizeOS, kprate, giFileL, iwfn, iolaps
+  ; Right channel
+  asigR syncgrain gkamp, kfreq+kfreqOS, kpitch, kgrsize+kgrsizeOS, kprate, giFileR, iwfn, iolaps
+  rireturn
+  aenv expsegr 0.0001, i(gkAtt), 1, i(gkRel), 0.0001  ; Cloud amplitude envelope
+  asigL = asigL * aenv                                ; Apply amplitude envelope
+  asigR = asigR * aenv                                ; Apply amplitude envelope
+  outs asigL, asigR
 endin
 
-instr	2	;INIT
-		outvalue	"_SetPresetIndex", 0
+instr 2  ; Init
+  outvalue "_SetPresetIndex", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		3600		;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 
-i 2	     0.1		 0		;INIT
+i 2 0.1 0  ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -204,9 +241,9 @@ i 2	     0.1		 0		;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -224,15 +261,20 @@ i 2	     0.1		 0		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>85</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -250,11 +292,23 @@ i 2	     0.1		 0		;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -272,14 +326,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -303,6 +357,18 @@ i 2	     0.1		 0		;INIT
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -320,9 +386,9 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -347,14 +413,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -376,14 +442,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -423,14 +489,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -452,14 +518,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -499,14 +565,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -528,14 +594,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -575,14 +641,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -604,15 +670,20 @@ i 2	     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -633,14 +704,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -680,14 +751,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -709,14 +780,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -756,14 +827,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -785,14 +856,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -832,14 +903,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -861,14 +932,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -908,14 +979,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -937,14 +1008,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -984,14 +1055,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1013,14 +1084,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1060,14 +1131,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1134,15 +1205,20 @@ i 2	     0.1		 0		;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1163,14 +1239,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1192,14 +1268,14 @@ i 2	     0.1		 0		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1223,6 +1299,18 @@ i 2	     0.1		 0		;INIT
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>MtoPitch</objectName>
@@ -1242,6 +1330,18 @@ i 2	     0.1		 0		;INIT
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Freeze</objectName>
@@ -1256,11 +1356,23 @@ i 2	     0.1		 0		;INIT
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   Freeze</text>
+  <text>Freeze</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

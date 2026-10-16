@@ -1,143 +1,152 @@
-;Written by Iain McCurdy, 2011
+; Written by Iain McCurdy, 2011
 
-;Modified for QuteCsound by René, May 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, May 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add denorm in reverb instrument
-;	Add INIT instrument using QuteCsound Presets system
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add denorm in reverb instrument
+; Add INIT instrument using QuteCsound Presets system
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 1		;KR MUST EQUAL SR SO THEREFORE KSMPS MUST BE 1
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 1      ; Kr must equal sr so therefore ksmps must be 1
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gaL		init		0
-gaR		init		0
+gaL init 0
+gaR init 0
 
-giwave	ftgen	1,0,4096,10,1
-;TABLES FOR EXP SLIDER
-giExp1	ftgen	0, 0, 129, -25, 0, 0.1, 128, 5000.0
-giExp2	ftgen	0, 0, 129, -25, 0, 0.01, 128, 2.0
-giExp3	ftgen	0, 0, 129, -25, 0, 0.0000001, 128, 0.1
+giwave ftgen 1, 0, 4096, 10, 1
+; Tables for exp slider
+giExp1 ftgen 0, 0, 129, -25, 0, 0.1, 128, 5000.0
+giExp2 ftgen 0, 0, 129, -25, 0, 0.01, 128, 2.0
+giExp3 ftgen 0, 0, 129, -25, 0, 0.0000001, 128, 0.1
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SLIDERS
-		gkOutGain		invalue	"OutGain"
-		kFundMin		invalue	"FundMin"
-		gkFundMin		tablei	kFundMin, giExp1, 1
-					outvalue	"FundMin_Value", gkFundMin		
-		kFundMax		invalue	"FundMax"
-		gkFundMax		tablei	kFundMax, giExp1, 1
-					outvalue	"FundMax_Value", gkFundMax
-		kFundRateMin	invalue	"FundRateMin"
-		gkFundRateMin	tablei	kFundRateMin, giExp2, 1
-					outvalue	"FundRateMin_Value", gkFundRateMin
-		kFundRateMax	invalue	"FundRateMax"
-		gkFundRateMax	tablei	kFundRateMax, giExp2, 1
-					outvalue	"FundRateMax_Value", gkFundRateMax
-		kFundDeReg	invalue	"FundDeReg"
-		gkFundDeReg	tablei	kFundDeReg, giExp3, 1
-					outvalue	"FundDeReg_Value", gkFundDeReg
-		gkFormMin		invalue	"FormMin"
-		gkFormMax		invalue	"FormMax"
-		gkFormRateMin	invalue	"FormRateMin"
-		gkFormRateMax	invalue	"FormRateMax"
-		gkFormDeReg	invalue	"FormDeReg"
-		gkRvbSnd		invalue	"RvbSend"
-		gkRvbTim		invalue	"RvbTime"
-		gkAmpModDep	invalue	"AmpModDepth"
-		gkPanModDep	invalue	"PanModDepth"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Sliders
+    gkOutGain invalue "OutGain"
+    kFundMin  invalue "FundMin"
+    gkFundMin tablei kFundMin, giExp1, 1
+    outvalue "FundMin_Value", gkFundMin
+    kFundMax invalue "FundMax"
+    gkFundMax tablei kFundMax, giExp1, 1
+    outvalue "FundMax_Value", gkFundMax
+    kFundRateMin invalue "FundRateMin"
+    gkFundRateMin tablei kFundRateMin, giExp2, 1
+    outvalue "FundRateMin_Value", gkFundRateMin
+    kFundRateMax invalue "FundRateMax"
+    gkFundRateMax tablei kFundRateMax, giExp2, 1
+    outvalue "FundRateMax_Value", gkFundRateMax
+    kFundDeReg invalue "FundDeReg"
+    gkFundDeReg tablei kFundDeReg, giExp3, 1
+    outvalue "FundDeReg_Value", gkFundDeReg
+    gkFormMin     invalue "FormMin"
+    gkFormMax     invalue "FormMax"
+    gkFormRateMin invalue "FormRateMin"
+    gkFormRateMax invalue "FormRateMax"
+    gkFormDeReg   invalue "FormDeReg"
+    gkRvbSnd      invalue "RvbSend"
+    gkRvbTim      invalue "RvbTime"
+    gkAmpModDep   invalue "AmpModDepth"
+    gkPanModDep   invalue "PanModDepth"
 
-		gkamp1		invalue	"Amp01"
-		gkamp2		invalue	"Amp02"
-		gkamp3		invalue	"Amp03"
-		gkamp4		invalue	"Amp04"
-		gkamp5		invalue	"Amp05"
-		gkamp6		invalue	"Amp06"
-		gkamp7		invalue	"Amp07"
-		gkamp8		invalue	"Amp08"
-		gkamp9		invalue	"Amp09"
-		gkamp10		invalue	"Amp10"
-		gkamp11		invalue	"Amp11"
-		gkamp12		invalue	"Amp12"
-		gkamp13		invalue	"Amp13"
-		gkamp14		invalue	"Amp14"
-		gkamp15		invalue	"Amp15"
-		gkamp16		invalue	"Amp16"
-		gkamp17		invalue	"Amp17"
-		gkamp18		invalue	"Amp18"
-		gkamp19		invalue	"Amp19"
-		gkamp20		invalue	"Amp20"
-		;COUNTERS 
-		gknum		invalue	"NumWavelets" 
-	endif
+    gkamp1  invalue "Amp01"
+    gkamp2  invalue "Amp02"
+    gkamp3  invalue "Amp03"
+    gkamp4  invalue "Amp04"
+    gkamp5  invalue "Amp05"
+    gkamp6  invalue "Amp06"
+    gkamp7  invalue "Amp07"
+    gkamp8  invalue "Amp08"
+    gkamp9  invalue "Amp09"
+    gkamp10 invalue "Amp10"
+    gkamp11 invalue "Amp11"
+    gkamp12 invalue "Amp12"
+    gkamp13 invalue "Amp13"
+    gkamp14 invalue "Amp14"
+    gkamp15 invalue "Amp15"
+    gkamp16 invalue "Amp16"
+    gkamp17 invalue "Amp17"
+    gkamp18 invalue "Amp18"
+    gkamp19 invalue "Amp19"
+    gkamp20 invalue "Amp20"
+    ; Counters
+    gknum invalue "NumWavelets"
+  endif
 endin
 
-instr	1	; WAVELET GENERATING INSTRUMENT
-	;GENERATE A TRIGGER IMPULSE (MOMENTARY '1' VALUE) IN kupdate IF ANY OF THE INPUT ARGUMENTS CHANGE
-	kupdate		changed	gkamp1, gkamp2, gkamp3, gkamp6, gkamp5, gkamp6, gkamp7, gkamp8, gkamp9, gkamp10, gkamp11, gkamp12, gkamp13, gkamp14, gkamp15, gkamp16, gkamp17, gkamp18, gkamp19, gkamp20 
-	if kupdate=1 then												;IF A TRIGGER IMPULSE HAS BEEN GENERATED...
-				reinit	UPDATE									;...BEGIN AN INTIALISATION PASS FROM LABEL 'UPDATE'
-		UPDATE:													;LABEL 'UPDATE'
-		;CREATE A NEW FUNCTION TABLE TO BE USED BY THE AUDIO OSCILLLATOR IN INSTR 2
-		giwave	ftgen	1,0,4096,10,i(gkamp1), i(gkamp2), i(gkamp3), i(gkamp6), i(gkamp5), i(gkamp6), i(gkamp7), i(gkamp8), i(gkamp9), i(gkamp10), i(gkamp11), i(gkamp12), i(gkamp13), i(gkamp14), i(gkamp15), i(gkamp16), i(gkamp17), i(gkamp18), i(gkamp19), i(gkamp20)
-				rireturn											;RETURN FROM REINITIALISATION PASS
-	endif
+instr 1  ; Wavelet generating instrument
+  ; Generate a trigger impulse (momentary '1' value) in kupdate if any of the input
+  ; arguments change
+  kupdate changed gkamp1, gkamp2, gkamp3, gkamp6, gkamp5, gkamp6, gkamp7, gkamp8, gkamp9, gkamp10, gkamp11, gkamp12, gkamp13, gkamp14, gkamp15, gkamp16, gkamp17, gkamp18, gkamp19, gkamp20
+  if kupdate = 1 then  ; If a trigger impulse has been generated...
+    reinit UPDATE      ; ...Begin an intialisation pass from label 'update'
+UPDATE:                ; Label 'update'
+    ; Create a new function table to be used by the audio oscilllator in instr 2
+    giwave ftgen 1, 0, 4096, 10, i(gkamp1), i(gkamp2), i(gkamp3), i(gkamp6), i(gkamp5), i(gkamp6), i(gkamp7), i(gkamp8), i(gkamp9), i(gkamp10), i(gkamp11), i(gkamp12), i(gkamp13), i(gkamp14), i(gkamp15), i(gkamp16), i(gkamp17), i(gkamp18), i(gkamp19), i(gkamp20)
+    rireturn  ; Return from reinitialisation pass
+  endif
 
-	krate	rspline	gkFundMin, gkFundMax, gkFundRateMin, gkFundRateMax	;RATE OF WAVELET GENERATION
-	ktrigger	metro	krate										;GENERATE A STREAM OF TRIGGER IMPULSES '1' VALUES OVER A BED OF ZEROES
-	koct		rspline	gkFormMin, gkFormMax, gkFormRateMin, gkFormRateMax	;PITCH OF THE WAVEFORM CONTAINED WITHIN THE WAVELET (IN oct FORMAT)
-	kFormOS	gauss	gkFormDeReg
-	kcps		=		cpsoct(koct+kFormOS)							;CONVERT oct FORMAT VARIABLE TO A cps FORMAT VARIABLE
-	kamp		rspline	1-gkAmpModDep, 1, 0.05, 0.1						;AMPLITUDE OF WAVELET TRAIN DEFINED BY A RANDOM SPLINE
-	kpan		rspline	0.5-gkPanModDep, 0.5+gkPanModDep, 0.1, 0.2			;PANNING OF WAVELET TRAIN DEFINED BY A RANDOM SPLINE
-	kDelay	exprand	gkFundDeReg
+  ; Rate of wavelet generation
+  krate rspline gkFundMin, gkFundMax, gkFundRateMin, gkFundRateMax
+  ; Generate a stream of trigger impulses '1' values over a bed of zeroes
+  ktrigger metro krate
+  ; Pitch of the waveform contained within the wavelet (in oct format)
+  koct rspline gkFormMin, gkFormMax, gkFormRateMin, gkFormRateMax
+  kFormOS gauss gkFormDeReg
+  kcps = cpsoct(koct+kFormOS)  ; Convert oct format variable to a cps format variable
+  ; Amplitude of wavelet train defined by a random spline
+  kamp rspline 1-gkAmpModDep, 1, 0.05, 0.1
+  ; Panning of wavelet train defined by a random spline
+  kpan rspline 0.5-gkPanModDep, 0.5+gkPanModDep, 0.1, 0.2
+  kDelay exprand gkFundDeReg
 
-	;GENERATE A WAVELET:
-	;                                                 	  p4    p5    p6
-			schedkwhen ktrigger, 0, 0, 2, kDelay, 0.001, kcps, kamp, kpan	;p3 IS IRRELEVANT AS IT WILL BE DEFINED IN INSTR 2
+  ; Generate a wavelet:
+  ; p4    p5    p6
+  ; P3 is irrelevant as it will be defined in instr 2
+  schedkwhen ktrigger, 0, 0, 2, kDelay, 0.001, kcps, kamp, kpan
 endin
 
-instr	2	;WAVELET SOUNDING INSTRUMENT
-	icps		=		p4
-	p3		=		i(gknum)/icps									;NOTE DURATION WILL BE DESCRIBED AS A PRECISE NUMBER OF COMPLETE CYCLES OF THE OSCILLATOR WAVEFORM
-	a1		poscil	gkOutGain*p5, icps, giwave
-	
-	aL,aR	pan2		a1, p6
-			outs		aL, aR
-	gaL		=		gaL+aL*gkRvbSnd
-	gaR		=		gaR+aL*gkRvbSnd
+instr 2  ; Wavelet sounding instrument
+  icps = p4
+  ; Note duration will be described as a precise number of complete cycles of the
+  ; oscillator waveform
+  p3 = i(gknum)/icps
+  a1 poscil gkOutGain*p5, icps, giwave
+
+  aL, aR pan2 a1, p6
+  outs aL, aR
+  gaL = gaL+aL*gkRvbSnd
+  gaR = gaR+aL*gkRvbSnd
 endin
 
-instr	4	;REVERB
-				denorm	gaL, gaR
-	aRvbL, aRvbR	reverbsc	gaL, gaR, gkRvbTim, 5000
-				outs		aRvbL, aRvbR
-				clear	gaL, gaR
+instr 4  ; Reverb
+  denorm gaL, gaR
+  aRvbL, aRvbR reverbsc gaL, gaR, gkRvbTim, 5000
+  outs aRvbL, aRvbR
+  clear gaL, gaR
 endin
 
-instr	11	;INIT
-		outvalue	"_SetPresetIndex", 0
+instr 11  ; Init
+  outvalue "_SetPresetIndex", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		3600		;GUI
-i 11	     0		0.00		;INIT
-i  4		0		3600		;REVERB
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 11 0 0.00  ; Init
+i 4 0 3600   ; Reverb
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -150,9 +159,9 @@ i  4		0		3600		;REVERB
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -170,15 +179,20 @@ i  4		0		3600		;REVERB
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>85</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -196,11 +210,23 @@ i  4		0		3600		;REVERB
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>FundMin_Value</objectName>
@@ -218,14 +244,14 @@ i  4		0		3600		;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -247,14 +273,14 @@ i  4		0		3600		;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -276,14 +302,14 @@ i  4		0		3600		;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -307,14 +333,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -348,9 +374,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -381,9 +407,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -402,14 +428,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -431,14 +457,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -460,14 +486,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -501,9 +527,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -534,9 +560,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -555,14 +581,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -584,14 +610,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -625,9 +651,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -646,14 +672,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -675,14 +701,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -704,14 +730,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -745,9 +771,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -778,9 +804,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -799,14 +825,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -828,14 +854,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -857,14 +883,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -898,9 +924,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -931,9 +957,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -952,14 +978,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -981,14 +1007,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1022,9 +1048,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1043,14 +1069,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1084,9 +1110,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1105,14 +1131,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1146,9 +1172,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1167,14 +1193,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1208,9 +1234,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1229,14 +1255,14 @@ To faciltate the exploration of these two parameters in this implementation they
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1270,9 +1296,9 @@ To faciltate the exploration of these two parameters in this implementation they
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1292,14 +1318,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1333,9 +1359,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1354,14 +1380,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1383,15 +1409,20 @@ Gain</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -1424,9 +1455,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1457,9 +1488,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1490,9 +1521,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1523,9 +1554,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1556,9 +1587,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1589,9 +1620,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1622,9 +1653,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1655,9 +1686,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1688,9 +1719,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1721,9 +1752,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1754,9 +1785,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1787,9 +1818,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1820,9 +1851,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1853,9 +1884,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1886,9 +1917,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1919,9 +1950,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1952,9 +1983,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1985,9 +2016,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -2018,9 +2049,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -2051,9 +2082,9 @@ Gain</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
@@ -2070,14 +2101,14 @@ Gain</label>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>

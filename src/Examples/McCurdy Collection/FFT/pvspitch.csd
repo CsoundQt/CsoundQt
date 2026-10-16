@@ -1,36 +1,43 @@
-;Written by Iain McCurdy 2011
+; Written by Iain McCurdy 2011
 
-;Modified for QuteCsound by René, May 2011
-;Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and QuteCsound svn rev 848
+; Modified for QuteCsound by René, May 2011
+; Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and
+; QuteCsound svn rev 848
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac:system:playback_ -+rtaudio=jack -b32 -B4096 -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac:system:playback_ -+rtaudio=jack -b32 -B4096
+; -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 1		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 1      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-giwaveform	ftgen	0,0,4096,10,1,1/4,1/16,1/32,1/64		;SINGLE CYCLE OF A HARMONIC TONE
+; Single cycle of a harmonic tone
+giwaveform ftgen 0, 0, 4096, 10, 1, 1/4, 1/16, 1/32, 1/64
 
 
-instr	1
-	kInGain	invalue	"Gain"
-	kthresh	invalue	"Threshold"
-	kOutGain	invalue	"OutGain"
+instr 1
+  kInGain  invalue "Gain"
+  kthresh  invalue "Threshold"
+  kOutGain invalue "OutGain"
 
-	asig		inch		1								;READ LIVE AUDIO FROM COMPUTER'S 1ST INPUT CHANNEL
-	fsig  	pvsanal	asig*kInGain, 1024, 256, 1024, 1		;ANALYSE THE AUDIO SIGNAL. OUTPUT AN F-SIGNAL.      	
-	kfr, kamp	pvspitch	fsig, kthresh						;ANALYSE THE FSIG AND OUTPUT ESTIMATIONS OF FUNDEMENTAL FREQUENCY AND AMPLITUDE 
-	aout		oscili	kamp, kfr, giwaveform				;CREATE AN OSCILLATOR, THE FREQUENCY AND AMPLITUDE OF WHICH ARE BASED ON DATA DERIVED FROM THE LIVE INPUT AUDIO STREAM
-			out		aout*kOutGain						;SEND THE RESCALED, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
+  asig inch 1  ; Read live audio from computer's 1st input channel
+  ; Analyse the audio signal. Output an f-signal.
+  fsig pvsanal asig*kInGain, 1024, 256, 1024, 1
+  ; Analyse the fsig and output estimations of fundemental frequency and amplitude
+  kfr, kamp pvspitch fsig, kthresh
+  ; Create an oscillator, the frequency and amplitude of which are based on data derived
+  ; from the live input audio stream
+  aout oscili kamp, kfr, giwaveform
+  out aout*kOutGain  ; Send the rescaled, resynthesized signal to the audio outputs
 endin
 </CsInstruments>
 <CsScore>
@@ -47,9 +54,9 @@ f 0 3600
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -67,15 +74,20 @@ f 0 3600
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -96,15 +108,20 @@ f 0 3600
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -127,14 +144,14 @@ Threshold can be used to define a threshold beneath which sound components will 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -153,11 +170,23 @@ Threshold can be used to define a threshold beneath which sound components will 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
@@ -175,14 +204,14 @@ Threshold can be used to define a threshold beneath which sound components will 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -222,14 +251,14 @@ Threshold can be used to define a threshold beneath which sound components will 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -251,14 +280,14 @@ Threshold can be used to define a threshold beneath which sound components will 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -298,14 +327,14 @@ Threshold can be used to define a threshold beneath which sound components will 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -327,14 +356,14 @@ Threshold can be used to define a threshold beneath which sound components will 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -374,14 +403,14 @@ Threshold can be used to define a threshold beneath which sound components will 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

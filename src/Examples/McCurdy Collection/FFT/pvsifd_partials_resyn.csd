@@ -1,97 +1,104 @@
-;Written by Iain McCurdy 2011
+; Written by Iain McCurdy 2011
 
-;Modified for QuteCsound by René, May 2011
-;Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and QuteCsound svn rev 848
-;-------> NOT STABLE, freeze QuteCsound
-
-
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
+; Modified for QuteCsound by René, May 2011
+; Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and
+; QuteCsound svn rev 848
+; -------> NOT STABLE, freeze QuteCsound
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav
+; files
+
+
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 1		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 1      ; Number of channels (2=stereo)
 
 
-gisine	ftgen	0,0,1024,10,1		;A SINE WAVE (NEEDED FOR THE RESYNTHESIS)
+gisine ftgen 0, 0, 1024, 10, 1  ; A sine wave (needed for the resynthesis)
 
-;TABLE FOR EXP SLIDER
-giExp1	ftgen	0, 0, 129, -25, 0, 0.125, 128, 4.0
-giExp2	ftgen	0, 0, 129, -25, 0, 1.0, 128, 10.0
+; Table for exp slider
+giExp1 ftgen 0, 0, 129, -25, 0, 0.125, 128, 4.0
+giExp2 ftgen 0, 0, 129, -25, 0, 1.0, 128, 10.0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;COUNTERS
-		gkmaxtracks	invalue	"MaxTracks"
-		gkminpts		invalue	"MinPoints"
-		;SLIDERS
-		gkthresh		invalue 	"Threshold"
-		gkscal		invalue 	"Scaling"
-		ktrans		invalue 	"Transp"
-		gktrans		tablei	ktrans, giExp1, 1
-					outvalue	"Transp_Value", gktrans
-		kmaxgap		invalue 	"MaxGap"
-		gkmaxgap		tablei	kmaxgap, giExp2, 1
-					outvalue	"MaxGap_Value", gkmaxgap
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Counters
+    gkmaxtracks invalue "MaxTracks"
+    gkminpts    invalue "MinPoints"
+    ; Sliders
+    gkthresh invalue "Threshold"
+    gkscal   invalue "Scaling"
+    ktrans   invalue "Transp"
+    gktrans tablei ktrans, giExp1, 1
+    outvalue "Transp_Value", gktrans
+    kmaxgap invalue "MaxGap"
+    gkmaxgap tablei kmaxgap, giExp2, 1
+    outvalue "MaxGap_Value", gkmaxgap
+  endif
 endin
 
-instr 	1
-	Sfile	invalue		"_Browse"
-	asigin,aR	FilePlay2		Sfile, 1, 0, 1											;CREATE AUDIO SIGNAL OF AUDIO SAMPLE TO WHICH STENCILLING WILL BE APPLIED
+instr 1
+  Sfile invalue "_Browse"
+  ; Create audio signal of audio sample to which stencilling will be applied
+  asigin, aR FilePlay2 Sfile, 1, 0, 1
 
-	kporttime	linseg		0, 0.001, 0.05											;A FUNCTION THAT QUICKLY RAMPS UP FROM ZERO THAT WILL BE USED FOR PORTAMENTO TIME
-	ktrans	portk		gktrans, kporttime										;PORTAMENTO SMOOTHING APPLIED TO GUI SLIDER PARAMETER
+  ; A function that quickly ramps up from zero that will be used for portamento time
+  kporttime linseg 0, 0.001, 0.05
+  ktrans portk gktrans, kporttime  ; Portamento smoothing applied to GUI slider parameter
 
-	ffr,fphs 	pvsifd 		asigin, 1024, 512, 1 									;PVSIFD ANALYSIS
-	ktrigger	changed		gkmaxtracks											;IF K-RATE INPUT CHANGES GENERATE AN TRIGGER OUTPUT (MOMENTARY 1)
-	if		ktrigger=1	then													;IF TRIGGER IS '1'...
-			reinit		UPDATE												;BEGIN A REINITIALIZATION PASS FROM LABEL 'UPDATE'
-	endif																	;END OF THE CONDITIONAL BRANCH
-	UPDATE:																	;LABEL 'UPDATE'
-	ftrks  	partials	 	ffr, fphs, gkthresh, gkminpts, gkmaxgap, i(gkmaxtracks)		;PARTIAL TRACKING
+  ffr, fphs pvsifd asigin, 1024, 512, 1  ; Pvsifd analysis
+  ; If k-rate input changes generate an trigger output (momentary 1)
+  ktrigger changed gkmaxtracks
+  if ktrigger = 1 then  ; If trigger is '1'...
+    reinit UPDATE       ; Begin a reinitialization pass from label 'update'
+  endif                 ; End of the conditional branch
+UPDATE:                 ; Label 'update'
+  ; Partial tracking
+  ftrks partials ffr, fphs, gkthresh, gkminpts, gkmaxgap, i(gkmaxtracks)
 
-	aout  	resyn		ftrks, gkscal, ktrans, gkmaxtracks, gisine					;RESYNTHESIS
-			out			aout													;SEND THE RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
+  aout resyn ftrks, gkscal, ktrans, gkmaxtracks, gisine  ; Resynthesis
+  ; Send the resynthesized signal to the audio outputs
+  out aout
 endin
 
-instr	2	;INIT
-		outvalue	"Threshold"	, 0.003
-		outvalue	"Scaling"		, 0.5
-		outvalue	"Transp"		, 0.6
-		outvalue	"MaxTracks"	, 30
-		outvalue	"MinPoints"	, 1
-		outvalue	"MaxGap"		, 0.478
+instr 2  ; Init
+  outvalue "Threshold", 0.003
+  outvalue "Scaling", 0.5
+  outvalue "Transp", 0.6
+  outvalue "MaxTracks", 30
+  outvalue "MinPoints", 1
+  outvalue "MaxGap", 0.478
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
-i  2		0		0	;INIT
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 2 0 0      ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -105,9 +112,9 @@ i  2		0		0	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -125,15 +132,20 @@ i  2		0		0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -154,15 +166,20 @@ i  2		0		0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -185,14 +202,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -211,11 +228,23 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Threshold</objectName>
@@ -233,14 +262,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -280,14 +309,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -311,6 +340,18 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -328,9 +369,9 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -355,14 +396,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -382,14 +423,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -411,14 +452,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -442,14 +483,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -471,14 +512,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -500,14 +541,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -547,14 +588,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -576,14 +617,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -623,14 +664,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -652,14 +693,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -699,14 +740,14 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

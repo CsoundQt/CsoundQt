@@ -1,72 +1,76 @@
-;Writen by Iain McCurdy, 2008
+; Writen by Iain McCurdy, 2008
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
 
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 2		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 2      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-giwaveform	ftgen	0,0,4096,10,1,.5,.25,.125,.0625		;A RICH HARMONIC WAVEFORM
-gkvoice		init		1								;GLOBAL VARIABLE USED TO DEFINE WHETHER VOICE 1 OR VOICE 2 IS CURRENT 
+giwaveform ftgen 0, 0, 4096, 10, 1, .5, .25, .125, .0625  ; A rich harmonic waveform
+; Global variable used to define whether voice 1 or voice 2 is current
+gkvoice init 1
 
-giExp1		ftgen	0, 0, 129, -25, 0, 0.01, 128, 2.0		;TABLE FOR EXP SLIDER
-giExp2		ftgen	0, 0, 129, -25, 0, 0.01, 128, 8.0		;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 0.01, 128, 2.0  ; Table for exp slider
+giExp2 ftgen 0, 0, 129, -25, 0, 0.01, 128, 8.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		katt		invalue 	"Attack"
-		gkatt	tablei	katt, giExp1, 1
-				outvalue	"Attack_Value", gkatt
-		kdec		invalue 	"Decay"
-		gkdec	tablei	kdec, giExp2, 1
-				outvalue	"Decay_Value", gkdec
-		gksus	invalue 	"Sustain"
-		krel		invalue 	"Release"
-		gkrel	tablei	krel, giExp1, 1
-				outvalue	"Release_Value", gkrel
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    katt invalue "Attack"
+    gkatt tablei katt, giExp1, 1
+    outvalue "Attack_Value", gkatt
+    kdec invalue "Decay"
+    gkdec tablei kdec, giExp2, 1
+    outvalue "Decay_Value", gkdec
+    gksus invalue "Sustain"
+    krel  invalue "Release"
+    gkrel tablei krel, giExp1, 1
+    outvalue "Release_Value", gkrel
+  endif
 endin
 
-instr	1	; NOTE TRIGGERING INSTRUMENT
-	icps		cpsmidi										;READ CYCLES PER SECOND VALUES FROM MIDI KEYBOARD INPUT
-	asig		subinstr	i(gkvoice)+1, icps						;CALL SOUND GENERATING INSTRUMENT AS A SUB-INSTRUMENT
-			outs		asig, asig							;SEND AUDIO TO OUTPUTS
+instr 1  ; Note triggering instrument
+  ; Read cycles per second values from MIDI keyboard input
+  icps cpsmidi
+  asig subinstr i(gkvoice)+1, icps  ; Call sound generating instrument as a sub-instrument
+  outs asig, asig                   ; Send audio to outputs
 endin
 
-instr	2,3	;SOUND GENERATING INSTRUMENTS
-	gkvoice	init		(i(gkvoice)=1?2:1)						;FLIP VOICE ALLOCATION AT INIT TIME
-	if	gkvoice=p1-1	then									;IF THE OTHER VOICE IS NOW PLAYING...
-		turnoff											;...TURN THIS INSTRUMENT OFF (ENVELOPE RELEASE STAGE WILL BE ALLOWED TO COMPLETE) 
-	endif												;END OF CONDITIONAL BRANCHING
+instr 2, 3                           ; Sound generating instruments
+  gkvoice init (i(gkvoice) = 1?2:1)  ; Flip voice allocation at init time
+  if gkvoice = p1-1 then             ; If the other voice is now playing...
+    ; ...Turn this instrument off (envelope release stage will be allowed to complete)
+    turnoff
+  endif  ; End of conditional branching
 
-	;              	  ATT      |  DEC    |  SUS    |   REL
-	aenv 	madsr 	i(gkatt),  i(gkdec), i(gksus),  i(gkrel)	;MIDI SENSING ADSR ENVELOPE WITH EXPONENTIALLY SHAPED SEGMENTS
-	;OUTPUT OPCODE 	AMP      CPS FUNCTION_TABLE
-	asig		oscili	0.1*aenv, p4, giwaveform					;AUDIO OSCILLATOR
-			outch	1, asig								;SEND AUDIO BACK TO INSTR 1
+  ; Att      |  dec    |  sus    |   rel
+  ; MIDI sensing adsr envelope with exponentially shaped segments
+  aenv madsr i(gkatt), i(gkdec), i(gksus), i(gkrel)
+  ; Output opcode  amp      cps function_table
+  asig oscili 0.1*aenv, p4, giwaveform  ; Audio oscillator
+  outch 1, asig                         ; Send audio back to instr 1
 endin
 
-instr	999	;QUIT
-	exitnow		;EXIT CSOUND IMMEDIATELY
+instr 999  ; Quit
+  exitnow  ; Exit csound immediately
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600		;GUI - ALLOWS REAL-TIME PLAYING FOR 1 HOUR
+i 10 0 3600  ; GUI - allows real-time playing for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>

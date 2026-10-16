@@ -1,9 +1,10 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
 ; Modified for QuteCsound by René, January 2011.
 ; Thanks to Andres CABRERA for the mouse channels names.
 
-; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817 with "Widgets are an independent window" ON.
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817 with "Widgets
+; are an independent window" ON.
 
 
 /*
@@ -14,131 +15,135 @@ The notes of the chromatic scale are arranged in coloured boxes according to the
 If the mouse enters one of the boxes the note indicated by its label is played. If the mouse leaves the box the note is stopped (with a short release segment).
 No clicking is required enabling better timing in performance. The GUI window needs to be in focus for this to work.
 The mouse relative position is given by the channels _MouseRelX and _MouseRelY.
- 
+
 If the windows need to be resized, for example to accomodate use on a netbook, it is mandatory to manually update the values of boxes dimensions and positions in the csd file.
 
-Professional head mouse or iris tracking software can be very expensive and requires practice. 
+Professional head mouse or iris tracking software can be very expensive and requires practice.
 iNavigate is a free option for Mac OS 10.5 if the user wants to experiment with this approach.
 */
 
 
-;Notes on modifications from original csd:
-;	No automatic rescale
-;	Replaced audio file by an audio generator
+; Notes on modifications from original csd:
+; No automatic rescale
+; Replaced audio file by an audio generator
 
 
-;Depending on your platform and distribution, you might need to enable displays using the --displays command line flag.
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Depending on your platform and distribution, you might need to enable displays using the
+; --displays command line flag.
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	1
-	;Boxes dimensions
-	iwidth	=	100
-	iheight	=	100
+instr 1
+  ; Boxes dimensions
+  iwidth  = 100
+  iheight = 100
 
-	;Boxes positions
-	ix1		=	350	;C box
-	iy1		=	50
+  ; Boxes positions
+  ix1 = 350  ; C box
+  iy1 = 50
 
-	ix2		=	490	;G box
-	iy2		=	110
+  ix2 = 490  ; G box
+  iy2 = 110
 
-	ix3		=	610	;D box
-	iy3		=	220
+  ix3 = 610  ; D box
+  iy3 = 220
 
-	ix4		=	650	;A box
-	iy4		=	350
+  ix4 = 650  ; A box
+  iy4 = 350
 
-	ix5		=	610	;E box
-	iy5		=	480
+  ix5 = 610  ; E box
+  iy5 = 480
 
-	ix6		=	490	;B box
-	iy6		=	600
+  ix6 = 490  ; B box
+  iy6 = 600
 
-	ix7		=	350	;Gb box
-	iy7		=	650
+  ix7 = 350  ; Gb box
+  iy7 = 650
 
-	ix8		=	220	;Db box
-	iy8		=	600
+  ix8 = 220  ; Db box
+  iy8 = 600
 
-	ix9		=	90	;Ab box
-	iy9		=	480
+  ix9 = 90  ; Ab box
+  iy9 = 480
 
-	ix10		=	50	;Eb box
-	iy10		=	350
+  ix10 = 50  ; Eb box
+  iy10 = 350
 
-	ix11		=	90	;Bb box
-	iy11		=	220
+  ix11 = 90  ; Bb box
+  iy11 = 220
 
-	ix12		=	220	;F box
-	iy12		=	110
+  ix12 = 220  ; F box
+  iy12 = 110
 
-	krelx	invalue	"_MouseRelX"
-	krely	invalue	"_MouseRelY"
+  krelx invalue "_MouseRelX"
+  krely invalue "_MouseRelY"
 
-;DEFINE A MACRO FOR DETECTION OF MOUSE WITHIN EACH BOX - INPUTS FOR NUMBER AND PITCH (PCH FORMAT)
-#define	NOTE_BOX_DETECT(N'PCH)
-	#
-	kinside$N	init	0
-	if (ix$N <= krelx && krelx <= ix$N+iwidth && iy$N <= krely && krely <= iy$N+iheight) then
-		kinside$N	= 1
-	else
-		kinside$N	= 0
-	endif
+  ; Define a macro for detection of mouse within each box - inputs for number and pitch
+  ; (pch format)
+  #define NOTE_BOX_DETECT(N'PCH)
+  #
+  kinside$N init 0
+  if (ix$N <= krelx && krelx <= ix$N+iwidth && iy$N <= krely && krely <= iy$N+iheight) then
+    kinside$N = 1
+  else
+    kinside$N = 0
+  endif
 
-	ktrig$N	changed	kinside$N				;CREATE A TRIGGER (MOMENTARY '1') IF MOUSE ENTERS OR LEAVES THIS BOX
-	if	ktrig$N=1	then						;IF MOUSE HAS JUST ENTERED OR LEFT THIS BOX...
-		if	kinside$N=1	then				;IF MOUSE HAS JUST ENTERED THIS BOX...
-			event	"i", 2, 0, 5, $PCH		;CREATE A 5 SECOND NOTE EVENT FOR INSTR 2. PASS PITCH VIA p4
-		elseif	kinside$N=0	then			;OR ELSE IF MOUSE HAS JUST LEFT THIS BOX 
-			turnoff2	2, 0, 1				;TURNOFF INSTRUMENT 2
-		endif							;END OF CONDITIONAL BRANCHING
-	endif								;END OF CONDITIONAL BRANCHING
-	#
+  ; Create a trigger (momentary '1') if mouse enters or leaves this box
+  ktrig$N changed kinside$N
+  if ktrig$N = 1 then      ; If mouse has just entered or left this box...
+    if kinside$N = 1 then  ; If mouse has just entered this box...
+      ; Create a 5 second note event for instr 2. Pass pitch via p4
+      event "i", 2, 0, 5, $PCH
+    elseif kinside$N = 0 then  ; Or else if mouse has just left this box
+      turnoff2 2, 0, 1         ; Turnoff instrument 2
+    endif                      ; End of conditional branching
+  endif                        ; End of conditional branching
+  #
 
-	;EXECUTE MACRO FOR EACH BOX...
-	$NOTE_BOX_DETECT(1'8.00)
-	$NOTE_BOX_DETECT(2'7.07)
-	$NOTE_BOX_DETECT(3'8.02)
-	$NOTE_BOX_DETECT(4'7.09)
-	$NOTE_BOX_DETECT(5'8.04)
-	$NOTE_BOX_DETECT(6'7.11)
-	$NOTE_BOX_DETECT(7'8.06)
-	$NOTE_BOX_DETECT(8'8.01)
-	$NOTE_BOX_DETECT(9'7.08)
-	$NOTE_BOX_DETECT(10'8.03)
-	$NOTE_BOX_DETECT(11'7.10)
-	$NOTE_BOX_DETECT(12'7.05)
+  ; Execute macro for each box...
+  $NOTE_BOX_DETECT(1'8.00)
+  $NOTE_BOX_DETECT(2'7.07)
+  $NOTE_BOX_DETECT(3'8.02)
+  $NOTE_BOX_DETECT(4'7.09)
+  $NOTE_BOX_DETECT(5'8.04)
+  $NOTE_BOX_DETECT(6'7.11)
+  $NOTE_BOX_DETECT(7'8.06)
+  $NOTE_BOX_DETECT(8'8.01)
+  $NOTE_BOX_DETECT(9'7.08)
+  $NOTE_BOX_DETECT(10'8.03)
+  $NOTE_BOX_DETECT(11'7.10)
+  $NOTE_BOX_DETECT(12'7.05)
 endin
 
-instr	2	;BASS
-	aenv	linsegr	1,0.05,0	;AMPLITUDE ENVELOPE (BASICALLY JUST THE RELEASE STAGE)
-	
-	icps	= cpspch(p4)
+instr 2                    ; Bass
+  aenv linsegr 1, 0.05, 0  ; Amplitude envelope (basically just the release stage)
 
-	k1	linseg	0.55, .2, 0.2, 0, 0.2
-	k2	linseg	4, .2, 2, 0, 2
+  icps = cpspch(p4)
 
-	a2	oscil	k2, icps/2, 1
-	a1	oscil	k1, icps/2*a2, 1
-	
-		outs		a1*aenv, a1*aenv
+  k1 linseg 0.55, .2, 0.2, 0, 0.2
+  k2 linseg 4, .2, 2, 0, 2
+
+  a2 oscil k2, icps/2, 1
+  a1 oscil k1, icps/2*a2, 1
+
+  outs a1*aenv, a1*aenv
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 1024 10 1		;sin table
+f 1 0 1024 10 1  ; sin table
 
-;INSTR | START | DURATION
-i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
+; Instr | start | duration
+i 1 0 3600  ; Mouse position detection, plays a note for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 
@@ -152,9 +157,9 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -172,14 +177,14 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -201,9 +206,9 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>100</r>
@@ -230,9 +235,9 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -259,9 +264,9 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>200</r>
@@ -288,9 +293,9 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>100</r>
@@ -317,9 +322,9 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>105</r>
@@ -346,14 +351,14 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>50</g>
-   <b>50</b>
+   <r>245</r>
+   <g>53</g>
+   <b>53</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -375,9 +380,9 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -404,9 +409,9 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>55</r>
@@ -433,9 +438,9 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -462,9 +467,9 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -491,14 +496,14 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>200</g>
-   <b>100</b>
+   <r>39</r>
+   <g>180</g>
+   <b>109</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -520,14 +525,14 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>150</r>
-   <g>0</g>
-   <b>255</b>
+   <r>155</r>
+   <g>50</g>
+   <b>230</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -549,15 +554,20 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -578,15 +588,20 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -607,14 +622,14 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -636,14 +651,14 @@ i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

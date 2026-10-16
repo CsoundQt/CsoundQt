@@ -1,89 +1,104 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
 
 ; Modified for QuteCsound by René, November 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Instrument 1 is activated by MIDI and by the GUI
-;	Cannot display more than one space in Label, so can't display the schematic shown below:
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Instrument 1 is activated by MIDI and by the GUI
+; Cannot display more than one space in Label, so can't display the schematic shown below:
 
-	; Phase Modulation Synthesis: Carrier(with feedback):
-	;             +------+
-	;             V      |
-	;          +--+--+   |
-	;          |CAR.1|   |(feedback)
-	;          +--+--+   |
-	;             |      |
-	;             +------+
-	;             |
-	;             V
-	;            OUT
+  ; Phase Modulation Synthesis: Carrier(with feedback):
+  ; +------+
+  ; V      |
+  ; +--+--+   |
+  ; |CAR.1|   |(feedback)
+  ; +--+--+   |
+  ; |      |
+  ; +------+
+  ; |
+  ; V
+  ; Out
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 1		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 1      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	0,0,65537,10,1							;A SINE WAVE THAT CAN BE REFERENCED BY THE GLOBAL VARIABLE 'gisine'
-giExp20000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLES FOR EXP SLIDER
+; A sine wave that can be referenced by the global variable 'gisine'
+gisine     ftgen 0, 0, 65537, 10, 1
+giExp20000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Tables for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kfreq		invalue 	"Base_Frequency"
-		gkfreq		tablei	kfreq, giExp20000, 1
-					outvalue	"Base_Frequency_Value", gkfreq		
-		gkAmp		invalue 	"Amplitude"
-		gkFBRatio		invalue 	"Feedback_Ratio"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kfreq invalue "Base_Frequency"
+    gkfreq tablei kfreq, giExp20000, 1
+    outvalue "Base_Frequency_Value", gkfreq
+    gkAmp     invalue "Amplitude"
+    gkFBRatio invalue "Feedback_Ratio"
+  endif
 endin
 
-instr	1	;FM INSTRUMENT
-	if p4!=0 then														;MIDI
-		ioct		= p4													;READ OCT VALUE FROM MIDI INPUT
-		iamp		= p5													;READ midi-velocity-amp FROM MIDI INPUT
-		kAmp		= iamp * gkAmp											;SET AMPLITUDE TO RECEIVED p5 RECEIVED FROM INSTR 1 (I.E. MIDI VELOCITY) MULTIPLIED BY SLIDER gkAmp.
-		;PITCH BEND===========================================================================================================================================================
-		iSemitoneBendRange = 4											;PITCH BEND RANGE IN SEMITONES
-		imin		= 0													;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333							;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax									;PITCH BEND VARIABLE (IN oct FORMAT)
-		kfreq	=	cpsoct(ioct + kbend)								;SET FUNDEMENTAL FROM MIDI
-		;=====================================================================================================================================================================
-	else																;GUI
-		kfreq	= gkfreq
-		kAmp		= gkAmp												;SET kAmp TO SLIDER VALUE gkAmp
-	endif
+instr 1            ; Fm instrument
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read oct value from MIDI input
+    iamp = p5      ; READ midi-velocity-amp FROM MIDI INPUT
+    ; Set amplitude to received p5 received from instr 1 (i.e. MIDI velocity) multiplied
+    ; by slider gkamp.
+    kAmp = iamp * gkAmp
+    ; Pitch
+    ; bend===========================================================================================================================================================
+    iSemitoneBendRange = 4  ; Pitch bend range in semitones
+    imin               = 0  ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kfreq = cpsoct(ioct + kbend)  ; Set fundemental from MIDI
+    ; =====================================================================================================================================================================
+  else  ; GUI
+    kfreq = gkfreq
+    kAmp  = gkAmp  ; Set kamp to slider value gkamp
+  endif
 
-	iporttime		=		.02											;PORTAMENTO FUNCTION (WILL BE USED TO SMOOTH PARAMETER MOVED BY FLTK WIDGETS)
-	kporttime		linseg	0,.001,iporttime,1,iporttime						;PORTAMENTO FUNCTION (WILL BE USED TO SMOOTH PARAMETER MOVED BY FLTK WIDGETS)
-	
-	kfreq		portk	kfreq, kporttime								;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'kfreq'
-	kFBRatio		portk	gkFBRatio, kporttime							;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'kFBratio'
-	kAmp			portk	kAmp, kporttime								;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'kAmp'
+  ; Portamento function (will be used to smooth parameter moved by FLTK widgets)
+  iporttime = .02
+  ; Portamento function (will be used to smooth parameter moved by FLTK widgets)
+  kporttime linseg 0, .001, iporttime, 1, iporttime
 
-	aFB			init		0											;CREATE AN INITIAL VALUE FOR THE FEEDBACK SIGNAL
-	aCarPhase		phasor	kfreq										;CREATE A MOVING PHASE VALUE THAT WILL BE USED TO READ CREATE THE CARRIER
-	aCarrier		tablei	aCarPhase+aFB, gisine,1,0,1						;CARRIER OSCILLATOR IS CREATED. NOTE THAT FEEDBACK SIGNAL IS ADDED TO THE POINTER VARIABLE
-	aFB			=		aCarrier * kFBRatio								;FEEDBACK SIGNAL UPDATED FOR THE NEXT PASS
-	aAntiClick	linsegr	0,0.001,1,0.01,0								;ANTI CLICK ENVELOPE
-				outs		aCarrier*kAmp*aAntiClick, aCarrier*kAmp*aAntiClick	;SEND THE AUDIO OUTPUT OF THE CARRIER WAVEFORM TO THE OUTPUTS - RESCALE WITH 'kAmp' VARIABLE
+  kfreq portk kfreq, kporttime  ; Apply smoothing portamento to the variable 'kfreq'
+  ; Apply smoothing portamento to the variable 'kfbratio'
+  kFBRatio portk gkFBRatio, kporttime
+  kAmp     portk kAmp, kporttime  ; Apply smoothing portamento to the variable 'kamp'
+
+  aFB init 0  ; Create an initial value for the feedback signal
+  ; Create a moving phase value that will be used to read create the carrier
+  aCarPhase phasor kfreq
+  ; Carrier oscillator is created. Note that feedback signal is added to the pointer
+  ; variable
+  aCarrier tablei aCarPhase+aFB, gisine, 1, 0, 1
+  aFB = aCarrier * kFBRatio                ; Feedback signal updated for the next pass
+  aAntiClick linsegr 0, 0.001, 1, 0.01, 0  ; Anti click envelope
+  ; Send the audio output of the carrier waveform to the outputs - rescale with 'kamp'
+  ; variable
+  outs aCarrier*kAmp*aAntiClick, aCarrier*kAmp*aAntiClick
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600		;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 

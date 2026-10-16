@@ -1,21 +1,21 @@
 <CsoundSynthesizer>
 <CsOptions>
--fdm0 --midi-key=4
+-fdm0 --midi-key = 4
 </CsOptions>
 <CsInstruments>
-;Physical Waveguide Midi synth with CsoundQt GUI by René Djack 2009.
-;Modified for CsoundQt examples by Andres Cabrera
+; Physical Waveguide Midi synth with CsoundQt GUI by René Djack 2009.
+; Modified for CsoundQt examples by Andres Cabrera
 
-sr 		= 48000
-ksmps	= 512
-nchnls	= 2
+sr     = 48000
+ksmps  = 512
+nchnls = 2
 
-maxalloc	1, 10	;maximum polyphony
-;prealloc	1, 9 ;preallocate voices
-gaIn_Reverb	init	0
+maxalloc 1, 10  ; maximum polyphony
+; prealloc 1, 9 ;preallocate voices
+gaIn_Reverb init 0
 
 ; all midi channels to instrument 1
-massign		0, 1
+massign 0, 1
 
 chn_k "kC1", 1
 chn_k "kC10", 1
@@ -71,657 +71,679 @@ chn_k "tempo", 2
 chn_k "vu_Left", 2
 chn_k "vu_Right", 2
 
-opcode	PIPE, a, iiiiiiikkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+opcode PIPE, a, iiiiiiikkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
 
-iPitch,\			;midi pitch
-\;AIR ENV
-iAtt_ENV,\		;knob Att
-iDec_ENV,\		;knob Dec
-iSus_ENV,\		;knob Sus
-iRel_ENV,\		;knob Rel
-iVel_ENV,\		;knob Vel
-iScaling_ENV,\		;knob Scaling
-\;AIR GEN
-kDC_Noise_GEN,\	;knob DC/Noise
-kCut_GEN,\		;knob Cut
-kRes_GEN,\		;knob Res
-kK_Track_GEN,\		;knob K-Track
-kV_Track_GEN,\		;knob V-Track
-k1_Pole_GEN,\		;button 1-Pole
-\;Pipe
-kCtr_MW,\			;knob ModWheel
-kPolarity,\		;button Polarity
-\;Pipe DELTUNE
-kTune_DT,\		;knob Tune
-kFine_DT,\		;knob Fine
-kSREC_DT,\		;knob Srec
-kMW_DT,\			;knob MW
-\;Pipe FEEDBACK
-kRT_FB,\			;knob RT
-kK_TrackFB,\		;knob K-Track
-kDamp_FB,\		;knob Damp
-\;Pipe ALLPASS TUNE
-kTune_AP,\		;knob Tune
-kFine_AP,\		;knob Fine
-kSREC_AP,\		;knob Srec
-kMW_AP,\			;knob MW
-\;Pipe ALLPASS
-kDffs_AP,\		;knob Dffs
-kPower_AP,\		;button Power
-\;Pipe PUSH PULL
-kOffset,\			;knob Offset
-kPush,\			;knob Push
-\;Pipe SATURATION
-kSoftHard,\		;knob Soft/Hard
-kSym,\			;knob Sym
-\;Pipe MW FILTER
-kHP0,\			;knob HP0
-kHP1,\			;knob HP1
-kK_TrackH,\		;knob K-TrackH
-kLP0,\			;knob LP0
-kLP1,\			;knob LP1
-kK_TrackL\		;knob K-TrackL
-		xin
+  iPitch, \           ; midi pitch
+    \                 ; Air env
+    iAtt_ENV,     \   ; knob Att
+    iDec_ENV,     \   ; knob Dec
+    iSus_ENV,     \   ; knob Sus
+    iRel_ENV,     \   ; knob Rel
+    iVel_ENV,     \   ; knob Vel
+    iScaling_ENV, \   ; knob Scaling
+    \                 ; Air gen
+    kDC_Noise_GEN, \  ; knob DC/Noise
+    kCut_GEN,      \  ; knob Cut
+    kRes_GEN,      \  ; knob Res
+    kK_Track_GEN,  \  ; knob K-Track
+    kV_Track_GEN,  \  ; knob V-Track
+    k1_Pole_GEN,   \  ; button 1-Pole
+    \                 ; Pipe
+    kCtr_MW,   \      ; knob ModWheel
+    kPolarity, \      ; button Polarity
+    \                 ; Pipe deltune
+    kTune_DT, \       ; knob Tune
+    kFine_DT, \       ; knob Fine
+    kSREC_DT, \       ; knob Srec
+    kMW_DT,   \       ; knob MW
+    \                 ; Pipe feedback
+    kRT_FB,     \     ; knob RT
+    kK_TrackFB, \     ; knob K-Track
+    kDamp_FB,   \     ; knob Damp
+    \                 ; Pipe allpass tune
+    kTune_AP, \       ; knob Tune
+    kFine_AP, \       ; knob Fine
+    kSREC_AP, \       ; knob Srec
+    kMW_AP,   \       ; knob MW
+    \                 ; Pipe allpass
+    kDffs_AP,  \      ; knob Dffs
+    kPower_AP, \      ; button Power
+    \                 ; Pipe push pull
+    kOffset, \        ; knob Offset
+    kPush,   \        ; knob Push
+    \                 ; Pipe saturation
+    kSoftHard, \      ; knob Soft/Hard
+    kSym,      \      ; knob Sym
+    \                 ; Pipe mw filter
+    kHP0,      \      ; knob HP0
+    kHP1,      \      ; knob HP1
+    kK_TrackH, \      ; knob K-TrackH
+    kLP0,      \      ; knob LP0
+    kLP1,      \      ; knob LP1
+    kK_TrackL\        ; knob K-TrackL
+    xin
 
-		setksmps	1
-;******************************************************************************************AIR SECTION
-;Input iPitch
-;Output aout_Air (to PIPE)
-;************************************************************************************************ENV
-;Output kout_ENV (to GEN)
-iScaling_ENV	= iScaling_ENV * (iPitch - 60)
-iAtt_ENV	= iAtt_ENV + iScaling_ENV
-iDec_ENV	= iDec_ENV + iScaling_ENV
-iRel_ENV	= iRel_ENV + iScaling_ENV
-iGate_ENV	= 1 - 0.5 * iVel_ENV
+  setksmps 1
+  ; ******************************************************************************************Air
+  ; section
+  ; Input iPitch
+  ; Output aout_Air (to PIPE)
+  ; ************************************************************************************************Env
+  ; Output kout_ENV (to GEN)
+  iScaling_ENV = iScaling_ENV * (iPitch - 60)
+  iAtt_ENV     = iAtt_ENV + iScaling_ENV
+  iDec_ENV     = iDec_ENV + iScaling_ENV
+  iRel_ENV     = iRel_ENV + iScaling_ENV
+  iGate_ENV    = 1 - 0.5 * iVel_ENV
 
-iAtt_ENV	table	iAtt_ENV + 44, 10		;exp table; add 44 for positive index
-iDec_ENV	table	iDec_ENV + 44, 10		;exp table; add 44 for positive index
-iRel_ENV	table	iRel_ENV + 44, 10		;exp table; add 44 for positive index
+  iAtt_ENV table iAtt_ENV + 44, 10  ; exp table; add 44 for positive index
+  iDec_ENV table iDec_ENV + 44, 10  ; exp table; add 44 for positive index
+  iRel_ENV table iRel_ENV + 44, 10  ; exp table; add 44 for positive index
 
-iRel_ENV	= iRel_ENV * 6
+  iRel_ENV = iRel_ENV * 6
 
-		xtratim	iRel_ENV + 0.1
+  xtratim iRel_ENV + 0.1
 
-krel_ENV	init	0
+  krel_ENV init 0
 
-krel_ENV	release									;outputs release-stage flag
-		if   (krel_ENV > .5)	kgoto	rel_ENV		;if in release-stage goto release section
-;attack decay and sustain
-kmp1_ENV	transeg	0.001, iAtt_ENV, 0, iGate_ENV, iDec_ENV*10,-10, iGate_ENV * iSus_ENV, 1, 0, iGate_ENV * iSus_ENV
-kout_ENV	= kmp1_ENV
-		kgoto	done_ENV
-;release
+  krel_ENV release                  ; outputs release-stage flag
+  if (krel_ENV > .5) kgoto rel_ENV  ; if in release-stage goto release section
+  ; attack decay and sustain
+  kmp1_ENV transeg 0.001, iAtt_ENV, 0, iGate_ENV, iDec_ENV*10, -10, iGate_ENV * iSus_ENV, 1, 0, iGate_ENV * iSus_ENV
+  kout_ENV = kmp1_ENV
+  kgoto done_ENV
+  ; release
 rel_ENV:
-kmp2_ENV	transeg	1, iRel_ENV, -6, 0.0024787521
-kout_ENV	= kmp2_ENV * kmp1_ENV
+  kmp2_ENV transeg 1, iRel_ENV, -6, 0.0024787521
+  kout_ENV = kmp2_ENV * kmp1_ENV
 
 done_ENV:
-;kout_ENV is envelope
-;************************************************************************************************GEN
-;Input kout_ENV (output from ENV)
-;Output aout_Air (to PIPE section)
+  ; kout_ENV is envelope
+  ; ************************************************************************************************Gen
+  ; Input kout_ENV (output from ENV)
+  ; Output aout_Air (to PIPE section)
 
-;iPitch_GEN from -48 to +168
-kPitch_GEN	= ((iPitch - 60) * kK_Track_GEN + kCut_GEN) * (1 - (0.5 * kV_Track_GEN))
+  ; iPitch_GEN from -48 to +168
+  kPitch_GEN = ((iPitch - 60) * kK_Track_GEN + kCut_GEN) * (1 - (0.5 * kV_Track_GEN))
 
-kCut_GEN	table	kPitch_GEN + 192, 11	;exp table; add 192 for positive index
+  kCut_GEN table kPitch_GEN + 192, 11  ; exp table; add 192 for positive index
 
-anoise_GEN	noise	kout_ENV, 0
+  anoise_GEN noise kout_ENV, 0
 
-	if (k1_Pole_GEN < 0.5)	kgoto Deux_Pole_GEN
+  if (k1_Pole_GEN < 0.5) kgoto Deux_Pole_GEN
 
-;One pole filter LPF1
-i2Pisr		= 2*$M_PI/sr
-kPhic_GEN	= (kCut_GEN < 6948.89 ? i2Pisr * kCut_GEN : 0.99005)
+  ; One pole filter LPF1
+  i2Pisr    = 2*$M_PI/sr
+  kPhic_GEN = (kCut_GEN < 6948.89 ? i2Pisr * kCut_GEN : 0.99005)
 
-;LP
-aout_LPF	biquad	anoise_GEN, kPhic_GEN, 0, 0, 1, kPhic_GEN-1, 0
+  ; Lp
+  aout_LPF biquad anoise_GEN, kPhic_GEN, 0, 0, 1, kPhic_GEN-1, 0
 
-		kgoto	Done_GEN
+  kgoto Done_GEN
 Deux_Pole_GEN:
-;Two poles filter LPF2
-kRes_GEN	= 0.5  / (1 - kRes_GEN)
+  ; Two poles filter LPF2
+  kRes_GEN = 0.5 / (1 - kRes_GEN)
 
-aout_LPF	lowpass2	anoise_GEN, kCut_GEN, kRes_GEN
+  aout_LPF lowpass2 anoise_GEN, kCut_GEN, kRes_GEN
 
 Done_GEN:
-aout_Air	= aout_LPF * kDC_Noise_GEN + a(kout_ENV) *  (1 - kDC_Noise_GEN)
+  aout_Air = aout_LPF * kDC_Noise_GEN + a(kout_ENV) * (1 - kDC_Noise_GEN)
 
-;*******************************************************************************************PIPE SECTION
-;Input aout_Air (output from AIR)
-;Output aout_Pipe (to AMPLI)
-;*******************************************************************************************DEL TUNE
-;Output idly_DT (to SINGLE DELAY and FEEDBACK)
+  ; *******************************************************************************************Pipe
+  ; section
+  ; Input aout_Air (output from AIR)
+  ; Output aout_Pipe (to AMPLI)
+  ; *******************************************************************************************Del
+  ; tune
+  ; Output idly_dt (to single delay and feedback)
 
-;iPitch_DT from -27 to +147
-kPitch_DT		= iPitch + kTune_DT + kFine_DT + kCtr_MW * kMW_DT
-kFreq_DT		table	kPitch_DT + 192, 11		;exp table; add 192 for positive index
-kdly_DT		= (1/kFreq_DT)+( kSREC_DT/sr)
+  ; iPitch_DT from -27 to +147
+  kPitch_DT = iPitch + kTune_DT + kFine_DT + kCtr_MW * kMW_DT
+  kFreq_DT table kPitch_DT + 192, 11  ; exp table; add 192 for positive index
+  kdly_DT = (1/kFreq_DT)+(kSREC_DT/sr)
 
-;************************************************************************************SINGLE DELAY
-;Input idly_DT (output from DEL TUNE)
-;Input aout_FeedBack (output from FEEDBACK)
-;Output aout_SD  (to ALLPASS)
+  ; ************************************************************************************Single
+  ; delay
+  ; Input idly_DT (output from DEL TUNE)
+  ; Input aout_FeedBack (output from FEEDBACK)
+  ; Output aout_SD  (to ALLPASS)
 
-aout_FeedBack	init	0
+  aout_FeedBack init 0
 
-amaxtime_SD	delayr	1			;set maximum delay
-aout_SD		deltap3	 kdly_DT
-			delayw	aout_FeedBack
+  amaxtime_SD delayr 1  ; set maximum delay
+  aout_SD deltap3 kdly_DT
+  delayw aout_FeedBack
 
-;Send the signal aout_SD to Saturation (Allpass is bypassed) if iPower_AP = 0.
+  ; Send the signal aout_SD to Saturation (Allpass is bypassed) if iPower_AP = 0.
 
-if kPower_AP > 0.5	kgoto	Allpasstune
+  if kPower_AP > 0.5 kgoto Allpasstune
 
-aout_AP	= aout_SD
-		kgoto Saturation
+  aout_AP = aout_SD
+  kgoto Saturation
 Allpasstune:
-;************************************************************************************ALLPASS TUNE
-;Output idly_APTune (to ALLPASS)
+  ; ************************************************************************************Allpass
+  ; tune
+  ; Output idly_APTune (to ALLPASS)
 
-;iPitch_AP from -27 to +147
-kPitch_AP		= iPitch + kTune_AP + kFine_AP + kCtr_MW * kMW_AP
-kFreq_AP		table	kPitch_AP + 192, 11			;exp table; add 192 for positive index
-kdly_APTune	= (1/kFreq_AP)+( kSREC_AP/sr)
+  ; iPitch_AP from -27 to +147
+  kPitch_AP = iPitch + kTune_AP + kFine_AP + kCtr_MW * kMW_AP
+  kFreq_AP table kPitch_AP + 192, 11  ; exp table; add 192 for positive index
+  kdly_APTune = (1/kFreq_AP)+(kSREC_AP/sr)
 
-;******************************************************************************************ALLPASS
-;Input aout_SD (from SINGLE DELAY)
-;Input idly_APTune (from ALLPASS TUNE)
-;Output aout_AP  (to SATURATION)
+  ; ******************************************************************************************Allpass
+  ; Input aout_SD (from SINGLE DELAY)
+  ; Input idly_APTune (from ALLPASS TUNE)
+  ; Output aout_AP  (to SATURATION)
 
-;Interp Diffusion	;atime mini=1/sr
-adel1_APA	init	0
+  ; Interp Diffusion ;atime mini=1/sr
+  adel1_APA init 0
 
-amaxtime_APA	delayr	0.2						;set maximum delay
-aout_AP		= adel1_APA + kDffs_AP * aout_SD		;FEED FORWARD
-adel1_APA		deltap3	kdly_APTune				;DELAY
-			delayw	aout_SD - kDffs_AP * aout_AP	;FEEDBACK
+  amaxtime_APA delayr 0.2                   ; set maximum delay
+  aout_AP = adel1_APA + kDffs_AP * aout_SD  ; Feed forward
+  adel1_APA deltap3 kdly_APTune             ; Delay
+  delayw aout_SD - kDffs_AP * aout_AP       ; Feedback
 Saturation:
-;**************************************************************************************SATURATION
-;Input aout_AP  (from ALLPASS)
-;Output aout_Sat  (to MW FILTER)
+  ; **************************************************************************************Saturation
+  ; Input aout_AP  (from ALLPASS)
+  ; Output aout_Sat  (to MW FILTER)
 
-;Event Clip
-kSoftHard_Clip	= ( kSoftHard == 0 ? 0.00001 : kSoftHard)
-kSoftHard_Clip = ( kSoftHard == 1 ? 0.99999 : kSoftHard)
+  ; Event Clip
+  kSoftHard_Clip = (kSoftHard == 0 ? 0.00001 : kSoftHard)
+  kSoftHard_Clip = (kSoftHard == 1 ? 0.99999 : kSoftHard)
 
-kSHS		= kSoftHard_Clip * kSym
-kMaxClipper	= kSHS +  kSoftHard_Clip
-kMinClipper	= kSHS -  kSoftHard_Clip
+  kSHS        = kSoftHard_Clip * kSym
+  kMaxClipper = kSHS + kSoftHard_Clip
+  kMinClipper = kSHS - kSoftHard_Clip
 
-aoutClip	limit	aout_AP, kMinClipper, kMaxClipper
+  aoutClip limit aout_AP, kMinClipper, kMaxClipper
 
-;Positive signal
-kSat_coefPlus	= 0.5 * (1 + kSym - kMaxClipper)
-;Saturator
-ain_SatPlus	= (aout_AP - aoutClip) / kSat_coefPlus
-;Clipper (to limit output to +2, when input is > +4)
-ain_SatPlus	limit	ain_SatPlus, 0, 4							;Positive clip and remove negative signal
-aSat_outPlus	= (-0.125 * ain_SatPlus * ain_SatPlus) + ain_SatPlus		;Out=-0.125*In*In+In if In>0 ; In = 4 -> Out = 2
+  ; Positive signal
+  kSat_coefPlus = 0.5 * (1 + kSym - kMaxClipper)
+  ; Saturator
+  ain_SatPlus = (aout_AP - aoutClip) / kSat_coefPlus
+  ; Clipper (to limit output to +2, when input is > +4)
+  ain_SatPlus limit ain_SatPlus, 0, 4  ; Positive clip and remove negative signal
+  ; Out=-0.125*In*In+In if In>0 ; In = 4 -> Out = 2
+  aSat_outPlus = (-0.125 * ain_SatPlus * ain_SatPlus) + ain_SatPlus
 
-;Negative signal
-kSat_coefMoins	= 0.5 * (1 - kSym + kMinClipper)
-;Saturator
-ain_SatMoins	= (aout_AP - aoutClip) / kSat_coefMoins
-;Clipper (to limit output to -2, when input is <-4)
-ain_SatMoins	limit	ain_SatMoins, -4, 0							;Negative clip and remove negative signal
-aSat_outMoins	= (0.125 * ain_SatMoins * ain_SatMoins) + ain_SatMoins		;Out=0.125*In*In+In if In<0  ; In = -4 -> Out = -2
+  ; Negative signal
+  kSat_coefMoins = 0.5 * (1 - kSym + kMinClipper)
+  ; Saturator
+  ain_SatMoins = (aout_AP - aoutClip) / kSat_coefMoins
+  ; Clipper (to limit output to -2, when input is <-4)
+  ain_SatMoins limit ain_SatMoins, -4, 0  ; Negative clip and remove negative signal
+  ; Out=0.125*In*In+In if In<0 ; In = -4 -> Out = -2
+  aSat_outMoins = (0.125 * ain_SatMoins * ain_SatMoins) + ain_SatMoins
 
-aout_Sat	= (aSat_outPlus * kSat_coefPlus) +  (aSat_outMoins * kSat_coefMoins) + aoutClip
+  aout_Sat = (aSat_outPlus * kSat_coefPlus) + (aSat_outMoins * kSat_coefMoins) + aoutClip
 
-;*****************************************************************************************MW FILTER
-;Input aout_Sat  (from SATURATION)
-;Output aout_Pipe (to AMPLI, FEEDBACK, PUSH PULL)
+  ; *****************************************************************************************Mw
+  ; filter
+  ; Input aout_Sat  (from SATURATION)
+  ; Output aout_pipe (to ampli, feedback, push pull)
 
-;HPF1
-;iPitch_MWHP from -48 to +168
-kPitch_MWHP	= (iPitch-60) * kK_TrackH + (1- kCtr_MW) * kHP0 + kCtr_MW * kHP1
-kFreq_MWHP	table	kPitch_MWHP + 192, 11						;exp table; add 192 for positive index
-kPhic_MWHP	= (kFreq_MWHP < 6948.89 ? i2Pisr * kFreq_MWHP : 0.99005)
+  ; Hpf1
+  ; iPitch_MWHP from -48 to +168
+  kPitch_MWHP = (iPitch-60) * kK_TrackH + (1- kCtr_MW) * kHP0 + kCtr_MW * kHP1
+  kFreq_MWHP table kPitch_MWHP + 192, 11  ; exp table; add 192 for positive index
+  kPhic_MWHP = (kFreq_MWHP < 6948.89 ? i2Pisr * kFreq_MWHP : 0.99005)
 
-aout_HPF1	biquad	aout_Sat, 1, -1, 0, 1, kPhic_MWHP-1, 0
+  aout_HPF1 biquad aout_Sat, 1, -1, 0, 1, kPhic_MWHP-1, 0
 
-;LPF1
-;iPitch_MWLP from -48 to +168
-kPitch_MWLP	= (iPitch-60) * kK_TrackL + (1- kCtr_MW) * kLP0 + kCtr_MW * kLP1
-kFreq_MWLP	table	kPitch_MWLP + 192, 11						;exp table; add 192 for positive index
-kPhic_MWLP	= (kFreq_MWLP < 6948.89 ? i2Pisr * kFreq_MWLP : 0.99005)
+  ; Lpf1
+  ; iPitch_MWLP from -48 to +168
+  kPitch_MWLP = (iPitch-60) * kK_TrackL + (1- kCtr_MW) * kLP0 + kCtr_MW * kLP1
+  kFreq_MWLP table kPitch_MWLP + 192, 11  ; exp table; add 192 for positive index
+  kPhic_MWLP = (kFreq_MWLP < 6948.89 ? i2Pisr * kFreq_MWLP : 0.99005)
 
-aout_Pipe	biquad	aout_HPF1, kPhic_MWLP, 0, 0, 1, kPhic_MWLP-1, 0
+  aout_Pipe biquad aout_HPF1, kPhic_MWLP, 0, 0, 1, kPhic_MWLP-1, 0
 
-;******************************************************************************************PUSH PULL
-;Input aout_Air (from AIR)
-;Input aout_Pipe  (from MW FILTER)
-;Output aout_PPull (to FEEDBACK)
+  ; ******************************************************************************************Push
+  ; pull
+  ; Input aout_Air (from AIR)
+  ; Input aout_Pipe  (from MW FILTER)
+  ; Output aout_PPull (to FEEDBACK)
 
-aout_PPull	= (aout_Pipe * kPush + kPolarity * kOffset) * aout_Air
+  aout_PPull = (aout_Pipe * kPush + kPolarity * kOffset) * aout_Air
 
-;******************************************************************************************FEEDBACK
-;Input aout_Pipe  (from MW FILTER)
-;entrée kdly_DelTune (from DEL TUNE)
-;Output aout_FeedBack (to SINGLE DELAY)
+  ; ******************************************************************************************Feedback
+  ; Input aout_Pipe  (from MW FILTER)
+  ; entrée kdly_DelTune (from DEL TUNE)
+  ; Output aout_FeedBack (to SINGLE DELAY)
 
-;Midi to freq conversion (note 69 = 440Hz)
-;Cannot use cpsoct (P/12 + 3) because P can go below -36
-kPitch_FB	= (iPitch - 60) * kK_TrackFB  + kRT_FB
-kFreq_FB	table	kPitch_FB + 192, 11								;exp table; add 192 for positive index
-kLevel_FB	= 60.0 * (1 - kdly_DT * kFreq_FB)
-kLevel_FB	= 0.001 * ampdb(kLevel_FB)
+  ; Midi to freq conversion (note 69 = 440Hz)
+  ; Cannot use cpsoct (P/12 + 3) because P can go below -36
+  kPitch_FB = (iPitch - 60) * kK_TrackFB + kRT_FB
+  kFreq_FB table kPitch_FB + 192, 11  ; exp table; add 192 for positive index
+  kLevel_FB = 60.0 * (1 - kdly_DT * kFreq_FB)
+  kLevel_FB = 0.001 * ampdb(kLevel_FB)
 
-kPitch_FB_Rel	= kPitch_FB + kDamp_FB
-kFreq_FB_Rel	table	kPitch_FB_Rel + 192, 11						;exp table; add 192 for positive index
-kLevel_FB_Rel	= 60.0 * (1 - kdly_DT * kFreq_FB_Rel)
-kLevel_FB_Rel	= 0.001 * ampdb(kLevel_FB_Rel)
+  kPitch_FB_Rel = kPitch_FB + kDamp_FB
+  kFreq_FB_Rel table kPitch_FB_Rel + 192, 11  ; exp table; add 192 for positive index
+  kLevel_FB_Rel = 60.0 * (1 - kdly_DT * kFreq_FB_Rel)
+  kLevel_FB_Rel = 0.001 * ampdb(kLevel_FB_Rel)
 
-		if   (krel_ENV > .5)	kgoto	Rel_FB
-aout_FBack	= aout_Pipe * kLevel_FB
-		kgoto	done_FB
+  if (krel_ENV > .5) kgoto Rel_FB
+  aout_FBack = aout_Pipe * kLevel_FB
+  kgoto done_FB
 Rel_FB:
-aout_FBack	= aout_Pipe * kLevel_FB_Rel
+  aout_FBack = aout_Pipe * kLevel_FB_Rel
 
 done_FB:
-aout_FeedBack	= (aout_FBack + aout_PPull) * kPolarity
-;*****************************************************************************************PIPE SECTION END
-		xout	aout_Pipe
+  aout_FeedBack = (aout_FBack + aout_PPull) * kPolarity
+  ; *****************************************************************************************Pipe
+  ; section end
+  xout aout_Pipe
 endop
 
 
-opcode	REVERB, aa, akkkkkkkkkkkk
+opcode REVERB, aa, akkkkkkkkkkkk
 
-aIn_Reverb,\	;audio input
-\
-kTime_Rev,\	;knob Time
-kLR_Rev,\		;knob L/R
-kSize_Rev,\	;knob Size
-kRT_Rev,\		;knob RT
-kLP_Rev,\		;knob LP
-kLD_Rev,\		;knob LD
-kHD_Rev,\		;knob HD
-kFrq_Rev,\	;knob Frq,	LFO sinus frequency
-kSpin_Rev,\	;knob Spin,	LFO sinus amplitude
-kDizzy_Rev,\	;knob Dizzy,	Slow Random amplitude
-kPos_Rev,\	;knob Pos	0 à 1
-kMix_Rev\		;knob Mix	0 à 1
-		xin
+  aIn_Reverb, \  ; audio input
+    \
+    kTime_Rev,  \  ; knob Time
+    kLR_Rev,    \  ; knob L/R
+    kSize_Rev,  \  ; knob Size
+    kRT_Rev,    \  ; knob RT
+    kLP_Rev,    \  ; knob LP
+    kLD_Rev,    \  ; knob LD
+    kHD_Rev,    \  ; knob HD
+    kFrq_Rev,   \  ; knob Frq, LFO sinus frequency
+    kSpin_Rev,  \  ; knob Spin, LFO sinus amplitude
+    kDizzy_Rev, \  ; knob Dizzy, Slow Random amplitude
+    kPos_Rev,   \  ; knob Pos 0 à 1
+    kMix_Rev\      ; knob Mix 0 à 1
+    xin
 
-		setksmps	128	
+  setksmps 128
 
-aoutL_Feed	init	0
-aoutR_Feed	init	0
+  aoutL_Feed init 0
+  aoutR_Feed init 0
 
-;****************************************************************************************DEL SECTION
-;***********************************************************************************************
-;Inputs ainL_dry and ainR_dry (global stereo signal)
-;Outputs aoutL_Del et aoutR_Del (to DIFFUSION)
+  ; ****************************************************************************************Del
+  ; section
+  ; ***********************************************************************************************
+  ; Inputs ainL_dry and ainR_dry (global stereo signal)
+  ; Outputs aoutL_Del et aoutR_Del (to DIFFUSION)
 
-;direct signal
-ainL_dry	= aIn_Reverb
-ainR_dry	= aIn_Reverb
+  ; direct signal
+  ainL_dry = aIn_Reverb
+  ainR_dry = aIn_Reverb
 
-kdelL		=		kTime_Rev * (1 + kLR_Rev)
-kdelR		=		kTime_Rev * (1 - kLR_Rev)
+  kdelL = kTime_Rev * (1 + kLR_Rev)
+  kdelR = kTime_Rev * (1 - kLR_Rev)
 
-aoutL_Del		vdelay	ainL_dry, kdelL, 500
-aoutR_Del		vdelay	ainR_dry, kdelR, 500
+  aoutL_Del vdelay ainL_dry, kdelL, 500
+  aoutR_Del vdelay ainR_dry, kdelR, 500
 
-;*************************************************************************************DEL SECTION END
+  ; *************************************************************************************Del
+  ; section end
 
-;**********************************************************************************DIFFUSION SECTION
-;***********************************************************************************************
-;Inputs aoutL_Del and aoutR_Del (from DEL)
-;Outputs ainL_wet and ainR_wet (to OUT)
+  ; **********************************************************************************Diffusion
+  ; section
+  ; ***********************************************************************************************
+  ; Inputs aoutL_Del and aoutR_Del (from DEL)
+  ; Outputs ainL_wet and ainR_wet (to OUT)
 
-;**************************************************************************************EARLY DIFF
-;Inputs aoutL_Del and aoutR_Del (from DEL)
-;Outputs ainL_EDiff and ainR_EDiff (to LOPASS)
+  ; **************************************************************************************Early
+  ; diff
+  ; Inputs aoutL_Del and aoutR_Del (from DEL)
+  ; Outputs ainL_EDiff and ainR_EDiff (to LOPASS)
 
-;Diffusion with variable Delay ;ktime mini=2/sr
-kDffs		=		0.5 + (kSize_Rev * 0.0041666666)
+  ; Diffusion with variable Delay ;ktime mini=2/sr
+  kDffs = 0.5 + (kSize_Rev * 0.0041666666)
 
-ktime_1L_ED	table	kSize_Rev + 4, 1	;exp table; in seconds
-ktime_2L_ED	table	kSize_Rev + 8, 1	;exp table; in seconds
-ktime_3L_ED	table	kSize_Rev + 12, 1	;exp table; in seconds
+  ktime_1L_ED table kSize_Rev + 4, 1   ; exp table; in seconds
+  ktime_2L_ED table kSize_Rev + 8, 1   ; exp table; in seconds
+  ktime_3L_ED table kSize_Rev + 12, 1  ; exp table; in seconds
 
-ktime_1R_ED	table	kSize_Rev + 6, 1	;exp table; in seconds
-ktime_2R_ED	table	kSize_Rev + 10, 1	;exp table; in seconds
-ktime_3R_ED	table	kSize_Rev + 14, 1	;exp table; in seconds
+  ktime_1R_ED table kSize_Rev + 6, 1   ; exp table; in seconds
+  ktime_2R_ED table kSize_Rev + 10, 1  ; exp table; in seconds
+  ktime_3R_ED table kSize_Rev + 14, 1  ; exp table; in seconds
 
-;Diffuser delay 1L
-adel1L_ED		init		0
-amaxtime1L_ED	delayr	0.2							; set maximum delay 200 ms
-aEDiff_1L		=		adel1L_ED + kDffs * aoutL_Del		; FEED FORWARD
-adel1L_ED		deltap	ktime_1L_ED					; DELAY
-			delayw	aoutL_Del - kDffs * aEDiff_1L		; FEEDBACK
-;Diffuser delay 2L
-adel2L_ED		init	0
-amaxtime2L_ED	delayr	0.2							; set maximum delay 200 ms
-aEDiff_2L		=		adel2L_ED + kDffs * aEDiff_1L		; FEED FORWARD
-adel2L_ED		deltap	ktime_2L_ED					; DELAY
-			delayw	aEDiff_1L - kDffs * aEDiff_2L		; FEEDBACK
-;Diffuser delay 3L
-adel3L_ED		init	0
-amaxtime3L_ED	delayr	0.2							; set maximum delay 200 ms
-ainL_EDiff	=		adel3L_ED + kDffs * aEDiff_2L		; FEED FORWARD
-adel3L_ED		deltap	ktime_3L_ED					; DELAY
-			delayw	aEDiff_2L - kDffs * ainL_EDiff	; FEEDBACK
+  ; Diffuser delay 1L
+  adel1L_ED init 0
+  amaxtime1L_ED delayr 0.2                   ; set maximum delay 200 ms
+  aEDiff_1L = adel1L_ED + kDffs * aoutL_Del  ; Feed forward
+  adel1L_ED deltap ktime_1L_ED               ; Delay
+  delayw aoutL_Del - kDffs * aEDiff_1L       ; Feedback
+  ; Diffuser delay 2L
+  adel2L_ED init 0
+  amaxtime2L_ED delayr 0.2                   ; set maximum delay 200 ms
+  aEDiff_2L = adel2L_ED + kDffs * aEDiff_1L  ; Feed forward
+  adel2L_ED deltap ktime_2L_ED               ; Delay
+  delayw aEDiff_1L - kDffs * aEDiff_2L       ; Feedback
+  ; Diffuser delay 3L
+  adel3L_ED init 0
+  amaxtime3L_ED delayr 0.2                    ; set maximum delay 200 ms
+  ainL_EDiff = adel3L_ED + kDffs * aEDiff_2L  ; Feed forward
+  adel3L_ED deltap ktime_3L_ED                ; Delay
+  delayw aEDiff_2L - kDffs * ainL_EDiff       ; Feedback
 
-;Diffuser delay 1R
-adel1R_ED		init	0
-amaxtime1R_ED	delayr	0.2							; set maximum delay 200 ms
-aEDiff_1R		=		adel1R_ED + kDffs * aoutR_Del		; FEED FORWARD
-adel1R_ED		deltap	ktime_1R_ED					; DELAY
-			delayw	aoutR_Del - kDffs * aEDiff_1R		; FEEDBACK
-;Diffuser delay 2R
-adel2R_ED		init	0
-amaxtime2R_ED	delayr	0.2							; set maximum delay 200 ms
-aEDiff_2R		=		adel2R_ED + kDffs * aEDiff_1R		; FEED FORWARD
-adel2R_ED		deltap	ktime_2R_ED					; DELAY
-			delayw	aEDiff_1R - kDffs * aEDiff_2R		; FEEDBACK
-;Diffuser delay 3R
-adel3R_ED		init	0
-amaxtime3R_ED	delayr	0.2							; set maximum delay 200 ms
-ainR_EDiff	=		adel3R_ED + kDffs * aEDiff_2R		; FEED FORWARD
-adel3R_ED		deltap	ktime_3R_ED					; DELAY
-			delayw	aEDiff_2R - kDffs * ainR_EDiff	; FEEDBACK
+  ; Diffuser delay 1R
+  adel1R_ED init 0
+  amaxtime1R_ED delayr 0.2                   ; set maximum delay 200 ms
+  aEDiff_1R = adel1R_ED + kDffs * aoutR_Del  ; Feed forward
+  adel1R_ED deltap ktime_1R_ED               ; Delay
+  delayw aoutR_Del - kDffs * aEDiff_1R       ; Feedback
+  ; Diffuser delay 2R
+  adel2R_ED init 0
+  amaxtime2R_ED delayr 0.2                   ; set maximum delay 200 ms
+  aEDiff_2R = adel2R_ED + kDffs * aEDiff_1R  ; Feed forward
+  adel2R_ED deltap ktime_2R_ED               ; Delay
+  delayw aEDiff_1R - kDffs * aEDiff_2R       ; Feedback
+  ; Diffuser delay 3R
+  adel3R_ED init 0
+  amaxtime3R_ED delayr 0.2                    ; set maximum delay 200 ms
+  ainR_EDiff = adel3R_ED + kDffs * aEDiff_2R  ; Feed forward
+  adel3R_ED deltap ktime_3R_ED                ; Delay
+  delayw aEDiff_2R - kDffs * ainR_EDiff       ; Feedback
 
-;*****************************************************************************************LOPASS
-;Inputs ainL_EDiff and ainR_EDiff (from EARLY DIFF)
-;Outputs aoutL_LP and aoutR_LP  (to DAMP L, POWER FADE L, DAMP R, POWER FADE R)
+  ; *****************************************************************************************Lopass
+  ; Inputs ainL_EDiff and ainR_EDiff (from EARLY DIFF)
+  ; Outputs aoutl_lp and aoutr_lp  (to damp l, power fade l, damp r, power fade r)
 
-kfreq_LP		table	kLP_Rev, 2			;exp2 table; Pitch to freq convertion in hertz
+  kfreq_LP table kLP_Rev, 2  ; exp2 table; Pitch to freq convertion in hertz
 
-aoutL_LP		tone		ainL_EDiff, kfreq_LP
-aoutR_LP		tone		ainR_EDiff, kfreq_LP
+  aoutL_LP tone ainL_EDiff, kfreq_LP
+  aoutR_LP tone ainR_EDiff, kfreq_LP
 
-;**************************************************************************************DAMP L et R
-;Inputs aoutL_LP (from LOPASS) and aoutR_Feed (from DIFF R)
-;Inputs aoutR_LP (from LOPASS) and aoutL_Feed (from DIFF L)
-;Outputs aoutL_Damp (to DIFF L) and aoutR_Damp (to DIFF R)
+  ; **************************************************************************************Damp
+  ; l et r
+  ; Inputs aoutL_LP (from LOPASS) and aoutR_Feed (from DIFF R)
+  ; Inputs aoutR_LP (from LOPASS) and aoutL_Feed (from DIFF L)
+  ; Outputs aoutL_Damp (to DIFF L) and aoutR_Damp (to DIFF R)
 
-kvH			= ampdb(-kHD_Rev)
-kvL			= ampdb(-kLD_Rev)
+  kvH = ampdb(-kHD_Rev)
+  kvL = ampdb(-kLD_Rev)
 
-ainL_Damp		=		aoutL_LP + aoutR_Feed
-aH			pareq	ainL_Damp, 2093, kvH, 0.707 , 2	;L Damp HiShelfEQ
-aoutL_Damp	pareq	aH, 262, kvL, 0.707 , 1			;L Damp LoShelfEQ
+  ainL_Damp = aoutL_LP + aoutR_Feed
+  aH         pareq ainL_Damp, 2093, kvH, 0.707, 2  ; L Damp HiShelfEQ
+  aoutL_Damp pareq aH, 262, kvL, 0.707, 1          ; L Damp LoShelfEQ
 
-ainR_Damp		=		aoutR_LP + aoutL_Feed
-aH			pareq	ainR_Damp, 2093, kvH, 0.707 , 2	;R Damp HiShelfEQ
-aoutR_Damp	pareq	aH, 262, kvL, 0.707 , 1			;R Damp LoShelfEQ
+  ainR_Damp = aoutR_LP + aoutL_Feed
+  aH         pareq ainR_Damp, 2093, kvH, 0.707, 2  ; R Damp HiShelfEQ
+  aoutR_Damp pareq aH, 262, kvL, 0.707, 1          ; R Damp LoShelfEQ
 
-;***************************************************************************************16 PHASE
-;Outputs kphase1,kphase2,kphase3,kphase4 (to DIFF L)
-;Outputs kphase5,kphase6,kphase7,kphase8 (to DIFF R)
+  ; ***************************************************************************************16
+  ; Phase
+  ; Outputs kphase1,kphase2,kphase3,kphase4 (to DIFF L)
+  ; Outputs kphase5,kphase6,kphase7,kphase8 (to DIFF R)
 
-;LFO +Slow Random gen N1
-iseed1		=		0
-krand1		randh	kDizzy_Rev, 400, iseed1
-krand1		tonek	krand1, kFrq_Rev * 0.7
-klfo1		poscil	kSpin_Rev, kFrq_Rev, 3, 0.9375	;phase=1-1/16
-kphase1		=		klfo1 * 0.001 + krand1 * 0.004
-kphase5		=		- kphase1
-;LFO +Slow Random gen N2
-iseed2		=		0.2
-krand2		randh	kDizzy_Rev, 400, iseed2
-krand2		tonek	krand2, kFrq_Rev * 0.7
-klfo2		poscil	kSpin_Rev, kFrq_Rev, 3, 0.875		;phase=1-2/16
-kphase2		=		klfo2 * 0.001 + krand2 * 0.004
-kphase6		=		- kphase2
-;LFO +Slow Random gen N3
-iseed3		=		0.4
-krand3		randh	kDizzy_Rev, 400, iseed3
-krand3		tonek	krand3, kFrq_Rev * 0.7
-klfo3		poscil	kSpin_Rev, kFrq_Rev, 3, 0.8125	;phase=1-3/16
-kphase3		=		klfo3 * 0.001 + krand3 * 0.004
-kphase7		=		- kphase3
-;LFO +Slow Random gen N4
-iseed4		=		0.6
-krand4		randh	kDizzy_Rev, 400, iseed4
-krand4		tonek	krand4, kFrq_Rev * 0.7
-klfo4		poscil	kSpin_Rev, kFrq_Rev, 3, 0.75		;phase=1-4/16
-kphase4		=		klfo4 * 0.001 + krand4 * 0.004
-kphase8		=		- kphase4
+  ; LFO +Slow Random gen N1
+  iseed1 = 0
+  krand1 randh kDizzy_Rev, 400, iseed1
+  krand1 tonek krand1, kFrq_Rev * 0.7
+  klfo1 poscil kSpin_Rev, kFrq_Rev, 3, 0.9375  ; phase=1-1/16
+  kphase1 = klfo1 * 0.001 + krand1 * 0.004
+  kphase5 = - kphase1
+  ; LFO +Slow Random gen N2
+  iseed2 = 0.2
+  krand2 randh kDizzy_Rev, 400, iseed2
+  krand2 tonek krand2, kFrq_Rev * 0.7
+  klfo2 poscil kSpin_Rev, kFrq_Rev, 3, 0.875  ; phase=1-2/16
+  kphase2 = klfo2 * 0.001 + krand2 * 0.004
+  kphase6 = - kphase2
+  ; LFO +Slow Random gen N3
+  iseed3 = 0.4
+  krand3 randh kDizzy_Rev, 400, iseed3
+  krand3 tonek krand3, kFrq_Rev * 0.7
+  klfo3 poscil kSpin_Rev, kFrq_Rev, 3, 0.8125  ; phase=1-3/16
+  kphase3 = klfo3 * 0.001 + krand3 * 0.004
+  kphase7 = - kphase3
+  ; LFO +Slow Random gen N4
+  iseed4 = 0.6
+  krand4 randh kDizzy_Rev, 400, iseed4
+  krand4 tonek krand4, kFrq_Rev * 0.7
+  klfo4 poscil kSpin_Rev, kFrq_Rev, 3, 0.75  ; phase=1-4/16
+  kphase4 = klfo4 * 0.001 + krand4 * 0.004
+  kphase8 = - kphase4
 
-;******************************************************************************************DIFF L
-;Input aoutL_Damp (from DAMP L)
-;Outputs aoutL_Diff (to POWER FADE L) and aoutL_Feed (to DAMP R)
+  ; ******************************************************************************************Diff
+  ; l
+  ; Input aoutL_Damp (from DAMP L)
+  ; Outputs aoutL_Diff (to POWER FADE L) and aoutL_Feed (to DAMP R)
 
-;Diffusion with variable Delay ;ktime mini=2/sr
-;iDffs same value as in EARLY DIFF
+  ; Diffusion with variable Delay ;ktime mini=2/sr
+  ; iDffs same value as in EARLY DIFF
 
-ktime_1L_Diff	table	kSize_Rev + 31, 1	;exp table; in seconds
-ktime_2L_Diff	table	kSize_Rev + 35, 1	;exp table; in seconds
-ktime_3L_Diff	table	kSize_Rev + 39, 1	;exp table; in seconds
-ktime_4L_Diff	table	kSize_Rev + 46, 1	;exp table; in seconds
+  ktime_1L_Diff table kSize_Rev + 31, 1  ; exp table; in seconds
+  ktime_2L_Diff table kSize_Rev + 35, 1  ; exp table; in seconds
+  ktime_3L_Diff table kSize_Rev + 39, 1  ; exp table; in seconds
+  ktime_4L_Diff table kSize_Rev + 46, 1  ; exp table; in seconds
 
-ktime_1L_Diff	=		ktime_1L_Diff + kphase1
-ktime_2L_Diff	=		ktime_2L_Diff + kphase2
-ktime_3L_Diff	=		ktime_3L_Diff + kphase3
-ktime_4L_DiffRT	=	ktime_4L_Diff + kphase4
+  ktime_1L_Diff   = ktime_1L_Diff + kphase1
+  ktime_2L_Diff   = ktime_2L_Diff + kphase2
+  ktime_3L_Diff   = ktime_3L_Diff + kphase3
+  ktime_4L_DiffRT = ktime_4L_Diff + kphase4
 
-ktime_1L_Diff	portk	ktime_1L_Diff, 0.1
-ktime_2L_Diff	portk	ktime_2L_Diff, 0.1
-ktime_3L_Diff	portk	ktime_3L_Diff, 0.1
-ktime_4L_Diff	portk	ktime_4L_DiffRT, 0.1
+  ktime_1L_Diff portk ktime_1L_Diff, 0.1
+  ktime_2L_Diff portk ktime_2L_Diff, 0.1
+  ktime_3L_Diff portk ktime_3L_Diff, 0.1
+  ktime_4L_Diff portk ktime_4L_DiffRT, 0.1
 
-;Diffuser delay 1L
-adel1L_Diff	init	0
-amaxtime1L_Diff	delayr	1.0					; set maximum delay 1000 ms
-aDiff_1L		=	adel1L_Diff + kDffs * aoutL_Damp	; FEED FORWARD
-adel1L_Diff	deltap3	ktime_1L_Diff				; DELAY
-			delayw	aoutL_Damp - kDffs * aDiff_1L	; FEEDBACK
+  ; Diffuser delay 1L
+  adel1L_Diff init 0
+  amaxtime1L_Diff delayr 1.0                   ; set maximum delay 1000 ms
+  aDiff_1L = adel1L_Diff + kDffs * aoutL_Damp  ; Feed forward
+  adel1L_Diff deltap3 ktime_1L_Diff            ; Delay
+  delayw aoutL_Damp - kDffs * aDiff_1L         ; Feedback
 
-;Diffuser delay 2L
-adel2L_Diff	init	0
-amaxtime2L_Diff	delayr	1.0					; set maximum delay 1000 ms
-aDiff_2L		=	adel2L_Diff + kDffs * aDiff_1L	; FEED FORWARD
-adel2L_Diff	deltap3	ktime_2L_Diff				; DELAY
-			delayw	aDiff_1L - kDffs * aDiff_2L	; FEEDBACK
+  ; Diffuser delay 2L
+  adel2L_Diff init 0
+  amaxtime2L_Diff delayr 1.0                 ; set maximum delay 1000 ms
+  aDiff_2L = adel2L_Diff + kDffs * aDiff_1L  ; Feed forward
+  adel2L_Diff deltap3 ktime_2L_Diff          ; Delay
+  delayw aDiff_1L - kDffs * aDiff_2L         ; Feedback
 
-;Diffuser delay 3L
-adel3L_Diff	init	0
-amaxtime3L_Diff	delayr	1.0					; set maximum delay 1000 ms
-aoutL_Diff	=	adel3L_Diff + kDffs * aDiff_2L	; FEED FORWARD
-adel3L_Diff	deltap3	ktime_3L_Diff				; DELAY
-			delayw	aDiff_2L - kDffs * aoutL_Diff	; FEEDBACK
+  ; Diffuser delay 3L
+  adel3L_Diff init 0
+  amaxtime3L_Diff delayr 1.0                   ; set maximum delay 1000 ms
+  aoutL_Diff = adel3L_Diff + kDffs * aDiff_2L  ; Feed forward
+  adel3L_Diff deltap3 ktime_3L_Diff            ; Delay
+  delayw aDiff_2L - kDffs * aoutL_Diff         ; Feedback
 
-;Single delay 4L
-aoutL_SD		vdelay	aoutL_Diff, a(ktime_4L_Diff), 1500
+  ; Single delay 4L
+  aoutL_SD vdelay aoutL_Diff, a(ktime_4L_Diff), 1500
 
-kFeed1		table	kRT_Rev, 1				;exp table
-kFeed2		=	-1.115 / kFeed1
+  kFeed1 table kRT_Rev, 1  ; exp table
+  kFeed2 = -1.115 / kFeed1
 
-aoutL_Feed	= aoutL_SD * ampdb( ktime_4L_DiffRT * kFeed2)
+  aoutL_Feed = aoutL_SD * ampdb(ktime_4L_DiffRT * kFeed2)
 
-;******************************************************************************************DIFF R
-;Input aoutR_Damp (from DAMP R)
-;Outputs aoutR_Diff (to POWER FADE R) and aoutR_Feed (to DAMP L)
+  ; ******************************************************************************************Diff
+  ; r
+  ; Input aoutR_Damp (from DAMP R)
+  ; Outputs aoutR_Diff (to POWER FADE R) and aoutR_Feed (to DAMP L)
 
-;Diffusion with variable Delay ;ktime mini=2/sr
-;iDffs same value as in EARLY DIFF
+  ; Diffusion with variable Delay ;ktime mini=2/sr
+  ; iDffs same value as in EARLY DIFF
 
-ktime_1R_Diff	table	kSize_Rev + 31, 1	;exp table; in seconds
-ktime_2R_Diff	table	kSize_Rev + 35, 1	;exp table; in seconds
-ktime_3R_Diff	table	kSize_Rev + 39, 1	;exp table; in seconds
-ktime_4R_Diff	table	kSize_Rev + 46, 1	;exp table; in seconds
+  ktime_1R_Diff table kSize_Rev + 31, 1  ; exp table; in seconds
+  ktime_2R_Diff table kSize_Rev + 35, 1  ; exp table; in seconds
+  ktime_3R_Diff table kSize_Rev + 39, 1  ; exp table; in seconds
+  ktime_4R_Diff table kSize_Rev + 46, 1  ; exp table; in seconds
 
-ktime_1R_Diff	= ktime_1R_Diff + kphase5
-ktime_2R_Diff	= ktime_2R_Diff + kphase6
-ktime_3R_Diff	= ktime_3R_Diff + kphase7
-ktime_4R_DiffRT	= ktime_4R_Diff + kphase8
+  ktime_1R_Diff   = ktime_1R_Diff + kphase5
+  ktime_2R_Diff   = ktime_2R_Diff + kphase6
+  ktime_3R_Diff   = ktime_3R_Diff + kphase7
+  ktime_4R_DiffRT = ktime_4R_Diff + kphase8
 
-ktime_1R_Diff	portk	ktime_1R_Diff, 0.1
-ktime_2R_Diff	portk	ktime_2R_Diff, 0.1
-ktime_3R_Diff	portk	ktime_3R_Diff, 0.1
-ktime_4R_Diff	portk	ktime_4R_DiffRT, 0.1
+  ktime_1R_Diff portk ktime_1R_Diff, 0.1
+  ktime_2R_Diff portk ktime_2R_Diff, 0.1
+  ktime_3R_Diff portk ktime_3R_Diff, 0.1
+  ktime_4R_Diff portk ktime_4R_DiffRT, 0.1
 
-;Diffuser delay 1R
-adel1R_Diff	init	0
-amaxtime1R_Diff	delayr	1.0					; set maximum delay 1000 ms
-aDiff_1R		=	adel1R_Diff + kDffs * aoutR_Damp	; FEED FORWARD
-adel1R_Diff	deltap3	ktime_1R_Diff				; DELAY
-			delayw	aoutR_Damp - kDffs * aDiff_1R	; FEEDBACK
+  ; Diffuser delay 1R
+  adel1R_Diff init 0
+  amaxtime1R_Diff delayr 1.0                   ; set maximum delay 1000 ms
+  aDiff_1R = adel1R_Diff + kDffs * aoutR_Damp  ; Feed forward
+  adel1R_Diff deltap3 ktime_1R_Diff            ; Delay
+  delayw aoutR_Damp - kDffs * aDiff_1R         ; Feedback
 
-;Diffuser delay 2R
-adel2R_Diff	init	0
-amaxtime2R_Diff	delayr	1.0					; set maximum delay 1000 ms
-aDiff_2R		=	adel2R_Diff + kDffs * aDiff_1R	; FEED FORWARD
-adel2R_Diff	deltap3	ktime_2R_Diff				; DELAY
-			delayw	aDiff_1R - kDffs * aDiff_2R	; FEEDBACK
+  ; Diffuser delay 2R
+  adel2R_Diff init 0
+  amaxtime2R_Diff delayr 1.0                 ; set maximum delay 1000 ms
+  aDiff_2R = adel2R_Diff + kDffs * aDiff_1R  ; Feed forward
+  adel2R_Diff deltap3 ktime_2R_Diff          ; Delay
+  delayw aDiff_1R - kDffs * aDiff_2R         ; Feedback
 
-;Diffuser delay 3R
-adel3R_Diff	init	0
-amaxtime3R_Diff	delayr	1.0					; set maximum delay 1000 ms
-aoutR_Diff	=	adel3R_Diff + kDffs * aDiff_2R	; FEED FORWARD
-adel3R_Diff	deltap3	ktime_3R_Diff				; DELAY
-			delayw	aDiff_2R - kDffs * aoutR_Diff	; FEEDBACK
+  ; Diffuser delay 3R
+  adel3R_Diff init 0
+  amaxtime3R_Diff delayr 1.0                   ; set maximum delay 1000 ms
+  aoutR_Diff = adel3R_Diff + kDffs * aDiff_2R  ; Feed forward
+  adel3R_Diff deltap3 ktime_3R_Diff            ; Delay
+  delayw aDiff_2R - kDffs * aoutR_Diff         ; Feedback
 
-;Single delay 4R
-aoutR_SD		vdelay	aoutR_Diff, a(ktime_4R_Diff), 1500
+  ; Single delay 4R
+  aoutR_SD vdelay aoutR_Diff, a(ktime_4R_Diff), 1500
 
-;iFeed2 same as in DIFF L
-aoutR_Feed	= aoutR_SD * ampdb( ktime_4R_DiffRT * kFeed2)
+  ; iFeed2 same as in DIFF L
+  aoutR_Feed = aoutR_SD * ampdb(ktime_4R_DiffRT * kFeed2)
 
-;*******************************************************************************POWER FADE L and R
-;Inputs aoutL_LP (from LOPASS) and aoutL_Diff (from DIFF L)
-;Inputs aoutR_LP (from LOPASS) and aoutR_Diff (from DIFF R)
-;Outputs ainL_wet and ainR_wet (to OUT)
+  ; *******************************************************************************Power
+  ; fade l and r
+  ; Inputs aoutL_LP (from LOPASS) and aoutL_Diff (from DIFF L)
+  ; Inputs aoutR_LP (from LOPASS) and aoutR_Diff (from DIFF R)
+  ; Outputs ainL_wet and ainR_wet (to OUT)
 
-ksqrtPos_Rev0	= sqrt(1 - kPos_Rev)
-ksqrtPos_Rev1	= sqrt(kPos_Rev)
+  ksqrtPos_Rev0 = sqrt(1 - kPos_Rev)
+  ksqrtPos_Rev1 = sqrt(kPos_Rev)
 
-ainL_wet		= ksqrtPos_Rev0 * aoutL_LP + ksqrtPos_Rev1 * aoutL_Diff
-ainR_wet		= ksqrtPos_Rev0 * aoutR_LP + ksqrtPos_Rev1 * aoutR_Diff
+  ainL_wet = ksqrtPos_Rev0 * aoutL_LP + ksqrtPos_Rev1 * aoutL_Diff
+  ainR_wet = ksqrtPos_Rev0 * aoutR_LP + ksqrtPos_Rev1 * aoutR_Diff
 
-;*******************************************************************************DIFFUSION SECTION END
+  ; *******************************************************************************Diffusion
+  ; section end
 
-;****************************************************************************************OUT SECTION
-;***********************************************************************************************
-;Inputs ainL_dry and ainR_dry (global inputs of stereo signal)
-;Inputs ainL_wet and ainR_wet (from DIFFUSION)
-;Outputs audio aoutL and aoutR
+  ; ****************************************************************************************Out
+  ; section
+  ; ***********************************************************************************************
+  ; Inputs ainL_dry and ainR_dry (global inputs of stereo signal)
+  ; Inputs ainL_wet and ainR_wet (from DIFFUSION)
+  ; Outputs audio aoutL and aoutR
 
-ksqrtMix_Rev0	= sqrt(1 - kMix_Rev)
-ksqrtMix_Rev1	= sqrt(kMix_Rev)
+  ksqrtMix_Rev0 = sqrt(1 - kMix_Rev)
+  ksqrtMix_Rev1 = sqrt(kMix_Rev)
 
-aoutL		= ksqrtMix_Rev0 * ainL_dry + ksqrtMix_Rev1 * ainL_wet
-aoutR		= ksqrtMix_Rev0 * ainR_dry + ksqrtMix_Rev1 * ainR_wet
+  aoutL = ksqrtMix_Rev0 * ainL_dry + ksqrtMix_Rev1 * ainL_wet
+  aoutR = ksqrtMix_Rev0 * ainR_dry + ksqrtMix_Rev1 * ainR_wet
 
-;*************************************************************************************OUT SECTION END
+  ; *************************************************************************************Out
+  ; section end
 
-		xout		aoutL, aoutR
+  xout aoutL, aoutR
 endop
 
 
-instr	1	;Pipe (physical waveguide)
-;ctrl reading
-;ENV
-iAtt_ENV		chnget	"kC1"	;knob Att
-iDec_ENV		chnget	"kC2"	;knob Dec
-iSus_ENV		chnget	"kC3"	;knob Sus
-iRel_ENV		chnget	"kC4"	;knob Rel
-iVel_ENV		chnget	"kC5"	;knob Vel
-iScaling_ENV	chnget	"kC6"	;knob Scaling
-;GEN
-kDC_Noise_GEN	chnget	"kC7"	;knob DC/Noise
-kCut_GEN		chnget	"kC8"	;knob Cut
-kRes_GEN		chnget	"kC9"	;knob Res
-kK_Track_GEN	chnget	"kC10"	;knob K-Track
-kV_Track_GEN	chnget	"kC11"	;knob V-Track
-k1_Pole_GEN	chnget	"kC12"	;button 1-Pole
-;Pipe
-kCtr_MW		chnget	"kC13"	;knob ModWheel
-iPolarity		chnget	"kC14"	;button Polarity
-;Pipe DELTUNE
-kTune_DT		chnget	"kC15"	;knob Tune
-kFine_DT		chnget	"kC16"	;knob Fine
-kSREC_DT		chnget	"kC17"	;knob Srec
-kMW_DT		chnget	"kC18"	;knob MW
-;Pipe FEEDBACK
-kRT_FB		chnget	"kC19"	;knob RT
-kK_TrackFB	chnget	"kC20"	;knob K-Track
-kDamp_FB		chnget	"kC21"	;knob Damp
-;Pipe ALLPASS TUNE
-kTune_AP		chnget	"kC22"	;knob Tune
-kFine_AP		chnget	"kC23"	;knob Fine
-kSREC_AP		chnget	"kC24"	;knob Srec
-kMW_AP		chnget	"kC25"	;knob MW
-;Pipe ALLPASS
-kDffs_AP		chnget	"kC26"	;knob Dffs
-kPower_AP		chnget	"kC27"	;button Power
-;Pipe PUSH PULL
-kOffset		chnget	"kC28"	;knob Offset
-kPush		chnget	"kC29"	;knob Push
-;Pipe SATURATION
-kSoftHard		chnget	"kC30"	;knob Soft/Hard
-kSym			chnget	"kC31"	;knob Sym
-;Pipe MW FILTER
-kHP0			chnget	"kC32"	;knob HP0
-kHP1			chnget	"kC33"	;knob HP1
-kK_TrackH		chnget	"kC34"	;knob K-Track
-kLP0			chnget	"kC35"	;knob LP0
-kLP1			chnget	"kC36"	;knob LP1
-kK_TrackL		chnget	"kC37"	;knob K-Track
+instr 1  ; Pipe (physical waveguide)
+  ; ctrl reading
+  ; Env
+  iAtt_ENV     chnget "kC1"  ; knob Att
+  iDec_ENV     chnget "kC2"  ; knob Dec
+  iSus_ENV     chnget "kC3"  ; knob Sus
+  iRel_ENV     chnget "kC4"  ; knob Rel
+  iVel_ENV     chnget "kC5"  ; knob Vel
+  iScaling_ENV chnget "kC6"  ; knob Scaling
+  ; Gen
+  kDC_Noise_GEN chnget "kC7"   ; knob DC/Noise
+  kCut_GEN      chnget "kC8"   ; knob Cut
+  kRes_GEN      chnget "kC9"   ; knob Res
+  kK_Track_GEN  chnget "kC10"  ; knob K-Track
+  kV_Track_GEN  chnget "kC11"  ; knob V-Track
+  k1_Pole_GEN   chnget "kC12"  ; button 1-Pole
+  ; Pipe
+  kCtr_MW   chnget "kC13"  ; knob ModWheel
+  iPolarity chnget "kC14"  ; button Polarity
+  ; Pipe deltune
+  kTune_DT chnget "kC15"  ; knob Tune
+  kFine_DT chnget "kC16"  ; knob Fine
+  kSREC_DT chnget "kC17"  ; knob Srec
+  kMW_DT   chnget "kC18"  ; knob MW
+  ; Pipe feedback
+  kRT_FB     chnget "kC19"  ; knob RT
+  kK_TrackFB chnget "kC20"  ; knob K-Track
+  kDamp_FB   chnget "kC21"  ; knob Damp
+  ; Pipe allpass tune
+  kTune_AP chnget "kC22"  ; knob Tune
+  kFine_AP chnget "kC23"  ; knob Fine
+  kSREC_AP chnget "kC24"  ; knob Srec
+  kMW_AP   chnget "kC25"  ; knob MW
+  ; Pipe allpass
+  kDffs_AP  chnget "kC26"  ; knob Dffs
+  kPower_AP chnget "kC27"  ; button Power
+  ; Pipe push pull
+  kOffset chnget "kC28"  ; knob Offset
+  kPush   chnget "kC29"  ; knob Push
+  ; Pipe saturation
+  kSoftHard chnget "kC30"  ; knob Soft/Hard
+  kSym      chnget "kC31"  ; knob Sym
+  ; Pipe mw filter
+  kHP0      chnget "kC32"  ; knob HP0
+  kHP1      chnget "kC33"  ; knob HP1
+  kK_TrackH chnget "kC34"  ; knob K-Track
+  kLP0      chnget "kC35"  ; knob LP0
+  kLP1      chnget "kC36"  ; knob LP1
+  kK_TrackL chnget "kC37"  ; knob K-Track
 
-kMain_Vol		chnget	"kC50"	;knob Main Vol
+  kMain_Vol chnget "kC50"  ; knob Main Vol
 
-kPolarity		= 1 - 2*iPolarity
+  kPolarity = 1 - 2*iPolarity
 
-iPitch = p4			;iPitch, midi note from 36 to 84 with midi keyboard
+  iPitch = p4  ; iPitch, midi note from 36 to 84 with midi keyboard
 
-aout_Pipe		PIPE	iPitch, iAtt_ENV, iDec_ENV, iSus_ENV, iRel_ENV, iVel_ENV, iScaling_ENV, kDC_Noise_GEN, kCut_GEN, kRes_GEN, kK_Track_GEN, kV_Track_GEN, k1_Pole_GEN, kCtr_MW, kPolarity, kTune_DT, kFine_DT, kSREC_DT, kMW_DT, kRT_FB, kK_TrackFB, kDamp_FB, kTune_AP, kFine_AP, kSREC_AP, kMW_AP, kDffs_AP, kPower_AP, kOffset, kPush, kSoftHard, kSym, kHP0, kHP1, kK_TrackH, kLP0, kLP1, kK_TrackL
+  aout_Pipe PIPE iPitch, iAtt_ENV, iDec_ENV, iSus_ENV, iRel_ENV, iVel_ENV, iScaling_ENV, kDC_Noise_GEN, kCut_GEN, kRes_GEN, kK_Track_GEN, kV_Track_GEN, k1_Pole_GEN, kCtr_MW, kPolarity, kTune_DT, kFine_DT, kSREC_DT, kMW_DT, kRT_FB, kK_TrackFB, kDamp_FB, kTune_AP, kFine_AP, kSREC_AP, kMW_AP, kDffs_AP, kPower_AP, kOffset, kPush, kSoftHard, kSym, kHP0, kHP1, kK_TrackH, kLP0, kLP1, kK_TrackL
 
-		gaIn_Reverb	= gaIn_Reverb + aout_Pipe * kMain_Vol
+  gaIn_Reverb = gaIn_Reverb + aout_Pipe * kMain_Vol
 endin
 
-instr	99		;Reverb unit
+instr 99  ; Reverb unit
 
-;Running LED, just for fun ***********************
-ktempo		lfo		1, 0.5, 2
-			chnset	 ktempo, "tempo"
-;**********************************************
+  ; Running LED, just for fun ***********************
+  ktempo lfo 1, 0.5, 2
+  chnset ktempo, "tempo"
+  ; **********************************************
 
-kTime_Rev		chnget	"kC38"	;knob Time
-kLR_Rev		chnget	"kC39"	;knob L/R
-kSize_Rev		chnget	"kC40"	;knob Size
-kRT_Rev		chnget	"kC41"	;knob RT
-kLP_Rev		chnget	"kC42"	;knob LP
-kLD_Rev		chnget	"kC43"	;knob LD
-kHD_Rev		chnget	"kC44"	;knob HD
-kFrq_Rev		chnget	"kC45"	;knob Frq,	LFO sinus frequency
-kSpin_Rev		chnget	"kC46"	;knob Spin,	LFO sinus amplitude
-kDizzy_Rev	chnget	"kC47"	;knob Dizzy,	Slow Random amplitude
-kPos_Rev		chnget	"kC48"	;knob Pos,	0 to 1
-kMix_Rev		chnget	"kC49"	;knob Mix,	0 to 1
+  kTime_Rev  chnget "kC38"  ; knob Time
+  kLR_Rev    chnget "kC39"  ; knob L/R
+  kSize_Rev  chnget "kC40"  ; knob Size
+  kRT_Rev    chnget "kC41"  ; knob RT
+  kLP_Rev    chnget "kC42"  ; knob LP
+  kLD_Rev    chnget "kC43"  ; knob LD
+  kHD_Rev    chnget "kC44"  ; knob HD
+  kFrq_Rev   chnget "kC45"  ; knob Frq, LFO sinus frequency
+  kSpin_Rev  chnget "kC46"  ; knob Spin, LFO sinus amplitude
+  kDizzy_Rev chnget "kC47"  ; knob Dizzy, Slow Random amplitude
+  kPos_Rev   chnget "kC48"  ; knob Pos, 0 to 1
+  kMix_Rev   chnget "kC49"  ; knob Mix, 0 to 1
 
-			denorm			gaIn_Reverb
+  denorm gaIn_Reverb
 
-aoutL, aoutR	REVERB	gaIn_Reverb, kTime_Rev, kLR_Rev, kSize_Rev, kRT_Rev, kLP_Rev, kLD_Rev, kHD_Rev, kFrq_Rev, kSpin_Rev, kDizzy_Rev, kPos_Rev, kMix_Rev
+  aoutL, aoutR REVERB gaIn_Reverb, kTime_Rev, kLR_Rev, kSize_Rev, kRT_Rev, kLP_Rev, kLD_Rev, kHD_Rev, kFrq_Rev, kSpin_Rev, kDizzy_Rev, kPos_Rev, kMix_Rev
 
-;vu-meters
-kLeft		rms		aoutL
-kRight		rms		aoutR
-			chnset	 kLeft, "vu_Left"
-			chnset	 kRight, "vu_Right"
+  ; vu-meters
+  kLeft  rms aoutL
+  kRight rms aoutR
+  chnset kLeft, "vu_Left"
+  chnset kRight, "vu_Right"
 
-			outs		aoutL*10000, aoutR*10000
+  outs aoutL*10000, aoutR*10000
 
-gaIn_Reverb	= 0
+  gaIn_Reverb = 0
 endin
 
 
 </CsInstruments>
 <CsScore>
-;Table  exp= (1/1000) * pow(10; (indx-44)/20) for ADSR (in sec)
+; Table  exp= (1/1000) * pow(10; (indx-44)/20) for ADSR (in sec)
 f 10 0 256 -25 0 0.000006 12 0.000025 24 0.0001 36 0.000398 48 0.001584 60 0.006309 72 0.02511 84 0.1 96 0.398107 108 1.5848931 120 6.3095734 132 25.1188 144 100.0 156 398.10 168 1584.89 256 2000
-;Table  exp= 440 * pow(2; (indx-192-69)/12) Pitch to Frequency table for P=-192 à +198
+; Table  exp= 440 * pow(2; (indx-192-69)/12) Pitch to Frequency table for P=-192 à +198
 f 11 0 512 -25 0 0.00012475 12 0.00024951 24 0.00049901 36 0.00099802 48 0.00199604 60 0.00399209 72 0.00798418 84 0.01596836 96 0.03193671 108 0.06387343 120 0.12774686 132 0.25549372 144 0.51098743 156 1.02197486 168 2.04394973 180 4.08789946 192 8.17579892 204 16.3515978 216 32.7031957 228 65.4063913 240 130.812783 252 261.625565 264 523.251131 276 1046.50226 288 2093.00452 300 4186.00904 312 8372.01809 324 16744.0362 336 33488.0724 348 66976.1447 360 133952.289 372 267904.579 384 535809.158 396 1071618.32 512 100
 
-;Reverb
-f 1 0 128 -25 0 0.00227272727 128 3.69431518	;Table  exp1= (1/440) * pow(2; (indx)/12)
-f 2 0 128 -25 0 8.17579892 128 13289.7503	;Table  exp2= 440 * pow(2; (indx-69)/12)
-f 3 0 512 10 1							;sinus for poscil
+; Reverb
+f 1 0 128 -25 0 0.00227272727 128 3.69431518  ; Table  exp1= (1/440) * pow(2; (indx)/12)
+f 2 0 128 -25 0 8.17579892 128 13289.7503     ; Table  exp2= 440 * pow(2; (indx-69)/12)
+f 3 0 512 10 1                                ; sinus for poscil
 
 i 99 0 3600
 
@@ -770,9 +792,9 @@ i 1 7.5 0.1 37
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>102</r>
-  <g>102</g>
-  <b>102</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -793,9 +815,9 @@ i 1 7.5 0.1 37
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -803,9 +825,9 @@ i 1 7.5 0.1 37
    <b>144</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>4</borderradius>
@@ -830,9 +852,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -840,9 +862,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -867,9 +889,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -877,9 +899,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -924,14 +946,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -981,14 +1003,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1018,14 +1040,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1075,14 +1097,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1112,14 +1134,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1169,14 +1191,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1206,14 +1228,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1263,14 +1285,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1300,14 +1322,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1357,14 +1379,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1394,14 +1416,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1451,14 +1473,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1488,14 +1510,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1545,14 +1567,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1582,14 +1604,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1639,14 +1661,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1676,14 +1698,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1733,14 +1755,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1770,14 +1792,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1827,14 +1849,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1864,14 +1886,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1921,14 +1943,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -1958,14 +1980,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2015,14 +2037,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2052,14 +2074,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2109,14 +2131,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2146,14 +2168,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2203,14 +2225,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2240,14 +2262,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2297,14 +2319,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2334,14 +2356,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2391,14 +2413,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2428,14 +2450,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2485,14 +2507,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2522,14 +2544,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2559,9 +2581,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -2569,9 +2591,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -2616,14 +2638,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2653,14 +2675,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2710,14 +2732,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2747,14 +2769,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2804,14 +2826,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2841,14 +2863,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2898,14 +2920,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2935,14 +2957,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -2992,14 +3014,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3029,14 +3051,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3066,14 +3088,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3120,9 +3142,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -3130,9 +3152,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -3177,14 +3199,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3214,14 +3236,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3271,14 +3293,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3308,14 +3330,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3365,14 +3387,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3402,14 +3424,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3459,14 +3481,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3496,14 +3518,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3553,14 +3575,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3590,14 +3612,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3647,14 +3669,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3684,14 +3706,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3721,9 +3743,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -3731,9 +3753,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -3778,14 +3800,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3815,14 +3837,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3852,14 +3874,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -3906,9 +3928,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -3916,9 +3938,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -3963,14 +3985,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4000,14 +4022,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4057,14 +4079,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4094,14 +4116,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4151,14 +4173,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4188,14 +4210,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4245,14 +4267,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4282,14 +4304,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4319,9 +4341,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -4329,9 +4351,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -4376,14 +4398,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4413,14 +4435,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4470,14 +4492,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4507,14 +4529,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4564,14 +4586,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4601,14 +4623,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4638,9 +4660,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -4648,9 +4670,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -4695,14 +4717,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4732,14 +4754,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4789,14 +4811,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4826,14 +4848,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4883,14 +4905,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4920,14 +4942,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -4977,14 +4999,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5014,14 +5036,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5051,9 +5073,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -5061,9 +5083,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -5108,14 +5130,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5145,14 +5167,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5182,14 +5204,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5236,9 +5258,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -5246,9 +5268,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -5293,14 +5315,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5330,14 +5352,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5387,14 +5409,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5424,14 +5446,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5461,9 +5483,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -5471,9 +5493,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -5518,14 +5540,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5555,14 +5577,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5612,14 +5634,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5649,14 +5671,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5686,9 +5708,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -5696,9 +5718,9 @@ i 1 7.5 0.1 37
    <b>144</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>10</borderradius>
@@ -5724,13 +5746,13 @@ i 1 7.5 0.1 37
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>1</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -5754,14 +5776,14 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5791,14 +5813,14 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5833,17 +5855,17 @@ i 1 7.5 0.1 37
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>45</r>
+   <g>208</g>
+   <b>45</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -5871,17 +5893,17 @@ i 1 7.5 0.1 37
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>45</r>
+   <g>208</g>
+   <b>45</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -5904,14 +5926,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5941,14 +5963,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -5983,17 +6005,17 @@ i 1 7.5 0.1 37
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>24</r>
-   <g>232</g>
-   <b>0</b>
+   <r>62</r>
+   <g>208</g>
+   <b>45</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -6016,9 +6038,9 @@ i 1 7.5 0.1 37
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>85</r>
@@ -6026,9 +6048,9 @@ i 1 7.5 0.1 37
    <b>127</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
@@ -6053,14 +6075,14 @@ i 1 7.5 0.1 37
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordercolor>
    <r>0</r>
@@ -6134,9 +6156,9 @@ i 1 7.5 0.1 37
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -6144,9 +6166,9 @@ i 1 7.5 0.1 37
    <b>162</b>
   </bgcolor>
   <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
   </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>4</borderradius>
@@ -6168,9 +6190,9 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>

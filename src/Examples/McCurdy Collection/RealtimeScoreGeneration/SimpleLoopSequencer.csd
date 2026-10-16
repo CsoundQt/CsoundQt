@@ -1,105 +1,111 @@
-;Written by Iain McCurdy, 2011
+; Written by Iain McCurdy, 2011
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add Tempo SpinBox widget
+; Notes on modifications from original csd:
+; Add Tempo SpinBox widget
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 1		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 1      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-;						1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16
-gi1		ftgen	0,0,16,2,	1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0	;BASS DRUM 
-gi2		ftgen	0,0,16,2,	1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1	;KALIMBA 
-gi3		ftgen	0,0,16,2,	0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0	;SNARE
-gi4		ftgen	0,0,16,2,	1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0	;CLOSED HI-HAT
-gi5		ftgen	0,0,16,2,	0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1	;OPEN HI-HAT
-gi6		ftgen	0,0,16,2,	1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0	;TAMBOURINE 
-gisine	ftgen	0,0,4096,10,1										;SINE
+; 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16
+gi1    ftgen 0, 0, 16, 2, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0  ; Bass drum
+gi2    ftgen 0, 0, 16, 2, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1  ; Kalimba
+gi3    ftgen 0, 0, 16, 2, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0  ; Snare
+gi4    ftgen 0, 0, 16, 2, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0  ; Closed hi-hat
+gi5    ftgen 0, 0, 16, 2, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1  ; Open hi-hat
+gi6    ftgen 0, 0, 16, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0  ; Tambourine
+gisine ftgen 0, 0, 4096, 10, 1                                            ; Sine
 
-gindx	init		0
+gindx init 0
 
 
-instr	1
-	ktempo	invalue		"Tempo"	
-	ktick	metro		(ktempo*4)/60
-			schedkwhen	ktick, 0, 0, 2, 0, 0.001, 0
+instr 1
+  ktempo invalue "Tempo"
+  ktick metro (ktempo*4)/60
+  schedkwhen ktick, 0, 0, 2, 0, 0.001, 0
 endin
 
-instr	2
-#define	VOICE(N)	
-	#
-	iOnOff$N	table		gindx, gi$N
-			schedkwhen	iOnOff$N, 0, 0, p1+$N, 0, 0.2
-	#
-$VOICE(1)
-$VOICE(2)
-$VOICE(3)
-$VOICE(4)
-$VOICE(5)
-$VOICE(6)
-	gindx	wrap		gindx+1, 0, 16
-			turnoff
+instr 2
+  #define VOICE(N)
+  #
+  iOnOff$N table gindx, gi$N
+  schedkwhen iOnOff$N, 0, 0, p1+$N, 0, 0.2
+  #
+  $VOICE(1)
+  $VOICE(2)
+  $VOICE(3)
+  $VOICE(4)
+  $VOICE(5)
+  $VOICE(6)
+  gindx wrap gindx+1, 0, 16
+  turnoff
 endin
 
-instr	3	;SOUND 1 - BASS DRUM
-	p3		=		0.2										;DEFINE DURATION FOR THIS SOUND
-	aenv		expon	rnd(0.5)+0.5,p3,0.001						;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
-	kcps		expon	200,p3,20									;PITCH GLISSANDO
-	asig		oscil	aenv*0.5, kcps, gisine 						;OSCILLATOR
-			out		asig										;SEND AUDIO TO OUTPUTS
+instr 3                               ; Sound 1 - bass drum
+  p3 = 0.2                            ; Define duration for this sound
+  aenv expon rnd(0.5)+0.5, p3, 0.001  ; Amplitude envelope - percussive decay
+  kcps expon 200, p3, 20              ; Pitch glissando
+  asig oscil aenv*0.5, kcps, gisine   ; Oscillator
+  out asig                            ; Send audio to outputs
 endin
 
-instr	4	;SOUND 2 - KALIMBA (BAR MODEL)
-	p3		=		2.6										;DEFINE DURATION FOR THIS SOUND
-	asig 	barmodel	1, 1, 80, 1, 0, 2.6, 0.5, 6000, 0.07			;KALIMBA SOUND CREATED USING barmodel OPCODE (SEE CSOUND MANUAL FOR MORE INFO.)
-			out		asig*(rnd(0.5)+0.5)*0.1				 		;SEND AUDIO TO OUTPUTS AND ATTENUATE  USING GAIN CONTROLS
+instr 4     ; Sound 2 - kalimba (bar model)
+  p3 = 2.6  ; Define duration for this sound
+  ; Kalimba sound created using barmodel opcode (see csound manual for more info.)
+  asig barmodel 1, 1, 80, 1, 0, 2.6, 0.5, 6000, 0.07
+  out asig*(rnd(0.5)+0.5)*0.1  ; Send audio to outputs and attenuate  using gain controls
 endin
 
-instr	5	;SOUND 3 - SNARE
-	p3		=		0.15										;DEFINE DURATION FOR THIS SOUND
-	aenv		expon	rnd(0.5)+0.5,p3,0.001						;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
-	anse		noise	1, 0 									;CREATE NOISE COMPONENT FOR SNARE DRUM SOUND
-	kcps		expon	400,p3,20									;CREATE TONE COMPONENT FREQUENCY GLISSANDO FOR SNARE DRUM SOUND
-	ajit		randomi	0.2,1.8,10000								;JITTER ON FREQUENCY FOR TONE COMPONENT
-	atne		oscil	aenv,kcps*ajit,gisine						;CREATE TONE COMPONENT
-	asig		sum		anse*0.5, atne*5							;MIX NOISE AND TONE SOUND COMPONENTS
-	ares 	comb 	asig, 0.02, 0.0035							;PASS SIGNAL THROUGH A COMB FILTER TO CREATE STATIC HARMONIC RESONANCE
-			out		ares*aenv*0.1								;SEND AUDIO TO OUTPUTS, APPLY ENVELOPE AND ATTENTUATE USING GAIN CONTROLS 
+instr 5                               ; Sound 3 - snare
+  p3 = 0.15                           ; Define duration for this sound
+  aenv expon rnd(0.5)+0.5, p3, 0.001  ; Amplitude envelope - percussive decay
+  anse noise 1, 0                     ; Create noise component for snare drum sound
+  ; Create tone component frequency glissando for snare drum sound
+  kcps expon 400, p3, 20
+  ajit randomi 0.2, 1.8, 10000        ; Jitter on frequency for tone component
+  atne oscil aenv, kcps*ajit, gisine  ; Create tone component
+  asig sum anse*0.5, atne*5           ; Mix noise and tone sound components
+  ; Pass signal through a comb filter to create static harmonic resonance
+  ares comb asig, 0.02, 0.0035
+  ; Send audio to outputs, apply envelope and attentuate using gain controls
+  out ares*aenv*0.1
 endin
 
-instr	6	;SOUND 4 - CLOSED HI-HAT
-			turnoff2	7,0,0									;TURN OFF ALL INSTANCES OF instr 7 (OPEN HI-HAT)
-	p3		=		0.1										;DEFINE DURATION FOR THIS SOUND
-	aenv		expon	rnd(0.5)+0.5,p3,0.001						;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
-	asig		noise	aenv*0.3, 0								;CREATE SOUND FOR CLOSED HI-HAT
-	asig		buthp	asig, 7000								;HIGHPASS FILTER SOUND
-			out		asig										;SEND AUDIO TO OUTPUTS
+instr 6                               ; Sound 4 - closed hi-hat
+  turnoff2 7, 0, 0                    ; Turn off all instances of instr 7 (open hi-hat)
+  p3 = 0.1                            ; Define duration for this sound
+  aenv expon rnd(0.5)+0.5, p3, 0.001  ; Amplitude envelope - percussive decay
+  asig noise aenv*0.3, 0              ; Create sound for closed hi-hat
+  asig buthp asig, 7000               ; Highpass filter sound
+  out asig                            ; Send audio to outputs
 endin
 
-instr	7	;SOUND 5 - OPEN HI-HAT
-	p3		=		1										;DEFINE DURATION FOR THIS SOUND
-	aenv		expon	rnd(0.5)+0.5,p3,0.001						;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
-	asig		noise	aenv*0.3, 0								;CREATE SOUND FOR CLOSED HI-HAT
-	asig		buthp	asig, 7000								;HIGHPASS FILTER SOUND	
-			out		asig										;SEND AUDIO TO OUTPUTS
+instr 7                               ; Sound 5 - open hi-hat
+  p3 = 1                              ; Define duration for this sound
+  aenv expon rnd(0.5)+0.5, p3, 0.001  ; Amplitude envelope - percussive decay
+  asig noise aenv*0.3, 0              ; Create sound for closed hi-hat
+  asig buthp asig, 7000               ; Highpass filter sound
+  out asig                            ; Send audio to outputs
 endin
 
-instr	8	;SOUND 6 - TAMBOURINE
-	p3		=		0.5										;DEFINE DURATION FOR THIS SOUND
-	asig		tambourine 0.1,0.01 ,32, 0.47, 0, 2300 , 5600, 8000		;TAMBOURINE SOUND CREATED USING tambourine PHYSICAL MODELLING OPCODE (SEE CSOUND MANUAL FOR MORE INFO.)
-			out		asig*(rnd(0.5)+0.5)							;SEND AUDIO TO OUTPUTS
+instr 8     ; Sound 6 - tambourine
+  p3 = 0.5  ; Define duration for this sound
+  ; Tambourine sound created using tambourine physical modelling opcode (see csound manual
+  ; for more info.)
+  asig tambourine 0.1, 0.01, 32, 0.47, 0, 2300, 5600, 8000
+  out asig*(rnd(0.5)+0.5)  ; Send audio to outputs
 endin
 </CsInstruments>
 <CsScore>
@@ -116,9 +122,9 @@ i 1 0 300
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -136,15 +142,20 @@ i 1 0 300
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -170,14 +181,14 @@ This method is less flexible than the method using timedseq but for simple rhyth
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -199,14 +210,14 @@ This method is less flexible than the method using timedseq but for simple rhyth
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -226,14 +237,14 @@ This method is less flexible than the method using timedseq but for simple rhyth
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>

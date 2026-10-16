@@ -1,281 +1,313 @@
-;WRITTEN BY IAIN MCCURDY, 2008
+; Written by iain mccurdy, 2008
 
-;Modified for QuteCsound by René, October 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, October 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
-;	replaced (1-gkf1)...(1-gkf5) by gkf1...gkf5 because QC slider limit values cannot be reversed
-;	Changed macro FORMANT_DATA to accept NUM as a parameter.
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; replaced (1-gkf1)...(1-gkf5) by gkf1...gkf5 because QC slider limit values cannot be
+; reversed
+; Changed macro FORMANT_DATA to accept NUM as a parameter.
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-givoice_os	ftgen	0, 0, 8, -2, 0, 15, 30, 45, 60		;TABLE OF OFFSET VALUES USED WHEN READING FORMANT DATA - WHICH OFFSET VALUE IS CHOSEN DEPENDS ON WHAT VOICE TYPE IS SELECTED	
+; Table of offset values used when reading formant data - which offset value is chosen
+; depends on what voice type is selected
+givoice_os ftgen 0, 0, 8, -2, 0, 15, 30, 45, 60
 
-;TABLE FOR EXP SLIDER
-giExp4a		ftgen	0, 0, 129, -25, 0, 0.01, 128, 4.0
-giExp4b		ftgen	0, 0, 129, -25, 0, 0.25, 128, 4.0
-giExp500		ftgen	0, 0, 129, -25, 0, 20.0, 128, 500.0
+; Table for exp slider
+giExp4a  ftgen 0, 0, 129, -25, 0, 0.01, 128, 4.0
+giExp4b  ftgen 0, 0, 129, -25, 0, 0.25, 128, 4.0
+giExp500 ftgen 0, 0, 129, -25, 0, 20.0, 128, 500.0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	1	;GUI
+instr 1  ; GUI
 
-	Sfile_new			strcpy		""						;INIT TO EMPTY STRING
+  Sfile_new strcpy ""  ; Init to empty string
 
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kBWMlt		invalue	 	"Bandwidths_Multiply"
-		gkBWMlt		tablei		kBWMlt, giExp4a, 1
-					outvalue		"Bandwidths_Multiply_Value", gkBWMlt
-		kFrqMlt		invalue 		"Frequencies_Multiply"
-		gkFrqMlt		tablei		kFrqMlt, giExp4b, 1
-					outvalue		"Frequencies_Multiply_Value", gkFrqMlt
-		gkmix		invalue 		"Dry_Wet_Mix"
-		gkgain		invalue 		"Global_Gain"
-		gkInGain		invalue 		"In_Gain"
-		kBuzFrq		invalue 		"Buzz_Freq"
-		gkBuzFrq		tablei		kBuzFrq, giExp500, 1
-					outvalue		"Buzz_Freq_Value", gkBuzFrq
+  ktrig metro 10
+  if (ktrig == 1) then
+    kBWMlt invalue "Bandwidths_Multiply"
+    gkBWMlt tablei kBWMlt, giExp4a, 1
+    outvalue "Bandwidths_Multiply_Value", gkBWMlt
+    kFrqMlt invalue "Frequencies_Multiply"
+    gkFrqMlt tablei kFrqMlt, giExp4b, 1
+    outvalue "Frequencies_Multiply_Value", gkFrqMlt
+    gkmix    invalue "Dry_Wet_Mix"
+    gkgain   invalue "Global_Gain"
+    gkInGain invalue "In_Gain"
+    kBuzFrq  invalue "Buzz_Freq"
+    gkBuzFrq tablei kBuzFrq, giExp500, 1
+    outvalue "Buzz_Freq_Value", gkBuzFrq
 
-		gkf1			invalue 		"f1"
-		gkf2			invalue 		"f2"
-		gkf3			invalue 		"f3"
-		gkf4			invalue 		"f4"
-		gkf5			invalue 		"f5"
+    gkf1 invalue "f1"
+    gkf2 invalue "f2"
+    gkf3 invalue "f3"
+    gkf4 invalue "f4"
+    gkf5 invalue "f5"
 
-		gkx			invalue		"Vowel_X"
-		gky			invalue		"Vowel_Y"
+    gkx invalue "Vowel_X"
+    gky invalue "Vowel_Y"
 
-		gkinput		invalue		"Input"
-		gkvoice		invalue		"Voice"
+    gkinput invalue "Input"
+    gkvoice invalue "Voice"
 
-		gSfile		invalue		"_Browse"
-		Sfile_old		strcpyk		Sfile_new
-		Sfile_new		strcpyk		gSfile
-		gkfile 		strcmpk		Sfile_new, Sfile_old
-	endif
+    gSfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk gSfile
+    gkfile strcmpk Sfile_new, Sfile_old
+  endif
 endin
 
-instr	2															;PLAYS FILE AND SENSES FADER MOVEMENT AND RESTARTS INSTR FOR I-RATE CONTROLLERS
-	ibit		=		16												;BIT DEPTH OF THE SOUNDFILE USED
-	ginorm	=		(2^ibit)*0.5										;MULTIPLIER USED TO NORMALISE THE AUDIO SIGNAL BETWEEN ZERO AND 1
-	iporttime	=		.1
-	kporttime	linseg	0,.001,iporttime,1,iporttime							;PORTAMENTO TIME                                                      
-	kBuzFrq	portk	gkBuzFrq, kporttime                   					;K-RATE PORTAMENTO TIME - RISES QUICKLY TO DESIRED VALUE THEN HOLDS IT
+; Plays file and senses fader movement and restarts instr for i-rate controllers
+instr 2
+  ibit = 16  ; Bit depth of the soundfile used
+  ; Multiplier used to normalise the audio signal between zero and 1
+  ginorm    = (2^ibit)*0.5
+  iporttime = .1
+  kporttime linseg 0, .001, iporttime, 1, iporttime  ; Portamento time
+  ; K-rate portamento time - rises quickly to desired value then holds it
+  kBuzFrq portk gkBuzFrq, kporttime
 
-	if		gkinput=0	then												;IF 'Live' IS SELECTED FOR INPUT
-		asigL	inch	1												;READ AUDIO FROM CHANNEL 1 (LEFT)
-		asigL	=	asigL * gkInGain									;ATTENUATE AUDIO FROM CHANNEL 1 USING 'gkInGain' CONTROL
-		asigR	inch	2                         							;READ AUDIO FROM CHANNEL 2 (RIGHT)                       
-		asigR	=	asigR * gkInGain									;ATTENUATE AUDIO FROM CHANNEL 2 USING 'gkInGain' CONTROL
-	elseif	gkinput=1	then												;IF 'Buzz' IS SELECTED FOR INPUT
-		;OUT		OPCODE	AMPLITUDE | INTERVAL (BETWEEN PULSES)
-		asigL	mpulse	32768,      1/kBuzFrq
-		asigR	=	asigL											;SET asigR TO BE IDENTICAL TO asigL (THE 'BUZZING' TONE) 
-	else																;IF NEITHER OF THE FIRST 2 OPTIONS FOR INPUT ARE USED... (ONLY ONE OPTION REMAINS)
-		kNew_file		changed	gkfile									;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-		if	kNew_file=1	then											;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-			reinit	NEW_FILE											;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-		endif
-		NEW_FILE:
-		;OUTPUTS		OPCODE	FILE  | SPEED | INSKIP | LOOPING (0=OFF 1=ON)
-		asigL, asigR	FilePlay2	gSfile,  1,      0,         1					;GENERATE 2 AUDIO SIGNALS FROM A STEREO SOUND FILE
-					rireturn											;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-	endif
-		
-	asigL		=	asigL/ginorm										;NORMALISE BOTH CHANNELS OF AUDIO
-	asigR		=	asigR/ginorm										;NORMALISE BOTH CHANNELS OF AUDIO
-	                                                                                                                                                           
-	kSwitch		changed	gkvoice										;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then													;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	START												;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif
-	START:
-	ivoice_os		table	i(gkvoice), givoice_os							;READ TABLE OFFSET VALUE FROM FUNCTION TABLE 'givoice_os' - THESE ARE USED TO SELECT THE DIFFERENT DATA SET CORRESPONDING TO THE 5 DIFFERENT VOICE TYPES
-		
-	;A TEXT MACRO IS DEFINED THAT WILL BE THE CODE FOR DERIVING DATA FOR EACH FORMANT. A MACRO IS USED TO AVOID HAVING TO USING CODE REPETITION AND TO EASIER FACICLITATE CODE MODIFICATION
-#define	FORMANT_DATA(NUM')	#
-	kfreq$NUM._U	table	(gkx)*(3/5),$NUM+ivoice_os, 1					;READ DATA FOR FREQUENCY (UPPER EDGE OF PANEL)
-	kfreq$NUM._L	table	((1-gkx)*(1/5))+(4/5),$NUM+ivoice_os, 1				;READ DATA FOR FREQUENCY (LOWER EDGE OF PANEL)
-	kfreq$NUM		ntrpol	kfreq$NUM._L, kfreq$NUM._U, gky						;INTERPOLATE BETWEEN UPPER VALUE AND LOWER VALUE (DETERMINED BY Y-LOCATION ON PANEL)                          
-	kfreq$NUM		=		kfreq$NUM * gkFrqMlt							;MULTIPLY FREQUENCY VALUE BY VALUE FROM 'Frequency Multiply' SLIDER
-	kdbamp$NUM._U	table	(gkx)*(3/5),$NUM+ivoice_os+5, 1					;READ DATA FOR INTENSITY (UPPER EDGE OF PANEL)                                      
-	kdbamp$NUM._L	table	((1-gkx)*(1/5))+(4/5),$NUM+ivoice_os+5, 1				;READ DATA FOR INTENSITY (LOWER EDGE OF PANEL)                                      
-	kdbamp$NUM	ntrpol	kdbamp$NUM._L, kdbamp$NUM._U, gky						;INTERPOLATE BETWEEN UPPER VALUE AND LOWER VALUE (DETERMINED BY Y-LOCATION ON PANEL)
-	kbw$NUM._U		table	(gkx)*(3/5),$NUM+ivoice_os+10, 1					;READ DATA FOR BANDWIDTH (UPPER EDGE OF PANEL)                                      
-	kbw$NUM._L		table	((1-gkx)*(1/5))+(4/5),$NUM+ivoice_os+10, 1				;READ DATA FOR BANDWIDTH (LOWER EDGE OF PANEL)                                      
-	kbw$NUM		ntrpol	kbw$NUM._L, kbw$NUM._U, gky							;INTERPOLATE BETWEEN UPPER VALUE AND LOWER VALUE (DETERMINED BY Y-LOCATION ON PANEL)
-	kbw$NUM		=		kbw$NUM*gkBWMlt								;MULTIPLY BANDWIDTH VALUE BY VALUE FROM 'Bandwidth Multiply' SLIDER
+  if gkinput = 0 then         ; If 'live' is selected for input
+    asigL inch 1              ; Read audio from channel 1 (left)
+    asigL = asigL * gkInGain  ; Attenuate audio from channel 1 using 'gkingain' control
+    asigR inch 2              ; Read audio from channel 2 (right)
+    asigR = asigR * gkInGain  ; Attenuate audio from channel 2 using 'gkingain' control
+  elseif gkinput = 1 then     ; If 'buzz' is selected for input
+    ; Out  opcode amplitude | interval (between pulses)
+    asigL mpulse 32768, 1/kBuzFrq
+    asigR = asigL  ; Set asigr to be identical to asigl (the 'buzzing' tone)
+    ; If neither of the first 2 options for input are used... (only one option remains)
+  else
+    ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+    ; variables change. (output 'kswitch' is normally zero)
+    kNew_file changed gkfile
+    if kNew_file = 1 then  ; If i-rate variable change trigger is '1'...
+      reinit NEW_FILE      ; Begin a reinitialisation pass from label 'start'
+    endif
+NEW_FILE:
+    ; Outputs  opcode file  | speed | inskip | looping (0=off 1=on)
+    ; Generate 2 audio signals from a stereo sound file
+    asigL, asigR FilePlay2 gSfile, 1, 0, 1
+    rireturn  ; Return from reinitialisation pass to performance time passes
+  endif
 
-	if 	kDisplayTrigger == 1	then
-		outvalue	"freq$NUM", kfreq$NUM									;UPDATE DISPLAY OF FREQUENCY VALUE IN THE ON-SCREEN VALUATOR BOX                                                          
-		outvalue	"db$NUM", kdbamp$NUM									;UPDATE DISPLAY OF INTENSITY VALUE IN THE ON-SCREEN VALUATOR BOX                                                          
-		outvalue	"bw$NUM", kbw$NUM										;UPDATE DISPLAY OF BANDWIDTH VALUE IN THE ON-SCREEN VALUATOR BOX                                                          
-	endif
-	#																;END OF MACRO!
-	
-	kDisplayTrigger	metro	10										;CREATE A TRIGGER METRONOME (USED TO UPDATE VALUATOR BOX DISPLAYS
+  asigL = asigL/ginorm  ; Normalise both channels of audio
+  asigR = asigR/ginorm  ; Normalise both channels of audio
 
-;READING DATA FOR FORMANTS (MACROS IMPLEMENTED)
-	$FORMANT_DATA(1')
-	$FORMANT_DATA(2')
-	$FORMANT_DATA(3')
-	$FORMANT_DATA(4')
-	$FORMANT_DATA(5')
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkvoice
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit START       ; Begin a reinitialisation pass from label 'start'
+  endif
+START:
+  ; Read table offset value from function table 'givoice_os' - these are used to select
+  ; the different data set corresponding to the 5 different voice types
+  ivoice_os table i(gkvoice), givoice_os
 
-				rireturn											;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-	
-	kfreq1		portk	kfreq1,	kporttime							;PORTAMENTO APPLIED TO VALUE TO SMOOTH TRANSITIONS
-	kfreq2		portk	kfreq2,	kporttime
-	kfreq3		portk	kfreq3,	kporttime
-	kfreq4		portk	kfreq4,	kporttime
-	kfreq5		portk	kfreq5,	kporttime
-	kdbamp1		portk	kdbamp1,	kporttime
-	kdbamp2		portk	kdbamp2,	kporttime
-	kdbamp3		portk	kdbamp3,	kporttime
-	kdbamp4		portk	kdbamp4,	kporttime
-	kdbamp5		portk	kdbamp5,	kporttime
-	kbw1			portk	kbw1,	kporttime
-	kbw2			portk	kbw2,	kporttime
-	kbw3			portk	kbw3,	kporttime
-	kbw4			portk	kbw4,	kporttime
-	kbw5			portk	kbw5,	kporttime
-	
-	aBPF1L		reson	asigL, kfreq1, kbw1, 1						;FORMANT 1
-	aBPF1R		reson	asigR, kfreq1, kbw1, 1
+  ; A text macro is defined that will be the code for deriving data for each formant. A
+  ; macro is used to avoid having to using code repetition and to easier faciclitate code
+  ; modification
+  #define FORMANT_DATA(NUM') #
+  ; Read data for frequency (upper edge of panel)
+  kfreq$NUM._U table (gkx)*(3/5), $NUM+ivoice_os, 1
+  ; Read data for frequency (lower edge of panel)
+  kfreq$NUM._L table ((1-gkx)*(1/5))+(4/5), $NUM+ivoice_os, 1
+  ; Interpolate between upper value and lower value (determined by y-location on panel)
+  kfreq$NUM ntrpol kfreq$NUM._L, kfreq$NUM._U, gky
+  ; Multiply frequency value by value from 'frequency multiply' slider
+  kfreq$NUM = kfreq$NUM * gkFrqMlt
+  ; Read data for intensity (upper edge of panel)
+  kdbamp$NUM._U table (gkx)*(3/5), $NUM+ivoice_os+5, 1
+  ; Read data for intensity (lower edge of panel)
+  kdbamp$NUM._L table ((1-gkx)*(1/5))+(4/5), $NUM+ivoice_os+5, 1
+  ; Interpolate between upper value and lower value (determined by y-location on panel)
+  kdbamp$NUM ntrpol kdbamp$NUM._L, kdbamp$NUM._U, gky
+  ; Read data for bandwidth (upper edge of panel)
+  kbw$NUM._U table (gkx)*(3/5), $NUM+ivoice_os+10, 1
+  ; Read data for bandwidth (lower edge of panel)
+  kbw$NUM._L table ((1-gkx)*(1/5))+(4/5), $NUM+ivoice_os+10, 1
+  ; Interpolate between upper value and lower value (determined by y-location on panel)
+  kbw$NUM ntrpol kbw$NUM._L, kbw$NUM._U, gky
+  ; Multiply bandwidth value by value from 'bandwidth multiply' slider
+  kbw$NUM = kbw$NUM*gkBWMlt
 
-	aBPF2L		reson	asigL, kfreq2, kbw2, 1						;FORMANT 2
-	aBPF2R		reson	asigR, kfreq2, kbw2, 1
+  if kDisplayTrigger == 1 then
+    ; Update display of frequency value in the on-screen valuator box
+    outvalue "freq$NUM", kfreq$NUM
+    ; Update display of intensity value in the on-screen valuator box
+    outvalue "db$NUM", kdbamp$NUM
+    ; Update display of bandwidth value in the on-screen valuator box
+    outvalue "bw$NUM", kbw$NUM
+  endif
+  #  ; End of macro!
 
-	aBPF3L		reson	asigL, kfreq3, kbw3, 1						;FORMANT 3
-	aBPF3R		reson	asigR, kfreq3, kbw3, 1
+  ; Create a trigger metronome (used to update valuator box displays
+  kDisplayTrigger metro 10
 
-	aBPF4L		reson	asigL, kfreq4, kbw4, 1						;FORMANT 4
-	aBPF4R		reson	asigR, kfreq4, kbw4, 1
+  ; Reading data for formants (macros implemented)
+  $FORMANT_DATA(1')
+  $FORMANT_DATA(2')
+  $FORMANT_DATA(3')
+  $FORMANT_DATA(4')
+  $FORMANT_DATA(5')
 
-	aBPF5L		reson	asigL, kfreq5, kbw5, 1						;FORMANT 5
-	aBPF5R		reson	asigR, kfreq5, kbw5, 1
-	
-	;FORMANTS ARE MIXED AND MULTIPLIED BOTH BY INTENSITY VALUES DERIVED FROM TABLES AND BY THE ON-SCREEN GAIN CONTROLS FOR EACH FORMANT 
-	aMixL		sum		aBPF1L*(ampdbfs(kdbamp1))*gkf1, aBPF2L*(ampdbfs(kdbamp2))*gkf2, aBPF3L*(ampdbfs(kdbamp3))*gkf3, aBPF4L*(ampdbfs(kdbamp4))*gkf4, aBPF5L*(ampdbfs(kdbamp5))*gkf5
-	aMixR		sum		aBPF1R*(ampdbfs(kdbamp1))*gkf1, aBPF2R*(ampdbfs(kdbamp2))*gkf2, aBPF3R*(ampdbfs(kdbamp3))*gkf3, aBPF4R*(ampdbfs(kdbamp4))*gkf4, aBPF5R*(ampdbfs(kdbamp5))*gkf5
+  rireturn  ; Return from reinitialisation pass to performance time passes
 
-	aOutMixL		ntrpol	asigL*ginorm, aMixL*gkgain, gkmix				;MIX BETWEEN DRY AND WET SIGNALS
-	aOutMixR		ntrpol	asigR*ginorm, aMixR*gkgain, gkmix
+  kfreq1  portk kfreq1, kporttime  ; Portamento applied to value to smooth transitions
+  kfreq2  portk kfreq2, kporttime
+  kfreq3  portk kfreq3, kporttime
+  kfreq4  portk kfreq4, kporttime
+  kfreq5  portk kfreq5, kporttime
+  kdbamp1 portk kdbamp1, kporttime
+  kdbamp2 portk kdbamp2, kporttime
+  kdbamp3 portk kdbamp3, kporttime
+  kdbamp4 portk kdbamp4, kporttime
+  kdbamp5 portk kdbamp5, kporttime
+  kbw1    portk kbw1, kporttime
+  kbw2    portk kbw2, kporttime
+  kbw3    portk kbw3, kporttime
+  kbw4    portk kbw4, kporttime
+  kbw5    portk kbw5, kporttime
 
-				outs		aOutMixL, aOutMixR							;SEND AUDIO TO OUTPUTS
+  aBPF1L reson asigL, kfreq1, kbw1, 1  ; Formant 1
+  aBPF1R reson asigR, kfreq1, kbw1, 1
+
+  aBPF2L reson asigL, kfreq2, kbw2, 1  ; Formant 2
+  aBPF2R reson asigR, kfreq2, kbw2, 1
+
+  aBPF3L reson asigL, kfreq3, kbw3, 1  ; Formant 3
+  aBPF3R reson asigR, kfreq3, kbw3, 1
+
+  aBPF4L reson asigL, kfreq4, kbw4, 1  ; Formant 4
+  aBPF4R reson asigR, kfreq4, kbw4, 1
+
+  aBPF5L reson asigL, kfreq5, kbw5, 1  ; Formant 5
+  aBPF5R reson asigR, kfreq5, kbw5, 1
+
+  ; Formants are mixed and multiplied both by intensity values derived from tables and by
+  ; the on-screen gain controls for each formant
+  aMixL sum aBPF1L*(ampdbfs(kdbamp1))*gkf1, aBPF2L*(ampdbfs(kdbamp2))*gkf2, aBPF3L*(ampdbfs(kdbamp3))*gkf3, aBPF4L*(ampdbfs(kdbamp4))*gkf4, aBPF5L*(ampdbfs(kdbamp5))*gkf5
+  aMixR sum aBPF1R*(ampdbfs(kdbamp1))*gkf1, aBPF2R*(ampdbfs(kdbamp2))*gkf2, aBPF3R*(ampdbfs(kdbamp3))*gkf3, aBPF4R*(ampdbfs(kdbamp4))*gkf4, aBPF5R*(ampdbfs(kdbamp5))*gkf5
+
+  aOutMixL ntrpol asigL*ginorm, aMixL*gkgain, gkmix  ; Mix between dry and wet signals
+  aOutMixR ntrpol asigR*ginorm, aMixR*gkgain, gkmix
+
+  outs aOutMixL, aOutMixR  ; Send audio to outputs
 endin
 </CsInstruments>
 <CsScore>
-;FUNCTION TABLES STORING FORMANT DATA FOR EACH OF THE FIVE VOICE TYPES REPRESENTED
-;BASS
-f 1  0 32768 -7 	600	10922	400	10922	250	10924	350	;FREQ
-f 2  0 32768 -7 	1040	10922	1620	10922	1750	10924	600	;FREQ
-f 3  0 32768 -7	2250	10922	2400	10922	2600	10924	2400	;FREQ
-f 4  0 32768 -7	2450	10922	2800	10922	3050	10924	2675	;FREQ
-f 5  0 32768 -7	2750	10922	3100	10922	3340	10924	2950	;FREQ
-f 6  0 32768 -7	0	10922	0	10922	0	10924	0	;dB
-f 7  0 32768 -7	-7	10922	-12	10922	-30	10924	-20	;dB
-f 8  0 32768 -7	-9	10922	-9	10922	-16	10924	-32	;dB
-f 9  0 32768 -7	-9	10922	-12	10922	-22	10924	-28	;dB
-f 10 0 32768 -7	-20	10922	-18	10922	-28	10924	-36	;dB
-f 11 0 32768 -7	60	10922	40	10922	60	10924	40	;BAND WIDTH
-f 12 0 32768 -7	70	10922	80	10922	90	10924	80	;BAND WIDTH
-f 13 0 32768 -7	110	10922	100	10922	100	10924	100	;BAND WIDTH
-f 14 0 32768 -7	120	10922	120	10922	120	10924	120	;BAND WIDTH
-f 15 0 32768 -7	130	10922	120	10922	120	10924	120	;BAND WIDTH
-;TENOR
-f 16 0 32768 -7	 650 8192	 400	8192	290	8192	400	8192	350	;FREQ
-f 17 0 32768 -7	1080 8192	1700 8192	1870	8192	800	8192	600	;FREQ
-f 18 0 32768 -7	2650	8192	2600 8192	2800	8192	2600	8192	2700	;FREQ
-f 19 0 32768 -7	2900	8192	3200 8192	3250	8192	2800	8192	2900	;FREQ
-f 20 0 32768 -7	3250	8192	3580 8192	3540	8192	3000	8192	3300	;FREQ
-f 21 0 32768 -7	0	8192	0	8192	0	8192	0	8192	0	;dB
-f 22 0 32768 -7	-6	8192	-14	8192	-15	8192	-10	8192	-20	;dB
-f 23 0 32768 -7	-7	8192	-12	8192	-18	8192	-12	8192	-17	;dB
-f 24 0 32768 -7	-8	8192	-14	8192	-20	8192	-12	8192	-14	;dB
-f 25 0 32768 -7	-22	8192	-20	8192	-30	8192	-26	8192	-26	;dB
-f 26 0 32768 -7	80	8192	70	8192	40	8192	40	8192	40	;BAND WIDTH
-f 27 0 32768 -7	90	8192	80	8192	90	8192	80	8192	60	;BAND WIDTH
-f 28 0 32768 -7	120	8192	100	8192	100	8192	100	8192	100	;BAND WIDTH
-f 29 0 32768 -7	130	8192	120	8192	120	8192	120	8192	120	;BAND WIDTH
-f 30 0 32768 -7	140	8192	120	8192	120	8192	120	8192	120	;BAND WIDTH
-;COUNTER TENOR
-f 31 0 32768 -7 	660	8192	440	8192	270	8192	430	8192	370	;FREQ
-f 32 0 32768 -7 	1120	8192	1800	8192	1850	8192	820	8192	630	;FREQ
-f 33 0 32768 -7	2750	8192	2700	8192	2900	8192	2700	8192	2750	;FREQ
-f 34 0 32768 -7	3000	8192	3000	8192	3350	8192	3000	8192	3000	;FREQ
-f 35 0 32768 -7	3350	8192	3300	8192	3590	8192	3300	8192	3400	;FREQ
-f 36 0 32768 -7	0	8192	0	8192	0	8192	0	8192	0	;dB
-f 37 0 32768 -7	-6	8192	-14	8192	-24	8192	-10	8192	-20	;dB
-f 38 0 32768 -7	-23	8192	-18	8192	-24	8192	-26	8192	-23	;dB
-f 39 0 32768 -7	-24	8192	-20	8192	-36	8192	-22	8192	-30	;dB
-f 40 0 32768 -7	-38	8192	-20	8192	-36	8192	-34	8192	-30	;dB
-f 41 0 32768 -7	80	8192	70	8192	40	8192	40	8192	40	;BAND WIDTH
-f 42 0 32768 -7	90	8192	80	8192	90	8192	80	8192	60	;BAND WIDTH
-f 43 0 32768 -7	120	8192	100	8192	100	8192	100	8192	100	;BAND WIDTH
-f 44 0 32768 -7	130	8192	120	8192	120	8192	120	8192	120	;BAND WIDTH
-f 45 0 32768 -7	140	8192	120	8192	120	8192	120	8192	120	;BAND WIDTH
-;ALTO
-f 46 0 32768 -7	800	8192	400	8192	350	8192	450	8192	325	;FREQ
-f 47 0 32768 -7	1150	8192	1600	8192	1700	8192	800	8192	700	;FREQ
-f 48 0 32768 -7	2800	8192	2700	8192	2700	8192	2830	8192	2530	;FREQ
-f 49 0 32768 -7	3500	8192	3300	8192	3700	8192	3500	8192	2500	;FREQ
-f 50 0 32768 -7	4950	8192	4950	8192	4950	8192	4950	8192	4950	;FREQ
-f 51 0 32768 -7	0	8192	0	8192	0	8192	0	8192	0	;dB
-f 52 0 32768 -7	-4	8192	-24	8192	-20	8192	-9	8192	-12	;dB
-f 53 0 32768 -7	-20	8192	-30	8192	-30	8192	-16	8192	-30	;dB
-f 54 0 32768 -7	-36	8192	-35	8192	-36	8192	-28	8192	-40	;dB
-f 55 0 32768 -7	-60	8192	-60	8192	-60	8192	-55	8192	-64	;dB
-f 56 0 32768 -7	50	8192	60	8192	50	8192	70	8192	50	;BAND WIDTH
-f 57 0 32768 -7	60	8192	80	8192	100	8192	80	8192	60	;BAND WIDTH
-f 58 0 32768 -7	170	8192	120	8192	120	8192	100	8192	170	;BAND WIDTH
-f 59 0 32768 -7	180	8192	150	8192	150	8192	130	8192	180	;BAND WIDTH
-f 60 0 32768 -7	200	8192	200	8192	200	8192	135	8192	200	;BAND WIDTH
-;SOPRANO
-f 61 0 32768 -7	800	8192	350	8192	270	8192	450	8192	325	;FREQ
-f 62 0 32768 -7	1150	8192	2000	8192	2140	8192	800	8192	700	;FREQ
-f 63 0 32768 -7	2900	8192	2800	8192	2950	8192	2830	8192	2700	;FREQ
-f 64 0 32768 -7	3900	8192	3600	8192	3900	8192	3800	8192	3800	;FREQ
-f 65 0 32768 -7	4950	8192	4950	8192	4950	8192	4950	8192	4950	;FREQ
-f 66 0 32768 -7	0	8192	0	8192	0	8192	0	8192	0	;dB
-f 67 0 32768 -7	-6	8192	-20	8192	-12	8192	-11	8192	-16	;dB
-f 68 0 32768 -7	-32	8192	-15	8192	-26	8192	-22	8192	-35	;dB
-f 69 0 32768 -7	-20	8192	-40	8192	-26	8192	-22	8192	-40	;dB
-f 70 0 32768 -7	-50	8192	-56	8192	-44	8192	-50	8192	-60	;dB
-f 71 0 32768 -7	80	8192	60	8192	60	8192	70	8192	50	;BAND WIDTH
-f 72 0 32768 -7	90	8192	90	8192	90	8192	80	8192	60	;BAND WIDTH
-f 73 0 32768 -7	120	8192	100	8192	100	8192	100	8192	170	;BAND WIDTH
-f 74 0 32768 -7	130	8192	150	8192	120	8192	130	8192	180	;BAND WIDTH
-f 75 0 32768 -7	140	8192	200	8192	120	8192	135	8192	200	;BAND WIDTH
+; Function tables storing formant data for each of the five voice types represented
+; Bass
+f 1 0 32768 -7 600 10922 400 10922 250 10924 350      ; Freq
+f 2 0 32768 -7 1040 10922 1620 10922 1750 10924 600   ; Freq
+f 3 0 32768 -7 2250 10922 2400 10922 2600 10924 2400  ; Freq
+f 4 0 32768 -7 2450 10922 2800 10922 3050 10924 2675  ; Freq
+f 5 0 32768 -7 2750 10922 3100 10922 3340 10924 2950  ; Freq
+f 6 0 32768 -7 0 10922 0 10922 0 10924 0              ; dB
+f 7 0 32768 -7 -7 10922 -12 10922 -30 10924 -20       ; dB
+f 8 0 32768 -7 -9 10922 -9 10922 -16 10924 -32        ; dB
+f 9 0 32768 -7 -9 10922 -12 10922 -22 10924 -28       ; dB
+f 10 0 32768 -7 -20 10922 -18 10922 -28 10924 -36     ; dB
+f 11 0 32768 -7 60 10922 40 10922 60 10924 40         ; Band width
+f 12 0 32768 -7 70 10922 80 10922 90 10924 80         ; Band width
+f 13 0 32768 -7 110 10922 100 10922 100 10924 100     ; Band width
+f 14 0 32768 -7 120 10922 120 10922 120 10924 120     ; Band width
+f 15 0 32768 -7 130 10922 120 10922 120 10924 120     ; Band width
+; Tenor
+f 16 0 32768 -7 650 8192 400 8192 290 8192 400 8192 350       ; Freq
+f 17 0 32768 -7 1080 8192 1700 8192 1870 8192 800 8192 600    ; Freq
+f 18 0 32768 -7 2650 8192 2600 8192 2800 8192 2600 8192 2700  ; Freq
+f 19 0 32768 -7 2900 8192 3200 8192 3250 8192 2800 8192 2900  ; Freq
+f 20 0 32768 -7 3250 8192 3580 8192 3540 8192 3000 8192 3300  ; Freq
+f 21 0 32768 -7 0 8192 0 8192 0 8192 0 8192 0                 ; dB
+f 22 0 32768 -7 -6 8192 -14 8192 -15 8192 -10 8192 -20        ; dB
+f 23 0 32768 -7 -7 8192 -12 8192 -18 8192 -12 8192 -17        ; dB
+f 24 0 32768 -7 -8 8192 -14 8192 -20 8192 -12 8192 -14        ; dB
+f 25 0 32768 -7 -22 8192 -20 8192 -30 8192 -26 8192 -26       ; dB
+f 26 0 32768 -7 80 8192 70 8192 40 8192 40 8192 40            ; Band width
+f 27 0 32768 -7 90 8192 80 8192 90 8192 80 8192 60            ; Band width
+f 28 0 32768 -7 120 8192 100 8192 100 8192 100 8192 100       ; Band width
+f 29 0 32768 -7 130 8192 120 8192 120 8192 120 8192 120       ; Band width
+f 30 0 32768 -7 140 8192 120 8192 120 8192 120 8192 120       ; Band width
+; Counter tenor
+f 31 0 32768 -7 660 8192 440 8192 270 8192 430 8192 370       ; Freq
+f 32 0 32768 -7 1120 8192 1800 8192 1850 8192 820 8192 630    ; Freq
+f 33 0 32768 -7 2750 8192 2700 8192 2900 8192 2700 8192 2750  ; Freq
+f 34 0 32768 -7 3000 8192 3000 8192 3350 8192 3000 8192 3000  ; Freq
+f 35 0 32768 -7 3350 8192 3300 8192 3590 8192 3300 8192 3400  ; Freq
+f 36 0 32768 -7 0 8192 0 8192 0 8192 0 8192 0                 ; dB
+f 37 0 32768 -7 -6 8192 -14 8192 -24 8192 -10 8192 -20        ; dB
+f 38 0 32768 -7 -23 8192 -18 8192 -24 8192 -26 8192 -23       ; dB
+f 39 0 32768 -7 -24 8192 -20 8192 -36 8192 -22 8192 -30       ; dB
+f 40 0 32768 -7 -38 8192 -20 8192 -36 8192 -34 8192 -30       ; dB
+f 41 0 32768 -7 80 8192 70 8192 40 8192 40 8192 40            ; Band width
+f 42 0 32768 -7 90 8192 80 8192 90 8192 80 8192 60            ; Band width
+f 43 0 32768 -7 120 8192 100 8192 100 8192 100 8192 100       ; Band width
+f 44 0 32768 -7 130 8192 120 8192 120 8192 120 8192 120       ; Band width
+f 45 0 32768 -7 140 8192 120 8192 120 8192 120 8192 120       ; Band width
+; Alto
+f 46 0 32768 -7 800 8192 400 8192 350 8192 450 8192 325       ; Freq
+f 47 0 32768 -7 1150 8192 1600 8192 1700 8192 800 8192 700    ; Freq
+f 48 0 32768 -7 2800 8192 2700 8192 2700 8192 2830 8192 2530  ; Freq
+f 49 0 32768 -7 3500 8192 3300 8192 3700 8192 3500 8192 2500  ; Freq
+f 50 0 32768 -7 4950 8192 4950 8192 4950 8192 4950 8192 4950  ; Freq
+f 51 0 32768 -7 0 8192 0 8192 0 8192 0 8192 0                 ; dB
+f 52 0 32768 -7 -4 8192 -24 8192 -20 8192 -9 8192 -12         ; dB
+f 53 0 32768 -7 -20 8192 -30 8192 -30 8192 -16 8192 -30       ; dB
+f 54 0 32768 -7 -36 8192 -35 8192 -36 8192 -28 8192 -40       ; dB
+f 55 0 32768 -7 -60 8192 -60 8192 -60 8192 -55 8192 -64       ; dB
+f 56 0 32768 -7 50 8192 60 8192 50 8192 70 8192 50            ; Band width
+f 57 0 32768 -7 60 8192 80 8192 100 8192 80 8192 60           ; Band width
+f 58 0 32768 -7 170 8192 120 8192 120 8192 100 8192 170       ; Band width
+f 59 0 32768 -7 180 8192 150 8192 150 8192 130 8192 180       ; Band width
+f 60 0 32768 -7 200 8192 200 8192 200 8192 135 8192 200       ; Band width
+; Soprano
+f 61 0 32768 -7 800 8192 350 8192 270 8192 450 8192 325       ; Freq
+f 62 0 32768 -7 1150 8192 2000 8192 2140 8192 800 8192 700    ; Freq
+f 63 0 32768 -7 2900 8192 2800 8192 2950 8192 2830 8192 2700  ; Freq
+f 64 0 32768 -7 3900 8192 3600 8192 3900 8192 3800 8192 3800  ; Freq
+f 65 0 32768 -7 4950 8192 4950 8192 4950 8192 4950 8192 4950  ; Freq
+f 66 0 32768 -7 0 8192 0 8192 0 8192 0 8192 0                 ; dB
+f 67 0 32768 -7 -6 8192 -20 8192 -12 8192 -11 8192 -16        ; dB
+f 68 0 32768 -7 -32 8192 -15 8192 -26 8192 -22 8192 -35       ; dB
+f 69 0 32768 -7 -20 8192 -40 8192 -26 8192 -22 8192 -40       ; dB
+f 70 0 32768 -7 -50 8192 -56 8192 -44 8192 -50 8192 -60       ; dB
+f 71 0 32768 -7 80 8192 60 8192 60 8192 70 8192 50            ; Band width
+f 72 0 32768 -7 90 8192 90 8192 90 8192 80 8192 60            ; Band width
+f 73 0 32768 -7 120 8192 100 8192 100 8192 100 8192 170       ; Band width
+f 74 0 32768 -7 130 8192 150 8192 120 8192 130 8192 180       ; Band width
+f 75 0 32768 -7 140 8192 200 8192 120 8192 135 8192 200       ; Band width
 
-;INSTR | START | DURATION
-i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
+; Instr | start | duration
+i 1 0 3600  ; Instrument 1 plays for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 
@@ -289,9 +321,9 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -309,15 +341,20 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -338,15 +375,20 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -375,14 +417,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -401,11 +443,23 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Bandwidths_Multiply_Value</objectName>
@@ -423,14 +477,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -470,14 +524,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -501,6 +555,18 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -518,9 +584,9 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -545,14 +611,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -574,14 +640,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -621,14 +687,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -650,14 +716,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -697,14 +763,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -814,14 +880,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -861,14 +927,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -962,14 +1028,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -991,14 +1057,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1020,14 +1086,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1067,14 +1133,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1096,14 +1162,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1143,14 +1209,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1184,9 +1250,9 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1205,14 +1271,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1234,14 +1300,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1263,14 +1329,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1292,14 +1358,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1321,14 +1387,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1350,14 +1416,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1379,15 +1445,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1408,15 +1479,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1437,15 +1513,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1466,15 +1547,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1495,15 +1581,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1524,15 +1615,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1553,15 +1649,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1582,15 +1683,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1611,15 +1717,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1640,15 +1751,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1669,15 +1785,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1698,15 +1819,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1727,15 +1853,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1756,15 +1887,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1785,15 +1921,20 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1814,14 +1955,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1843,14 +1984,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1872,14 +2013,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1901,14 +2042,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1930,14 +2071,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1959,14 +2100,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1988,14 +2129,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2017,14 +2158,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2046,14 +2187,14 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -1,107 +1,119 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, November 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, November 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-;TABLES FOR EXP SLIDER
-giExp10000	ftgen	0, 0, 129, -25, 0, 0.1, 128, 10000.0
-giExp20000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0
+; Tables for exp slider
+giExp10000 ftgen 0, 0, 129, -25, 0, 0.1, 128, 10000.0
+giExp20000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	1	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
+instr 1  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
 
-		Sfile_new	strcpy	""						;INIT TO EMPTY STRING
+    Sfile_new strcpy ""  ; Init to empty string
 
-		kbf			invalue 	"Base_Frequency"
-		gkbf			tablei	kbf, giExp20000, 1
-					outvalue	"Base_Frequency_Value", gkbf
+    kbf invalue "Base_Frequency"
+    gkbf tablei kbf, giExp20000, 1
+    outvalue "Base_Frequency_Value", gkbf
 
-		kbw			invalue 	"Bandwidth"
-		gkbw			tablei	kbw, giExp10000, 1
-					outvalue	"Bandwidth_Value", gkbw
+    kbw invalue "Bandwidth"
+    gkbw tablei kbw, giExp10000, 1
+    outvalue "Bandwidth_Value", gkbw
 
-		gkgain		invalue 	"Output_Gain"
+    gkgain invalue "Output_Gain"
 
-		gksepmode		invalue	"Separation_Mode"
-		gkscl		invalue	"Scaling_Mode"
-		gknum		invalue	"Number_Filters"
-		gkskip		invalue	"Initialisation"
+    gksepmode invalue "Separation_Mode"
+    gkscl     invalue "Scaling_Mode"
+    gknum     invalue "Number_Filters"
+    gkskip    invalue "Initialisation"
 
-		;IF SEPARATION MODE IS 'HERTZ' THEN SEPARATION SHOULD NOT BE LESS THAT 0, THE FOLLOWING LINES OF CODE PROTECT AGAINST THIS 
-		gksep		invalue 	"Separation"
-		if	gksepmode==1	then														;IF gksepmode IS 'HERTZ'...
-			gksep	=	abs(gksep)												;...FINAL SEPARATION VALUE IS AN ABSOLUTE VERSION OF gksep (I.E. CANNOT BE NEGATIVE)
-		endif																	;END OF CONDITIONAL BRANCHING
-					outvalue	"Separation_Value", gksep								;UPDATE SEPARATION DISPLAY BOX IF VALUE HAS CHANGED
+    ; If separation mode is 'hertz' then separation should not be less that 0, the
+    ; following lines of code protect against this
+    gksep invalue "Separation"
+    if gksepmode == 1 then  ; IF gksepmode IS 'HERTZ'...
+      ; ...Final separation value is an absolute version of gksep (i.e. Cannot be
+      ; negative)
+      gksep = abs(gksep)
+    endif  ; End of conditional branching
+    ; Update separation display box if value has changed
+    outvalue "Separation_Value", gksep
 
-		gSfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	gSfile
-		gkfile 		strcmpk	Sfile_new, Sfile_old
-	endif
+    gSfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk gSfile
+    gkfile strcmpk Sfile_new, Sfile_old
+  endif
 endin
 
-instr	2
-	kporttime		linseg	0,0.001,0.005,1,0.005										;CREATE A VARIABLE FUNCTION THAT RAPIDLY RAMPS UP TO A SET VALUE	
-	kbf			portk	gkbf, kporttime											;SMOOTH MOVEMENT OF SLIDER VARIABLE
+instr 2
+  ; Create a variable function that rapidly ramps up to a set value
+  kporttime linseg 0, 0.001, 0.005, 1, 0.005
+  kbf portk gkbf, kporttime  ; Smooth movement of slider variable
 
 
-	kNew_file		changed	gkfile													;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kNew_file=1	then															;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	NEW_FILE															;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif
-	NEW_FILE:
-	;OUTPUTS		OPCODE	FILE  | SPEED | INSKIP | LOOPING (0=OFF 1=ON)
-	asigL, asigR	FilePlay2	gSfile,  1,      0,         1									;GENERATE 2 AUDIO SIGNALS FROM A STEREO SOUND FILE
-				rireturn															;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kNew_file changed gkfile
+  if kNew_file = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit NEW_FILE      ; Begin a reinitialisation pass from label 'start'
+  endif
+NEW_FILE:
+  ; Outputs  opcode file  | speed | inskip | looping (0=off 1=on)
+  ; Generate 2 audio signals from a stereo sound file
+  asigL, asigR FilePlay2 gSfile, 1, 0, 1
+  rireturn  ; Return from reinitialisation pass to performance time passes
 
-	kSwitch		changed	gkscl, gkskip, gknum, gksepmode								;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)	
-	if	kSwitch=1	then																;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	START															;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif
-	START:
-	ksep			lineto	gksep, 0.05												;SMOOTH MOVEMENT OF SLIDER VARIABLE
-	aresL 		resony 	asigL, kbf, gkbw, i(gknum), ksep , i(gksepmode), i(gkscl), i(gkskip)
-	aresR 		resony 	asigR, kbf, gkbw, i(gknum), ksep , i(gksepmode), i(gkscl), i(gkskip)
-				rireturn															;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-				outs		aresL * gkgain, aresR * gkgain								;SEND FILTER OUTPUT TO THE AUDIO OUTPUTS AND SCALE USING THE FLTK SLIDER VARIABLE gkgain
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkscl, gkskip, gknum, gksepmode
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit START       ; Begin a reinitialisation pass from label 'start'
+  endif
+START:
+  ksep lineto gksep, 0.05  ; Smooth movement of slider variable
+  aresL resony asigL, kbf, gkbw, i(gknum), ksep, i(gksepmode), i(gkscl), i(gkskip)
+  aresR resony asigR, kbf, gkbw, i(gknum), ksep, i(gksepmode), i(gkscl), i(gkskip)
+  rireturn  ; Return from reinitialisation pass to performance time passes
+  ; Send filter output to the audio outputs and scale using the FLTK slider variable
+  ; gkgain
+  outs aresL * gkgain, aresR * gkgain
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1		0	   3600		;GUI
+; Instr | start | duration
+i 1 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -115,9 +127,9 @@ i 1		0	   3600		;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -135,15 +147,20 @@ i 1		0	   3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -164,15 +181,20 @@ i 1		0	   3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -194,14 +216,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -220,11 +242,23 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Base_Frequency_Value</objectName>
@@ -242,14 +276,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -289,14 +323,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -336,14 +370,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -362,11 +396,23 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  No Initialisation</text>
+  <text>No Initialisation</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
@@ -386,6 +432,18 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -403,9 +461,9 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -430,14 +488,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -489,14 +547,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -518,14 +576,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -565,14 +623,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -594,14 +652,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -648,14 +706,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -675,14 +733,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -706,14 +764,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -735,14 +793,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -782,14 +840,14 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

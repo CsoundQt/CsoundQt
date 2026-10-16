@@ -4,10 +4,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 128
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 ; Make sure CsOptions are not ignored in the preferences,
 ; Otherwise Realtime MIDI input will not work.
@@ -16,82 +16,82 @@ giatttimemax = 2
 gidectimemax = 2
 gireltimemax = 4
 
-instr 1  ;Subtractive synth
-kosctype invalue "osctype"
+instr 1  ; Subtractive synth
+  kosctype invalue "osctype"
 
-kftype invalue "ftype"
-kffreq invalue "ffreq"
-kffreq portk kffreq, 0.02 ;smooth signal
-kfres invalue "fres"
-kfres portk kfres, 0.02 ;smooth signal
-kfatt invalue "fatt"
-kfdec invalue "fdec"
-kfsus invalue "fsus"
-kfrel invalue "frel"
-kfenvamt invalue "fenvamt"
+  kftype invalue "ftype"
+  kffreq invalue "ffreq"
+  kffreq portk kffreq, 0.02  ; smooth signal
+  kfres invalue "fres"
+  kfres portk kfres, 0.02  ; smooth signal
+  kfatt    invalue "fatt"
+  kfdec    invalue "fdec"
+  kfsus    invalue "fsus"
+  kfrel    invalue "frel"
+  kfenvamt invalue "fenvamt"
 
-kaatt invalue "aatt"
-kadec invalue "adec"
-kasus invalue "asus"
-karel invalue "arel"
+  kaatt invalue "aatt"
+  kadec invalue "adec"
+  kasus invalue "asus"
+  karel invalue "arel"
 
-klvl invalue "lvl"
+  klvl invalue "lvl"
 
-ifreq = p4  ;in cps
-iamp = (p5/127) ;MIDI velocity to linear amp
+  ifreq = p4        ; in cps
+  iamp  = (p5/127)  ; MIDI velocity to linear amp
 
-itype = i(kosctype)
+  itype = i(kosctype)
 
-if (itype == 0) then
-	aosc oscil iamp, ifreq, 1
-elseif (itype == 1) then
-	aosc oscil iamp, ifreq, 2
-elseif (itype == 2) then
-	aosc vco2 iamp, ifreq
-elseif (itype == 3) then
-	aosc vco2 iamp, ifreq, 2, 0.5
-endif
+  if (itype == 0) then
+    aosc oscil iamp, ifreq, 1
+  elseif (itype == 1) then
+    aosc oscil iamp, ifreq, 2
+  elseif (itype == 2) then
+    aosc vco2 iamp, ifreq
+  elseif (itype == 3) then
+    aosc vco2 iamp, ifreq, 2, 0.5
+  endif
 
-kfenv madsr giatttimemax*i(kfatt), gidectimemax*i(kfdec), i(kfsus), gireltimemax*i(kfrel)
-kfenv = (kfenv*kfenvamt) + 1
+  kfenv madsr giatttimemax*i(kfatt), gidectimemax*i(kfdec), i(kfsus), gireltimemax*i(kfrel)
+  kfenv = (kfenv*kfenvamt) + 1
 
-if (kftype == 0) then
-	aosc moogladder aosc, kffreq*kfenv, kfres
-elseif (kftype == 1) then
-	aosc moogvcf2 aosc, kffreq*kfenv, kfres
-elseif (kftype == 2) then
-	aosc rezzy aosc, kffreq*kfenv, kfres*100
-elseif (kftype == 3) then
-	aosc lowresx aosc, kffreq*kfenv, kfres/3
-endif
+  if (kftype == 0) then
+    aosc moogladder aosc, kffreq*kfenv, kfres
+  elseif (kftype == 1) then
+    aosc moogvcf2 aosc, kffreq*kfenv, kfres
+  elseif (kftype == 2) then
+    aosc rezzy aosc, kffreq*kfenv, kfres*100
+  elseif (kftype == 3) then
+    aosc lowresx aosc, kffreq*kfenv, kfres/3
+  endif
 
-aenv madsr giatttimemax*i(kaatt), gidectimemax*i(kadec), i(kasus), gireltimemax*i(karel)
+  aenv madsr giatttimemax*i(kaatt), gidectimemax*i(kadec), i(kasus), gireltimemax*i(karel)
 
-outs aosc*aenv*klvl, aosc*aenv*klvl
+  outs aosc*aenv*klvl, aosc*aenv*klvl
 endin
 
-instr 98 ; Play note
-	koscfreq invalue "oscfreq"
-	event "i", 1, 0, 3, i(koscfreq), 100
-	turnoff
+instr 98  ; Play note
+  koscfreq invalue "oscfreq"
+  event "i", 1, 0, 3, i(koscfreq), 100
+  turnoff
 endin
 
-instr 99 ; Always on
+instr 99  ; Always on
 
-kcont invalue "cont"
-koscfreq invalue "oscfreq"
+  kcont    invalue "cont"
+  koscfreq invalue "oscfreq"
 
-if kcont == 1 then
-	ktrig metro 0.5
-	schedkwhen ktrig, 0.1, 10, 1, 0, 1, koscfreq, 100
-endif
+  if kcont == 1 then
+    ktrig metro 0.5
+    schedkwhen ktrig, 0.1, 10, 1, 0, 1, koscfreq, 100
+  endif
 endin
 
 
 </CsInstruments>
 <CsScore>
-f 1 0 1024 7 -1 1024 1 ;Saw wave
-f 2 0 1024 7 1 512 1 0 -1 512 -1 ;Square wave
+f 1 0 1024 7 -1 1024 1            ; Saw wave
+f 2 0 1024 7 1 512 1 0 -1 512 -1  ; Square wave
 
 i 99 0 3600
 </CsScore>
@@ -106,9 +106,9 @@ i 99 0 3600
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>125</r>
-  <g>162</g>
-  <b>160</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -128,15 +128,20 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -160,13 +165,13 @@ i 99 0 3600
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -189,14 +194,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -221,13 +226,13 @@ i 99 0 3600
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -250,14 +255,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -317,14 +322,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -424,14 +429,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -455,14 +460,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -486,14 +491,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -517,14 +522,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -548,15 +553,20 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -579,15 +589,20 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -722,14 +737,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -753,14 +768,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -784,14 +799,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -815,14 +830,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -846,9 +861,9 @@ i 99 0 3600
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>192</r>
@@ -880,6 +895,18 @@ i 99 0 3600
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>oscfreq</objectName>
@@ -900,13 +927,13 @@ i 99 0 3600
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -929,14 +956,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -961,13 +988,13 @@ i 99 0 3600
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -990,14 +1017,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1018,14 +1045,14 @@ i 99 0 3600
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <value>374.40000000</value>
   <resolution>0.10000000</resolution>
@@ -1076,13 +1103,13 @@ i 99 0 3600
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -1105,14 +1132,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1152,14 +1179,14 @@ i 99 0 3600
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

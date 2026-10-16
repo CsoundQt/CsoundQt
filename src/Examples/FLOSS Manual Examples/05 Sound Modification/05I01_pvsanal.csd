@@ -22,7 +22,7 @@ aback     pvsynth   fsig
 endin
 
 instr 2 ;live input to fsig
-          prints    "LIVE INPUT NOW!%n"
+          prints    "LIVE INPUT NOW!\n"
 ain       inch      1 ;live input from channel 1
 fsig      pvsanal   ain, gifftsiz, gioverlap, gifftsiz, giwintyp
 alisten   pvsynth   fsig

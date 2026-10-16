@@ -1,124 +1,141 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
 
 ; Modified for QuteCsound by René, November 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Instrument 1 is activated by MIDI and by the GUI
-;	Cannot display more than one space in Label, so can't display the schematic shown below:
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Instrument 1 is activated by MIDI and by the GUI
+; Cannot display more than one space in Label, so can't display the schematic shown below:
 
-	;Phase Modulation Synthesis: 3 parallel modulators-> 1 carrier
-	;-------------------------------------------------------------
+  ; Phase Modulation Synthesis: 3 parallel modulators-> 1 carrier
+  ; -------------------------------------------------------------
 
-	;         +---------+    +---------+    +---------+
-	;         | MOD. 1  |    | MOD. 2  |    | MOD. 3  |
-	;         +----+----+    +----+----+    +----+----+
-	;              |              |              |
-	;              +--------------+--------------+
-	;                             |
-	;                        +----+----+
-	;                        | CARRIER |
-	;                        +----+----+
-	;                             |
-	;                             v
-	;                            OUT
+  ; +---------+    +---------+    +---------+
+  ; | Mod. 1  |    | mod. 2  |    | mod. 3  |
+  ; +----+----+    +----+----+    +----+----+
+  ; |              |              |
+  ; +--------------+--------------+
+  ; |
+  ; +----+----+
+  ; | Carrier |
+  ; +----+----+
+  ; |
+  ; v
+  ; Out
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	0,0,65537,10,1							;A SINE WAVE THAT CAN BE REFERENCED BY THE GLOBAL VARIABLE 'gisine'
-giExp20000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLES FOR EXP SLIDER
+; A sine wave that can be referenced by the global variable 'gisine'
+gisine     ftgen 0, 0, 65537, 10, 1
+giExp20000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Tables for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kbasefreq		invalue 	"Base_Frequency"
-		gkbasefreq	tablei	kbasefreq, giExp20000, 1
-					outvalue	"Base_Frequency_Value", gkbasefreq		
-		gkindex1		invalue 	"Modulation_Index_1"
-		gkindex2		invalue 	"Modulation_Index_2"
-		gkindex3		invalue 	"Modulation_Index_3"
-		gkCarRatio	invalue	"Carrier_Frequency"
-		gkModRatio1	invalue	"Modulator1_Frequency"
-		gkModRatio2	invalue	"Modulator2_Frequency"
-		gkModRatio3	invalue	"Modulator3_Frequency"
-		gkCarAmp		invalue 	"Carrier_Amplitude"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kbasefreq invalue "Base_Frequency"
+    gkbasefreq tablei kbasefreq, giExp20000, 1
+    outvalue "Base_Frequency_Value", gkbasefreq
+    gkindex1    invalue "Modulation_Index_1"
+    gkindex2    invalue "Modulation_Index_2"
+    gkindex3    invalue "Modulation_Index_3"
+    gkCarRatio  invalue "Carrier_Frequency"
+    gkModRatio1 invalue "Modulator1_Frequency"
+    gkModRatio2 invalue "Modulator2_Frequency"
+    gkModRatio3 invalue "Modulator3_Frequency"
+    gkCarAmp    invalue "Carrier_Amplitude"
+  endif
 endin
 
-instr	1	;FM INSTRUMENT
-	if p4!=0 then													;MIDI
-		ioct		= p4												;READ OCT VALUE FROM MIDI INPUT
-		iamp		= p5												;READ midi-velocity-amp FROM MIDI INPUT
-		kCarAmp	= iamp * gkCarAmp									;SET AMPLITUDE TO RECEIVED p5 (I.E. MIDI VELOCITY) MULTIPLIED BY SLIDER "Carrier_Amplitude"
-		kindex1	= iamp * gkindex1
-		kindex2	= iamp * gkindex2
-		kindex3	= iamp * gkindex3
-		;PITCH BEND===========================================================================================================================================================
-		iSemitoneBendRange = 4										;PITCH BEND RANGE IN SEMITONES
-		imin		= 0												;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333						;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax								;PITCH BEND VARIABLE (IN oct FORMAT)
-		kbasefreq	=	cpsoct(ioct + kbend)							;SET FUNDEMENTAL FROM MIDI
-		;=====================================================================================================================================================================
-	else															;GUI
-		kbasefreq = gkbasefreq										;SET FUNDEMENTAL FROM GUI SLIDER "Base_Frequency"
-		kCarAmp	= gkCarAmp										;SET kamp TO SLIDER VALUE "Carrier_Amplitude"
-		kindex1	= gkindex1
-		kindex2	= gkindex2
-		kindex3	= gkindex3
-	endif
+instr 1            ; Fm instrument
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read oct value from MIDI input
+    iamp = p5      ; READ midi-velocity-amp FROM MIDI INPUT
+    ; Set amplitude to received p5 (i.e. MIDI velocity) multiplied by slider
+    ; "carrier_amplitude"
+    kCarAmp = iamp * gkCarAmp
+    kindex1 = iamp * gkindex1
+    kindex2 = iamp * gkindex2
+    kindex3 = iamp * gkindex3
+    ; Pitch
+    ; bend===========================================================================================================================================================
+    iSemitoneBendRange = 4  ; Pitch bend range in semitones
+    imin               = 0  ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kbasefreq = cpsoct(ioct + kbend)  ; Set fundemental from MIDI
+    ; =====================================================================================================================================================================
+  else                      ; GUI
+    kbasefreq = gkbasefreq  ; Set fundemental from GUI slider "base_frequency"
+    kCarAmp   = gkCarAmp    ; SET kamp TO SLIDER VALUE "Carrier_Amplitude"
+    kindex1   = gkindex1
+    kindex2   = gkindex2
+    kindex3   = gkindex3
+  endif
 
-	iporttime		=		.01												;PORTAMENTO FUNCTION (WILL BE USED TO SMOOTH PARAMETER MOVED BY WIDGETS)
-	kporttime		linseg	0,.001,iporttime,1,iporttime							;PORTAMENTO FUNCTION (WILL BE USED TO SMOOTH PARAMETER MOVED BY WIDGETS)
-	
-	kindex1		portk	kindex1, kporttime									;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'kindex'
-	kindex2		portk	kindex2, kporttime									;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'kindex'
-	kindex3		portk	kindex3, kporttime									;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'kindex'
-	kbasefreq		portk	kbasefreq, kporttime								;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'kbasefreq'
-	kCarAmp		portk	kCarAmp, kporttime									;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'gkCarAmp'
+  ; Portamento function (will be used to smooth parameter moved by widgets)
+  iporttime = .01
+  ; Portamento function (will be used to smooth parameter moved by widgets)
+  kporttime linseg 0, .001, iporttime, 1, iporttime
 
-	aModPhase1	phasor	kbasefreq * gkModRatio1								;CREATE A MOVING PHASE VALUE THAT WILL BE USED TO READ CREATE MODULATOR 1
-	aModulator1	tablei	aModPhase1,gisine,1,0,1								;MODULATOR 1 IS CREATED.
-	aModulator1	=		aModulator1*kindex1									;MODULATOR 1 AMPLITUDE RESCALED
+  kindex1 portk kindex1, kporttime  ; Apply smoothing portamento to the variable 'kindex'
+  kindex2 portk kindex2, kporttime  ; Apply smoothing portamento to the variable 'kindex'
+  kindex3 portk kindex3, kporttime  ; Apply smoothing portamento to the variable 'kindex'
+  ; Apply smoothing portamento to the variable 'kbasefreq'
+  kbasefreq portk kbasefreq, kporttime
+  ; Apply smoothing portamento to the variable 'gkcaramp'
+  kCarAmp portk kCarAmp, kporttime
 
-	aModPhase2	phasor	kbasefreq * gkModRatio2								;CREATE A MOVING PHASE VALUE THAT WILL BE USED TO READ CREATE MODULATOR 2
-	aModulator2	tablei	aModPhase2,gisine,1,0,1								;MODULATOR 2 IS CREATED
-	aModulator2	=		aModulator2 * kindex2								;MODULATOR 2 AMPLITUDE RESCALED
+  ; Create a moving phase value that will be used to read create modulator 1
+  aModPhase1 phasor kbasefreq * gkModRatio1
+  aModulator1 tablei aModPhase1, gisine, 1, 0, 1  ; Modulator 1 is created.
+  aModulator1 = aModulator1*kindex1               ; Modulator 1 amplitude rescaled
 
-	aModPhase3	phasor	kbasefreq * gkModRatio3								;CREATE A MOVING PHASE VALUE THAT WILL BE USED TO READ CREATE MODULATOR 3
-	aModulator3	tablei	aModPhase3,gisine,1,0,1								;MODULATOR 3 IS CREATED
-	aModulator3	=		aModulator3 * kindex3								;MODULATOR 3 AMPLITUDE RESCALED
+  ; Create a moving phase value that will be used to read create modulator 2
+  aModPhase2 phasor kbasefreq * gkModRatio2
+  aModulator2 tablei aModPhase2, gisine, 1, 0, 1  ; Modulator 2 is created
+  aModulator2 = aModulator2 * kindex2             ; Modulator 2 amplitude rescaled
 
-	aCarrPhase	phasor	kbasefreq * gkCarRatio								;CREATE A MOVING PHASE VALUE THAT WILL BE USED TO CREATE THE CARRIER
-	aCarrPhase	=		aCarrPhase + aModulator1 + aModulator2  + aModulator3		;ALL 3 MODULATORS ARE ADDED TO CARRIER PHASE VARIABLE
-	aCarrier		tablei	aCarrPhase,gisine,1,0,1								;MODULATOR OSCILLATOR IS CREATED
-	aAntiClick	linsegr	0,0.001,1,0.01,0									;ANTI CLICK ENVELOPE
-	aCarrier		=		aCarrier*kCarAmp*aAntiClick							;CARRIER AMPLITUDE IS RESCALED
-				outs		aCarrier, aCarrier									;SEND THE AUDIO OUTPUT OF THE CARRIER WAVEFORM *ONLY* TO THE OUTPUTS 
+  ; Create a moving phase value that will be used to read create modulator 3
+  aModPhase3 phasor kbasefreq * gkModRatio3
+  aModulator3 tablei aModPhase3, gisine, 1, 0, 1  ; Modulator 3 is created
+  aModulator3 = aModulator3 * kindex3             ; Modulator 3 amplitude rescaled
+
+  ; Create a moving phase value that will be used to create the carrier
+  aCarrPhase phasor kbasefreq * gkCarRatio
+  ; All 3 modulators are added to carrier phase variable
+  aCarrPhase = aCarrPhase + aModulator1 + aModulator2 + aModulator3
+  aCarrier tablei aCarrPhase, gisine, 1, 0, 1  ; Modulator oscillator is created
+  aAntiClick linsegr 0, 0.001, 1, 0.01, 0      ; Anti click envelope
+  aCarrier = aCarrier*kCarAmp*aAntiClick       ; Carrier amplitude is rescaled
+  ; Send the audio output of the carrier waveform *only* to the outputs
+  outs aCarrier, aCarrier
 endin
 
-instr	2	;INIT
-		outvalue	"_SetPresetIndex", 0
+instr 2  ; Init
+  outvalue "_SetPresetIndex", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600		;GUI
-i 2	     0.1		 0		;INIT
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 2 0.1 0    ; Init
 </CsScore>
 </CsoundSynthesizer>
 

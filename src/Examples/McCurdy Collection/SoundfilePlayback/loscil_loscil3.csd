@@ -1,93 +1,99 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-
-;Notes on modifications from original csd:
-;	Add Browser for audio file
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Notes on modifications from original csd:
+; Add Browser for audio file
+
+
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SLIDERS
-		gkbeg1		invalue	"LoopBeg1"
-		gkend1		invalue	"LoopEnd1"
-		gkbeg2		invalue	"LoopBeg2"
-		gkend2		invalue	"LoopEnd2"
-		gkspeed		invalue	"Speed"
-		gkrelease		invalue	"Release"
-		gkgain		invalue	"Gain"
-		;MENUS
-		gkmode1		invalue	"SusLoop"
-		gkmode2		invalue	"RelLoop"
-		gklosciltype	invalue	"OscType"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Sliders
+    gkbeg1    invalue "LoopBeg1"
+    gkend1    invalue "LoopEnd1"
+    gkbeg2    invalue "LoopBeg2"
+    gkend2    invalue "LoopEnd2"
+    gkspeed   invalue "Speed"
+    gkrelease invalue "Release"
+    gkgain    invalue "Gain"
+    ; Menus
+    gkmode1      invalue "SusLoop"
+    gkmode2      invalue "RelLoop"
+    gklosciltype invalue "OscType"
+  endif
 endin
 
-instr	1
-	Sfile_new		strcpy	""																;INIT TO EMPTY STRING
-	Sfile		invalue	"_Browse"
-	Sfile_old		strcpyk	Sfile_new
-	Sfile_new		strcpyk	Sfile
-	kfile 		strcmpk	Sfile_new, Sfile_old
+instr 1
+  Sfile_new strcpy ""  ; Init to empty string
+  Sfile invalue "_Browse"
+  Sfile_old strcpyk Sfile_new
+  Sfile_new strcpyk Sfile
+  kfile strcmpk Sfile_new, Sfile_old
 
-	kSwitch		changed	gkbeg1, gkend1, gkbeg2, gkend2, gkrelease, gkmode1, gkmode2, kfile			;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then																		;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE																	;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
-	UPDATE:
-	ifn			ftgentmp	0, 0, 0, 1, Sfile,0,0,1												;READ MONO OR STEREO AUDIO FILE CHANNEL 1
-	ifilelen		=	nsamp(ifn)															;LENGTH OF THE SAMPLE IN SAMPLES
-	ibeg1		=	ifilelen * i(gkbeg1)
-	iend1		=	ifilelen * i(gkend1)
-	ibeg2		=	ifilelen * i(gkbeg2)
-	iend2		=	ifilelen * i(gkend2)
-	
-	aenv			linsegr	0, (.01), 1, i(gkrelease), 0
-	
-	asigloscil	loscil	aenv, gkspeed, ifn, 1, i(gkmode1), ibeg1, iend1, i(gkmode2), ibeg2, iend2		;READ GEN01 FUNCTION TABLE USING loscil OPCODE
-	asigloscil3	loscil3	aenv, gkspeed, ifn, 1, i(gkmode1), ibeg1, iend1, i(gkmode2), ibeg2, iend2		;READ GEN01 FUNCTION TABLE USING loscil3 OPCODE
-				rireturn																	;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkbeg1, gkend1, gkbeg2, gkend2, gkrelease, gkmode1, gkmode2, kfile
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
+UPDATE:
+  ifn ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read mono or stereo audio file channel 1
+  ifilelen = nsamp(ifn)                    ; Length of the sample in samples
+  ibeg1    = ifilelen * i(gkbeg1)
+  iend1    = ifilelen * i(gkend1)
+  ibeg2    = ifilelen * i(gkbeg2)
+  iend2    = ifilelen * i(gkend2)
 
-	if		gklosciltype==0	then							;THE NEXT LINE OF CODE CONDITIONALLY EXECUTED IF gklosciltype==0 (GUI MENU)
-		asig		=	asigloscil							;ASSIGN THE AUDIO SIGNAL asigloscil TO THE AUDIO VARIABLE asig
-	elseif	gklosciltype==1	then							;THE NEXT LINE OF CODE CONDITIONALLY EXECUTED IF gklosciltype==1 (GUI MENU)
-		asig		=	asigloscil3							;ASSIGN THE AUDIO SIGNAL asigloscil3 TO THE AUDIO VARIABLE asig
-	endif
-				outs	asig*gkgain, asig*gkgain
+  aenv linsegr 0, (.01), 1, i(gkrelease), 0
+
+  ; Read gen01 function table using loscil opcode
+  asigloscil loscil aenv, gkspeed, ifn, 1, i(gkmode1), ibeg1, iend1, i(gkmode2), ibeg2, iend2
+  ; Read gen01 function table using loscil3 opcode
+  asigloscil3 loscil3 aenv, gkspeed, ifn, 1, i(gkmode1), ibeg1, iend1, i(gkmode2), ibeg2, iend2
+  rireturn  ; Return from reinitialisation pass to performance time passes
+
+  ; The next line of code conditionally executed if gklosciltype==0 (GUI menu)
+  if gklosciltype == 0 then
+    asig = asigloscil  ; Assign the audio signal asigloscil to the audio variable asig
+    ; The next line of code conditionally executed if gklosciltype==1 (GUI menu)
+  elseif gklosciltype == 1 then
+    asig = asigloscil3  ; Assign the audio signal asigloscil3 to the audio variable asig
+  endif
+  outs asig*gkgain, asig*gkgain
 endin
 
-instr	11	;INIT
-		outvalue	"Speed"		, 1.0
-		outvalue	"LoopBeg1"	, .37
-		outvalue	"LoopEnd1"	, .42
-		outvalue	"RelLoop"		, 2
-		outvalue	"LoopBeg2"	, .5
-		outvalue	"LoopEnd2"	, .55
-		outvalue	"Release"		, 10.0
-		outvalue	"Gain"		, 0.7
-		outvalue	"OscType"		, 0
-		outvalue	"RelLoop"		, 2
-		outvalue	"SusLoop"		, 1
+instr 11  ; Init
+  outvalue "Speed", 1.0
+  outvalue "LoopBeg1", .37
+  outvalue "LoopEnd1", .42
+  outvalue "RelLoop", 2
+  outvalue "LoopBeg2", .5
+  outvalue "LoopEnd2", .55
+  outvalue "Release", 10.0
+  outvalue "Gain", 0.7
+  outvalue "OscType", 0
+  outvalue "RelLoop", 2
+  outvalue "SusLoop", 1
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
-i 11 0 0.01	;INIT
+i 10 0 3600  ; GUI
+i 11 0 0.01  ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -120,15 +126,20 @@ i 11 0 0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>181</r>
-   <g>199</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -146,11 +157,23 @@ i 11 0 0.01	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    On / Off  </text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -168,15 +191,20 @@ i 11 0 0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -198,14 +226,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -227,14 +255,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -274,14 +302,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -303,14 +331,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -350,14 +378,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -379,14 +407,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -426,14 +454,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -455,14 +483,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -502,14 +530,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -531,9 +559,9 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -558,14 +586,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -605,14 +633,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -634,14 +662,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -681,14 +709,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -710,14 +738,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -741,6 +769,18 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -758,14 +798,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -805,14 +845,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -834,14 +874,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -893,14 +933,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -947,14 +987,14 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

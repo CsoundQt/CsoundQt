@@ -1,137 +1,156 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file
+
+
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 64	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1
+sr     = 44100  ; Sample rate
+ksmps  = 64     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1
 
-giExp1	ftgen	0, 0, 129, -25, 0, 50.0, 128, 10000.0	;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 50.0, 128, 10000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;COUNTERS
-		gksubdiv		invalue	"SubDiv"
-		gkbarlen		invalue	"BarLength"
-		gkphrase		invalue	"Phrase"
-		gkrepeats		invalue	"Repeats"
-		gkstutspd		invalue	"StutSpeed"
-		gkstutchnc	invalue	"StutChance"
-		gkBPM		invalue	"BPM"
-		gkfltdiv		invalue	"FilDiv"
-		;SLIDERS
-		gkDry		invalue	"DryGain"
-		gkWet		invalue	"WetGain"
-		gkFltMix		invalue	"FiltMix"
-		gkbw			invalue	"Bandwidth"
-		kcfmin		invalue	"FreqMin"
-		gkcfmin		tablei	kcfmin, giExp1, 1
-					outvalue	"FreqMin_Value", gkcfmin	
-		kcfmax		invalue	"FreqMax"
-		gkcfmax		tablei	kcfmax, giExp1, 1
-					outvalue	"FreqMax_Value", gkcfmax			
-		gki_h		invalue	"Interp_SH"
-		;MENU
-		gkinput		invalue	"Input"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Counters
+    gksubdiv   invalue "SubDiv"
+    gkbarlen   invalue "BarLength"
+    gkphrase   invalue "Phrase"
+    gkrepeats  invalue "Repeats"
+    gkstutspd  invalue "StutSpeed"
+    gkstutchnc invalue "StutChance"
+    gkBPM      invalue "BPM"
+    gkfltdiv   invalue "FilDiv"
+    ; Sliders
+    gkDry    invalue "DryGain"
+    gkWet    invalue "WetGain"
+    gkFltMix invalue "FiltMix"
+    gkbw     invalue "Bandwidth"
+    kcfmin   invalue "FreqMin"
+    gkcfmin tablei kcfmin, giExp1, 1
+    outvalue "FreqMin_Value", gkcfmin
+    kcfmax invalue "FreqMax"
+    gkcfmax tablei kcfmax, giExp1, 1
+    outvalue "FreqMax_Value", gkcfmax
+    gki_h invalue "Interp_SH"
+    ; Menu
+    gkinput invalue "Input"
+  endif
 endin
 
-instr	1
-	Sfile_new		strcpy	""											;INIT TO EMPTY STRING
-	Sfile		invalue	"_Browse"
-	Sfile_old		strcpyk	Sfile_new
-	Sfile_new		strcpyk	Sfile
-	kfile 		strcmpk	Sfile_new, Sfile_old
+instr 1
+  Sfile_new strcpy ""  ; Init to empty string
+  Sfile invalue "_Browse"
+  Sfile_old strcpyk Sfile_new
+  Sfile_new strcpyk Sfile
+  kfile strcmpk Sfile_new, Sfile_old
 
-	inumbar	=	2													;NUMBER OF BARS IN THE INPUT SOUND FILE
-	kBarPS	=	gkBPM/240												;DERIVE BARS PER SECOND
-	
-	kSwitch	changed	gkBPM, gkrepeats, gkphrase, gkstutspd, gkstutchnc, gkbarlen, gksubdiv, gkinput, gkfltdiv, kfile		;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then													;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE												;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
+  inumbar = 2          ; Number of bars in the input sound file
+  kBarPS  = gkBPM/240  ; Derive bars per second
 
-	UPDATE:
-	if	gkinput==0 then												;IF 'INPUT' SWITCH IS SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
-		;tablei with phasor accept only (power of 2 + 1) table size
-		ifnTemp	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1						;Temporary table to get the audio file size
-		iftlen	=		ftlen(ifnTemp)									;file size
-		iftlen	pow		2, ceil(log(iftlen)/log(2))						;high nearest power of two table size
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkBPM, gkrepeats, gkphrase, gkstutspd, gkstutchnc, gkbarlen, gksubdiv, gkinput, gkfltdiv, kfile
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
 
-		ifn		ftgentmp	0, 0, 1+iftlen, 1, Sfile,0,0,1					;READ MONO OR STEREO AUDIO FILE CHANNEL 1
+UPDATE:
+  ; If 'input' switch is set to 'stored file' then implement the next line of code
+  if gkinput == 0 then
+    ; tablei with phasor accept only (power of 2 + 1) table size
+    ; Temporary table to get the audio file size
+    ifnTemp ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1
+    iftlen = ftlen(ifnTemp)                 ; file size
+    iftlen pow 2, ceil(log(iftlen)/log(2))  ; high nearest power of two table size
 
-		aptr		phasor	kBarPS/inumbar									;CREATE A MOVING PHASE VALUE
-		ain		tablei	aptr*nsamp(ifn), ifn							;READ AUDIO FROM TABLE
-	else																;IF 'INPUT' SWITCH IS NOT SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
-		ain, aignore	ins												;READ AUDIO FROM THE COMPUTER'S LIVE INPUT (LEFT INPUT ONLY IS READ, RIGHT CHANNEL IS IGNORED IN SUBSEQUENT CODE. A STEREO VERSION COULD EASILY BE BUILT BUT THIS WOULD DOUBLE CPU DEMANDS!)
-	endif															;END OF 'IF'...'THEN' BRANCHING
-	
-	;OUTPUT		OPCODE	INPUT |   BPM      | SUBDIVISION | BAR_LENGTH | PHRASE_LENGTH | NUM.OF_REPEATS | STUTTER_SPEED | STUTTER_CHANCE	
-	abbcutL		bbcutm	ain,   i(gkBPM)/60, i(gksubdiv),  i(gkbarlen),   i(gkphrase),    i(gkrepeats),   i(gkstutspd),   i(gkstutchnc)
-	abbcutR		bbcutm	ain,   i(gkBPM)/60, i(gksubdiv),  i(gkbarlen),   i(gkphrase),    i(gkrepeats),   i(gkstutspd),   i(gkstutchnc)
-	;bbcutm IS THE MONO VERSION OF THE BREAK BEAT CUTTER
+    ; Read mono or stereo audio file channel 1
+    ifn ftgentmp 0, 0, 1+iftlen, 1, Sfile, 0, 0, 1
 
-	;FILTER=================================================================================================================================================================
-	kfreq	=		(kBarPS*gkfltdiv)/inumbar		;FREQUENCY WITH WHICH NEW FILTER CUTOFF VALUES ARE GENERATED			;LEFT CHANNEL
-			rireturn								;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
+    aptr phasor kBarPS/inumbar       ; Create a moving phase value
+    ain tablei aptr*nsamp(ifn), ifn  ; Read audio from table
+    ; If 'input' switch is not set to 'stored file' then implement the next line of code
+  else
+    ; Read audio from the computer's live input (left input only is read, right channel is
+    ; ignored in subsequent code. A stereo version could easily be built but this would
+    ; double cpu demands!)
+    ain, aignore ins
+  endif  ; End of 'if'...'then' branching
 
-	kcf1h	randomh	gkcfmin, gkcfmax, kfreq			;SAMPLE AND HOLD RANDOM FREQUENCY VALUES							;LEFT CHANNEL
-	kcf1i	lineto	kcf1h, 1/kfreq					;INTERPOLATE VALUES												;LEFT CHANNEL
-	kcf1		ntrpol	kcf1i, kcf1h, gki_h   			;CROSSFADE BETWEEN INTERPOLATING AND SAMPLE AND HOLD TYPE RANDOM VALUES	;LEFT CHANNEL
-	abbFltL	reson	abbcutL, kcf1, kcf1*gkbw, 2		;BAND-PASS FILTER												;LEFT CHANNEL
-	abbMixL	ntrpol	abbcutL, abbFltL, gkFltMix		;CROSSFADE BETWEEN UNFILTERED AND FILTER AUDIO SIGNAL					;LEFT CHANNEL
-	kcf2h	randomh	gkcfmin, gkcfmax, kfreq			;SAMPLE AND HOLD RANDOM FREQUENCY VALUES							;RIGHT CHANNEL
-	kcf2i	lineto	kcf2h, 1/kfreq					;INTERPOLATE VALUES												;RIGHT CHANNEL
-	kcf2		ntrpol	kcf2i, kcf2h, gki_h   			;CROSSFADE BETWEEN INTERPOLATING AND SAMPLE AND HOLD TYPE RANDOM VALUES	;RIGHT CHANNEL
-	abbFltR	reson	abbcutR, kcf2, kcf2*gkbw, 2		;BAND-PASS FILTER												;RIGHT CHANNEL
-	abbMixR	ntrpol	abbcutR, abbFltR, gkFltMix		;CROSSFADE BETWEEN UNFILTERED AND FILTER AUDIO SIGNAL					;RIGHT CHANNEL
-	;=======================================================================================================================================================================
-	
-	amixL	sum		ain*gkDry, abbMixL*gkWet			;SUM AND MIX DRY SIGNAL AND BBCUT SIGNAL (LEFT CHANNEL)
-	amixR	sum		ain*gkDry, abbMixR*gkWet			;SUM AND MIX DRY SIGNAL AND BBCUT SIGNAL (RIGHT CHANNEL)
-			outs		amixL, amixR					;SEND AUDIO TO OUTPUTS
+  ; Output opcode input | bpm | subdivision | bar_length | phrase_length | num.of_repeats
+  ; | stutter_speed | stutter_chance
+  abbcutL bbcutm ain, i(gkBPM)/60, i(gksubdiv), i(gkbarlen), i(gkphrase), i(gkrepeats), i(gkstutspd), i(gkstutchnc)
+  abbcutR bbcutm ain, i(gkBPM)/60, i(gksubdiv), i(gkbarlen), i(gkphrase), i(gkrepeats), i(gkstutspd), i(gkstutchnc)
+  ; Bbcutm is the mono version of the break beat cutter
+
+  ; Filter=================================================================================================================================================================
+  ; Frequency with which new filter cutoff values are generated ;left channel
+  kfreq = (kBarPS*gkfltdiv)/inumbar
+  rireturn  ; Return from reinitialisation pass to performance time passes
+
+  ; Sample and hold random frequency values ;left channel
+  kcf1h randomh gkcfmin, gkcfmax, kfreq
+  kcf1i lineto kcf1h, 1/kfreq  ; Interpolate values            ;left channel
+  ; Crossfade between interpolating and sample and hold type random values ;left channel
+  kcf1 ntrpol kcf1i, kcf1h, gki_h
+  abbFltL reson abbcutL, kcf1, kcf1*gkbw, 2  ; Band-pass filter            ;left channel
+  ; Crossfade between unfiltered and filter audio signal ;left channel
+  abbMixL ntrpol abbcutL, abbFltL, gkFltMix
+  ; Sample and hold random frequency values ;right channel
+  kcf2h randomh gkcfmin, gkcfmax, kfreq
+  kcf2i lineto kcf2h, 1/kfreq  ; Interpolate values            ;right channel
+  ; Crossfade between interpolating and sample and hold type random values ;right channel
+  kcf2 ntrpol kcf2i, kcf2h, gki_h
+  abbFltR reson abbcutR, kcf2, kcf2*gkbw, 2  ; Band-pass filter            ;right channel
+  ; Crossfade between unfiltered and filter audio signal ;right channel
+  abbMixR ntrpol abbcutR, abbFltR, gkFltMix
+  ; =======================================================================================================================================================================
+
+  ; Sum and mix dry signal and bbcut signal (left channel)
+  amixL sum ain*gkDry, abbMixL*gkWet
+  ; Sum and mix dry signal and bbcut signal (right channel)
+  amixR sum ain*gkDry, abbMixR*gkWet
+  outs amixL, amixR  ; Send audio to outputs
 endin
 
-instr	11	;INIT
-		outvalue	"SubDiv"		, 8
-		outvalue	"BarLength"	, 2
-		outvalue	"Phrase"		, 8
-		outvalue	"Repeats"		, 2
-		outvalue	"StutSpeed"	, 4
-		outvalue	"StutChance"	, 1
-		outvalue	"BPM"		, 110
-		outvalue	"FilDiv"		, 1
-		outvalue	"Input"		, 0
+instr 11  ; Init
+  outvalue "SubDiv", 8
+  outvalue "BarLength", 2
+  outvalue "Phrase", 8
+  outvalue "Repeats", 2
+  outvalue "StutSpeed", 4
+  outvalue "StutChance", 1
+  outvalue "BPM", 110
+  outvalue "FilDiv", 1
+  outvalue "Input", 0
 
-		outvalue	"DryGain"		, 0.5
-		outvalue	"WetGain"		, 0.5
-		outvalue	"FiltMix"		, 0.9
-		outvalue	"Bandwidth"	, 0.3
-		outvalue	"Interp_SH"	, 1.0
+  outvalue "DryGain", 0.5
+  outvalue "WetGain", 0.5
+  outvalue "FiltMix", 0.9
+  outvalue "Bandwidth", 0.3
+  outvalue "Interp_SH", 1.0
 
-		outvalue	"FreqMin"		, 0.3925
-		outvalue	"FreqMax"		, 0.8694
+  outvalue "FreqMin", 0.3925
+  outvalue "FreqMax", 0.8694
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
-i 11 0 0.01	;INIT
+i 10 0 3600  ; GUI
+i 11 0 0.01  ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -166,15 +185,20 @@ i 11 0 0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>181</r>
-   <g>199</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -193,13 +217,25 @@ i 11 0 0.01	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    On / Off  </text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -219,15 +255,20 @@ i 11 0 0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -252,14 +293,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -283,14 +324,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -333,14 +374,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -364,14 +405,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -414,14 +455,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -445,14 +486,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -476,14 +517,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -526,14 +567,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -557,14 +598,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -607,14 +648,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -664,14 +705,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -698,6 +739,18 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -716,9 +769,9 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>239</r>
@@ -742,14 +795,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -775,14 +828,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -803,14 +856,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.25000000</resolution>
   <minimum>1</minimum>
@@ -836,14 +889,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -864,14 +917,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.25000000</resolution>
   <minimum>0.25</minimum>
@@ -897,14 +950,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -925,14 +978,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -958,14 +1011,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -986,14 +1039,14 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.25000000</resolution>
   <minimum>1</minimum>
@@ -1020,14 +1073,14 @@ Chance</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1048,14 +1101,14 @@ Chance</label>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.25000000</resolution>
   <minimum>0</minimum>
@@ -1081,14 +1134,14 @@ Chance</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1109,14 +1162,14 @@ Chance</label>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>20</minimum>
@@ -1142,14 +1195,14 @@ Chance</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1170,14 +1223,14 @@ Chance</label>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -1208,17 +1261,17 @@ Chance</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>45</r>
+   <g>208</g>
+   <b>45</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -1240,14 +1293,14 @@ Chance</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1276,17 +1329,17 @@ Chance</label>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>45</r>
+   <g>208</g>
+   <b>45</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -1308,14 +1361,14 @@ Chance</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1339,14 +1392,14 @@ Chance</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1370,14 +1423,14 @@ Chance</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1420,14 +1473,14 @@ Chance</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

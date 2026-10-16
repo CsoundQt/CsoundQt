@@ -1,68 +1,82 @@
-;Written by Iain McCurdy
+; Written by Iain McCurdy
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt
+; -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-giRecBuf1		ftgen	1, 0, 1048576, -7, 0, 1048576, 0	;AUDIO DATA STORAGE
-giRecBuf1		ftgen	2, 0, 1048576, -7, 0, 1048576, 0	;AUDIO DATA STORAGE
-giRecBuf1		ftgen	3, 0, 1048576, -7, 0, 1048576, 0	;AUDIO DATA STORAGE
-giRecBuf1		ftgen	4, 0, 1048576, -7, 0, 1048576, 0	;AUDIO DATA STORAGE
-giRecBuf1		ftgen	5, 0, 1048576, -7, 0, 1048576, 0	;AUDIO DATA STORAGE
-giRecBuf1		ftgen	6, 0, 1048576, -7, 0, 1048576, 0	;AUDIO DATA STORAGE
+giRecBuf1 ftgen 1, 0, 1048576, -7, 0, 1048576, 0  ; Audio data storage
+giRecBuf1 ftgen 2, 0, 1048576, -7, 0, 1048576, 0  ; Audio data storage
+giRecBuf1 ftgen 3, 0, 1048576, -7, 0, 1048576, 0  ; Audio data storage
+giRecBuf1 ftgen 4, 0, 1048576, -7, 0, 1048576, 0  ; Audio data storage
+giRecBuf1 ftgen 5, 0, 1048576, -7, 0, 1048576, 0  ; Audio data storage
+giRecBuf1 ftgen 6, 0, 1048576, -7, 0, 1048576, 0  ; Audio data storage
 
-gitablelen	init		1048576
-girecdur1		init		0
-girecdur2		init		0
-girecdur3		init		0
-girecdur4		init		0
-girecdur5		init		0
-girecdur6		init		0
+gitablelen init 1048576
+girecdur1  init 0
+girecdur2  init 0
+girecdur3  init 0
+girecdur4  init 0
+girecdur5  init 0
+girecdur6  init 0
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)then
-		gkSpeed1	invalue	"Speed1"		;Rec Button 1 Starts / Stops instr 1		;Play  Button 1 Starts / Stops instr 2
-		gkSpeed2	invalue	"Speed2"		;Rec Button 2 Starts / Stops instr 101		;Play  Button 2 Starts / Stops instr 102
-		gkSpeed3	invalue	"Speed3"		;Rec Button 3 Starts / Stops instr 201		;Play  Button 3 Starts / Stops instr 202
-		gkSpeed4	invalue	"Speed4"		;Rec Button 4 Starts / Stops instr 301		;Play  Button 4 Starts / Stops instr 302
-		gkSpeed5	invalue	"Speed5"		;Rec Button 5 Starts / Stops instr 401		;Play  Button 5 Starts / Stops instr 402
-		gkSpeed6	invalue	"Speed6"		;Rec Button 6 Starts / Stops instr 501		;Play  Button 6 Starts / Stops instr 502
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1)then
+    ; Rec Button 1 Starts / Stops instr 1 ;Play Button 1 Starts / Stops instr 2
+    gkSpeed1 invalue "Speed1"
+    ; Rec Button 2 Starts / Stops instr 101 ;Play Button 2 Starts / Stops instr 102
+    gkSpeed2 invalue "Speed2"
+    ; Rec Button 3 Starts / Stops instr 201 ;Play Button 3 Starts / Stops instr 202
+    gkSpeed3 invalue "Speed3"
+    ; Rec Button 4 Starts / Stops instr 301 ;Play Button 4 Starts / Stops instr 302
+    gkSpeed4 invalue "Speed4"
+    ; Rec Button 5 Starts / Stops instr 401 ;Play Button 5 Starts / Stops instr 402
+    gkSpeed5 invalue "Speed5"
+    ; Rec Button 6 Starts / Stops instr 501 ;Play Button 6 Starts / Stops instr 502
+    gkSpeed6 invalue "Speed6"
+  endif
 endin
 
-#define	RECORD_PLAY_INSTRS(COUNT'RECORD'PLAY)
+#define RECORD_PLAY_INSTRS(COUNT'RECORD'PLAY)
 #
-instr	$RECORD	;RECORD
-	ain		inch		1								;READ AUDIO FROM LIVE INPUT CHANNEL 1
-	andx		phasor	sr/gitablelen						;CREATE A POINTER FOR WRITING TO TABLE - FREQUENCY OF POINTER IS DEPENDENT UPON TABLE LENGTH AND SAMPLE RATE
-	andx		=		andx*gitablelen					;RESCALE POINTER ACCORDING TO LENGTH OF FUNCTION TABLE 
-	gkrecdur$COUNT	downsamp	andx							;CREATE A K-RATE GLOBAL VARIABLE THAT WILL BE USED BY THE 'PLAYBACK' INSTRUMENT TO DETERMINE THE LENGTH OF RECORDED DATA			
-			;OPCODE	INPUT | INDEX | FUNCTION_TABLE
-			tablew	ain,     andx,     $COUNT			;WRITE AUDIO TO AUDIO STORAGE TABLE
+instr $RECORD  ; Record
+  ain inch 1   ; Read audio from live input channel 1
+  ; Create a pointer for writing to table - frequency of pointer is dependent upon table
+  ; length and sample rate
+  andx phasor sr/gitablelen
+  andx = andx*gitablelen  ; Rescale pointer according to length of function table
+  ; Create a k-rate global variable that will be used by the 'playback' instrument to
+  ; determine the length of recorded data
+  gkrecdur$COUNT downsamp andx
+  ; Opcode input | index | function_table
+  tablew ain, andx, $COUNT  ; Write audio to audio storage table
 endin
-		
-instr	$PLAY	;PLAYBACK INSTRUMENT
-	andx		phasor	(sr*gkSpeed$COUNT)/i(gkrecdur$COUNT)	;CREATE A POINTER FOR WRITING TO TABLE - FREQUENCY OF POINTER IS DEPENDENT UPON TABLE LENGTH AND SAMPLE RATE
-	andx		=		andx*i(gkrecdur$COUNT)				;RESCALE POINTER ACCORDING TO LENGTH OF PREVIOUS AUDIO RECORDING 
-	;OUT 	OPCODE 	INDEX | FUNCTION_TABLE
-	asig		tablei	andx,      $COUNT					;READ AUDIO FROM AUDIO STORAGE FUNCTION TABLE
-			outs		asig, asig						;SEND AUDIO TO OUTPUTS
+
+instr $PLAY  ; Playback instrument
+  ; Create a pointer for writing to table - frequency of pointer is dependent upon table
+  ; length and sample rate
+  andx phasor (sr*gkSpeed$COUNT)/i(gkrecdur$COUNT)
+  ; Rescale pointer according to length of previous audio recording
+  andx = andx*i(gkrecdur$COUNT)
+  ; Out  opcode  index | function_table
+  asig tablei andx, $COUNT  ; Read audio from audio storage function table
+  outs asig, asig           ; Send audio to outputs
 endin
 #
 
@@ -75,7 +89,7 @@ $RECORD_PLAY_INSTRS(6'501'502)
 
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -108,15 +122,20 @@ i 10 0 3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>181</r>
-   <g>199</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -134,11 +153,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Rec</text>
+  <text>Rec</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5958</objectName>
@@ -153,11 +184,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> Play</text>
+  <text>Play</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -175,15 +218,20 @@ i 10 0 3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -208,14 +256,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -237,14 +285,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -284,14 +332,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -310,11 +358,23 @@ The code makes use of macros to minimize code repetition.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Rec</text>
+  <text>Rec</text>
   <image>/</image>
   <eventLine>i 101 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8307</objectName>
@@ -329,11 +389,23 @@ The code makes use of macros to minimize code repetition.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> Play</text>
+  <text>Play</text>
   <image>/</image>
   <eventLine>i 102 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -351,14 +423,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -398,14 +470,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -424,11 +496,23 @@ The code makes use of macros to minimize code repetition.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Rec</text>
+  <text>Rec</text>
   <image>/</image>
   <eventLine>i 201 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1506</objectName>
@@ -443,11 +527,23 @@ The code makes use of macros to minimize code repetition.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> Play</text>
+  <text>Play</text>
   <image>/</image>
   <eventLine>i 202 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -465,14 +561,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -512,14 +608,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -538,11 +634,23 @@ The code makes use of macros to minimize code repetition.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Rec</text>
+  <text>Rec</text>
   <image>/</image>
   <eventLine>i 301 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b9896</objectName>
@@ -557,11 +665,23 @@ The code makes use of macros to minimize code repetition.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> Play</text>
+  <text>Play</text>
   <image>/</image>
   <eventLine>i 302 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -579,14 +699,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -626,14 +746,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -652,11 +772,23 @@ The code makes use of macros to minimize code repetition.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Rec</text>
+  <text>Rec</text>
   <image>/</image>
   <eventLine>i 401 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8591</objectName>
@@ -671,11 +803,23 @@ The code makes use of macros to minimize code repetition.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> Play</text>
+  <text>Play</text>
   <image>/</image>
   <eventLine>i 402 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -693,14 +837,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -740,14 +884,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -766,11 +910,23 @@ The code makes use of macros to minimize code repetition.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Rec</text>
+  <text>Rec</text>
   <image>/</image>
   <eventLine>i 501 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5192</objectName>
@@ -785,11 +941,23 @@ The code makes use of macros to minimize code repetition.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> Play</text>
+  <text>Play</text>
   <image>/</image>
   <eventLine>i 502 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -807,14 +975,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -854,14 +1022,14 @@ The code makes use of macros to minimize code repetition.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

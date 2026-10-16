@@ -1,113 +1,131 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gitri		ftgen	0, 0, 131072, 7, 0, 65536, 1, 65536, 0	;POSITIVE DOMAIN TRIANGLE WAVE      
-giExp1		ftgen	0, 0, 129, -25, 0, ksmps/sr, 128, 1.0	;TABLE FOR EXP SLIDER
-giExp7		ftgen	0, 0, 129, -25, 0, 0.0001, 128, 7.0	;TABLE FOR EXP SLIDER
+gitri  ftgen 0, 0, 131072, 7, 0, 65536, 1, 65536, 0  ; Positive domain triangle wave
+giExp1 ftgen 0, 0, 129, -25, 0, ksmps/sr, 128, 1.0   ; Table for exp slider
+giExp7 ftgen 0, 0, 129, -25, 0, 0.0001, 128, 7.0     ; Table for exp slider
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkingain		invalue	"Live_Input_Gain"
-		kdlt			invalue	"Delay_Time"
-		gkdlt		tablei	kdlt, giExp1, 1
-					outvalue	"Delay_Time_Value", gkdlt				;init 0.0001		
-		gkmix		invalue	"Mix"								;init 0.5
-		gkfeedamt		invalue	"Feedback_Amount"						;init 0.9
-		gkamp		invalue	"Output_Amplitude_Rescaling"				;init 0.4
-		gkFlaDepth	invalue 	"Flanger_Modulation_Depth"				;init 0.005
-		kFlaRate		invalue	"Flanger_Modulation_Rate"
-		gkFlaRate		tablei	kFlaRate, giExp7, 1
-					outvalue	"Flanger_Modulation_Rate_Value", gkFlaRate	;init 0.05
-		gkinput		invalue	"Input"
-		gkmode		invalue	"Mode"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkingain invalue "Live_Input_Gain"
+    kdlt     invalue "Delay_Time"
+    gkdlt tablei kdlt, giExp1, 1
+    outvalue "Delay_Time_Value", gkdlt               ; init 0.0001
+    gkmix      invalue "Mix"                         ; init 0.5
+    gkfeedamt  invalue "Feedback_Amount"             ; init 0.9
+    gkamp      invalue "Output_Amplitude_Rescaling"  ; init 0.4
+    gkFlaDepth invalue "Flanger_Modulation_Depth"    ; init 0.005
+    kFlaRate   invalue "Flanger_Modulation_Rate"
+    gkFlaRate tablei kFlaRate, giExp7, 1
+    outvalue "Flanger_Modulation_Rate_Value", gkFlaRate  ; init 0.05
+    gkinput invalue "Input"
+    gkmode  invalue "Mode"
 
-	endif
+  endif
 endin
 
-instr	1	;PLAYS FILE
-	if	gkinput==0	then								;IF FILE INPUT IS SELECTED...
-		Sfile		invalue	"_Browse1"
-		gasigL, gasigR	FilePlay2	Sfile, 1, 0, 1				;GENERATE 2 AUDIO SIGNALS FROM A SOUND FILE (NOTE THE USE OF GLOBAL VARIABLES)		
-	else												;OTHERWISE
-		asigL, asigR	ins								;TAKE INPUT FROM COMPUTER'S AUDIO INPUT
-		gasigL	=	asigL * gkingain					;SCALE USING 'Input Gain' SLIDER
-		gasigR	=	asigR * gkingain					;SCALE USING 'Input Gain' SLIDER
-	endif											;END OF CONDITIONAL BRANCHING
-endin                                                                         
-                                                                                              
-instr 	2	;FLANGER-DELAY INSTRUMENT                             
-	iporttime	=		.1								;PORTAMENTO TIME                                      
-	kporttime	linseg	0, .001, iporttime, 1, iporttime		;USE OF AN ENVELOPE VALUE THAT QUICKLY RAMPS UP FROM ZERON TO THE REQUIRED VALUE PREVENTS VARIABLES GLIDING TO THEIR REQUIRED VALUES EACH TIME THE INSTRUMENT IS STARTED
-	kdlt		portk	gkdlt, kporttime					;PORTAMENTO IS APPLIED TO THE VARIABLE 'gkdlt'. A NEW VARIABLE 'kdlt' IS CREATED.
-	adlt		interp	kdlt								;A NEW A-RATE VARIABLE 'adlt' IS CREATED BY INTERPOLATING THE K-RATE VARIABLE 'kdlt' 
-	                                                                                              
-	amod		oscili	gkFlaDepth, gkFlaRate, gitri			;OSCILLATOR THAT MAKES USE OF THE POSITIVE DOMAIN ONLY TRIANGLE WAVE IN FUNCTION TABLE 1
-	                                                                                              
-	adlt		sum		adlt, amod						;STATIC DELAY TIME AND MODULATING DELAY TIME ARE SUMMED
-	;REMEMBER THAT THE LENGTH OF THE DELAY BUFFER DEFINED WILL HAVE TO TAKE ACCOUNT OF THE SUMMED MAXIMUM OF THE STATIC DELAY TIME AND MODULATING DELAY TIME
+instr 1                 ; Plays file
+  if gkinput == 0 then  ; If file input is selected...
+    Sfile invalue "_Browse1"
+    ; Generate 2 audio signals from a sound file (note the use of global variables)
+    gasigL, gasigR FilePlay2 Sfile, 1, 0, 1
+  else                         ; Otherwise
+    asigL, asigR ins           ; Take input from computer's audio input
+    gasigL = asigL * gkingain  ; Scale using 'input gain' slider
+    gasigR = asigR * gkingain  ; Scale using 'input gain' slider
+  endif                        ; End of conditional branching
+endin
 
-	if	gkmode=0	then                                                                                           
-		;;;LEFT CHANNEL DELAY;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-		abufferL	delayr	1.2							;CREATE A DELAY BUFFER OF 5 SECONDS DURATION (EQUIVALENT TO THE MAXIMUM DELAY TIME POSSIBLE USING THIS EXAMPLE)
-		adelsigL 	deltap3	adlt							;TAP THE DELAY LINE AT gkdlt SECONDS                          
-				delayw	gasigL + (adelsigL * gkfeedamt)	;WRITE AUDIO SOURCE AND FEEDBACK SIGNAL INTO THE BEGINNING OF THE BUFFER
-		
-		;;;RIGHT CHANNEL DELAY;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;		                                                                                              
-		abufferR	delayr	1.2							;CREATE A DELAY BUFFER OF 5 SECONDS DURATION (EQUIVALENT TO THE MAXIMUM DELAY TIME POSSIBLE USING THIS EXAMPLE)
-		adelsigR 	deltap3	adlt							;TAP THE DELAY LINE AT gkdlt SECONDS                          
-				delayw	gasigR + (adelsigR * gkfeedamt)	;WRITE AUDIO SOURCE AND FEEDBACK SIGNAL INTO THE BEGINNING OF THE BUFFER
-        elseif	gkmode=1	then											
-		adelsigL	flanger gasigL, adlt, gkfeedamt , 1.2
-		adelsigR	flanger gasigR, adlt, gkfeedamt , 1.2		
-	endif                                                                                      
-	aL		ntrpol	gasigL, adelsigL, gkmix				;CREATE DRY/WET MIX
-	aR		ntrpol	gasigR, adelsigR, gkmix				;CREATE DRY/WET MIX
+instr 2           ; Flanger-delay instrument
+  iporttime = .1  ; Portamento time
+  ; Use of an envelope value that quickly ramps up from zeron to the required value
+  ; prevents variables gliding to their required values each time the instrument is
+  ; started
+  kporttime linseg 0, .001, iporttime, 1, iporttime
+  ; Portamento is applied to the variable 'gkdlt'. A new variable 'kdlt' is created.
+  kdlt portk gkdlt, kporttime
+  ; A new a-rate variable 'adlt' is created by interpolating the k-rate variable 'kdlt'
+  adlt interp kdlt
 
-			outs		aL * gkamp, aR * gkamp				;CREATE A MIX BETWEEN THE WET AND THE DRY SIGNALS AT THE OUTPUT
-			clear	gasigL, gasigR						;CLEAR THE GLOBAL AUDIO SEND VARIABLES
-endin                                                                         
+  ; Oscillator that makes use of the positive domain only triangle wave in function table
+  ; 1
+  amod oscili gkFlaDepth, gkFlaRate, gitri
+
+  adlt sum adlt, amod  ; Static delay time and modulating delay time are summed
+  ; Remember that the length of the delay buffer defined will have to take account of the
+  ; summed maximum of the static delay time and modulating delay time
+
+  if gkmode = 0 then
+    ; ;;Left channel
+    ; delay;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ; Create a delay buffer of 5 seconds duration (equivalent to the maximum delay time
+    ; possible using this example)
+    abufferL delayr 1.2
+    adelsigL deltap3 adlt  ; Tap the delay line at gkdlt seconds
+    ; Write audio source and feedback signal into the beginning of the buffer
+    delayw gasigL + (adelsigL * gkfeedamt)
+
+    ; ;;Right channel
+    ; delay;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ; Create a delay buffer of 5 seconds duration (equivalent to the maximum delay time
+    ; possible using this example)
+    abufferR delayr 1.2
+    adelsigR deltap3 adlt  ; Tap the delay line at gkdlt seconds
+    ; Write audio source and feedback signal into the beginning of the buffer
+    delayw gasigR + (adelsigR * gkfeedamt)
+  elseif gkmode = 1 then
+    adelsigL flanger gasigL, adlt, gkfeedamt, 1.2
+    adelsigR flanger gasigR, adlt, gkfeedamt, 1.2
+  endif
+  aL ntrpol gasigL, adelsigL, gkmix  ; Create dry/wet mix
+  aR ntrpol gasigR, adelsigR, gkmix  ; Create dry/wet mix
+
+  ; Create a mix between the wet and the dry signals at the output
+  outs aL * gkamp, aR * gkamp
+  clear gasigL, gasigR  ; Clear the global audio send variables
+endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		-1		;GUI
-i  2      0         -1		;INSTRUMENT 2 PLAYS A HELD NOTE
+; Instr | start | duration
+i 10 0 -1  ; GUI
+i 2 0 -1   ; Instrument 2 plays a held note
 
-f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
+f 0 3600  ; 'Dummy' score event keeps realtime performance going for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -120,9 +138,9 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -140,15 +158,20 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -166,11 +189,23 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Input_Gain</objectName>
@@ -206,14 +241,14 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -235,14 +270,14 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -264,15 +299,20 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -295,14 +335,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -324,14 +364,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -353,14 +393,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -425,14 +465,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -472,14 +512,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -501,14 +541,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -530,14 +570,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -559,14 +599,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -606,14 +646,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -635,14 +675,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -700,14 +740,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -729,14 +769,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -758,14 +798,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -787,14 +827,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -834,14 +874,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -890,6 +930,18 @@ In this example the user can choose between a sound file as input or the compute
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -907,9 +959,9 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -934,14 +986,14 @@ In this example the user can choose between a sound file as input or the compute
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -1,108 +1,121 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;DEMONSTRATION OF THE wgpluck2 OPCODE WHICH IS AN IMPLEMENTATION OF THE KARPLUS-STRONG PHYSICAL MODEL OF A PLUCKED STRING.
-;IT USES SIMPLE MATHEMATICAL PRINCIPLES AND AN IN-BUILT DELAY LINE TO IMITATE THE SOUND OF A STRING BEING PLUCKED.
-;THE 'VIRTUAL BASS' VST INSTRUMENT THAT COMES WITH CUBASE IS BASED ON THIS ALGORITHM
+; Demonstration of the wgpluck2 opcode which is an implementation of the karplus-strong
+; physical model of a plucked string.
+; It uses simple mathematical principles and an in-built delay line to imitate the sound
+; of a string being plucked.
+; The 'virtual bass' vst instrument that comes with cubase is based on this algorithm
 
-;TAKING AN ELECTRIC GUITAR OR BASS GUITAR AS ITS CUE THIS OPCODE OFFERS INPUT PARAMETERS FOR:
+; Taking an electric guitar or bass guitar as its cue this opcode offers input parameters
+; for:
 
-;iplk - THE POSITION ALONG THE STRING'S LENGTH AT WHICH IT IS PLUCKED
-;	VALUES FOR iplk SHOULD BE GREATER THAT 0 AND LESS THAN 1
-;	0 = THE STRING BEING PLUCKED AT THE NUT (NECK), 1 = THE STRING BEING PLUCKED AT THE BRIDGE
-;	IN ACTUALITY VALUES OF 0 AND 1 WILL PRODUCE SILENCE
-;	VALUES CLOSE TO ZERO OR CLOSE TO 1 WILL PRODUCE A THIN, HARD SOUND (PLUCKED NEAR THE NECK END OR NEAR THE BRIDGE)
-;	A VALUE OF .5 WILL PRODUCE A SOFT FLUTEY SOUND (STRING PLUCKED HALFWAY ALONG ITS LENGTH, I.E. 12TH FRET)
-;	IF YOU'VE A GUITAR OR ANY STRINGED INSTRUMENT HANDY, TRY IT OUT. 
+; Iplk - the position along the string's length at which it is plucked
+; Values for iplk should be greater that 0 and less than 1
+; 0 = The string being plucked at the nut (neck), 1 = the string being plucked at the
+; bridge
+; In actuality values of 0 and 1 will produce silence
+; Values close to zero or close to 1 will produce a thin, hard sound (plucked near the
+; neck end or near the bridge)
+; A value of .5 will produce a soft flutey sound (string plucked halfway along its length,
+; i.e. 12th fret)
+; If you've a guitar or any stringed instrument handy, try it out.
 
-;kpick - LOCATION OF THE PICK-UP UNDERNEATH THE VIBRATING STRING
-;	AGAIN VALUES GREATER THAN 0 AND LESS THAN 1 ARE EXPECTED HERE, 
-;	0 MEANING THE PICK-UP IS UNDER THE NUT (NECK END), 1 MEANING IT IS UNDER THE BRIDGE, .5 MEANING UNDER THE 12TH FRET FOR AN OPEN STRING
-;	SIMILAR SPECTRAL RESULTS APPLY REGARDING WHETHER THE PICK-UP IS CLOSE TO THE BRIDGE OR HALFWAY ALON THE STRING AND SO ON...
-;	THIS PARAMETER CAN BE VARIED AT K-RATE - I.E. THE PICK-UP CAN MOVE DURING A NOTE!
-;	MOVING THE PICK-UP DURING A NOTE CAUSES A 'FLANGING' EFFECT
+; Kpick - location of the pick-up underneath the vibrating string
+; Again values greater than 0 and less than 1 are expected here,
+; 0 Meaning the pick-up is under the nut (neck end), 1 meaning it is under the bridge, .5
+; meaning under the 12th fret for an open string
+; Similar spectral results apply regarding whether the pick-up is close to the bridge or
+; halfway alon the string and so on...
+; This parameter can be varied at k-rate - i.e. The pick-up can move during a note!
+; Moving the pick-up during a note causes a 'flanging' effect
 
-;krefl - COEFFICIENT OF REFLECTION, I.E. AMOUNT OF DAMPING OF THE STRING AT THE BRIDGE
-;	IMAGINE DAMPING THE STRING WITH THE HEEL OF YOUR HAND WHILE PLUCKING A STRING.
-;	ONCE AGAIN VALUES SHOULD BE GREATER THAN 0 AND LESS THAN 1, DON'T ACTUALLY USE 0 OR 1
-;	A VALUE CLOSE TO ZERO REPRESENTS VERY LITTLE DAMPING
-;	A VALUE CLOSE TO 1 REPRESENTS A LOT OF DAMPING
-;	WHEN USING LARGE AMOUNTS OF DAMPING THE SOUNDING PITCH OF THE PLUCKED STRING CAN DROP SLIGHTLY
+; Krefl - coefficient of reflection, i.e. Amount of damping of the string at the bridge
+; Imagine damping the string with the heel of your hand while plucking a string.
+; Once again values should be greater than 0 and less than 1, don't actually use 0 or 1
+; A value close to zero represents very little damping
+; A value close to 1 represents a lot of damping
+; When using large amounts of damping the sounding pitch of the plucked string can drop
+; slightly
 
-;OTHER OPCODES THAT ARE ALSO BASED ON THE SAME KARPLUS-STRONG PLUCKED STRING ALGORITHM ARE pluck AND wgpluck
+; Other opcodes that are also based on the same karplus-strong plucked string algorithm
+; are pluck and wgpluck
 
-;THE pluck OPCODE ALSO INCLUDES SOME PHYSICALLY MODELLED DRUM SOUNDS THAT WERE USED BY SOME ANTIQUE DRUM MACHINES
-
-
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-
-;Notes on modifications from original csd:
-;	Add tables for exp slider
-;	INIT instrument added
-;	Removed subinstr opcode in midi instrument 1
+; The pluck opcode also includes some physically modelled drum sounds that were used by
+; some antique drum machines
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+
+
+; Notes on modifications from original csd:
+; Add tables for exp slider
+; INIT instrument added
+; Removed subinstr opcode in midi instrument 1
+
+
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine	ftgen	0, 0, 131072, 10, 1						;SINE WAVE (USED FOR VIBRATO)
-giExp1	ftgen	0, 0, 129, -25, 0, 20.0, 128, 3000.0		;TABLE FOR EXP SLIDER
-giExp2	ftgen	0, 0, 129, -25, 0, 0.01, 128, 100.0		;TABLE FOR EXP SLIDER
+gisine ftgen 0, 0, 131072, 10, 1                   ; Sine wave (used for vibrato)
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 3000.0  ; Table for exp slider
+giExp2 ftgen 0, 0, 129, -25, 0, 0.01, 128, 100.0   ; Table for exp slider
 
 
-instr	2	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkplk		invalue	"Pluck"
-		gkpick		invalue	"Pick"
-		gkrefl		invalue	"Refl"
-		kcps			invalue	"Pitch"
-		gkcps		tablei	kcps, giExp1, 1
-					outvalue	"Pitch_Value", gkcps
-		koutgain		invalue	"Gain"
-		gkoutgain		tablei	koutgain, giExp2, 1
-					outvalue	"Gain_Value", gkoutgain
-	endif
+instr 2  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkplk  invalue "Pluck"
+    gkpick invalue "Pick"
+    gkrefl invalue "Refl"
+    kcps   invalue "Pitch"
+    gkcps tablei kcps, giExp1, 1
+    outvalue "Pitch_Value", gkcps
+    koutgain invalue "Gain"
+    gkoutgain tablei koutgain, giExp2, 1
+    outvalue "Gain_Value", gkoutgain
+  endif
 endin
 
-instr	1	;MIDI ACTIVATED INSTRUMENT
-	icps		cpsmidi														;FREQUENCY IS READ FROM INCOMING MIDI NOTE
-	iamp		ampmidi	1													;AMPLITUDE IS READ FROM INCOMING MIDI NOTE
+instr 1           ; MIDI activated instrument
+  icps cpsmidi    ; Frequency is read from incoming MIDI note
+  iamp ampmidi 1  ; Amplitude is read from incoming MIDI note
 
-	apluck 	wgpluck2    	i(gkplk), iamp, icps, gkpick, gkrefl
-	aenv		linsegr		1, 3600, 1, 0.1, 0									;CREATE AN AMPLITUDE ENVELOPE. THIS WILL BE USED TO PREVENT CLICKS.
-			outs 		apluck * aenv * gkoutgain, apluck * aenv * gkoutgain
+  apluck wgpluck2 i(gkplk), iamp, icps, gkpick, gkrefl
+  ; Create an amplitude envelope. This will be used to prevent clicks.
+  aenv linsegr 1, 3600, 1, 0.1, 0
+  outs apluck * aenv * gkoutgain, apluck * aenv * gkoutgain
 endin
 
-instr	3
-	iamp	=		1
-	apluck 	wgpluck2    	i(gkplk), iamp, i(gkcps), gkpick, gkrefl
-	aenv		linsegr		1, 3600, 1, 0.1, 0									;CREATE AN AMPLITUDE ENVELOPE. THIS WILL BE USED TO PREVENT CLICKS.
-			outs 		apluck * aenv * gkoutgain, apluck * aenv * gkoutgain
+instr 3
+  iamp = 1
+  apluck wgpluck2 i(gkplk), iamp, i(gkcps), gkpick, gkrefl
+  ; Create an amplitude envelope. This will be used to prevent clicks.
+  aenv linsegr 1, 3600, 1, 0.1, 0
+  outs apluck * aenv * gkoutgain, apluck * aenv * gkoutgain
 endin
 
-instr	4	;INIT
-		outvalue	"Pluck"	, .98
-		outvalue	"Pick"	, .1
-		outvalue	"Refl"	, .6
-		outvalue	"Pitch"	, 0.3213
-		outvalue	"Gain"	, 0.4
+instr 4  ; Init
+  outvalue "Pluck", .98
+  outvalue "Pick", .1
+  outvalue "Refl", .6
+  outvalue "Pitch", 0.3213
+  outvalue "Gain", 0.4
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION 
-i 2		0		3600		;GUI
-i 4		0		0.1		;INIT
+; Instr | start | duration
+i 2 0 3600  ; GUI
+i 4 0 0.1   ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -115,9 +128,9 @@ i 4		0		0.1		;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -135,15 +148,20 @@ i 4		0		0.1		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -164,14 +182,14 @@ i 4		0		0.1		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -211,14 +229,14 @@ i 4		0		0.1		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -240,15 +258,20 @@ i 4		0		0.1		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -270,14 +293,14 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -296,11 +319,23 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i 3 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -318,14 +353,14 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -365,14 +400,14 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -394,14 +429,14 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -441,14 +476,14 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -470,14 +505,14 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -517,14 +552,14 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -546,14 +581,14 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -593,14 +628,14 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

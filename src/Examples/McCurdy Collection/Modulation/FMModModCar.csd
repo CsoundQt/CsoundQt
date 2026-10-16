@@ -1,119 +1,136 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
 
 ; Modified for QuteCsound by René, November 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Instrument 1 is activated by MIDI and by the GUI
-;	Removed presets (included in QuteCsound)	
-;	Cannot display more than one space in Label, so can't display the schematic shown below:
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Instrument 1 is activated by MIDI and by the GUI
+; Removed presets (included in QuteCsound)
+; Cannot display more than one space in Label, so can't display the schematic shown below:
 
-	; FM Synthesis: Modulator->Modulator->Carrier
-	;---------------------------------------------
-	;			+-----+
-	;			|MOD.1|
-	;			+--+--+
-	;			   |
-	;			+--+--+
-	;			|MOD.2|
-	;			+--+--+
-	;			   |
-	;			+--+--+
-	;			|CAR. |
-	;			+--+--+
-	;			   |
-	;			   V
-	;			  OUT
+  ; FM Synthesis: Modulator->Modulator->Carrier
+  ; ---------------------------------------------
+  ; +-----+
+  ; |Mod.1|
+  ; +--+--+
+  ; |
+  ; +--+--+
+  ; |Mod.2|
+  ; +--+--+
+  ; |
+  ; +--+--+
+  ; |Car. |
+  ; +--+--+
+  ; |
+  ; V
+  ; Out
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 1		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 1      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	0, 0, 4096, 10, 1						;FUNCTION TABLE THAT STORES A SINGLE CYCLE OF A SINE WAVE
-giExp20000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLES FOR EXP SLIDER
+; Function table that stores a single cycle of a sine wave
+gisine     ftgen 0, 0, 4096, 10, 1
+giExp20000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Tables for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kbasefreq		invalue 	"Base_Frequency"
-		gkbasefreq	tablei	kbasefreq, giExp20000, 1
-					outvalue	"Base_Frequency_Value", gkbasefreq		
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kbasefreq invalue "Base_Frequency"
+    gkbasefreq tablei kbasefreq, giExp20000, 1
+    outvalue "Base_Frequency_Value", gkbasefreq
 
-		gkindex1		invalue 	"Modulation_Index_1"
-		gkindex2		invalue 	"Modulation_Index_2"
+    gkindex1 invalue "Modulation_Index_1"
+    gkindex2 invalue "Modulation_Index_2"
 
-		gkCarRatio	invalue	"Carrier_Frequency"
-		gkMod1Ratio	invalue	"Modulator1_Frequency"
-		gkMod2Ratio	invalue	"Modulator2_Frequency"	
-		
-		gkCarAmp		invalue 	"Carrier_Amplitude"
-	endif
+    gkCarRatio  invalue "Carrier_Frequency"
+    gkMod1Ratio invalue "Modulator1_Frequency"
+    gkMod2Ratio invalue "Modulator2_Frequency"
+
+    gkCarAmp invalue "Carrier_Amplitude"
+  endif
 endin
 
-instr	1	;FM INSTRUMENT
-	if p4!=0 then													;MIDI
-		ioct		= p4												;READ OCT VALUE FROM MIDI INPUT
-		iamp		= p5												;READ midi-velocity-amp FROM MIDI INPUT
-		kCarAmp	= iamp * gkCarAmp									;SET AMPLITUDE TO RECEIVED p5 (I.E. MIDI VELOCITY) MULTIPLIED BY SLIDER "Carrier_Amplitude"
+instr 1            ; Fm instrument
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read oct value from MIDI input
+    iamp = p5      ; READ midi-velocity-amp FROM MIDI INPUT
+    ; Set amplitude to received p5 (i.e. MIDI velocity) multiplied by slider
+    ; "carrier_amplitude"
+    kCarAmp = iamp * gkCarAmp
 
-		;PITCH BEND===========================================================================================================================================================
-		iSemitoneBendRange = 4										;PITCH BEND RANGE IN SEMITONES
-		imin		= 0												;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333						;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax								;PITCH BEND VARIABLE (IN oct FORMAT)
-		kbasefreq	=	cpsoct(ioct + kbend)							;SET FUNDEMENTAL FROM MIDI
-		;=====================================================================================================================================================================
-	else															;GUI
-		kbasefreq = gkbasefreq										;SET FUNDEMENTAL FROM GUI SLIDER "Base_Frequency"
-		kCarAmp	= gkCarAmp										;SET kamp TO SLIDER VALUE "Carrier_Amplitude"
-	endif
+    ; Pitch
+    ; bend===========================================================================================================================================================
+    iSemitoneBendRange = 4  ; Pitch bend range in semitones
+    imin               = 0  ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kbasefreq = cpsoct(ioct + kbend)  ; Set fundemental from MIDI
+    ; =====================================================================================================================================================================
+  else                      ; GUI
+    kbasefreq = gkbasefreq  ; Set fundemental from GUI slider "base_frequency"
+    kCarAmp   = gkCarAmp    ; SET kamp TO SLIDER VALUE "Carrier_Amplitude"
+  endif
 
-	iporttime		=		.02										;PORTAMENTO TIME (TO BE APPLIED TO K-RATE VARIABLES IN ORDER TO IMPLEMENT DAMPING)
-	kporttime		linseg	0, .001, iporttime, 1, iporttime				;FINAL VARIABLE WILL RAMP UP
-	
-	kbasefreq		portk	kbasefreq, kporttime						;PORTAMENTO APPLIED
-	kindex1		portk	gkindex1, kporttime							;PORTAMENTO APPLIED
-	kindex2		portk	gkindex2, kporttime							;PORTAMENTO APPLIED
-	kCarAmp		portk	kCarAmp, kporttime							;PORTAMENTO APPLIED
-	
-	kpeakdeviation1	=	kbasefreq * kindex1							;CALCUALATE THE PEAK DEVIATION OF THE MODULATOR FROM THE VALUES GIVEN FOR BASE FREQUENCY AND THE INDEX OF MODULATION
-	kpeakdeviation2	=	kbasefreq * kindex2							;CALCUALATE THE PEAK DEVIATION OF THE MODULATOR FROM THE VALUES GIVEN FOR BASE FREQUENCY AND THE INDEX OF MODULATION
+  ; Portamento time (to be applied to k-rate variables in order to implement damping)
+  iporttime = .02
+  kporttime linseg 0, .001, iporttime, 1, iporttime  ; Final variable will ramp up
 
-	aAntiClick	linsegr	0,0.001,1,0.01,0							;ANTI CLICK ENVELOPE
-	
-	;OUTPUT		OPCODE	AMPLITUDE          |     FREQUENCY						| FUNCTION_TABLE
-	aModulator1	oscili	kpeakdeviation1,   kbasefreq * gkMod1Ratio,				gisine			;DEFINE THE MODULATOR WAVEFORM
-	aModulator2	oscili	kpeakdeviation2,   (kbasefreq * gkMod2Ratio) + aModulator1,	gisine			;DEFINE THE MODULATOR WAVEFORM
-	aCarrier		oscili	kCarAmp*aAntiClick,(kbasefreq * gkCarRatio) + aModulator2,	gisine			;DEFINE THE CARRIER WAVEFORM (NOTE HOW ITS FREQUENCY IS MODULATED (THROUGH ADDITION) BY THE AUDIO OUTPUT OF THE MODULATOR WAVEFORM)
-				outs		aCarrier, aCarrier													;SEND THE AUDIO OUTPUT OF THE CARRIER WAVEFORM *ONLY* TO THE OUTPUTS 
+  kbasefreq portk kbasefreq, kporttime  ; Portamento applied
+  kindex1   portk gkindex1, kporttime   ; Portamento applied
+  kindex2   portk gkindex2, kporttime   ; Portamento applied
+  kCarAmp   portk kCarAmp, kporttime    ; Portamento applied
 
-	ktrig	  	metro	10	;CREATE A REPEATING TRIGGER SIGNAL
-	if ktrig == 1 then
-			outvalue		"Peak_Dev_1", kpeakdeviation1
-			outvalue		"Peak_Dev_2", kpeakdeviation2
-	endif
+  ; Calcualate the peak deviation of the modulator from the values given for base
+  ; frequency and the index of modulation
+  kpeakdeviation1 = kbasefreq * kindex1
+  ; Calcualate the peak deviation of the modulator from the values given for base
+  ; frequency and the index of modulation
+  kpeakdeviation2 = kbasefreq * kindex2
+
+  aAntiClick linsegr 0, 0.001, 1, 0.01, 0  ; Anti click envelope
+
+  ; Output  opcode amplitude          |     frequency      | function_table
+  ; Define the modulator waveform
+  aModulator1 oscili kpeakdeviation1, kbasefreq * gkMod1Ratio, gisine
+  ; Define the modulator waveform
+  aModulator2 oscili kpeakdeviation2, (kbasefreq * gkMod2Ratio) + aModulator1, gisine
+  ; Define the carrier waveform (note how its frequency is modulated (through addition) by
+  ; the audio output of the modulator waveform)
+  aCarrier oscili kCarAmp*aAntiClick, (kbasefreq * gkCarRatio) + aModulator2, gisine
+  ; Send the audio output of the carrier waveform *only* to the outputs
+  outs aCarrier, aCarrier
+
+  ktrig metro 10  ; Create a repeating trigger signal
+  if ktrig == 1 then
+    outvalue "Peak_Dev_1", kpeakdeviation1
+    outvalue "Peak_Dev_2", kpeakdeviation2
+  endif
 endin
 
-instr	2	;INIT
-		outvalue	"_SetPresetIndex", 0
+instr 2  ; Init
+  outvalue "_SetPresetIndex", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600		;GUI
-i 2	     0.1		 0		;INIT
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 2 0.1 0    ; Init
 </CsScore>
 </CsoundSynthesizer>
 

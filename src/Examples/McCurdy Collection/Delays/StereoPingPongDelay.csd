@@ -1,112 +1,137 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
-;THE delay OPCODES IS PLACED IN A SEPARATE, ALWAYS ON, INSTRUMENT FROM THE SOURCE SOUND PRODUCING INSTRUMENT.
-;THE IS A COMMONLY USED TECHNIQUE WITH TIME SMEARING OPCODES AND EFFECTS LIKE REVERBS AND DELAYS.
+; The delay opcodes is placed in a separate, always on, instrument from the source sound
+; producing instrument.
+; The is a commonly used technique with time smearing opcodes and effects like reverbs and
+; delays.
 
-;ksmps MAY NEED TO BE LOW (AND kr THEREFORE HIGH) WHEN WORKING WITH SHORT DELAY TIMES DEFINED INITIALLY AT KRATE
-
-
-;Modified for QuteCsound by René, September 2010
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Cannot display more than one space in Label, so can't display the schematic shown below:
-;
-;                           (feedback)
-;                        +-------<------+
-;                        |              |
-;                        v  +--------+  ^
-;                        |  |        |  |
-;      +-----------------+--+Delay L +--+---->LEFT_OUT
-;      |                    |time x 2|
-;      |                    +--------+
-;      |
-; IN->-+
-;      |
-;      |     +--------+     +--------+
-;      |     |Offset  |     |        |
-;      +-----+Delay   +--+--+Delay  R+--+---->RIGHT_OUT
-;            |time x 1|  |  |time x 2|  |
-;            +--------+  ^  +--------+  v
-;                        |              |
-;                        +-------<------+
-;                           (feedback)
+; Ksmps may need to be low (and kr therefore high) when working with short delay times
+; defined initially at krate
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Modified for QuteCsound by René, September 2010
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Cannot display more than one space in Label, so can't display the schematic shown below:
+
+; (feedback)
+; +-------<------+
+; |              |
+; v  +--------+  ^
+; |  |        |  |
+; +-----------------+--+Delay l +--+---->left_out
+; |                    |time x 2|
+; |                    +--------+
+; |
+; In->-+
+; |
+; |     +--------+     +--------+
+; |     |Offset  |     |        |
+; +-----+Delay   +--+--+Delay  R+--+---->RIGHT_OUT
+; |time x 1|  |  |time x 2|  |
+; +--------+  ^  +--------+  v
+; |              |
+; +-------<------+
+; (feedback)
+
+
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 48000		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 48000  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gimaxdelay	=	5	;MAXIMUM DELAY TIME VARIABLE USED BOTH BY THE ORCHESTRA CODE AND BY GUI INSTRUMENT (giExp1 table used for Delay_Time slider)
+; Maximum delay time variable used both by the orchestra code and by GUI instrument
+; (giexp1 table used for delay_time slider)
+gimaxdelay = 5
 
-giExp1		ftgen	0, 0, 129, -25, 0, 0.01, 128, gimaxdelay		;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 0.01, 128, gimaxdelay  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkInGain		invalue 		"Live_Input_Gain"
-		kdlt			invalue		"Delay_Time"
-		gkdlt		tablei		kdlt, giExp1, 1
-					outvalue		"Delay_Time_Value", gkdlt
-		gkmix		invalue	 	"Mix"
-		gkfeedamt		invalue 		"Feedback_Amount"
-		gkamp		invalue 		"Output_Amplitude_Rescaling"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkInGain invalue "Live_Input_Gain"
+    kdlt     invalue "Delay_Time"
+    gkdlt tablei kdlt, giExp1, 1
+    outvalue "Delay_Time_Value", gkdlt
+    gkmix     invalue "Mix"
+    gkfeedamt invalue "Feedback_Amount"
+    gkamp     invalue "Output_Amplitude_Rescaling"
+  endif
 endin
 
-instr	1	;GENERATES A SHORT SYNTHESISED IMPULSE SOUND                                                                                                     
-	aenv			expseg	0.0001, 0.01, 1, p3-0.01, 0.0001			;PERCUSSIVE-TYPE AMPLITUDE ENVELOPE
-	asig1		noise	0.3 * aenv, 0							;GENERATE A 'WHITE NOISE' SIGNAL
-	iCutoff_Oct	random	6,14									;CREATE A RANDOM VALUE FOR CUTOFF FREQUENCY (IN OCT FORMAT)
-	asig2		butlp	asig1, cpsoct(iCutoff_Oct)				;LOWPASS FILTER WHITE NOISE
-	gasig		balance	asig2, asig1							;BALANCE FILTERED SIGNAL WITH UNFILTERED WHITE NOISE SIGNAL TO COMPENSATE FOR AMPLITUDE LOSS
+; Generates a short synthesised impulse sound
+instr 1
+  aenv expseg 0.0001, 0.01, 1, p3-0.01, 0.0001  ; Percussive-type amplitude envelope
+  asig1 noise 0.3 * aenv, 0                     ; Generate a 'white noise' signal
+  ; Create a random value for cutoff frequency (in oct format)
+  iCutoff_Oct random 6, 14
+  asig2 butlp asig1, cpsoct(iCutoff_Oct)  ; Lowpass filter white noise
+  ; Balance filtered signal with unfiltered white noise signal to compensate for amplitude
+  ; loss
+  gasig balance asig2, asig1
 endin
 
-instr 	2	;STEREO PING-PONG DELAY INSTRUMENT - ALSO READS LIVE INPUT SIGNAL
-	gasig		init		0									;SET INITIAL STATE OF GLOBAL AUDIO SIGNAL (SILENCE)
-	aInL, aInR	ins											;READ LIVE AUDIO INPUT
-	aInL			=		(aInL * gkInGain) + gasig				;MIX LIVE AUDIO IN WITH GLOBAL AUDIO SIGNAL RECEIVED FROM INSTR 1
-	aInR			=		(aInR * gkInGain) + gasig				;MIX LIVE AUDIO IN WITH GLOBAL AUDIO SIGNAL RECEIVED FROM INSTR 1
-	
-	iporttime		=		.1									;PORTAMENTO TIME
-	kporttime		linseg	0, .001, iporttime, 1, iporttime			;USE OF AN ENVELOPE VALUE THAT QUICKLY RAMPS UP FROM ZERO TO THE REQUIRED VALUE. THIS PREVENTS VARIABLES GLIDING TO THEIR REQUIRED VALUES EACH TIME THE INSTRUMENT IS STARTED
-	kdlt			portk	gkdlt, kporttime						;PORTAMENTO IS APPLIED TO THE VARIABLE 'gkdlt'. A NEW VARIABLE 'kdlt' IS CREATED.
-	adlt			interp	kdlt									;A NEW A-RATE VARIABLE 'adlt' IS CREATED BY INTERPOLATING THE K-RATE VARIABLE 'kdlt' 
-	
-	;;;RIGHT CHANNEL OFFSET;;;NO FEEDBACK!!;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	abufferR_OS	delayr	gimaxdelay							;CREATE A DELAY BUFFER OF imaxdelay SECONDS DURATION
-	adelsigR_OS 	deltap3	adlt									;TAP THE DELAY LINE AT adlt SECONDS
-				delayw	aInL									;WRITE AUDIO SOURCE INTO THE BEGINNING OF THE BUFFER
-	
-	;;;LEFT CHANNEL DELAY;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	abufferL		delayr	gimaxdelay*2							;CREATE A DELAY BUFFER OF 5 SECONDS DURATION (EQUIVALENT TO THE MAXIMUM DELAY TIME POSSIBLE USING THIS EXAMPLE)
-	adelsigL 		deltap3	adlt*2								;TAP THE DELAY LINE AT gkdlt SECONDS
-				delayw	aInR + (adelsigL * gkfeedamt)				;WRITE AUDIO SOURCE AND FEEDBACK SIGNAL INTO THE BEGINNING OF THE BUFFER
-	
-	abufferR		delayr	gimaxdelay*2							;CREATE A DELAY BUFFER OF 5 SECONDS DURATION (EQUIVALENT TO THE MAXIMUM DELAY TIME POSSIBLE USING THIS EXAMPLE)
-	adelsigR 		deltap3	adlt*2								;TAP THE DELAY LINE AT gkdlt SECONDS
-				delayw	adelsigR_OS + (adelsigR * gkfeedamt)		;WRITE AUDIO SOURCE AND FEEDBACK SIGNAL INTO THE BEGINNING OF THE BUFFER
+instr 2           ; Stereo ping-pong delay instrument - also reads live input signal
+  gasig init 0    ; Set initial state of global audio signal (silence)
+  aInL, aInR ins  ; Read live audio input
+  ; Mix live audio in with global audio signal received from instr 1
+  aInL = (aInL * gkInGain) + gasig
+  ; Mix live audio in with global audio signal received from instr 1
+  aInR = (aInR * gkInGain) + gasig
 
-				outs		((adelsigL * gkmix) + (aInL * (1-gkmix))) * gkamp, (((adelsigR + adelsigR_OS) * gkmix) + (aInR * (1-gkmix))) * gkamp	;CREATE A MIX BETWEEN THE WET AND THE DRY SIGNALS AT THE OUTPUT
-	gasig		=		0									;CLEAR THE GLOBAL AUDIO SEND VARIABLES
+  iporttime = .1  ; Portamento time
+  ; Use of an envelope value that quickly ramps up from zero to the required value. This
+  ; prevents variables gliding to their required values each time the instrument is
+  ; started
+  kporttime linseg 0, .001, iporttime, 1, iporttime
+  ; Portamento is applied to the variable 'gkdlt'. A new variable 'kdlt' is created.
+  kdlt portk gkdlt, kporttime
+  ; A new a-rate variable 'adlt' is created by interpolating the k-rate variable 'kdlt'
+  adlt interp kdlt
+
+  ; ;;Right channel offset;;;no
+  ; feedback!!;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  abufferR_OS delayr gimaxdelay  ; Create a delay buffer of imaxdelay seconds duration
+  adelsigR_OS deltap3 adlt       ; Tap the delay line at adlt seconds
+  delayw aInL                    ; Write audio source into the beginning of the buffer
+
+  ; ;;Left channel
+  ; delay;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ; Create a delay buffer of 5 seconds duration (equivalent to the maximum delay time
+  ; possible using this example)
+  abufferL delayr gimaxdelay*2
+  adelsigL deltap3 adlt*2  ; Tap the delay line at gkdlt seconds
+  ; Write audio source and feedback signal into the beginning of the buffer
+  delayw aInR + (adelsigL * gkfeedamt)
+
+  ; Create a delay buffer of 5 seconds duration (equivalent to the maximum delay time
+  ; possible using this example)
+  abufferR delayr gimaxdelay*2
+  adelsigR deltap3 adlt*2  ; Tap the delay line at gkdlt seconds
+  ; Write audio source and feedback signal into the beginning of the buffer
+  delayw adelsigR_OS + (adelsigR * gkfeedamt)
+
+  ; Create a mix between the wet and the dry signals at the output
+  outs ((adelsigL * gkmix) + (aInL * (1-gkmix))) * gkamp, (((adelsigR + adelsigR_OS) * gkmix) + (aInR * (1-gkmix))) * gkamp
+  gasig = 0  ; Clear the global audio send variables
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		-1		;GUI
-i  2      0    	-1		;INSTRUMENT 2 (DELAY INSTRUMENT) PLAYS A HELD NOTE
+; Instr | start | duration
+i 10 0 -1  ; GUI
+i 2 0 -1   ; Instrument 2 (delay instrument) plays a held note
 
-f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
+f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 
@@ -121,9 +146,9 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -141,15 +166,20 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -172,6 +202,18 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <eventLine>i 1 0 0.1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Input_Gain</objectName>
@@ -207,14 +249,14 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -236,14 +278,14 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -265,15 +307,20 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -295,14 +342,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -324,14 +371,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -353,14 +400,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -400,14 +447,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -447,14 +494,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -494,14 +541,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -523,14 +570,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -552,14 +599,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -581,14 +628,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -1,186 +1,203 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Use of QuteCsound internal midi for X Centre (CC#1), Y Centre (CC#2), X Radius (CC#3) and Y Radius (CC#4)
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Use of QuteCsound internal midi for X Centre (CC#1), Y Centre (CC#2), X Radius (CC#3)
+; and Y Radius (CC#4)
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 16			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-garvbL		init		0								;INITIALIZE GLOBAL AUDIO REVERB SEND SIGNALS
-garvbR		init		0								;INITIALIZE GLOBAL AUDIO REVERB SEND SIGNALS
+garvbL init 0  ; Initialize global audio reverb send signals
+garvbR init 0  ; Initialize global audio reverb send signals
 
-giKybdScaling	ftgen	0,0,128,5,1,32,1,96,0.4				;KEYBOARD SCALING WHICH WILL BE USED TO PREVENT EXCESSIVE SHRILLNESS IN THE UPPER REGISTER FOR MIDI TRIGGERED NOTES
-giExp1		ftgen	0, 0, 129, -25, 0, 1.0, 128, 8000.0	;TABLE FOR EXP SLIDER
+; Keyboard scaling which will be used to prevent excessive shrillness in the upper
+; register for MIDI triggered notes
+giKybdScaling ftgen 0, 0, 128, 5, 1, 32, 1, 96, 0.4
+giExp1        ftgen 0, 0, 129, -25, 0, 1.0, 128, 8000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SLIDERS
-		kfreq	invalue	"Freq"
-		gkfreq	tablei	kfreq, giExp1, 1
-				outvalue	"Freq_Value", gkfreq
-		gkcx		invalue	"XCentre"
-		gkcy		invalue	"YCentre"
-		gkrx		invalue	"XRadius"
-		gkry		invalue	"YRadius"
-		gkamp	invalue	"Amplitude"
-		gkAtt	invalue	"Attack"
-		gkRel	invalue	"Release"
-		gkRvbSnd	invalue	"Reverb"
-		gkJitX	invalue	"XJitter"
-		gkJitY	invalue	"YJitter"
-		;X Wave
-		gk1_1	invalue	"1_1"
-		gk1_2	invalue	"1_2"
-		gk1_3	invalue	"1_3"
-		gk1_4	invalue	"1_4"
-		gk1_5	invalue	"1_5"
-		gk1_6	invalue	"1_6"
-		gk1_7	invalue	"1_7"
-		gk1_8	invalue	"1_8"
-		gk1_9	invalue	"1_9"
-		gk1_10	invalue	"1_10"
-		gk1_11	invalue	"1_11"
-		gk1_12	invalue	"1_12"
-		;Y Wave
-		gk2_1	invalue	"2_1"
-		gk2_2	invalue	"2_2"
-		gk2_3	invalue	"2_3"
-		gk2_4	invalue	"2_4"
-		gk2_5	invalue	"2_5"
-		gk2_6	invalue	"2_6"
-		gk2_7	invalue	"2_7"
-		gk2_8	invalue	"2_8"
-		gk2_9	invalue	"2_9"
-		gk2_10	invalue	"2_10"
-		gk2_11	invalue	"2_11"
-		gk2_12	invalue	"2_12"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Sliders
+    kfreq invalue "Freq"
+    gkfreq tablei kfreq, giExp1, 1
+    outvalue "Freq_Value", gkfreq
+    gkcx     invalue "XCentre"
+    gkcy     invalue "YCentre"
+    gkrx     invalue "XRadius"
+    gkry     invalue "YRadius"
+    gkamp    invalue "Amplitude"
+    gkAtt    invalue "Attack"
+    gkRel    invalue "Release"
+    gkRvbSnd invalue "Reverb"
+    gkJitX   invalue "XJitter"
+    gkJitY   invalue "YJitter"
+    ; X Wave
+    gk1_1  invalue "1_1"
+    gk1_2  invalue "1_2"
+    gk1_3  invalue "1_3"
+    gk1_4  invalue "1_4"
+    gk1_5  invalue "1_5"
+    gk1_6  invalue "1_6"
+    gk1_7  invalue "1_7"
+    gk1_8  invalue "1_8"
+    gk1_9  invalue "1_9"
+    gk1_10 invalue "1_10"
+    gk1_11 invalue "1_11"
+    gk1_12 invalue "1_12"
+    ; Y Wave
+    gk2_1  invalue "2_1"
+    gk2_2  invalue "2_2"
+    gk2_3  invalue "2_3"
+    gk2_4  invalue "2_4"
+    gk2_5  invalue "2_5"
+    gk2_6  invalue "2_6"
+    gk2_7  invalue "2_7"
+    gk2_8  invalue "2_8"
+    gk2_9  invalue "2_9"
+    gk2_10 invalue "2_10"
+    gk2_11 invalue "2_11"
+    gk2_12 invalue "2_12"
+  endif
 endin
 
-instr	11	;INIT
-	outvalue	"Freq"		, 0.666606
-	outvalue	"XCentre"		, 0.2
-	outvalue	"YCentre"		, 0.7
-	outvalue	"XRadius"		, 0.3
-	outvalue	"YRadius"		, 0.3
-	outvalue	"Amplitude"	, 0.4
-	outvalue	"Attack"		, 1.2
-	outvalue	"Release"		, 5.0
-	outvalue	"Reverb"		, 0.5
-	outvalue	"XJitter"		, 0.05
-	outvalue	"YJitter"		, 0.05
-	;PARTIAL VALUES
-	outvalue	"1_1"		, 1.0
-	outvalue	"1_2"		, 0.0
-	outvalue	"1_3"		, 0.33
-	outvalue	"1_4"		, 0.0
-	outvalue	"1_5"		, 0.2
-	outvalue	"1_6"		, 0.0
-	outvalue	"1_7"		, 0.14
-	outvalue	"1_8"		, 0.0
-	outvalue	"1_9"		, 0.11
-	outvalue	"1_10"		, 0.0
-	outvalue	"1_11"		, 0.0
-	outvalue	"1_12"		, 0.0
-	outvalue	"2_1"		, 1.0
-	outvalue	"2_2"		, 0.0
-	outvalue	"2_3"		, 0.0
-	outvalue	"2_4"		, 0.0
-	outvalue	"2_5"		, 0.0
-	outvalue	"2_6"		, 0.0
-	outvalue	"2_7"		, 0.0
-	outvalue	"2_8"		, 0.0
-	outvalue	"2_9"		, 0.0
-	outvalue	"2_10"		, 0.0
-	outvalue	"2_11"		, 0.0
-	outvalue	"2_12"		, 0.0
+instr 11  ; Init
+  outvalue "Freq", 0.666606
+  outvalue "XCentre", 0.2
+  outvalue "YCentre", 0.7
+  outvalue "XRadius", 0.3
+  outvalue "YRadius", 0.3
+  outvalue "Amplitude", 0.4
+  outvalue "Attack", 1.2
+  outvalue "Release", 5.0
+  outvalue "Reverb", 0.5
+  outvalue "XJitter", 0.05
+  outvalue "YJitter", 0.05
+  ; Partial values
+  outvalue "1_1", 1.0
+  outvalue "1_2", 0.0
+  outvalue "1_3", 0.33
+  outvalue "1_4", 0.0
+  outvalue "1_5", 0.2
+  outvalue "1_6", 0.0
+  outvalue "1_7", 0.14
+  outvalue "1_8", 0.0
+  outvalue "1_9", 0.11
+  outvalue "1_10", 0.0
+  outvalue "1_11", 0.0
+  outvalue "1_12", 0.0
+  outvalue "2_1", 1.0
+  outvalue "2_2", 0.0
+  outvalue "2_3", 0.0
+  outvalue "2_4", 0.0
+  outvalue "2_5", 0.0
+  outvalue "2_6", 0.0
+  outvalue "2_7", 0.0
+  outvalue "2_8", 0.0
+  outvalue "2_9", 0.0
+  outvalue "2_10", 0.0
+  outvalue "2_11", 0.0
+  outvalue "2_12", 0.0
 endin
 
-instr	2	;UPDATE WAVEFORMS
-	ktrig	changed	gk1_1, gk1_2, gk1_3, gk1_4, gk1_5, gk1_6, gk1_7, gk1_8, gk1_9, gk1_10, gk1_11, gk1_12, gk2_1, gk2_2, gk2_3, gk2_4, gk2_5, gk2_6, gk2_7, gk2_8, gk2_9, gk2_10, gk2_11, gk2_12	;IF ANY OF THE INPUT VARIABLES CHANGE OUTPUT A MOMENTARY '1' (BANG)
-	if ktrig=1 then											;IF ANY OF THE TABLE PARTIAL AMPLITUDE SLIDERS HAS BEEN CHANGED...
-		reinit	UPDATE										;BEGIN A REINITIALIZATION PASS FROM LABEL 'UPDATE'
-	endif													;END OPF THIS CONDITIONAL BRANCH
-	UPDATE:													;A LABEL CALLED 'UPDATE'
-	;DEFINE THE TWO GEN 10 FUNCTION TABLES THAT WILL BE USED ON THE WAVE TERRAIN SYNTHESIS
-	giwave1	ftgen	1,0,8192,10,i(gk1_1),i(gk1_2),i(gk1_3),i(gk1_4),i(gk1_5),i(gk1_6),i(gk1_7),i(gk1_8),i(gk1_9),i(gk1_10),i(gk1_11),i(gk1_12)
-	giwave2	ftgen	2,0,8192,10,i(gk2_1),i(gk2_2),i(gk2_3),i(gk2_4),i(gk2_5),i(gk2_6),i(gk2_7),i(gk2_8),i(gk2_9),i(gk2_10),i(gk2_11),i(gk2_12)
-			rireturn											;RETURN FROM REINITIALIZATION PASS
+instr 2  ; Update waveforms
+  ; If any of the input variables change output a momentary '1' (bang)
+  ktrig changed gk1_1, gk1_2, gk1_3, gk1_4, gk1_5, gk1_6, gk1_7, gk1_8, gk1_9, gk1_10, gk1_11, gk1_12, gk2_1, gk2_2, gk2_3, gk2_4, gk2_5, gk2_6, gk2_7, gk2_8, gk2_9, gk2_10, gk2_11, gk2_12
+  if ktrig = 1 then  ; If any of the table partial amplitude sliders has been changed...
+    reinit UPDATE    ; Begin a reinitialization pass from label 'update'
+  endif              ; End opf this conditional branch
+UPDATE:              ; A label called 'update'
+  ; Define the two gen 10 function tables that will be used on the wave terrain synthesis
+  giwave1 ftgen 1, 0, 8192, 10, i(gk1_1), i(gk1_2), i(gk1_3), i(gk1_4), i(gk1_5), i(gk1_6), i(gk1_7), i(gk1_8), i(gk1_9), i(gk1_10), i(gk1_11), i(gk1_12)
+  giwave2 ftgen 2, 0, 8192, 10, i(gk2_1), i(gk2_2), i(gk2_3), i(gk2_4), i(gk2_5), i(gk2_6), i(gk2_7), i(gk2_8), i(gk2_9), i(gk2_10), i(gk2_11), i(gk2_12)
+  rireturn  ; Return from reinitialization pass
 endin
 
-instr 	1
-	iporttime			=		0.05								;CREATE A VARIABLE THAT WILL BE USED FOR PORTAMENTO TIME
-	kporttime			linseg	0, 0.01, iporttime					;CREATE A VARIABLE THAT WILL BE USED FOR PORTAMENTO TIME
+instr 1
+  iporttime = 0.05  ; Create a variable that will be used for portamento time
+  ; Create a variable that will be used for portamento time
+  kporttime linseg 0, 0.01, iporttime
 
-	iMIDIActiveValue	=		1								;IF MIDI ACTIVATED
-	iMIDIflag			=		0								;IF GUI ACTIVATED
-				mididefault	iMIDIActiveValue, iMIDIflag			;IF NOTE IS MIDI ACTIVATED REPLACE iMIDIflag WITH iMIDIActiveValue 
+  iMIDIActiveValue = 1  ; If MIDI activated
+  iMIDIflag        = 0  ; If GUI activated
+  ; If note is MIDI activated replace imidiflag with imidiactivevalue
+  mididefault iMIDIActiveValue, iMIDIflag
 
-	if iMIDIflag=1 then											;IF THIS IS A MIDI ACTIVATED NOTE AND MIDI-TO-PITCH SWITCH IS ON...
-		icps			cpsmidi									;READ MIDI PITCH VALUES - THIS VALUE CAN BE MAPPED TO GRAIN DENSITY AND/OR PITCH DEPENDING ON THE SETTING OF THE MIDI MAPPING SWITCHES
-		inum			notnum									;READ IN MIDI NOTE NUMBER (0-127) - WILL BE USED IN KEYBOARD SCALING
-		iamp			ampmidi	1								;READ MIDI AMPLITUDE VALUES
-		kfreq		=		icps								;MAP TO MIDI NOTE VALUE TO PITCH (CONVERT TO RATIO: MIDDLE C IS POINT OF UNISON)
-		iKybdScale	table	inum, giKybdScaling					;READ IN KEYBOARD SCALING VALUE FROM FUNCTION TABLE - INDEX IS DERIVED FROM MIDI NOTE NUMBER
-		iamp			=		iamp * iKybdScale					;APPLY KEYBOARD SCALING TO AMPLITUDE VALUE - THIS IS DONE TO PREVERN EXCESSIVE SHRILLNESS IN THE UPPER REGISTER
-	else														;OTHERWISE...
-		kfreq		portk	gkfreq, kporttime					;USE THE GUI SLIDER VALUE
-		iamp			=		1								;AS THERE IS NO MIDI AMPLITUDE IN AN GUI ACTUATED NOTE IT WILL IN THIS CASE BE JUST GIVEN A VALUE OF '1'
-	endif													;END OF THIS CONDITIONAL BRANCH
+  ; If this is a MIDI activated note and MIDI-to-pitch switch is on...
+  if iMIDIflag = 1 then
+    ; Read MIDI pitch values - this value can be mapped to grain density and/or pitch
+    ; depending on the setting of the MIDI mapping switches
+    icps cpsmidi
+    inum notnum     ; Read in MIDI note number (0-127) - will be used in keyboard scaling
+    iamp ampmidi 1  ; Read MIDI amplitude values
+    ; Map to MIDI note value to pitch (convert to ratio: middle c is point of unison)
+    kfreq = icps
+    ; Read in keyboard scaling value from function table - index is derived from MIDI note
+    ; number
+    iKybdScale table inum, giKybdScaling
+    ; Apply keyboard scaling to amplitude value - this is done to prevern excessive
+    ; shrillness in the upper register
+    iamp = iamp * iKybdScale
+  else                             ; Otherwise...
+    kfreq portk gkfreq, kporttime  ; Use the GUI slider value
+    ; As there is no MIDI amplitude in an GUI actuated note it will in this case be just
+    ; given a value of '1'
+    iamp = 1
+  endif  ; End of this conditional branch
 
-	kRadEnv	linsegr	0, i(gkAtt), iamp, i(gkRel), 0				;RADIUS ENVELOPE
-	
-	kcx		portk	gkcx, kporttime							;APPLY PORTAMENTO SMOOTHING TO GUI SLIDER VARIABLE
-	kcy		portk	gkcy, kporttime							;APPLY PORTAMENTO SMOOTHING TO GUI SLIDER VARIABLE
-	krx		portk	gkrx, kporttime							;APPLY PORTAMENTO SMOOTHING TO GUI SLIDER VARIABLE
-	kry		portk	gkry, kporttime							;APPLY PORTAMENTO SMOOTHING TO GUI SLIDER VARIABLE
+  kRadEnv linsegr 0, i(gkAtt), iamp, i(gkRel), 0  ; Radius envelope
 
-	krxJit	jspline	gkJitX,1,10								;JITTER SIGNAL
-	kryJit	jspline	gkJitY,1,10								;JITTER SIGNAL
-	
-	asigL	wterrain	gkamp,  kfreq, kcx, kcy, krx*kRadEnv*(1+krxJit), kry*kRadEnv*(1+kryJit), giwave1, giwave2
-	asigR	wterrain	gkamp, -kfreq, kcx, kcy, krx*kRadEnv*(1+krxJit), kry*kRadEnv*(1+kryJit), giwave1, giwave2		;RIGHT CHANNEL FREQUENCY IS INVERTED TO CREAT A STEREO EFFECT
-	asigL	dcblock	asigL									;BLOCK DC OFFSETS
-	asigR	dcblock	asigR									;BLOCK DC OFFSETS
+  kcx portk gkcx, kporttime  ; Apply portamento smoothing to GUI slider variable
+  kcy portk gkcy, kporttime  ; Apply portamento smoothing to GUI slider variable
+  krx portk gkrx, kporttime  ; Apply portamento smoothing to GUI slider variable
+  kry portk gkry, kporttime  ; Apply portamento smoothing to GUI slider variable
 
-	aenv		expseg	0.001, 0.01, 1,1,1							;DECLICKING AMPLITUDE ENVELOPE
-	asigL	=		asigL * aenv								;SCALE AUDIO SIGNAL WITH AMPLITUDE ENVELOPE
-	asigR	=		asigR * aenv								;SCALE AUDIO SIGNAL WITH AMPLITUDE ENVELOPE
-			outs		asigL, asigR								;SEND AUDIO TO OUTPUTS
-	garvbL	=		garvbL + (asigL * gkRvbSnd)					;ADD TO GLOBAL AUDIO REVERB CHANNEL (LEFT)
-	garvbR	=		garvbR + (asigR * gkRvbSnd)					;ADD TO GLOBAL AUDIO REVERB CHANNEL (RIGHT)
+  krxJit jspline gkJitX, 1, 10  ; Jitter signal
+  kryJit jspline gkJitY, 1, 10  ; Jitter signal
+
+  asigL wterrain gkamp, kfreq, kcx, kcy, krx*kRadEnv*(1+krxJit), kry*kRadEnv*(1+kryJit), giwave1, giwave2
+  ; Right channel frequency is inverted to creat a stereo effect
+  asigR wterrain gkamp, -kfreq, kcx, kcy, krx*kRadEnv*(1+krxJit), kry*kRadEnv*(1+kryJit), giwave1, giwave2
+  asigL dcblock asigL  ; Block dc offsets
+  asigR dcblock asigR  ; Block dc offsets
+
+  aenv expseg 0.001, 0.01, 1, 1, 1      ; Declicking amplitude envelope
+  asigL = asigL * aenv                  ; Scale audio signal with amplitude envelope
+  asigR = asigR * aenv                  ; Scale audio signal with amplitude envelope
+  outs asigL, asigR                     ; Send audio to outputs
+  garvbL = garvbL + (asigL * gkRvbSnd)  ; Add to global audio reverb channel (left)
+  garvbR = garvbR + (asigR * gkRvbSnd)  ; Add to global audio reverb channel (right)
 endin
 
-instr	4	;REVERB
-	asigL,asigR	reverbsc	garvbL, garvbR, 0.8, 7000
-				outs		asigL, asigR
-				clear	garvbL, garvbR							;CLEAR GLOBAL AUDIO VARIABLES
+instr 4  ; Reverb
+  asigL, asigR reverbsc garvbL, garvbR, 0.8, 7000
+  outs asigL, asigR
+  clear garvbL, garvbR  ; Clear global audio variables
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0.0	   3600	;GUI
-i 11		0.0     0.01	;INIT
+; Instr | start | duration
+i 10 0.0 3600  ; GUI
+i 11 0.0 0.01  ; Init
 
-i 2 0 3600			;UPDATE FUNCTION TABLES
-i 4 0 3600			;REVERB
+i 2 0 3600  ; Update function tables
+i 4 0 3600  ; Reverb
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -193,9 +210,9 @@ i 4 0 3600			;REVERB
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -213,15 +230,20 @@ i 4 0 3600			;REVERB
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -242,14 +264,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -271,14 +293,14 @@ i 4 0 3600			;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -318,14 +340,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -347,14 +369,14 @@ i 4 0 3600			;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -394,14 +416,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -423,14 +445,14 @@ i 4 0 3600			;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -470,14 +492,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -499,14 +521,14 @@ i 4 0 3600			;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -546,14 +568,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -575,14 +597,14 @@ i 4 0 3600			;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -619,11 +641,23 @@ i 4 0 3600			;REVERB
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -641,14 +675,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -670,14 +704,14 @@ i 4 0 3600			;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -717,14 +751,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -746,14 +780,14 @@ i 4 0 3600			;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -793,14 +827,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -822,14 +856,14 @@ i 4 0 3600			;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -869,15 +903,20 @@ i 4 0 3600			;REVERB
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -916,14 +955,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -963,14 +1002,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1010,14 +1049,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1057,14 +1096,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1104,14 +1143,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1151,14 +1190,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1198,14 +1237,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1245,14 +1284,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1292,14 +1331,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1339,14 +1378,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1386,14 +1425,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1433,14 +1472,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1462,15 +1501,20 @@ i 4 0 3600			;REVERB
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -1509,14 +1553,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1556,14 +1600,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1603,14 +1647,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1650,14 +1694,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1697,14 +1741,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1744,14 +1788,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1791,14 +1835,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1838,14 +1882,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1885,14 +1929,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1932,14 +1976,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1979,14 +2023,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2026,14 +2070,14 @@ i 4 0 3600			;REVERB
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2055,14 +2099,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2084,14 +2128,14 @@ i 4 0 3600			;REVERB
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2131,14 +2175,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2178,14 +2222,14 @@ i 4 0 3600			;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2225,15 +2269,20 @@ i 4 0 3600			;REVERB
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -2260,14 +2309,14 @@ This example can also be played from a MIDI keyboard. In this mode MIDI pitch is
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>2</borderradius>

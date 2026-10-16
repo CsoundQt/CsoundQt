@@ -1,103 +1,114 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table for exp slider
+; Notes on modifications from original csd:
+; Add table for exp slider
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine	ftgen	0,0,4096,10,1			;SINE WAVE
+gisine ftgen 0, 0, 4096, 10, 1  ; Sine wave
 
-;TABLES FOR EXP SLIDER
-giExp1	ftgen	0, 0, 129, -25, 0, 0.1 , 128, 50.0
-giExp2	ftgen	0, 0, 129, -25, 0, 0.01, 128, 10.0
-giExp3	ftgen	0, 0, 129, -25, 0, 0.05, 128,  3.0
+; Tables for exp slider
+giExp1 ftgen 0, 0, 129, -25, 0, 0.1, 128, 50.0
+giExp2 ftgen 0, 0, 129, -25, 0, 0.01, 128, 10.0
+giExp3 ftgen 0, 0, 129, -25, 0, 0.05, 128, 3.0
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SWITCHES
-		gkEnvOnOff	invalue	"EnvOnOff"
-		;SLIDERS
-		kSHrate		invalue	"SHrate"
-		gkSHrate		tablei	kSHrate, giExp1, 1
-					outvalue	"SHrate_Value", gkSHrate
-		kLFOrate		invalue	"LFOrate"
-		gkLFOrate		tablei	kLFOrate, giExp2, 1
-					outvalue	"LFOrate_Value", gkLFOrate
-		gkLFOrange	invalue	"LFOrange"
-		gkLFOoffset	invalue	"LFOoffset"
-		kEnvDur		invalue	"EnvDur"
-		gkEnvDur		tablei	kEnvDur, giExp3, 1
-					outvalue	"EnvDur_Value", gkEnvDur
-		;MENU
-		gkSourceType	invalue	"SourceType"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Switches
+    gkEnvOnOff invalue "EnvOnOff"
+    ; Sliders
+    kSHrate invalue "SHrate"
+    gkSHrate tablei kSHrate, giExp1, 1
+    outvalue "SHrate_Value", gkSHrate
+    kLFOrate invalue "LFOrate"
+    gkLFOrate tablei kLFOrate, giExp2, 1
+    outvalue "LFOrate_Value", gkLFOrate
+    gkLFOrange  invalue "LFOrange"
+    gkLFOoffset invalue "LFOoffset"
+    kEnvDur     invalue "EnvDur"
+    gkEnvDur tablei kEnvDur, giExp3, 1
+    outvalue "EnvDur_Value", gkEnvDur
+    ; Menu
+    gkSourceType invalue "SourceType"
+  endif
 endin
 
-instr	1	;SAMPLE AND HOLD NOTE SEQUENCER
-	;MAKE VARIOUS SETTINGS BASED ON LFO TYPE CHOICE
-	if gkSourceType=0 then
-		kLFOtype=0										;SINE WAVE
-	elseif gkSourceType=1 then
-		kLFOtype=1										;TRIANGLE
-	elseif gkSourceType=2 then
-		kLFOtype=5										;SAWTOOTH DOWN (UNIPOLAR)
-	elseif gkSourceType=3 then
-		kLFOtype=4										;SAWTOOTH UP (UNIPOLAR)
-	endif
-	if gkSourceType=4 then
-		aoct	noise	gkLFOrange, 0							;NOISE WAVEFORM
-	else
-		ktrig	changed	kLFOtype							;GENERATE A 'BANG' TRIGGER (MOMENTARY '1') IF LFO TYPE SELECTION IS CHANGED
-		if ktrig=1 then									;IF 'BANG' IS RECEIVED...
-			reinit	RESTART_LFO							;BEGIN A REINITIALISATION PASS BEGINNING FROM LABEL 'RESTART_LFO'
-		endif											;END OF CONDITIONAL BRANCH
+instr 1  ; Sample and hold note sequencer
+  ; Make various settings based on LFO type choice
+  if gkSourceType = 0 then
+    kLFOtype = 0  ; Sine wave
+  elseif gkSourceType = 1 then
+    kLFOtype = 1  ; Triangle
+  elseif gkSourceType = 2 then
+    kLFOtype = 5  ; Sawtooth down (unipolar)
+  elseif gkSourceType = 3 then
+    kLFOtype = 4  ; Sawtooth up (unipolar)
+  endif
+  if gkSourceType = 4 then
+    aoct noise gkLFOrange, 0  ; Noise waveform
+  else
+    ; Generate a 'bang' trigger (momentary '1') if LFO type selection is changed
+    ktrig changed kLFOtype
+    if ktrig = 1 then  ; If 'bang' is received...
+      ; Begin a reinitialisation pass beginning from label 'restart_lfo'
+      reinit RESTART_LFO
+    endif  ; End of conditional branch
 
-		RESTART_LFO:										;LABEL
-		aoct		lfo		gkLFOrange, gkLFOrate, i(kLFOtype)		;LFO GENERATES FREQUENCY VALUES FOR OSCILLATOR
-				rireturn									;RETURN FROM REINITIALISATION PASS
-		if gkSourceType=2||gkSourceType=3 then					;SAWTOOTH WAVEFORMS WITH lfo OPCODE ARE UNIPOLAR. WE WILL RE-RANGE LFO OUTPUT SO THAT IT IS BI-POLAR IF EITHER OF THESE TYPES HAS BEEN SELECTED
-			aoct = (aoct * 2) - gkLFOrange					;RE-RANGE LFO
-		endif											;END OF CONDITIONAL BRANCH
-	endif												;END OF CONDITIONAL BRANCH
-	kgate	metro		gkSHrate							;TRAIN OF GATE TRIGGERS TO BE USED BY SAMPLE AND HOLD MECHANISM
-	if gkEnvOnOff=1 then									;IF 'ENVELOPE' OPTION HAS BEEN SELECTED...
-		;ALSO RESTART A PERCUSSIVE ENVELOPE WHENEVER A GATE TRIGGER IS RECEIVED TO ARTICULATE CHANGES IN PITCH IN THE OSCILLATOR
-		if kgate=1 then									;IF TRIGGER IS RECEIVED (I.E. = 1)...
-			reinit	RESTART_ENVELOPE						;RE-INITIALISE FROM LABEL 'RESTART_ENVELOPE'
-		endif											;END OF CONDITIONAL BRANCH
+RESTART_LFO:  ; Label
+    ; LFO generates frequency values for oscillator
+    aoct lfo gkLFOrange, gkLFOrate, i(kLFOtype)
+    rireturn  ; Return from reinitialisation pass
+    ; Sawtooth waveforms with LFO opcode are unipolar. We will re-range LFO output so that
+    ; it is bi-polar if either of these types has been selected
+    if gkSourceType = 2||gkSourceType = 3 then
+      aoct = (aoct * 2) - gkLFOrange  ; Re-range LFO
+    endif                             ; End of conditional branch
+  endif                               ; End of conditional branch
+  ; Train of gate triggers to be used by sample and hold mechanism
+  kgate metro gkSHrate
+  if gkEnvOnOff = 1 then  ; If 'envelope' option has been selected...
+    ; Also restart a percussive envelope whenever a gate trigger is received to articulate
+    ; changes in pitch in the oscillator
+    if kgate = 1 then          ; If trigger is received (i.e. = 1)...
+      reinit RESTART_ENVELOPE  ; Re-initialise from label 'restart_envelope'
+    endif                      ; End of conditional branch
 
-		RESTART_ENVELOPE:									;A LABEL
-		aenv	expseg	0.001,0.01,1,i(gkEnvDur),0.0001			;PERCUSSIVE TYPE AMPLITUDE ENVELOPE
-			rireturn										;RETURN FROM RE-INITIALISATION PASS TO NORMAL PERFORMANCE PASSES
-		aenv	tone		aenv, 500								;SMOOTH AMPLITUDE ENVELOPE A LITTLE (TO REMOVE CLICKS WHENEVER AN ENVELOPE IS INTERRUPTED BY A RE-INITIALISATION)
-	else													;OTHERWISE...
-		aenv	=	1										;AMPLITUDE IS A CONSTANT (NO ENVELOPE)
-	endif												;END OF CONDITIONAL BRANCH
+RESTART_ENVELOPE:                                    ; A label
+    aenv expseg 0.001, 0.01, 1, i(gkEnvDur), 0.0001  ; Percussive type amplitude envelope
+    ; Return from re-initialisation pass to normal performance passes
+    rireturn
+    ; Smooth amplitude envelope a little (to remove clicks whenever an envelope is
+    ; interrupted by a re-initialisation)
+    aenv tone aenv, 500
+  else        ; Otherwise...
+    aenv = 1  ; Amplitude is a constant (no envelope)
+  endif       ; End of conditional branch
 
-	aoct		samphold	aoct + gkLFOoffset, kgate				;APPLY SAMPLE-AND-HOLD TO THE LFO GENERATED FREQUENCY VALUES (AND ADD AN OFFSET)
-	asig		poscil	0.4*aenv, cpsoct(aoct), gisine			;AUDIO OSCILLATOR
-			outs		asig, asig							;SEND AUDIO TO OUPUTS
+  ; Apply sample-and-hold to the LFO generated frequency values (and add an offset)
+  aoct samphold aoct + gkLFOoffset, kgate
+  asig poscil 0.4*aenv, cpsoct(aoct), gisine  ; Audio oscillator
+  outs asig, asig                             ; Send audio to ouputs
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		3600		;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -110,9 +121,9 @@ i 10		0		3600		;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -130,15 +141,20 @@ i 10		0		3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -156,11 +172,23 @@ i 10		0		3600		;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Note On / Off</text>
+  <text>Note On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -178,14 +206,14 @@ i 10		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -225,14 +253,14 @@ i 10		0		3600		;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -254,14 +282,14 @@ i 10		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -301,14 +329,14 @@ i 10		0		3600		;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -330,14 +358,14 @@ i 10		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -377,14 +405,14 @@ i 10		0		3600		;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -406,14 +434,14 @@ i 10		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -453,14 +481,14 @@ i 10		0		3600		;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -522,14 +550,14 @@ i 10		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -551,15 +579,20 @@ i 10		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>4</borderradius>
   <borderwidth>2</borderwidth>
@@ -580,14 +613,14 @@ i 10		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -627,14 +660,14 @@ i 10		0		3600		;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -671,15 +704,20 @@ i 10		0		3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -703,14 +741,14 @@ In this example the frequency of an audio oscillator is modulated by an LFO but 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

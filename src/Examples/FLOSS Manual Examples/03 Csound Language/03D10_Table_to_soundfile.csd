@@ -12,7 +12,7 @@ giAudio   ftgen     0, 0, -5*sr, 2, 0
 
   instr 1 ;record live input
 ktim      timeinsts ; playing time of the instrument in seconds
-          prints    "PLEASE GIVE YOUR LIVE INPUT AFTER THE BEEP!%n"
+          prints    "PLEASE GIVE YOUR LIVE INPUT AFTER THE BEEP!\n"
 kBeepEnv  linseg    0, 1, 0, .01, 1, .5, 1, .01, 0
 aBeep     oscils    .2, 600, 0
           outs      aBeep*kBeepEnv, aBeep*kBeepEnv
@@ -31,7 +31,7 @@ aindx     phasor    1/5
   instr 2; write the giAudio table to a soundfile
 iDone  ftaudio giAudio, "testwrite.wav", -1
 if iDone==1 then
- prints "FUNCTION TABLE WRITTEN TO FILE 'testwrite.wav'!%n"
+ prints "FUNCTION TABLE WRITTEN TO FILE 'testwrite.wav'!\n"
 endif
   endin
 

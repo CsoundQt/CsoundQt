@@ -3,652 +3,652 @@
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 32
-nchnls = 2; change this in respect to your audio device
-0dbfs = 1
+sr     = 44100
+ksmps  = 32
+nchnls = 2  ; change this in respect to your audio device
+0dbfs  = 1
 
 /*****Recording a soundfile*****/
-;example for CsoundQt
-;written by joachim heintz apr 2009 / dec 2013
-;please send bug reports and suggestions
-;to jh at joachimheintz.de
+; example for CsoundQt
+; written by joachim heintz apr 2009 / dec 2013
+; please send bug reports and suggestions
+; to jh at joachimheintz.de
 
 
 
 /********UDOs for Signal Display*********/
 
-gi_db_range =         60 ;dB range to be displayed in the LED widget
-gi_hold    =          2 ;time (sec) to hold "red light" if signal is over maxmimum
+gi_db_range = 60  ; dB range to be displayed in the LED widget
+gi_hold     = 2   ; time (sec) to hold "red light" if signal is over maxmimum
 
-	opcode	ShowLED_a, 0, Saki
-Soutchan, asig, ktrig, idbrange xin
-kdispval   max_k      asig, ktrig, 1
-kdb        =          dbfsamp(kdispval)
-kval       =          (idbrange + kdb) / idbrange
-	if ktrig == 1 then
-           chnset     kval, Soutchan
-	endif
-	endop
+opcode ShowLED_a, 0, Saki
+  Soutchan, asig, ktrig, idbrange xin
+  kdispval max_k asig, ktrig, 1
+  kdb  = dbfsamp(kdispval)
+  kval = (idbrange + kdb) / idbrange
+  if ktrig == 1 then
+    chnset kval, Soutchan
+  endif
+endop
 
-	opcode ShowOver_a, 0, Saki
-Soutchan, asig, ktrig, iholdtm xin
-kon        init       0
-ktim       times
-kstart     init       0
-kend       init       0
-iholdtm    =          (iholdtm < .01 ? .01 : iholdtm); avoiding too short hold times
-kmax       max_k      asig, ktrig, 1
-	if kon == 0 && kmax > 1 && ktrig == 1 then
-kstart     =          ktim
-kend       =          kstart + iholdtm
-           chnset     kmax, Soutchan
-kon        =          1
-	endif
-	if kon == 1 && ktim > kend && ktrig == 1 then
-           chnset     ktim-ktim, Soutchan
-kon        =          0
-	endif
-	endop
+opcode ShowOver_a, 0, Saki
+  Soutchan, asig, ktrig, iholdtm xin
+  kon init 0
+  ktim times
+  kstart init 0
+  kend   init 0
+  iholdtm = (iholdtm < .01 ? .01 : iholdtm)  ; avoiding too short hold times
+  kmax max_k asig, ktrig, 1
+  if kon == 0 && kmax > 1 && ktrig == 1 then
+    kstart = ktim
+    kend   = kstart + iholdtm
+    chnset kmax, Soutchan
+    kon = 1
+  endif
+  if kon == 1 && ktim > kend && ktrig == 1 then
+    chnset ktim-ktim, Soutchan
+    kon = 0
+  endif
+endop
 
 
 
 /**************Declare Channels for Widgets**************/
-           chn_S      "_Browse1", 1
-           chn_k      "record", 1
-           chn_k      "stop", 1
-           chn_k      "chn1onoff", 1
-           chn_k      "chn2onoff", 1
-           chn_k      "chn3onoff", 1
-           chn_k      "chn4onoff", 1
-           chn_k      "chn5onoff", 1
-           chn_k      "chn6onoff", 1
-           chn_k      "chn7onoff", 1
-           chn_k      "chn8onoff", 1
-           chn_k      "chn1", 1
-           chn_k      "chn2", 1
-           chn_k      "chn3", 1
-           chn_k      "chn4", 1
-           chn_k      "chn5", 1
-           chn_k      "chn6", 1
-           chn_k      "chn7", 1
-           chn_k      "chn8", 1
-           chn_k      "fileformat", 1
-           chn_k      "bitdepth", 1
-           chn_k      "dbrange", 1
-           chn_k      "peakhold", 1
-           chn_k      "ampdisp", 1
-           chn_k      "gain", 1
-           chn_S      "gain_disp", 2
-           chn_S      "message", 2
-           chn_S      "message2", 2
-           chn_S      "hor", 2
-           chn_S      "min", 2
-           chn_S      "sec", 2
-           chn_S      "ms", 2
-           chn_k      "in1_pre", 2
-           chn_k      "in2_pre", 2
-           chn_k      "in3_pre", 2
-           chn_k      "in4_pre", 2
-           chn_k      "in5_pre", 2
-           chn_k      "in6_pre", 2
-           chn_k      "in7_pre", 2
-           chn_k      "in8_pre", 2
-           chn_k      "in1over_pre", 2
-           chn_k      "in2over_pre", 2
-           chn_k      "in3over_pre", 2
-           chn_k      "in4over_pre", 2
-           chn_k      "in5over_pre", 2
-           chn_k      "in6over_pre", 2
-           chn_k      "in7over_pre", 2
-           chn_k      "in8over_pre", 2
-           chn_k      "in1_post", 2
-           chn_k      "in2_post", 2
-           chn_k      "in3_post", 2
-           chn_k      "in4_post", 2
-           chn_k      "in5_post", 2
-           chn_k      "in6_post", 2
-           chn_k      "in7_post", 2
-           chn_k      "in8_post", 2
-           chn_k      "in1over_post", 2
-           chn_k      "in2over_post", 2
-           chn_k      "in3over_post", 2
-           chn_k      "in4over_post", 2
-           chn_k      "in5over_post", 2
-           chn_k      "in6over_post", 2
-           chn_k      "in7over_post", 2
-           chn_k      "in8over_post", 2
+chn_S "_Browse1", 1
+chn_k "record", 1
+chn_k "stop", 1
+chn_k "chn1onoff", 1
+chn_k "chn2onoff", 1
+chn_k "chn3onoff", 1
+chn_k "chn4onoff", 1
+chn_k "chn5onoff", 1
+chn_k "chn6onoff", 1
+chn_k "chn7onoff", 1
+chn_k "chn8onoff", 1
+chn_k "chn1", 1
+chn_k "chn2", 1
+chn_k "chn3", 1
+chn_k "chn4", 1
+chn_k "chn5", 1
+chn_k "chn6", 1
+chn_k "chn7", 1
+chn_k "chn8", 1
+chn_k "fileformat", 1
+chn_k "bitdepth", 1
+chn_k "dbrange", 1
+chn_k "peakhold", 1
+chn_k "ampdisp", 1
+chn_k "gain", 1
+chn_S "gain_disp", 2
+chn_S "message", 2
+chn_S "message2", 2
+chn_S "hor", 2
+chn_S "min", 2
+chn_S "sec", 2
+chn_S "ms", 2
+chn_k "in1_pre", 2
+chn_k "in2_pre", 2
+chn_k "in3_pre", 2
+chn_k "in4_pre", 2
+chn_k "in5_pre", 2
+chn_k "in6_pre", 2
+chn_k "in7_pre", 2
+chn_k "in8_pre", 2
+chn_k "in1over_pre", 2
+chn_k "in2over_pre", 2
+chn_k "in3over_pre", 2
+chn_k "in4over_pre", 2
+chn_k "in5over_pre", 2
+chn_k "in6over_pre", 2
+chn_k "in7over_pre", 2
+chn_k "in8over_pre", 2
+chn_k "in1_post", 2
+chn_k "in2_post", 2
+chn_k "in3_post", 2
+chn_k "in4_post", 2
+chn_k "in5_post", 2
+chn_k "in6_post", 2
+chn_k "in7_post", 2
+chn_k "in8_post", 2
+chn_k "in1over_post", 2
+chn_k "in2over_post", 2
+chn_k "in3over_post", 2
+chn_k "in4over_post", 2
+chn_k "in5over_post", 2
+chn_k "in6over_post", 2
+chn_k "in7over_post", 2
+chn_k "in8over_post", 2
 
 
-instr 1; always on
+instr 1  ; always on
 
-gSfile     chnget     "_Browse1"; output file name
-krecord    chnget     "record"
-kstop      chnget     "stop"
-kchn1onoff chnget     "chn1onoff"; 1=record this channel, 0=not
-kchn2onoff chnget     "chn2onoff"
-kchn3onoff chnget     "chn3onoff"
-kchn4onoff chnget     "chn4onoff"
-kchn5onoff chnget     "chn5onoff"
-kchn6onoff chnget     "chn6onoff"
-kchn7onoff chnget     "chn7onoff"
-kchn8onoff chnget     "chn8onoff"
-kchn1      chnget     "chn1"; which physical channel goes here
-kchn2      chnget     "chn2"
-kchn3      chnget     "chn3"
-kchn4      chnget     "chn4"
-kchn5      chnget     "chn5"
-kchn6      chnget     "chn6"
-kchn7      chnget     "chn7"
-kchn8      chnget     "chn8"
-kfilfrmt   chnget     "fileformat"; 0=wav, 1=aiff
-kfilfrmt   =          kfilfrmt + 1
-kbitdepth  chnget     "bitdepth"; 0=16bit, 1=24bit, 2=32bit
-kdbrange   chnget     "dbrange"
-kpeakhold  chnget     "peakhold"
-kampdisp   chnget     "ampdisp"; 0=dB, 1=raw
-kampdisp   =          (kampdisp == 1 ? 0 : 1); 1=dB, 0=raw
-gkgain     chnget     "gain"
-Sgain_disp sprintfk   "%+.2f dB", gkgain
-           chnset     Sgain_disp, "gain_disp"
+  gSfile     chnget "_Browse1"  ; output file name
+  krecord    chnget "record"
+  kstop      chnget "stop"
+  kchn1onoff chnget "chn1onoff"  ; 1=record this channel, 0=not
+  kchn2onoff chnget "chn2onoff"
+  kchn3onoff chnget "chn3onoff"
+  kchn4onoff chnget "chn4onoff"
+  kchn5onoff chnget "chn5onoff"
+  kchn6onoff chnget "chn6onoff"
+  kchn7onoff chnget "chn7onoff"
+  kchn8onoff chnget "chn8onoff"
+  kchn1      chnget "chn1"  ; which physical channel goes here
+  kchn2      chnget "chn2"
+  kchn3      chnget "chn3"
+  kchn4      chnget "chn4"
+  kchn5      chnget "chn5"
+  kchn6      chnget "chn6"
+  kchn7      chnget "chn7"
+  kchn8      chnget "chn8"
+  kfilfrmt   chnget "fileformat"  ; 0=wav, 1=aiff
+  kfilfrmt = kfilfrmt + 1
+  kbitdepth chnget "bitdepth"  ; 0=16bit, 1=24bit, 2=32bit
+  kdbrange  chnget "dbrange"
+  kpeakhold chnget "peakhold"
+  kampdisp  chnget "ampdisp"          ; 0=dB, 1=raw
+  kampdisp = (kampdisp == 1 ? 0 : 1)  ; 1=dB, 0=raw
+  gkgain chnget "gain"
+  Sgain_disp sprintfk "%+.2f dB", gkgain
+  chnset Sgain_disp, "gain_disp"
 
-;saying hello
-ktimek     timek
-if ktimek == 1 then
-           chnset     "Waiting ...", "message"
-           chnset     "00", "hor"
-           chnset     "00", "min"
-           chnset     "00", "sec"
-           chnset     "000", "ms"
-endif
+  ; saying hello
+  ktimek timek
+  if ktimek == 1 then
+    chnset "Waiting ...", "message"
+    chnset "00", "hor"
+    chnset "00", "min"
+    chnset "00", "sec"
+    chnset "000", "ms"
+  endif
 
-;format number for fout (e.g. aiff 24 bit gives the number 28)
-kformat    =          (kbitdepth == 0 ? kfilfrmt*10+2 : (kbitdepth == 1 ? kfilfrmt*10+8 : kfilfrmt*10+6))
+  ; format number for fout (e.g. aiff 24 bit gives the number 28)
+  kformat = (kbitdepth == 0 ? kfilfrmt*10+2 : (kbitdepth == 1 ? kfilfrmt*10+8 : kfilfrmt*10+6))
 
-;number of the instr which records
-krecinstr  init       0
+  ; number of the instr which records
+  krecinstr init 0
 
-;how many channels are checked
-kchnsum    =          kchn1onoff + kchn2onoff + kchn3onoff + kchn4onoff + kchn5onoff + kchn6onoff + kchn7onoff + kchn8onoff
+  ; how many channels are checked
+  kchnsum = kchn1onoff + kchn2onoff + kchn3onoff + kchn4onoff + kchn5onoff + kchn6onoff + kchn7onoff + kchn8onoff
 
-;calling the record instrument and stopping
-krecstat   init       0
-krechanged changed    krecord
-   if krecord == 1 && krecstat == 0 then
-krecstat   =          1
-           chnset     "Recording...", "message"
-kinstr     =          100 + kchnsum
-krecinstr  =          kinstr
-           event      "i", kinstr, 0, p3, kformat, kchn1onoff, kchn2onoff, kchn3onoff, kchn4onoff, kchn5onoff, kchn6onoff, kchn7onoff, kchn8onoff, kchn1, kchn2, kchn3, kchn4, kchn5, kchn6, kchn7, kchn8
-   elseif krecord == 1 && krecstat == 1 && krechanged == 1 then
-           chnset     "Can't start new record. Stop previous record first.", "message"
-   endif
-   if kstop == 1 then
-krecstat   =          0
-           turnoff2   krecinstr, 0, 0
-           chnset     "Record stopped.", "message"
-           chnset     "", "message2"
-   endif
+  ; calling the record instrument and stopping
+  krecstat init 0
+  krechanged changed krecord
+  if krecord == 1 && krecstat == 0 then
+    krecstat = 1
+    chnset "Recording...", "message"
+    kinstr    = 100 + kchnsum
+    krecinstr = kinstr
+    event "i", kinstr, 0, p3, kformat, kchn1onoff, kchn2onoff, kchn3onoff, kchn4onoff, kchn5onoff, kchn6onoff, kchn7onoff, kchn8onoff, kchn1, kchn2, kchn3, kchn4, kchn5, kchn6, kchn7, kchn8
+  elseif krecord == 1 && krecstat == 1 && krechanged == 1 then
+    chnset "Can't start new record. Stop previous record first.", "message"
+  endif
+  if kstop == 1 then
+    krecstat = 0
+    turnoff2 krecinstr, 0, 0
+    chnset "Record stopped.", "message"
+    chnset "", "message2"
+  endif
 
-;display
- if kchn1 <= nchnls then ;this check is necessary (csound crashes if inch > nchnls)
-ain1pre    inch       kchn1
-           else
-ain1pre    =          0
- endif
- if kchn2 <= nchnls then
-ain2pre    inch       kchn2
-           else
-ain2pre    =          0
- endif
- if kchn3 <= nchnls then
-ain3pre    inch       kchn3
-           else
-ain3pre    =          0
- endif
- if kchn4 <= nchnls then
-ain4pre    inch       kchn4
-           else
-ain4pre    =          0
- endif
- if kchn5 <= nchnls then
-ain5pre    inch       kchn5
-           else
-ain5pre    =          0
- endif
- if kchn6 <= nchnls then
-ain6pre    inch       kchn6
-           else
-ain6pre    =          0
- endif
- if kchn7 <= nchnls then
-ain7pre    inch       kchn7
-           else
-ain7pre    =          0
- endif
- if kchn8 <= nchnls then
-ain8pre    inch       kchn8
-           else
-ain8pre    =          0
- endif
+  ; display
+  if kchn1 <= nchnls then  ; this check is necessary (csound crashes if inch > nchnls)
+    ain1pre inch kchn1
+  else
+    ain1pre = 0
+  endif
+  if kchn2 <= nchnls then
+    ain2pre inch kchn2
+  else
+    ain2pre = 0
+  endif
+  if kchn3 <= nchnls then
+    ain3pre inch kchn3
+  else
+    ain3pre = 0
+  endif
+  if kchn4 <= nchnls then
+    ain4pre inch kchn4
+  else
+    ain4pre = 0
+  endif
+  if kchn5 <= nchnls then
+    ain5pre inch kchn5
+  else
+    ain5pre = 0
+  endif
+  if kchn6 <= nchnls then
+    ain6pre inch kchn6
+  else
+    ain6pre = 0
+  endif
+  if kchn7 <= nchnls then
+    ain7pre inch kchn7
+  else
+    ain7pre = 0
+  endif
+  if kchn8 <= nchnls then
+    ain8pre inch kchn8
+  else
+    ain8pre = 0
+  endif
 
 
-kTrigDisp  metro      10; refresh rate of display
+  kTrigDisp metro 10  ; refresh rate of display
 
-           ShowLED_a  "in1_pre", ain1pre, kTrigDisp, gi_db_range
-           ShowLED_a  "in2_pre", ain2pre, kTrigDisp, gi_db_range
-           ShowLED_a  "in3_pre", ain3pre, kTrigDisp, gi_db_range
-           ShowLED_a  "in4_pre", ain4pre, kTrigDisp, gi_db_range
-           ShowLED_a  "in5_pre", ain5pre, kTrigDisp, gi_db_range
-           ShowLED_a  "in6_pre", ain6pre, kTrigDisp, gi_db_range
-           ShowLED_a  "in7_pre", ain7pre, kTrigDisp, gi_db_range
-           ShowLED_a  "in8_pre", ain8pre, kTrigDisp, gi_db_range
-           ShowOver_a "in1over_pre", ain1pre, kTrigDisp, gi_hold
-           ShowOver_a "in2over_pre", ain2pre, kTrigDisp, gi_hold
-           ShowOver_a "in3over_pre", ain3pre, kTrigDisp, gi_hold
-           ShowOver_a "in4over_pre", ain4pre, kTrigDisp, gi_hold
-           ShowOver_a "in5over_pre", ain5pre, kTrigDisp, gi_hold
-           ShowOver_a "in6over_pre", ain6pre, kTrigDisp, gi_hold
-           ShowOver_a "in7over_pre", ain7pre, kTrigDisp, gi_hold
-           ShowOver_a "in8over_pre", ain8pre, kTrigDisp, gi_hold
-ain1post   =          ain1pre * ampdbfs(gkgain)
-ain2post   =          ain2pre * ampdbfs(gkgain)
-ain3post   =          ain3pre * ampdbfs(gkgain)
-ain4post   =          ain4pre * ampdbfs(gkgain)
-ain5post   =          ain5pre * ampdbfs(gkgain)
-ain6post   =          ain6pre * ampdbfs(gkgain)
-ain7post   =          ain7pre * ampdbfs(gkgain)
-ain8post   =          ain8pre * ampdbfs(gkgain)
-           ShowLED_a  "in1_post", ain1post, kTrigDisp, gi_db_range
-           ShowLED_a  "in2_post", ain2post, kTrigDisp, gi_db_range
-           ShowLED_a  "in3_post", ain3post, kTrigDisp, gi_db_range
-           ShowLED_a  "in4_post", ain4post, kTrigDisp, gi_db_range
-           ShowLED_a  "in5_post", ain5post, kTrigDisp, gi_db_range
-           ShowLED_a  "in6_post", ain6post, kTrigDisp, gi_db_range
-           ShowLED_a  "in7_post", ain7post, kTrigDisp, gi_db_range
-           ShowLED_a  "in8_post", ain8post, kTrigDisp, gi_db_range
-           ShowOver_a "in1over_post", ain1post, kTrigDisp, gi_hold
-           ShowOver_a "in2over_post", ain2post, kTrigDisp, gi_hold
-           ShowOver_a "in3over_post", ain3post, kTrigDisp, gi_hold
-           ShowOver_a "in4over_post", ain4post, kTrigDisp, gi_hold
-           ShowOver_a "in5over_post", ain5post, kTrigDisp, gi_hold
-           ShowOver_a "in6over_post", ain6post, kTrigDisp, gi_hold
-           ShowOver_a "in7over_post", ain7post, kTrigDisp, gi_hold
-           ShowOver_a "in8over_post", ain8post, kTrigDisp, gi_hold
+  ShowLED_a  "in1_pre", ain1pre, kTrigDisp, gi_db_range
+  ShowLED_a  "in2_pre", ain2pre, kTrigDisp, gi_db_range
+  ShowLED_a  "in3_pre", ain3pre, kTrigDisp, gi_db_range
+  ShowLED_a  "in4_pre", ain4pre, kTrigDisp, gi_db_range
+  ShowLED_a  "in5_pre", ain5pre, kTrigDisp, gi_db_range
+  ShowLED_a  "in6_pre", ain6pre, kTrigDisp, gi_db_range
+  ShowLED_a  "in7_pre", ain7pre, kTrigDisp, gi_db_range
+  ShowLED_a  "in8_pre", ain8pre, kTrigDisp, gi_db_range
+  ShowOver_a "in1over_pre", ain1pre, kTrigDisp, gi_hold
+  ShowOver_a "in2over_pre", ain2pre, kTrigDisp, gi_hold
+  ShowOver_a "in3over_pre", ain3pre, kTrigDisp, gi_hold
+  ShowOver_a "in4over_pre", ain4pre, kTrigDisp, gi_hold
+  ShowOver_a "in5over_pre", ain5pre, kTrigDisp, gi_hold
+  ShowOver_a "in6over_pre", ain6pre, kTrigDisp, gi_hold
+  ShowOver_a "in7over_pre", ain7pre, kTrigDisp, gi_hold
+  ShowOver_a "in8over_pre", ain8pre, kTrigDisp, gi_hold
+  ain1post = ain1pre * ampdbfs(gkgain)
+  ain2post = ain2pre * ampdbfs(gkgain)
+  ain3post = ain3pre * ampdbfs(gkgain)
+  ain4post = ain4pre * ampdbfs(gkgain)
+  ain5post = ain5pre * ampdbfs(gkgain)
+  ain6post = ain6pre * ampdbfs(gkgain)
+  ain7post = ain7pre * ampdbfs(gkgain)
+  ain8post = ain8pre * ampdbfs(gkgain)
+  ShowLED_a  "in1_post", ain1post, kTrigDisp, gi_db_range
+  ShowLED_a  "in2_post", ain2post, kTrigDisp, gi_db_range
+  ShowLED_a  "in3_post", ain3post, kTrigDisp, gi_db_range
+  ShowLED_a  "in4_post", ain4post, kTrigDisp, gi_db_range
+  ShowLED_a  "in5_post", ain5post, kTrigDisp, gi_db_range
+  ShowLED_a  "in6_post", ain6post, kTrigDisp, gi_db_range
+  ShowLED_a  "in7_post", ain7post, kTrigDisp, gi_db_range
+  ShowLED_a  "in8_post", ain8post, kTrigDisp, gi_db_range
+  ShowOver_a "in1over_post", ain1post, kTrigDisp, gi_hold
+  ShowOver_a "in2over_post", ain2post, kTrigDisp, gi_hold
+  ShowOver_a "in3over_post", ain3post, kTrigDisp, gi_hold
+  ShowOver_a "in4over_post", ain4post, kTrigDisp, gi_hold
+  ShowOver_a "in5over_post", ain5post, kTrigDisp, gi_hold
+  ShowOver_a "in6over_post", ain6post, kTrigDisp, gi_hold
+  ShowOver_a "in7over_post", ain7post, kTrigDisp, gi_hold
+  ShowOver_a "in8over_post", ain8post, kTrigDisp, gi_hold
 
 endin
 
 
-instr 101; records mono
-iformat    =          p4
-   ;which channel is checked and what is its input channel number
-ichnls     =          1
-itab       ftgentmp   0, 0, -ichnls, -2, 0; ftable for writing the result
-iwrtpnt    init       0
-ipfld      init       5; first check p5
+instr 101  ; records mono
+  iformat = p4
+  ; which channel is checked and what is its input channel number
+  ichnls = 1
+  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
+  iwrtpnt init 0
+  ipfld   init 5  ; first check p5
 check:
-if p(ipfld) == 1 then
-ipfldval   =          ipfld + 8
-           tabw_i     p(ipfldval), iwrtpnt, itab
-iwrtpnt    =          iwrtpnt + 1
-endif
-ipfld      =          ipfld + 1
-if iwrtpnt < ichnls igoto check
+  if p(ipfld) == 1 then
+    ipfldval = ipfld + 8
+    tabw_i p(ipfldval), iwrtpnt, itab
+    iwrtpnt = iwrtpnt + 1
+  endif
+  ipfld = ipfld + 1
+  if iwrtpnt < ichnls igoto check
 
-   ;read the values from itab and write the soundfile
-inchn1     tab_i      0, itab
-Smessage   sprintf    "Writing input channel %d to file %s", inchn1, gSfile
-           chnset     Smessage, "message2"
-a1         inch       inchn1
-           fout       gSfile, iformat, a1*ampdbfs(gkgain)
+  ; read the values from itab and write the soundfile
+  inchn1 tab_i 0, itab
+  Smessage sprintf "Writing input channel %d to file %s", inchn1, gSfile
+  chnset Smessage, "message2"
+  a1 inch inchn1
+  fout gSfile, iformat, a1*ampdbfs(gkgain)
 
-   ;showing the clock
-ktimout    timeinsts
-ktimouthor =          int(ktimout / 3600)
-Shor       sprintfk   "%02d", ktimouthor
-ktimoutmin =          int(ktimout / 60)
-Smin       sprintfk   "%02d", ktimoutmin
-ktimoutsec =          ktimout % 60
-Ssec       sprintfk   "%02d", ktimoutsec
-ktimoutms  =          frac(ktimout) * 1000
-Sms        sprintfk   "%03d", ktimoutms
-           chnset     Shor, "hor"
-           chnset     Smin, "min"
-           chnset     Ssec, "sec"
-           chnset     Sms, "ms"
+  ; showing the clock
+  ktimout timeinsts
+  ktimouthor = int(ktimout / 3600)
+  Shor sprintfk "%02d", ktimouthor
+  ktimoutmin = int(ktimout / 60)
+  Smin sprintfk "%02d", ktimoutmin
+  ktimoutsec = ktimout % 60
+  Ssec sprintfk "%02d", ktimoutsec
+  ktimoutms = frac(ktimout) * 1000
+  Sms sprintfk "%03d", ktimoutms
+  chnset Shor, "hor"
+  chnset Smin, "min"
+  chnset Ssec, "sec"
+  chnset Sms, "ms"
 endin
 
-instr 102; records stereo
-iformat    =          p4
-   ;which channels are checked and what are their input channel numbers
-ichnls     =          2
-itab       ftgentmp   0, 0, -ichnls, -2, 0; ftable for writing the result
-iwrtpnt    init       0
-ipfld      init       5; first check p5
+instr 102  ; records stereo
+  iformat = p4
+  ; which channels are checked and what are their input channel numbers
+  ichnls = 2
+  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
+  iwrtpnt init 0
+  ipfld   init 5  ; first check p5
 check:
-if p(ipfld) == 1 then
-ipfldval   =          ipfld + 8
-           tabw_i     p(ipfldval), iwrtpnt, itab
-iwrtpnt    =          iwrtpnt + 1
-endif
-ipfld      =          ipfld + 1
-if iwrtpnt < ichnls igoto check
+  if p(ipfld) == 1 then
+    ipfldval = ipfld + 8
+    tabw_i p(ipfldval), iwrtpnt, itab
+    iwrtpnt = iwrtpnt + 1
+  endif
+  ipfld = ipfld + 1
+  if iwrtpnt < ichnls igoto check
 
-   ;read the values from itab and write the soundfile
-inchn1     tab_i      0, itab
-inchn2     tab_i      1, itab
-Smessage   sprintf    "Writing input channels %d and %d to file %s", inchn1, inchn2, gSfile
-           chnset     Smessage, "message2"
-a1         inch       inchn1
-a2         inch       inchn2
-           fout       gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain)
+  ; read the values from itab and write the soundfile
+  inchn1 tab_i 0, itab
+  inchn2 tab_i 1, itab
+  Smessage sprintf "Writing input channels %d and %d to file %s", inchn1, inchn2, gSfile
+  chnset Smessage, "message2"
+  a1 inch inchn1
+  a2 inch inchn2
+  fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain)
 
-   ;showing the clock
-ktimout    timeinsts
-ktimouthor =          int(ktimout / 3600)
-Shor       sprintfk   "%02d", ktimouthor
-ktimoutmin =          int(ktimout / 60)
-Smin       sprintfk   "%02d", ktimoutmin
-ktimoutsec =          ktimout % 60
-Ssec       sprintfk   "%02d", ktimoutsec
-ktimoutms  =          frac(ktimout) * 1000
-Sms        sprintfk   "%03d", ktimoutms
-           chnset     Shor, "hor"
-           chnset     Smin, "min"
-           chnset     Ssec, "sec"
-           chnset     Sms, "ms"
+  ; showing the clock
+  ktimout timeinsts
+  ktimouthor = int(ktimout / 3600)
+  Shor sprintfk "%02d", ktimouthor
+  ktimoutmin = int(ktimout / 60)
+  Smin sprintfk "%02d", ktimoutmin
+  ktimoutsec = ktimout % 60
+  Ssec sprintfk "%02d", ktimoutsec
+  ktimoutms = frac(ktimout) * 1000
+  Sms sprintfk "%03d", ktimoutms
+  chnset Shor, "hor"
+  chnset Smin, "min"
+  chnset Ssec, "sec"
+  chnset Sms, "ms"
 endin
 
-instr 103; records 3 channels
-iformat    =          p4
-   ;which channels are checked and what are their input channel numbers
-ichnls     =          3
-itab       ftgentmp   0, 0, -ichnls, -2, 0; ftable for writing the result
-iwrtpnt    init       0
-ipfld      init       5; first check p5
+instr 103  ; records 3 channels
+  iformat = p4
+  ; which channels are checked and what are their input channel numbers
+  ichnls = 3
+  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
+  iwrtpnt init 0
+  ipfld   init 5  ; first check p5
 check:
-if p(ipfld) == 1 then
-ipfldval   =          ipfld + 8
-           tabw_i     p(ipfldval), iwrtpnt, itab
-iwrtpnt    =          iwrtpnt + 1
-endif
-ipfld      =          ipfld + 1
-if iwrtpnt < ichnls igoto check
+  if p(ipfld) == 1 then
+    ipfldval = ipfld + 8
+    tabw_i p(ipfldval), iwrtpnt, itab
+    iwrtpnt = iwrtpnt + 1
+  endif
+  ipfld = ipfld + 1
+  if iwrtpnt < ichnls igoto check
 
-   ;read the values from itab and write the soundfile
-inchn1     tab_i      0, itab
-inchn2     tab_i      1, itab
-inchn3     tab_i      2, itab
-Smessage   sprintf    "Writing input channels %d, %d and %d to file %s", inchn1, inchn2, inchn3, gSfile
-           chnset     Smessage, "message2"
-a1         inch       inchn1
-a2         inch       inchn2
-a3         inch       inchn3
-           fout       gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain)
+  ; read the values from itab and write the soundfile
+  inchn1 tab_i 0, itab
+  inchn2 tab_i 1, itab
+  inchn3 tab_i 2, itab
+  Smessage sprintf "Writing input channels %d, %d and %d to file %s", inchn1, inchn2, inchn3, gSfile
+  chnset Smessage, "message2"
+  a1 inch inchn1
+  a2 inch inchn2
+  a3 inch inchn3
+  fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain)
 
-   ;showing the clock
-ktimout    timeinsts
-ktimouthor =          int(ktimout / 3600)
-Shor       sprintfk   "%02d", ktimouthor
-ktimoutmin =          int(ktimout / 60)
-Smin       sprintfk   "%02d", ktimoutmin
-ktimoutsec =          ktimout % 60
-Ssec       sprintfk   "%02d", ktimoutsec
-ktimoutms  =          frac(ktimout) * 1000
-Sms        sprintfk   "%03d", ktimoutms
-           chnset     Shor, "hor"
-           chnset     Smin, "min"
-           chnset     Ssec, "sec"
-           chnset     Sms, "ms"
+  ; showing the clock
+  ktimout timeinsts
+  ktimouthor = int(ktimout / 3600)
+  Shor sprintfk "%02d", ktimouthor
+  ktimoutmin = int(ktimout / 60)
+  Smin sprintfk "%02d", ktimoutmin
+  ktimoutsec = ktimout % 60
+  Ssec sprintfk "%02d", ktimoutsec
+  ktimoutms = frac(ktimout) * 1000
+  Sms sprintfk "%03d", ktimoutms
+  chnset Shor, "hor"
+  chnset Smin, "min"
+  chnset Ssec, "sec"
+  chnset Sms, "ms"
 endin
 
-instr 104; records 4 channels
-iformat    =          p4
-   ;which channels are checked and what are their input channel numbers
-ichnls     =          4
-itab       ftgentmp   0, 0, -ichnls, -2, 0; ftable for writing the result
-iwrtpnt    init       0
-ipfld      init       5; first check p5
+instr 104  ; records 4 channels
+  iformat = p4
+  ; which channels are checked and what are their input channel numbers
+  ichnls = 4
+  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
+  iwrtpnt init 0
+  ipfld   init 5  ; first check p5
 check:
-if p(ipfld) == 1 then
-ipfldval   =          ipfld + 8
-           tabw_i     p(ipfldval), iwrtpnt, itab
-iwrtpnt    =          iwrtpnt + 1
-endif
-ipfld      =          ipfld + 1
-if iwrtpnt < ichnls igoto check
+  if p(ipfld) == 1 then
+    ipfldval = ipfld + 8
+    tabw_i p(ipfldval), iwrtpnt, itab
+    iwrtpnt = iwrtpnt + 1
+  endif
+  ipfld = ipfld + 1
+  if iwrtpnt < ichnls igoto check
 
-   ;read the values from itab and write the soundfile
-inchn1     tab_i      0, itab
-inchn2     tab_i      1, itab
-inchn3     tab_i      2, itab
-inchn4     tab_i      3, itab
-Smessage   sprintf    "Writing input channels %d, %d, %d and %d to file %s", inchn1, inchn2, inchn3,inchn4, gSfile
-           chnset     Smessage, "message2"
-a1         inch       inchn1
-a2         inch       inchn2
-a3         inch       inchn3
-a4         inch       inchn4
-           fout       gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain)
+  ; read the values from itab and write the soundfile
+  inchn1 tab_i 0, itab
+  inchn2 tab_i 1, itab
+  inchn3 tab_i 2, itab
+  inchn4 tab_i 3, itab
+  Smessage sprintf "Writing input channels %d, %d, %d and %d to file %s", inchn1, inchn2, inchn3, inchn4, gSfile
+  chnset Smessage, "message2"
+  a1 inch inchn1
+  a2 inch inchn2
+  a3 inch inchn3
+  a4 inch inchn4
+  fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain)
 
-   ;showing the clock
-ktimout    timeinsts
-ktimouthor =          int(ktimout / 3600)
-Shor       sprintfk   "%02d", ktimouthor
-ktimoutmin =          int(ktimout / 60)
-Smin       sprintfk   "%02d", ktimoutmin
-ktimoutsec =          ktimout % 60
-Ssec       sprintfk   "%02d", ktimoutsec
-ktimoutms  =          frac(ktimout) * 1000
-Sms        sprintfk   "%03d", ktimoutms
-           chnset     Shor, "hor"
-           chnset     Smin, "min"
-           chnset     Ssec, "sec"
-           chnset     Sms, "ms"
+  ; showing the clock
+  ktimout timeinsts
+  ktimouthor = int(ktimout / 3600)
+  Shor sprintfk "%02d", ktimouthor
+  ktimoutmin = int(ktimout / 60)
+  Smin sprintfk "%02d", ktimoutmin
+  ktimoutsec = ktimout % 60
+  Ssec sprintfk "%02d", ktimoutsec
+  ktimoutms = frac(ktimout) * 1000
+  Sms sprintfk "%03d", ktimoutms
+  chnset Shor, "hor"
+  chnset Smin, "min"
+  chnset Ssec, "sec"
+  chnset Sms, "ms"
 endin
 
-instr 105; records 5 channels
-iformat    =          p4
-   ;which channels are checked and what are their input channel numbers
-ichnls     =          5
-itab       ftgentmp   0, 0, -ichnls, -2, 0; ftable for writing the result
-iwrtpnt    init       0
-ipfld      init       5; first check p5
+instr 105  ; records 5 channels
+  iformat = p4
+  ; which channels are checked and what are their input channel numbers
+  ichnls = 5
+  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
+  iwrtpnt init 0
+  ipfld   init 5  ; first check p5
 check:
-if p(ipfld) == 1 then
-ipfldval   =          ipfld + 8
-           tabw_i     p(ipfldval), iwrtpnt, itab
-iwrtpnt    =          iwrtpnt + 1
-endif
-ipfld      =          ipfld + 1
-if iwrtpnt < ichnls igoto check
+  if p(ipfld) == 1 then
+    ipfldval = ipfld + 8
+    tabw_i p(ipfldval), iwrtpnt, itab
+    iwrtpnt = iwrtpnt + 1
+  endif
+  ipfld = ipfld + 1
+  if iwrtpnt < ichnls igoto check
 
-   ;read the values from itab and write the soundfile
-inchn1     tab_i      0, itab
-inchn2     tab_i      1, itab
-inchn3     tab_i      2, itab
-inchn4     tab_i      3, itab
-inchn5     tab_i      4, itab
-Smessage   sprintf    "Writing input channels %d, %d, %d, %d and %d to file %s",\
-inchn1, inchn2, inchn3,inchn4, inchn5, gSfile
-           chnset     Smessage, "message2"
-a1         inch       inchn1
-a2         inch       inchn2
-a3         inch       inchn3
-a4         inch       inchn4
-a5         inch       inchn5
-           fout       gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain)
+  ; read the values from itab and write the soundfile
+  inchn1 tab_i 0, itab
+  inchn2 tab_i 1, itab
+  inchn3 tab_i 2, itab
+  inchn4 tab_i 3, itab
+  inchn5 tab_i 4, itab
+  Smessage sprintf "Writing input channels %d, %d, %d, %d and %d to file %s", \
+    inchn1, inchn2, inchn3, inchn4, inchn5, gSfile
+  chnset Smessage, "message2"
+  a1 inch inchn1
+  a2 inch inchn2
+  a3 inch inchn3
+  a4 inch inchn4
+  a5 inch inchn5
+  fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain)
 
-   ;showing the clock
-ktimout    timeinsts
-ktimouthor =          int(ktimout / 3600)
-Shor       sprintfk   "%02d", ktimouthor
-ktimoutmin =          int(ktimout / 60)
-Smin       sprintfk   "%02d", ktimoutmin
-ktimoutsec =          ktimout % 60
-Ssec       sprintfk   "%02d", ktimoutsec
-ktimoutms  =          frac(ktimout) * 1000
-Sms        sprintfk   "%03d", ktimoutms
-           chnset     Shor, "hor"
-           chnset     Smin, "min"
-           chnset     Ssec, "sec"
-           chnset     Sms, "ms"
+  ; showing the clock
+  ktimout timeinsts
+  ktimouthor = int(ktimout / 3600)
+  Shor sprintfk "%02d", ktimouthor
+  ktimoutmin = int(ktimout / 60)
+  Smin sprintfk "%02d", ktimoutmin
+  ktimoutsec = ktimout % 60
+  Ssec sprintfk "%02d", ktimoutsec
+  ktimoutms = frac(ktimout) * 1000
+  Sms sprintfk "%03d", ktimoutms
+  chnset Shor, "hor"
+  chnset Smin, "min"
+  chnset Ssec, "sec"
+  chnset Sms, "ms"
 endin
 
-instr 106; records 6 channels
-iformat    =          p4
-   ;which channels are checked and what are their input channel numbers
-ichnls     =          6
-itab       ftgentmp   0, 0, -ichnls, -2, 0; ftable for writing the result
-iwrtpnt    init       0
-ipfld      init       5; first check p5
+instr 106  ; records 6 channels
+  iformat = p4
+  ; which channels are checked and what are their input channel numbers
+  ichnls = 6
+  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
+  iwrtpnt init 0
+  ipfld   init 5  ; first check p5
 check:
-if p(ipfld) == 1 then
-ipfldval   =          ipfld + 8
-           tabw_i     p(ipfldval), iwrtpnt, itab
-iwrtpnt    =          iwrtpnt + 1
-endif
-ipfld      =          ipfld + 1
-if iwrtpnt < ichnls igoto check
+  if p(ipfld) == 1 then
+    ipfldval = ipfld + 8
+    tabw_i p(ipfldval), iwrtpnt, itab
+    iwrtpnt = iwrtpnt + 1
+  endif
+  ipfld = ipfld + 1
+  if iwrtpnt < ichnls igoto check
 
-   ;read the values from itab and write the soundfile
-inchn1     tab_i      0, itab
-inchn2     tab_i      1, itab
-inchn3     tab_i      2, itab
-inchn4     tab_i      3, itab
-inchn5     tab_i      4, itab
-inchn6     tab_i      5, itab
-Smessage   sprintf    "Writing input channels %d, %d, %d, %d, %d and %d to file %s",\
-inchn1, inchn2, inchn3,inchn4, inchn5, inchn6, gSfile
-           chnset     Smessage, "message2"
-a1         inch       inchn1
-a2         inch       inchn2
-a3         inch       inchn3
-a4         inch       inchn4
-a5         inch       inchn5
-a6         inch       inchn6
-           fout       gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain)
+  ; read the values from itab and write the soundfile
+  inchn1 tab_i 0, itab
+  inchn2 tab_i 1, itab
+  inchn3 tab_i 2, itab
+  inchn4 tab_i 3, itab
+  inchn5 tab_i 4, itab
+  inchn6 tab_i 5, itab
+  Smessage sprintf "Writing input channels %d, %d, %d, %d, %d and %d to file %s", \
+    inchn1, inchn2, inchn3, inchn4, inchn5, inchn6, gSfile
+  chnset Smessage, "message2"
+  a1 inch inchn1
+  a2 inch inchn2
+  a3 inch inchn3
+  a4 inch inchn4
+  a5 inch inchn5
+  a6 inch inchn6
+  fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain)
 
-   ;showing the clock
-ktimout    timeinsts
-ktimouthor =          int(ktimout / 3600)
-Shor       sprintfk   "%02d", ktimouthor
-ktimoutmin =          int(ktimout / 60)
-Smin       sprintfk   "%02d", ktimoutmin
-ktimoutsec =          ktimout % 60
-Ssec       sprintfk   "%02d", ktimoutsec
-ktimoutms  =          frac(ktimout) * 1000
-Sms        sprintfk   "%03d", ktimoutms
-           chnset     Shor, "hor"
-           chnset     Smin, "min"
-           chnset     Ssec, "sec"
-           chnset     Sms, "ms"
+  ; showing the clock
+  ktimout timeinsts
+  ktimouthor = int(ktimout / 3600)
+  Shor sprintfk "%02d", ktimouthor
+  ktimoutmin = int(ktimout / 60)
+  Smin sprintfk "%02d", ktimoutmin
+  ktimoutsec = ktimout % 60
+  Ssec sprintfk "%02d", ktimoutsec
+  ktimoutms = frac(ktimout) * 1000
+  Sms sprintfk "%03d", ktimoutms
+  chnset Shor, "hor"
+  chnset Smin, "min"
+  chnset Ssec, "sec"
+  chnset Sms, "ms"
 endin
 
-instr 107; records 7 channels
-iformat    =          p4
-   ;which channels are checked and what are their input channel numbers
-ichnls     =          7
-itab       ftgentmp   0, 0, -ichnls, -2, 0; ftable for writing the result
-iwrtpnt    init       0
-ipfld      init       5; first check p5
+instr 107  ; records 7 channels
+  iformat = p4
+  ; which channels are checked and what are their input channel numbers
+  ichnls = 7
+  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
+  iwrtpnt init 0
+  ipfld   init 5  ; first check p5
 check:
-if p(ipfld) == 1 then
-ipfldval   =          ipfld + 8
-           tabw_i     p(ipfldval), iwrtpnt, itab
-iwrtpnt    =          iwrtpnt + 1
-endif
-ipfld      =          ipfld + 1
-if iwrtpnt < ichnls igoto check
+  if p(ipfld) == 1 then
+    ipfldval = ipfld + 8
+    tabw_i p(ipfldval), iwrtpnt, itab
+    iwrtpnt = iwrtpnt + 1
+  endif
+  ipfld = ipfld + 1
+  if iwrtpnt < ichnls igoto check
 
-   ;read the values from itab and write the soundfile
-inchn1     tab_i      0, itab
-inchn2     tab_i      1, itab
-inchn3     tab_i      2, itab
-inchn4     tab_i      3, itab
-inchn5     tab_i      4, itab
-inchn6     tab_i      5, itab
-inchn7     tab_i      6, itab
-Smessage   sprintf    "Writing input channels %d, %d, %d, %d, %d, %d and %d to file %s",\
-inchn1, inchn2, inchn3,inchn4, inchn5, inchn6, inchn7, gSfile
-           chnset     Smessage, "message2"
-a1         inch       inchn1
-a2         inch       inchn2
-a3         inch       inchn3
-a4         inch       inchn4
-a5         inch       inchn5
-a6         inch       inchn6
-a7         inch       inchn7
-           fout       gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain), a7*ampdbfs(gkgain)
+  ; read the values from itab and write the soundfile
+  inchn1 tab_i 0, itab
+  inchn2 tab_i 1, itab
+  inchn3 tab_i 2, itab
+  inchn4 tab_i 3, itab
+  inchn5 tab_i 4, itab
+  inchn6 tab_i 5, itab
+  inchn7 tab_i 6, itab
+  Smessage sprintf "Writing input channels %d, %d, %d, %d, %d, %d and %d to file %s", \
+    inchn1, inchn2, inchn3, inchn4, inchn5, inchn6, inchn7, gSfile
+  chnset Smessage, "message2"
+  a1 inch inchn1
+  a2 inch inchn2
+  a3 inch inchn3
+  a4 inch inchn4
+  a5 inch inchn5
+  a6 inch inchn6
+  a7 inch inchn7
+  fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain), a7*ampdbfs(gkgain)
 
-   ;showing the clock
-ktimout    timeinsts
-ktimouthor =          int(ktimout / 3600)
-Shor       sprintfk   "%02d", ktimouthor
-ktimoutmin =          int(ktimout / 60)
-Smin       sprintfk   "%02d", ktimoutmin
-ktimoutsec =          ktimout % 60
-Ssec       sprintfk   "%02d", ktimoutsec
-ktimoutms  =          frac(ktimout) * 1000
-Sms        sprintfk   "%03d", ktimoutms
-           chnset     Shor, "hor"
-           chnset     Smin, "min"
-           chnset     Ssec, "sec"
-           chnset     Sms, "ms"
+  ; showing the clock
+  ktimout timeinsts
+  ktimouthor = int(ktimout / 3600)
+  Shor sprintfk "%02d", ktimouthor
+  ktimoutmin = int(ktimout / 60)
+  Smin sprintfk "%02d", ktimoutmin
+  ktimoutsec = ktimout % 60
+  Ssec sprintfk "%02d", ktimoutsec
+  ktimoutms = frac(ktimout) * 1000
+  Sms sprintfk "%03d", ktimoutms
+  chnset Shor, "hor"
+  chnset Smin, "min"
+  chnset Ssec, "sec"
+  chnset Sms, "ms"
 endin
 
-instr 108; records 8 channels
-iformat    =          p4
-   ;which channels are checked and what are their input channel numbers
-ichnls     =          8
-itab       ftgentmp   0, 0, -ichnls, -2, 0; ftable for writing the result
-iwrtpnt    init       0
-ipfld      init       5; first check p5
+instr 108  ; records 8 channels
+  iformat = p4
+  ; which channels are checked and what are their input channel numbers
+  ichnls = 8
+  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
+  iwrtpnt init 0
+  ipfld   init 5  ; first check p5
 check:
-if p(ipfld) == 1 then
-ipfldval   =          ipfld + 8
-           tabw_i     p(ipfldval), iwrtpnt, itab
-iwrtpnt    =          iwrtpnt + 1
-endif
-ipfld      =          ipfld + 1
-if iwrtpnt < ichnls igoto check
+  if p(ipfld) == 1 then
+    ipfldval = ipfld + 8
+    tabw_i p(ipfldval), iwrtpnt, itab
+    iwrtpnt = iwrtpnt + 1
+  endif
+  ipfld = ipfld + 1
+  if iwrtpnt < ichnls igoto check
 
-   ;read the values from itab and write the soundfile
-inchn1     tab_i      0, itab
-inchn2     tab_i      1, itab
-inchn3     tab_i      2, itab
-inchn4     tab_i      3, itab
-inchn5     tab_i      4, itab
-inchn6     tab_i      5, itab
-inchn7     tab_i      6, itab
-inchn8     tab_i      7, itab
-Smessage   sprintf    "Writing input channels %d, %d, %d, %d, %d, %d, %d and %d to file %s",\
-inchn1, inchn2, inchn3,inchn4, inchn5, inchn6, inchn7, inchn8, gSfile
-           chnset     Smessage, "message2"
-a1         inch       inchn1
-a2         inch       inchn2
-a3         inch       inchn3
-a4         inch       inchn4
-a5         inch       inchn5
-a6         inch       inchn6
-a7         inch       inchn7
-a8         inch       inchn8
-           fout       gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain), a7*ampdbfs(gkgain), a8*ampdbfs(gkgain)
+  ; read the values from itab and write the soundfile
+  inchn1 tab_i 0, itab
+  inchn2 tab_i 1, itab
+  inchn3 tab_i 2, itab
+  inchn4 tab_i 3, itab
+  inchn5 tab_i 4, itab
+  inchn6 tab_i 5, itab
+  inchn7 tab_i 6, itab
+  inchn8 tab_i 7, itab
+  Smessage sprintf "Writing input channels %d, %d, %d, %d, %d, %d, %d and %d to file %s", \
+    inchn1, inchn2, inchn3, inchn4, inchn5, inchn6, inchn7, inchn8, gSfile
+  chnset Smessage, "message2"
+  a1 inch inchn1
+  a2 inch inchn2
+  a3 inch inchn3
+  a4 inch inchn4
+  a5 inch inchn5
+  a6 inch inchn6
+  a7 inch inchn7
+  a8 inch inchn8
+  fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain), a7*ampdbfs(gkgain), a8*ampdbfs(gkgain)
 
-   ;showing the clock
-ktimout    timeinsts
-ktimouthor =          int(ktimout / 3600)
-Shor       sprintfk   "%02d", ktimouthor
-ktimoutmin =          int(ktimout / 60)
-Smin       sprintfk   "%02d", ktimoutmin
-ktimoutsec =          ktimout % 60
-Ssec       sprintfk   "%02d", ktimoutsec
-ktimoutms  =          frac(ktimout) * 1000
-Sms        sprintfk   "%03d", ktimoutms
-           chnset     Shor, "hor"
-           chnset     Smin, "min"
-           chnset     Ssec, "sec"
-           chnset     Sms, "ms"
+  ; showing the clock
+  ktimout timeinsts
+  ktimouthor = int(ktimout / 3600)
+  Shor sprintfk "%02d", ktimouthor
+  ktimoutmin = int(ktimout / 60)
+  Smin sprintfk "%02d", ktimoutmin
+  ktimoutsec = ktimout % 60
+  Ssec sprintfk "%02d", ktimoutsec
+  ktimoutms = frac(ktimout) * 1000
+  Sms sprintfk "%03d", ktimoutms
+  chnset Shor, "hor"
+  chnset Smin, "min"
+  chnset Ssec, "sec"
+  chnset Sms, "ms"
 endin
 </CsInstruments>
 <CsScore>

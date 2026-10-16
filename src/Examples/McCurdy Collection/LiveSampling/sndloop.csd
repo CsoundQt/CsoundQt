@@ -1,75 +1,79 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt
+; -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)then
-		gktrig		invalue		"Play_Stop"
-		ktrigOn		trigger		gktrig, 0.5, 0
-					schedkwhen	ktrigOn, 0, 0, 2, 0, 0.01
-		gkmute		invalue		"Mute_Live"
-		gkdur		invalue 		"Duration"
-		gkpitch		invalue 		"Pitch"
-		gkfad		invalue 		"Crossfade"
-		gkInGain		invalue 		"Input_Gain"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1)then
+    gktrig invalue "Play_Stop"
+    ktrigOn trigger gktrig, 0.5, 0
+    schedkwhen ktrigOn, 0, 0, 2, 0, 0.01
+    gkmute   invalue "Mute_Live"
+    gkdur    invalue "Duration"
+    gkpitch  invalue "Pitch"
+    gkfad    invalue "Crossfade"
+    gkInGain invalue "Input_Gain"
+  endif
 endin
 
-instr	1	;MIDI ACTIVATED INSTRUMENT - READS MIDI NOTE VALUES
-	icps			cpsmidi									;READ PITCH VALUES (IN HERTZ) FROM A CONNECTED MIDI KEYBOARD
-	ifreqratio	=			icps/261.626					;DERIVE A FREQUENCY RATI0 (BASE FREQUENCY IS MIDDLE C)
-				outvalue		"Pitch", ifreqratio				;SEND FREQUENCY RATIO VALUE TO 'Pitch' FADER.
-	gkpitch		init			ifreqratio					;SET gkpitch TO ifreqratio.
+instr 1  ; MIDI activated instrument - reads MIDI note values
+  ; Read pitch values (in hertz) from a connected MIDI keyboard
+  icps cpsmidi
+  ifreqratio = icps/261.626     ; Derive a frequency rati0 (base frequency is middle c)
+  outvalue "Pitch", ifreqratio  ; Send frequency ratio value to 'pitch' fader.
+  gkpitch init ifreqratio       ; SET gkpitch TO ifreqratio.
 endin
 
-instr	2	;RESTARTS INSTR 3 WHEN RECORD-PLAY/STOP IS PRESSED
-	turnon	3
+instr 2  ; Restarts instr 3 when record-play/stop is pressed
+  turnon 3
 endin
 
-instr	3	;SOUND PRODUCING INSTRUMENT
-	krecflag		init			0
+instr 3  ; Sound producing instrument
+  krecflag init 0
 
-	ain			inch			1							;READ AUDIO FROM LIVE INPUT CHANNEL 1
-	asig, krec	sndloop		ain*gkInGain, gkpitch, gktrig, i(gkdur), i(gkfad)
+  ain inch 1  ; Read audio from live input channel 1
+  asig, krec sndloop ain*gkInGain, gkpitch, gktrig, i(gkdur), i(gkfad)
 
-	kupdate		changed		krec							;IF krec CHANGES, (I.E. STATE CHANGES FROM RECORDING TO PLAYBACK), kupdate WILL BE MOMENTARILY 1 
+  ; If krec changes, (i.e. State changes from recording to playback), kupdate will be
+  ; momentarily 1
+  kupdate changed krec
 
-	if kupdate = 1 then
-				outvalue		"Recording", krec				;UPDATE 'RECORDING' INDICATOR
-	endif
+  if kupdate = 1 then
+    outvalue "Recording", krec  ; Update 'recording' indicator
+  endif
 
-	krecflag		max			krec, krecflag
+  krecflag max krec, krecflag
 
-	if	gkmute = 1 then
-		if	(krecflag == 1 && krec == 0)	then
-			outs	asig, asig								;SEND AUDIO TO OUTPUT
-		endif
-	else
-		outs	asig, asig									;SEND AUDIO TO OUTPUT
-	endif
+  if gkmute = 1 then
+    if (krecflag == 1 && krec == 0) then
+      outs asig, asig  ; Send audio to output
+    endif
+  else
+    outs asig, asig  ; Send audio to output
+  endif
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
+i 10 0 3600  ; GUI
 
-i  2 0 3600	;INSTRUMENT PLAYS FOR 1 HOUR (AND SUSTAINS REALTIME PERFORMANCE)      
+i 2 0 3600  ; Instrument plays for 1 hour (and sustains realtime performance)
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -102,15 +106,20 @@ i  2 0 3600	;INSTRUMENT PLAYS FOR 1 HOUR (AND SUSTAINS REALTIME PERFORMANCE)
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>181</r>
-   <g>199</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -128,11 +137,23 @@ i  2 0 3600	;INSTRUMENT PLAYS FOR 1 HOUR (AND SUSTAINS REALTIME PERFORMANCE)
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Rec-Play / Stop</text>
+  <text>Rec-Play / Stop</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Mute_Live</objectName>
@@ -147,11 +168,23 @@ i  2 0 3600	;INSTRUMENT PLAYS FOR 1 HOUR (AND SUSTAINS REALTIME PERFORMANCE)
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> Mute Live Input</text>
+  <text>Mute Live Input</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -169,15 +202,20 @@ i  2 0 3600	;INSTRUMENT PLAYS FOR 1 HOUR (AND SUSTAINS REALTIME PERFORMANCE)
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -200,14 +238,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -229,14 +267,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -276,14 +314,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -305,14 +343,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -352,14 +390,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -381,14 +419,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -428,14 +466,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -457,14 +495,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -504,14 +542,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -545,9 +583,9 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -566,14 +604,14 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -1,73 +1,80 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 
 ; Modified for QuteCsound by René, November 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-;	Cannot display more than one space in Label, so can't display the schematic shown below:
+; Notes on modifications from original csd:
+; Cannot display more than one space in Label, so can't display the schematic shown below:
 
-	;  SIMPLIFIED SCHEMATIC FOR A MODULATOR AND CARRIER FM PAIR
-	;----------------------------------------------------------
-	;
-	;                         +-----------+
-	;                         |   oscil   |
-	;                         |(modulator)|
-	;                         +-----+-----+
-	;                               |
-	;                               |
-	;                               |
-	;                               |
-	;                               |
-	;                         +-----------+
-	;                         |   oscil   |
-	;                         | (carrier) |
-	;                         +-----+-----+
-	;                               |
-	;                               |
-	;                              OUT
+  ; Simplified schematic for a modulator and carrier fm pair
+  ; ----------------------------------------------------------
+
+  ; +-----------+
+  ; |   oscil   |
+  ; |(modulator)|
+  ; +-----+-----+
+  ; |
+  ; |
+  ; |
+  ; |
+  ; |
+  ; +-----------+
+  ; |   oscil   |
+  ; | (carrier) |
+  ; +-----+-----+
+  ; |
+  ; |
+  ; Out
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 1		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 1      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-gisine	ftgen 0, 0, 129, 10, 1	;A SINE WAVE (INTERPOLATING OSCILLATOR OPCODES ARE USED THEREFORE A SMALL TABLE SIZE (+1) CAN BE USED)
+; A sine wave (interpolating oscillator opcodes are used therefore a small table size (+1)
+; can be used)
+gisine ftgen 0, 0, 129, 10, 1
 
 
-instr	1	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkModAmp		invalue 	"Modulator_Amplitude"
-		gkCarrAmp		invalue 	"Carrier_Amplitude"
+instr 1  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkModAmp  invalue "Modulator_Amplitude"
+    gkCarrAmp invalue "Carrier_Amplitude"
 
-		gkModFreq		invalue	"Modulator_Frequency"
-		gkCarrFreq	invalue	"Carrier_Frequency"
-	endif
+    gkModFreq  invalue "Modulator_Frequency"
+    gkCarrFreq invalue "Carrier_Frequency"
+  endif
 endin
 
-instr	2
-	kporttime		linseg	0,0.001,0.005,1,0.005								;CREATE A VARIABLE FUNCTION THAT RAPIDLY RAMPS UP TO A SET VALUE
-	kModAmp		portk	gkModAmp, kporttime									;SMOOTH SLIDER VARIABLE
-	aModAmp		interp	kModAmp											;INTERPOLATE AND CREATE AN AUDIO RATE VERSION OF K-RATE VARIABLE
+instr 2
+  ; Create a variable function that rapidly ramps up to a set value
+  kporttime linseg 0, 0.001, 0.005, 1, 0.005
+  kModAmp portk gkModAmp, kporttime  ; Smooth slider variable
+  ; Interpolate and create an audio rate version of k-rate variable
+  aModAmp interp kModAmp
 
-	;OUTPUT		OPCODE	AMPLITUDE |FREQUENCY            |FUNCTION_TABLE	
-	aModulator	oscili	aModAmp,   gkModFreq,             gisine				;DEFINE THE MODULATOR WAVEFORM
-	aCarrier		oscili	gkCarrAmp, gkCarrFreq+aModulator, gisine				;DEFINE THE CARRIER WAVEFORM (NOTE HOW ITS FREQUENCY IS MODULATED (THROUGH ADDITION) BY THE AUDIO OUTPUT OF THE MODULATOR WAVEFORM)
-				outs		aCarrier, aCarrier									;SEND THE AUDIO OUTPUT OF THE CARRIER WAVEFORM *ONLY* TO THE OUTPUTS 
-				dispfft aCarrier * 2, 0.1, 2048
+  ; Output  opcode amplitude |frequency            |function_table
+  aModulator oscili aModAmp, gkModFreq, gisine  ; Define the modulator waveform
+  ; Define the carrier waveform (note how its frequency is modulated (through addition) by
+  ; the audio output of the modulator waveform)
+  aCarrier oscili gkCarrAmp, gkCarrFreq+aModulator, gisine
+  ; Send the audio output of the carrier waveform *only* to the outputs
+  outs aCarrier, aCarrier
+  dispfft aCarrier * 2, 0.1, 2048
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1		0	   3600		;GUI
+; Instr | start | duration
+i 1 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 

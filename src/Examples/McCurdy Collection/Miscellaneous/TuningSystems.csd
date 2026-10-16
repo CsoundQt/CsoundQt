@@ -1,181 +1,230 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-
-;Notes on modifications from original csd:
-;	Changed (1-kamp_n) by kamp_n
-;	Add INIT instrument 11
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; Notes on modifications from original csd:
+; Changed (1-kamp_n) by kamp_n
+; Add INIT instrument 11
+
+
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1	
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1
 
 
-gisine	ftgen	0,0,4096,10,1	;A SINE WAVE
-;			FN_NUM | INIT_TIME | SIZE | GEN_ROUTINE | NUM_GRADES | REPEAT | BASE_FREQ | BASE_KEY_MIDI | TUNING_RATIOS:-0-|----1----|---2----|----3----|----4----|----5----|----6----|----7----|----8----|----9----|----10----|---11----|-12-|
-gijust	ftgen  0,         0,       64,       -2,          12,         2,     261.626,        60,                        1,   16/15,    9/8,     6/5,      5/4,       4/3,     45/32,     3/2,     8/5,      5/3,       9/5,     15/8,     2		;RATIOS FOR JUST INTONATION
-gipyth	ftgen  0,         0,       64,       -2,          12,         2,     261.626,        60,                        1,  256/243,   9/8,    32/27,    81/64,      4/3,    729/512,    3/2,    128/81,   27/16,     16/9,     243/128,  2		;RATIOS FOR PYTHAGOREAN TUNING
+gisine ftgen 0, 0, 4096, 10, 1  ; A sine wave
+; Fn_num | init_time | size | gen_routine | num_grades | repeat | base_freq |
+; base_key_midi |
+; tuning_ratios:-0-|----1----|---2----|----3----|----4----|----5----|----6----|----7----|----8----|----9----|----10----|---11----|-12-|
+; Ratios for just intonation
+gijust ftgen 0, 0, 64, -2, 12, 2, 261.626, 60, 1, 16/15, 9/8, 6/5, 5/4, 4/3, 45/32, 3/2, 8/5, 5/3, 9/5, 15/8, 2
+; Ratios for pythagorean tuning
+gipyth ftgen 0, 0, 64, -2, 12, 2, 261.626, 60, 1, 256/243, 9/8, 32/27, 81/64, 4/3, 729/512, 3/2, 128/81, 27/16, 16/9, 243/128, 2
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkmode		invalue	"Mode"
-		gkGlobAmp		invalue	"Amplitude"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkmode    invalue "Mode"
+    gkGlobAmp invalue "Amplitude"
 
-		gkamp1		invalue	"Par1"
-		gkamp2		invalue	"Par2"
-		gkamp3		invalue	"Par3"
-		gkamp4		invalue	"Par4"
-		gkamp5		invalue	"Par5"
-		gkamp6		invalue	"Par6"
-		gkamp7		invalue	"Par7"
-		gkamp8		invalue	"Par8"
-		gkamp9		invalue	"Par9"
-		gkamp10		invalue	"Par10"
-		gkamp11		invalue	"Par11"
-		gkamp12		invalue	"Par12"
-		gkamp13		invalue	"Par13"
-		gkamp14		invalue	"Par14"
-		gkamp15		invalue	"Par15"
-		gkamp16		invalue	"Par16"
-	endif
+    gkamp1  invalue "Par1"
+    gkamp2  invalue "Par2"
+    gkamp3  invalue "Par3"
+    gkamp4  invalue "Par4"
+    gkamp5  invalue "Par5"
+    gkamp6  invalue "Par6"
+    gkamp7  invalue "Par7"
+    gkamp8  invalue "Par8"
+    gkamp9  invalue "Par9"
+    gkamp10 invalue "Par10"
+    gkamp11 invalue "Par11"
+    gkamp12 invalue "Par12"
+    gkamp13 invalue "Par13"
+    gkamp14 invalue "Par14"
+    gkamp15 invalue "Par15"
+    gkamp16 invalue "Par16"
+  endif
 endin
 
-instr	11	;INIT
-		outvalue	"Par1",  1/1
-		outvalue	"Par2",  1/2
-		outvalue	"Par3",  1/3
-		outvalue	"Par4",  1/4
-		outvalue	"Par5",  1/5
-		outvalue	"Par6",  1/6
-		outvalue	"Par7",  1/7
-		outvalue	"Par8",  1/8
-		outvalue	"Par9",  1/9
-		outvalue	"Par10", 1/10
-		outvalue	"Par11", 1/11
-		outvalue	"Par12", 1/12
-		outvalue	"Par13", 1/13
-		outvalue	"Par14", 1/14
-		outvalue	"Par15", 1/15
-		outvalue	"Par16", 1/16
+instr 11  ; Init
+  outvalue "Par1", 1/1
+  outvalue "Par2", 1/2
+  outvalue "Par3", 1/3
+  outvalue "Par4", 1/4
+  outvalue "Par5", 1/5
+  outvalue "Par6", 1/6
+  outvalue "Par7", 1/7
+  outvalue "Par8", 1/8
+  outvalue "Par9", 1/9
+  outvalue "Par10", 1/10
+  outvalue "Par11", 1/11
+  outvalue "Par12", 1/12
+  outvalue "Par13", 1/13
+  outvalue "Par14", 1/14
+  outvalue "Par15", 1/15
+  outvalue "Par16", 1/16
 endin
 
-instr	1	;MIDI ACTIVATED INSTRUMENT
-	icpsET	cpsmidi									;NOTE PITCH IN CYCLES PER SECOND (EQUALLY TEMPERED)
-	icpsJI	cpstmid	gijust							;NOTE PITCH IN CYCLES PER SECOND (JUST INTONATION)
-	icpsPy	cpstmid	gipyth							;NOTE PITCH IN CYCLES PER SECOND (PYTHAGOREAN)
-	if	gkmode==0	then									;IF 'EQUAL TEMPERAMENT' MIDI MODE HAS BEEN CHOSED...
-		kcps	=	icpsET								;kcps TAKES EQUALLY TEMPERED PITCH VALUE
-	elseif	gkmode==1	then								;IF 'JUST INTONATION' MIDI MODE HAS BEEN CHOSED...
-		kcps	=	icpsJI 								;kcps TAKES JUST INTONATION PITCH VALUE
-	elseif	gkmode==2	then								;IF 'PYTHAGOREAN' MIDI MODE HAS BEEN CHOSED...
-		kcps	=	icpsPy								;kcps TAKES PYTHAGOREAN PITCH VALUE
-	endif											;END OF CONDITIONAL BRANCHING
+instr 1                    ; MIDI activated instrument
+  icpsET cpsmidi           ; Note pitch in cycles per second (equally tempered)
+  icpsJI cpstmid gijust    ; Note pitch in cycles per second (just intonation)
+  icpsPy cpstmid gipyth    ; Note pitch in cycles per second (pythagorean)
+  if gkmode == 0 then      ; If 'equal temperament' MIDI mode has been chosed...
+    kcps = icpsET          ; Kcps takes equally tempered pitch value
+  elseif gkmode == 1 then  ; If 'just intonation' MIDI mode has been chosed...
+    kcps = icpsJI          ; Kcps takes just intonation pitch value
+  elseif gkmode == 2 then  ; If 'pythagorean' MIDI mode has been chosed...
+    kcps = icpsPy          ; Kcps takes pythagorean pitch value
+  endif                    ; End of conditional branching
 
-	iporttime	=		0.01								;PORTAMENTO TIME
-	kporttime	linseg	0,iporttime,1,1,1					;CREATE A RAMPING UP FUNCTION FOR PORTAMENTO TIME
-	kamp1	portk	gkamp1, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE		
-	kamp2	portk	gkamp2, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp3	portk	gkamp3, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp4	portk	gkamp4, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp5	portk	gkamp5, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp6	portk	gkamp6, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp7	portk	gkamp7, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp8	portk	gkamp8, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp9	portk	gkamp9, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp10	portk	gkamp10, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp11	portk	gkamp11, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp12	portk	gkamp12, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp13	portk	gkamp13, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp14	portk	gkamp14, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp15	portk	gkamp15, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	kamp16	portk	gkamp16, kporttime					;APPLY PORTAMENTO SMOOTHING TO SLIDER VARIABLE
-	
-	a1		oscili	kamp1,  kcps, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a2		oscili	kamp2,  kcps*2, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a3		oscili	kamp3,  kcps*3, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a4		oscili	kamp4,  kcps*4, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a5		oscili	kamp5,  kcps*5, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a6		oscili	kamp6,  kcps*6, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a7		oscili	kamp7,  kcps*7, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a8		oscili	kamp8,  kcps*8, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a9		oscili	kamp9,  kcps*9, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a10		oscili	kamp10, kcps*10, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a11		oscili	kamp11, kcps*11, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a12		oscili	kamp12, kcps*12, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a13		oscili	kamp13, kcps*13, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a14		oscili	kamp14, kcps*14, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a15		oscili	kamp15, kcps*15, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a16		oscili	kamp16, kcps*16, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
+  iporttime = 0.01  ; Portamento time
+  ; Create a ramping up function for portamento time
+  kporttime linseg 0, iporttime, 1, 1, 1
+  kamp1  portk gkamp1, kporttime   ; Apply portamento smoothing to slider variable
+  kamp2  portk gkamp2, kporttime   ; Apply portamento smoothing to slider variable
+  kamp3  portk gkamp3, kporttime   ; Apply portamento smoothing to slider variable
+  kamp4  portk gkamp4, kporttime   ; Apply portamento smoothing to slider variable
+  kamp5  portk gkamp5, kporttime   ; Apply portamento smoothing to slider variable
+  kamp6  portk gkamp6, kporttime   ; Apply portamento smoothing to slider variable
+  kamp7  portk gkamp7, kporttime   ; Apply portamento smoothing to slider variable
+  kamp8  portk gkamp8, kporttime   ; Apply portamento smoothing to slider variable
+  kamp9  portk gkamp9, kporttime   ; Apply portamento smoothing to slider variable
+  kamp10 portk gkamp10, kporttime  ; Apply portamento smoothing to slider variable
+  kamp11 portk gkamp11, kporttime  ; Apply portamento smoothing to slider variable
+  kamp12 portk gkamp12, kporttime  ; Apply portamento smoothing to slider variable
+  kamp13 portk gkamp13, kporttime  ; Apply portamento smoothing to slider variable
+  kamp14 portk gkamp14, kporttime  ; Apply portamento smoothing to slider variable
+  kamp15 portk gkamp15, kporttime  ; Apply portamento smoothing to slider variable
+  kamp16 portk gkamp16, kporttime  ; Apply portamento smoothing to slider variable
 
-	asig		sum		a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16		;SUM (MIX) ALL PARTIALS
-	aenv		expsegr	0.01,0.001,1,0.05,0.001								;CREATE AN AMPLITUDE ENVELOPE WITH A RELEASE SEGMENT
-	asig		=		(asig*aenv*gkGlobAmp)/16								;SCALE AUDIO SIGNAL USING GLOBAL AMPLITUDE SLIDER VARIABLE, AMPLITUDE ENVELOPE AND ACCORDING TO THE NUMBER OF PARTIALS PRESENT
-			outs		asig,asig											;SEND AUDIO TO OUTPUTS
+  ; Create oscillator for partial of additive synthesis tone
+  a1 oscili kamp1, kcps, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a2 oscili kamp2, kcps*2, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a3 oscili kamp3, kcps*3, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a4 oscili kamp4, kcps*4, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a5 oscili kamp5, kcps*5, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a6 oscili kamp6, kcps*6, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a7 oscili kamp7, kcps*7, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a8 oscili kamp8, kcps*8, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a9 oscili kamp9, kcps*9, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a10 oscili kamp10, kcps*10, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a11 oscili kamp11, kcps*11, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a12 oscili kamp12, kcps*12, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a13 oscili kamp13, kcps*13, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a14 oscili kamp14, kcps*14, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a15 oscili kamp15, kcps*15, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a16 oscili kamp16, kcps*16, gisine
+
+  ; Sum (mix) all partials
+  asig sum a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16
+  ; Create an amplitude envelope with a release segment
+  aenv expsegr 0.01, 0.001, 1, 0.05, 0.001
+  ; Scale audio signal using global amplitude slider variable, amplitude envelope and
+  ; according to the number of partials present
+  asig = (asig*aenv*gkGlobAmp)/16
+  outs asig, asig  ; Send audio to outputs
 endin
 
-;CREATE A MACRO FOR GUI INSTRUMENT TO REDUCE CODE REPETITION
-;THIS MACRO WILL TAKE TWO INPUT ARGUMENTS FOR INSTRUMENT NUMBER AND A COUNTER THAT WILL RELATE TO THE NAMES OF THE VARIABLES OUTPUT BY GUI BUTTONS
+; Create a macro for GUI instrument to reduce code repetition
+; This macro will take two input arguments for instrument number and a counter that will
+; relate to the names of the variables output by GUI buttons
 #define GUI_INSTRUMENT(I'N)
 #
-instr	$I	;GUI INSTRUMENT
-	icps		=		cpsoct(8) * p4						;CREATE THE RELEVANT PITCH VALUE IN CYCLES PER SECOND (THE INTERVAL (AS A RATIO) WITH REFERENCE TO MIDDLE C IS OUTPUT AS p4 BY THE GUI BUTTONS)
+instr $I  ; GUI instrument
+  ; Create the relevant pitch value in cycles per second (the interval (as a ratio) with
+  ; reference to middle c is output as p4 by the GUI buttons)
+  icps = cpsoct(8) * p4
 
-	iporttime	=		0.01								;PORTAMENTO TIME
-	kporttime	linseg	0,iporttime,iporttime,1,iporttime		;CREATE A RAMPING UP FUNCTION FOR PORTAMENTO TIME
-	kamp1	portk	gkamp1, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp2	portk	gkamp2, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp3	portk	gkamp3, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp4	portk	gkamp4, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp5	portk	gkamp5, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp6	portk	gkamp6, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp7	portk	gkamp7, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp8	portk	gkamp8, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp9	portk	gkamp9, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp10	portk	gkamp10, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp11	portk	gkamp11, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp12	portk	gkamp12, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp13	portk	gkamp13, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp14	portk	gkamp14, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp15	portk	gkamp15, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
-	kamp16	portk	gkamp16, kporttime					;APPLY PORTAMENTO TO SLIDER VARIABLE
+  iporttime = 0.01  ; Portamento time
+  ; Create a ramping up function for portamento time
+  kporttime linseg 0, iporttime, iporttime, 1, iporttime
+  kamp1  portk gkamp1, kporttime   ; Apply portamento to slider variable
+  kamp2  portk gkamp2, kporttime   ; Apply portamento to slider variable
+  kamp3  portk gkamp3, kporttime   ; Apply portamento to slider variable
+  kamp4  portk gkamp4, kporttime   ; Apply portamento to slider variable
+  kamp5  portk gkamp5, kporttime   ; Apply portamento to slider variable
+  kamp6  portk gkamp6, kporttime   ; Apply portamento to slider variable
+  kamp7  portk gkamp7, kporttime   ; Apply portamento to slider variable
+  kamp8  portk gkamp8, kporttime   ; Apply portamento to slider variable
+  kamp9  portk gkamp9, kporttime   ; Apply portamento to slider variable
+  kamp10 portk gkamp10, kporttime  ; Apply portamento to slider variable
+  kamp11 portk gkamp11, kporttime  ; Apply portamento to slider variable
+  kamp12 portk gkamp12, kporttime  ; Apply portamento to slider variable
+  kamp13 portk gkamp13, kporttime  ; Apply portamento to slider variable
+  kamp14 portk gkamp14, kporttime  ; Apply portamento to slider variable
+  kamp15 portk gkamp15, kporttime  ; Apply portamento to slider variable
+  kamp16 portk gkamp16, kporttime  ; Apply portamento to slider variable
 
-	a1		oscili	kamp1,  icps, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a2		oscili	kamp2,  icps*2, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a3		oscili	kamp3,  icps*3, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a4		oscili	kamp4,  icps*4, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a5		oscili	kamp5,  icps*5, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a6		oscili	kamp6,  icps*6, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a7		oscili	kamp7,  icps*7, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a8		oscili	kamp8,  icps*8, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a9		oscili	kamp9,  icps*9, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a10		oscili	kamp10, icps*10, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a11		oscili	kamp11, icps*11, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a12		oscili	kamp12, icps*12, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a13		oscili	kamp13, icps*13, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a14		oscili	kamp14, icps*14, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a15		oscili	kamp15, icps*15, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
-	a16		oscili	kamp16, icps*16, gisine				;CREATE OSCILLATOR FOR PARTIAL OF ADDITIVE SYNTHESIS TONE
+  ; Create oscillator for partial of additive synthesis tone
+  a1 oscili kamp1, icps, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a2 oscili kamp2, icps*2, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a3 oscili kamp3, icps*3, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a4 oscili kamp4, icps*4, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a5 oscili kamp5, icps*5, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a6 oscili kamp6, icps*6, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a7 oscili kamp7, icps*7, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a8 oscili kamp8, icps*8, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a9 oscili kamp9, icps*9, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a10 oscili kamp10, icps*10, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a11 oscili kamp11, icps*11, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a12 oscili kamp12, icps*12, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a13 oscili kamp13, icps*13, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a14 oscili kamp14, icps*14, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a15 oscili kamp15, icps*15, gisine
+  ; Create oscillator for partial of additive synthesis tone
+  a16 oscili kamp16, icps*16, gisine
 
-	asig		sum		a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16		;SUM (MIX) ALL PARTIALS
-	aenv		expsegr	0.01,0.001,1,0.05,0.001								;CREATE AN AMPLITUDE ENVELOPE WITH A RELEASE SEGMENT
-	asig		=		(asig*aenv*gkGlobAmp)/16								;SCALE AUDIO SIGNAL USING GLOBAL AMPLITUDE SLIDER VARIABLE, AMPLITUDE ENVELOPE AND ACCORDING TO THE NUMBER OF PARTIALS PRESENT
-			outs		asig,asig											;SEND AUDIO TO OUTPUTS
+  ; Sum (mix) all partials
+  asig sum a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16
+  ; Create an amplitude envelope with a release segment
+  aenv expsegr 0.01, 0.001, 1, 0.05, 0.001
+  ; Scale audio signal using global amplitude slider variable, amplitude envelope and
+  ; according to the number of partials present
+  asig = (asig*aenv*gkGlobAmp)/16
+  outs asig, asig  ; Send audio to outputs
 endin
 #
 
-;EXECUTE MACRO FOR EACH GUI BUTTON
+; Execute macro for each GUI button
 $GUI_INSTRUMENT(101'1)
 $GUI_INSTRUMENT(102'2)
 $GUI_INSTRUMENT(103'3)
@@ -217,8 +266,8 @@ $GUI_INSTRUMENT(138'38)
 $GUI_INSTRUMENT(139'39)
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
-i 11 0 0.1	;INIT
+i 10 0 3600  ; GUI
+i 11 0 0.1   ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -231,9 +280,9 @@ i 11 0 0.1	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -251,15 +300,20 @@ i 11 0 0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -310,14 +364,14 @@ i 11 0 0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -339,15 +393,20 @@ i 11 0 0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -370,14 +429,14 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -396,11 +455,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     C      </text>
+  <text>C</text>
   <image>/</image>
   <eventLine>i 101 0 -1 1.0</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b9104</objectName>
@@ -415,11 +486,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    C#    </text>
+  <text>C#</text>
   <image>/</image>
   <eventLine>i 104 0 -1 1.059463094</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1437</objectName>
@@ -434,11 +517,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     D      </text>
+  <text>D</text>
   <image>/</image>
   <eventLine>i 107 0 -1 1.122462048</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b7147</objectName>
@@ -453,11 +548,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    D#    </text>
+  <text>D#</text>
   <image>/</image>
   <eventLine>i 110 0 -1 1.189207115</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5121</objectName>
@@ -472,11 +579,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     E      </text>
+  <text>E</text>
   <image>/</image>
   <eventLine>i 113 0 -1 1.25992105</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8057</objectName>
@@ -491,11 +610,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     F      </text>
+  <text>F</text>
   <image>/</image>
   <eventLine>i 116 0 -1 1.334839854</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3322</objectName>
@@ -510,11 +641,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    F#     </text>
+  <text>F#</text>
   <image>/</image>
   <eventLine>i 119 0 -1 1.414213562</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4241</objectName>
@@ -529,11 +672,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     G      </text>
+  <text>G</text>
   <image>/</image>
   <eventLine>i 122 0 -1 1.498307077</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b7722</objectName>
@@ -548,11 +703,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    G#    </text>
+  <text>G#</text>
   <image>/</image>
   <eventLine>i 125 0 -1 1.587401052</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2345</objectName>
@@ -567,11 +734,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     A      </text>
+  <text>A</text>
   <image>/</image>
   <eventLine>i 128 0 -1 1.681792831</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2344</objectName>
@@ -586,11 +765,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    A#    </text>
+  <text>A#</text>
   <image>/</image>
   <eventLine>i 131 0 -1 1.781797436</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -608,14 +799,14 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -634,11 +825,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     C      </text>
+  <text>C</text>
   <image>/</image>
   <eventLine>i 102 0 -1 1.0</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1190</objectName>
@@ -653,12 +856,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    C#
-  16/15 </text>
+  <text>C#
+16/15</text>
   <image>/</image>
   <eventLine>i 105 0 -1 1.066666667</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5470</objectName>
@@ -673,12 +888,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     D     
-     9/8   </text>
+  <text>D
+9/8</text>
   <image>/</image>
   <eventLine>i 108 0 -1 1.125</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5639</objectName>
@@ -693,12 +920,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    D# 
-    6/5   </text>
+  <text>D#
+6/5</text>
   <image>/</image>
   <eventLine>i 111 0 -1 1.2</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3922</objectName>
@@ -713,12 +952,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     E     
-     5/4   </text>
+  <text>E
+5/4</text>
   <image>/</image>
   <eventLine>i 114 0 -1 1.25</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1108</objectName>
@@ -733,12 +984,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     F     
-     4/3   </text>
+  <text>F
+4/3</text>
   <image>/</image>
   <eventLine>i 117 0 -1 1.333333333</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2826</objectName>
@@ -753,12 +1016,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    F#    
-  45/32 </text>
+  <text>F#
+45/32</text>
   <image>/</image>
   <eventLine>i 120 0 -1 1.40625</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b9720</objectName>
@@ -773,12 +1048,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     G     
-     3/2   </text>
+  <text>G
+3/2</text>
   <image>/</image>
   <eventLine>i 123 0 -1 1.5</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5895</objectName>
@@ -793,12 +1080,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    G#    
-    8/5    </text>
+  <text>G#
+8/5</text>
   <image>/</image>
   <eventLine>i 126 0 -1 1.6</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2963</objectName>
@@ -813,12 +1112,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     A     
-     5/3   </text>
+  <text>A
+5/3</text>
   <image>/</image>
   <eventLine>i 129 0 -1 1.666666667</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2877</objectName>
@@ -833,12 +1144,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    A#    
-    9/5    </text>
+  <text>A#
+9/5</text>
   <image>/</image>
   <eventLine>i 132 0 -1 1.8</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -856,14 +1179,14 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -882,11 +1205,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     C      </text>
+  <text>C</text>
   <image>/</image>
   <eventLine>i 103 0 -1 1.0</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5451</objectName>
@@ -901,12 +1236,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    C#
+  <text>C#
 256/243</text>
   <image>/</image>
   <eventLine>i 106 0 -1 1.053497942</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b7133</objectName>
@@ -921,12 +1268,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     D     
-     9/8   </text>
+  <text>D
+9/8</text>
   <image>/</image>
   <eventLine>i 109 0 -1 1.125</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8555</objectName>
@@ -941,12 +1300,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    D#    
- 32/27 </text>
+  <text>D#
+32/27</text>
   <image>/</image>
   <eventLine>i 112 0 -1 1.185185185</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4007</objectName>
@@ -961,12 +1332,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     E    
-  81/64  </text>
+  <text>E
+81/64</text>
   <image>/</image>
   <eventLine>i 115 0 -1 1.265625</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3534</objectName>
@@ -981,12 +1364,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     F     
-     4/3   </text>
+  <text>F
+4/3</text>
   <image>/</image>
   <eventLine>i 118 0 -1 1.333333333</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8021</objectName>
@@ -1001,12 +1396,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     F#
+  <text>F#
 729/512</text>
   <image>/</image>
   <eventLine>i 121 0 -1 1.423828125</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8969</objectName>
@@ -1021,12 +1428,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     G     
-     3/2   </text>
+  <text>G
+3/2</text>
   <image>/</image>
   <eventLine>i 124 0 -1 1.5</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b7430</objectName>
@@ -1041,12 +1460,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    G#    
- 128/81 </text>
+  <text>G#
+128/81</text>
   <image>/</image>
   <eventLine>i 127 0 -1 1.580246914</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3049</objectName>
@@ -1061,12 +1492,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    A 
-   27/16</text>
+  <text>A
+27/16</text>
   <image>/</image>
   <eventLine>i 130 0 -1 1.6875</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b9549</objectName>
@@ -1081,12 +1524,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    A#  
-    16/9  </text>
+  <text>A#
+16/9</text>
   <image>/</image>
   <eventLine>i 133 0 -1 1.777777778</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1104,15 +1559,20 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
@@ -1139,15 +1599,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1172,15 +1632,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1205,15 +1665,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1238,15 +1698,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1271,15 +1731,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1304,15 +1764,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1337,15 +1797,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1370,15 +1830,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1403,15 +1863,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1436,15 +1896,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1469,15 +1929,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1502,15 +1962,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1535,15 +1995,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1568,15 +2028,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1601,15 +2061,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1634,15 +2094,15 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>124</r>
+   <g>56</g>
+   <b>56</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1661,14 +2121,14 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1690,14 +2150,14 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1719,14 +2179,14 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1745,11 +2205,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     B      </text>
+  <text>B</text>
   <image>/</image>
   <eventLine>i 134 0 -1 1.887748625</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1454</objectName>
@@ -1764,11 +2236,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    C2     </text>
+  <text>C2</text>
   <image>/</image>
   <eventLine>i 137 0 -1 2.0</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3566</objectName>
@@ -1783,12 +2267,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     B  
-    15/8  </text>
+  <text>B
+15/8</text>
   <image>/</image>
   <eventLine>i 135 0 -1 1.875</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2142</objectName>
@@ -1803,11 +2299,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    C2     </text>
+  <text>C2</text>
   <image>/</image>
   <eventLine>i 138 0 -1 2.0</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4897</objectName>
@@ -1822,12 +2330,24 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     B
+  <text>B
 243/128</text>
   <image>/</image>
   <eventLine>i 136 0 -1 1.8984375</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4998</objectName>
@@ -1842,11 +2362,23 @@ Notes in the various tuning systems can be activated either using the GUI button
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    C2     </text>
+  <text>C2</text>
   <image>/</image>
   <eventLine>i 139 0 -1 2.0</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
@@ -1882,14 +2414,14 @@ Notes in the various tuning systems can be activated either using the GUI button
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

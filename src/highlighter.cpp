@@ -759,7 +759,11 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     static const QRegularExpression instOpcodeRx("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b");
     static const QRegularExpression operatorsRx(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
     static const QRegularExpression stringRx("\"[^\"]*\"");
-    static const QRegularExpression labelRx("^\\s*([a-zA-Z]\\w*):\\s*$");
+    // A label is an identifier followed by ':' and then whitespace/end-of-line.
+    // The lookahead keeps the match ending at the colon so trailing whitespace
+    // (e.g. before a comment) is not highlighted, and it prevents mistaking a
+    // Csound 7 typed variable definition ("name:type") for a label.
+    static const QRegularExpression labelRx("^\\s*([a-zA-Z]\\w*):(?=\\s|$)");
 
 	// text is processed one line at a time
     if(m_theme == "none")
@@ -1106,9 +1110,8 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         rxmatch = labelRx.match(text);
 
         if (rxmatch.hasMatch()) {
-            setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), labelFormat);
-            // setFormat(rxmatch.capturedEnd(1), 1, colonFormat);
-            return;
+            // Highlight "<label>:" only, not the leading indentation.
+            setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1) + 1, labelFormat);
         }
 
         // Multiline {{ ... }} strings
@@ -1349,8 +1352,9 @@ void Highlighter::setLastRules()
 {
 	HighlightingRule rule;
 
-    // labels
-    rule = {QRegularExpression("^\\s*([a-zA-Z]\\w*):\\s*$"), labelFormat, 1};
+    // labels (kept in sync with labelRx in highlightCsoundBlock; this list is
+    // currently unused, the active label highlight lives there)
+    rule = {QRegularExpression("^\\s*([a-zA-Z]\\w*):(?=\\s|$)"), labelFormat, 1};
     lastHighlightingRules.append(rule);
 
     // strings

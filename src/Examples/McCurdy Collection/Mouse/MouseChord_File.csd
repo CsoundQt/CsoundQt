@@ -1,16 +1,17 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
 ; Modified for QuteCsound by René, January 2011.
 ; Thanks to Andres CABRERA for the mouse channels names.
 
-; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817 with "Widgets are an independent window" ON.
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817 with "Widgets
+; are an independent window" ON.
 
 
 /*
 Mouse Chord
 -----------
 This csd was originally written for use by someone who only had the use of a head-mouse for music performance.
-If the mouse enters one of the coloured boxes the chord indicated by the Roman numeral is played. 
+If the mouse enters one of the coloured boxes the chord indicated by the Roman numeral is played.
 Continuous dynamic control is possible by moving the mouse within the box: the dynamic is lowest at the edges of each box and highest at the centre of each box.
 Dynamics are implemented with a changing tone (low-pass filter) as well as changing amplitude.
 The user can choose between three different sounds using the radio buttons within the GUI.
@@ -20,218 +21,237 @@ The mouse relative position is given by the channels _MouseRelX and _MouseRelY.
 
 If the windows need to be resized, for example to accomodate use on a netbook, it is mandatory to manually update the values of boxes dimensions and positions in the csd file.
 
-Professional head mouse or iris tracking software can be very expensive and requires practice. 
+Professional head mouse or iris tracking software can be very expensive and requires practice.
 iNavigate is a free option for Mac OS 10.5 if the user wants to experiment with this approach.
 */
 
 
-;Notes on modifications from original csd:
-;	No automatic rescale
-;	Add Browser for audio file, accept mono or stereo wav files
+; Notes on modifications from original csd:
+; No automatic rescale
+; Add Browser for audio file, accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-;DEFINE CHORDS I-VII IN PCH FORMAT FOR MAJOR KEY
-gichord1	ftgen	0,0,4,-2,8.00,8.04,8.07,9.00
-gichord2	ftgen	0,0,4,-2,8.02,8.05,8.09,9.02
-gichord3	ftgen	0,0,4,-2,8.04,8.07,8.11,9.04
-gichord4	ftgen	0,0,4,-2,8.00,8.05,8.09,9.00
-gichord5	ftgen	0,0,4,-2,7.11,8.02,8.07,8.11
-gichord6	ftgen	0,0,4,-2,8.00,8.04,8.09,9.00
-gichord7	ftgen	0,0,4,-2,8.02,8.05,8.11,9.02
+; Define chords i-vii in pch format for major key
+gichord1 ftgen 0, 0, 4, -2, 8.00, 8.04, 8.07, 9.00
+gichord2 ftgen 0, 0, 4, -2, 8.02, 8.05, 8.09, 9.02
+gichord3 ftgen 0, 0, 4, -2, 8.04, 8.07, 8.11, 9.04
+gichord4 ftgen 0, 0, 4, -2, 8.00, 8.05, 8.09, 9.00
+gichord5 ftgen 0, 0, 4, -2, 7.11, 8.02, 8.07, 8.11
+gichord6 ftgen 0, 0, 4, -2, 8.00, 8.04, 8.09, 9.00
+gichord7 ftgen 0, 0, 4, -2, 8.02, 8.05, 8.11, 9.02
 
-;DEFINE CHORDS I-VII IN PCH FORMAT FOR MINOR KEY
-gichord1m	ftgen	0,0,4,-2,8.00,8.03,8.07,9.00
-gichord2m	ftgen	0,0,4,-2,8.02,8.05,8.08,9.02
-gichord3m	ftgen	0,0,4,-2,8.03,8.07,8.11,9.03
-gichord4m	ftgen	0,0,4,-2,8.05,8.08,8.00,9.05
-gichord5m	ftgen	0,0,4,-2,8.07,8.11,8.02,9.07
-gichord6m	ftgen	0,0,4,-2,8.08,8.00,8.03,9.08
-gichord7m	ftgen	0,0,4,-2,8.02,8.05,8.11,9.02
+; Define chords i-vii in pch format for minor key
+gichord1m ftgen 0, 0, 4, -2, 8.00, 8.03, 8.07, 9.00
+gichord2m ftgen 0, 0, 4, -2, 8.02, 8.05, 8.08, 9.02
+gichord3m ftgen 0, 0, 4, -2, 8.03, 8.07, 8.11, 9.03
+gichord4m ftgen 0, 0, 4, -2, 8.05, 8.08, 8.00, 9.05
+gichord5m ftgen 0, 0, 4, -2, 8.07, 8.11, 8.02, 9.07
+gichord6m ftgen 0, 0, 4, -2, 8.08, 8.00, 8.03, 9.08
+gichord7m ftgen 0, 0, 4, -2, 8.02, 8.05, 8.11, 9.02
 
-		zakinit	4,10
-gkRvbSze	init		0.85		;Reverb size
-gkRvbSnd	init		0.2		;Reverb amount
-
-
-;UDOS-(USER DEFINED OPCODES)----------------------------------------------------------------------------------------------------------------------------------------------
-opcode	reverbsr, aa, aakk								;REVERB UDO (USE OF A UDO FOR REVERB IS TO ALLOW THE SETTING OF A K-RATE INDEPENDENT OF THE GLOBAL K-RATE
-				setksmps	1							;CONTROL RATE WITHIN UDO IS 1
-	ainsigL, ainsigR, kfblvl, kfco	xin					;NAME INPUT VARIABLES
-	arvbL, arvbR	reverbsc 	ainsigL, ainsigR, kfblvl, kfco	;USE reverbsc OPCODE
-				xout		arvbL, arvbR					;SEND AUDIO TO CALLER INSTRUMENT
-endop												;END OF UDO
-;-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-instr	1
-	;Boxes dimensions, square isize x isize
-	isize	=	200
-
-	;Boxes positions
-	ix1		=	50	;I box
-	iy1		=	105
-
-	ix2		=	300	;II box
-	iy2		=	105
-	
-	ix3		=	550	;III box
-	iy3		=	105
-	
-	ix4		=	800	;IV box
-	iy4		=	105
-	
-	ix5		=	174	;V box
-	iy5		=	386
-	
-	ix6		=	424	;VI box
-	iy6		=	386
-	
-	ix7		=	674	;VII box
-	iy7		=	386
-
-	krelx	invalue	"_MouseRelX"
-	krely	invalue	"_MouseRelY"
-
-	gkoct	invalue	"Octave"
-	gkkey	invalue	"Key"
-	gkton	invalue	"Ton"
+zakinit 4, 10
+gkRvbSze init 0.85  ; Reverb size
+gkRvbSnd init 0.2   ; Reverb amount
 
 
-;AUDIO FILE CHANGE / LOAD IN TABLES ********************************************************************************************************
+; Udos-(user defined
+; opcodes)----------------------------------------------------------------------------------------------------------------------------------------------
+; Reverb udo (use of a udo for reverb is to allow the setting of a k-rate independent of
+; the global k-rate
+opcode reverbsr, aa, aakk
+  setksmps 1                                            ; Control rate within udo is 1
+  ainsigL, ainsigR, kfblvl, kfco xin                    ; Name input variables
+  arvbL, arvbR reverbsc ainsigL, ainsigR, kfblvl, kfco  ; USE reverbsc OPCODE
+  xout arvbL, arvbR                                     ; Send audio to caller instrument
+endop                                                   ; End of udo
+; -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-		Sfile_new		strcpy	""											;INIT TO EMPTY STRING
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
+instr 1
+  ; Boxes dimensions, square isize x isize
+  isize = 200
 
-		if	kfile != 0	then												;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-				reinit	NEW_FILE											;REINITIALIZE FROM LABEL 'NEW_FILE'
-		endif
-		NEW_FILE:
-		ichn			filenchnls	Sfile
-		if ichn == 1 then
-			giFileL	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1						;READ MONO AUDIO FILE CHANNEL 1
-			giFileR	=		giFileL
-		else
-			giFileL	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1						;READ STEREO AUDIO FILE CHANNEL 1
-			giFileR	ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 2						;READ STEREO AUDIO FILE CHANNEL 2
-		endif
-					rireturn
-;*******************************************************************************************************************************************
+  ; Boxes positions
+  ix1 = 50  ; I box
+  iy1 = 105
 
-;DEFINE A MACRO FOR DETECTION OF MOUSE WITHIN EACH BOX
-#define	CHORD_BOX_DETECT(N)
-	#
-	kinside$N	init	0
-	if (ix$N <= krelx && krelx <= ix$N+isize && iy$N <= krely && krely <= iy$N+isize) then
-		kinside$N	= 1
-			
-		kx$N	= (krelx - ix$N - isize*0.5)/(isize*0.5)		;origin change and scale to -1 to +1, zero at center of the box
-		ky$N	= (krely - iy$N - isize*0.5)/(isize*0.5)		;origin change and scale to -1 to +1, zero at center of the box
-		
-		;MOUSE LOCATION DEFINE A VALUE THAT WILL BE ZERO IF THE MOUSE IS ON THE circle of radius 1, AND RISE EXPONENTIALLY TO A VALUE OF 1 AT THE CENTRE OF THE BOX
-		k$N	= 1 - ((((kx$N^2) + (ky$N^2))*0.5)^0.5)	
-	else
-		kinside$N	= 0
-		k$N		= 0									;zero amplitude
-	endif
+  ix2 = 300  ; II box
+  iy2 = 105
 
-	ktrig$N	changed	kinside$N							;CREATE A TRIGGER (MOMENTARY '1') IF MOUSE ENTERS OR LEAVES THIS BOX
-	if	ktrig$N=1	then									;IF MOUSE HAS JUST ENTERED OR LEFT THIS BOX...
-		if	kinside$N=1	then							;IF MOUSE HAS JUST ENTERED THIS BOX...
-			event	"i", 2, 0, 3600, $N					;PLAY A LONG NOTE INSTRUMENT $N
-		elseif	kinside$N=0	then						;OR ELSE IF MOUSE HAS JUST LEFT THIS BOX 
-			turnoff2	2, 0, 1							;TURNOFF INSTRUMENT 2 ALLOWING RELEASE STAGES TO BE COMPLETED
-		endif										;END OF CONDITIONAL BRANCHING
-	endif											;END OF CONDITIONAL BRANCHING
+  ix3 = 550  ; III box
+  iy3 = 105
 
-		zkw	k$N^3, $N-1								;WRITE amplitude VALUE TO ZAK VARIABLE
-	#
+  ix4 = 800  ; IV box
+  iy4 = 105
 
-	;EXECUTE MACRO FOR EACH BOX...
-	$CHORD_BOX_DETECT(1)
-	$CHORD_BOX_DETECT(2)
-	$CHORD_BOX_DETECT(3)
-	$CHORD_BOX_DETECT(4)
-	$CHORD_BOX_DETECT(5)
-	$CHORD_BOX_DETECT(6)
-	$CHORD_BOX_DETECT(7)
+  ix5 = 174  ; V box
+  iy5 = 386
+
+  ix6 = 424  ; VI box
+  iy6 = 386
+
+  ix7 = 674  ; VII box
+  iy7 = 386
+
+  krelx invalue "_MouseRelX"
+  krely invalue "_MouseRelY"
+
+  gkoct invalue "Octave"
+  gkkey invalue "Key"
+  gkton invalue "Ton"
+
+
+  ; Audio file change / load in tables
+  ; ********************************************************************************************************
+
+  Sfile_new strcpy ""  ; Init to empty string
+  Sfile invalue "_Browse"
+  Sfile_old strcpyk Sfile_new
+  Sfile_new strcpyk Sfile
+  kfile strcmpk Sfile_new, Sfile_old
+
+  if kfile != 0 then  ; If a bang had been generated in the line above
+    reinit NEW_FILE   ; Reinitialize from label 'new_file'
+  endif
+NEW_FILE:
+  ichn filenchnls Sfile
+  if ichn == 1 then
+    giFileL ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read mono audio file channel 1
+    giFileR = giFileL
+  else
+    giFileL ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1  ; Read stereo audio file channel 1
+    giFileR ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 2  ; Read stereo audio file channel 2
+  endif
+  rireturn
+  ; *******************************************************************************************************************************************
+
+  ; Define a macro for detection of mouse within each box
+  #define CHORD_BOX_DETECT(N)
+  #
+  kinside$N init 0
+  if (ix$N <= krelx && krelx <= ix$N+isize && iy$N <= krely && krely <= iy$N+isize) then
+    kinside$N = 1
+
+    ; origin change and scale to -1 to +1, zero at center of the box
+    kx$N = (krelx - ix$N - isize*0.5)/(isize*0.5)
+    ; origin change and scale to -1 to +1, zero at center of the box
+    ky$N = (krely - iy$N - isize*0.5)/(isize*0.5)
+
+    ; Mouse location define a value that will be zero if the mouse is on the circle of
+    ; radius 1, and rise exponentially to a value of 1 at the centre of the box
+    k$N = 1 - ((((kx$N^2) + (ky$N^2))*0.5)^0.5)
+  else
+    kinside$N = 0
+    k$N       = 0  ; zero amplitude
+  endif
+
+  ; Create a trigger (momentary '1') if mouse enters or leaves this box
+  ktrig$N changed kinside$N
+  if ktrig$N = 1 then            ; If mouse has just entered or left this box...
+    if kinside$N = 1 then        ; If mouse has just entered this box...
+      event "i", 2, 0, 3600, $N  ; Play a long note instrument $n
+    elseif kinside$N = 0 then    ; Or else if mouse has just left this box
+      ; Turnoff instrument 2 allowing release stages to be completed
+      turnoff2 2, 0, 1
+    endif  ; End of conditional branching
+  endif    ; End of conditional branching
+
+  zkw k$N^3, $N-1  ; Write amplitude value to zak variable
+  #
+
+  ; Execute macro for each box...
+  $CHORD_BOX_DETECT(1)
+  $CHORD_BOX_DETECT(2)
+  $CHORD_BOX_DETECT(3)
+  $CHORD_BOX_DETECT(4)
+  $CHORD_BOX_DETECT(5)
+  $CHORD_BOX_DETECT(6)
+  $CHORD_BOX_DETECT(7)
 endin
 
-instr	2
-	;ipch2	table	1, gichord1 + p4 - 1	;PITCH OF FIRST NOTE OF CHORD
-	;ipch3	table	2, gichord1 + p4 - 1	;PITCH OF SECOND NOTE OF CHORD
-	;ipch4	table	3, gichord1 + p4 - 1	;PITCH OF THIRD NOTE OF CHORD
+instr 2
+  ; ipch2 table 1, gichord1 + p4 - 1 ;PITCH OF FIRST NOTE OF CHORD
+  ; ipch3 table 2, gichord1 + p4 - 1 ;PITCH OF SECOND NOTE OF CHORD
+  ; ipch4 table 3, gichord1 + p4 - 1 ;PITCH OF THIRD NOTE OF CHORD
 
-	aenv		expsegr	0.001,0.2,1,1,0.001	;AMPLITUDE ENVELOPE
-	
-	;DEFINE MACRO OF CODE TO PRODUCE EACH NOTE OF THE CHORD
-#define	NOTE(N)
-	#
-	if	i(gkton)=0 then										;IF TONALITY IS 'MAJOR'...
-		ipch$N	table	$N-1, gichord1 + p4 - 1					;DEFINE PITCH (PCH FORMAT) FOR THIS NOTE (MAJOR)
-	else														;OTHERWISE TONALITY MUST BE MINOR...
-		ipch$N	table	$N-1, gichord1m + p4 - 1					;DEFINE PITCH (PCH FORMAT) FOR THIS NOTE (MINOR)
-	endif													;END OF CONDITIONAL BRANCHING
+  aenv expsegr 0.001, 0.2, 1, 1, 0.001  ; Amplitude envelope
 
-	imlt$N	= cpspch(ipch$N + (i(gkkey)*0.01) + i(gkoct))/cpsoct(8.00)	;CONVERT PCH TO A RATIO
-	ilen		= nsamp(giFileL)/sr									;DERIVE LENGTH OF THE SAMPLE
-	aL$N		flooper	0.3, imlt$N, 0, ilen-2, 1, giFileL				;CREATE AUDIO SIGNAL USING FLOOPER2 OPCODE (LEFT CHANNEL)
-	aR$N		flooper	0.3, imlt$N, 0, ilen-2, 1, giFileR				;CREATE AUDIO SIGNAL USING FLOOPER2 OPCODE (RIGHT CHANNEL)
-	#
+  ; Define macro of code to produce each note of the chord
+  #define NOTE(N)
+  #
+  if i(gkton) = 0 then  ; If tonality is 'major'...
+    ; Define pitch (pch format) for this note (major)
+    ipch$N table $N-1, gichord1 + p4 - 1
+  else  ; Otherwise tonality must be minor...
+    ; Define pitch (pch format) for this note (minor)
+    ipch$N table $N-1, gichord1m + p4 - 1
+  endif  ; End of conditional branching
 
-	;EXECUTE MACRO FOR EACH NOTE
-	$NOTE(1)
-	$NOTE(2)
-	$NOTE(3)
-	$NOTE(4)
-	
-	;SUM (MIX) THE FOUR NOTES
-	aL		sum		aL1, aL2, aL3, aL4
-	aR		sum		aR1, aR2, aR3, aR4
-	
-	kamp		zkr		p4 - 1									;READ AMPLITUDE FROM ZAK VARIABLE
-	kamp		port		kamp, 0.05								;APPLY PORTAMENTO (TO PREVENT QUANTISATION / ZIPPER NOISE)
-	aamp		interp	kamp										;INTERPOLATE TO CREATE AN AUDIO RATE VERSION OF THIS VARIABLE
-	
-	kcfoct	=		(8*kamp)+6								;DEFINE A FILTER CUTOFF FREQUENCY WHICH IS RELATED TO DISTANCE FROM THE CENTRE OF THE BOX
-	
-	aL		tone		aL, cpsoct(kcfoct)							;APPLY LOW PASS FILTERING (TONE CONTROL)
-	aR		tone		aR, cpsoct(kcfoct)							;APPLY LOW PASS FILTERING (TONE CONTROL)
-	
-	aL		=		aL * aenv * aamp							;SCALE AUDIO SIGNAL WITH AMPLITIUDE ENVELOPE AND
-	aR		=		aR * aenv * aamp
-			outs		aL, aR
-			zawm		aL * gkRvbSnd, 0							;SEND SOME OF THE AUDIO TO THE REVERB VIA ZAK PATCHING (LEFT CHANNEL) 
-			zawm		aR * gkRvbSnd, 1							;SEND SOME OF THE AUDIO TO THE REVERB VIA ZAK PATCHING (RIGHT CHANNEL)
+  ; Convert pch to a ratio
+  imlt$N = cpspch(ipch$N + (i(gkkey)*0.01) + i(gkoct))/cpsoct(8.00)
+  ilen   = nsamp(giFileL)/sr  ; Derive length of the sample
+  ; Create audio signal using flooper2 opcode (left channel)
+  aL$N flooper 0.3, imlt$N, 0, ilen-2, 1, giFileL
+  ; Create audio signal using flooper2 opcode (right channel)
+  aR$N flooper 0.3, imlt$N, 0, ilen-2, 1, giFileR
+  #
+
+  ; Execute macro for each note
+  $NOTE(1)
+  $NOTE(2)
+  $NOTE(3)
+  $NOTE(4)
+
+  ; Sum (mix) the four notes
+  aL sum aL1, aL2, aL3, aL4
+  aR sum aR1, aR2, aR3, aR4
+
+  kamp zkr p4 - 1       ; Read amplitude from zak variable
+  kamp port kamp, 0.05  ; Apply portamento (to prevent quantisation / zipper noise)
+  aamp interp kamp      ; Interpolate to create an audio rate version of this variable
+
+  ; Define a filter cutoff frequency which is related to distance from the centre of the
+  ; box
+  kcfoct = (8*kamp)+6
+
+  aL tone aL, cpsoct(kcfoct)  ; Apply low pass filtering (tone control)
+  aR tone aR, cpsoct(kcfoct)  ; Apply low pass filtering (tone control)
+
+  aL = aL * aenv * aamp  ; Scale audio signal with amplitiude envelope and
+  aR = aR * aenv * aamp
+  outs aL, aR
+  ; Send some of the audio to the reverb via zak patching (left channel)
+  zawm aL * gkRvbSnd, 0
+  ; Send some of the audio to the reverb via zak patching (right channel)
+  zawm aR * gkRvbSnd, 1
 endin
 
-instr	1000	;REVERB
-	ainL		zar		0										;READ IN AUDIO FROM ZAK CHANNELS
-	ainR		zar		1										;READ IN AUDIO FROM ZAK CHANNELS
-			denorm	ainL, ainR								;...DENORMALIZE BOTH CHANNELS OF AUDIO SIGNAL
+instr 1000           ; Reverb
+  ainL zar 0         ; Read in audio from zak channels
+  ainR zar 1         ; Read in audio from zak channels
+  denorm ainL, ainR  ; ...Denormalize both channels of audio signal
 
-	arvbL, arvbR	reverbsr	ainL, ainR, gkRvbSze, 10000				;CREATE REVERBERATED SIGNAL (USING UDO DEFINED ABOVE)
-				outs		arvbL, arvbR							;SEND AUDIO TO OUTPUTS
-				zacl		0,3									;CLEAR ZAK AUDIO CHANNELS
+  ; Create reverberated signal (using udo defined above)
+  arvbL, arvbR reverbsr ainL, ainR, gkRvbSze, 10000
+  outs arvbL, arvbR  ; Send audio to outputs
+  zacl 0, 3          ; Clear zak audio channels
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1		0	   3600	;MOUSE POSITION DETECTION, PLAYS A NOTE FOR 1 HOUR
-i 1000	0	   3600	;REVERB
+; Instr | start | duration
+i 1 0 3600     ; Mouse position detection, plays a note for 1 hour
+i 1000 0 3600  ; Reverb
 </CsScore>
 </CsoundSynthesizer>
 
@@ -245,9 +265,9 @@ i 1000	0	   3600	;REVERB
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -265,14 +285,14 @@ i 1000	0	   3600	;REVERB
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -294,9 +314,9 @@ i 1000	0	   3600	;REVERB
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>100</r>
@@ -421,14 +441,14 @@ i 1000	0	   3600	;REVERB
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-2</minimum>
@@ -452,14 +472,14 @@ i 1000	0	   3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -481,9 +501,9 @@ i 1000	0	   3600	;REVERB
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -510,9 +530,9 @@ i 1000	0	   3600	;REVERB
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -539,9 +559,9 @@ i 1000	0	   3600	;REVERB
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>100</r>
@@ -568,9 +588,9 @@ i 1000	0	   3600	;REVERB
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -597,9 +617,9 @@ i 1000	0	   3600	;REVERB
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>100</r>
@@ -626,14 +646,14 @@ i 1000	0	   3600	;REVERB
   <fontsize>70</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>100</g>
-   <b>255</b>
+   <r>50</r>
+   <g>120</g>
+   <b>230</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -657,6 +677,18 @@ i 1000	0	   3600	;REVERB
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -674,9 +706,9 @@ i 1000	0	   3600	;REVERB
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>

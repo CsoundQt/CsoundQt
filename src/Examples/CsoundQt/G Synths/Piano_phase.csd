@@ -1,92 +1,93 @@
 ; Written by Aaron Krister Johnson, 2009 based on code by Ian McCurdy, 2006
 
 ; Ported to CsoundQt by René, January 2011
-; Tested on Ubuntu 10.04 with csound-double cvs January 2011 (previous version have a bug in madsr opcode) and CsoundQt svn rev 800
+; Tested on Ubuntu 10.04 with csound-double cvs January 2011 (previous version have a bug
+; in madsr opcode) and CsoundQt svn rev 800
 
-;my flags on Ubuntu: -dm0 -odac:plughw -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac:plughw -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100
-ksmps	= 128
-nchnls	= 2
+sr     = 44100
+ksmps  = 128
+nchnls = 2
 
-				massign	0, 2		;all midi to instrument 2
+massign 0, 2  ; all midi to instrument 2
 
-instr	1		;gui
-	gkndxatt		invalue	"Index1_Attack"		; init	.002
-	gkndxdec		invalue	"Index1_Decay"			; init	5
-	gkndxslev		invalue	"Index1_Sustain"		; init	0
-	gkndxrel		invalue	"Index1_Release"		; init	.1
-	gkndxatt2		invalue	"Index2_Attack"		; init	.002
-	gkndxdec2		invalue	"Index2_Decay"			; init	5
-	gkndxslev2	invalue	"Index2_Sustain"		; init	0
-	gkndxrel2		invalue	"Index2_Release"		; init	.1
-	gkampatt		invalue	"Amp_Attack"			; init	.002
-	gkampdec		invalue	"Amp_Decay"			; init	6
-	gkampslev		invalue	"Amp_Sustain"			; init	0
-	gkamprel		invalue	"Amp_Release"			; init	.1
-	gkcutoff		invalue	"Filter_Cutoff"		; init	6000
-	gkreson		invalue	"Filter_Reso"			; init	1
-	gkpan		invalue	"Pan"				; init	.5
-	gkchorus		invalue	"Chorus"				; init	.333
-	gkvol		invalue	"Volume"				; init	1
-	gkmodratio	invalue	"Mod_ratio1"			; init	1
-	gkmodratio2	invalue	"Mod_ratio2"			; init	2
-	gkindex		invalue	"Mod_index1"			; init	3
-	gkindex2		invalue	"Mod_index2"			; init	2
+instr 1                                 ; gui
+  gkndxatt    invalue "Index1_Attack"   ; init .002
+  gkndxdec    invalue "Index1_Decay"    ; init 5
+  gkndxslev   invalue "Index1_Sustain"  ; init 0
+  gkndxrel    invalue "Index1_Release"  ; init .1
+  gkndxatt2   invalue "Index2_Attack"   ; init .002
+  gkndxdec2   invalue "Index2_Decay"    ; init 5
+  gkndxslev2  invalue "Index2_Sustain"  ; init 0
+  gkndxrel2   invalue "Index2_Release"  ; init .1
+  gkampatt    invalue "Amp_Attack"      ; init .002
+  gkampdec    invalue "Amp_Decay"       ; init 6
+  gkampslev   invalue "Amp_Sustain"     ; init 0
+  gkamprel    invalue "Amp_Release"     ; init .1
+  gkcutoff    invalue "Filter_Cutoff"   ; init 6000
+  gkreson     invalue "Filter_Reso"     ; init 1
+  gkpan       invalue "Pan"             ; init .5
+  gkchorus    invalue "Chorus"          ; init .333
+  gkvol       invalue "Volume"          ; init 1
+  gkmodratio  invalue "Mod_ratio1"      ; init 1
+  gkmodratio2 invalue "Mod_ratio2"      ; init 2
+  gkindex     invalue "Mod_index1"      ; init 3
+  gkindex2    invalue "Mod_index2"      ; init 2
 endin
 
-instr	2	;FM (PM)
-	icps			cpsmidi
-	iamp			ampmidi	1
+instr 2  ; Fm (pm)
+  icps cpsmidi
+  iamp ampmidi 1
 
-	i1div2pi		=		0.1592
-	ipanR		=		i(gkpan)
-	ipanL		=		1-ipanR
+  i1div2pi = 0.1592
+  ipanR    = i(gkpan)
+  ipanL    = 1-ipanR
 
-	kvol			=		20000*gkvol
-	kpeakdev		=		iamp * gkindex * i1div2pi
-	kpeakdev2		=		iamp * gkindex2 * i1div2pi
+  kvol      = 20000*gkvol
+  kpeakdev  = iamp * gkindex * i1div2pi
+  kpeakdev2 = iamp * gkindex2 * i1div2pi
 
-	;ENVELOPES
-	kndxenv 		madsr 	i(gkndxatt), i(gkndxdec), i(gkndxslev) + .0000001, i(gkndxrel)
-	kndxenv2 		madsr 	i(gkndxatt2), i(gkndxdec2), i(gkndxslev2) + .0000001, i(gkndxrel2)
-	kampenv 		madsr 	i(gkampatt), i(gkampdec), i(gkampslev) + .0000001, i(gkamprel)
+  ; Envelopes
+  kndxenv  madsr i(gkndxatt), i(gkndxdec), i(gkndxslev) + .0000001, i(gkndxrel)
+  kndxenv2 madsr i(gkndxatt2), i(gkndxdec2), i(gkndxslev2) + .0000001, i(gkndxrel2)
+  kampenv  madsr i(gkampatt), i(gkampdec), i(gkampslev) + .0000001, i(gkamprel)
 
-	;STEREO "CHORUS" ENRICHMENT USING JITTER
-	kjitL		jitter	i(gkchorus)*3, 2, 5.3
-	kjitR		jitter	i(gkchorus)*3, 1.5, 5
+  ; Stereo "chorus" enrichment using jitter
+  kjitL jitter i(gkchorus)*3, 2, 5.3
+  kjitR jitter i(gkchorus)*3, 1.5, 5
 
-	;MODULATORS
-	aModulator	oscil	kpeakdev * kndxenv, icps * gkmodratio, 1
-	aModulator2	oscil	kpeakdev2 * kndxenv2 , icps * gkmodratio2, 1
-	aCarrierL		phasor	icps + kjitL
-	aCarrierR		phasor	icps + kjitR
-	aCarrierL		table	aCarrierL + aModulator + aModulator2, 1, 1, 0, 1
-	aCarrierR		table	aCarrierR + aModulator + aModulator2, 1, 1, 0, 1
-	aSigL		=		aCarrierL * iamp * kampenv
-	aSigR		=		aCarrierR * iamp * kampenv
+  ; Modulators
+  aModulator  oscil kpeakdev * kndxenv, icps * gkmodratio, 1
+  aModulator2 oscil kpeakdev2 * kndxenv2, icps * gkmodratio2, 1
+  aCarrierL phasor icps + kjitL
+  aCarrierR phasor icps + kjitR
+  aCarrierL table aCarrierL + aModulator + aModulator2, 1, 1, 0, 1
+  aCarrierR table aCarrierR + aModulator + aModulator2, 1, 1, 0, 1
+  aSigL = aCarrierL * iamp * kampenv
+  aSigR = aCarrierR * iamp * kampenv
 
-	aFilterL		bqrez	aSigL, gkcutoff, gkreson
-	aFilterR		bqrez	aSigR, gkcutoff, gkreson
-	aFilterL		balance	aFilterL, aSigL
-	aFilterR		balance	aFilterR, aSigR
-				outs		aFilterL * kvol * ipanL, aFilterR * kvol * ipanR
+  aFilterL bqrez aSigL, gkcutoff, gkreson
+  aFilterR bqrez aSigR, gkcutoff, gkreson
+  aFilterL balance aFilterL, aSigL
+  aFilterR balance aFilterR, aSigR
+  outs aFilterL * kvol * ipanL, aFilterR * kvol * ipanR
 endin
 
 
-instr	3		;init
-	outvalue	"_SetPresetIndex", 0	;call preset 0
+instr 3                          ; init
+  outvalue "_SetPresetIndex", 0  ; call preset 0
 endin
 </CsInstruments>
 <CsScore>
 f 1 0 65537 10 1
 
-i 1 0 3600	;gui
-i 3 1 0		;init
+i 1 0 3600  ; gui
+i 3 1 0     ; init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -99,9 +100,9 @@ i 3 1 0		;init
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>115</r>
-  <g>57</g>
-  <b>0</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Index1_Attack</objectName>
@@ -122,13 +123,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -151,14 +152,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -182,14 +183,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -214,13 +215,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -243,14 +244,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -275,13 +276,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -304,14 +305,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -336,13 +337,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -365,14 +366,14 @@ i 3 1 0		;init
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -396,15 +397,20 @@ i 3 1 0		;init
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -427,14 +433,14 @@ i 3 1 0		;init
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -459,13 +465,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -488,14 +494,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -520,13 +526,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -549,14 +555,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -581,13 +587,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -610,14 +616,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -641,14 +647,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -672,14 +678,14 @@ i 3 1 0		;init
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
@@ -704,13 +710,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -733,14 +739,14 @@ i 3 1 0		;init
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -765,13 +771,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -794,14 +800,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -826,13 +832,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -855,14 +861,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -887,13 +893,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -916,14 +922,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -947,14 +953,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -978,14 +984,14 @@ i 3 1 0		;init
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
@@ -1010,13 +1016,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -1039,14 +1045,14 @@ i 3 1 0		;init
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1070,14 +1076,14 @@ i 3 1 0		;init
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1101,14 +1107,14 @@ i 3 1 0		;init
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1133,13 +1139,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -1162,14 +1168,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1193,14 +1199,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1225,13 +1231,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -1254,14 +1260,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1286,13 +1292,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -1315,14 +1321,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1347,13 +1353,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -1373,14 +1379,14 @@ i 3 1 0		;init
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>222</r>
-   <g>113</g>
-   <b>0</b>
+   <r>199</r>
+   <g>123</g>
+   <b>43</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
@@ -1406,14 +1412,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1437,14 +1443,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1465,14 +1471,14 @@ i 3 1 0		;init
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>226</r>
-   <g>114</g>
-   <b>0</b>
+   <r>203</r>
+   <g>124</g>
+   <b>44</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
@@ -1495,14 +1501,14 @@ i 3 1 0		;init
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>232</r>
-   <g>117</g>
-   <b>0</b>
+   <r>208</r>
+   <g>128</g>
+   <b>45</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
@@ -1528,14 +1534,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1559,14 +1565,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1587,14 +1593,14 @@ i 3 1 0		;init
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>232</r>
-   <g>117</g>
-   <b>0</b>
+   <r>208</r>
+   <g>128</g>
+   <b>45</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
@@ -1621,13 +1627,13 @@ i 3 1 0		;init
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#e87500</textcolor>
+  <textcolor>#d0802d</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -1650,14 +1656,14 @@ i 3 1 0		;init
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
+   <r>231</r>
+   <g>172</g>
+   <b>50</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -1,445 +1,475 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, December 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, December 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Instrument 1 is activated by MIDI and by the GUI (with lost of midi portamento, sorry !!!, fofx6_Mono have it!)
-;	Midi Synth is polyphonic
-;	Removed Recording instr, included in QuteCsound
-;	Removed midi controlers, included in QuteCsound widgets
-;	Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Instrument 1 is activated by MIDI and by the GUI (with lost of midi portamento, sorry
+; !!!, fofx6_Mono have it!)
+; Midi Synth is polyphonic
+; Removed Recording instr, included in QuteCsound
+; Removed midi controlers, included in QuteCsound widgets
+; Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
 
-;	                         FOF x 6                             
-;	--------------------------------------------------------------------------------------------------------------------------
-;	This example make use of six simultaneous instances of the opcode to imitate a variety of singing voices singing various
-;	vowel sounds.
-;	The interface allows a variety of methods for inputting the essential parameter values and the patch incorporates several
-;	additional effects and elaborations.
-;	The first method for parameter input is 'Sliders or MIDI'. To use sliders, first activate the main 'On/Off' button which
-;	then allows control of the fundamental of the tone using the 'Fundemental (Hz)' slider and of the vowel using the
-;	'A E I O U' slider. To use MIDI just leave the main 'On/Off' button deactivated and play notes on the MIDI keyboard. The
-;	instrument is polyphonic.
-;	MIDI continuous controller 2 can be used to modulate the vowel type produced and controller 1 controls vibrato depth.
-;	The second method for parameter input is 'XY Panel'. With this method activated, fundamental and vowel type of the tone
-;	are controllable using the XY panel at the bottom of the interface. Movement in the vertical plane varys the
-;	fundemental and movement in the horizontal plane vary the vowel type.
-;	Selecting the 'Counters' option for parameter input mode allows the fundamental to be defined using the two
-;	neighbouring counters. In this mode, vowel type is varyed using the slider.
+; Fof x 6
+; --------------------------------------------------------------------------------------------------------------------------
+; This example make use of six simultaneous instances of the opcode to imitate a variety
+; of singing voices singing various
+; vowel sounds.
+; The interface allows a variety of methods for inputting the essential parameter values
+; and the patch incorporates several
+; additional effects and elaborations.
+; The first method for parameter input is 'Sliders or MIDI'. To use sliders, first
+; activate the main 'On/Off' button which
+; then allows control of the fundamental of the tone using the 'Fundemental (Hz)' slider
+; and of the vowel using the
+; 'A E I O U' slider. To use MIDI just leave the main 'On/Off' button deactivated and play
+; notes on the MIDI keyboard. The
+; instrument is polyphonic.
+; MIDI continuous controller 2 can be used to modulate the vowel type produced and
+; controller 1 controls vibrato depth.
+; The second method for parameter input is 'XY Panel'. With this method activated,
+; fundamental and vowel type of the tone
+; are controllable using the XY panel at the bottom of the interface. Movement in the
+; vertical plane varys the
+; fundemental and movement in the horizontal plane vary the vowel type.
+; Selecting the 'Counters' option for parameter input mode allows the fundamental to be
+; defined using the two
+; neighbouring counters. In this mode, vowel type is varyed using the slider.
 
-;	A bordered panel contains various controls for fundamental and amplitude LFO modulation. 'Vibrato' refers to fundamental
-;	modulation and 'tremolo' refers to amplitude modulation. There are controls for how quickly the modulation builds,
-;	('ModRis') and the delay time before it begins to build, ('ModDly'). There is overall control of modulation depth and
-;	frequency ('ModDep' and 'ModFrq') and independent control over vibrato and tremolo depth ('VibDep' and 'TrmDep').
+; A bordered panel contains various controls for fundamental and amplitude LFO modulation.
+; 'Vibrato' refers to fundamental
+; modulation and 'tremolo' refers to amplitude modulation. There are controls for how
+; quickly the modulation builds,
+; ('ModRis') and the delay time before it begins to build, ('ModDly'). There is overall
+; control of modulation depth and
+; frequency ('ModDep' and 'ModFrq') and independent control over vibrato and tremolo depth
+; ('VibDep' and 'TrmDep').
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gasend		init		0									;GLOBAL VARIABLE USED TO PASS AUDIO BETWEEN INSTRUMENTS 
+gasend init 0  ; Global variable used to pass audio between instruments
 
-giExp10_2000	ftgen	200, 0, 129, -25, 0,  10.0, 128,  2000.0		;TABLE FOR EXP SLIDER
-giExp1_3000	ftgen	201, 0, 129, -25, 0,   1.0, 128,  3000.0		;TABLE FOR EXP SLIDER
-giExp20_20000	ftgen	202, 0, 129, -25, 0,  20.0, 128, 20000.0		;TABLE FOR EXP SLIDER
-giExp100_8000	ftgen	203, 0, 129, -25, 0, 100.0, 128,  8000.0		;TABLE FOR EXP SLIDER
+giExp10_2000  ftgen 200, 0, 129, -25, 0, 10.0, 128, 2000.0   ; Table for exp slider
+giExp1_3000   ftgen 201, 0, 129, -25, 0, 1.0, 128, 3000.0    ; Table for exp slider
+giExp20_20000 ftgen 202, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
+giExp100_8000 ftgen 203, 0, 129, -25, 0, 100.0, 128, 8000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkOctave		invalue	"Octave"
-		gkSemiStep	invalue	"SemiStep"
-		gkIPmode		invalue	"IPmode"
-		gkvoice		invalue	"Voice"
-		gkLFOmode		invalue	"LFOmode"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkOctave   invalue "Octave"
+    gkSemiStep invalue "SemiStep"
+    gkIPmode   invalue "IPmode"
+    gkvoice    invalue "Voice"
+    gkLFOmode  invalue "LFOmode"
 
-		gkndx		invalue	"A_E_I_O_U"				;MIDI CC 1
-		kfund		invalue	"Fundamental"
-		gkfund		tablei	kfund, giExp1_3000, 1
-					outvalue	"Fundamental_Value", gkfund
-		gkoct		invalue	"Octaviation"
-		gkoutamp		invalue	"Amplitude"
-		gkporttime1	invalue	"Porta_Fund"
-		gkporttime2	invalue	"Porta_Formant"
-		gkVlRndType	invalue	"Voxel_RndType"
-		gkFundRndType	invalue	"Fund_RndType"
+    gkndx invalue "A_E_I_O_U"  ; MIDI cc 1
+    kfund invalue "Fundamental"
+    gkfund tablei kfund, giExp1_3000, 1
+    outvalue "Fundamental_Value", gkfund
+    gkoct         invalue "Octaviation"
+    gkoutamp      invalue "Amplitude"
+    gkporttime1   invalue "Porta_Fund"
+    gkporttime2   invalue "Porta_Formant"
+    gkVlRndType   invalue "Voxel_RndType"
+    gkFundRndType invalue "Fund_RndType"
 
-		gkmoddep		invalue	"ModDep"					;MIDI CC 2
-		gkmodfrq		invalue	"ModFrq"
-		gkvibdep		invalue	"VibDep"
-		gktrmdep		invalue	"TrmDep"
-		gkmoddly		invalue	"ModDly"
-		gkmodris		invalue	"ModRis"
-		gkamprand		invalue	"AmpOS"
-		gkamprandF	invalue	"AmpOSF"
-		gkfrqrand		invalue	"FrqOS"
-		gkfrqrandF	invalue	"FrqOSF"
-		gkFundRndA	invalue	"RandAmp"
-		gkFundRndF	invalue	"RandFrq"
-		gkris		invalue	"Rise"
-		gkdur		invalue	"Dur"
-		gkdec		invalue	"Dec"
-		gkrndfund		invalue	"Random_Fund"
-		gkVlLFOAmp	invalue	"Depth"
-		gkVlLFOFrq	invalue	"Rate"
-		gkVlRndAmp	invalue	"RndAmt"
-		gkVlRndFrq	invalue	"RndFrq"
-		kHPF			invalue	"EQ_HPF"
-		gkHPF		tablei	kHPF, giExp20_20000, 1
-					outvalue	"EQ_HPF_Value", gkHPF
-		kcf			invalue	"EQ_Cutoff"
-		gkcf			tablei	kcf, giExp100_8000, 1
-					outvalue	"EQ_Cutoff_Value", gkcf
-		gkgain		invalue	"EQ_Gain"
-		gkq			invalue	"EQ_Res"
-		kLPF			invalue	"EQ_LPF"
-		gkLPF		tablei	kLPF, giExp20_20000, 1
-					outvalue	"EQ_LPF_Value", gkLPF
-		gkEQlev		invalue	"EQ_Level"
-		gkChoRate		invalue	"Cho_Rate"
-		gkChoDep		invalue	"Cho_Depth"
-		gkrvbmix		invalue	"REV_Mix"
-		gkrvbtim		invalue	"REV_Size"
-		gkhfdiff		invalue	"REV_HFDiff"
-		gkDlyMix		invalue	"DEL_Mix"
-		gkDlyTim		invalue	"DEL_Time"
-		gkDlyFB		invalue	"DEL_FB"
-		gkDlyModDep	invalue	"DEL_ModDep"
-		gkDlyModFrq	invalue	"DEL_ModFrq"
+    gkmoddep   invalue "ModDep"  ; MIDI cc 2
+    gkmodfrq   invalue "ModFrq"
+    gkvibdep   invalue "VibDep"
+    gktrmdep   invalue "TrmDep"
+    gkmoddly   invalue "ModDly"
+    gkmodris   invalue "ModRis"
+    gkamprand  invalue "AmpOS"
+    gkamprandF invalue "AmpOSF"
+    gkfrqrand  invalue "FrqOS"
+    gkfrqrandF invalue "FrqOSF"
+    gkFundRndA invalue "RandAmp"
+    gkFundRndF invalue "RandFrq"
+    gkris      invalue "Rise"
+    gkdur      invalue "Dur"
+    gkdec      invalue "Dec"
+    gkrndfund  invalue "Random_Fund"
+    gkVlLFOAmp invalue "Depth"
+    gkVlLFOFrq invalue "Rate"
+    gkVlRndAmp invalue "RndAmt"
+    gkVlRndFrq invalue "RndFrq"
+    kHPF       invalue "EQ_HPF"
+    gkHPF tablei kHPF, giExp20_20000, 1
+    outvalue "EQ_HPF_Value", gkHPF
+    kcf invalue "EQ_Cutoff"
+    gkcf tablei kcf, giExp100_8000, 1
+    outvalue "EQ_Cutoff_Value", gkcf
+    gkgain invalue "EQ_Gain"
+    gkq    invalue "EQ_Res"
+    kLPF   invalue "EQ_LPF"
+    gkLPF tablei kLPF, giExp20_20000, 1
+    outvalue "EQ_LPF_Value", gkLPF
+    gkEQlev     invalue "EQ_Level"
+    gkChoRate   invalue "Cho_Rate"
+    gkChoDep    invalue "Cho_Depth"
+    gkrvbmix    invalue "REV_Mix"
+    gkrvbtim    invalue "REV_Size"
+    gkhfdiff    invalue "REV_HFDiff"
+    gkDlyMix    invalue "DEL_Mix"
+    gkDlyTim    invalue "DEL_Time"
+    gkDlyFB     invalue "DEL_FB"
+    gkDlyModDep invalue "DEL_ModDep"
+    gkDlyModFrq invalue "DEL_ModFrq"
 
-		kfund2		invalue	"X_Fund"
-		gkfund2		tablei	kfund2, giExp10_2000, 1
-					outvalue	"X_Fund_Value", gkfund2
-		gkndx2		invalue	"Y_Vowel"
-	endif
+    kfund2 invalue "X_Fund"
+    gkfund2 tablei kfund2, giExp10_2000, 1
+    outvalue "X_Fund_Value", gkfund2
+    gkndx2 invalue "Y_Vowel"
+  endif
 endin
 
-instr	1	;FOF INSTRUMENT
-	if p4!=0 then													;MIDI
-		ioct		=	p4											;READ OCT VALUE FROM MIDI INPUT
-		;PITCH BEND=============================================================================================
-		iSemitoneBendRange = 12										;PITCH BEND RANGE IN SEMITONES
-		imin		= 0												;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333						;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax								;PITCH BEND VARIABLE (IN oct FORMAT)
-		kfund	=	cpsoct(ioct + kbend)							;SET FUNDEMENTAL
-		;=======================================================================================================
-	else															;GUI
-		kfund	=	gkfund										;SET FUNDEMENTAL
-	endif
+instr 1            ; Fof instrument
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read oct value from MIDI input
+    ; Pitch
+    ; bend=============================================================================================
+    iSemitoneBendRange = 12  ; Pitch bend range in semitones
+    imin               = 0   ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kfund = cpsoct(ioct + kbend)  ; Set fundemental
+    ; =======================================================================================================
+  else              ; GUI
+    kfund = gkfund  ; Set fundemental
+  endif
 
-	;REINITILIZATION CHECK=======================================================================================
-	kSwitch		changed	gkvoice, gkLFOmode							;IF VARIABLES THAT NEED RE-INITIALIZATION ARE CHANGED kSwitch WILL BE A MOMENTARY '1', OTHERWISE IT IS ZERO
-	if	kSwitch=1	then												;IF kSwitch=1 THEN
-		reinit	UPDATE											;BEGIN A REINITIALIZATION PASS FROM LABEL 'UPDATE'
-	endif														;END OF CONDITIONAL BRANCHING
-	UPDATE:														;A LABEL
-	;=============================================================================================================
-	
-	;AMPLITUDE ENVELOPE===========================================================================================
-	aenv			linsegr		.0001, .1, 1.5, .3, 1, .1, .0001
-	;=============================================================================================================
-	
-	;PORTAMENTO FUNCTION==========================================================================================
-	kporttime		linseg	0,.001,1,1,1								;PORTAMENTO FUNCTION
-	kporttime1	=		kporttime * gkporttime1						;PORTAMENTO FUNCTION
-	kporttime2	=		kporttime * gkporttime2						;PORTAMENTO FUNCTION
-	
-	iolaps 		= 		14850									;MAXIMUM NUMBER OF OVERLAPS (OVERESTIMATE)
-	ifna 		= 		101										;WAVEFORM FOR GRAIN CONTENTS
-	ifnb 		= 		102										;EXPONENTIAL SHAPE USED FOR GRAIN ENVELOPING
-	itotdur 		= 		3600										;NOTE WILL LAST FOR 1 HOUR (OVERESTIMATE)
-	;==============================================================================================================
-	
-	;FUNDEMENTAL/FORMANT INPUT FORMAT==============================================================================
-	ivoice		table	i(gkvoice), 103
-	if	gkIPmode!=0	kgoto	SKIP1
-		kndx		=	gkndx
-	SKIP1:
-	if	gkIPmode!=1	kgoto	SKIP2
-		kndx		=	gkndx2
-		kfund	=	gkfund2
-	SKIP2:
-	if	gkIPmode!=2	kgoto	SKIP3
-		kndx		=	gkndx
-		kfund	=	cpspch(gkOctave+(gkSemiStep*.01))
-	SKIP3:
-	;===============================================================================================================
-	
-	;FUNDEMENTAL_RANDOM_OFFSET======================================================================================
-	irandfundrange		=		i(gkrndfund)
-	ifundrand		random		irandfundrange, -irandfundrange
-	kFundRndi		randomi		gkFundRndA, -gkFundRndA, gkFundRndF
-	kFundRndh		randomh		gkFundRndA, -gkFundRndA, gkFundRndF
-	kFundRnd		ntrpol		kFundRndi, kFundRndh, gkFundRndType
-	kfund			=		kfund*(1+ifundrand)*(1+kFundRnd)
-	;===============================================================================================================
-	
-	;VOWEL_MODULATION===============================================================================================
-	kvowelLFO		lfo		gkVlLFOAmp, gkVlLFOFrq, i(gkLFOmode)
-	kvowelRndi	randomi	-gkVlRndAmp, gkVlRndAmp, gkVlRndFrq
-	kvowelRndh	randomh	-gkVlRndAmp, gkVlRndAmp, gkVlRndFrq
-	kvowelRnd		ntrpol	kvowelRndi, kvowelRndh, gkVlRndType
-	kndx			=		kndx+kvowelLFO+kvowelRnd
-	kndx			mirror	kndx, 0, 1
-	;===============================================================================================================
-	
-	;FOF_AMPLITUDE_BANDWIDTH_&_FORMANT_DERIVATION===================================================================
-	k1form 		table	kndx, 1+ivoice, 1
-	k1amp 		table 	kndx, 6+ivoice, 1
-	k1amp		=		ampdb(k1amp)
-	k1band 		table 	kndx, 11+ivoice, 1
-	
-	k2form 		table	kndx, 2+ivoice, 1
-	k2amp 		table 	kndx, 7+ivoice, 1
-	k2amp		=		ampdb(k2amp)
-	k2band 		table 	kndx, 12+ivoice, 1
-	
-	k3form 		table	kndx, 3+ivoice, 1
-	k3amp 		table 	kndx, 8+ivoice, 1
-	k3amp		=		ampdb(k3amp)
-	k3band 		table 	kndx, 13+ivoice, 1
-	
-	k4form 		table	kndx, 4+ivoice, 1
-	k4amp 		table 	kndx, 9+ivoice, 1
-	k4amp		=		ampdb(k4amp)
-	k4band 		table 	kndx, 14+ivoice, 1
-	
-	k5form 		table	kndx, 5+ivoice, 1
-	k5amp 		table 	kndx, 10+ivoice, 1
-	k5amp		=		ampdb(k5amp)
-	k5band 		table 	kndx, 15+ivoice, 1
-	;===============================================================================================================
-	
-	rireturn			;RETURN TO PERFORMANCE TIME PASSES
-	
-	;PORTAMENTO PARAMETER SMOOTHING APPLIED TO FORMANT, BANDWIDTH AND FUNDEMENTAL PARAMETERS========================
-	k1form		portk	k1form, kporttime2
-	k2form		portk	k2form, kporttime2
-	k3form		portk	k3form, kporttime2
-	k4form		portk	k4form, kporttime2
-	k5form		portk	k5form, kporttime2
-	k1band		portk	k1band, kporttime2
-	k2band		portk	k2band, kporttime2
-	k3band		portk	k3band, kporttime2
-	k4band		portk	k4band, kporttime2
-	k5band		portk	k5band, kporttime2
-	kfund		portk	kfund,  kporttime1
-	;==============================================================================================================
-	
-	;MODULATION====================================================================================================
-	kamprnd		randomi	0, gkamprand, gkamprandF
-	kmoddep		=		gkmoddep + kamprnd
-	kmoddep		limit	kmoddep, 0, 1
-	kfrqrnd		randomi	0, gkfrqrand, gkfrqrandF
-	kmodfrq		=		gkmodfrq+kfrqrnd
-	kmoddep		limit	kmoddep, 0, 10
-	kmodenv		linseg	0, i(gkmoddly)+.00001, 0, i(gkmodris), 1, 1, 1
-	kvib			oscili	gkvibdep*kmodenv*gkmoddep, kmodfrq, 101
-	kvib			=		kvib+1
-	kfund		=		kfund*kvib
-	ktrm			oscil	gktrmdep*.5*kmodenv*kmoddep, gkmodfrq, 101
-	ktrm			=		ktrm+.5
-	;===============================================================================================================
+  ; Reinitilization
+  ; check=======================================================================================
+  ; If variables that need re-initialization are changed kswitch will be a momentary '1',
+  ; otherwise it is zero
+  kSwitch changed gkvoice, gkLFOmode
+  if kSwitch = 1 then  ; IF kSwitch=1 THEN
+    reinit UPDATE      ; Begin a reinitialization pass from label 'update'
+  endif                ; End of conditional branching
+UPDATE:                ; A label
+  ; =============================================================================================================
 
-	;FOF============================================================================================================
-	a1 			fof 		k1amp, kfund, k1form, gkoct, k1band, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
-	a2 			fof 		k2amp, kfund, k2form, gkoct, k2band, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
-	a3 			fof 		k3amp, kfund, k3form, gkoct, k3band, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
-	a4 			fof 		k4amp, kfund, k4form, gkoct, k4band, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
-	a5 			fof 		k5amp, kfund, k5form, gkoct, k5band, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
-	;===============================================================================================================
+  ; Amplitude
+  ; envelope===========================================================================================
+  aenv linsegr .0001, .1, 1.5, .3, 1, .1, .0001
+  ; =============================================================================================================
 
-	;OUT============================================================================================================
-	avoice		=		(a1+a2+a3+a4+a5) * ktrm * gkoutamp * aenv
-	gasend		=		gasend + avoice 
-	;================================================================================================================
+  ; Portamento
+  ; function==========================================================================================
+  kporttime linseg 0, .001, 1, 1, 1     ; Portamento function
+  kporttime1 = kporttime * gkporttime1  ; Portamento function
+  kporttime2 = kporttime * gkporttime2  ; Portamento function
+
+  iolaps  = 14850  ; Maximum number of overlaps (overestimate)
+  ifna    = 101    ; Waveform for grain contents
+  ifnb    = 102    ; Exponential shape used for grain enveloping
+  itotdur = 3600   ; Note will last for 1 hour (overestimate)
+  ; ==============================================================================================================
+
+  ; Fundemental/formant input
+  ; format==============================================================================
+  ivoice table i(gkvoice), 103
+  if gkIPmode != 0 kgoto SKIP1
+  kndx = gkndx
+SKIP1:
+  if gkIPmode != 1 kgoto SKIP2
+  kndx  = gkndx2
+  kfund = gkfund2
+SKIP2:
+  if gkIPmode != 2 kgoto SKIP3
+  kndx  = gkndx
+  kfund = cpspch(gkOctave+(gkSemiStep*.01))
+SKIP3:
+  ; ===============================================================================================================
+
+  ; Fundemental_random_offset======================================================================================
+  irandfundrange = i(gkrndfund)
+  ifundrand random irandfundrange, -irandfundrange
+  kFundRndi randomi gkFundRndA, -gkFundRndA, gkFundRndF
+  kFundRndh randomh gkFundRndA, -gkFundRndA, gkFundRndF
+  kFundRnd ntrpol kFundRndi, kFundRndh, gkFundRndType
+  kfund = kfund*(1+ifundrand)*(1+kFundRnd)
+  ; ===============================================================================================================
+
+  ; Vowel_modulation===============================================================================================
+  kvowelLFO lfo gkVlLFOAmp, gkVlLFOFrq, i(gkLFOmode)
+  kvowelRndi randomi -gkVlRndAmp, gkVlRndAmp, gkVlRndFrq
+  kvowelRndh randomh -gkVlRndAmp, gkVlRndAmp, gkVlRndFrq
+  kvowelRnd ntrpol kvowelRndi, kvowelRndh, gkVlRndType
+  kndx = kndx+kvowelLFO+kvowelRnd
+  kndx mirror kndx, 0, 1
+  ; ===============================================================================================================
+
+  ; Fof_amplitude_bandwidth_&_formant_derivation===================================================================
+  k1form table kndx, 1+ivoice, 1
+  k1amp  table kndx, 6+ivoice, 1
+  k1amp = ampdb(k1amp)
+  k1band table kndx, 11+ivoice, 1
+
+  k2form table kndx, 2+ivoice, 1
+  k2amp  table kndx, 7+ivoice, 1
+  k2amp = ampdb(k2amp)
+  k2band table kndx, 12+ivoice, 1
+
+  k3form table kndx, 3+ivoice, 1
+  k3amp  table kndx, 8+ivoice, 1
+  k3amp = ampdb(k3amp)
+  k3band table kndx, 13+ivoice, 1
+
+  k4form table kndx, 4+ivoice, 1
+  k4amp  table kndx, 9+ivoice, 1
+  k4amp = ampdb(k4amp)
+  k4band table kndx, 14+ivoice, 1
+
+  k5form table kndx, 5+ivoice, 1
+  k5amp  table kndx, 10+ivoice, 1
+  k5amp = ampdb(k5amp)
+  k5band table kndx, 15+ivoice, 1
+  ; ===============================================================================================================
+
+  rireturn  ; Return to performance time passes
+
+  ; Portamento parameter smoothing applied to formant, bandwidth and fundemental
+  ; parameters========================
+  k1form portk k1form, kporttime2
+  k2form portk k2form, kporttime2
+  k3form portk k3form, kporttime2
+  k4form portk k4form, kporttime2
+  k5form portk k5form, kporttime2
+  k1band portk k1band, kporttime2
+  k2band portk k2band, kporttime2
+  k3band portk k3band, kporttime2
+  k4band portk k4band, kporttime2
+  k5band portk k5band, kporttime2
+  kfund  portk kfund, kporttime1
+  ; ==============================================================================================================
+
+  ; Modulation====================================================================================================
+  kamprnd randomi 0, gkamprand, gkamprandF
+  kmoddep = gkmoddep + kamprnd
+  kmoddep limit kmoddep, 0, 1
+  kfrqrnd randomi 0, gkfrqrand, gkfrqrandF
+  kmodfrq = gkmodfrq+kfrqrnd
+  kmoddep limit kmoddep, 0, 10
+  kmodenv linseg 0, i(gkmoddly)+.00001, 0, i(gkmodris), 1, 1, 1
+  kvib oscili gkvibdep*kmodenv*gkmoddep, kmodfrq, 101
+  kvib  = kvib+1
+  kfund = kfund*kvib
+  ktrm oscil gktrmdep*.5*kmodenv*kmoddep, gkmodfrq, 101
+  ktrm = ktrm+.5
+  ; ===============================================================================================================
+
+  ; Fof============================================================================================================
+  a1 fof k1amp, kfund, k1form, gkoct, k1band, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
+  a2 fof k2amp, kfund, k2form, gkoct, k2band, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
+  a3 fof k3amp, kfund, k3form, gkoct, k3band, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
+  a4 fof k4amp, kfund, k4form, gkoct, k4band, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
+  a5 fof k5amp, kfund, k5form, gkoct, k5band, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
+  ; ===============================================================================================================
+
+  ; Out============================================================================================================
+  avoice = (a1+a2+a3+a4+a5) * ktrm * gkoutamp * aenv
+  gasend = gasend + avoice
+  ; ================================================================================================================
 endin
 
-instr	2	;INIT
-		outvalue	"_SetPresetIndex", 0
+instr 2  ; Init
+  outvalue "_SetPresetIndex", 0
 endin
 
-instr	3	;EQ
-	aEQ 			pareq	gasend, gkcf, ampdb(gkgain), gkq			;APPLY PARAMETRIC EQ
-	aEQ			buthp	aEQ, gkHPF							;APPLY HIGH PASS FILTER
-	aEQ			butlp	aEQ, gkLPF							;APPLY LOW PASS FILTER
-	gasend		=		aEQ*gkEQlev							;CREATE NEW gasend AUDIO VARIABLE
+instr 3                                       ; Eq
+  aEQ pareq gasend, gkcf, ampdb(gkgain), gkq  ; Apply parametric eq
+  aEQ buthp aEQ, gkHPF                        ; Apply high pass filter
+  aEQ butlp aEQ, gkLPF                        ; Apply low pass filter
+  gasend = aEQ*gkEQlev                        ; Create new gasend audio variable
 endin
 
-instr	4	;DRY SIGNAL OUTPUT
-	aSigL		=		gasend*(1-gkrvbmix)						;LEFT CHANNEL AUDIO
-	aSigR		=		gasend*(1-gkrvbmix)						;RIGHT CHANNEL AUDIO	
-				outs 	aSigL, aSigR							;SEND AUDIO TO OUTPUTS
+instr 4                        ; Dry signal output
+  aSigL = gasend*(1-gkrvbmix)  ; Left channel audio
+  aSigR = gasend*(1-gkrvbmix)  ; Right channel audio
+  outs aSigL, aSigR            ; Send audio to outputs
 endin
 
-instr	5	;CHORUS
-	atim1 		jspline 	.005*gkChoDep, 4  *gkChoRate, 4.1*gkChoRate	;RANDOM SPLINE CURVE FOR DELAY TIME TO BE USED BY CHORUS
-	atim2 		jspline 	.005*gkChoDep, 4.1*gkChoRate, 4.2*gkChoRate	;RANDOM SPLINE CURVE FOR DELAY TIME TO BE USED BY CHORUS
-	atim3 		jspline 	.005*gkChoDep, 4.2*gkChoRate, 4.3*gkChoRate	;RANDOM SPLINE CURVE FOR DELAY TIME TO BE USED BY CHORUS
-	;DELAY LINE=========================================================================================================================
-	aignore		delayr	.01
-	atap1		deltap3	abs(atim1)+.001
-	atap2		deltap3	abs(atim2)+.001
-	atap3		deltap3	abs(atim3)+.001
-				delayw	gasend
-	;====================================================================================================================================
-	aSigL		=		atap1+(atap2*.7)						;LEFT CHANNEL AUDIO
-	aSigR		=		atap3+(atap2*.7)						;RIGHT CHANNEL AUDIO	
-				outs 	aSigL, aSigR							;SEND AUDIO TO OUTPUTS
+instr 5  ; Chorus
+  ; Random spline curve for delay time to be used by chorus
+  atim1 jspline .005*gkChoDep, 4 *gkChoRate, 4.1*gkChoRate
+  ; Random spline curve for delay time to be used by chorus
+  atim2 jspline .005*gkChoDep, 4.1*gkChoRate, 4.2*gkChoRate
+  ; Random spline curve for delay time to be used by chorus
+  atim3 jspline .005*gkChoDep, 4.2*gkChoRate, 4.3*gkChoRate
+  ; Delay
+  ; line=========================================================================================================================
+  aignore delayr .01
+  atap1 deltap3 abs(atim1)+.001
+  atap2 deltap3 abs(atim2)+.001
+  atap3 deltap3 abs(atim3)+.001
+  delayw gasend
+  ; ====================================================================================================================================
+  aSigL = atap1+(atap2*.7)  ; Left channel audio
+  aSigR = atap3+(atap2*.7)  ; Right channel audio
+  outs aSigL, aSigR         ; Send audio to outputs
 endin
 
-instr 	100	;REVERB
-				denorm	gasend								;DENORMALIZE AUDIO SIGNAL
-	arvbL, arvbR 	freeverb 	gasend, gasend, gkrvbtim, gkhfdiff, sr
-	aSigL		=		arvbL*gkrvbmix							;LEFT CHANNEL AUDIO
-	aSigR		=		arvbR*gkrvbmix							;RIGHT CHANNEL AUDIO	
-				outs 	aSigL, aSigR							;SEND AUDIO TO OUTPUTS
+instr 100        ; Reverb
+  denorm gasend  ; Denormalize audio signal
+  arvbL, arvbR freeverb gasend, gasend, gkrvbtim, gkhfdiff, sr
+  aSigL = arvbL*gkrvbmix  ; Left channel audio
+  aSigR = arvbR*gkrvbmix  ; Right channel audio
+  outs aSigL, aSigR       ; Send audio to outputs
 endin
 
-instr	102	;PING PONG DELAY
-	iporttime		init		.2
-	kporttime		linseg	0,.001,iporttime,1,iporttime
-	
-	kDlyTim		portk	gkDlyTim, kporttime
-	kDlyMod		lfo		gkDlyModDep, gkDlyModFrq, 0
-	kDlyTim		=		kDlyTim+kDlyMod
-	kDlyTim		limit	kDlyTim, .001, 2
-	aDlyTim		interp	kDlyTim
-	
-	imaxdelay		=		2									;MAXIMUM DELAY TIME
-	
-	;LEFT CHANNEL OFFSETTING DELAY (NO FEEDBACK!)
-	aBuffer		delayr	imaxdelay*.5
-	aLeftOffset	deltap3	aDlyTim*.5
-				delayw	gasend*gkDlyMix
-			
-	;LEFT CHANNEL DELAY WITH FEEDBACK
-	aFBsigL		init		0
-	aBuffer		delayr	imaxdelay
-	aDlySigL		deltap3	aDlyTim
-				delayw	aLeftOffset + aFBsigL
-	aFBsigL			=	aDlySigL * gkDlyFB
-	
-	;RIGHT CHANNEL DELAY WITH FEEDBACK
-	aFBsigR		init		0
-	aBuffer		delayr	imaxdelay
-	aDlySigR		deltap3	aDlyTim
-				delayw	(gasend*gkDlyMix) + aFBsigR
-	aFBsigR		=		aDlySigR * gkDlyFB	
-	aSigL		=		aDlySigL+aLeftOffset					;LEFT CHANNEL AUDIO
-	aSigR		=		aDlySigR								;RIGHT CHANNEL AUDIO	
-				outs 	aSigL, aSigR							;SEND AUDIO TO OUTPUTS
+instr 102  ; Ping pong delay
+  iporttime init .2
+  kporttime linseg 0, .001, iporttime, 1, iporttime
+
+  kDlyTim portk gkDlyTim, kporttime
+  kDlyMod lfo gkDlyModDep, gkDlyModFrq, 0
+  kDlyTim = kDlyTim+kDlyMod
+  kDlyTim limit kDlyTim, .001, 2
+  aDlyTim interp kDlyTim
+
+  imaxdelay = 2  ; Maximum delay time
+
+  ; Left channel offsetting delay (no feedback!)
+  aBuffer delayr imaxdelay*.5
+  aLeftOffset deltap3 aDlyTim*.5
+  delayw gasend*gkDlyMix
+
+  ; Left channel delay with feedback
+  aFBsigL init 0
+  aBuffer delayr imaxdelay
+  aDlySigL deltap3 aDlyTim
+  delayw aLeftOffset + aFBsigL
+  aFBsigL = aDlySigL * gkDlyFB
+
+  ; Right channel delay with feedback
+  aFBsigR init 0
+  aBuffer delayr imaxdelay
+  aDlySigR deltap3 aDlyTim
+  delayw (gasend*gkDlyMix) + aFBsigR
+  aFBsigR = aDlySigR * gkDlyFB
+  aSigL   = aDlySigL+aLeftOffset  ; Left channel audio
+  aSigR   = aDlySigR              ; Right channel audio
+  outs aSigL, aSigR               ; Send audio to outputs
 endin
 
-instr	300													;CLEAR GLOBAL VARIBLES
-	gasend		=		0
+instr 300  ; Clear global varibles
+  gasend = 0
 endin
 </CsInstruments>
 <CsScore>
-f 101 0 4096 10 1					;SINE WAVE
-f 102 0 1024 19 0.5 0.5 270 0.5		;EXPONENTIAL CURVE USED TO DEFINE THE ENVELOPE SHAPE OF FOF PULSES
-f 103 0 16 -2 0 15 30 45 60			;INDEXING USED BY VOICE SELECTER BUTTON 
+f 101 0 4096 10 1  ; Sine wave
+; Exponential curve used to define the envelope shape of fof pulses
+f 102 0 1024 19 0.5 0.5 270 0.5
+f 103 0 16 -2 0 15 30 45 60  ; Indexing used by voice selecter button
 
-;FUNCTION TABLES STORING DATA FOR VARIOUS VOICE FORMANTS
-;BASS
-f 1  0 32768 -7 	600	10922	400	10922	250	10924	350	;FREQ
-f 2  0 32768 -7	 1040	10922	1620	10922	1750	10924	600	;FREQ
-f 3  0 32768 -7	2250	10922	2400	10922	2600	10924	2400	;FREQ
-f 4  0 32768 -7	2450	10922	2800	10922	3050	10924	2675	;FREQ
-f 5  0 32768 -7	2750	10922	3100	10922	3340	10924	2950	;FREQ
-f 6  0 32768 -7	0	10922	0	10922	0	10924	0	;dB
-f 7  0 32768 -7	-7	10922	-12	10922	-30	10924	-20	;dB
-f 8  0 32768 -7	-9	10922	-9	10922	-16	10924	-32	;dB
-f 9  0 32768 -7	-9	10922	-12	10922	-22	10924	-28	;dB
-f 10 0 32768 -7	-20	10922	-18	10922	-28	10924	-36	;dB
-f 11 0 32768 -7	60	10922	40	10922	60	10924	40	;BAND WIDTH
-f 12 0 32768 -7	70	10922	80	10922	90	10924	80	;BAND WIDTH
-f 13 0 32768 -7	110	10922	100	10922	100	10924	100	;BAND WIDTH
-f 14 0 32768 -7	120	10922	120	10922	120	10924	120	;BAND WIDTH
-f 15 0 32768 -7	130	10922	120	10922	120	10924	120	;BAND WIDTH
-;TENOR
-f 16 0 32768 -7	 650 8192	400 	8192	290	8192	400	8192	350	;FREQ
-f 17 0 32768 -7	 1080 8192 1700    8192	1870	8192	800	8192	600	;FREQ
-f 18 0 32768 -7	2650	8192	2600    8192	2800	8192	2600	8192	2700	;FREQ
-f 19 0 32768 -7	2900	8192	3200    8192	3250	8192	2800	8192	2900	;FREQ
-f 20 0 32768 -7	3250	8192	3580    8192	3540	8192	3000	8192	3300	;FREQ
-f 21 0 32768 -7	0	8192	0	8192	0	8192	0	8192	0	;dB
-f 22 0 32768 -7	-6	8192	-14	8192	-15	8192	-10	8192	-20	;dB
-f 23 0 32768 -7	-7	8192	-12	8192	-18	8192	-12	8192	-17	;dB
-f 24 0 32768 -7	-8	8192	-14	8192	-20	8192	-12	8192	-14	;dB
-f 25 0 32768 -7	-22	8192	-20	8192	-30	8192	-26	8192	-26	;dB
-f 26 0 32768 -7	80	8192	70	8192	40	8192	40	8192	40	;BAND WIDTH
-f 27 0 32768 -7	90	8192	80	8192	90	8192	80	8192	60	;BAND WIDTH
-f 28 0 32768 -7	120	8192	100	8192	100	8192	100	8192	100	;BAND WIDTH
-f 29 0 32768 -7	130	8192	120	8192	120	8192	120	8192	120	;BAND WIDTH
-f 30 0 32768 -7	140	8192	120	8192	120	8192	120	8192	120	;BAND WIDTH
-;COUNTER TENOR
-f 31 0 32768 -7 	660	8192	440	8192	270	8192	430	8192	370	;FREQ
-f 32 0 32768 -7 	1120	8192	1800	8192	1850	8192	820	8192	630	;FREQ
-f 33 0 32768 -7	2750	8192	2700	8192	2900	8192	2700	8192	2750	;FREQ
-f 34 0 32768 -7	3000	8192	3000	8192	3350	8192	3000	8192	3000	;FREQ
-f 35 0 32768 -7	3350	8192	3300	8192	3590	8192	3300	8192	3400	;FREQ
-f 36 0 32768 -7	0	8192	0	8192	0	8192	0	8192	0	;dB
-f 37 0 32768 -7	-6	8192	-14	8192	-24	8192	-10	8192	-20	;dB
-f 38 0 32768 -7	-23	8192	-18	8192	-24	8192	-26	8192	-23	;dB
-f 39 0 32768 -7	-24	8192	-20	8192	-36	8192	-22	8192	-30	;dB
-f 40 0 32768 -7	-38	8192	-20	8192	-36	8192	-34	8192	-30	;dB
-f 41 0 32768 -7	80	8192	70	8192	40	8192	40	8192	40	;BAND WIDTH
-f 42 0 32768 -7	90	8192	80	8192	90	8192	80	8192	60	;BAND WIDTH
-f 43 0 32768 -7	120	8192	100	8192	100	8192	100	8192	100	;BAND WIDTH
-f 44 0 32768 -7	130	8192	120	8192	120	8192	120	8192	120	;BAND WIDTH
-f 45 0 32768 -7	140	8192	120	8192	120	8192	120	8192	120	;BAND WIDTH
-;ALTO
-f 46 0 32768 -7	800	8192	400	8192	350	8192	450	8192	325	;FREQ
-f 47 0 32768 -7	1150	8192	1600	8192	1700	8192	800	8192	700	;FREQ
-f 48 0 32768 -7	2800	8192	2700	8192	2700	8192	2830	8192	2530	;FREQ
-f 49 0 32768 -7	3500	8192	3300	8192	3700	8192	3500	8192	2500	;FREQ
-f 50 0 32768 -7	4950	8192	4950	8192	4950	8192	4950	8192	4950	;FREQ
-f 51 0 32768 -7	0	8192	0	8192	0	8192	0	8192	0	;dB
-f 52 0 32768 -7	-4	8192	-24	8192	-20	8192	-9	8192	-12	;dB
-f 53 0 32768 -7	-20	8192	-30	8192	-30	8192	-16	8192	-30	;dB
-f 54 0 32768 -7	-36	8192	-35	8192	-36	8192	-28	8192	-40	;dB
-f 55 0 32768 -7	-60	8192	-60	8192	-60	8192	-55	8192	-64	;dB
-f 56 0 32768 -7	50	8192	60	8192	50	8192	70	8192	50	;BAND WIDTH
-f 57 0 32768 -7	60	8192	80	8192	100	8192	80	8192	60	;BAND WIDTH
-f 58 0 32768 -7	170	8192	120	8192	120	8192	100	8192	170	;BAND WIDTH
-f 59 0 32768 -7	180	8192	150	8192	150	8192	130	8192	180	;BAND WIDTH
-f 60 0 32768 -7	200	8192	200	8192	200	8192	135	8192	200	;BAND WIDTH
-;SOPRANO
-f 61 0 32768 -7	800	8192	350	8192	270	8192	450	8192	325	;FREQ
-f 62 0 32768 -7	1150	8192	2000	8192	2140	8192	800	8192	700	;FREQ
-f 63 0 32768 -7	2900	8192	2800	8192	2950	8192	2830	8192	2700	;FREQ
-f 64 0 32768 -7	3900	8192	3600	8192	3900	8192	3800	8192	3800	;FREQ
-f 65 0 32768 -7	4950	8192	4950	8192	4950	8192	4950	8192	4950	;FREQ
-f 66 0 32768 -7	0	8192	0	8192	0	8192	0	8192	0	;dB
-f 67 0 32768 -7	-6	8192	-20	8192	-12	8192	-11	8192	-16	;dB
-f 68 0 32768 -7	-32	8192	-15	8192	-26	8192	-22	8192	-35	;dB
-f 69 0 32768 -7	-20	8192	-40	8192	-26	8192	-22	8192	-40	;dB
-f 70 0 32768 -7	-50	8192	-56	8192	-44	8192	-50	8192	-60	;dB
-f 71 0 32768 -7	80	8192	60	8192	60	8192	70	8192	50	;BAND WIDTH
-f 72 0 32768 -7	90	8192	90	8192	90	8192	80	8192	60	;BAND WIDTH
-f 73 0 32768 -7	120	8192	100	8192	100	8192	100	8192	170	;BAND WIDTH
-f 74 0 32768 -7	130	8192	150	8192	120	8192	130	8192	180	;BAND WIDTH
-f 75 0 32768 -7	140	8192	200	8192	120	8192	135	8192	200	;BAND WIDTH
+; Function tables storing data for various voice formants
+; Bass
+f 1 0 32768 -7 600 10922 400 10922 250 10924 350      ; Freq
+f 2 0 32768 -7 1040 10922 1620 10922 1750 10924 600   ; Freq
+f 3 0 32768 -7 2250 10922 2400 10922 2600 10924 2400  ; Freq
+f 4 0 32768 -7 2450 10922 2800 10922 3050 10924 2675  ; Freq
+f 5 0 32768 -7 2750 10922 3100 10922 3340 10924 2950  ; Freq
+f 6 0 32768 -7 0 10922 0 10922 0 10924 0              ; dB
+f 7 0 32768 -7 -7 10922 -12 10922 -30 10924 -20       ; dB
+f 8 0 32768 -7 -9 10922 -9 10922 -16 10924 -32        ; dB
+f 9 0 32768 -7 -9 10922 -12 10922 -22 10924 -28       ; dB
+f 10 0 32768 -7 -20 10922 -18 10922 -28 10924 -36     ; dB
+f 11 0 32768 -7 60 10922 40 10922 60 10924 40         ; Band width
+f 12 0 32768 -7 70 10922 80 10922 90 10924 80         ; Band width
+f 13 0 32768 -7 110 10922 100 10922 100 10924 100     ; Band width
+f 14 0 32768 -7 120 10922 120 10922 120 10924 120     ; Band width
+f 15 0 32768 -7 130 10922 120 10922 120 10924 120     ; Band width
+; Tenor
+f 16 0 32768 -7 650 8192 400 8192 290 8192 400 8192 350       ; Freq
+f 17 0 32768 -7 1080 8192 1700 8192 1870 8192 800 8192 600    ; Freq
+f 18 0 32768 -7 2650 8192 2600 8192 2800 8192 2600 8192 2700  ; Freq
+f 19 0 32768 -7 2900 8192 3200 8192 3250 8192 2800 8192 2900  ; Freq
+f 20 0 32768 -7 3250 8192 3580 8192 3540 8192 3000 8192 3300  ; Freq
+f 21 0 32768 -7 0 8192 0 8192 0 8192 0 8192 0                 ; dB
+f 22 0 32768 -7 -6 8192 -14 8192 -15 8192 -10 8192 -20        ; dB
+f 23 0 32768 -7 -7 8192 -12 8192 -18 8192 -12 8192 -17        ; dB
+f 24 0 32768 -7 -8 8192 -14 8192 -20 8192 -12 8192 -14        ; dB
+f 25 0 32768 -7 -22 8192 -20 8192 -30 8192 -26 8192 -26       ; dB
+f 26 0 32768 -7 80 8192 70 8192 40 8192 40 8192 40            ; Band width
+f 27 0 32768 -7 90 8192 80 8192 90 8192 80 8192 60            ; Band width
+f 28 0 32768 -7 120 8192 100 8192 100 8192 100 8192 100       ; Band width
+f 29 0 32768 -7 130 8192 120 8192 120 8192 120 8192 120       ; Band width
+f 30 0 32768 -7 140 8192 120 8192 120 8192 120 8192 120       ; Band width
+; Counter tenor
+f 31 0 32768 -7 660 8192 440 8192 270 8192 430 8192 370       ; Freq
+f 32 0 32768 -7 1120 8192 1800 8192 1850 8192 820 8192 630    ; Freq
+f 33 0 32768 -7 2750 8192 2700 8192 2900 8192 2700 8192 2750  ; Freq
+f 34 0 32768 -7 3000 8192 3000 8192 3350 8192 3000 8192 3000  ; Freq
+f 35 0 32768 -7 3350 8192 3300 8192 3590 8192 3300 8192 3400  ; Freq
+f 36 0 32768 -7 0 8192 0 8192 0 8192 0 8192 0                 ; dB
+f 37 0 32768 -7 -6 8192 -14 8192 -24 8192 -10 8192 -20        ; dB
+f 38 0 32768 -7 -23 8192 -18 8192 -24 8192 -26 8192 -23       ; dB
+f 39 0 32768 -7 -24 8192 -20 8192 -36 8192 -22 8192 -30       ; dB
+f 40 0 32768 -7 -38 8192 -20 8192 -36 8192 -34 8192 -30       ; dB
+f 41 0 32768 -7 80 8192 70 8192 40 8192 40 8192 40            ; Band width
+f 42 0 32768 -7 90 8192 80 8192 90 8192 80 8192 60            ; Band width
+f 43 0 32768 -7 120 8192 100 8192 100 8192 100 8192 100       ; Band width
+f 44 0 32768 -7 130 8192 120 8192 120 8192 120 8192 120       ; Band width
+f 45 0 32768 -7 140 8192 120 8192 120 8192 120 8192 120       ; Band width
+; Alto
+f 46 0 32768 -7 800 8192 400 8192 350 8192 450 8192 325       ; Freq
+f 47 0 32768 -7 1150 8192 1600 8192 1700 8192 800 8192 700    ; Freq
+f 48 0 32768 -7 2800 8192 2700 8192 2700 8192 2830 8192 2530  ; Freq
+f 49 0 32768 -7 3500 8192 3300 8192 3700 8192 3500 8192 2500  ; Freq
+f 50 0 32768 -7 4950 8192 4950 8192 4950 8192 4950 8192 4950  ; Freq
+f 51 0 32768 -7 0 8192 0 8192 0 8192 0 8192 0                 ; dB
+f 52 0 32768 -7 -4 8192 -24 8192 -20 8192 -9 8192 -12         ; dB
+f 53 0 32768 -7 -20 8192 -30 8192 -30 8192 -16 8192 -30       ; dB
+f 54 0 32768 -7 -36 8192 -35 8192 -36 8192 -28 8192 -40       ; dB
+f 55 0 32768 -7 -60 8192 -60 8192 -60 8192 -55 8192 -64       ; dB
+f 56 0 32768 -7 50 8192 60 8192 50 8192 70 8192 50            ; Band width
+f 57 0 32768 -7 60 8192 80 8192 100 8192 80 8192 60           ; Band width
+f 58 0 32768 -7 170 8192 120 8192 120 8192 100 8192 170       ; Band width
+f 59 0 32768 -7 180 8192 150 8192 150 8192 130 8192 180       ; Band width
+f 60 0 32768 -7 200 8192 200 8192 200 8192 135 8192 200       ; Band width
+; Soprano
+f 61 0 32768 -7 800 8192 350 8192 270 8192 450 8192 325       ; Freq
+f 62 0 32768 -7 1150 8192 2000 8192 2140 8192 800 8192 700    ; Freq
+f 63 0 32768 -7 2900 8192 2800 8192 2950 8192 2830 8192 2700  ; Freq
+f 64 0 32768 -7 3900 8192 3600 8192 3900 8192 3800 8192 3800  ; Freq
+f 65 0 32768 -7 4950 8192 4950 8192 4950 8192 4950 8192 4950  ; Freq
+f 66 0 32768 -7 0 8192 0 8192 0 8192 0 8192 0                 ; dB
+f 67 0 32768 -7 -6 8192 -20 8192 -12 8192 -11 8192 -16        ; dB
+f 68 0 32768 -7 -32 8192 -15 8192 -26 8192 -22 8192 -35       ; dB
+f 69 0 32768 -7 -20 8192 -40 8192 -26 8192 -22 8192 -40       ; dB
+f 70 0 32768 -7 -50 8192 -56 8192 -44 8192 -50 8192 -60       ; dB
+f 71 0 32768 -7 80 8192 60 8192 60 8192 70 8192 50            ; Band width
+f 72 0 32768 -7 90 8192 90 8192 90 8192 80 8192 60            ; Band width
+f 73 0 32768 -7 120 8192 100 8192 100 8192 100 8192 170       ; Band width
+f 74 0 32768 -7 130 8192 150 8192 120 8192 130 8192 180       ; Band width
+f 75 0 32768 -7 140 8192 200 8192 120 8192 135 8192 200       ; Band width
 
 
-;INSTR | START | DURATION
-i 10		0		3600		;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 
-i 2	     0.1		 0		;INIT
-i 4		0		3600		;DRY OUTPUT
-i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
+i 2 0.1 0     ; Init
+i 4 0 3600    ; Dry output
+i 300 0 3600  ; Resetting of global audio variables
 </CsScore>
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
@@ -451,9 +481,9 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -471,15 +501,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>85</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -518,14 +553,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -559,9 +594,9 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -577,11 +612,23 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Fundamental_Value</objectName>
@@ -599,14 +646,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -646,14 +693,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -675,14 +722,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -704,14 +751,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -733,14 +780,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -762,14 +809,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -791,14 +838,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -838,14 +885,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -867,14 +914,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -914,14 +961,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -943,14 +990,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -990,14 +1037,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1019,14 +1066,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1066,14 +1113,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1095,14 +1142,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1124,14 +1171,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1153,14 +1200,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1182,14 +1229,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1211,15 +1258,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -1258,14 +1310,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1287,14 +1339,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1316,14 +1368,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1345,14 +1397,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1392,14 +1444,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1421,14 +1473,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1468,14 +1520,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1497,14 +1549,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1544,14 +1596,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1573,14 +1625,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1620,14 +1672,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1649,14 +1701,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1696,15 +1748,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -1743,14 +1800,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1772,14 +1829,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1819,14 +1876,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1848,14 +1905,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1877,15 +1934,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -1924,14 +1986,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1953,14 +2015,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1982,14 +2044,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2011,14 +2073,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2058,14 +2120,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2105,14 +2167,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2134,14 +2196,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2181,14 +2243,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2210,14 +2272,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2257,15 +2319,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -2304,14 +2371,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2333,14 +2400,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2362,14 +2429,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2391,14 +2458,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2438,14 +2505,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2467,14 +2534,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2514,15 +2581,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -2606,14 +2678,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2635,14 +2707,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2682,14 +2754,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2711,14 +2783,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2740,15 +2812,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -2769,14 +2846,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2798,14 +2875,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2845,14 +2922,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2874,14 +2951,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2939,14 +3016,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2968,14 +3045,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3015,14 +3092,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3044,15 +3121,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -3075,6 +3157,18 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <eventLine>i 3 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>EQ_Level</objectName>
@@ -3110,14 +3204,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3139,14 +3233,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3186,14 +3280,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3215,14 +3309,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3262,14 +3356,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3291,14 +3385,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3338,14 +3432,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3367,14 +3461,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3414,14 +3508,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3443,14 +3537,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3472,14 +3566,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3501,14 +3595,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3548,15 +3642,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -3595,14 +3694,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3624,14 +3723,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3653,14 +3752,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3682,14 +3781,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3731,6 +3830,18 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <eventLine>i 5 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3748,15 +3859,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -3777,15 +3893,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -3808,6 +3929,18 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <eventLine>i 100 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6495</objectName>
@@ -3827,6 +3960,18 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <eventLine>i 102 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>DEL_Mix</objectName>
@@ -3862,14 +4007,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3891,14 +4036,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3920,14 +4065,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3949,14 +4094,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3996,14 +4141,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4025,14 +4170,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4072,14 +4217,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4101,14 +4246,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4148,14 +4293,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4177,14 +4322,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4242,14 +4387,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4271,14 +4416,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4300,14 +4445,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4329,14 +4474,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4376,14 +4521,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4405,14 +4550,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4452,15 +4597,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -4481,15 +4631,20 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>2</borderradius>
   <borderwidth>1</borderwidth>
@@ -4580,14 +4735,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4609,14 +4764,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4636,14 +4791,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>4</minimum>
@@ -4665,14 +4820,14 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>

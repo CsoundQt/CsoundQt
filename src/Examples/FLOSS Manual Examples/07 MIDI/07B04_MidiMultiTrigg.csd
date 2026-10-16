@@ -49,14 +49,14 @@ endif
  instr 2
 ichn      =         int(frac(p1)*100)
 inote     =         round(frac(frac(p1)*100)*1000)
-         prints    "instr %f: ichn = %f, inote = %f%n", p1, ichn, inote
+         prints    "instr %f: ichn = %f, inote = %f\n", p1, ichn, inote
          printks   "instr %f playing!%n", 1, p1
  endin
 
  instr 3
 ichn      =         int(frac(p1)*100)
 inote     =         round(frac(frac(p1)*100)*1000)
-         prints    "instr %f: ichn = %f, inote = %f%n", p1, ichn, inote
+         prints    "instr %f: ichn = %f, inote = %f\n", p1, ichn, inote
          printks   "instr %f playing!%n", 1, p1
  endin
 

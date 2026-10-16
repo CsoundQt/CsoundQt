@@ -1,59 +1,62 @@
-;Written by Iain McCurdy, 2011
+; Written by Iain McCurdy, 2011
 
 
-;Modified for QuteCsound by René, May 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, May 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add kkeydown output variable to sensekey opcode, if not it does not work !
-	
+; Notes on modifications from original csd:
+; Add kkeydown output variable to sensekey opcode, if not it does not work !
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 1		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 1      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gkMIDInote	init		60
-giwave		ftgen	0,0,4096,10,1, 1/2, 0, 1/4, 0, 0, 1/8
+gkMIDInote init 60
+giwave ftgen 0, 0, 4096, 10, 1, 1/2, 0, 1/4, 0, 0, 1/8
 
 
-instr	1	;SENSE KEYBOARD ACTIVITY AND START RECORD OR PLAYBACK INSTRUMENTS ACCORDINGLY
-	kKey, kkeydown	sensekey									;SENSE ACTIVITY ON THE COMPUTER KEYBOARD
+; Sense keyboard activity and start record or playback instruments accordingly
+instr 1
+  kKey, kkeydown sensekey  ; Sense activity on the computer keyboard
 
-	if kkeydown == 1 then
-		Smessage	sprintfk	"Key pressed. Code = %i", kKey
-				outvalue	"data", Smessage
-	elseif (kkeydown == 0 && kKey != -1) then
-		Smessage	sprintfk	"Key released. Code = %i", kKey
-				outvalue	"data", Smessage
-	endif
+  if kkeydown == 1 then
+    Smessage sprintfk "Key pressed. Code = %i", kKey
+    outvalue "data", Smessage
+  elseif (kkeydown == 0 && kKey != -1) then
+    Smessage sprintfk "Key released. Code = %i", kKey
+    outvalue "data", Smessage
+  endif
 
-	if		kKey=112	then									;IF ASCCI VALUE OF 112 IS OUTPUT, I.E. 'p' HAS BEEN PRESSED...
-		event	"i", 2, 0, -1								;START INSTRUMENT 2
-	elseif	kKey=115	then									;IF ASCII VALUE OF 115 IS OUTPUT, I.E. 's' HAS BEEN PRESSED...
-		turnoff2	2,0,1									;STOP INSTRUMENT 2
-	elseif	kKey=43	then									;IF ASCII VALUE OF 43 IS OUTPUT, I.E. '+' HAS BEEN PRESSED...
-		gkMIDInote	limit	gkMIDInote + 1, 0, 127			;INCREMENT MIDI NOTE NUMBER UP ONE STEP (LIMIT RANGE TO BE BETWEEN ZERO AND 127)
-	elseif	kKey=45	then									;IF ASCII VALUE OF 45 IS OUTPUT, I.E. '-' HAS BEEN PRESSED...
-		gkMIDInote	limit	gkMIDInote - 1, 0, 127			;DECREMENT MIDI NOTE NUMBER DOWN ONE STEP (LIMIT RANGE TO BE BETWEEN ZERO AND 127)
-	endif												;END OF CONDITIONAL BRANCH
+  if kKey = 112 then      ; If ascci value of 112 is output, i.e. 'p' has been pressed...
+    event "i", 2, 0, -1   ; Start instrument 2
+  elseif kKey = 115 then  ; If ascii value of 115 is output, i.e. 's' has been pressed...
+    turnoff2 2, 0, 1      ; Stop instrument 2
+  elseif kKey = 43 then   ; If ascii value of 43 is output, i.e. '+' has been pressed...
+    ; Increment MIDI note number up one step (limit range to be between zero and 127)
+    gkMIDInote limit gkMIDInote + 1, 0, 127
+  elseif kKey = 45 then  ; If ascii value of 45 is output, i.e. '-' has been pressed...
+    ; Decrement MIDI note number down one step (limit range to be between zero and 127)
+    gkMIDInote limit gkMIDInote - 1, 0, 127
+  endif  ; End of conditional branch
 endin
 
-instr 2	;PLAYS A TONE
-	aenv	linsegr	0,0.01,1,0.01,0
-	a1	oscili	0.2*aenv, cpsmidinn(gkMIDInote), giwave
-		out		a1
+instr 2  ; Plays a tone
+  aenv linsegr 0, 0.01, 1, 0.01, 0
+  a1 oscili 0.2*aenv, cpsmidinn(gkMIDInote), giwave
+  out a1
 endin
 </CsInstruments>
 <CsScore>
-i 1 0 3600	;SENSES KEYBOARD ACTIVITY INSTRUMENT
+i 1 0 3600  ; Senses keyboard activity instrument
 </CsScore>
 </CsoundSynthesizer>
 
@@ -67,9 +70,9 @@ i 1 0 3600	;SENSES KEYBOARD ACTIVITY INSTRUMENT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -87,15 +90,20 @@ i 1 0 3600	;SENSES KEYBOARD ACTIVITY INSTRUMENT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -121,14 +129,14 @@ sensekey is case sensitive.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -150,14 +158,14 @@ sensekey is case sensitive.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -179,15 +187,20 @@ sensekey is case sensitive.</label>
   <fontsize>15</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>

@@ -1,137 +1,144 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;THE screverb OPCODE IS PLACED IN A SEPARATE, ALWAYS ON, INSTRUMENT FROM THE SOURCE SOUND PRODUCING INSTRUMENT.
-;THE IS A COMMONLY USED TECHNIQUE WITH TIME SMEARING OPCODES AND EFFECTS LIKE REVERBS AND DELAYS.
-
-
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
-;	Add init instrument
+; The screverb opcode is placed in a separate, always on, instrument from the source sound
+; producing instrument.
+; The is a commonly used technique with time smearing opcodes and effects like reverbs and
+; delays.
 
 
-;Reverb structure:
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;			       +----+
-;			     +-|comb|-+
-;			     | +----+ |
-;			     |        |
-;			     | +----+ |
-;			     +-|comb|-+
-;			     | +----+ |
-;			     |        |
-;			     | +----+ |
-;			     +-|comb|-+
-;			     | +----+ |
-;			     +        +
-;			     | +----+ |
-;			     +-|comb|-+
-;			     | +----+ | +-------+ +-------+ +-------+ +-------+
-;			IN-->|        |-|allpass|-|allpass|-|allpass|-|allpass|-->OUT
-;			     | +----+ | +-------+ +-------+ +-------+ +-------+
-;			     +-|comb|-+
-;			     | +----+ |
-;			     |        |
-;			     | +----+ |
-;			     +-|comb|-+
-;			     | +----+ |
-;			     |        |
-;			     | +----+ |
-;			     +-|comb|-+
-;			     | +----+ |
-;			     |        |
-;			     | +----+ |
-;			     +-|comb|-+
-;			       +----+
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Add init instrument
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Reverb structure:
+
+; +----+
+; +-|comb|-+
+; | +----+ |
+; |        |
+; | +----+ |
+; +-|comb|-+
+; | +----+ |
+; |        |
+; | +----+ |
+; +-|comb|-+
+; | +----+ |
+; +        +
+; | +----+ |
+; +-|comb|-+
+; | +----+ | +-------+ +-------+ +-------+ +-------+
+; IN-->|        |-|allpass|-|allpass|-|allpass|-|allpass|-->OUT
+; | +----+ | +-------+ +-------+ +-------+ +-------+
+; +-|comb|-+
+; | +----+ |
+; |        |
+; | +----+ |
+; +-|comb|-+
+; | +----+ |
+; |        |
+; | +----+ |
+; +-|comb|-+
+; | +----+ |
+; |        |
+; | +----+ |
+; +-|comb|-+
+; +----+
+
+
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 100		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-giExp1	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0	;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkingain		invalue	"LiveGain"
-		gkfblvl		invalue 	"FBLevel"
-		kfco			invalue 	"CutFreq"
-		gkfco		tablei	kfco, giExp1, 1
-					outvalue	"CutFreq_Value", gkfco	
-		gkpitchm		invalue 	"Modulation"
-		gkmix		invalue	"Mix"
-		gkamp		invalue 	"Amplitude"
-		gkskip		invalue	"Init"
-		gkinput		invalue	"Input"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkingain invalue "LiveGain"
+    gkfblvl  invalue "FBLevel"
+    kfco     invalue "CutFreq"
+    gkfco tablei kfco, giExp1, 1
+    outvalue "CutFreq_Value", gkfco
+    gkpitchm invalue "Modulation"
+    gkmix    invalue "Mix"
+    gkamp    invalue "Amplitude"
+    gkskip   invalue "Init"
+    gkinput  invalue "Input"
+  endif
 endin
 
-instr	1	;PLAYS FILE AND OUTPUTS GLOBAL VARIABLES
-	if	gkinput==0	then									;IF FILE INPUT IS SELECTED...
-		Sfile		invalue	"_Browse1"
-		gasigL, gasigR	FilePlay2	Sfile, 1, 0, 1					;GENERATE 2 AUDIO SIGNALS FROM A SOUND FILE (NOTE THE USE OF GLOBAL VARIABLES)		
-	else													;OTHERWISE
-		asigL, asigR	ins									;TAKE INPUT FROM COMPUTER'S AUDIO INPUT
-		gasigL		=		asigL * gkingain				;SCALE USING 'Input Gain' SLIDER
-		gasigR		=		asigR * gkingain				;SCALE USING 'Input Gain' SLIDER
-	endif												;END OF CONDITIONAL BRANCHING
+instr 1                 ; Plays file and outputs global variables
+  if gkinput == 0 then  ; If file input is selected...
+    Sfile invalue "_Browse1"
+    ; Generate 2 audio signals from a sound file (note the use of global variables)
+    gasigL, gasigR FilePlay2 Sfile, 1, 0, 1
+  else                         ; Otherwise
+    asigL, asigR ins           ; Take input from computer's audio input
+    gasigL = asigL * gkingain  ; Scale using 'input gain' slider
+    gasigR = asigR * gkingain  ; Scale using 'input gain' slider
+  endif                        ; End of conditional branching
 endin
 
-instr	2
-			denorm		gasigL, gasigR											;DENORMALIZE BOTH CHANNELS OF AUDIO SIGNAL
-	kSwitch	changed		gkpitchm, gkskip										;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then															;IF kSwitch=1 THEN
-		reinit	UPDATE														;BEGIN A REINITIALIZATION PASS FROM LABEL 'UPDATE'
-	endif																	;END OF CONDITIONAL BRANCHING
+instr 2
+  denorm gasigL, gasigR  ; Denormalize both channels of audio signal
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkpitchm, gkskip
+  if kSwitch = 1 then  ; IF kSwitch=1 THEN
+    reinit UPDATE      ; Begin a reinitialization pass from label 'update'
+  endif                ; End of conditional branching
 
-	UPDATE:																	;A LABEL
-	arvbL, arvbR	reverbsc 	gasigL, gasigR, gkfblvl, gkfco, sr, i(gkpitchm), i(gkskip) 
-				rireturn														;RETURN TO PERFORMANCE TIME PASSES
-	amixL		ntrpol	gasigL, arvbL, gkmix									;CREATE A DRY/WET MIX BETWEEN THE DRY AND THE REVERBERATED SIGNAL
-	amixR		ntrpol	gasigR, arvbR, gkmix									;CREATE A DRY/WET MIX BETWEEN THE DRY AND THE REVERBERATED SIGNAL
-				outs		amixL * gkamp, amixR * gkamp
-				clear	gasigL, gasigR											;CLEAR GLOBAL AUDIO VARIABLES
+UPDATE:  ; A label
+  arvbL, arvbR reverbsc gasigL, gasigR, gkfblvl, gkfco, sr, i(gkpitchm), i(gkskip)
+  rireturn  ; Return to performance time passes
+  ; Create a dry/wet mix between the dry and the reverberated signal
+  amixL ntrpol gasigL, arvbL, gkmix
+  ; Create a dry/wet mix between the dry and the reverberated signal
+  amixR ntrpol gasigR, arvbR, gkmix
+  outs amixL * gkamp, amixR * gkamp
+  clear gasigL, gasigR  ; Clear global audio variables
 endin
 
-instr	11	;INIT
-		outvalue	"FBLevel"		, 0.7
-		outvalue	"CutFreq"		, 0.89965
-		outvalue	"Modulation"	, 1.0
-		outvalue	"Mix"		, 0.5
-		outvalue	"Amplitude"	, 0.6
+instr 11  ; Init
+  outvalue "FBLevel", 0.7
+  outvalue "CutFreq", 0.89965
+  outvalue "Modulation", 1.0
+  outvalue "Mix", 0.5
+  outvalue "Amplitude", 0.6
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0.0	   3600	;GUI
-i  2		0.0	   3600	;REVERB INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
-i 11		0.0		0.1	;INIT
+; Instr | start | duration
+i 10 0.0 3600  ; GUI
+i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going)
+i 11 0.0 0.1   ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -144,9 +151,9 @@ i 11		0.0		0.1	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -164,15 +171,20 @@ i 11		0.0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -190,11 +202,23 @@ i 11		0.0		0.1	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -212,14 +236,14 @@ i 11		0.0		0.1	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -241,14 +265,14 @@ i 11		0.0		0.1	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -270,15 +294,20 @@ i 11		0.0		0.1	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -300,14 +329,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -354,14 +383,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -385,6 +414,18 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -402,9 +443,9 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -429,14 +470,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -476,14 +517,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -505,14 +546,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -552,14 +593,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -581,14 +622,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -628,14 +669,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -657,14 +698,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -729,14 +770,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -758,14 +799,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -805,14 +846,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -834,14 +875,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

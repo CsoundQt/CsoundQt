@@ -1,64 +1,79 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkTrigFreqMin	invalue 	"TrigFreqMin"
-		gkTrigFreqMax	invalue 	"TrigFreqMax"
-		gkscale		invalue	"Scale"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkTrigFreqMin invalue "TrigFreqMin"
+    gkTrigFreqMax invalue "TrigFreqMax"
+    gkscale       invalue "Scale"
+  endif
 endin
 
-instr	1	;THIS INSTRUMENT TRIGGERS NOTES IN INSTRUMENT 2 WITH A MINIMUM TIME GAP BETWEEN NOTES OF kmintim SECONDS
-	kTrigFreq	randomi		gkTrigFreqMin, gkTrigFreqMax, 5		;TRIGGER FREQUENCY - DEFINED RANDOMLY WITHIN THE GIVEN RANGE - FREQUENCY OF NEW RANDOM NUMBER OUTPUT=5Hz
-	ktrigger	metro		kTrigFreq							;CREATE A TRIGGER SIGNAL (MOMENTARY '1' IMPULSES) ACCORDING TO THE FLUCTUATING VARIABLE 'kTrigFreq'
-	;NOTE DURATIONS WILL BE DEFINED RANDOMLY:
-	;					MIN | MAX | FREQUENCY
-	kdur		randomh		.1,    2,       5					;SAMPLE-AND-HOLD RANDOM NUMBER GENERATOR
-	;		 			TRIGGER | MINTIM | MAXNUM | INSNUM | WHEN | KDUR
-			schedkwhen 	ktrigger,   0,        0,       2,      0,   kdur
+; This instrument triggers notes in instrument 2 with a minimum time gap between notes of
+; kmintim seconds
+instr 1
+  ; Trigger frequency - defined randomly within the given range - frequency of new random
+  ; number output=5hz
+  kTrigFreq randomi gkTrigFreqMin, gkTrigFreqMax, 5
+  ; Create a trigger signal (momentary '1' impulses) according to the fluctuating variable
+  ; 'ktrigfreq'
+  ktrigger metro kTrigFreq
+  ; Note durations will be defined randomly:
+  ; Min | max | frequency
+  kdur randomh .1, 2, 5  ; Sample-and-hold random number generator
+  ; Trigger | mintim | maxnum | insnum | when | kdur
+  schedkwhen ktrigger, 0, 0, 2, 0, kdur
 endin
 
-instr	2	;THIS IS THE SOUND PRODUCING INSTRUMENT - A SIMPLE SINE WAVE 'PING'
-	iamp		random	0.03,0.5								;AMPLITUDES WILL BE RANDOM VALUES BETWEEN 1000 (VERY QUIET) AND 10000 (LOUD)
-	ipan		random	0, 1									;PAN VALUES WILL BE RANDOM VALUES BETWEEN 0 (LEFT SPEAKER) AND 1 (RIGHT SPEAKER)
-	ipchndx	random	0,13									;A RANDOM INDEX VALUE IS DEFINED FOR EACH NEW NOTE.
-														;THIS INDEX WILL BE USED TO SELECT VALUES FROM THE 'SCALE' FUNCTION TABLE.
-														;THE MAXIMUM POSSIBLE VALUE SHOULD NOT EXCEED THE NUMBER OF VALUES (NOTES) DEFINED IN THE CORRESPONDING FUNCTION TABLE (SCALE).
-	ipch		table	ipchndx, 2+i(gkscale)					;THE VARIABLE ipch WILL BE SELECTED FROM THE ipchndx VALUE IN FUNCTION TABLE 2
-	aenv		expseg	1, (p3), .001							;PERCUSSIVE-TYPE AMPLITUDE ENVELOPE
-	asig		oscil	iamp * aenv, cpspch(ipch), 1				;GENERATE AN AUDIO SIGNAL ACCORDING TO THE WAVEFORM IN FUNCTION TABLE 1 - USE THE SELECTED PCH VALUE AND APPLY THE AMPLITUDE ENVELOPE AND RANDOM AMPLITUDE VALUE
-			outs		asig * ipan, asig * (1-ipan)				;SEND AUDIO TO OUTPUTS AND APPLY SIMPLE PANNING
+instr 2  ; This is the sound producing instrument - a simple sine wave 'ping'
+  ; Amplitudes will be random values between 1000 (very quiet) and 10000 (loud)
+  iamp random 0.03, 0.5
+  ; Pan values will be random values between 0 (left speaker) and 1 (right speaker)
+  ipan    random 0, 1
+  ipchndx random 0, 13  ; A random index value is defined for each new note.
+  ; This index will be used to select values from the 'scale' function table.
+  ; The maximum possible value should not exceed the number of values (notes) defined in
+  ; the corresponding function table (scale).
+  ; The variable ipch will be selected from the ipchndx value in function table 2
+  ipch table ipchndx, 2+i(gkscale)
+  aenv expseg 1, (p3), .001  ; Percussive-type amplitude envelope
+  ; Generate an audio signal according to the waveform in function table 1 - use the
+  ; selected pch value and apply the amplitude envelope and random amplitude value
+  asig oscil iamp * aenv, cpspch(ipch), 1
+  outs asig * ipan, asig * (1-ipan)  ; Send audio to outputs and apply simple panning
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 4096 10 1		;SINE WAVE
+f 1 0 4096 10 1  ; Sine wave
 
-;TABLE_NO.|INIT_TIME|SIZE|GEN_NUMBER|VALUES.1..	2	3	4	5	6	7	8	9	10	11	12	13	
-f   2          0      64      -2 	7 	7.03 	7.05 	7.07 	7.10 	8	8.03 	8.05 	8.07 	8.10 	9			;PENTATONIC SCALE - 2 OCTAVES
-f   3          0      64      -2 	7 	7.02 	7.04 	7.06 	7.08 	7.10	8.00 	8.02 	8.04 	8.06 	8.08	8.10	9.00	;WHOLE TONE SCALE - 2 OCTAVES
-;GEN 2 OFFERS US A MEANS TO STORE DISCRETE VALUES, DEFINED VALUE BY VALUE - IN THIS CASE THESE VALUES WILL BE INTERPRETED IN THE ORCHESTRA AS PCH FORMAT VALUES
-;IF THE GEN ROUTINE NUMBER IS GIVEN AS A NEGATIVE NUMBER THEN VALUES WON'T BE NORMALIZED (RESCALED WITHIN THE RANGE -1 TO 1)
+; Table_no.|init_time|size|gen_number|values.1.. 2 3 4 5 6 7 8 9 10 11 12 13
+f 2 0 64 -2 7 7.03 7.05 7.07 7.10 8 8.03 8.05 8.07 8.10 9  ; Pentatonic scale - 2 octaves
+; Whole tone scale - 2 octaves
+f 3 0 64 -2 7 7.02 7.04 7.06 7.08 7.10 8.00 8.02 8.04 8.06 8.08 8.10 9.00
+; Gen 2 offers us a means to store discrete values, defined value by value - in this case
+; these values will be interpreted in the orchestra as pch format values
+; If the gen routine number is given as a negative number then values won't be normalized
+; (rescaled within the range -1 to 1)
 
-i 10	 0	 3600		;GUI
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -71,9 +86,9 @@ i 10	 0	 3600		;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -91,15 +106,20 @@ i 10	 0	 3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -121,14 +141,14 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -147,11 +167,23 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -169,14 +201,14 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -235,9 +267,9 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -268,9 +300,9 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -289,14 +321,14 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -318,14 +350,14 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -347,14 +379,14 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

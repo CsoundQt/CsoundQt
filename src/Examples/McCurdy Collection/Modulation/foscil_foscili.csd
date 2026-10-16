@@ -1,101 +1,121 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
 
 ; Modified for QuteCsound by René, November 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Instrument 1 is activated by MIDI and by the GUI
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Instrument 1 is activated by MIDI and by the GUI
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	0, 0, 64, 10, 1						;SINE WAVE FUNCTION TABLE (SIZE:64 FOR NON-INTERPOLATING OPCODES)
-gisinei		ftgen	0, 0, 65, 10, 1						;SINE WAVE FUNCTION TABLE (SIZE:65 FOR INTERPOLATING OPCODES)
-giExp20000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLES FOR EXP SLIDER
+; Sine wave function table (size:64 for non-interpolating opcodes)
+gisine ftgen 0, 0, 64, 10, 1
+; Sine wave function table (size:65 for interpolating opcodes)
+gisinei    ftgen 0, 0, 65, 10, 1
+giExp20000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Tables for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kcps			invalue 	"Base_Frequency"
-		gkcps		tablei	kcps, giExp20000, 1
-					outvalue	"Base_Frequency_Value", gkcps		
-		gkamp		invalue	"Amplitude"
-		gkndx		invalue	"Index"
-		gkcar		invalue	"Carrier_Frequency"
-		gkmod		invalue	"Modulator_Frequency"
-		gkopcode		invalue	"Opcode"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kcps invalue "Base_Frequency"
+    gkcps tablei kcps, giExp20000, 1
+    outvalue "Base_Frequency_Value", gkcps
+    gkamp    invalue "Amplitude"
+    gkndx    invalue "Index"
+    gkcar    invalue "Carrier_Frequency"
+    gkmod    invalue "Modulator_Frequency"
+    gkopcode invalue "Opcode"
+  endif
 endin
 
-instr	1	;FOSCIL/FOSCILI INSTRUMENT
-	if p4!=0 then												;MIDI
-		ioct		= p4											;READ OCT VALUE FROM MIDI INPUT
-		iamp		= p5											;READ midi-velocity-amp FROM MIDI INPUT
-		kamp		= iamp * gkamp									;SET AMPLITUDE TO RECEIVED p5 RECEIVED FROM INSTR 1 (I.E. MIDI VELOCITY) MULTIPLIED BY SLIDER gkamp.
-		kndx		= iamp * gkndx									;SET INDEX TO SLIDER gkndx MULTIPLIED BY AMPLITUDE VALUES RECEIVED FROM CALLING INSTRUMENT
-		;PITCH BEND===========================================================================================================================================================
-		iSemitoneBendRange = 4									;PITCH BEND RANGE IN SEMITONES
-		imin		= 0											;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333					;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax							;PITCH BEND VARIABLE (IN oct FORMAT)
-		kcps		=	cpsoct(ioct + kbend)						;SET FUNDEMENTAL FROM MIDI
-		;=====================================================================================================================================================================
-	else														;GUI
-		kamp		= gkamp										;SET kamp TO SLIDER VALUE gkamp
-		kcps		= gkcps										;SET FUNDEMENTAL TO SLIDER gkcps
-		kndx		= gkndx										;SET INDEX TO SLIDER gkndx
-	endif
+instr 1            ; Foscil/foscili instrument
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read oct value from MIDI input
+    iamp = p5      ; READ midi-velocity-amp FROM MIDI INPUT
+    ; Set amplitude to received p5 received from instr 1 (i.e. MIDI velocity) multiplied
+    ; by slider gkamp.
+    kamp = iamp * gkamp
+    ; Set index to slider gkndx multiplied by amplitude values received from calling
+    ; instrument
+    kndx = iamp * gkndx
+    ; Pitch
+    ; bend===========================================================================================================================================================
+    iSemitoneBendRange = 4  ; Pitch bend range in semitones
+    imin               = 0  ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kcps = cpsoct(ioct + kbend)  ; Set fundemental from MIDI
+    ; =====================================================================================================================================================================
+  else            ; GUI
+    kamp = gkamp  ; Set kamp to slider value gkamp
+    kcps = gkcps  ; Set fundemental to slider gkcps
+    kndx = gkndx  ; Set index to slider gkndx
+  endif
 
-	iporttime		=		.05									;PORTAMENTO FUNCTION (WILL BE USED TO SMOOTH PARAMETER MOVED BY WIDGETS)
-	kporttime		linseg	0,.001,iporttime,1,iporttime				;PORTAMENTO FUNCTION (WILL BE USED TO SMOOTH PARAMETER MOVED BY WIDGETS)
+  ; Portamento function (will be used to smooth parameter moved by widgets)
+  iporttime = .05
+  ; Portamento function (will be used to smooth parameter moved by widgets)
+  kporttime linseg 0, .001, iporttime, 1, iporttime
 
-	aAntiClick	linsegr	0,0.001,1,0.01,0						;ANTI CLICK ENVELOPE
+  aAntiClick linsegr 0, 0.001, 1, 0.01, 0  ; Anti click envelope
 
-	kndx			portk	kndx, kporttime						;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'kndx'
-	kcps			portk	kcps, kporttime						;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'kcps'
-	kamp			portk	kamp, kporttime						;APPLY SMOOTHING PORTAMENTO TO THE VARIABLE 'kamp'
-	aAntiClick	linsegr	0,0.001,1,0.01,0						;ANTI CLICK ENVELOPE
+  ; Apply smoothing portamento to the variable 'kndx'
+  kndx portk kndx, kporttime
+  ; Apply smoothing portamento to the variable 'kcps'
+  kcps portk kcps, kporttime
+  ; Apply smoothing portamento to the variable 'kamp'
+  kamp portk kamp, kporttime
+  aAntiClick linsegr 0, 0.001, 1, 0.01, 0  ; Anti click envelope
 
-	;SELECT THE APPRORIATE FM OPCODE ACCORDING TO THE SETTING OF THE 'TYPE' TICK BOX SELECTER 
-	if		gkopcode==0	then
-		;FOSCIL
-		ares		foscil	kamp, kcps, gkcar, gkmod, kndx, gisine		;FM SYNTHESIS USING FOSCIL
-	elseif	gkopcode==1	then
-		;FOSCILI
-		ares		foscili	kamp, kcps, gkcar, gkmod, kndx, gisinei		;FM SYNTHESIS USING FOSCILI
-	elseif	gkopcode==2	then
-		;;FIRST PRINCIPLES
-		;FM SYNTHESIS FROM FIRST PRINCIPLES
-		kpeakdeviation	=	kcps * kndx											;CALCULATE THE PEAK DEVIATION OF THE MODULATOR FROM THE VALUES GIVEN FOR BASE FREQUENCY AND THE INDEX OF MODULATION
-		;OUTPUT	OPCODE	AMPLITUDE         |     FREQUENCY        | FUNCTION_TABLE
-		amod		oscili	kpeakdeviation,     kcps * gkmod,          gisinei			;DEFINE THE MODULATOR WAVEFORM
-		ares		oscili	kamp,               (kcps * gkcar) + amod, gisinei			;DEFINE THE CARRIER WAVEFORM (NOTE HOW ITS FREQUENCY IS MODULATED (THROUGH ADDITION) BY THE AUDIO OUTPUT OF THE MODULATOR WAVEFORM)
-	endif																	;END OF CONDITIONAL BRANCHING
-				outs		ares * aAntiClick, ares * aAntiClick						;SEND AUDIO TO OUTPUTS
+  ; Select the approriate fm opcode according to the setting of the 'type' tick box
+  ; selecter
+  if gkopcode == 0 then
+    ; Foscil
+    ares foscil kamp, kcps, gkcar, gkmod, kndx, gisine  ; Fm synthesis using foscil
+  elseif gkopcode == 1 then
+    ; Foscili
+    ares foscili kamp, kcps, gkcar, gkmod, kndx, gisinei  ; Fm synthesis using foscili
+  elseif gkopcode == 2 then
+    ; ;First principles
+    ; Fm synthesis from first principles
+    ; Calculate the peak deviation of the modulator from the values given for base
+    ; frequency and the index of modulation
+    kpeakdeviation = kcps * kndx
+    ; Output opcode amplitude         |     frequency        | function_table
+    amod oscili kpeakdeviation, kcps * gkmod, gisinei  ; Define the modulator waveform
+    ; Define the carrier waveform (note how its frequency is modulated (through addition)
+    ; by the audio output of the modulator waveform)
+    ares oscili kamp, (kcps * gkcar) + amod, gisinei
+  endif                                      ; End of conditional branching
+  outs ares * aAntiClick, ares * aAntiClick  ; Send audio to outputs
 endin
 
-instr	2	;INIT
-		outvalue	"_SetPresetIndex", 0
+instr 2  ; Init
+  outvalue "_SetPresetIndex", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		3600		;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 
-i 2	     0.1		 0		;INIT
+i 2 0.1 0  ; Init
 </CsScore>
 </CsoundSynthesizer>
 

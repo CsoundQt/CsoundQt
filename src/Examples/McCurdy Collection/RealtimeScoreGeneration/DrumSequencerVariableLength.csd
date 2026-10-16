@@ -1,358 +1,367 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	used latched value type button and removed macro WRITE_VAL to replace FLbutton
+; Notes on modifications from original csd:
+; used latched value type button and removed macro WRITE_VAL to replace FLbutton
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-;FUNCTION TABLE FOR STORAGE OF SEQUENCE DATA FOR SOUND 1
-gi1		ftgen	0, 0, 256, -2,	0,	0.25,	.001,	0,\
-							0,	0.5,	.001,	0,\
-							0,	0.75,	.001,	0,\
-							0,	1,	.001,	0,\
-							0,	1.25,	.001,	0,\
-							0,	1.5,	.001,	0,\
-							0,	1.75,	.001,	0,\
-							0,	2,	.001,	0,\
-							0,	2.25,	.001,	0,\
-							0,	2.5,	.001,	0,\
-							0,	2.75,	.001,	0,\
-							0,	3,	.001,	0,\
-							0,	3.25,	.001,	0,\
-							0,	3.5,	.001,	0,\
-							0,	3.75,	.001,	0,\
-							0,	4,	.001,	0,\
-							0,	4.25,	.001,	0,\
-							0,	4.5,	.001,	0,\
-							0,	4.75,	.001,	0,\
-							0,	5,	.001,	0,\
-							0,	5.25,	.001,	0,\
-							0,	5.5,	.001,	0,\
-							0,	5.75,	.001,	0,\
-							0,	6,	.001,	0,\
-							0,	6.25,	.001,	0,\
-							0,	6.5,	.001,	0,\
-							0,	6.75,	.001,	0,\
-							0,	7,	.001,	0,\
-							0,	7.25,	.001,	0,\
-							0,	7.5,	.001,	0,\
-							0,	7.75,	.001,	0,\
-							0,	8,	.001,	0,\
-							-1,	8,	-1,	-1
+; Function table for storage of sequence data for sound 1
+gi1 ftgen 0, 0, 256, -2, 0, 0.25, .001, 0, \
+  0, 0.5, .001, 0, \
+  0, 0.75, .001, 0, \
+  0, 1, .001, 0, \
+  0, 1.25, .001, 0, \
+  0, 1.5, .001, 0, \
+  0, 1.75, .001, 0, \
+  0, 2, .001, 0, \
+  0, 2.25, .001, 0, \
+  0, 2.5, .001, 0, \
+  0, 2.75, .001, 0, \
+  0, 3, .001, 0, \
+  0, 3.25, .001, 0, \
+  0, 3.5, .001, 0, \
+  0, 3.75, .001, 0, \
+  0, 4, .001, 0, \
+  0, 4.25, .001, 0, \
+  0, 4.5, .001, 0, \
+  0, 4.75, .001, 0, \
+  0, 5, .001, 0, \
+  0, 5.25, .001, 0, \
+  0, 5.5, .001, 0, \
+  0, 5.75, .001, 0, \
+  0, 6, .001, 0, \
+  0, 6.25, .001, 0, \
+  0, 6.5, .001, 0, \
+  0, 6.75, .001, 0, \
+  0, 7, .001, 0, \
+  0, 7.25, .001, 0, \
+  0, 7.5, .001, 0, \
+  0, 7.75, .001, 0, \
+  0,  8, .001, 0, \
+  -1, 8, -1, -1
 
-gi2		ftgen	0, 0, 256, -2, 0		;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
-gi3		ftgen	0, 0, 256, -2, 0		;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
-gi4		ftgen	0, 0, 256, -2, 0		;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
-gi5		ftgen	0, 0, 256, -2, 0		;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
-gi6		ftgen	0, 0, 256, -2, 0		;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
+; Empty tables initially. Contents will be copied from table gi1
+gi2 ftgen 0, 0, 256, -2, 0
+; Empty tables initially. Contents will be copied from table gi1
+gi3 ftgen 0, 0, 256, -2, 0
+; Empty tables initially. Contents will be copied from table gi1
+gi4 ftgen 0, 0, 256, -2, 0
+; Empty tables initially. Contents will be copied from table gi1
+gi5 ftgen 0, 0, 256, -2, 0
+; Empty tables initially. Contents will be copied from table gi1
+gi6 ftgen 0, 0, 256, -2, 0
 
-		zakinit	8, 8					;INITIALISE ZAK SPACE (8 A-RATE, 8 K-RATE)
+zakinit 8, 8  ; Initialise zak space (8 a-rate, 8 k-rate)
 
-giRvbSndChn	=	1					;ZAK CHANNEL NUMBER USED FOR REVERB SEND
-giDlySndChn	=	3					;ZAK CHANNEL NUMBER USED FOR REVERB SEND
+giRvbSndChn = 1  ; Zak channel number used for reverb send
+giDlySndChn = 3  ; Zak channel number used for reverb send
 
-		seed		0
+seed 0
 
 
-instr	200	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
+instr 200  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
 
-#define	ROW(COUNT)	
-		#
-		;TABLES UPDATE
-		gk$COUNT_01	invalue	"b$COUNT_01"		;BUTTON VALUE
-		kTrig$COUNT_01	changed	gk$COUNT_01
-		if kTrig$COUNT_01 == 1 then
-			tablew	gk$COUNT_01, ((1-1)*4)+3, gi$COUNT 
-		endif
+    #define ROW(COUNT)
+    #
+    ; Tables update
+    gk$COUNT_01 invalue "b$COUNT_01"  ; Button value
+    kTrig$COUNT_01 changed gk$COUNT_01
+    if kTrig$COUNT_01 == 1 then
+      tablew gk$COUNT_01, ((1-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_02	invalue	"b$COUNT_02"		;BUTTON VALUE
-		kTrig$COUNT_02	changed	gk$COUNT_02
-		if kTrig$COUNT_02 == 1 then
-			tablew	gk$COUNT_02, ((2-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_02 invalue "b$COUNT_02"  ; Button value
+    kTrig$COUNT_02 changed gk$COUNT_02
+    if kTrig$COUNT_02 == 1 then
+      tablew gk$COUNT_02, ((2-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_03	invalue	"b$COUNT_03"		;BUTTON VALUE
-		kTrig$COUNT_03	changed	gk$COUNT_03
-		if kTrig$COUNT_03 == 1 then
-			tablew	gk$COUNT_03, ((3-1)*4)+3, gi$COUNT 
-		endif
-		
-		gk$COUNT_04	invalue	"b$COUNT_04"		;BUTTON VALUE
-		kTrig$COUNT_04	changed	gk$COUNT_04
-		if kTrig$COUNT_04 == 1 then
-			tablew	gk$COUNT_04, ((4-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_03 invalue "b$COUNT_03"  ; Button value
+    kTrig$COUNT_03 changed gk$COUNT_03
+    if kTrig$COUNT_03 == 1 then
+      tablew gk$COUNT_03, ((3-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_05	invalue	"b$COUNT_05"		;BUTTON VALUE
-		kTrig$COUNT_05	changed	gk$COUNT_05
-		if kTrig$COUNT_05 == 1 then
-			tablew	gk$COUNT_05, ((5-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_04 invalue "b$COUNT_04"  ; Button value
+    kTrig$COUNT_04 changed gk$COUNT_04
+    if kTrig$COUNT_04 == 1 then
+      tablew gk$COUNT_04, ((4-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_06	invalue	"b$COUNT_06"		;BUTTON VALUE
-		kTrig$COUNT_06	changed	gk$COUNT_06
-		if kTrig$COUNT_06 == 1 then
-			tablew	gk$COUNT_06, ((6-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_05 invalue "b$COUNT_05"  ; Button value
+    kTrig$COUNT_05 changed gk$COUNT_05
+    if kTrig$COUNT_05 == 1 then
+      tablew gk$COUNT_05, ((5-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_07	invalue	"b$COUNT_07"		;BUTTON VALUE
-		kTrig$COUNT_07	changed	gk$COUNT_07
-		if kTrig$COUNT_07 == 1 then
-			tablew	gk$COUNT_07, ((7-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_06 invalue "b$COUNT_06"  ; Button value
+    kTrig$COUNT_06 changed gk$COUNT_06
+    if kTrig$COUNT_06 == 1 then
+      tablew gk$COUNT_06, ((6-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_08	invalue	"b$COUNT_08"		;BUTTON VALUE
-		kTrig$COUNT_08	changed	gk$COUNT_08
-		if kTrig$COUNT_08 == 1 then
-			tablew	gk$COUNT_08, ((8-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_07 invalue "b$COUNT_07"  ; Button value
+    kTrig$COUNT_07 changed gk$COUNT_07
+    if kTrig$COUNT_07 == 1 then
+      tablew gk$COUNT_07, ((7-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_09	invalue	"b$COUNT_09"		;BUTTON VALUE
-		kTrig$COUNT_09	changed	gk$COUNT_09
-		if kTrig$COUNT_09 == 1 then
-			tablew	gk$COUNT_09, ((9-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_08 invalue "b$COUNT_08"  ; Button value
+    kTrig$COUNT_08 changed gk$COUNT_08
+    if kTrig$COUNT_08 == 1 then
+      tablew gk$COUNT_08, ((8-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_10	invalue	"b$COUNT_10"		;BUTTON VALUE
-		kTrig$COUNT_10	changed	gk$COUNT_10
-		if kTrig$COUNT_10 == 1 then
-			tablew	gk$COUNT_10, ((10-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_09 invalue "b$COUNT_09"  ; Button value
+    kTrig$COUNT_09 changed gk$COUNT_09
+    if kTrig$COUNT_09 == 1 then
+      tablew gk$COUNT_09, ((9-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_11	invalue	"b$COUNT_11"		;BUTTON VALUE
-		kTrig$COUNT_11	changed	gk$COUNT_11
-		if kTrig$COUNT_11 == 1 then
-			tablew	gk$COUNT_11, ((11-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_10 invalue "b$COUNT_10"  ; Button value
+    kTrig$COUNT_10 changed gk$COUNT_10
+    if kTrig$COUNT_10 == 1 then
+      tablew gk$COUNT_10, ((10-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_12	invalue	"b$COUNT_12"		;BUTTON VALUE
-		kTrig$COUNT_12	changed	gk$COUNT_12
-		if kTrig$COUNT_12 == 1 then
-			tablew	gk$COUNT_12, ((12-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_11 invalue "b$COUNT_11"  ; Button value
+    kTrig$COUNT_11 changed gk$COUNT_11
+    if kTrig$COUNT_11 == 1 then
+      tablew gk$COUNT_11, ((11-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_13	invalue	"b$COUNT_13"		;BUTTON VALUE
-		kTrig$COUNT_13	changed	gk$COUNT_13
-		if kTrig$COUNT_13 == 1 then
-			tablew	gk$COUNT_13, ((13-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_12 invalue "b$COUNT_12"  ; Button value
+    kTrig$COUNT_12 changed gk$COUNT_12
+    if kTrig$COUNT_12 == 1 then
+      tablew gk$COUNT_12, ((12-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_14	invalue	"b$COUNT_14"		;BUTTON VALUE
-		kTrig$COUNT_14	changed	gk$COUNT_14
-		if kTrig$COUNT_14 == 1 then
-			tablew	gk$COUNT_14, ((14-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_13 invalue "b$COUNT_13"  ; Button value
+    kTrig$COUNT_13 changed gk$COUNT_13
+    if kTrig$COUNT_13 == 1 then
+      tablew gk$COUNT_13, ((13-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_15	invalue	"b$COUNT_15"		;BUTTON VALUE
-		kTrig$COUNT_15	changed	gk$COUNT_15
-		if kTrig$COUNT_15 == 1 then
-			tablew	gk$COUNT_15, ((15-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_14 invalue "b$COUNT_14"  ; Button value
+    kTrig$COUNT_14 changed gk$COUNT_14
+    if kTrig$COUNT_14 == 1 then
+      tablew gk$COUNT_14, ((14-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_16	invalue	"b$COUNT_16"		;BUTTON VALUE
-		kTrig$COUNT_16	changed	gk$COUNT_16
-		if kTrig$COUNT_16 == 1 then
-			tablew	gk$COUNT_16, ((16-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_15 invalue "b$COUNT_15"  ; Button value
+    kTrig$COUNT_15 changed gk$COUNT_15
+    if kTrig$COUNT_15 == 1 then
+      tablew gk$COUNT_15, ((15-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_17	invalue	"b$COUNT_17"		;BUTTON VALUE
-		kTrig$COUNT_17	changed	gk$COUNT_17
-		if kTrig$COUNT_17 == 1 then
-			tablew	gk$COUNT_17, ((17-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_16 invalue "b$COUNT_16"  ; Button value
+    kTrig$COUNT_16 changed gk$COUNT_16
+    if kTrig$COUNT_16 == 1 then
+      tablew gk$COUNT_16, ((16-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_18	invalue	"b$COUNT_18"		;BUTTON VALUE
-		kTrig$COUNT_18	changed	gk$COUNT_18
-		if kTrig$COUNT_18 == 1 then
-			tablew	gk$COUNT_18, ((18-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_17 invalue "b$COUNT_17"  ; Button value
+    kTrig$COUNT_17 changed gk$COUNT_17
+    if kTrig$COUNT_17 == 1 then
+      tablew gk$COUNT_17, ((17-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_19	invalue	"b$COUNT_19"		;BUTTON VALUE
-		kTrig$COUNT_19	changed	gk$COUNT_19
-		if kTrig$COUNT_19 == 1 then
-			tablew	gk$COUNT_19, ((19-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_18 invalue "b$COUNT_18"  ; Button value
+    kTrig$COUNT_18 changed gk$COUNT_18
+    if kTrig$COUNT_18 == 1 then
+      tablew gk$COUNT_18, ((18-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_20	invalue	"b$COUNT_20"		;BUTTON VALUE
-		kTrig$COUNT_20	changed	gk$COUNT_20
-		if kTrig$COUNT_20 == 1 then
-			tablew	gk$COUNT_20, ((20-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_19 invalue "b$COUNT_19"  ; Button value
+    kTrig$COUNT_19 changed gk$COUNT_19
+    if kTrig$COUNT_19 == 1 then
+      tablew gk$COUNT_19, ((19-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_21	invalue	"b$COUNT_21"		;BUTTON VALUE
-		kTrig$COUNT_21	changed	gk$COUNT_21
-		if kTrig$COUNT_21 == 1 then
-			tablew	gk$COUNT_21, ((21-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_20 invalue "b$COUNT_20"  ; Button value
+    kTrig$COUNT_20 changed gk$COUNT_20
+    if kTrig$COUNT_20 == 1 then
+      tablew gk$COUNT_20, ((20-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_22	invalue	"b$COUNT_22"		;BUTTON VALUE
-		kTrig$COUNT_22	changed	gk$COUNT_22
-		if kTrig$COUNT_22 == 1 then
-			tablew	gk$COUNT_22, ((22-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_21 invalue "b$COUNT_21"  ; Button value
+    kTrig$COUNT_21 changed gk$COUNT_21
+    if kTrig$COUNT_21 == 1 then
+      tablew gk$COUNT_21, ((21-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_23	invalue	"b$COUNT_23"		;BUTTON VALUE
-		kTrig$COUNT_23	changed	gk$COUNT_23
-		if kTrig$COUNT_23 == 1 then
-			tablew	gk$COUNT_23, ((23-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_22 invalue "b$COUNT_22"  ; Button value
+    kTrig$COUNT_22 changed gk$COUNT_22
+    if kTrig$COUNT_22 == 1 then
+      tablew gk$COUNT_22, ((22-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_24	invalue	"b$COUNT_24"		;BUTTON VALUE
-		kTrig$COUNT_24	changed	gk$COUNT_24
-		if kTrig$COUNT_24 == 1 then
-			tablew	gk$COUNT_24, ((24-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_23 invalue "b$COUNT_23"  ; Button value
+    kTrig$COUNT_23 changed gk$COUNT_23
+    if kTrig$COUNT_23 == 1 then
+      tablew gk$COUNT_23, ((23-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_25	invalue	"b$COUNT_25"		;BUTTON VALUE
-		kTrig$COUNT_25	changed	gk$COUNT_25
-		if kTrig$COUNT_25 == 1 then
-			tablew	gk$COUNT_25, ((25-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_24 invalue "b$COUNT_24"  ; Button value
+    kTrig$COUNT_24 changed gk$COUNT_24
+    if kTrig$COUNT_24 == 1 then
+      tablew gk$COUNT_24, ((24-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_26	invalue	"b$COUNT_26"		;BUTTON VALUE
-		kTrig$COUNT_26	changed	gk$COUNT_26
-		if kTrig$COUNT_26 == 1 then
-			tablew	gk$COUNT_26, ((26-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_25 invalue "b$COUNT_25"  ; Button value
+    kTrig$COUNT_25 changed gk$COUNT_25
+    if kTrig$COUNT_25 == 1 then
+      tablew gk$COUNT_25, ((25-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_27	invalue	"b$COUNT_27"		;BUTTON VALUE
-		kTrig$COUNT_27	changed	gk$COUNT_27
-		if kTrig$COUNT_27 == 1 then
-			tablew	gk$COUNT_27, ((27-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_26 invalue "b$COUNT_26"  ; Button value
+    kTrig$COUNT_26 changed gk$COUNT_26
+    if kTrig$COUNT_26 == 1 then
+      tablew gk$COUNT_26, ((26-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_28	invalue	"b$COUNT_28"		;BUTTON VALUE
-		kTrig$COUNT_28	changed	gk$COUNT_28
-		if kTrig$COUNT_28 == 1 then
-			tablew	gk$COUNT_28, ((28-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_27 invalue "b$COUNT_27"  ; Button value
+    kTrig$COUNT_27 changed gk$COUNT_27
+    if kTrig$COUNT_27 == 1 then
+      tablew gk$COUNT_27, ((27-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_29	invalue	"b$COUNT_29"		;BUTTON VALUE
-		kTrig$COUNT_29	changed	gk$COUNT_29
-		if kTrig$COUNT_29 == 1 then
-			tablew	gk$COUNT_29, ((29-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_28 invalue "b$COUNT_28"  ; Button value
+    kTrig$COUNT_28 changed gk$COUNT_28
+    if kTrig$COUNT_28 == 1 then
+      tablew gk$COUNT_28, ((28-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_30	invalue	"b$COUNT_30"		;BUTTON VALUE
-		kTrig$COUNT_30	changed	gk$COUNT_30
-		if kTrig$COUNT_30 == 1 then
-			tablew	gk$COUNT_30, ((30-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_29 invalue "b$COUNT_29"  ; Button value
+    kTrig$COUNT_29 changed gk$COUNT_29
+    if kTrig$COUNT_29 == 1 then
+      tablew gk$COUNT_29, ((29-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_31	invalue	"b$COUNT_31"		;BUTTON VALUE
-		kTrig$COUNT_31	changed	gk$COUNT_31
-		if kTrig$COUNT_31 == 1 then
-			tablew	gk$COUNT_31, ((31-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_30 invalue "b$COUNT_30"  ; Button value
+    kTrig$COUNT_30 changed gk$COUNT_30
+    if kTrig$COUNT_30 == 1 then
+      tablew gk$COUNT_30, ((30-1)*4)+3, gi$COUNT
+    endif
 
-		gk$COUNT_32	invalue	"b$COUNT_32"		;BUTTON VALUE
-		kTrig$COUNT_32	changed	gk$COUNT_32
-		if kTrig$COUNT_32 == 1 then
-			tablew	gk$COUNT_32, ((32-1)*4)+3, gi$COUNT 
-		endif
+    gk$COUNT_31 invalue "b$COUNT_31"  ; Button value
+    kTrig$COUNT_31 changed gk$COUNT_31
+    if kTrig$COUNT_31 == 1 then
+      tablew gk$COUNT_31, ((31-1)*4)+3, gi$COUNT
+    endif
 
-		;SLIDERS
-		gk$COUNTGain	invalue	"Gain$COUNT"
-		gk$COUNTPch	invalue	"Transpose$COUNT"
-		gk$COUNTDly	invalue	"Delay$COUNT"
-		;COUNTERS
-		gkLen$COUNT	invalue	"Cycle$COUNT"
-		;CONTROLLERS
-		gkphs$COUNT	invalue	"Phase$COUNT"
-		#
+    gk$COUNT_32 invalue "b$COUNT_32"  ; Button value
+    kTrig$COUNT_32 changed gk$COUNT_32
+    if kTrig$COUNT_32 == 1 then
+      tablew gk$COUNT_32, ((32-1)*4)+3, gi$COUNT
+    endif
 
-		$ROW(1)
-		$ROW(2)
-		$ROW(3)
-		$ROW(4)
-		$ROW(5)
-		$ROW(6)
+    ; Sliders
+    gk$COUNTGain invalue "Gain$COUNT"
+    gk$COUNTPch  invalue "Transpose$COUNT"
+    gk$COUNTDly  invalue "Delay$COUNT"
+    ; Counters
+    gkLen$COUNT invalue "Cycle$COUNT"
+    ; Controllers
+    gkphs$COUNT invalue "Phase$COUNT"
+    #
 
-		;SLIDERS
-		gkRvbSnd		invalue	"RvbSend"
-		gkfblvl		invalue	"RvbTime"
-		gkfco		invalue	"RvbCutoff"
-		gkDlySnd		invalue	"DelSend"
-		gkDlyFB		invalue	"DelFB"
-		;COUNTERS
-		gkTempo		invalue	"Tempo"
-		gkDelTim1		invalue	"DelayL"
-		gkDelTim2		invalue	"DelayR"
-		;KNOBS
-		gkMasterGain	invalue	"Master"
+    $ROW(1)
+    $ROW(2)
+    $ROW(3)
+    $ROW(4)
+    $ROW(5)
+    $ROW(6)
 
-	endif
+    ; Sliders
+    gkRvbSnd invalue "RvbSend"
+    gkfblvl  invalue "RvbTime"
+    gkfco    invalue "RvbCutoff"
+    gkDlySnd invalue "DelSend"
+    gkDlyFB  invalue "DelFB"
+    ; Counters
+    gkTempo   invalue "Tempo"
+    gkDelTim1 invalue "DelayL"
+    gkDelTim2 invalue "DelayR"
+    ; Knobs
+    gkMasterGain invalue "Master"
+
+  endif
 endin
 
-instr	1	; NOTE TRIGGERING INSTRUMENT
-	kSwitch	changed	gkLen1, gkLen2, gkLen3, gkLen4, gkLen5, gkLen6 			;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then													;IF kSwitch=1, I.E. IF ANY OF THE ABOVE LISTED PARAMETERS HAVE CHANGED...
-		reinit	START												;...PERFORM AN I-RATE PASS BEGINNING FROM THE GIVEN LABEL
-	endif															;END OF CONDITIONAL BRANCHING
-	START:															;A LABEL	
-	kTempoRatio	=	gkTempo/60
-	
-	kp1			init	0
-	kp2			init	0
-	kp3			init	0
-	kp4			init	0
+instr 1  ; Note triggering instrument
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkLen1, gkLen2, gkLen3, gkLen4, gkLen5, gkLen6
+  ; If kswitch=1, i.e. If any of the above listed parameters have changed...
+  if kSwitch = 1 then
+    reinit START  ; ...Perform an i-rate pass beginning from the given label
+  endif           ; End of conditional branching
+START:            ; A label
+  kTempoRatio = gkTempo/60
 
-#define	LOOP(COUNT)	
-	#
-	kphs$COUNT    	phasor		(kTempoRatio)/gkLen$COUNT
-	gktimpnt$COUNT	=			kphs$COUNT * gkLen$COUNT
-	ktrig		timedseq		gktimpnt$COUNT,gi$COUNT, kp1, kp2,kp3, kp4
+  kp1 init 0
+  kp2 init 0
+  kp3 init 0
+  kp4 init 0
 
-	;			schedkwhen 	ktrigger, kmintim, kmaxnum, kinsnum,    kwhen,      kdur    p4    p5
-				schedkwhen	ktrig,       0,        0,     2,     gk$COUNTDly,   kp3,   kp4, $COUNT#
-	
-	$LOOP(1)
-	$LOOP(2)
-	$LOOP(3)
-	$LOOP(4)
-	$LOOP(5)
-	$LOOP(6)
-	rireturn
+  #define LOOP(COUNT)
+  #
+  kphs$COUNT phasor (kTempoRatio)/gkLen$COUNT
+  gktimpnt$COUNT = kphs$COUNT * gkLen$COUNT
+  ktrig timedseq gktimpnt$COUNT, gi$COUNT, kp1, kp2, kp3, kp4
+
+  ; schedkwhen  ktrigger, kmintim, kmaxnum, kinsnum,    kwhen,      kdur    p4    p5
+  schedkwhen ktrig, 0, 0, 2, gk$COUNTDly, kp3, kp4, $COUNT#
+
+  $LOOP(1)
+  $LOOP(2)
+  $LOOP(3)
+  $LOOP(4)
+  $LOOP(5)
+  $LOOP(6)
+  rireturn
 endin
 
-instr	2
-	if	p4=1	then
-		event_i	"i", p1+p5, 0, p3
-	endif
+instr 2
+  if p4 = 1 then
+    event_i "i", p1+p5, 0, p3
+  endif
 endin
 
-#define	KALIMBA(I'COUNT)
-	#
-	instr	$I
-	p3	=	2.6		;DEFINE DURATION FOR THIS SOUND
-	ivel		random	0.2,1
-	asig 	barmodel	1, 1, i(gk$COUNTPch), 1, 0, 2.6, 0.5, 1000*ivel, 0.07		;KALIMBA SOUND CREATED USING barmodel OPCODE (SEE CSOUND MANUAL FOR MORE INFO.)
-	asigL	=		asig*i(gk$COUNTGain)*i(gkMasterGain)*2					;DEFINE LEFT CHANNEL AUDIO
-	asigR	=		asig*i(gk$COUNTGain)*i(gkMasterGain)*2					;DEFINE RIGHT CHANNEL AUDIO
-			outs		asigL, asigR 										;SEND AUDIO TO OUTPUTS
+#define KALIMBA(I'COUNT)
+#
+instr $I
+  p3 = 2.6  ; Define duration for this sound
+  ivel random 0.2, 1
+  ; Kalimba sound created using barmodel opcode (see csound manual for more info.)
+  asig barmodel 1, 1, i(gk$COUNTPch), 1, 0, 2.6, 0.5, 1000*ivel, 0.07
+  asigL = asig*i(gk$COUNTGain)*i(gkMasterGain)*2  ; Define left channel audio
+  asigR = asig*i(gk$COUNTGain)*i(gkMasterGain)*2  ; Define right channel audio
+  outs asigL, asigR                               ; Send audio to outputs
 
-			zawm		asigL*gkRvbSnd, giRvbSndChn
-			zawm		asigR*gkRvbSnd, giRvbSndChn+1
-			zawm		asigL*gkDlySnd, giDlySndChn
-			zawm		asigR*gkDlySnd, giDlySndChn+1
-	endin
-	#	
+  zawm asigL*gkRvbSnd, giRvbSndChn
+  zawm asigR*gkRvbSnd, giRvbSndChn+1
+  zawm asigL*gkDlySnd, giDlySndChn
+  zawm asigR*gkDlySnd, giDlySndChn+1
+endin
+#
 
 $KALIMBA(3'1)
 $KALIMBA(4'2)
@@ -361,135 +370,146 @@ $KALIMBA(6'4)
 $KALIMBA(7'5)
 $KALIMBA(8'6)
 
-instr	100	;COPY TABLE 1 TO ALL OTHER TABLES AND SET RANDOM INITIAL VALUES FOR SOME VALUATORS (PERFORMED ONCE AT THE BEGINNING OF THE PERFORMANCE)
-		tableicopy	gi2, gi1
-		tableicopy	gi3, gi1
-		tableicopy	gi4, gi1
-		tableicopy	gi5, gi1
-		tableicopy	gi6, gi1
-		event_i		"i", 102, 0, 0.001									;RANDOMISE SLIDERS
+; Copy table 1 to all other tables and set random initial values for some valuators
+; (performed once at the beginning of the performance)
+instr 100
+  tableicopy gi2, gi1
+  tableicopy gi3, gi1
+  tableicopy gi4, gi1
+  tableicopy gi5, gi1
+  tableicopy gi6, gi1
+  event_i "i", 102, 0, 0.001  ; Randomise sliders
 endin
 
-instr	102	;RANDOMISE SLIDERS
-#define	RANDOMIZE_SLIDERS(COUNT)
-	#
-	iPch$COUNT	random	25,300										;DEFINE RANDOM INITIAL VALUES FOR 'TRANSPOSE' SLIDERS
-				outvalue	"Transpose$COUNT", iPch$COUNT						;SEND RANDOM 'TRANSPOSE' VALUES TO SLIDERS
-	iLen$COUNTDec	random	1,3											;DEFINE RANDOM INITIAL VALUES FOR 'RANGE' COUNTERS
-	iLen$COUNTInt	random	4,8                                     			;DEFINE RANDOM INITIAL VALUES FOR 'RANGE' COUNTERS
-	iLen$COUNT	=		(int(iLen$COUNTDec)*0.5)+int(iLen$COUNTInt)			;DEFINE RANDOM INITIAL VALUES FOR 'RANGE' COUNTERS
-				outvalue	"Cycle$COUNT", iLen$COUNT						;SEND RANDOM 'RANGE' VALUES TO COUNTERS
-	iDly$COUNT	random	0, 0.03										;DEFINE RANDOM INITIAL VALUES FOR 'TRANSPOSE' SLIDERS
-				outvalue	"Delay$COUNT", iDly$COUNT						;SEND RANDOM 'DELAY' VALUES TO SLIDERS
-	#
+instr 102  ; Randomise sliders
+  #define RANDOMIZE_SLIDERS(COUNT)
+  #
+  ; Define random initial values for 'transpose' sliders
+  iPch$COUNT random 25, 300
+  outvalue "Transpose$COUNT", iPch$COUNT  ; Send random 'transpose' values to sliders
+  ; Define random initial values for 'range' counters
+  iLen$COUNTDec random 1, 3
+  ; Define random initial values for 'range' counters
+  iLen$COUNTInt random 4, 8
+  ; Define random initial values for 'range' counters
+  iLen$COUNT = (int(iLen$COUNTDec)*0.5)+int(iLen$COUNTInt)
+  outvalue "Cycle$COUNT", iLen$COUNT  ; Send random 'range' values to counters
+  ; Define random initial values for 'transpose' sliders
+  iDly$COUNT random 0, 0.03
+  outvalue "Delay$COUNT", iDly$COUNT  ; Send random 'delay' values to sliders
+  #
 
-$RANDOMIZE_SLIDERS(1)
-$RANDOMIZE_SLIDERS(2)
-$RANDOMIZE_SLIDERS(3)
-$RANDOMIZE_SLIDERS(4)
-$RANDOMIZE_SLIDERS(5)
-$RANDOMIZE_SLIDERS(6)
-endin	
-
-instr	998	;DUAL TEMPO DELAY
-	aL		zar		giDlySndChn
-	aR		zar		giDlySndChn+1
-	kSwitch	changed	gkTempo, gkDelTim1, gkDelTim2 						;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then													;IF kSwitch=1, I.E. IF ANY OF THE ABOVE LISTED PARAMETERS HAVE CHANGED...
-		reinit		START											;...PERFORM AN I-RATE PASS BEGINNING FROM THE GIVEN LABEL
-	endif															;END OF CONDITIONAL BRANCHING
-	START:															;A LABEL	
-	ideltimL	=		(15*i(gkDelTim1))/i(gkTempo)
-	ideltimR	=		(15*i(gkDelTim2))/i(gkTempo)
-	abuffer	delayr	ideltimL
-	atapL	deltap	ideltimL
-			delayw	aL + (atapL*gkDlyFB)
-	abuffer	delayr	ideltimR
-	atapR	deltap	ideltimR
-			delayw	aR + (atapR*gkDlyFB)
-			outs		atapL, atapR
+  $RANDOMIZE_SLIDERS(1)
+  $RANDOMIZE_SLIDERS(2)
+  $RANDOMIZE_SLIDERS(3)
+  $RANDOMIZE_SLIDERS(4)
+  $RANDOMIZE_SLIDERS(5)
+  $RANDOMIZE_SLIDERS(6)
 endin
 
-instr 	999	;REVERB
-	aL			zar		giRvbSndChn
-	aR			zar		giRvbSndChn+1
-				denorm	aL, aR										;DENORMALIZE BOTH CHANNELS OF AUDIO SIGNAL
-	arvbL, arvbR 	reverbsc 	aL, aR, gkfblvl, gkfco, sr  ;, i(gkpitchm), i(gkskip) 
-				outs		arvbL, arvbR
-				zacl		1,8
+instr 998  ; Dual tempo delay
+  aL zar giDlySndChn
+  aR zar giDlySndChn+1
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkTempo, gkDelTim1, gkDelTim2
+  ; If kswitch=1, i.e. If any of the above listed parameters have changed...
+  if kSwitch = 1 then
+    reinit START  ; ...Perform an i-rate pass beginning from the given label
+  endif           ; End of conditional branching
+START:            ; A label
+  ideltimL = (15*i(gkDelTim1))/i(gkTempo)
+  ideltimR = (15*i(gkDelTim2))/i(gkTempo)
+  abuffer delayr ideltimL
+  atapL deltap ideltimL
+  delayw aL + (atapL*gkDlyFB)
+  abuffer delayr ideltimR
+  atapR deltap ideltimR
+  delayw aR + (atapR*gkDlyFB)
+  outs atapL, atapR
 endin
-	
-instr	1000	;UPDATE LOOP INDICATORS
-	ktrigger	metro	10												;IF PERFORMANCE ISSUES ARISE REDUCING THIS VALUE MIGHT HELP
-	if (ktrigger == 1)	then
-			outvalue	"Phase1", gktimpnt1
-			outvalue	"Phase2", gktimpnt2
-			outvalue	"Phase3", gktimpnt3
-			outvalue	"Phase4", gktimpnt4
-			outvalue	"Phase5",	gktimpnt5
-			outvalue	"Phase6", gktimpnt6
-	endif
+
+instr 999  ; Reverb
+  aL zar giRvbSndChn
+  aR zar giRvbSndChn+1
+  ; Denormalize both channels of audio signal
+  denorm aL, aR
+  arvbL, arvbR reverbsc aL, aR, gkfblvl, gkfco, sr  ; , i(gkpitchm), i(gkskip)
+  outs arvbL, arvbR
+  zacl 1, 8
 endin
 
-instr	1001	;INIT
+instr 1000           ; Update loop indicators
+  ktrigger metro 10  ; If performance issues arise reducing this value might help
+  if (ktrigger == 1) then
+    outvalue "Phase1", gktimpnt1
+    outvalue "Phase2", gktimpnt2
+    outvalue "Phase3", gktimpnt3
+    outvalue "Phase4", gktimpnt4
+    outvalue "Phase5", gktimpnt5
+    outvalue "Phase6", gktimpnt6
+  endif
+endin
 
-			;BUTTONS
-			outvalue	"b1_01"		, 1
-			outvalue	"b5_03"		, 1
-			outvalue	"b2_05"		, 1
-			outvalue	"b6_07"		, 1
-			outvalue	"b3_09"		, 1
-			outvalue	"b1_11"		, 1
-			outvalue	"b4_13"		, 1
-			outvalue	"b2_15"		, 1
-			outvalue	"b4_17"		, 1
-			outvalue	"b5_19"		, 1
-			outvalue	"b2_21"		, 1
-			outvalue	"b6_23"		, 1
-			outvalue	"b1_25"		, 1
-			outvalue	"b3_27"		, 1
-			outvalue	"b2_29"		, 1
-			outvalue	"b5_31"		, 1
+instr 1001  ; Init
 
-			outvalue	"RvbSend"		, 0.4
-			outvalue	"RvbTime"		, .7
-			outvalue	"RvbCutoff"	, 10000
-			outvalue	"DelSend"		, 0.2
-			outvalue	"DelFB"		, .4
-			outvalue	"DelayL"		, 12
-			outvalue	"DelayR"		, 20
-			outvalue	"Tempo"		, 220
-			outvalue	"Master"		, .8
+  ; Buttons
+  outvalue "b1_01", 1
+  outvalue "b5_03", 1
+  outvalue "b2_05", 1
+  outvalue "b6_07", 1
+  outvalue "b3_09", 1
+  outvalue "b1_11", 1
+  outvalue "b4_13", 1
+  outvalue "b2_15", 1
+  outvalue "b4_17", 1
+  outvalue "b5_19", 1
+  outvalue "b2_21", 1
+  outvalue "b6_23", 1
+  outvalue "b1_25", 1
+  outvalue "b3_27", 1
+  outvalue "b2_29", 1
+  outvalue "b5_31", 1
 
-			outvalue	"Transpose1"	, 100
-			outvalue	"Transpose2"	, 100
-			outvalue	"Transpose3"	, 100
-			outvalue	"Transpose4"	, 100
-			outvalue	"Transpose5"	, 100
-			outvalue	"Transpose6"	, 100
+  outvalue "RvbSend", 0.4
+  outvalue "RvbTime", .7
+  outvalue "RvbCutoff", 10000
+  outvalue "DelSend", 0.2
+  outvalue "DelFB", .4
+  outvalue "DelayL", 12
+  outvalue "DelayR", 20
+  outvalue "Tempo", 220
+  outvalue "Master", .8
 
-			outvalue	"Gain1"		, 1
-			outvalue	"Gain2"		, 1
-			outvalue	"Gain3"		, 1
-			outvalue	"Gain4"		, 1
-			outvalue	"Gain5"		, 1
-			outvalue	"Gain6"		, 1
+  outvalue "Transpose1", 100
+  outvalue "Transpose2", 100
+  outvalue "Transpose3", 100
+  outvalue "Transpose4", 100
+  outvalue "Transpose5", 100
+  outvalue "Transpose6", 100
 
-			outvalue	"Cycle1"		, 8
-			outvalue	"Cycle2"		, 8
-			outvalue	"Cycle3"		, 8
-			outvalue	"Cycle4"		, 8
-			outvalue	"Cycle5"		, 8
-			outvalue	"Cycle6"		, 8
+  outvalue "Gain1", 1
+  outvalue "Gain2", 1
+  outvalue "Gain3", 1
+  outvalue "Gain4", 1
+  outvalue "Gain5", 1
+  outvalue "Gain6", 1
+
+  outvalue "Cycle1", 8
+  outvalue "Cycle2", 8
+  outvalue "Cycle3", 8
+  outvalue "Cycle4", 8
+  outvalue "Cycle5", 8
+  outvalue "Cycle6", 8
 endin
 </CsInstruments>
 <CsScore>
-i 200 0 3600			;GUI
+i 200 0 3600  ; GUI
 i 100 0 0
-i 998 0 3600			;DELAY
-i 999 0 3600			;REVERB
-i 1000 0 3600			;LOOP INDICATORS
-i 1001 0.01 0.01		;INIT
+i 998 0 3600      ; Delay
+i 999 0 3600      ; Reverb
+i 1000 0 3600     ; Loop indicators
+i 1001 0.01 0.01  ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -502,9 +522,9 @@ i 1001 0.01 0.01		;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -522,15 +542,20 @@ i 1001 0.01 0.01		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -551,14 +576,14 @@ i 1001 0.01 0.01		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -598,14 +623,14 @@ i 1001 0.01 0.01		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -628,14 +653,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -654,11 +679,23 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_01</objectName>
@@ -678,6 +715,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_02</objectName>
@@ -697,6 +746,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_03</objectName>
@@ -716,6 +777,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_04</objectName>
@@ -735,6 +808,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_05</objectName>
@@ -754,6 +839,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_06</objectName>
@@ -773,6 +870,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_07</objectName>
@@ -792,6 +901,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_08</objectName>
@@ -811,6 +932,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_09</objectName>
@@ -830,6 +963,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_10</objectName>
@@ -849,6 +994,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_11</objectName>
@@ -868,6 +1025,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_12</objectName>
@@ -887,6 +1056,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_13</objectName>
@@ -906,6 +1087,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_14</objectName>
@@ -925,6 +1118,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_15</objectName>
@@ -944,6 +1149,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_16</objectName>
@@ -963,6 +1180,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_17</objectName>
@@ -982,6 +1211,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_18</objectName>
@@ -1001,6 +1242,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_19</objectName>
@@ -1020,6 +1273,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_20</objectName>
@@ -1039,6 +1304,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_21</objectName>
@@ -1058,6 +1335,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_22</objectName>
@@ -1077,6 +1366,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_23</objectName>
@@ -1096,6 +1397,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_24</objectName>
@@ -1115,6 +1428,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_25</objectName>
@@ -1134,6 +1459,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_26</objectName>
@@ -1153,6 +1490,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_27</objectName>
@@ -1172,6 +1521,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_28</objectName>
@@ -1191,6 +1552,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_29</objectName>
@@ -1210,6 +1583,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_30</objectName>
@@ -1229,6 +1614,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_31</objectName>
@@ -1248,6 +1645,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_32</objectName>
@@ -1267,6 +1676,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Phase1</objectName>
@@ -1290,15 +1711,15 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -1319,6 +1740,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_02</objectName>
@@ -1338,6 +1771,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_03</objectName>
@@ -1357,6 +1802,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_04</objectName>
@@ -1376,6 +1833,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_05</objectName>
@@ -1395,6 +1864,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_06</objectName>
@@ -1414,6 +1895,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_07</objectName>
@@ -1433,6 +1926,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_08</objectName>
@@ -1452,6 +1957,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_09</objectName>
@@ -1471,6 +1988,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_10</objectName>
@@ -1490,6 +2019,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_11</objectName>
@@ -1509,6 +2050,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_12</objectName>
@@ -1528,6 +2081,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_13</objectName>
@@ -1547,6 +2112,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_14</objectName>
@@ -1566,6 +2143,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_15</objectName>
@@ -1585,6 +2174,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_16</objectName>
@@ -1604,6 +2205,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_17</objectName>
@@ -1623,6 +2236,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_18</objectName>
@@ -1642,6 +2267,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_19</objectName>
@@ -1661,6 +2298,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_20</objectName>
@@ -1680,6 +2329,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_21</objectName>
@@ -1699,6 +2360,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_22</objectName>
@@ -1718,6 +2391,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_23</objectName>
@@ -1737,6 +2422,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_24</objectName>
@@ -1756,6 +2453,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_25</objectName>
@@ -1775,6 +2484,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_26</objectName>
@@ -1794,6 +2515,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_27</objectName>
@@ -1813,6 +2546,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_28</objectName>
@@ -1832,6 +2577,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_29</objectName>
@@ -1851,6 +2608,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_30</objectName>
@@ -1870,6 +2639,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_31</objectName>
@@ -1889,6 +2670,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_32</objectName>
@@ -1908,6 +2701,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Phase2</objectName>
@@ -1931,15 +2736,15 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -1960,6 +2765,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_02</objectName>
@@ -1979,6 +2796,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_03</objectName>
@@ -1998,6 +2827,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_04</objectName>
@@ -2017,6 +2858,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_05</objectName>
@@ -2036,6 +2889,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_06</objectName>
@@ -2055,6 +2920,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_07</objectName>
@@ -2074,6 +2951,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_08</objectName>
@@ -2093,6 +2982,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_09</objectName>
@@ -2112,6 +3013,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_10</objectName>
@@ -2131,6 +3044,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_11</objectName>
@@ -2150,6 +3075,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_12</objectName>
@@ -2169,6 +3106,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_13</objectName>
@@ -2188,6 +3137,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_14</objectName>
@@ -2207,6 +3168,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_15</objectName>
@@ -2226,6 +3199,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_16</objectName>
@@ -2245,6 +3230,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_17</objectName>
@@ -2264,6 +3261,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_18</objectName>
@@ -2283,6 +3292,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_19</objectName>
@@ -2302,6 +3323,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_20</objectName>
@@ -2321,6 +3354,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_21</objectName>
@@ -2340,6 +3385,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_22</objectName>
@@ -2359,6 +3416,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_23</objectName>
@@ -2378,6 +3447,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_24</objectName>
@@ -2397,6 +3478,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_25</objectName>
@@ -2416,6 +3509,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_26</objectName>
@@ -2435,6 +3540,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_27</objectName>
@@ -2454,6 +3571,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_28</objectName>
@@ -2473,6 +3602,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_29</objectName>
@@ -2492,6 +3633,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_30</objectName>
@@ -2511,6 +3664,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_31</objectName>
@@ -2530,6 +3695,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_32</objectName>
@@ -2549,6 +3726,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Phase3</objectName>
@@ -2572,15 +3761,15 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -2601,6 +3790,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_02</objectName>
@@ -2620,6 +3821,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_03</objectName>
@@ -2639,6 +3852,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_04</objectName>
@@ -2658,6 +3883,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_05</objectName>
@@ -2677,6 +3914,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_06</objectName>
@@ -2696,6 +3945,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_07</objectName>
@@ -2715,6 +3976,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_08</objectName>
@@ -2734,6 +4007,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_09</objectName>
@@ -2753,6 +4038,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_10</objectName>
@@ -2772,6 +4069,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_11</objectName>
@@ -2791,6 +4100,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_12</objectName>
@@ -2810,6 +4131,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_13</objectName>
@@ -2829,6 +4162,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_14</objectName>
@@ -2848,6 +4193,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_15</objectName>
@@ -2867,6 +4224,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_16</objectName>
@@ -2886,6 +4255,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_17</objectName>
@@ -2905,6 +4286,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_18</objectName>
@@ -2924,6 +4317,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_19</objectName>
@@ -2943,6 +4348,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_20</objectName>
@@ -2962,6 +4379,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_21</objectName>
@@ -2981,6 +4410,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_22</objectName>
@@ -3000,6 +4441,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_23</objectName>
@@ -3019,6 +4472,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_24</objectName>
@@ -3038,6 +4503,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_25</objectName>
@@ -3057,6 +4534,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_26</objectName>
@@ -3076,6 +4565,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_27</objectName>
@@ -3095,6 +4596,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_28</objectName>
@@ -3114,6 +4627,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_29</objectName>
@@ -3133,6 +4658,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_30</objectName>
@@ -3152,6 +4689,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_31</objectName>
@@ -3171,6 +4720,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_32</objectName>
@@ -3190,6 +4751,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Phase4</objectName>
@@ -3213,15 +4786,15 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -3242,6 +4815,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_02</objectName>
@@ -3261,6 +4846,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_03</objectName>
@@ -3280,6 +4877,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_04</objectName>
@@ -3299,6 +4908,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_05</objectName>
@@ -3318,6 +4939,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_06</objectName>
@@ -3337,6 +4970,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_07</objectName>
@@ -3356,6 +5001,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_08</objectName>
@@ -3375,6 +5032,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_09</objectName>
@@ -3394,6 +5063,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_10</objectName>
@@ -3413,6 +5094,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_11</objectName>
@@ -3432,6 +5125,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_12</objectName>
@@ -3451,6 +5156,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_13</objectName>
@@ -3470,6 +5187,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_14</objectName>
@@ -3489,6 +5218,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_15</objectName>
@@ -3508,6 +5249,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_16</objectName>
@@ -3527,6 +5280,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_17</objectName>
@@ -3546,6 +5311,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_18</objectName>
@@ -3565,6 +5342,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_19</objectName>
@@ -3584,6 +5373,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_20</objectName>
@@ -3603,6 +5404,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_21</objectName>
@@ -3622,6 +5435,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_22</objectName>
@@ -3641,6 +5466,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_23</objectName>
@@ -3660,6 +5497,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_24</objectName>
@@ -3679,6 +5528,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_25</objectName>
@@ -3698,6 +5559,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_26</objectName>
@@ -3717,6 +5590,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_27</objectName>
@@ -3736,6 +5621,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_28</objectName>
@@ -3755,6 +5652,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_29</objectName>
@@ -3774,6 +5683,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_30</objectName>
@@ -3793,6 +5714,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_31</objectName>
@@ -3812,6 +5745,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_32</objectName>
@@ -3831,6 +5776,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Phase5</objectName>
@@ -3854,15 +5811,15 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -3883,6 +5840,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_02</objectName>
@@ -3902,6 +5871,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_03</objectName>
@@ -3921,6 +5902,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_04</objectName>
@@ -3940,6 +5933,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_05</objectName>
@@ -3959,6 +5964,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_06</objectName>
@@ -3978,6 +5995,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_07</objectName>
@@ -3997,6 +6026,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_08</objectName>
@@ -4016,6 +6057,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_09</objectName>
@@ -4035,6 +6088,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_10</objectName>
@@ -4054,6 +6119,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_11</objectName>
@@ -4073,6 +6150,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_12</objectName>
@@ -4092,6 +6181,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_13</objectName>
@@ -4111,6 +6212,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_14</objectName>
@@ -4130,6 +6243,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_15</objectName>
@@ -4149,6 +6274,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_16</objectName>
@@ -4168,6 +6305,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_17</objectName>
@@ -4187,6 +6336,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_18</objectName>
@@ -4206,6 +6367,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_19</objectName>
@@ -4225,6 +6398,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_20</objectName>
@@ -4244,6 +6429,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_21</objectName>
@@ -4263,6 +6460,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_22</objectName>
@@ -4282,6 +6491,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_23</objectName>
@@ -4301,6 +6522,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_24</objectName>
@@ -4320,6 +6553,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_25</objectName>
@@ -4339,6 +6584,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_26</objectName>
@@ -4358,6 +6615,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_27</objectName>
@@ -4377,6 +6646,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_28</objectName>
@@ -4396,6 +6677,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_29</objectName>
@@ -4415,6 +6708,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_30</objectName>
@@ -4434,6 +6739,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_31</objectName>
@@ -4453,6 +6770,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_32</objectName>
@@ -4472,6 +6801,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Phase6</objectName>
@@ -4495,15 +6836,15 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -4522,14 +6863,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4551,14 +6892,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4580,14 +6921,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4609,14 +6950,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4638,14 +6979,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4667,14 +7008,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4696,14 +7037,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4725,14 +7066,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4756,6 +7097,18 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <eventLine>i 102 0 0.001</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Tempo</objectName>
@@ -4771,14 +7124,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -4802,14 +7155,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -4883,14 +7236,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.25000000</resolution>
   <minimum>0</minimum>
@@ -4966,14 +7319,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.25000000</resolution>
   <minimum>0</minimum>
@@ -5049,14 +7402,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.25000000</resolution>
   <minimum>0</minimum>
@@ -5132,14 +7485,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.25000000</resolution>
   <minimum>0</minimum>
@@ -5215,14 +7568,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.25000000</resolution>
   <minimum>0</minimum>
@@ -5298,14 +7651,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.25000000</resolution>
   <minimum>0</minimum>
@@ -5329,14 +7682,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5358,14 +7711,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5387,14 +7740,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5416,14 +7769,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5445,14 +7798,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5492,14 +7845,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5521,14 +7874,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5568,14 +7921,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5597,14 +7950,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5644,14 +7997,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5673,14 +8026,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5720,14 +8073,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5747,14 +8100,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -5778,14 +8131,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5805,14 +8158,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -5836,14 +8189,14 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -5884,14 +8237,14 @@ Gain</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

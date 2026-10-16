@@ -1,68 +1,89 @@
-;WRITTEN BY IAIN MCCURDY, 2008
+; Written by iain mccurdy, 2008
 
 ; Modified for QuteCsound by René, September 2010
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gisine	ftgen	0, 0, 4096, 10, 1	;A SINE WAVE FUNCTION TABLE IS DEFINED
+gisine ftgen 0, 0, 4096, 10, 1  ; A sine wave function table is defined
 
 
-instr	10	;GUI
-	gkfreq		invalue	"Frequency_Rotation"		;init 0.2
-	gkAmpDepth	invalue	"Central_Edge"				;init .7
-	gkAmpPhase	invalue	"Orientation"				;init 0.5
-	gkPanDepth	invalue	"Panning_Width"			;init 1
-	gkDopDep		invalue	"Doppler_Depth"			;init .003
-	gkOutGain		invalue	"Output_Gain"				;init 0.7
+instr 10                                   ; GUI
+  gkfreq     invalue "Frequency_Rotation"  ; init 0.2
+  gkAmpDepth invalue "Central_Edge"        ; init .7
+  gkAmpPhase invalue "Orientation"         ; init 0.5
+  gkPanDepth invalue "Panning_Width"       ; init 1
+  gkDopDep   invalue "Doppler_Depth"       ; init .003
+  gkOutGain  invalue "Output_Gain"         ; init 0.7
 endin
 
-instr     1
-	iporttime		=		0.1									;CREATE 'PORTAMENTO TIME' CONSTANT VALUE
-	kporttime		linseg	0,0.001,iporttime,1,iporttime				;CREATE 'PORTAMENTO TIME' RISING FUNCTION
-	kAmpPhase		portk	gkAmpPhase, kporttime					;APPLY PORTAMENTO TO gkAmpPhase. CREATE NEW OUTPUT VARIABLE kAmpPhase (GLOBAL VARIABLES CAN'T BE BOTH INPUT AND OUTPUT)
-	kDopDep		portk	gkDopDep, kporttime						;APPLY PORTAMENTO TO gkDopDep. CREATE NEW OUTPUT VARIABLE kDopDep (GLOBAL VARIABLES CAN'T BE BOTH INPUT AND OUTPUT)
-	aDopDep		interp	kDopDep
-	asig			pinkish	0.3									;DEFINE SOUND SOURCE (PINK NOISE) FOR THIS EXAMPLE
-	asig			butbp	asig, 500, 10							;BANDPASS FILTER PINK NOISE TO GIVE asig A 'WHISTLING' CHARACTERISTIC. THIS FILTERING CAUSES A LOSS OF SIGNAL POWER WHICH MUST LATER BE COMPENSATED FOR
+instr 1
+  iporttime = 0.1  ; Create 'portamento time' constant value
+  ; Create 'portamento time' rising function
+  kporttime linseg 0, 0.001, iporttime, 1, iporttime
+  ; Apply portamento to gkampphase. Create new output variable kampphase (global variables
+  ; can't be both input and output)
+  kAmpPhase portk gkAmpPhase, kporttime
+  ; Apply portamento to gkdopdep. Create new output variable kdopdep (global variables
+  ; can't be both input and output)
+  kDopDep portk gkDopDep, kporttime
+  aDopDep interp kDopDep
+  asig pinkish 0.3  ; Define sound source (pink noise) for this example
+  ; Bandpass filter pink noise to give asig a 'whistling' characteristic. This filtering
+  ; causes a loss of signal power which must later be compensated for
+  asig butbp asig, 500, 10
 
-	aAmp 		osciliktp gkfreq, gisine, kAmpPhase				;AN LFO DEFINES A VARIABLE USED TO MODULATE AMPLITUDE (NOTE: VARIABLE PHASE). THIS MODELS THE LOCATION WITHIN THE CIRCLE FROM WHICH WE ARE LISTENING. NO AMPLITUDE MODULATION REPRESENT REPRESENTS OUR LISTENING POSITION BEING EXACTLY CENTRAL, MAXIMUM MODULATION REPRESENTS US BEING NEAR TO THE EDGE OF A LARGE CIRCLE. THE CONTROL OVER PHASE OF THIS LFO REPRESENTS WHICH EDGE WE ARE CLOSER TO.
-	aAmp			=		(aAmp * 0.5 * gkAmpDepth) + 0.5			;RESCALE AND OFFSET AMPLITUDE MODULATION LFO
-	
-	aPan			oscili	(gkPanDepth * 0.5), gkfreq, gisine, 0.75	;AN LFO DEFINES A VARIABLE FOR PANNING CONTROL - I.E. WHETHER SOUND IS CURRENTLY TO OUT LEFT OR TO OUT RIGHT. NOTE THAT PHASE IS 0.75 AND THEREFORE 0.75 RADIANS (OR 270 DEGREES OUT OF PHASE) WITH THE DELAY MODULATION 
-	aPan			=		aPan + 0.5							;OFFSET PANNING LFO
+  ; An LFO defines a variable used to modulate amplitude (note: variable phase). This
+  ; models the location within the circle from which we are listening. No amplitude
+  ; modulation represent represents our listening position being exactly central, maximum
+  ; modulation represents us being near to the edge of a large circle. The control over
+  ; phase of this LFO represents which edge we are closer to.
+  aAmp osciliktp gkfreq, gisine, kAmpPhase
+  aAmp = (aAmp * 0.5 * gkAmpDepth) + 0.5  ; Rescale and offset amplitude modulation LFO
 
-	iMaxDelay		=		1									;DEFINE A VARIABLE THAT WILL BE USE FOR 'MAXIMUM DELAY TIME' (BUFFER LENGTH)
-	aDelay		oscili	aDopDep, gkfreq, gisine, 0				;AN LFO DEFINES A VARIABLE FOR DELAY TIME (NOTE PHASE AT ZERO)
-	aDelay		=		aDelay + aDopDep						;DELAY TIME  VARIABLE 'aDelay' IS OFFSET TO STAY WITHIN THE POSITIVE DOMAIN	
-	aBuff		delayr	iMaxDelay								;DEFINE DELAY BUFFER STATING ITS LENGTH
-	aDelay		deltap3	aDelay+0.001								;TAP DELAY BUFFER
-				delayw	asig									;SIGNAL WRITTEN INTO BEGINING OF DELAY BUFFER
+  ; An LFO defines a variable for panning control - i.e. Whether sound is currently to out
+  ; left or to out right. Note that phase is 0.75 and therefore 0.75 radians (or 270
+  ; degrees out of phase) with the delay modulation
+  aPan oscili (gkPanDepth * 0.5), gkfreq, gisine, 0.75
+  aPan = aPan + 0.5  ; Offset panning LFO
 
-	asig			=		aDelay * aAmp * 100 * gkOutGain			;APPLY AMPLITUDE MODULATION RESCALING CONSTANT AND OUTPU GAIN SLIDER TO SIGNAL OUTPUT BY DELAY
+  ; Define a variable that will be use for 'maximum delay time' (buffer length)
+  iMaxDelay = 1
+  ; An LFO defines a variable for delay time (note phase at zero)
+  aDelay oscili aDopDep, gkfreq, gisine, 0
+  ; Delay time variable 'adelay' is offset to stay within the positive domain
+  aDelay = aDelay + aDopDep
+  aBuff delayr iMaxDelay       ; Define delay buffer stating its length
+  aDelay deltap3 aDelay+0.001  ; Tap delay buffer
+  delayw asig                  ; Signal written into begining of delay buffer
 
-	aL, aR		pan2 	asig, aPan, 1							;APPLY PANNING TO SIGNAL OUTPUT FROM AMPLITUDE MODUALTION STAGE USING pan2 OPCODE
-				outs		aL, aR								;SEND AUDIO TO OUTPUTS
+  ; Apply amplitude modulation rescaling constant and outpu gain slider to signal output
+  ; by delay
+  asig = aDelay * aAmp * 100 * gkOutGain
+
+  ; Apply panning to signal output from amplitude modualtion stage using pan2 opcode
+  aL, aR pan2 asig, aPan, 1
+  outs aL, aR  ; Send audio to outputs
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		-1		;GUI
+; Instr | start | duration
+i 10 0 -1  ; GUI
 
-f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
+f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 
@@ -77,9 +98,9 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -99,15 +120,20 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -126,13 +152,25 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency_Rotation</objectName>
@@ -171,14 +209,14 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -202,14 +240,14 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -233,15 +271,20 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -265,14 +308,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -296,14 +339,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -327,14 +370,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -377,14 +420,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -427,14 +470,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -477,14 +520,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -508,14 +551,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -539,14 +582,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -589,14 +632,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -620,14 +663,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -651,14 +694,14 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

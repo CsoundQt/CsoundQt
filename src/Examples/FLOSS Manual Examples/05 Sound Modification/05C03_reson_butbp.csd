@@ -10,7 +10,7 @@ nchnls = 1
 0dbfs = 1
 
   instr 1
-        prints       "reson%n"          ; indicate filter type in console
+        prints       "reson\n"          ; indicate filter type in console
 aSig    vco2         0.5, 150           ; input signal: sawtooth waveform
 kcf     expon        20,p3,10000        ; rising cutoff frequency
 aSig    reson        aSig,kcf,kcf*0.1,1 ; filter audio signal
@@ -18,7 +18,7 @@ aSig    reson        aSig,kcf,kcf*0.1,1 ; filter audio signal
   endin
 
   instr 2
-        prints       "butbp%n"          ; indicate filter type in console
+        prints       "butbp\n"          ; indicate filter type in console
 aSig    vco2         0.5, 150           ; input signal: sawtooth waveform
 kcf     expon        20,p3,10000        ; rising cutoff frequency
 aSig    butbp        aSig, kcf, kcf*0.1 ; filter audio signal
@@ -26,7 +26,7 @@ aSig    butbp        aSig, kcf, kcf*0.1 ; filter audio signal
   endin
 
   instr 3
-        prints       "reson%n"          ; indicate filter type in console
+        prints       "reson\n"          ; indicate filter type in console
 aSig    pinkish      0.5                ; input signal: pink noise
 kbw     expon        10000,p3,8         ; contracting bandwidth
 aSig    reson        aSig, 5000, kbw, 2 ; filter audio signal
@@ -34,7 +34,7 @@ aSig    reson        aSig, 5000, kbw, 2 ; filter audio signal
   endin
 
   instr 4
-        prints       "butbp%n"          ; indicate filter type in console
+        prints       "butbp\n"          ; indicate filter type in console
 aSig    pinkish      0.5                ; input signal: pink noise
 kbw     expon        10000,p3,8         ; contracting bandwidth
 aSig    butbp        aSig, 5000, kbw    ; filter audio signal

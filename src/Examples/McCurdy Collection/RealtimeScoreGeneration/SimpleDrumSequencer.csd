@@ -1,409 +1,440 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	used latched value type button and removed instr 10 to 15 to replace FLbutton
+; Notes on modifications from original csd:
+; used latched value type button and removed instr 10 to 15 to replace FLbutton
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine	ftgen	0,0,4096,10,1	;SINE WAVE
-gkphs	init		0
+gisine ftgen 0, 0, 4096, 10, 1  ; Sine wave
+gkphs init 0
 
-;FUNCTION TABLE FOR STORAGE OF SEQUENCE DATA FOR SOUND 1 p4=On/Off_Status p5=amplitude
-gi1		ftgen		0,0,128,-2,	0,	1,	0.001,	0,0,\
-						0,	1.25,	0.001,	0,0,\
-						0,	1.5,	0.001,	0,0,\
-						0,	1.75,	0.001,	0,0,\                       
-						0,	2,	0.001,	0,0,\
-						0,	2.25,	0.001,	0,0,\
-						0,	2.5,	0.001,	0,0,\
-						0,	2.75,	0.001,	0,0,\                  
-						0,	3,	0.001,	0,0,\
-						0,	3.25,	0.001,	0,0,\
-						0,	3.5,	0.001,	0,0,\
-						0,	3.75,	0.001,	0,0,\
-						0,	4,	0.001,	0,0,\
-						0,	4.25,	0.001,	0,0,\
-						0,	4.5,	0.001,	0,0,\
-						0,	4.75,	0.001,	0,0,\
-						-1,	5,	-1,	-1,-1
+; Function table for storage of sequence data for sound 1 p4=on/off_status p5=amplitude
+gi1 ftgen 0, 0, 128, -2, 0, 1, 0.001, 0, 0, \
+  0, 1.25, 0.001, 0, 0, \
+  0, 1.5, 0.001, 0, 0, \
+  0, 1.75, 0.001, 0, 0, \
+  0, 2, 0.001, 0, 0, \
+  0, 2.25, 0.001, 0, 0, \
+  0, 2.5, 0.001, 0, 0, \
+  0, 2.75, 0.001, 0, 0, \
+  0, 3, 0.001, 0, 0, \
+  0, 3.25, 0.001, 0, 0, \
+  0, 3.5, 0.001, 0, 0, \
+  0, 3.75, 0.001, 0, 0, \
+  0, 4, 0.001, 0, 0, \
+  0, 4.25, 0.001, 0, 0, \
+  0, 4.5, 0.001, 0, 0, \
+  0, 4.75, 0.001, 0, 0, \
+  -1, 5, -1, -1, -1
 
-gi2		ftgen	0,0,128,-2,0			;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
-gi3		ftgen	0,0,128,-2,0			;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
-gi4		ftgen	0,0,128,-2,0			;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
-gi5		ftgen	0,0,128,-2,0			;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
-gi6		ftgen	0,0,128,-2,0			;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
-		tableicopy 	gi2, gi1	;COPY TABLE 1 INTO ALL OTHER TABLES
-		tableicopy 	gi3, gi1
-		tableicopy 	gi4, gi1
-		tableicopy 	gi5, gi1
-		tableicopy 	gi6, gi1
+; Empty tables initially. Contents will be copied from table gi1
+gi2 ftgen 0, 0, 128, -2, 0
+; Empty tables initially. Contents will be copied from table gi1
+gi3 ftgen 0, 0, 128, -2, 0
+; Empty tables initially. Contents will be copied from table gi1
+gi4 ftgen 0, 0, 128, -2, 0
+; Empty tables initially. Contents will be copied from table gi1
+gi5 ftgen 0, 0, 128, -2, 0
+; Empty tables initially. Contents will be copied from table gi1
+gi6 ftgen 0, 0, 128, -2, 0
+tableicopy gi2, gi1  ; Copy table 1 into all other tables
+tableicopy gi3, gi1
+tableicopy gi4, gi1
+tableicopy gi5, gi1
+tableicopy gi6, gi1
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkMasterGain	invalue	"Master"
-		gkBPM		invalue	"Tempo"
-		gkswing	invalue	"swing"
-		gkamp1	invalue	"amp1"
-		gkamp2	invalue	"amp2"
-		gkamp3	invalue	"amp3"
-		gkamp4	invalue	"amp4"
-		gkamp5	invalue	"amp5"
-		gkamp6	invalue	"amp6"
-		gkamp7	invalue	"amp7"
-		gkamp8	invalue	"amp8"
-		gkamp9	invalue	"amp9"
-		gkamp10	invalue	"amp10"
-		gkamp11	invalue	"amp11"
-		gkamp12	invalue	"amp12"
-		gkamp13	invalue	"amp13"
-		gkamp14	invalue	"amp14"
-		gkamp15	invalue	"amp15"
-		gkamp16	invalue	"amp16"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkMasterGain invalue "Master"
+    gkBPM        invalue "Tempo"
+    gkswing      invalue "swing"
+    gkamp1       invalue "amp1"
+    gkamp2       invalue "amp2"
+    gkamp3       invalue "amp3"
+    gkamp4       invalue "amp4"
+    gkamp5       invalue "amp5"
+    gkamp6       invalue "amp6"
+    gkamp7       invalue "amp7"
+    gkamp8       invalue "amp8"
+    gkamp9       invalue "amp9"
+    gkamp10      invalue "amp10"
+    gkamp11      invalue "amp11"
+    gkamp12      invalue "amp12"
+    gkamp13      invalue "amp13"
+    gkamp14      invalue "amp14"
+    gkamp15      invalue "amp15"
+    gkamp16      invalue "amp16"
 
-#define	ROW1(COUNT)
-		#
-		;TABLES UPDATE
-		gk$COUNT_01	invalue	"b$COUNT_01"		;BUTTON VALUE
-		kTrig$COUNT_01	changed	gk$COUNT_01
-		if kTrig$COUNT_01 == 1 then
-			tablew	gk$COUNT_01, ((1-1)*5)+3, gi$COUNT 
-		endif
+    #define ROW1(COUNT)
+    #
+    ; Tables update
+    gk$COUNT_01 invalue "b$COUNT_01"  ; Button value
+    kTrig$COUNT_01 changed gk$COUNT_01
+    if kTrig$COUNT_01 == 1 then
+      tablew gk$COUNT_01, ((1-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_02	invalue	"b$COUNT_02"		;BUTTON VALUE
-		kTrig$COUNT_02	changed	gk$COUNT_02
-		if kTrig$COUNT_02 == 1 then
-			tablew	gk$COUNT_02, ((2-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_02 invalue "b$COUNT_02"  ; Button value
+    kTrig$COUNT_02 changed gk$COUNT_02
+    if kTrig$COUNT_02 == 1 then
+      tablew gk$COUNT_02, ((2-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_03	invalue	"b$COUNT_03"		;BUTTON VALUE
-		kTrig$COUNT_03	changed	gk$COUNT_03
-		if kTrig$COUNT_03 == 1 then
-			tablew	gk$COUNT_03, ((3-1)*5)+3, gi$COUNT 
-		endif
-		
-		gk$COUNT_04	invalue	"b$COUNT_04"		;BUTTON VALUE
-		kTrig$COUNT_04	changed	gk$COUNT_04
-		if kTrig$COUNT_04 == 1 then
-			tablew	gk$COUNT_04, ((4-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_03 invalue "b$COUNT_03"  ; Button value
+    kTrig$COUNT_03 changed gk$COUNT_03
+    if kTrig$COUNT_03 == 1 then
+      tablew gk$COUNT_03, ((3-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_05	invalue	"b$COUNT_05"		;BUTTON VALUE
-		kTrig$COUNT_05	changed	gk$COUNT_05
-		if kTrig$COUNT_05 == 1 then
-			tablew	gk$COUNT_05, ((5-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_04 invalue "b$COUNT_04"  ; Button value
+    kTrig$COUNT_04 changed gk$COUNT_04
+    if kTrig$COUNT_04 == 1 then
+      tablew gk$COUNT_04, ((4-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_06	invalue	"b$COUNT_06"		;BUTTON VALUE
-		kTrig$COUNT_06	changed	gk$COUNT_06
-		if kTrig$COUNT_06 == 1 then
-			tablew	gk$COUNT_06, ((6-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_05 invalue "b$COUNT_05"  ; Button value
+    kTrig$COUNT_05 changed gk$COUNT_05
+    if kTrig$COUNT_05 == 1 then
+      tablew gk$COUNT_05, ((5-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_07	invalue	"b$COUNT_07"		;BUTTON VALUE
-		kTrig$COUNT_07	changed	gk$COUNT_07
-		if kTrig$COUNT_07 == 1 then
-			tablew	gk$COUNT_07, ((7-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_06 invalue "b$COUNT_06"  ; Button value
+    kTrig$COUNT_06 changed gk$COUNT_06
+    if kTrig$COUNT_06 == 1 then
+      tablew gk$COUNT_06, ((6-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_08	invalue	"b$COUNT_08"		;BUTTON VALUE
-		kTrig$COUNT_08	changed	gk$COUNT_08
-		if kTrig$COUNT_08 == 1 then
-			tablew	gk$COUNT_08, ((8-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_07 invalue "b$COUNT_07"  ; Button value
+    kTrig$COUNT_07 changed gk$COUNT_07
+    if kTrig$COUNT_07 == 1 then
+      tablew gk$COUNT_07, ((7-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_09	invalue	"b$COUNT_09"		;BUTTON VALUE
-		kTrig$COUNT_09	changed	gk$COUNT_09
-		if kTrig$COUNT_09 == 1 then
-			tablew	gk$COUNT_09, ((9-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_08 invalue "b$COUNT_08"  ; Button value
+    kTrig$COUNT_08 changed gk$COUNT_08
+    if kTrig$COUNT_08 == 1 then
+      tablew gk$COUNT_08, ((8-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_10	invalue	"b$COUNT_10"		;BUTTON VALUE
-		kTrig$COUNT_10	changed	gk$COUNT_10
-		if kTrig$COUNT_10 == 1 then
-			tablew	gk$COUNT_10, ((10-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_09 invalue "b$COUNT_09"  ; Button value
+    kTrig$COUNT_09 changed gk$COUNT_09
+    if kTrig$COUNT_09 == 1 then
+      tablew gk$COUNT_09, ((9-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_11	invalue	"b$COUNT_11"		;BUTTON VALUE
-		kTrig$COUNT_11	changed	gk$COUNT_11
-		if kTrig$COUNT_11 == 1 then
-			tablew	gk$COUNT_11, ((11-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_10 invalue "b$COUNT_10"  ; Button value
+    kTrig$COUNT_10 changed gk$COUNT_10
+    if kTrig$COUNT_10 == 1 then
+      tablew gk$COUNT_10, ((10-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_12	invalue	"b$COUNT_12"		;BUTTON VALUE
-		kTrig$COUNT_12	changed	gk$COUNT_12
-		if kTrig$COUNT_12 == 1 then
-			tablew	gk$COUNT_12, ((12-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_11 invalue "b$COUNT_11"  ; Button value
+    kTrig$COUNT_11 changed gk$COUNT_11
+    if kTrig$COUNT_11 == 1 then
+      tablew gk$COUNT_11, ((11-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_13	invalue	"b$COUNT_13"		;BUTTON VALUE
-		kTrig$COUNT_13	changed	gk$COUNT_13
-		if kTrig$COUNT_13 == 1 then
-			tablew	gk$COUNT_13, ((13-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_12 invalue "b$COUNT_12"  ; Button value
+    kTrig$COUNT_12 changed gk$COUNT_12
+    if kTrig$COUNT_12 == 1 then
+      tablew gk$COUNT_12, ((12-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_14	invalue	"b$COUNT_14"		;BUTTON VALUE
-		kTrig$COUNT_14	changed	gk$COUNT_14
-		if kTrig$COUNT_14 == 1 then
-			tablew	gk$COUNT_14, ((14-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_13 invalue "b$COUNT_13"  ; Button value
+    kTrig$COUNT_13 changed gk$COUNT_13
+    if kTrig$COUNT_13 == 1 then
+      tablew gk$COUNT_13, ((13-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_15	invalue	"b$COUNT_15"		;BUTTON VALUE
-		kTrig$COUNT_15	changed	gk$COUNT_15
-		if kTrig$COUNT_15 == 1 then
-			tablew	gk$COUNT_15, ((15-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_14 invalue "b$COUNT_14"  ; Button value
+    kTrig$COUNT_14 changed gk$COUNT_14
+    if kTrig$COUNT_14 == 1 then
+      tablew gk$COUNT_14, ((14-1)*5)+3, gi$COUNT
+    endif
 
-		gk$COUNT_16	invalue	"b$COUNT_16"		;BUTTON VALUE
-		kTrig$COUNT_16	changed	gk$COUNT_16
-		if kTrig$COUNT_16 == 1 then
-			tablew	gk$COUNT_16, ((16-1)*5)+3, gi$COUNT 
-		endif
+    gk$COUNT_15 invalue "b$COUNT_15"  ; Button value
+    kTrig$COUNT_15 changed gk$COUNT_15
+    if kTrig$COUNT_15 == 1 then
+      tablew gk$COUNT_15, ((15-1)*5)+3, gi$COUNT
+    endif
 
-		;SLIDERS
-		gk$COUNTGain	invalue	"Gain$COUNT"
-		#
+    gk$COUNT_16 invalue "b$COUNT_16"  ; Button value
+    kTrig$COUNT_16 changed gk$COUNT_16
+    if kTrig$COUNT_16 == 1 then
+      tablew gk$COUNT_16, ((16-1)*5)+3, gi$COUNT
+    endif
 
-		$ROW1(1)
-		$ROW1(2)
-		$ROW1(3)
-		$ROW1(4)
-		$ROW1(5)
-		$ROW1(6)
+    ; Sliders
+    gk$COUNTGain invalue "Gain$COUNT"
+    #
 
-	endif
+    $ROW1(1)
+    $ROW1(2)
+    $ROW1(3)
+    $ROW1(4)
+    $ROW1(5)
+    $ROW1(6)
+
+  endif
 endin
 
-instr	1	; NOTE TRIGGERING INSTRUMENT
-	kBPS		=		gkBPM/60							;CONVERT BEATS PER MINUTE TO BEATS PER SECOND
-	isubdiv	=		4								;NUMBER OF SUBDIVISIONS OF THE BEAT
-	kphs		phasor	kBPS/isubdiv						;CREATE MOVING PHASE VALUE 
+instr 1                     ; Note triggering instrument
+  kBPS    = gkBPM/60        ; Convert beats per minute to beats per second
+  isubdiv = 4               ; Number of subdivisions of the beat
+  kphs phasor kBPS/isubdiv  ; Create moving phase value
 
-	ktrigger	metro	10
-	if ktrigger == 1 then
-			outvalue	"Phase", kphs
-	endif
+  ktrigger metro 10
+  if ktrigger == 1 then
+    outvalue "Phase", kphs
+  endif
 
-	ktimpnt 	=	kphs*isubdiv+0.99						;MULTIPLY PHASE VALUE BY NUMBER OF BEATS, OFFSET BY ALMOST 1 (THIS IS TO ENSURE THE FIRST EVENT ON BEAT ONE IS ALWAYS TRIGGERED)
-	kp1		init		0								;INITIALISE P-FIELD VALUES OUTPUT BY timedseq
-	kp2		init		0					               ;INITIALISE P-FIELD VALUES OUTPUT BY timedseq
-	kp3		init		0         						;INITIALISE P-FIELD VALUES OUTPUT BY timedseq
-	kp4		init		0         						;INITIALISE P-FIELD VALUES OUTPUT BY timedseq
-	kp5		init		0               				;INITIALISE P-FIELD VALUES OUTPUT BY timedseq AS INPUT VARIABLES
-	
-#define	LoopTrigger(N)
-	#ktrig   timedseq ktimpnt,gi$N, kp1, kp2,kp3, kp4,kp5	;CREATE NOTE TRIGGERS AND P-FIELDS FOR SOUND 1 FROM FUNCTION TABLE gi1 
-	;OPCODE 	TRIGGER | MINTIM | MAXNUM | INSNUM | WHEN | DUR | P4 | P5 |P6
-	schedkwhen 	ktrig,      0,       0,        2,     0,    kp3,  kp4, kp5, $N	;TRIGGER INTERROGATION INSTRUMENT#
-	;EXPAND MACRO MULTIPLE TIMES FOR EACH SEQUENCER ROW
-	$LoopTrigger(1)
-	$LoopTrigger(2)
-	$LoopTrigger(3)
-	$LoopTrigger(4)
-	$LoopTrigger(5)
-	$LoopTrigger(6)
-	
-	;--SWING CONTROL------------------------------------------------------------------------------------------------------
-	;TWO NESTED LOOPS ARE EMPLOYED: LOOP 1 APPLIES PROCEDURE FOR EACH ROW. LOOP 2 (WITHIN EACH LOOP1 PASS) FOR EACH COLUMN
-	kSwTrig	changed	gkswing				;IF SWING SLIDER HAS BEEN CHANGED GENERATE A TRIGGER IMPULSE
-	if kSwTrig==1 then				;IF SWING CHANGE TRIGGER HAS BEEN GENERATED...
-		kcount1	=	0			;LOOP 1 COUNTER
-		loop1:					;LOOP 1 BEGINS HERE. REITERATED FOR EACH ROW (INSTRUMENT)
-			kcount2	=	6		;LOOP 2 COUNTER (USED TO REFERENCE START TIME FOR ALTERNATE TABLE NOTE EVENTS HENCE INITIAL VALUE OF 5 AND INCREMENT OF 8
-			loop2:				;LOOP 2 BEGINS HERE. REITERATED FOR EACH COLUMN (INSTRUMENT)
-				tablewkt	1+((kcount2-1)/20) + gkswing, kcount2, gi1+kcount1	;WRITE NEW VALUE
-			loop_le	kcount2,10,5*16,loop2	;LOOP BACK TO LABEL FOR EACH PATTERN COLUMN
-		loop_lt	kcount1,1,6,loop1		;LOOP BACK TO LABEL FOR EACH PATTERN ROW
-	endif
-	
-	;--WRITE AMPS--------------------------------------------------------------------------------------------------------
-	;DEFINE A MACRO...
-#define	WRITE_AMP(N)
-	#
-	ktrig	changed	gkamp$N
-	if ktrig==1 then
-		kcount=0
-		loop3$N:
-		tablewkt	gkamp$N, (5 * $N)-1, gi1+kcount
-		loop_lt	kcount,1,6,loop3$N
-	endif
-	#
-	;EXPAND MACRO MULTIPLE TIMES. ONCE FOR EACH AMPLITUDE FADER
-	$WRITE_AMP(1)
-	$WRITE_AMP(2)
-	$WRITE_AMP(3)
-	$WRITE_AMP(4)
-	$WRITE_AMP(5)
-	$WRITE_AMP(6)
-	$WRITE_AMP(7)
-	$WRITE_AMP(8)
-	$WRITE_AMP(9)
-	$WRITE_AMP(10)
-	$WRITE_AMP(11)
-	$WRITE_AMP(12)
-	$WRITE_AMP(13)
-	$WRITE_AMP(14)
-	$WRITE_AMP(15)
-	$WRITE_AMP(16)	
+  ; Multiply phase value by number of beats, offset by almost 1 (this is to ensure the
+  ; first event on beat one is always triggered)
+  ktimpnt = kphs*isubdiv+0.99
+  kp1 init 0  ; Initialise p-field values output by timedseq
+  kp2 init 0  ; Initialise p-field values output by timedseq
+  kp3 init 0  ; Initialise p-field values output by timedseq
+  kp4 init 0  ; Initialise p-field values output by timedseq
+  kp5 init 0  ; Initialise p-field values output by timedseq as input variables
+
+  #define LoopTrigger(N)
+  ; Create note triggers and p-fields for sound 1 from function table gi1
+  #ktrig timedseq ktimpnt, gi$N, kp1, kp2, kp3, kp4, kp5
+  ; Opcode  trigger | mintim | maxnum | insnum | when | dur | p4 | p5 |p6
+  schedkwhen ktrig, 0, 0, 2, 0, kp3, kp4, kp5, $N  ; Trigger interrogation instrument#
+  ; Expand macro multiple times for each sequencer row
+  $LoopTrigger(1)
+  $LoopTrigger(2)
+  $LoopTrigger(3)
+  $LoopTrigger(4)
+  $LoopTrigger(5)
+  $LoopTrigger(6)
+
+  ; --Swing
+  ; control------------------------------------------------------------------------------------------------------
+  ; Two nested loops are employed: loop 1 applies procedure for each row. Loop 2 (within
+  ; each loop1 pass) for each column
+  kSwTrig changed gkswing  ; If swing slider has been changed generate a trigger impulse
+  if kSwTrig == 1 then     ; If swing change trigger has been generated...
+    kcount1 = 0            ; Loop 1 counter
+loop1:                     ; Loop 1 begins here. Reiterated for each row (instrument)
+    ; Loop 2 counter (used to reference start time for alternate table note events hence
+    ; initial value of 5 and increment of 8
+    kcount2 = 6
+    ; Loop 2 begins here. Reiterated for each column (instrument)
+loop2:
+    tablewkt 1+((kcount2-1)/20) + gkswing, kcount2, gi1+kcount1  ; Write new value
+    ; Loop back to label for each pattern column
+    loop_le kcount2, 10, 5*16, loop2
+    ; Loop back to label for each pattern row
+    loop_lt kcount1, 1, 6, loop1
+  endif
+
+  ; --Write
+  ; amps--------------------------------------------------------------------------------------------------------
+  ; Define a macro...
+  #define WRITE_AMP(N)
+  #
+  ktrig changed gkamp$N
+  if ktrig == 1 then
+    kcount = 0
+    loop3$N:
+    tablewkt gkamp$N, (5 * $N)-1, gi1+kcount
+    loop_lt kcount, 1, 6, loop3$N
+  endif
+  #
+  ; Expand macro multiple times. Once for each amplitude fader
+  $WRITE_AMP(1)
+  $WRITE_AMP(2)
+  $WRITE_AMP(3)
+  $WRITE_AMP(4)
+  $WRITE_AMP(5)
+  $WRITE_AMP(6)
+  $WRITE_AMP(7)
+  $WRITE_AMP(8)
+  $WRITE_AMP(9)
+  $WRITE_AMP(10)
+  $WRITE_AMP(11)
+  $WRITE_AMP(12)
+  $WRITE_AMP(13)
+  $WRITE_AMP(14)
+  $WRITE_AMP(15)
+  $WRITE_AMP(16)
 endin
 
-instr	2	;INTERROGATE EVENT AND DETERMINE WHETHER A SOUND SHOULD BE PLAYED OR NOT
-	if	p4=1	then										;IF EVENT VARIABLE IS '1'...
-		event_i	"i", p1+p6, 0, p3, p5	;...PLAY A SOUND. (p4=amplitude)
-	endif											;END OF CONDITIONAL BRANCH
+; Interrogate event and determine whether a sound should be played or not
+instr 2
+  if p4 = 1 then                   ; If event variable is '1'...
+    event_i "i", p1+p6, 0, p3, p5  ; ...PLAY A SOUND. (p4=amplitude)
+  endif                            ; End of conditional branch
 endin
 
-instr	3	;SOUND 1 - BASS DRUM
-	p3		=		.2																;DEFINE DURATION FOR THIS SOUND
-	aenv		expon	1,p3,0.001														;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
-	kcps		expon	200,p3,20															;PITCH GLISSANDO
-	;OUTPUT	OPCODE	AMPLITUDE                             | FREQUENCY | FUNCTION_TABLE
-	asig		oscil	aenv*i(gk1Gain)*i(gkMasterGain)*1.6*p4,     kcps,       gisine 				;OSCILLATOR
-			outs		asig, asig														;SEND AUDIO TO OUTPUTS
+instr 3                    ; Sound 1 - bass drum
+  p3 = .2                  ; Define duration for this sound
+  aenv expon 1, p3, 0.001  ; Amplitude envelope - percussive decay
+  kcps expon 200, p3, 20   ; Pitch glissando
+  ; Output opcode amplitude                             | frequency | function_table
+  asig oscil aenv*i(gk1Gain)*i(gkMasterGain)*1.6*p4, kcps, gisine  ; Oscillator
+  outs asig, asig                                                  ; Send audio to outputs
 endin
 
-instr	4	;SOUND 2 - KALIMBA (BAR MODEL)
-	p3		=		2.6																;DEFINE DURATION FOR THIS SOUND
-	asig 	barmodel	1, 1, 80, 1, 0, 2.6, 0.5, 6000, 0.07									;KALIMBA SOUND CREATED USING barmodel OPCODE (SEE CSOUND MANUAL FOR MORE INFO.)
-			outs		asig*i(gk2Gain)*i(gkMasterGain)*p4, asig*i(gk2Gain)*i(gkMasterGain)*p4 			;SEND AUDIO TO OUTPUTS AND ATTENUATE  USING GAIN CONTROLS
+instr 4     ; Sound 2 - kalimba (bar model)
+  p3 = 2.6  ; Define duration for this sound
+  ; Kalimba sound created using barmodel opcode (see csound manual for more info.)
+  asig barmodel 1, 1, 80, 1, 0, 2.6, 0.5, 6000, 0.07
+  ; Send audio to outputs and attenuate using gain controls
+  outs asig*i(gk2Gain)*i(gkMasterGain)*p4, asig*i(gk2Gain)*i(gkMasterGain)*p4
 endin
 
-instr	5	;SOUND 3 - SNARE
-	p3		=		0.3																;DEFINE DURATION FOR THIS SOUND
-	aenv		expon	1,p3,0.001														;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
-	anse		noise	1, 0 															;CREATE NOISE COMPONENT FOR SNARE DRUM SOUND
-	kcps		expon	400,p3,20															;CREATE TONE COMPONENT FREQUENCY GLISSANDO FOR SNARE DRUM SOUND
-	ajit		randomi	0.2,1.8,10000														;JITTER ON FREQUENCY FOR TONE COMPONENT
-	atne		oscil	aenv*i(gk3Gain)*i(gkMasterGain),kcps*ajit,gisine							;CREATE TONE COMPONENT
-	asig		sum		anse*0.5, atne*5													;MIX NOISE AND TONE SOUND COMPONENTS
-	ares 	vcomb 	asig, 0.02, 0.0035, .1												;PASS SIGNAL THROUGH ACOMB FILTER TO CREATE STATIC HARMONIC RESONANCE
-			outs		ares*aenv*i(gk3Gain)*i(gkMasterGain)*p4, ares*aenv*i(gk3Gain)*i(gkMasterGain)*p4		;SEND AUDIO TO OUTPUTS, APPLY ENVELOPE AND ATTENTUATE USING GAIN CONTROLS 
+instr 5  ; Sound 3 - snare
+  ; Define duration for this sound
+  p3 = 0.3
+  ; Amplitude envelope - percussive decay
+  aenv expon 1, p3, 0.001
+  ; Create noise component for snare drum sound
+  anse noise 1, 0
+  ; Create tone component frequency glissando for snare drum sound
+  kcps expon 400, p3, 20
+  ; Jitter on frequency for tone component
+  ajit randomi 0.2, 1.8, 10000
+  atne oscil aenv*i(gk3Gain)*i(gkMasterGain), kcps*ajit, gisine  ; Create tone component
+  ; Mix noise and tone sound components
+  asig sum anse*0.5, atne*5
+  ; Pass signal through acomb filter to create static harmonic resonance
+  ares vcomb asig, 0.02, 0.0035, .1
+  ; Send audio to outputs, apply envelope and attentuate using gain controls
+  outs ares*aenv*i(gk3Gain)*i(gkMasterGain)*p4, ares*aenv*i(gk3Gain)*i(gkMasterGain)*p4
 endin
 
-instr	6	;SOUND 4 - CLOSED HI-HAT
-	ktime	timeinstk
-	if ktime<=1 then
-	  turnoff2 7,0,0	;TURN OFF ALL INSTANCES OF instr 7 (OPEN HI-HAT)
-	endif
-	p3		=		0.1																;DEFINE DURATION FOR THIS SOUND
-	aenv		expon	1,p3,0.001														;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
-	asig		noise	aenv*i(gk4Gain)*i(gkMasterGain)*p4, 0										;CREATE SOUND FOR CLOSED HI-HAT
-	asig		buthp	asig, 7000														;HIGHPASS FILTER SOUND
-			outs		asig, asig														;SEND AUDIO TO OUTPUTS
+instr 6  ; Sound 4 - closed hi-hat
+  ktime timeinstk
+  if ktime <= 1 then
+    turnoff2 7, 0, 0  ; Turn off all instances of instr 7 (open hi-hat)
+  endif
+  p3 = 0.1  ; Define duration for this sound
+  ; Amplitude envelope - percussive decay
+  aenv expon 1, p3, 0.001
+  asig noise aenv*i(gk4Gain)*i(gkMasterGain)*p4, 0  ; Create sound for closed hi-hat
+  asig buthp asig, 7000                             ; Highpass filter sound
+  outs asig, asig                                   ; Send audio to outputs
 endin
 
-instr	7	;SOUND 5 - OPEN HI-HAT
-	p3		=		1																;DEFINE DURATION FOR THIS SOUND
-	aenv		expon	1,p3,0.001														;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
-	asig		noise	aenv*i(gk5Gain)*i(gkMasterGain)*p4, 0										;CREATE SOUND FOR CLOSED HI-HAT
-	asig		buthp	asig, 7000														;HIGHPASS FILTER SOUND	
-			outs		asig, asig														;SEND AUDIO TO OUTPUTS
+instr 7   ; Sound 5 - open hi-hat
+  p3 = 1  ; Define duration for this sound
+  ; Amplitude envelope - percussive decay
+  aenv expon 1, p3, 0.001
+  asig noise aenv*i(gk5Gain)*i(gkMasterGain)*p4, 0  ; Create sound for closed hi-hat
+  asig buthp asig, 7000                             ; Highpass filter sound
+  outs asig, asig                                   ; Send audio to outputs
 endin
 
-instr	8	;SOUND 6 - TAMBOURINE
-	p3		=		0.5																;DEFINE DURATION FOR THIS SOUND
-	asig		tambourine	i(gk6Gain)*i(gkMasterGain)*0.3*p4,0.01 ,32, 0.47, 0, 2300 , 5600, 8000		;TAMBOURINE SOUND CREATED USING tambourine PHYSICAL MODELLING OPCODE (SEE CSOUND MANUAL FOR MORE INFO.)
-			outs		asig, asig														;SEND AUDIO TO OUTPUTS
+instr 8     ; Sound 6 - tambourine
+  p3 = 0.5  ; Define duration for this sound
+  ; Tambourine sound created using tambourine physical modelling opcode (see csound manual
+  ; for more info.)
+  asig tambourine i(gk6Gain)*i(gkMasterGain)*0.3*p4, 0.01, 32, 0.47, 0, 2300, 5600, 8000
+  outs asig, asig  ; Send audio to outputs
 endin
 
-instr	101	;SET INITIAL PATTERN, init Gain sliders and BPM
-		outvalue	"b1_01"	,1
-		outvalue	"b1_04"	,1
-		outvalue	"b1_09"	,1
-		outvalue	"b1_11"	,1
-		outvalue	"b1_14"	,1
+instr 101  ; SET INITIAL PATTERN, init Gain sliders and BPM
+  outvalue "b1_01", 1
+  outvalue "b1_04", 1
+  outvalue "b1_09", 1
+  outvalue "b1_11", 1
+  outvalue "b1_14", 1
 
-		outvalue	"b2_05"	,1
-		outvalue	"b2_16"	,1
+  outvalue "b2_05", 1
+  outvalue "b2_16", 1
 
-		outvalue	"b3_05"	,1
-		outvalue	"b3_08"	,1
-		outvalue	"b3_13"	,1
-		outvalue	"b3_15"	,1
+  outvalue "b3_05", 1
+  outvalue "b3_08", 1
+  outvalue "b3_13", 1
+  outvalue "b3_15", 1
 
-		outvalue	"b4_01"	,1
-		outvalue	"b4_02"	,1
-		outvalue	"b4_04"	,1
-		outvalue	"b4_05"	,1
-		outvalue	"b4_06"	,1
-		outvalue	"b4_09"	,1
-		outvalue	"b4_10"	,1
-		outvalue	"b4_12"	,1
-		outvalue	"b4_13"	,1
-		outvalue	"b4_14"	,1
+  outvalue "b4_01", 1
+  outvalue "b4_02", 1
+  outvalue "b4_04", 1
+  outvalue "b4_05", 1
+  outvalue "b4_06", 1
+  outvalue "b4_09", 1
+  outvalue "b4_10", 1
+  outvalue "b4_12", 1
+  outvalue "b4_13", 1
+  outvalue "b4_14", 1
 
-		outvalue	"b5_03"	,1
-		outvalue	"b5_07"	,1
-		outvalue	"b5_11"	,1
-		outvalue	"b5_15"	,1
+  outvalue "b5_03", 1
+  outvalue "b5_07", 1
+  outvalue "b5_11", 1
+  outvalue "b5_15", 1
 
-		outvalue	"b6_01"	,1
-		outvalue	"b6_03"	,1
-		outvalue	"b6_05"	,1
-		outvalue	"b6_07"	,1
-		outvalue	"b6_09"	,1
-		outvalue	"b6_11"	,1
-		outvalue	"b6_13"	,1
-		outvalue	"b6_15"	,1
+  outvalue "b6_01", 1
+  outvalue "b6_03", 1
+  outvalue "b6_05", 1
+  outvalue "b6_07", 1
+  outvalue "b6_09", 1
+  outvalue "b6_11", 1
+  outvalue "b6_13", 1
+  outvalue "b6_15", 1
 
-		outvalue	"Gain1"	, 0.7
-		outvalue	"Gain2"	, 0.7
-		outvalue	"Gain3"	, 0.7
-		outvalue	"Gain4"	, 0.7
-		outvalue	"Gain5"	, 0.7
-		outvalue	"Gain6"	, 0.7
+  outvalue "Gain1", 0.7
+  outvalue "Gain2", 0.7
+  outvalue "Gain3", 0.7
+  outvalue "Gain4", 0.7
+  outvalue "Gain5", 0.7
+  outvalue "Gain6", 0.7
 
-		outvalue	"Tempo"	, 100
-		outvalue	"Master"	, .5
+  outvalue "Tempo", 100
+  outvalue "Master", .5
 endin
 
-instr	102	;CLEAR ALL PATTERNS
-#define	ROW2(COUNT)
-		#
-		outvalue	"b$COUNT_01"	,0
-		outvalue	"b$COUNT_02"	,0
-		outvalue	"b$COUNT_03"	,0
-		outvalue	"b$COUNT_04"	,0
-		outvalue	"b$COUNT_05"	,0
-		outvalue	"b$COUNT_06"	,0
-		outvalue	"b$COUNT_07"	,0
-		outvalue	"b$COUNT_08"	,0
-		outvalue	"b$COUNT_09"	,0
-		outvalue	"b$COUNT_10"	,0
-		outvalue	"b$COUNT_11"	,0
-		outvalue	"b$COUNT_12"	,0
-		outvalue	"b$COUNT_13"	,0
-		outvalue	"b$COUNT_14"	,0
-		outvalue	"b$COUNT_15"	,0
-		outvalue	"b$COUNT_16"	,0
-		#
+instr 102  ; Clear all patterns
+  #define ROW2(COUNT)
+  #
+  outvalue "b$COUNT_01", 0
+  outvalue "b$COUNT_02", 0
+  outvalue "b$COUNT_03", 0
+  outvalue "b$COUNT_04", 0
+  outvalue "b$COUNT_05", 0
+  outvalue "b$COUNT_06", 0
+  outvalue "b$COUNT_07", 0
+  outvalue "b$COUNT_08", 0
+  outvalue "b$COUNT_09", 0
+  outvalue "b$COUNT_10", 0
+  outvalue "b$COUNT_11", 0
+  outvalue "b$COUNT_12", 0
+  outvalue "b$COUNT_13", 0
+  outvalue "b$COUNT_14", 0
+  outvalue "b$COUNT_15", 0
+  outvalue "b$COUNT_16", 0
+  #
 
-		$ROW2(1)
-		$ROW2(2)
-		$ROW2(3)
-		$ROW2(4)
-		$ROW2(5)
-		$ROW2(6)
+  $ROW2(1)
+  $ROW2(2)
+  $ROW2(3)
+  $ROW2(4)
+  $ROW2(5)
+  $ROW2(6)
 endin
 </CsInstruments>
 <CsScore>
-i  10 0	3600		;GUI
-i 101 0 0			;SET INITIAL PATTERN
+i 10 0 3600  ; GUI
+i 101 0 0    ; Set initial pattern
 </CsScore>
 </CsoundSynthesizer>
 
@@ -418,9 +449,9 @@ i 101 0 0			;SET INITIAL PATTERN
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -438,15 +469,20 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -464,11 +500,23 @@ i 101 0 0			;SET INITIAL PATTERN
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On/Off</text>
+  <text>On/Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Phase</objectName>
@@ -492,15 +540,15 @@ i 101 0 0			;SET INITIAL PATTERN
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
+   <r>230</r>
+   <g>50</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -519,14 +567,14 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -656,14 +704,14 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -685,14 +733,14 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -714,14 +762,14 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -743,14 +791,14 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -772,14 +820,14 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -801,14 +849,14 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -830,14 +878,14 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -859,14 +907,14 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -906,15 +954,20 @@ i 101 0 0			;SET INITIAL PATTERN
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -937,14 +990,14 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -964,14 +1017,14 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -997,6 +1050,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine>i 102 0 0.01</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1014,15 +1079,20 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1043,15 +1113,20 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1072,15 +1147,20 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1101,15 +1181,20 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1132,6 +1217,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_02</objectName>
@@ -1151,6 +1248,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_03</objectName>
@@ -1170,6 +1279,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_04</objectName>
@@ -1189,6 +1310,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_05</objectName>
@@ -1208,6 +1341,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_06</objectName>
@@ -1227,6 +1372,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_07</objectName>
@@ -1246,6 +1403,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_08</objectName>
@@ -1265,6 +1434,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_09</objectName>
@@ -1284,6 +1465,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_10</objectName>
@@ -1303,6 +1496,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_11</objectName>
@@ -1322,6 +1527,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_12</objectName>
@@ -1341,6 +1558,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_13</objectName>
@@ -1360,6 +1589,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_14</objectName>
@@ -1379,6 +1620,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_15</objectName>
@@ -1398,6 +1651,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1_16</objectName>
@@ -1417,6 +1682,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_01</objectName>
@@ -1436,6 +1713,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_02</objectName>
@@ -1455,6 +1744,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_03</objectName>
@@ -1474,6 +1775,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_04</objectName>
@@ -1493,6 +1806,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_05</objectName>
@@ -1512,6 +1837,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_06</objectName>
@@ -1531,6 +1868,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_07</objectName>
@@ -1550,6 +1899,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_08</objectName>
@@ -1569,6 +1930,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_09</objectName>
@@ -1588,6 +1961,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_10</objectName>
@@ -1607,6 +1992,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_11</objectName>
@@ -1626,6 +2023,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_12</objectName>
@@ -1645,6 +2054,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_13</objectName>
@@ -1664,6 +2085,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_14</objectName>
@@ -1683,6 +2116,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_15</objectName>
@@ -1702,6 +2147,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2_16</objectName>
@@ -1721,6 +2178,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_01</objectName>
@@ -1740,6 +2209,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_02</objectName>
@@ -1759,6 +2240,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_03</objectName>
@@ -1778,6 +2271,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_04</objectName>
@@ -1797,6 +2302,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_05</objectName>
@@ -1816,6 +2333,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_06</objectName>
@@ -1835,6 +2364,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_07</objectName>
@@ -1854,6 +2395,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_08</objectName>
@@ -1873,6 +2426,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_09</objectName>
@@ -1892,6 +2457,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_10</objectName>
@@ -1911,6 +2488,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_11</objectName>
@@ -1930,6 +2519,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_12</objectName>
@@ -1949,6 +2550,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_13</objectName>
@@ -1968,6 +2581,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_14</objectName>
@@ -1987,6 +2612,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_15</objectName>
@@ -2006,6 +2643,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3_16</objectName>
@@ -2025,6 +2674,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_01</objectName>
@@ -2044,6 +2705,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_02</objectName>
@@ -2063,6 +2736,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_03</objectName>
@@ -2082,6 +2767,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_04</objectName>
@@ -2101,6 +2798,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_05</objectName>
@@ -2120,6 +2829,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_06</objectName>
@@ -2139,6 +2860,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_07</objectName>
@@ -2158,6 +2891,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_08</objectName>
@@ -2177,6 +2922,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_09</objectName>
@@ -2196,6 +2953,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_10</objectName>
@@ -2215,6 +2984,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_11</objectName>
@@ -2234,6 +3015,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_12</objectName>
@@ -2253,6 +3046,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_13</objectName>
@@ -2272,6 +3077,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_14</objectName>
@@ -2291,6 +3108,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_15</objectName>
@@ -2310,6 +3139,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4_16</objectName>
@@ -2329,6 +3170,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_01</objectName>
@@ -2348,6 +3201,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_02</objectName>
@@ -2367,6 +3232,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_03</objectName>
@@ -2386,6 +3263,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_04</objectName>
@@ -2405,6 +3294,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_05</objectName>
@@ -2424,6 +3325,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_06</objectName>
@@ -2443,6 +3356,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_07</objectName>
@@ -2462,6 +3387,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_08</objectName>
@@ -2481,6 +3418,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_09</objectName>
@@ -2500,6 +3449,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_10</objectName>
@@ -2519,6 +3480,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_11</objectName>
@@ -2538,6 +3511,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_12</objectName>
@@ -2557,6 +3542,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_13</objectName>
@@ -2576,6 +3573,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_14</objectName>
@@ -2595,6 +3604,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_15</objectName>
@@ -2614,6 +3635,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5_16</objectName>
@@ -2633,6 +3666,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_01</objectName>
@@ -2652,6 +3697,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_02</objectName>
@@ -2671,6 +3728,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_03</objectName>
@@ -2690,6 +3759,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_04</objectName>
@@ -2709,6 +3790,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_05</objectName>
@@ -2728,6 +3821,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_06</objectName>
@@ -2747,6 +3852,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_07</objectName>
@@ -2766,6 +3883,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_08</objectName>
@@ -2785,6 +3914,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_09</objectName>
@@ -2804,6 +3945,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_10</objectName>
@@ -2823,6 +3976,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_11</objectName>
@@ -2842,6 +4007,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_12</objectName>
@@ -2861,6 +4038,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_13</objectName>
@@ -2880,6 +4069,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_14</objectName>
@@ -2899,6 +4100,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_15</objectName>
@@ -2918,6 +4131,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6_16</objectName>
@@ -2937,6 +4162,18 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>swing</objectName>
@@ -2972,14 +4209,14 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

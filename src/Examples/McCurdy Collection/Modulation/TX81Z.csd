@@ -1,108 +1,125 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
 
 ; Modified for QuteCsound by René, November 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-	;Use midi cc embeded in QuteCsound
+; Notes on modifications from original csd:
+  ; Use midi cc embeded in QuteCsound
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	0, 0, 1024, 10, 1
-gitwopeaks	ftgen	0, 0, 1024,  1, "twopeaks.aiff", 0, 0, 0
-gifwavblnk	ftgen	0, 0, 1024,  1, "fwavblnk.aiff", 0, 0, 0
+gisine     ftgen 0, 0, 1024, 10, 1
+gitwopeaks ftgen 0, 0, 1024, 1, "twopeaks.aiff", 0, 0, 0
+gifwavblnk ftgen 0, 0, 1024, 1, "fwavblnk.aiff", 0, 0, 0
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkamp		invalue 	"Amplitude"
-		gkc1			invalue 	"Control_1"
-		gkc2			invalue 	"Control_2"
-		gkvdepth		invalue 	"Vibrato_Depth"
-		gkvrate		invalue 	"Vibrato_Rate"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkamp    invalue "Amplitude"
+    gkc1     invalue "Control_1"
+    gkc2     invalue "Control_2"
+    gkvdepth invalue "Vibrato_Depth"
+    gkvrate  invalue "Vibrato_Rate"
 
-		gkpreset		invalue	"Preset"
-	endif
+    gkpreset invalue "Preset"
+  endif
 endin
 
-instr	1	;TX81Z INSTRUMENT
-	ioct				= p4
-	;PITCH BEND INFORMATION IS READ
-	iSemitoneBendRange	= 2										;PITCH BEND RANGE IN SEMITONES (WILL BE DEFINED FURTHER LATER) - SUGGESTION - THIS COULD BE CONTROLLED BY A COUNTER
-	imin				= 0										;EQUILIBRIUM POSITION
-	imax				= iSemitoneBendRange * .0833333				;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend			pchbend	imin, imax						;PITCH BEND VARIABLE (IN oct FORMAT)
-	kfreq			=	cpsoct(ioct+ kbend)
-	iporttime			=	0.1									;PORTAMENTO TIME
-	kporttime			linseg	0, 0.001, iporttime, 1, iporttime		;PORTAMENTO TIME RISES UP QUICKLY TO DESIRED VALUE
-	kc1				portk	gkc1, kporttime					;PORTAMENTO IS APPLIED TO CONTROL VARIABLES
-	kc2				portk	gkc2, kporttime					;PORTAMENTO IS APPLIED TO CONTROL VARIABLES
-	ikvel			= p5										;KEY VELOCITY IS READ
-	kamp				portk	gkamp * ikvel, kporttime				;AMPLITUDE IS DERIVED FROM ON-SCREEN AMPLITUDE CONTROL AND KEY VELOCITY / PORTAMENTO IS APPLIED
+instr 1  ; Tx81z instrument
+  ioct = p4
+  ; Pitch bend information is read
+  ; Pitch bend range in semitones (will be defined further later) - suggestion - this
+  ; could be controlled by a counter
+  iSemitoneBendRange = 2
+  imin               = 0  ; Equilibrium position
+  ; Max pitch displacement (in oct format)
+  imax = iSemitoneBendRange * .0833333
+  ; Pitch bend variable (in oct format)
+  kbend pchbend imin, imax
+  kfreq     = cpsoct(ioct+ kbend)
+  iporttime = 0.1  ; Portamento time
+  ; Portamento time rises up quickly to desired value
+  kporttime linseg 0, 0.001, iporttime, 1, iporttime
+  kc1 portk gkc1, kporttime  ; Portamento is applied to control variables
+  kc2 portk gkc2, kporttime  ; Portamento is applied to control variables
+  ikvel = p5                 ; Key velocity is read
+  ; Amplitude is derived from on-screen amplitude control and key velocity / portamento is
+  ; applied
+  kamp portk gkamp * ikvel, kporttime
 
-	;SELECT THE APPRORIATE FM OPCODE ACCORDING TO THE SETTING OF THE 'TYPE' MENU BOX SELECTER 
-	if		gkpreset==0	then
-		;HAMMOND B3 ORGAN
-		;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | CONTROL_1 | CONTROL_2 | VIBRATO_DEPTH | VIBRATO_RATE | F.TABLE_1 | F.TABLE_2 | F.TABLE_3 | F.TABLE_4 | VIBRATO_F.TABLE
-		ares		fmb3		kamp,        kfreq,      kc1,        kc2,       gkvdepth,       gkvrate,       gisine,    gisine,      gisine,    gisine,        gisine
-        
-     elseif	gkpreset==1	then
-		;TUBULAR BELL	
-		;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | CONTROL_1 | CONTROL_2 | VIBRATO_DEPTH | VIBRATO_RATE | F.TABLE_1 | F.TABLE_2 | F.TABLE_3 | F.TABLE_4 | VIBRATO_F.TABLE
-		ares		fmbell	kamp,        kfreq,      kc1,       kc2,       gkvdepth,       gkvrate,       gisine,    gisine,      gisine,    gisine,        gisine
+  ; Select the approriate fm opcode according to the setting of the 'type' menu box
+  ; selecter
+  if gkpreset == 0 then
+    ; Hammond b3 organ
+    ; Output opcode amplitude | frequency | control_1 | control_2 | vibrato_depth |
+    ; vibrato_rate | f.table_1 | f.table_2 | f.table_3 | f.table_4 | vibrato_f.table
+    ares fmb3 kamp, kfreq, kc1, kc2, gkvdepth, gkvrate, gisine, gisine, gisine, gisine, gisine
 
-	elseif	gkpreset==2	then
-		;HEAVY METAL
-		;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | CONTROL_1 | CONTROL_2 | VIBRATO_DEPTH | VIBRATO_RATE | F.TABLE_1 | F.TABLE_2 | F.TABLE_3 | F.TABLE_4 | VIBRATO_F.TABLE
-		ares		fmmetal	kamp,        kfreq,      kc1,       kc2,       gkvdepth,       gkvrate,      gisine,   gitwopeaks,  gitwopeaks,  gisine,        gisine
+  elseif gkpreset == 1 then
+    ; Tubular bell
+    ; Output opcode amplitude | frequency | control_1 | control_2 | vibrato_depth |
+    ; vibrato_rate | f.table_1 | f.table_2 | f.table_3 | f.table_4 | vibrato_f.table
+    ares fmbell kamp, kfreq, kc1, kc2, gkvdepth, gkvrate, gisine, gisine, gisine, gisine, gisine
 
-	elseif	gkpreset==3	then
-		;PERCUSSIVE FLUTE
-		;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | CONTROL_1 | CONTROL_2 | VIBRATO_DEPTH | VIBRATO_RATE | F.TABLE_1 | F.TABLE_2 | F.TABLE_3 | F.TABLE_4 | VIBRATO_F.TABLE
-		ares		fmpercfl	kamp,        kfreq,      kc1,       kc2,       gkvdepth,       gkvrate,      gisine,      gisine,     gisine,     gisine,        gisine
+  elseif gkpreset == 2 then
+    ; Heavy metal
+    ; Output opcode amplitude | frequency | control_1 | control_2 | vibrato_depth |
+    ; vibrato_rate | f.table_1 | f.table_2 | f.table_3 | f.table_4 | vibrato_f.table
+    ares fmmetal kamp, kfreq, kc1, kc2, gkvdepth, gkvrate, gisine, gitwopeaks, gitwopeaks, gisine, gisine
 
-	elseif	gkpreset==4	then
-		;RHODES ELECTRIC PIANO
-		;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | CONTROL_1 | CONTROL_2 | VIBRATO_DEPTH | VIBRATO_RATE | F.TABLE_1 | F.TABLE_2 | F.TABLE_3 | F.TABLE_4 | VIBRATO_F.TABLE
-		ares		fmrhode	kamp,        kfreq,      kc1,       kc2,       gkvdepth,       gkvrate,      gisine,      gisine,     gisine,   gifwavblnk,        gisine
+  elseif gkpreset == 3 then
+    ; Percussive flute
+    ; Output opcode amplitude | frequency | control_1 | control_2 | vibrato_depth |
+    ; vibrato_rate | f.table_1 | f.table_2 | f.table_3 | f.table_4 | vibrato_f.table
+    ares fmpercfl kamp, kfreq, kc1, kc2, gkvdepth, gkvrate, gisine, gisine, gisine, gisine, gisine
 
-	elseif	gkpreset==5	then
-		;VOICE
-		;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | CONTROL_1 | CONTROL_2 | VIBRATO_DEPTH | VIBRATO_RATE | F.TABLE_1 | F.TABLE_2 | F.TABLE_3 | F.TABLE_4 | VIBRATO_F.TABLE
-		ares		fmvoice	kamp,        kfreq,      kc1,       kc2,       gkvdepth,       gkvrate,       gisine,    gisine,      gisine,    gisine,        gisine
+  elseif gkpreset == 4 then
+    ; Rhodes electric piano
+    ; Output opcode amplitude | frequency | control_1 | control_2 | vibrato_depth |
+    ; vibrato_rate | f.table_1 | f.table_2 | f.table_3 | f.table_4 | vibrato_f.table
+    ares fmrhode kamp, kfreq, kc1, kc2, gkvdepth, gkvrate, gisine, gisine, gisine, gifwavblnk, gisine
 
-	elseif	gkpreset==6	then
-		;WURLITZER ELECTRIC PIANO
-		;OUTPUT	OPCODE	AMPLITUDE | FREQUENCY | CONTROL_1 | CONTROL_2 | VIBRATO_DEPTH | VIBRATO_RATE | F.TABLE_1 | F.TABLE_2 | F.TABLE_3 | F.TABLE_4  | VIBRATO_F.TABLE
-		ares		fmwurlie	kamp,       kfreq,      kc1,       kc2,       gkvdepth,       gkvrate,       gisine,    gisine,      gisine,   gifwavblnk,        gisine
+  elseif gkpreset == 5 then
+    ; Voice
+    ; Output opcode amplitude | frequency | control_1 | control_2 | vibrato_depth |
+    ; vibrato_rate | f.table_1 | f.table_2 | f.table_3 | f.table_4 | vibrato_f.table
+    ares fmvoice kamp, kfreq, kc1, kc2, gkvdepth, gkvrate, gisine, gisine, gisine, gisine, gisine
 
-	endif
-	
-	aenv		linsegr	0, 0.0001, 1, 3600, 1, 0.1, 0			;A SIMPLE MIDI RESPONSIVE ENVELOPE TO PREVENT CLICKS AT THE START AND END OF NOTES
-			outs		ares * aenv, ares * aenv				;SEND AUDIO TO OUTPUTS - MULTIPLY BY AMPLITUDE ENVELOPE
+  elseif gkpreset == 6 then
+    ; Wurlitzer electric piano
+    ; Output opcode amplitude | frequency | control_1 | control_2 | vibrato_depth |
+    ; vibrato_rate | f.table_1 | f.table_2 | f.table_3 | f.table_4 | vibrato_f.table
+    ares fmwurlie kamp, kfreq, kc1, kc2, gkvdepth, gkvrate, gisine, gisine, gisine, gifwavblnk, gisine
+
+  endif
+
+  ; A simple MIDI responsive envelope to prevent clicks at the start and end of notes
+  aenv linsegr 0, 0.0001, 1, 3600, 1, 0.1, 0
+  outs ares * aenv, ares * aenv  ; Send audio to outputs - multiply by amplitude envelope
 endin
 
-instr	2	;INIT
-		outvalue	"_SetPresetIndex", 0
+instr 2  ; Init
+  outvalue "_SetPresetIndex", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		3600		;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 
-i 2	     0.1		 0		;INIT
+i 2 0.1 0  ; Init
 </CsScore>
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>

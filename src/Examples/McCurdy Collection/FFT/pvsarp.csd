@@ -1,101 +1,104 @@
-;Written by Iain McCurdy
+; Written by Iain McCurdy
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
-;	Add giDummy table to avoid INIT ERROR in instr 1: Invalid ftable no. 6.000000
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav
+; files
+; Add giDummy table to avoid INIT ERROR in instr 1: Invalid ftable no. 6.000000
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-gisine		ftgen	1, 0, 129, 10, 1						;SINE WAVE
-gitri		ftgen	2, 0, 129, 7,  0, 32, 1, 64, -1, 32, 0		;TRIANGLE WAVE
-girampdn		ftgen	3, 0, 129, 7,  1,  128, -1				;RAMP DOWN
-girampup		ftgen	4, 0, 129, 7,  -1, 128,  1				;RAMP UP
-gisquare		ftgen	5, 0, 129, 7,  1, 64, 1, 0, -1, 64, -1		;SQUARE
+gisine   ftgen 1, 0, 129, 10, 1                       ; Sine wave
+gitri    ftgen 2, 0, 129, 7, 0, 32, 1, 64, -1, 32, 0  ; Triangle wave
+girampdn ftgen 3, 0, 129, 7, 1, 128, -1               ; Ramp down
+girampup ftgen 4, 0, 129, 7, -1, 128, 1               ; Ramp up
+gisquare ftgen 5, 0, 129, 7, 1, 64, 1, 0, -1, 64, -1  ; Square
 
-gidummy		ftgen	6,0, 129, 10, 1						;not used
+gidummy ftgen 6, 0, 129, 10, 1  ; not used
 
-;TABLE FOR EXP SLIDER
-giExp2000		ftgen	0, 0, 129, -25, 0, 0.001, 128, 2000
+; Table for exp slider
+giExp2000 ftgen 0, 0, 129, -25, 0, 0.001, 128, 2000
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkdepth		invalue 	"Depth"						;init 0.95
-		gkgain		invalue 	"Gain"						;init 1.0
-		gkLFOdepth	invalue 	"LFO_Depth"					;init 0.1
-		gkLFOoffset	invalue 	"LFO_Offset"					;init 0.11
-		kLFOspeed		invalue 	"LFO_Speed"
-		gkLFOspeed	tablei	kLFOspeed, giExp2000, 1
-					outvalue	"LFO_Speed_Value", gkLFOspeed		;init 0.17		
-		gkLFOfn		invalue	"LFO_Shape"					;init 1	
-		gkinput		invalue	"Input"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkdepth     invalue "Depth"       ; init 0.95
+    gkgain      invalue "Gain"        ; init 1.0
+    gkLFOdepth  invalue "LFO_Depth"   ; init 0.1
+    gkLFOoffset invalue "LFO_Offset"  ; init 0.11
+    kLFOspeed   invalue "LFO_Speed"
+    gkLFOspeed tablei kLFOspeed, giExp2000, 1
+    outvalue "LFO_Speed_Value", gkLFOspeed  ; init 0.17
+    gkLFOfn invalue "LFO_Shape"             ; init 1
+    gkinput invalue "Input"
+  endif
 endin
-			
-instr	1
-	Sfile	invalue	"_Browse"
-	;OUTPUT	OPCODE	FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-	aL, aR	FilePlay2	Sfile,      1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
-	
-	fsig1L 	pvsanal	aL, 1024, 256, 1024, 1							;ANALYSE THE  LEFT AUDIO SIGNAL
-	fsig1R 	pvsanal	aR, 1024, 256, 1024, 1							;ANALYSE THE RIGHT AUDIO SIGNAL
 
-	kSwitch	changed	gkLFOfn										;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then												;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-			reinit	START										;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif														;END OF CONDITIONAL BRANCHING
-	START:														;LABEL
-	if		gkLFOfn <= 4	then
-		kbin		oscili	gkLFOdepth, gkLFOspeed, i(gkLFOfn)+1
-	elseif	gkLFOfn = 5	then
-		kbin		randomh	-gkLFOdepth, gkLFOdepth, gkLFOspeed
-     endif
+instr 1
+  Sfile invalue "_Browse"
+  ; Output opcode file_path| speed | inskip | wraparound (1=on)
+  aL, aR FilePlay2 Sfile, 1, 0, 1  ; Read a stored audio file from the hard drive
 
-	kbin			=		kbin + gkLFOoffset	
-	kbin			limit	kbin, 0, 1	
-				rireturn											;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
+  fsig1L pvsanal aL, 1024, 256, 1024, 1  ; Analyse the  left audio signal
+  fsig1R pvsanal aR, 1024, 256, 1024, 1  ; Analyse the right audio signal
 
-	fsig2L		pvsarp 	fsig1L, kbin, gkdepth, gkgain	
-	fsig2R		pvsarp 	fsig1R, kbin, gkdepth, gkgain	
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkLFOfn
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit START       ; Begin a reinitialisation pass from label 'start'
+  endif                ; End of conditional branching
+START:                 ; Label
+  if gkLFOfn <= 4 then
+    kbin oscili gkLFOdepth, gkLFOspeed, i(gkLFOfn)+1
+  elseif gkLFOfn = 5 then
+    kbin randomh -gkLFOdepth, gkLFOdepth, gkLFOspeed
+  endif
 
-	aresynL 		pvsynth  	fsig2L                      					;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
-	aresynR 		pvsynth  	fsig2R                     					;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
+  kbin = kbin + gkLFOoffset
+  kbin limit kbin, 0, 1
+  rireturn  ; Return from reinitialisation pass to performance time passes
 
-				outs		aresynL, aresynR							;SEND THE RESCALED, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
+  fsig2L pvsarp fsig1L, kbin, gkdepth, gkgain
+  fsig2R pvsarp fsig1R, kbin, gkdepth, gkgain
+
+  aresynL pvsynth fsig2L  ; Resynthesize the f-signal as an audio signal
+  aresynR pvsynth fsig2R  ; Resynthesize the f-signal as an audio signal
+
+  outs aresynL, aresynR  ; Send the rescaled, resynthesized signal to the audio outputs
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -110,9 +113,9 @@ i 10		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -130,15 +133,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -159,15 +167,20 @@ i 10		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -193,14 +206,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -219,11 +232,23 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Depth</objectName>
@@ -241,14 +266,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -288,14 +313,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -317,14 +342,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -364,14 +389,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -393,14 +418,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -440,14 +465,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -469,14 +494,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -516,14 +541,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -590,14 +615,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -619,14 +644,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -666,14 +691,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -695,14 +720,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -724,9 +749,9 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -753,6 +778,18 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -770,14 +807,14 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

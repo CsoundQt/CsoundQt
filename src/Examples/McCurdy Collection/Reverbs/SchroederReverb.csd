@@ -1,101 +1,108 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-;	On/Off latched button light is saved in presets, so light goes off when changing preset
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; On/Off latched button light is saved in presets, so light goes off when changing preset
 
 
-;Notes on modifications from original csd:
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
-;	Delayed reverb start to avoid "INIT ERROR in instr 2: illegal loop time"
-;	Use QuteCsound Presets
+; Notes on modifications from original csd:
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Delayed reverb start to avoid "INIT ERROR in instr 2: illegal loop time"
+; Use QuteCsound Presets
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkingain		invalue	"LiveGain"
-		gkmix		invalue	"Mix"
-		gkinput		invalue	"Input"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkingain invalue "LiveGain"
+    gkmix    invalue "Mix"
+    gkinput  invalue "Input"
 
-		gklpt1		invalue	"LoopTime1"
-		gklpt2		invalue	"LoopTime2"
-		gklpt3		invalue	"LoopTime3"
-		gklpt4		invalue	"LoopTime4"
-		gklpt5		invalue	"LoopTime5"
-		gklpt6		invalue	"LoopTime6"
+    gklpt1 invalue "LoopTime1"
+    gklpt2 invalue "LoopTime2"
+    gklpt3 invalue "LoopTime3"
+    gklpt4 invalue "LoopTime4"
+    gklpt5 invalue "LoopTime5"
+    gklpt6 invalue "LoopTime6"
 
-		gkrvt1		invalue	"RvbTime1"
-		gkrvt2		invalue	"RvbTime2"
-		gkrvt3		invalue	"RvbTime3"
-		gkrvt4		invalue	"RvbTime4"
-		gkrvt5		invalue	"RvbTime5"
-		gkrvt6		invalue	"RvbTime6"
-	endif
+    gkrvt1 invalue "RvbTime1"
+    gkrvt2 invalue "RvbTime2"
+    gkrvt3 invalue "RvbTime3"
+    gkrvt4 invalue "RvbTime4"
+    gkrvt5 invalue "RvbTime5"
+    gkrvt6 invalue "RvbTime6"
+  endif
 endin
 
-instr	1	;PLAYS FILE AND OUTPUTS GLOBAL VARIABLES
-	if	gkinput==0	then										;IF FILE INPUT IS SELECTED...
-		Sfile		invalue	"_Browse1"
-		gasigL, gasigR	FilePlay2	Sfile, 1, 0, 1						;GENERATE 2 AUDIO SIGNALS FROM A SOUND FILE (NOTE THE USE OF GLOBAL VARIABLES)		
-	else														;OTHERWISE
-		asigL, asigR	ins										;TAKE INPUT FROM COMPUTER'S AUDIO INPUT
-		gasigL	=	asigL * gkingain							;SCALE USING 'Input Gain' SLIDER
-		gasigR	=	asigR * gkingain							;SCALE USING 'Input Gain' SLIDER
-	endif													;END OF CONDITIONAL BRANCHING
+instr 1                 ; Plays file and outputs global variables
+  if gkinput == 0 then  ; If file input is selected...
+    Sfile invalue "_Browse1"
+    ; Generate 2 audio signals from a sound file (note the use of global variables)
+    gasigL, gasigR FilePlay2 Sfile, 1, 0, 1
+  else                         ; Otherwise
+    asigL, asigR ins           ; Take input from computer's audio input
+    gasigL = asigL * gkingain  ; Scale using 'input gain' slider
+    gasigR = asigR * gkingain  ; Scale using 'input gain' slider
+  endif                        ; End of conditional branching
 endin
 
-instr	2	;REVERB - ALWAYS ON
-	ktrigger	changed	gklpt1, gklpt2, gklpt3, gklpt4, gklpt5, gklpt6	;IF ANY OF THE INPUT ARGUMENTS CHANGES GENERATE A MOMENTARY '1' VALUE (BAND)
-	if ktrigger=1 then											;IF QUERY IS TRUE...
-		reinit	UPDATE										;BEGIN A REINITIALIZATION PASS FROM LABEL 'UPDATE' IN ORDER TO FORCE AN UPDATE OF I-RATE CONTROLLERS
-	endif													;END OF THIS CONDITIONAL BRANCH
+instr 2  ; Reverb - always on
+  ; If any of the input arguments changes generate a momentary '1' value (band)
+  ktrigger changed gklpt1, gklpt2, gklpt3, gklpt4, gklpt5, gklpt6
+  if ktrigger = 1 then  ; If query is true...
+    ; Begin a reinitialization pass from label 'update' in order to force an update of
+    ; i-rate controllers
+    reinit UPDATE
+  endif  ; End of this conditional branch
 
-	UPDATE:													;LABEL CALLED 'UPDATE'
-	a1		comb		gasigL, gkrvt1, i(gklpt1)					;COMB FILTER 1
-	a2		comb		gasigL, gkrvt2, i(gklpt2)					;COMB FILTER 2
-	a3		comb		gasigL, gkrvt3, i(gklpt3)					;COMB FILTER 3
-	a4		comb		gasigL, gkrvt4, i(gklpt4)					;COMB FILTER 4
-	aSum		sum		a1,a2,a3,a4								;MIX THE OUTPUT FROM THE FOUR COMB FILTERS
-	a5		alpass	aSum, gkrvt5, i(gklpt5)						;SEND THE MIXED OUTPUT INTO THE FIRST ALLPASS FILTER
-	aRvb		alpass	a5, gkrvt6,   i(gklpt6)						;SEND THE OUTPUT OF THE FIRST ALLPASS FILTER INTO THE SECOND ALLPASS FILTER
-			rireturn											;RETURN FROM REINITIALIZATION PASS (IF APPLICABLE)
-	amix		ntrpol	aRvb, gasigL, gkmix							;CREATE A MIX BETWEEN THE WET AND DRY SIGNALS. CONTROLLABLE BY THE USER FROM AN ON SCREEN SLIDER
-			outs		amix*0.7, amix*0.7							;SEND WET/DRY MIX AUDIO TO OUTPUTS
-			clear	gasigL									;CLEAR GLOBAL AUDIO VARIABLES
+UPDATE:                              ; Label called 'update'
+  a1 comb gasigL, gkrvt1, i(gklpt1)  ; Comb filter 1
+  a2 comb gasigL, gkrvt2, i(gklpt2)  ; Comb filter 2
+  a3 comb gasigL, gkrvt3, i(gklpt3)  ; Comb filter 3
+  a4 comb gasigL, gkrvt4, i(gklpt4)  ; Comb filter 4
+  aSum sum a1, a2, a3, a4            ; Mix the output from the four comb filters
+  a5 alpass aSum, gkrvt5, i(gklpt5)  ; Send the mixed output into the first allpass filter
+  ; Send the output of the first allpass filter into the second allpass filter
+  aRvb alpass a5, gkrvt6, i(gklpt6)
+  rireturn  ; Return from reinitialization pass (if applicable)
+  ; Create a mix between the wet and dry signals. Controllable by the user from an on
+  ; screen slider
+  amix ntrpol aRvb, gasigL, gkmix
+  outs amix*0.7, amix*0.7  ; Send wet/dry mix audio to outputs
+  clear gasigL             ; Clear global audio variables
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0.0	   3600	;GUI
-i  2		0.5	   3600	;REVERB INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
+; Instr | start | duration
+i 10 0.0 3600  ; GUI
+i 2 0.5 3600   ; Reverb instrument plays for 1 hour (and keeps performance going)
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -108,9 +115,9 @@ i  2		0.5	   3600	;REVERB INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -128,15 +135,20 @@ i  2		0.5	   3600	;REVERB INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -157,15 +169,20 @@ i  2		0.5	   3600	;REVERB INSTRUMENT PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -187,14 +204,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -216,15 +233,20 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
@@ -243,9 +265,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -278,14 +300,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -305,9 +327,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -340,14 +362,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -369,15 +391,20 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
@@ -396,9 +423,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -431,14 +458,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -458,9 +485,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -493,14 +520,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -522,15 +549,20 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
@@ -549,9 +581,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -584,14 +616,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -611,9 +643,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -646,14 +678,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -675,15 +707,20 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
@@ -702,9 +739,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -737,14 +774,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -764,9 +801,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -799,14 +836,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -828,15 +865,20 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
@@ -855,9 +897,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -890,14 +932,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -917,9 +959,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -952,14 +994,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -981,15 +1023,20 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>2</borderwidth>
@@ -1008,9 +1055,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -1043,14 +1090,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1070,9 +1117,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>182</r>
@@ -1105,14 +1152,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1131,11 +1178,23 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1153,14 +1212,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1182,14 +1241,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1236,14 +1295,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1267,6 +1326,18 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -1284,9 +1355,9 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>240</r>
@@ -1311,14 +1382,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1358,14 +1429,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1387,14 +1458,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1469,14 +1540,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1498,15 +1569,20 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -1527,14 +1603,14 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -1,113 +1,151 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add limits for Lower/Upper frequencies
-;	Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
+; Notes on modifications from original csd:
+; Add limits for Lower/Upper frequencies
+; Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
 
 
-;												Pitch
-;	-------------------------------------------------------------------------------------------------------------------------------------------
-;	This example presents a simple demonstration of the 'pitch' opcode, used for pitch and amplitude tracking.
-;	It requires a live audio input so you should have a microphone connected to your computer and get ready to sing into it!
-;	'Pitch' outputs two k-rate variables and for frequency and the other for the amplitude of an input audio signal.
-;	For clarity, the usage of this data in this example is quite trivial in that it is used merely as input data for the
-;	frequency and amplitude of a simple synthesizing oscillator. With a little imagination, many more interesting applications are possible.
-;	'Update Period' defines the time period over which output data is updated. Higher values here will stabilise the output stream of
-;	frequency data at the expense of response time. Lower values will allow a faster response to changing pitch.
-;	Upper and lower limits of pitch detection can be defined (in the octave point decimal format). Careful setting of these limits can help
-;	prevent incorrect pitch detections.
-;	'Threshold of Detection' allows the user to define an amplitude threshold (in dB) above which detection will begin.
-;	Once the threshold is crossed the signal amplitude must drop to beyond 6 dB lower than the threshold before detection ceases.
-;	This parameter can be used to prevent extraneous and environmental noise from triggering the tracking process.
-;	'Octave Divisions' allows us to quantize the number of allowed pitches in an octave. A setting of 12 will limit the output frequency
-;	values to twelve per octave (as in the equally tempered tuning system). Maximum allowed setting here is 120.
-;	'Conformations' defines the number of confirmations that will be required before the tracker shifts to a higher or lower octave.
-;	This parameter can be used to control unstable jumping between octaves. Experimentation is required to find the appropriate setting.
-;	'Starting Pitch of the Tracker' defines the starting pitch (in oct) of the tracker. 'Octave Decimations' defines the number of octave
-;	decimations in the spectrum.
-;	This may need adjusting depending on the nature of the sound being tracked. Experimentation is  required.
-;	'Q of Filters' defines the sharpness or resonance of the analysis filters. Again this should be fine tuned according to the nature of
-;	the sound being tracked.
-;	Noisy or spectrally unstable sounds may require lower settings for 'Q' to allow sucessful pitch tracking.
-;	'Number of Partials' defines the number of partials that will be used in the pitch tracking process.
-;	Higher values here may facilitate more successful pitch tracking in sounds with a weak fundemental, but at the expense CPU.
-;	'Rolloff' defines the amplitude rolloff (expressed as a fraction of an octave) of the filters used in tracking. 'Skip', if activated, skips
-;	initialisation. An alternative opcode for pitch and amplitude tracking worth investigating is 'pitchamdf'.
-;	Pitch tracking is a much more involved and CPU intensive process than amplitude tracking.
-;	If you only require amplitude tracking it is recommended that you use either the 'follow' or 'follow2' opcodes.
+; Pitch
+; -------------------------------------------------------------------------------------------------------------------------------------------
+; This example presents a simple demonstration of the 'pitch' opcode, used for pitch and
+; amplitude tracking.
+; It requires a live audio input so you should have a microphone connected to your
+; computer and get ready to sing into it!
+; 'Pitch' outputs two k-rate variables and for frequency and the other for the amplitude
+; of an input audio signal.
+; For clarity, the usage of this data in this example is quite trivial in that it is used
+; merely as input data for the
+; frequency and amplitude of a simple synthesizing oscillator. With a little imagination,
+; many more interesting applications are possible.
+; 'Update Period' defines the time period over which output data is updated. Higher values
+; here will stabilise the output stream of
+; frequency data at the expense of response time. Lower values will allow a faster
+; response to changing pitch.
+; Upper and lower limits of pitch detection can be defined (in the octave point decimal
+; format). Careful setting of these limits can help
+; prevent incorrect pitch detections.
+; 'Threshold of Detection' allows the user to define an amplitude threshold (in dB) above
+; which detection will begin.
+; Once the threshold is crossed the signal amplitude must drop to beyond 6 dB lower than
+; the threshold before detection ceases.
+; This parameter can be used to prevent extraneous and environmental noise from triggering
+; the tracking process.
+; 'Octave Divisions' allows us to quantize the number of allowed pitches in an octave. A
+; setting of 12 will limit the output frequency
+; values to twelve per octave (as in the equally tempered tuning system). Maximum allowed
+; setting here is 120.
+; 'Conformations' defines the number of confirmations that will be required before the
+; tracker shifts to a higher or lower octave.
+; This parameter can be used to control unstable jumping between octaves. Experimentation
+; is required to find the appropriate setting.
+; 'Starting Pitch of the Tracker' defines the starting pitch (in oct) of the tracker.
+; 'Octave Decimations' defines the number of octave
+; decimations in the spectrum.
+; This may need adjusting depending on the nature of the sound being tracked.
+; Experimentation is required.
+; 'Q of Filters' defines the sharpness or resonance of the analysis filters. Again this
+; should be fine tuned according to the nature of
+; the sound being tracked.
+; Noisy or spectrally unstable sounds may require lower settings for 'Q' to allow
+; sucessful pitch tracking.
+; 'Number of Partials' defines the number of partials that will be used in the pitch
+; tracking process.
+; Higher values here may facilitate more successful pitch tracking in sounds with a weak
+; fundemental, but at the expense CPU.
+; 'Rolloff' defines the amplitude rolloff (expressed as a fraction of an octave) of the
+; filters used in tracking. 'Skip', if activated, skips
+; initialisation. An alternative opcode for pitch and amplitude tracking worth
+; investigating is 'pitchamdf'.
+; Pitch tracking is a much more involved and CPU intensive process than amplitude
+; tracking.
+; If you only require amplitude tracking it is recommended that you use either the
+; 'follow' or 'follow2' opcodes.
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	1	;GUI	;(ALWAYS ON - SEE SCORE) PLAYS FILE AND SENSES FADER MOVEMENT AND RESTARTS INSTR 2 FOR I-RATE CONTROLLERS
+; GUI ;(always on - see score) plays file and senses fader movement and restarts instr 2
+; for i-rate controllers
+instr 1
 
-	klimit	init	0
-	idelta	=	0.1
+  klimit init 0
+  idelta = 0.1
 
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkskip		invalue	"Skip"
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkskip invalue "Skip"
 
-		gkupdte		invalue 	"Update"
-		gklo			invalue 	"Lower"
-		gkhi			invalue 	"Upper"
+    gkupdte invalue "Update"
+    gklo    invalue "Lower"
+    gkhi    invalue "Upper"
 
-		if gklo > gkhi - idelta then
-			gklo	=	gkhi - idelta
-			klimit	=	1
-		else
-			klimit	=	0
-		endif
-					outvalue	"Lower_Value", gklo
-					outvalue	"Limit", klimit
+    if gklo > gkhi - idelta then
+      gklo   = gkhi - idelta
+      klimit = 1
+    else
+      klimit = 0
+    endif
+    outvalue "Lower_Value", gklo
+    outvalue "Limit", klimit
 
-		gkdbthresh	invalue 	"Threshold"
-		gkstrt		invalue 	"Starting"
-		gkq			invalue 	"Q_Filters"
-		gkrolloff		invalue 	"Rolloff"
+    gkdbthresh invalue "Threshold"
+    gkstrt     invalue "Starting"
+    gkq        invalue "Q_Filters"
+    gkrolloff  invalue "Rolloff"
 
-		gkfrqs		invalue  "Divisions"
-		gkconf		invalue  "Conformations"
-		gkocts		invalue  "Decimations"
-		gknptls		invalue  "Harmonics"
-	endif
+    gkfrqs  invalue "Divisions"
+    gkconf  invalue "Conformations"
+    gkocts  invalue "Decimations"
+    gknptls invalue "Harmonics"
+  endif
 
-	kSwitch	changed		gkupdte, gklo, gkhi, gkdbthresh, gkfrqs, gkconf, gkstrt, gkocts, gkq, gknptls, gkrolloff		;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	;					ITRIGGER | IMINTIM | IMAXNUM | IINSNUM | IWHEN | IDUR (-1 MEANS A NOTE OF INFINITE DURATION)
-			schedkwhen	kSwitch,    0,        0,        2,        0,      -1									;RESTART INSTRUMENT 2 WITH A SUSTAINED (HELD) NOTE WHENEVER kSwitch=1
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkupdte, gklo, gkhi, gkdbthresh, gkfrqs, gkconf, gkstrt, gkocts, gkq, gknptls, gkrolloff
+  ; Itrigger | imintim | imaxnum | iinsnum | iwhen | idur (-1 means a note of infinite
+  ; duration)
+  ; Restart instrument 2 with a sustained (held) note whenever kswitch=1
+  schedkwhen kSwitch, 0, 0, 2, 0, -1
 endin
 
-instr	2
-	aL, aR		ins												;READ STEREO INPUT TO THE COMPUTER
+instr 2
+  aL, aR ins  ; Read stereo input to the computer
 
-	;CREATE A PITCH TRACKING VARIABLE AND AN AMPLITUDE TRACKING VARIABLE USING THE 'pitch' OPCODE - IMPROVED RESULTS CAN BE ACHIEVED BY FIRST ATTENUATING THE AMPLITUDE OF THE INPUT SIGNAL, YOU WILL NOTICE THAT 'aL' IS FIRST DIVIDED BY 50
-	koct, kamp	pitch	aL/50, i(gkupdte), i(gklo), i(gkhi), i(gkdbthresh), i(gkfrqs), i(gkconf), i(gkstrt), i(gkocts), i(gkq), i(gknptls), i(gkrolloff), i(gkskip)
-	kamp			port		kamp, 0.01								;SMOOTH OUT DISCONTINUITIES IN THE AMPLITUDE PARAMETER STREAM
+  ; Create a pitch tracking variable and an amplitude tracking variable using the 'pitch'
+  ; opcode - improved results can be achieved by first attenuating the amplitude of the
+  ; input signal, you will notice that 'al' is first divided by 50
+  koct, kamp pitch aL/50, i(gkupdte), i(gklo), i(gkhi), i(gkdbthresh), i(gkfrqs), i(gkconf), i(gkstrt), i(gkocts), i(gkq), i(gknptls), i(gkrolloff), i(gkskip)
+  kamp port kamp, 0.01  ; Smooth out discontinuities in the amplitude parameter stream
 
-	aamp			interp	kamp/500									;RECALIBRATE THE AMPLITUDE FOLLOWING SIGNAL - ALSO INTERPOLATE TO CREATE AN A-RATE SIGNAL TO PREVENT CLICKS AS THE AMPLITUDE FLUCTUATES
-	asig			oscili	aamp, cpsoct(koct), 1						;CREATE A SYNTHESIZED TONE THAT MIMICS THE FREQUENCY AND AMPLITUDE ATTRIBUTES OF THE INPUT SIGNAL
-				outs		asig, asig								;SEND THE STNTHESIZED TONE TO THE OUTPUTS
+  ; Recalibrate the amplitude following signal - also interpolate to create an a-rate
+  ; signal to prevent clicks as the amplitude fluctuates
+  aamp interp kamp/500
+  ; Create a synthesized tone that mimics the frequency and amplitude attributes of the
+  ; input signal
+  asig oscili aamp, cpsoct(koct), 1
+  outs asig, asig  ; Send the stnthesized tone to the outputs
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 1024 10 1 .2 .15 .1 .2 .1 .05 .02 .01		;A RICH TONE - USED BY THE PITCH TRACKING SYNTHESIZER
-f 2 0 131072 10 1							;A SINE WAVE
+; A rich tone - used by the pitch tracking synthesizer
+f 1 0 1024 10 1 .2 .15 .1 .2 .1 .05 .02 .01
+f 2 0 131072 10 1  ; A sine wave
 
-;INSTR | START | DURATION
-i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
+; Instr | start | duration
+i 1 0 3600  ; GUI (this also keeps performance going)
 </CsScore>
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
@@ -119,9 +157,9 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -139,15 +177,20 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -168,14 +211,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -215,14 +258,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -244,14 +287,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -291,14 +334,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -320,14 +363,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -367,14 +410,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -396,14 +439,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -443,14 +486,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -484,9 +527,9 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -505,14 +548,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -532,14 +575,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -563,14 +606,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -590,14 +633,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -621,14 +664,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -648,14 +691,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -679,14 +722,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -708,14 +751,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -755,14 +798,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -784,14 +827,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -831,14 +874,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -858,14 +901,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -889,14 +932,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -915,11 +958,23 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> Skip Initialisation</text>
+  <text>Skip Initialisation</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -937,14 +992,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -984,14 +1039,14 @@ i 1		 0	   3600		;GUI (THIS ALSO KEEPS PERFORMANCE GOING)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

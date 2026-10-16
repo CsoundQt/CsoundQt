@@ -17,7 +17,7 @@ massign 3,2  ; channel 3 notes directed to instr 2
 
   instr 1 ; 1 impulse (midi channel 1)
 iChn midichn                                  ; discern what midi channel
-prints "channel:%d%tinstrument: %d%n",iChn,p1 ; print instr and midi channel
+prints "channel:%d%tinstrument: %d\n",iChn,p1 ; print instr and midi channel
 reset:                                        ; label 'reset'
      timout 0, 1, impulse                     ; jump to 'impulse' for 1 second
      reinit reset                             ; reinitialize pass from 'reset'
@@ -29,7 +29,7 @@ aSig poscil    aenv, 500, gisine              ; audio oscillator
 
   instr 2 ; 2 impulses (midi channel 2)
 iChn midichn
-prints "channel:%d%tinstrument: %d%n",iChn,p1
+prints "channel:%d%tinstrument: %d\n",iChn,p1
 reset:
      timout 0, 1, impulse
      reinit reset
@@ -42,7 +42,7 @@ a2   delay     aSig, 0.15                    ; delay generates a 2nd impulse
 
   instr 3 ; 3 impulses (midi channel 3)
 iChn midichn
-prints "channel:%d%tinstrument: %d%n",iChn,p1
+prints "channel:%d%tinstrument: %d\n",iChn,p1
 reset:
      timout 0, 1, impulse
      reinit reset

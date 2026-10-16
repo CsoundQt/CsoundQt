@@ -1,56 +1,65 @@
-;Written by Iain McCurdy
+; Written by Iain McCurdy
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 January 2011 and QuteCsound svn rev 817
 
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt
+; -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 64		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 64     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-instr	1	;ALWAYS ON - SEE SCORE
+instr 1  ; Always on - see score
 
-	kgainL		invalue 	"Gain_L"
-	kgainR		invalue 	"Gain_R"
-	kpanL		invalue 	"Pan_L"
-	kpanR		invalue 	"Pan_R"
+  kgainL invalue "Gain_L"
+  kgainR invalue "Gain_R"
+  kpanL  invalue "Pan_L"
+  kpanR  invalue "Pan_R"
 
-	ainL, ainR	ins											;READ AUDIO FROM THE COMPUTER'S INPUT
-	ainL			=		ainL * kgainL							;APPLY GAIN CONTROL
-	ainR			=		ainR * kgainR							;APPLY GAIN CONTROL
-	aL			=		(ainL * (1-kpanL)) + (ainR * (1 - kpanR))	;APPLY PANNING CONTROL
-	aR			=		(ainL * kpanL) + (ainR * kpanR)			;APPLY PANNING CONTROL
-	ameterL		follow 	aL, .01								;CREATE AN AMPLITUDE FOLLOWING UNIPOLAR SIGNAL (NEEDED FOR THE AMPLITUDE METERS)
-	ameterR		follow 	aR, .01								;CREATE AN AMPLITUDE FOLLOWING UNIPOLAR SIGNAL (NEEDED FOR THE AMPLITUDE METERS)
+  ainL, ainR ins                                    ; Read audio from the computer's input
+  ainL = ainL * kgainL                              ; Apply gain control
+  ainR = ainR * kgainR                              ; Apply gain control
+  aL   = (ainL * (1-kpanL)) + (ainR * (1 - kpanR))  ; Apply panning control
+  aR   = (ainL * kpanL) + (ainR * kpanR)            ; Apply panning control
+  ; Create an amplitude following unipolar signal (needed for the amplitude meters)
+  ameterL follow aL, .01
+  ; Create an amplitude following unipolar signal (needed for the amplitude meters)
+  ameterR follow aR, .01
 
-	kmeterL		downsamp	ameterL								;CONVERT AMPLITUDE FOLLOWING SIGNAL TO K-RATE
-	kmeterR		downsamp	ameterR								;CONVERT AMPLITUDE FOLLOWING SIGNAL TO K-RATE
-	kmeterL		portk	kmeterL, .1							;SMOOTH THE MOVEMENT OF THE AMPLITUDE FOLLOWING SIGNAL - THIS WILL MAKE THE METERS EASIER TO VIEW
-	kmeterR		portk	kmeterR, .1						     ;SMOOTH THE MOVEMENT OF THE AMPLITUDE FOLLOWING SIGNAL - THIS WILL MAKE THE METERS EASIER TO VIEW
-	ktrig		changed	kmeterL, kmeterR						;IF THE AMPLIUDE FOLLOWING SIGNAL CHANGES GENERATE A TRIGGER SIGNAL (A MOMENTARY '1' VALUE)
+  kmeterL downsamp ameterL  ; Convert amplitude following signal to k-rate
+  kmeterR downsamp ameterR  ; Convert amplitude following signal to k-rate
+  ; Smooth the movement of the amplitude following signal - this will make the meters
+  ; easier to view
+  kmeterL portk kmeterL, .1
+  ; Smooth the movement of the amplitude following signal - this will make the meters
+  ; easier to view
+  kmeterR portk kmeterR, .1
+  ; If the ampliude following signal changes generate a trigger signal (a momentary '1'
+  ; value)
+  ktrig changed kmeterL, kmeterR
 
-	kreadouttrig	metro	10									;METRONOMIC TRIGGER (USED BY NUMBER BOX READOUTS) - 2 PER SECOND
-	if kreadouttrig == 1 && ktrig == 1 then
-				outvalue	"Meter_L", kmeterL						;UPDATE NUMBER BOX READOUTS
-				outvalue	"Meter_R", kmeterR						;UPDATE NUMBER BOX READOUTS
-	endif
-				outs		aL, aR								;SEND THE AUDIO SIGNAL TO THE SPEAKERS
+  kreadouttrig metro 10  ; Metronomic trigger (used by number box readouts) - 2 per second
+  if kreadouttrig == 1 && ktrig == 1 then
+    outvalue "Meter_L", kmeterL  ; Update number box readouts
+    outvalue "Meter_R", kmeterR  ; Update number box readouts
+  endif
+  outs aL, aR  ; Send the audio signal to the speakers
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
+; Instr | start | duration
+i 1 0 3600  ; Instrument 1 plays for 1 hour (and keeps performance going)
 </CsScore>
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
@@ -62,9 +71,9 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -82,15 +91,20 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -111,14 +125,14 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -158,14 +172,14 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -187,15 +201,20 @@ i 1		0	   3600	;INSTRUMENT 1 PLAYS FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -220,9 +239,9 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
    <r>158</r>
@@ -249,14 +268,14 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -296,14 +315,14 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -343,14 +362,14 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -372,14 +391,14 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -419,14 +438,14 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -448,14 +467,14 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -489,9 +508,9 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -510,14 +529,14 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -551,9 +570,9 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -572,14 +591,14 @@ Visual meters monitor amplitude levels and number boxes give textual confimation
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

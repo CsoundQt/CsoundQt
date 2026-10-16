@@ -1,84 +1,88 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
+; Notes on modifications from original csd:
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 1		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 1      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-;INITIAL INDEX VALUE (FROM WHERE IN THE giscale TABLE WE WILL BEGIN READING FROM)
-giindex	init	5
+; Initial index value (from where in the giscale table we will begin reading from)
+giindex init 5
 
-;TABLE STORING PCH VALUES USED IN THE DRUNK WALK
-;                               0   1    2    3    4    5    6    7    8    9    10   11   12   13   14   15
-giscale	ftgen	0,0,32,-2,6.00,6.03,6.05,6.07,6.10,7.00,7.03,7.05,7.07,7.10,8.00,8.03,8.05,8.07,8.10,9.00
+; Table storing pch values used in the drunk walk
+; 0   1    2    3    4    5    6    7    8    9    10   11   12   13   14   15
+giscale ftgen 0, 0, 32, -2, 6.00, 6.03, 6.05, 6.07, 6.10, 7.00, 7.03, 7.05, 7.07, 7.10, 8.00, 8.03, 8.05, 8.07, 8.10, 9.00
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkBoundary	invalue	"Boundary"
-		gkTrigFreq	invalue	"SpeedWalk"
-		gkoutgain		invalue	"OutGain"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkBoundary invalue "Boundary"
+    gkTrigFreq invalue "SpeedWalk"
+    gkoutgain  invalue "OutGain"
+  endif
 endin
 
-instr	1	;NOTE TRIGGERING INSTRUMENT
-	ktrigger	metro	gkTrigFreq								;CREATE A METRONOME OF MOMENTARY '1's
-	
-	;		 		TRIGGER | MINTIM | MAXNUM | INSNUM | WHEN | KDUR
-			schedkwhen ktrigger,   0,      0,     p1+1,    0,     0.01	;TRIGGER NEXT INSTRUMENT METRONOMICALLY
+instr 1                      ; Note triggering instrument
+  ktrigger metro gkTrigFreq  ; Create a metronome of momentary '1's
+
+  ; Trigger | mintim | maxnum | insnum | when | kdur
+  schedkwhen ktrigger, 0, 0, p1+1, 0, 0.01  ; Trigger next instrument metronomically
 endin
 
-instr	2	;PROCESS DRUNK WALK
-	istep	random	0, 2										;STEP VALUE SET TO RANDOM FLOAT BETWEEN 0 AND 2
-	istep	=		(int(istep)*2)-1							;istep WILL BE EITHER 1 OR -1
-	iindex	=		giindex + istep							;ADD RANDOM VALUE TO OLD INDEX VALUE
-	
-	if	gkBoundary!=1	goto SKIP1								;IF BOUNDARY MODE IS SET TO 'BOUNCE'
-		if	iindex==-1	then              						;IF INDEX PUSHES BELOW BOUNDARY...
-			iindex=1											;...SET TO ONE ABOVE MINIMUM
-		elseif	iindex==16	then								;IF INDEX PUSHES BEYOND BOUNDARY...
-			iindex=14											;...BOUNCE TO ONE BELOW BOUNDARY
-		endif												;END OF CONDITIONAL BRANCHING
-		goto	SKIP2											;GOTO LABEL
-	SKIP1:
-		iindex	limit	iindex, 0, 15							;LIMIT INDEX VALUE WITHIN TABLE LIMITS
-	if	iindex == giindex&&gkBoundary==2	goto	SKIP3				;NO REPEATS
-	SKIP2:													;LABEL
-		turnoff2	3, 1, 1										;TURNOFF 'OLD' NOTE TO PREVENT POLYPHONY 
-	;                      i   strt  dur   p4  
-		event_i	"i", p1+1, 0.01,  8, giindex						;PLAY A NOTE USING NEXT INSTRUMENT
-	SKIP3:													;LABEL
-		giindex	=		iindex								;GLOBAL INDEX (USED AS THE 'OLD' INDEX VALUE FOR COMPARISON IN NEXT PERFORMANCE PASS)
-				outvalue	"Step", istep							;WRITE STEP VALUE TO FL TEXT BOX
-				outvalue	"Index", giindex						;WRITE INDEX VALUE TO FL TEXT BOX
-				turnoff										;TURN THIS INSTRUMENT OFF
+instr 2                      ; Process drunk walk
+  istep random 0, 2          ; Step value set to random float between 0 and 2
+  istep  = (int(istep)*2)-1  ; Istep will be either 1 or -1
+  iindex = giindex + istep   ; Add random value to old index value
+
+  if gkBoundary != 1 goto SKIP1  ; If boundary mode is set to 'bounce'
+  if iindex == -1 then           ; If index pushes below boundary...
+    iindex = 1                   ; ...Set to one above minimum
+  elseif iindex == 16 then       ; If index pushes beyond boundary...
+    iindex = 14                  ; ...Bounce to one below boundary
+  endif                          ; End of conditional branching
+  goto SKIP2                     ; Goto label
+SKIP1:
+  ; Limit index value within table limits
+  iindex limit iindex, 0, 15
+  if iindex == giindex&&gkBoundary == 2 goto SKIP3  ; No repeats
+SKIP2:                                              ; Label
+  ; Turnoff 'old' note to prevent polyphony
+  turnoff2 3, 1, 1
+  ; i   strt  dur   p4
+  event_i "i", p1+1, 0.01, 8, giindex  ; Play a note using next instrument
+SKIP3:                                 ; Label
+  ; Global index (used as the 'old' index value for comparison in next performance pass)
+  giindex = iindex
+  outvalue "Step", istep     ; Write step value to fl text box
+  outvalue "Index", giindex  ; Write index value to fl text box
+  turnoff                    ; Turn this instrument off
 endin
 
-instr	3
-	ipch		table	p4, giscale								;READ PCH VALUE FROM TABLE USING INDEX
-	aenv		linsegr	0, 0.005, 1, p3-0.105, 1, 0.1, 0				;AMPLITUDE ENVELOP WITH RELEASE STAGE
-	iplk		random	0.1,0.3									;SLIGHTLY RANDOMIZE PLUCK POSITION
-	asig 	wgpluck2	0.98, 1, cpspch(ipch), iplk, 0.6   		     ;PLUCKED STRING PHYSICAL MODEL
-	asig		=		asig  * aenv * gkoutgain						;SCALE AUDIO SIGNAL USING AMPLITUDE ENVELOPE AND OUTPUT GAIN SLIDER
-			outs		asig, asig								;SEND AUDIO TO OUTPUTS
+instr 3
+  ipch table p4, giscale                          ; Read pch value from table using index
+  aenv linsegr 0, 0.005, 1, p3-0.105, 1, 0.1, 0   ; Amplitude envelop with release stage
+  iplk random 0.1, 0.3                            ; Slightly randomize pluck position
+  asig wgpluck2 0.98, 1, cpspch(ipch), iplk, 0.6  ; Plucked string physical model
+  ; Scale audio signal using amplitude envelope and output gain slider
+  asig = asig * aenv * gkoutgain
+  outs asig, asig  ; Send audio to outputs
 endin
 </CsInstruments>
 <CsScore>
-i 10	 0	 3600		;GUI
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -92,9 +96,9 @@ i 10	 0	 3600		;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -112,15 +116,20 @@ i 10	 0	 3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -141,14 +150,14 @@ i 10	 0	 3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -188,14 +197,14 @@ i 10	 0	 3600		;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -223,14 +232,14 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -249,11 +258,23 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -271,14 +292,14 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -300,14 +321,14 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -329,14 +350,14 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -376,14 +397,14 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -435,14 +456,14 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -464,15 +485,20 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>1</borderwidth>
@@ -493,15 +519,20 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>1</borderwidth>

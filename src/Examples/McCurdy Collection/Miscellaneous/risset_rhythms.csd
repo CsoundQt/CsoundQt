@@ -1,219 +1,226 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table for exp slider
-;	Add Browser for audio files, accept mono or stereo wav files (only channel 1 is used)
-;	Replace (1-kenv_n) by (kenv_n) in instr 3
-;	Changed instr 2, can't hide / show widgets from orc
-;	Used reinit in instr 3  
-
-
-/*                                                 risset rhythms
-	--------------------------------------------------------------------------------------------------------------------------
-	Risset rhythms is a variation of the Shepard-Risset Glissando which employs a rhythmic loop instead of a sine tone.
-	This implementation uses speed control of sampled loops to vary tempo, therefore pitch as well as tempo is modulated.
-
-	A repeating loop fades in as it gradually increases in tempo (and pitch). By the time it has doubled its tempo (and risen
-	in pitch by an octave) a second layer of this loop is faded in at the same initial tempo of the original layer. It then
-	follows the trajectory of the first layer, always half its tempo (and an octave lower). As the layers get faster and
-	faster, they eventually fade out, just as they faded in. As many layers can be used as desired but the greater the number
-	of layers, the greater the range of tempi (& pitch) covered. The effect of this should be a cognative contradiction in
-	which, from moment to moment, the music appears to be getting faster, but over the longer term doesn't get faster.
-	A frequently cited visual analog is that of the spinning barber's pole in which parallel lines appear to be rising but
-	obviously aren't.
-	In this implementation 'Rate' controls the rate of acceleration of the loops. One period will be the time it
-	take for a loop to begin fading in at its lowest tempo, to when it finally fades our at its highest tempo. Negative
-	values here will result in loops slowing down (getting lower in pitch). The greater the number of layers employed the
-	greater the rate of acceleration will appear as each loop will cover a greater range of tempi from fading in to fading out.
-	Careful tuning of the 'Number of Layers' and 'Rate' is needed to properly create the illusion. Setting rate too high
-	will reveal the workings of the illusion.
-	The amplitudes of each of the layers are adjustable using the numbered sliders. These are normally all left at maximum but
-	listening to one layer on its own can help in understanding the mechanism of this example. The yellow bars indicate how
-	the different layers fade in and out.
-	A choice of amplitude window functions are available. These determine exactly how each layer fades in and out.
-	A choice of four source loops are provided (including a sine tone which allows creation of the Shepard-Risset Glissando).
-	'Global Speed' scales the speed of all layers equally.
-*/                                                                                
+; Notes on modifications from original csd:
+; Add table for exp slider
+; Add Browser for audio files, accept mono or stereo wav files (only channel 1 is used)
+; Replace (1-kenv_n) by (kenv_n) in instr 3
+; Changed instr 2, can't hide / show widgets from orc
+; Used reinit in instr 3
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+/* risset rhythms
+  --------------------------------------------------------------------------------------------------------------------------
+  Risset rhythms is a variation of the Shepard-Risset Glissando which employs a rhythmic loop instead of a sine tone.
+  This implementation uses speed control of sampled loops to vary tempo, therefore pitch as well as tempo is modulated.
+
+  A repeating loop fades in as it gradually increases in tempo (and pitch). By the time it has doubled its tempo (and risen
+  in pitch by an octave) a second layer of this loop is faded in at the same initial tempo of the original layer. It then
+  follows the trajectory of the first layer, always half its tempo (and an octave lower). As the layers get faster and
+  faster, they eventually fade out, just as they faded in. As many layers can be used as desired but the greater the number
+  of layers, the greater the range of tempi (& pitch) covered. The effect of this should be a cognative contradiction in
+  which, from moment to moment, the music appears to be getting faster, but over the longer term doesn't get faster.
+  A frequently cited visual analog is that of the spinning barber's pole in which parallel lines appear to be rising but
+  obviously aren't.
+  In this implementation 'Rate' controls the rate of acceleration of the loops. One period will be the time it
+  take for a loop to begin fading in at its lowest tempo, to when it finally fades our at its highest tempo. Negative
+  values here will result in loops slowing down (getting lower in pitch). The greater the number of layers employed the
+  greater the rate of acceleration will appear as each loop will cover a greater range of tempi from fading in to fading out.
+  Careful tuning of the 'Number of Layers' and 'Rate' is needed to properly create the illusion. Setting rate too high
+  will reveal the workings of the illusion.
+  The amplitudes of each of the layers are adjustable using the numbered sliders. These are normally all left at maximum but
+  listening to one layer on its own can help in understanding the mechanism of this example. The yellow bars indicate how
+  the different layers fade in and out.
+  A choice of amplitude window functions are available. These determine exactly how each layer fades in and out.
+  A choice of four source loops are provided (including a sine tone which allows creation of the Shepard-Risset Glissando).
+  'Global Speed' scales the speed of all layers equally.
+*/
+
+
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-giExp1		ftgen	0, 0, 129, -25, 0, 0.25, 128, 4.0	;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 0.25, 128, 4.0  ; Table for exp slider
 
-giAmpWindow1	ftgen	11, 0, 131073, 9, 0.5, 1, 0		;HALF SINE
-giAmpWindow2	ftgen	12, 0, 131073, 20, 3, 1			;BARTLETT (TRIANGLE)
-giAmpWindow3	ftgen	13, 0, 131073, 20,  5, 1			;BLACKMAN-HARRIS
+giAmpWindow1 ftgen 11, 0, 131073, 9, 0.5, 1, 0  ; Half sine
+giAmpWindow2 ftgen 12, 0, 131073, 20, 3, 1      ; Bartlett (triangle)
+giAmpWindow3 ftgen 13, 0, 131073, 20, 5, 1      ; Blackman-harris
 
-giLongSine		ftgen	0, 0, 131073, 9, 1200, 1, 0
+giLongSine ftgen 0, 0, 131073, 9, 1200, 1, 0
 
-instr	1	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SLIDERS
-		gkrate	invalue 	"Rate"
-		kGSpeed	invalue 	"GSpeed"
-		gkGSpeed	tablei	kGSpeed, giExp1, 1
-				outvalue	"GSpeed_Value", gkGSpeed
+instr 1  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Sliders
+    gkrate  invalue "Rate"
+    kGSpeed invalue "GSpeed"
+    gkGSpeed tablei kGSpeed, giExp1, 1
+    outvalue "GSpeed_Value", gkGSpeed
 
-		gk1		invalue 	"K1"
-		gk2		invalue 	"K2"
-		gk3		invalue 	"K3"
-		gk4		invalue 	"K4"
-		gk5		invalue 	"K5"
-		gk6		invalue 	"K6"
-		gk7		invalue 	"K7"
-		gk8		invalue 	"K8"
+    gk1 invalue "K1"
+    gk2 invalue "K2"
+    gk3 invalue "K3"
+    gk4 invalue "K4"
+    gk5 invalue "K5"
+    gk6 invalue "K6"
+    gk7 invalue "K7"
+    gk8 invalue "K8"
 
-		gkOutGain	invalue	"OutGain"
+    gkOutGain invalue "OutGain"
 
-		;COUNTERS
-		gklayers		invalue  "Layers"
-		ktrig_layer	changed	gklayers
-					schedkwhen	ktrig_layer, 0, 0, 2, 0, .1		;RESTART INSTRUMENT 2
+    ; Counters
+    gklayers invalue "Layers"
+    ktrig_layer changed gklayers
+    schedkwhen ktrig_layer, 0, 0, 2, 0, .1  ; Restart instrument 2
 
-		gkSineOnOff	invalue	"SineOnOff"
-		
-		;MENUS
-		gkAmpWindow	invalue	"AmpWindow"
+    gkSineOnOff invalue "SineOnOff"
 
-;AUDIO FILE CHANGE / LOAD IN TABLES ********************************************************************************************************
-		Sfile_new		strcpy	""								;INIT TO EMPTY STRING
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
+    ; Menus
+    gkAmpWindow invalue "AmpWindow"
 
-		gkfile_new	init		0
-		if	kfile != 0	then									;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-			gkfile_new	=	1								;Flag to inform instr 1 that a new file is loaded
-				reinit	NEW_FILE								;REINITIALIZE FROM LABEL 'NEW_FILE'
-		endif
-		NEW_FILE:
-		ilen		filelen	Sfile								;Find length
-		isr		filesr	Sfile								;Find sample rate
-		isamps	=		ilen * isr							;Total number of samples
+    ; Audio file change / load in tables
+    ; ********************************************************************************************************
+    Sfile_new strcpy ""  ; Init to empty string
+    Sfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk Sfile
+    kfile strcmpk Sfile_new, Sfile_old
 
-		isize	init		1
-		LOOP:
-		isize	=		isize * 2
-		if (isize < isamps) igoto LOOP							;Loop until isize is greater than number of samples
+    gkfile_new init 0
+    if kfile != 0 then  ; If a bang had been generated in the line above
+      gkfile_new = 1    ; Flag to inform instr 1 that a new file is loaded
+      reinit NEW_FILE   ; Reinitialize from label 'new_file'
+    endif
+NEW_FILE:
+    ilen filelen Sfile   ; Find length
+    isr filesr Sfile     ; Find sample rate
+    isamps = ilen * isr  ; Total number of samples
 
-		giloop	ftgen	0, 0, isize, 1, Sfile, 0, 0, 1			;READ AUDIO FILE CHANNEL 1
-;*******************************************************************************************************************************************
-	endif
+    isize init 1
+LOOP:
+    isize = isize * 2
+    if (isize < isamps) igoto LOOP  ; Loop until isize is greater than number of samples
+
+    giloop ftgen 0, 0, isize, 1, Sfile, 0, 0, 1  ; Read audio file channel 1
+    ; *******************************************************************************************************************************************
+  endif
 endin
 
-instr	2
-	ilayers	init	i(gklayers)
-	
-	if	ilayers < 3	then
-		outvalue	"K3",   0
-		outvalue	"Amp3", 0
-	endif
-	if	ilayers < 4	then
-		outvalue	"K4",   0
-		outvalue	"Amp4", 0
-	endif
-	if	ilayers < 5	then
-		outvalue	"K5",   0
-		outvalue	"Amp5", 0
-	endif
-	if	ilayers < 6	then
-		outvalue	"K6",   0
-		outvalue	"Amp6", 0
-	endif	
-	if	ilayers < 7	then
-		outvalue	"K7",   0
-		outvalue	"Amp7", 0
-	endif
-	if	ilayers < 8	then
-		outvalue	"K8",   0
-		outvalue	"Amp8", 0
-	endif
+instr 2
+  ilayers init i(gklayers)
+
+  if ilayers < 3 then
+    outvalue "K3", 0
+    outvalue "Amp3", 0
+  endif
+  if ilayers < 4 then
+    outvalue "K4", 0
+    outvalue "Amp4", 0
+  endif
+  if ilayers < 5 then
+    outvalue "K5", 0
+    outvalue "Amp5", 0
+  endif
+  if ilayers < 6 then
+    outvalue "K6", 0
+    outvalue "Amp6", 0
+  endif
+  if ilayers < 7 then
+    outvalue "K7", 0
+    outvalue "Amp7", 0
+  endif
+  if ilayers < 8 then
+    outvalue "K8", 0
+    outvalue "Amp8", 0
+  endif
 endin
 
-instr	3
-		kSwitch	changed		gkAmpWindow, gklayers,gkSineOnOff	
+instr 3
+  kSwitch changed gkAmpWindow, gklayers, gkSineOnOff
 
-		if gkfile_new == 1 || kSwitch == 1 then
-			gkfile_new = 0
-			reinit	REINIT
-		endif
+  if gkfile_new == 1 || kSwitch == 1 then
+    gkfile_new = 0
+    reinit REINIT
+  endif
 
-	REINIT:
-    	if	i(gkSineOnOff)==1 then
-    		ifn	=	giLongSine
-    		ilen	=	ftlen(ifn)
-    	else
-    		ifn	=	giloop
-		ilen			=	nsamp(ifn)
-	endif
-	
-	iAmpWindow	=	i(gkAmpWindow)+11
-	kSpeedRatio	=	sr*gkGSpeed/ilen	;PLAYBACK SPEED RATIO BASED ON FILE LENGTH AND 'GLOBAL SPEED' SLIDER
-	ilayers		=	i(gklayers)
+REINIT:
+  if i(gkSineOnOff) == 1 then
+    ifn  = giLongSine
+    ilen = ftlen(ifn)
+  else
+    ifn  = giloop
+    ilen = nsamp(ifn)
+  endif
 
-	kupdate		metro	20
-	
-	
-	
-	aout		init	0			;ACCUMULATING AUDIO VARIABLE INITIALISED
+  iAmpWindow = i(gkAmpWindow)+11
+  ; Playback speed ratio based on file length and 'global speed' slider
+  kSpeedRatio = sr*gkGSpeed/ilen
+  ilayers     = i(gklayers)
 
-	;CREATE FIRST LAYER
-	kspeed1	phasor	gkrate				;PHASOR THAT TRACES AMPLITUDE ENVELOPE
-	kenv1	tablei	kspeed1, iAmpWindow, 1		;AMPLITUDE ENVELOPE
-	if kupdate == 1	then
-			outvalue	"Amp1", kenv1
-	endif
-	kratio1	=		octave((kspeed1*ilayers)-(ilayers*.5))	;MOVING PLAYBACK RATIO
-	aptr1	phasor	kratio1*kSpeedRatio		;PHASOR THAT TRACES MOVEMENT THROUGH THE SOUND FILE
-	asig1	tablei	aptr1*ilen, ifn			;READ AUDIO FROM TABLE
-	aout	=	aout + (asig1*kenv1*gk1)	;ADD AUDIO TO ACCUMULATING AUDIO VARIABLE
+  kupdate metro 20
 
-;MACRO DEFINED FOR ALL SUBSEQUENT LAYERS
-#define	LAYER(N)
-	#
-	kspeed$N	phasor	gkrate, ($N-1)/ilayers				;PHASOR THAT TRACES AMPLITUDE ENVELOPE
-	kenv$N	tablei	kspeed$N, iAmpWindow, 1                                 ;AMPLITUDE ENVELOPE                   
-	if kupdate == 1	then
-			outvalue	"Amp$N", kenv$N
-	endif
-	kratio$N	=	octave((kspeed$N*ilayers)-(ilayers*.5))		;MOVING PLAYBACK RATIO
-	aptr$N		phasor	kratio$N*kSpeedRatio				;PHASOR THAT TRACES MOVEMENT THROUGH THE SOUND FILE
-	asig$N		tablei	aptr$N*ilen, ifn		                ;READ AUDIO FROM TABLE                             
-	aout	=	aout + (asig$N*kenv$N*gk$N)                             ;ADD AUDIO TO ACCUMULATING AUDIO VARIABLE          
-	if	gklayers==$N	goto	FINISH					;IF THIS IS THE FINAL LAYER JUMP TO 'FINISH' LABEL
-	#
-	;EXECUTE MACRO MULTIPLE TIMES
-	$LAYER(2)
-	$LAYER(3)
-	$LAYER(4)
-	$LAYER(5)
-	$LAYER(6)
-	$LAYER(7)
-	$LAYER(8)
 
-	FINISH:									;'FINISH' LABEL
-	outs	aout*gkOutGain, aout*gkOutGain					;SEND AUDIO TO OUTPUTS
-	clear	aout								;CLEAR ACCUMULATING AUDIO VARIABLE
-endin                                    
+
+  aout init 0  ; Accumulating audio variable initialised
+
+  ; Create first layer
+  kspeed1 phasor gkrate                ; Phasor that traces amplitude envelope
+  kenv1 tablei kspeed1, iAmpWindow, 1  ; Amplitude envelope
+  if kupdate == 1 then
+    outvalue "Amp1", kenv1
+  endif
+  kratio1 = octave((kspeed1*ilayers)-(ilayers*.5))  ; Moving playback ratio
+  ; Phasor that traces movement through the sound file
+  aptr1 phasor kratio1*kSpeedRatio
+  asig1 tablei aptr1*ilen, ifn  ; Read audio from table
+  ; Add audio to accumulating audio variable
+  aout = aout + (asig1*kenv1*gk1)
+
+  ; Macro defined for all subsequent layers
+  #define LAYER(N)
+  #
+  kspeed$N phasor gkrate, ($N-1)/ilayers  ; Phasor that traces amplitude envelope
+  kenv$N tablei kspeed$N, iAmpWindow, 1   ; Amplitude envelope
+  if kupdate == 1 then
+    outvalue "Amp$N", kenv$N
+  endif
+  kratio$N = octave((kspeed$N*ilayers)-(ilayers*.5))  ; Moving playback ratio
+  ; Phasor that traces movement through the sound file
+  aptr$N phasor kratio$N*kSpeedRatio
+  asig$N tablei aptr$N*ilen, ifn  ; Read audio from table
+  ; Add audio to accumulating audio variable
+  aout = aout + (asig$N*kenv$N*gk$N)
+  ; If this is the final layer jump to 'finish' label
+  if gklayers == $N goto FINISH
+  #
+  ; Execute macro multiple times
+  $LAYER(2)
+  $LAYER(3)
+  $LAYER(4)
+  $LAYER(5)
+  $LAYER(6)
+  $LAYER(7)
+  $LAYER(8)
+
+FINISH:                                ; 'Finish' label
+  outs aout*gkOutGain, aout*gkOutGain  ; Send audio to outputs
+  clear aout                           ; Clear accumulating audio variable
+endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1		0		3600		;GUI
+; Instr | start | duration
+i 1 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -229,9 +236,9 @@ i 1		0		3600		;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -249,15 +256,20 @@ i 1		0		3600		;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -278,14 +290,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -325,14 +337,14 @@ i 1		0		3600		;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -354,14 +366,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -401,14 +413,14 @@ i 1		0		3600		;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -430,14 +442,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -477,14 +489,14 @@ i 1		0		3600		;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -536,15 +548,20 @@ i 1		0		3600		;GUI
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -571,15 +588,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
+   <r>174</r>
+   <g>111</g>
+   <b>79</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -598,14 +615,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -627,14 +644,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -654,14 +671,14 @@ i 1		0		3600		;GUI
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>2</minimum>
@@ -685,14 +702,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -720,15 +737,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
+   <r>174</r>
+   <g>111</g>
+   <b>79</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -753,15 +770,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
+   <r>174</r>
+   <g>111</g>
+   <b>79</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -786,15 +803,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
+   <r>174</r>
+   <g>111</g>
+   <b>79</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -819,15 +836,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
+   <r>174</r>
+   <g>111</g>
+   <b>79</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -852,15 +869,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
+   <r>174</r>
+   <g>111</g>
+   <b>79</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -885,15 +902,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
+   <r>174</r>
+   <g>111</g>
+   <b>79</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -918,15 +935,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
+   <r>174</r>
+   <g>111</g>
+   <b>79</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -951,15 +968,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -984,15 +1001,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1017,15 +1034,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1050,15 +1067,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1083,15 +1100,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1116,15 +1133,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1149,15 +1166,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1182,15 +1199,15 @@ i 1		0		3600		;GUI
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1209,14 +1226,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1238,14 +1255,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1267,14 +1284,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1296,14 +1313,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1325,14 +1342,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1354,14 +1371,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1383,14 +1400,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1412,14 +1429,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1441,14 +1458,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1470,14 +1487,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1499,14 +1516,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1528,14 +1545,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1557,14 +1574,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1586,14 +1603,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1615,14 +1632,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1644,14 +1661,14 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1675,6 +1692,18 @@ i 1		0		3600		;GUI
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -1692,9 +1721,9 @@ i 1		0		3600		;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>235</r>
@@ -1716,11 +1745,23 @@ i 1		0		3600		;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>    On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i3 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>SineOnOff</objectName>
@@ -1740,6 +1781,18 @@ i 1		0		3600		;GUI
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

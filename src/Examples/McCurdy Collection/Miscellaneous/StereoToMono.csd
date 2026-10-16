@@ -1,51 +1,53 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add Browser for audio file and use of FilePlay2a udo
+; Notes on modifications from original csd:
+; Add Browser for audio file and use of FilePlay2a udo
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-opcode FilePlay2a, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		outvalue	"_Browse", "Please select a stereo audio file"
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2a, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    outvalue "_Browse", "Please select a stereo audio file"
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	1
-	gSfile	invalue	"_Browse"
+instr 1
+  gSfile invalue "_Browse"
 
-	ilen		filelen	gSfile								;DERIVE LENGTH OF INPUT SOUND FILE
-			event_i	"i", 2, 0, ilen						;TRIGGER INSTRUMENT 2
+  ilen filelen gSfile      ; Derive length of input sound file
+  event_i "i", 2, 0, ilen  ; Trigger instrument 2
 endin
-	
-instr	2
-	asigL, asigR	FilePlay2a	gSfile, 1, 0, 1				;GENERATE 2 AUDIO SIGNALS FROM A STEREO SOUND FILE
 
-	Sfile_Left	strcat		gSfile, "_Left.wav"
-	Sfile_Right	strcat		gSfile, "_Right.wav"
-				fout			Sfile_Left,  8, asigL			;LEFT CHANNEL IS OUTPUT TO FILE
-				fout			Sfile_Right, 8, asigR			;RIGHT CHANNEL IS OUTPUT TO FILE
-				outs			asigL, asigR					;REAL TIME AUDIO OUTPUT - USEFUL FOR MONITORING THE PROGRESS OF THE CONVERSION PROCESS
+instr 2
+  ; Generate 2 audio signals from a stereo sound file
+  asigL, asigR FilePlay2a gSfile, 1, 0, 1
+
+  Sfile_Left  strcat gSfile, "_Left.wav"
+  Sfile_Right strcat gSfile, "_Right.wav"
+  fout Sfile_Left, 8, asigL   ; Left channel is output to file
+  fout Sfile_Right, 8, asigR  ; Right channel is output to file
+  ; Real time audio output - useful for monitoring the progress of the conversion process
+  outs asigL, asigR
 endin
 </CsInstruments>
 <CsScore>
@@ -63,9 +65,9 @@ f 0 3600
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -83,15 +85,20 @@ f 0 3600
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -115,14 +122,14 @@ This example could easily be adapted to merge two mono files to a single stereo 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -146,6 +153,18 @@ This example could easily be adapted to merge two mono files to a single stereo 
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -163,9 +182,9 @@ This example could easily be adapted to merge two mono files to a single stereo 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -190,14 +209,14 @@ This example could easily be adapted to merge two mono files to a single stereo 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -221,6 +240,18 @@ This example could easily be adapted to merge two mono files to a single stereo 
   <eventLine>i 1 0 0.01</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

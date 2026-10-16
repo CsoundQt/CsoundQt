@@ -1,111 +1,134 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;THE deltap3 OPCODE IS PLACED IN A SEPARATE, ALWAYS ON, INSTRUMENT FROM THE SOURCE SOUND PRODUCING INSTRUMENT.
-;THE IS A COMMONLY USED TECHNIQUE WITH TIME SMEARING OPCODES AND EFFECTS LIKE REVERBS AND DELAYS.
+; The deltap3 opcode is placed in a separate, always on, instrument from the source sound
+; producing instrument.
+; The is a commonly used technique with time smearing opcodes and effects like reverbs and
+; delays.
 
-;ksmps MAY NEED TO BE LOW (AND kr THEREFORE HIGH) WHEN WORKING WITH SHORT DELAY TIMES DEFINED INITIALLY AT KRATE
+; Ksmps may need to be low (and kr therefore high) when working with short delay times
+; defined initially at krate
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 32     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-giExp20000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0	;TABLE FOR EXP SLIDER
+giExp20000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkingain		invalue	"Live_Input_Gain"
-		gkdlt		invalue	"Delay_Time"							;init 0.31
-		gkmix		invalue	"Mix"								;init 0.5
-		gkfeedamt		invalue	"Feedback_Amount"						;init 1.08
-		gkamp		invalue	"Output_Amplitude_Rescaling"				;init 0.7
-		gkporttime	invalue 	"Portamento_Time"						;init 0.3
-		gkinput		invalue	"Input"
-		kHPFcf		invalue	"High_Pass_Filter_Cutoff"
-		gkHPFcf		tablei	kHPFcf, giExp20000, 1
-					outvalue	"High_Pass_Filter_Cutoff_Value", gkHPFcf	;init 2000
-		kLPFcf		invalue	"Low_Pass_Filter_Cutoff"					
-		gkLPFcf		tablei	kLPFcf, giExp20000, 1
-					outvalue	"Low_Pass_Filter_Cutoff_Value", gkLPFcf		;init 7000			
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkingain   invalue "Live_Input_Gain"
+    gkdlt      invalue "Delay_Time"                  ; init 0.31
+    gkmix      invalue "Mix"                         ; init 0.5
+    gkfeedamt  invalue "Feedback_Amount"             ; init 1.08
+    gkamp      invalue "Output_Amplitude_Rescaling"  ; init 0.7
+    gkporttime invalue "Portamento_Time"             ; init 0.3
+    gkinput    invalue "Input"
+    kHPFcf     invalue "High_Pass_Filter_Cutoff"
+    gkHPFcf tablei kHPFcf, giExp20000, 1
+    outvalue "High_Pass_Filter_Cutoff_Value", gkHPFcf  ; init 2000
+    kLPFcf invalue "Low_Pass_Filter_Cutoff"
+    gkLPFcf tablei kLPFcf, giExp20000, 1
+    outvalue "Low_Pass_Filter_Cutoff_Value", gkLPFcf  ; init 7000
+  endif
 endin
 
-instr	1	;PLAYS FILE
-	if	gkinput==0	then										;IF FILE INPUT IS SELECTED...
-		Sfile		invalue	"_Browse1"
-		gasigL, gasigR	FilePlay2	Sfile, 1, 0, 1						;GENERATE 2 AUDIO SIGNALS FROM A SOUND FILE (NOTE THE USE OF GLOBAL VARIABLES)		
-	else														;OTHERWISE
-		asigL, asigR	ins										;TAKE INPUT FROM COMPUTER'S AUDIO INPUT
-		gasigL	=	asigL * gkingain							;SCALE USING 'Input Gain' SLIDER
-		gasigR	=	asigR * gkingain							;SCALE USING 'Input Gain' SLIDER
-	endif													;END OF CONDITIONAL BRANCHING
+instr 1                 ; Plays file
+  if gkinput == 0 then  ; If file input is selected...
+    Sfile invalue "_Browse1"
+    ; Generate 2 audio signals from a sound file (note the use of global variables)
+    gasigL, gasigR FilePlay2 Sfile, 1, 0, 1
+  else                         ; Otherwise
+    asigL, asigR ins           ; Take input from computer's audio input
+    gasigL = asigL * gkingain  ; Scale using 'input gain' slider
+    gasigR = asigR * gkingain  ; Scale using 'input gain' slider
+  endif                        ; End of conditional branching
 endin
 
-instr 	2	;DELAY INSTRUMENT
-	kporttime	linseg	0, .001, 1, 1, 1							;USE OF AN ENVELOPE VALUE THAT QUICKLY RAMPS UP FROM ZERO TO 1. THIS PREVENTS VARIABLES GLIDING TO THEIR REQUIRED VALUES EACH TIME THE INSTRUMENT IS STARTED.
-	kporttime	=		kporttime * gkporttime						;SCALE PORTAMENTO FUNCTION WITH FLTK SLIDER VALUE
-	kdlt		portk	gkdlt, kporttime							;PORTAMENTO IS APPLIED TO THE VARIABLE 'gkdlt'. A NEW VARIABLE 'kdlt' IS CREATED.
-	adlt		interp	kdlt										;A NEW A-RATE VARIABLE 'adlt' IS CREATED BY INTERPOLATING THE K-RATE VARIABLE 'kdlt' 
-	
-	;;;LEFT CHANNEL DELAY;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	abufferL	delayr	5										;CREATE A DELAY BUFFER OF 5 SECONDS DURATION (EQUIVALENT TO THE MAXIMUM DELAY TIME POSSIBLE USING THIS EXAMPLE)
-	adelsigL 	deltap3	adlt										;TAP THE DELAY LINE AT gkdlt SECONDS
-	adelsigL	clip		adelsigL, 0, 1								;SIGNAL IS CLIPPED AT MAXIMUM AMPLITUDE USING BRAM DE JONG METHOD
-	adelsigL	atone	adelsigL, gkHPFcf							;LEFT CHANNEL DELAY PASSED THROUGH A HIGH-PASS FILTER WITHIN THE DELAY LOOP
-	adelsigL	tone		adelsigL, gkLPFcf							;LEFT CHANNEL DELAY PASSED THROUGH A LOW-PASS FILTER WITHIN THE DELAY LOOP
-			delayw	gasigL + (adelsigL * gkfeedamt)				;WRITE AUDIO SOURCE AND FEEDBACK SIGNAL INTO THE BEGINNING OF THE BUFFER
+instr 2  ; Delay instrument
+  ; Use of an envelope value that quickly ramps up from zero to 1. This prevents variables
+  ; gliding to their required values each time the instrument is started.
+  kporttime linseg 0, .001, 1, 1, 1
+  kporttime = kporttime * gkporttime  ; Scale portamento function with FLTK slider value
+  ; Portamento is applied to the variable 'gkdlt'. A new variable 'kdlt' is created.
+  kdlt portk gkdlt, kporttime
+  ; A new a-rate variable 'adlt' is created by interpolating the k-rate variable 'kdlt'
+  adlt interp kdlt
 
-	;;;RIGHT CHANNEL DELAY;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;		
-	abufferR	delayr	5										;CREATE A DELAY BUFFER OF 5 SECONDS DURATION (EQUIVALENT TO THE MAXIMUM DELAY TIME POSSIBLE USING THIS EXAMPLE)
-	adelsigR 	deltap3	adlt										;TAP THE DELAY LINE AT gkdlt SECONDS
-	adelsigR	clip		adelsigR, 0, 1								;SIGNAL IS CLIPPED AT MAXIMUM AMPLITUDE USING BRAM DE JONG METHOD
-	adelsigR	atone	adelsigR, gkHPFcf							;RIGHT CHANNEL DELAY PASSED THROUGH A HIGH-PASS FILTER WITHIN THE DELAY LOOP
-	adelsigR	tone		adelsigR, gkLPFcf							;RIGHT CHANNEL DELAY PASSED THROUGH A LOW-PASS FILTER WITHIN THE DELAY LOOP 
-			delayw	gasigR + (adelsigR * gkfeedamt)				;WRITE AUDIO SOURCE AND FEEDBACK SIGNAL INTO THE BEGINNING OF THE BUFFER
-		
-	aL		ntrpol	gasigL, adelsigL, gkmix
-	aR		ntrpol	gasigR, adelsigR, gkmix
+  ; ;;Left channel
+  ; delay;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ; Create a delay buffer of 5 seconds duration (equivalent to the maximum delay time
+  ; possible using this example)
+  abufferL delayr 5
+  adelsigL deltap3 adlt  ; Tap the delay line at gkdlt seconds
+  ; Signal is clipped at maximum amplitude using bram de jong method
+  adelsigL clip adelsigL, 0, 1
+  ; Left channel delay passed through a high-pass filter within the delay loop
+  adelsigL atone adelsigL, gkHPFcf
+  ; Left channel delay passed through a low-pass filter within the delay loop
+  adelsigL tone adelsigL, gkLPFcf
+  ; Write audio source and feedback signal into the beginning of the buffer
+  delayw gasigL + (adelsigL * gkfeedamt)
 
-			outs		aL * gkamp, aR * gkamp						;CREATE A MIX BETWEEN THE WET AND THE DRY SIGNALS AT THE OUTPUT
-			clear	gasigL, gasigR								;CLEAR THE GLOBAL AUDIO SEND VARIABLES
+  ; ;;Right channel
+  ; delay;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ; Create a delay buffer of 5 seconds duration (equivalent to the maximum delay time
+  ; possible using this example)
+  abufferR delayr 5
+  adelsigR deltap3 adlt  ; Tap the delay line at gkdlt seconds
+  ; Signal is clipped at maximum amplitude using bram de jong method
+  adelsigR clip adelsigR, 0, 1
+  ; Right channel delay passed through a high-pass filter within the delay loop
+  adelsigR atone adelsigR, gkHPFcf
+  ; Right channel delay passed through a low-pass filter within the delay loop
+  adelsigR tone adelsigR, gkLPFcf
+  ; Write audio source and feedback signal into the beginning of the buffer
+  delayw gasigR + (adelsigR * gkfeedamt)
+
+  aL ntrpol gasigL, adelsigL, gkmix
+  aR ntrpol gasigR, adelsigR, gkmix
+
+  ; Create a mix between the wet and the dry signals at the output
+  outs aL * gkamp, aR * gkamp
+  clear gasigL, gasigR  ; Clear the global audio send variables
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		-1		;GUI
-i  2      0         -1		;INSTRUMENT 2 PLAYS A HELD NOTE
+; Instr | start | duration
+i 10 0 -1  ; GUI
+i 2 0 -1   ; Instrument 2 plays a held note
 
-f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
+f 0 3600  ; 'Dummy' score event keeps realtime performance going for 1 hour
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -118,9 +141,9 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -138,15 +161,20 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -164,11 +192,23 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Input_Gain</objectName>
@@ -204,14 +244,14 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -233,14 +273,14 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -262,15 +302,20 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>217</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -296,14 +341,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -325,14 +370,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -354,14 +399,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -426,14 +471,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -473,14 +518,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -502,14 +547,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -531,14 +576,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -560,14 +605,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -607,14 +652,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -636,14 +681,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -701,14 +746,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -730,14 +775,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -777,14 +822,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -806,14 +851,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -835,14 +880,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -864,14 +909,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -913,6 +958,18 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -930,9 +987,9 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -957,14 +1014,14 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

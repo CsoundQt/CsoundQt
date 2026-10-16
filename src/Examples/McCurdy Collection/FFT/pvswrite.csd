@@ -1,95 +1,97 @@
-;Written by Iain McCurdy 2011
+; Written by Iain McCurdy 2011
 
-;Modified for QuteCsound by René, May 2011
-;Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and QuteCsound svn rev 848
-
-
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
+; Modified for QuteCsound by René, May 2011
+; Tested on Ubuntu 10.04 with csound-float (git csound5-3c6d155, May 31 2011) and
+; QuteCsound svn rev 848
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+
+
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../../SourceMaterials
+--env:SADIR+ = ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 1		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 1      ; Number of channels (2=stereo)
 
 
-giExp1	ftgen	0, 0, 129, -25, 0, 0.125, 128, 4.0		;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 0.125, 128, 4.0  ; Table for exp slider
 
-		strset	1, "Write"
-		strset	2, "Read"
+strset 1, "Write"
+strset 2, "Read"
 
-#define	ANALYSISFILE	#"pvswriteFile.pvx"#
+#define ANALYSISFILE # "pvswriteFile.pvx" #
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;BUTTONS
-		gkwrite		invalue	"Write"
-		gkread		invalue	"Read"				;lance i 2 0 3600
-		;SLIDERS
-		gkptr		invalue	"Pointer"
-		gkspeed		invalue	"Speed"
-		ktrans		invalue	"Transpose"
-		gktrans		tablei	ktrans, giExp1, 1
-					outvalue	"Transpose_Value", gktrans
-		gkGain		invalue	"Gain"
-		;MENU
-		gkPtrMode		invalue	"Mode"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Buttons
+    gkwrite invalue "Write"
+    gkread  invalue "Read"  ; lance i 2 0 3600
+    ; Sliders
+    gkptr   invalue "Pointer"
+    gkspeed invalue "Speed"
+    ktrans  invalue "Transpose"
+    gktrans tablei ktrans, giExp1, 1
+    outvalue "Transpose_Value", gktrans
+    gkGain invalue "Gain"
+    ; Menu
+    gkPtrMode invalue "Mode"
+  endif
 endin
 
-instr	1	;WRITE PVS FILE
-			event_i		"i", 3, 0, 0.01, 2, 2				;to prevent to read while writing				
-	
-	asigin	inch			1								;READ AUDIO FROM THE LIVE AUDIO INPUT
-	fsigin 	pvsanal		asigin, 1024, 256, 1024, 1			;ANALYSE THE AUDIO SIGNAL THAT WAS CREATED IN INSTRUMENT 1. OUTPUT AN F-SIGNAL.      	
-			pvsfwrite 	fsigin, $ANALYSISFILE
+instr 1                          ; Write pvs file
+  event_i "i", 3, 0, 0.01, 2, 2  ; to prevent to read while writing
+
+  asigin inch 1  ; Read audio from the live audio input
+  ; Analyse the audio signal that was created in instrument 1. Output an f-signal.
+  fsigin pvsanal asigin, 1024, 256, 1024, 1
+  pvsfwrite fsigin, $ANALYSISFILE
 endin
 
-instr	2	;READ PVS FILE
-			event_i		"i", 3, 0, 0.01, 1, 1				;to prevent to write while reading
+instr 2                          ; Read pvs file
+  event_i "i", 3, 0, 0.01, 1, 1  ; to prevent to write while reading
 
-	ilen		filelen		$ANALYSISFILE
-	kporttime	linseg		0,0.001,0.05
+  ilen filelen $ANALYSISFILE
+  kporttime linseg 0, 0.001, 0.05
 
-	if gkPtrMode==0 then
-		kptr		portk	gkptr, kporttime
-	else
-		kptr		phasor	gkspeed/ilen
-	endif
+  if gkPtrMode == 0 then
+    kptr portk gkptr, kporttime
+  else
+    kptr phasor gkspeed/ilen
+  endif
 
-	fsig1	pvsfread		kptr*ilen,$ANALYSISFILE
-	fsig2	pvscale		fsig1, gktrans
+  fsig1 pvsfread kptr*ilen, $ANALYSISFILE
+  fsig2 pvscale fsig1, gktrans
 
-	aresyn 	pvsynth		fsig2							;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
-			out			aresyn*gkGain
+  aresyn pvsynth fsig2  ; Resynthesize the f-signal as an audio signal
+  out aresyn*gkGain
 endin
 
-instr	3	;CONTROLS
-	Str	strget	p5
-		turnoff2	p4, 0, 0
-		outvalue	Str, 0
-		turnoff
+instr 3  ; Controls
+  Str strget p5
+  turnoff2 p4, 0, 0
+  outvalue Str, 0
+  turnoff
 endin
 
-instr	11	;INIT
-		outvalue	"Gain"		, 0.5
-		outvalue	"Mode"		, 1
-		outvalue	"Speed"		, 1
-		outvalue	"Pointer"		, 0.5
-		outvalue	"Transpose"	, 0.6
+instr 11  ; Init
+  outvalue "Gain", 0.5
+  outvalue "Mode", 1
+  outvalue "Speed", 1
+  outvalue "Pointer", 0.5
+  outvalue "Transpose", 0.6
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI
-i 11		0		0	;INIT
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 11 0 0     ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -105,9 +107,9 @@ i 11		0		0	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -125,15 +127,20 @@ i 11		0		0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -154,15 +161,20 @@ i 11		0		0	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -185,14 +197,14 @@ one in which a pointer through the file is controlled manually and another in wh
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -211,11 +223,23 @@ one in which a pointer through the file is controlled manually and another in wh
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     Write</text>
+  <text>Write</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Pointer</objectName>
@@ -233,14 +257,14 @@ one in which a pointer through the file is controlled manually and another in wh
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -280,14 +304,14 @@ one in which a pointer through the file is controlled manually and another in wh
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -309,14 +333,14 @@ one in which a pointer through the file is controlled manually and another in wh
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -356,14 +380,14 @@ one in which a pointer through the file is controlled manually and another in wh
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -385,14 +409,14 @@ one in which a pointer through the file is controlled manually and another in wh
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -432,14 +456,14 @@ one in which a pointer through the file is controlled manually and another in wh
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -461,14 +485,14 @@ one in which a pointer through the file is controlled manually and another in wh
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -508,14 +532,14 @@ one in which a pointer through the file is controlled manually and another in wh
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -534,11 +558,23 @@ one in which a pointer through the file is controlled manually and another in wh
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     Read</text>
+  <text>Read</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>

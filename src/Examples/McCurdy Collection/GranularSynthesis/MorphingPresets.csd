@@ -1,214 +1,260 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
-;Modified for QuteCsound by René, October 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, October 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio files and power of two tables for grain3 opcode, accept mono or stereo wav files
-;	Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio files and power of two tables for grain3 opcode, accept mono or
+; stereo wav files
+; Removed "Instructions and Info Panel" for the gui to fit in a 1200x800 screen
 
-;	                     Morphing Presets
-;	---------------------------------------------------------------------------------------------------------------------------------
-;	This example is based on the example 'grain3.csd' so I would recommend investigating that example first.
-;	The innovation that this example introduces is the use of an X-Y 'joy' panel to allow the user to 2-dimensionally morph between 
-;	4 presets.
-;	The quickest way to see what this does is first to select a valid stereo audio file, then activate the on-screen 'On/Off' button,
-;	then click on the 'Load' button (ensure that the files 'Preset1.txt', 'Preset2.txt', 'Preset3.txt' and 'Preset4.txt' are in the
-;	same directory as this file),  and to then drag the cross-hairs of the joy panel.
-;	Four distinct presets are referenced to the four corners of the X-Y panel. Dragging the cross-hairs to locations other than these
-;	four corners creates a morph, or interpolation, between the four presets, the influence of each preset on the resultant preset is
-;	relative to its closeness to the current location of the cross-hairs.
-;	You will notice that only parameters whose slider labels have been suffixed with an asterisk ('*') are influenced by the presets.
-;	The sliders can of course be modified individually. A preset or snapshot can then be stored by clicking on one of the blue
-;	boxes at each corner of the X-Y panel. All four presets can be stored permanantly a set of four text files by clicking on the red
-;	'save' button. These four text files, and consequently the four presets, can be re-loaded in a later Csound session by clicking
-;	on the green 'load' button. The mechanism by which this is achieved is explained in detail in example 'ftsave_ftload.csd'.
-;	More parameters can easily be included in a preset by making a small modification to the code.
+; Morphing Presets
+; ---------------------------------------------------------------------------------------------------------------------------------
+; This example is based on the example 'grain3.csd' so I would recommend investigating
+; that example first.
+; The innovation that this example introduces is the use of an X-Y 'joy' panel to allow
+; the user to 2-dimensionally morph between
+; 4 presets.
+; The quickest way to see what this does is first to select a valid stereo audio file,
+; then activate the on-screen 'On/Off' button,
+; then click on the 'Load' button (ensure that the files 'Preset1.txt', 'Preset2.txt',
+; 'Preset3.txt' and 'Preset4.txt' are in the
+; same directory as this file),  and to then drag the cross-hairs of the joy panel.
+; Four distinct presets are referenced to the four corners of the X-Y panel. Dragging the
+; cross-hairs to locations other than these
+; four corners creates a morph, or interpolation, between the four presets, the influence
+; of each preset on the resultant preset is
+; relative to its closeness to the current location of the cross-hairs.
+; You will notice that only parameters whose slider labels have been suffixed with an
+; asterisk ('*') are influenced by the presets.
+; The sliders can of course be modified individually. A preset or snapshot can then be
+; stored by clicking on one of the blue
+; boxes at each corner of the X-Y panel. All four presets can be stored permanantly a set
+; of four text files by clicking on the red
+; 'save' button. These four text files, and consequently the four presets, can be
+; re-loaded in a later Csound session by clicking
+; on the green 'load' button. The mechanism by which this is achieved is explained in
+; detail in example 'ftsave_ftload.csd'.
+; More parameters can easily be included in a preset by making a small modification to the
+; code.
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-;FUNCTION TABLE USED TO STORE DATA FOR PRESET 1 to 4; NOTE THAT FUNCTION TABLES WILL NEED TO BE ENLARGED IF MORE THAT 8 PARAMETERS ARE TO BE INCLUDED IN THE PRESETS
-gipfn1	ftgen	1, 0, 8, -2, 0
-gipfn2	ftgen	2, 0, 8, -2, 0
-gipfn3	ftgen	3, 0, 8, -2, 0
-gipfn4	ftgen	4, 0, 8, -2, 0
+; Function table used to store data for preset 1 to 4; note that function tables will need
+; to be enlarged if more that 8 parameters are to be included in the presets
+gipfn1 ftgen 1, 0, 8, -2, 0
+gipfn2 ftgen 2, 0, 8, -2, 0
+gipfn3 ftgen 3, 0, 8, -2, 0
+gipfn4 ftgen 4, 0, 8, -2, 0
 
-;;GRAIN ENVELOPE WINDOW FUNCTION TABLES:
-giwfn1	ftgen	0,  0, 512,  20, 2									; HANNING WINDOW
-giwfn2	ftgen	0,  0, 512,  7, 0, 12, 1, 500, 0						; PERCUSSIVE - STRAIGHT SEGMENTS
-giwfn3	ftgen	0,  0, 512,  5, 0.00001, 12, 1, 500, 0.00001				; PERCUSSIVE - EXPONENTIAL SEGMENTS
-giwfn4	ftgen	0,  0, 512,  7, 0, 6, 1, 500, 1, 6, 0					; GATE - WITH ANTI-CLICK RAMP UP AND RAMP DOWN SEGMENTS
-giwfn5	ftgen	0,  0, 512,  7, 0, 500, 1, 12, 0						; REVERSE PERCUSSIVE - STRAIGHT SEGMENTS
-;giwfn6	ftgen	0,  0, 512,  5, 0.001, 500, 1, 12, 0.001				; REVERSE PERCUSSIVE - EXPONENTIAL SEGMENTS
-giwfn6	ftgen	0,  0, 131072, 5, 0.00001, 131072-1024, 1, 1024, 0.00001	; REVERSE PERCUSSIVE - EXPONENTIAL SEGMENTS
+; ;Grain envelope window function tables:
+giwfn1 ftgen 0, 0, 512, 20, 2                ; Hanning window
+giwfn2 ftgen 0, 0, 512, 7, 0, 12, 1, 500, 0  ; Percussive - straight segments
+; Percussive - exponential segments
+giwfn3 ftgen 0, 0, 512, 5, 0.00001, 12, 1, 500, 0.00001
+; Gate - with anti-click ramp up and ramp down segments
+giwfn4 ftgen 0, 0, 512, 7, 0, 6, 1, 500, 1, 6, 0
+giwfn5 ftgen 0, 0, 512, 7, 0, 500, 1, 12, 0  ; Reverse percussive - straight segments
+; Giwfn6 ftgen 0, 0, 512, 5, 0.001, 500, 1, 12, 0.001 ; reverse percussive - exponential
+; segments
+; Reverse percussive - exponential segments
+giwfn6 ftgen 0, 0, 131072, 5, 0.00001, 131072-1024, 1, 1024, 0.00001
 
-;TABLE FOR EXP SLIDER
-giExp16	ftgen	0, 0, 129, -25, 0, 0.016125, 128, 16.0
+; Table for exp slider
+giExp16 ftgen 0, 0, 129, -25, 0, 0.016125, 128, 16.0
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkSyncCPS		invalue	"SyncCPS"
-		gkIntegerLoc	invalue	"IntegerLoc"
-		gkLessZero	invalue	"LessZero"
-		gkInterp		invalue	"Interp"
-		gkNoInterp	invalue	"NoInterp"
-		gkFreqCont	invalue	"FreqCont"
-		gkSkipInit	invalue	"SkipInit"
-		gkmode 		=		gkSyncCPS + gkIntegerLoc + gkLessZero + gkInterp + gkNoInterp + gkFreqCont + gkFreqCont + gkSkipInit
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkSyncCPS    invalue "SyncCPS"
+    gkIntegerLoc invalue "IntegerLoc"
+    gkLessZero   invalue "LessZero"
+    gkInterp     invalue "Interp"
+    gkNoInterp   invalue "NoInterp"
+    gkFreqCont   invalue "FreqCont"
+    gkSkipInit   invalue "SkipInit"
+    gkmode = gkSyncCPS + gkIntegerLoc + gkLessZero + gkInterp + gkNoInterp + gkFreqCont + gkFreqCont + gkSkipInit
 
-		gkamp		invalue	"Amplitude"
-		gkdur		invalue	"Grain_Duration"			;* saved in file preset
-		kpch			invalue	"Pitch"					;* saved in file preset
-		gkpch		tablei	kpch, giExp16, 1
-					outvalue	"Pitch_Value", gkpch
-		gkfmd		invalue	"Pitch_Offset"				;* saved in file preset
-		gkdens		invalue	"Density"					;* saved in file preset
-		gkphs		invalue	"Grain_Phase"				;* saved in file preset
-		gkpmd		invalue	"Grain_Phase_Rnd_Offset"		;* saved in file preset
-		gkfrpow		invalue	"Dist_Rnd_Freq_Var"
-		gkprpow		invalue	"Dist_Rnd_Phase_Var"
-		gkseedL		invalue	"Seed_Value_L"
-		gkseedR		invalue	"Seed_Value_R"
-		gkDensRnd		invalue	"Density_Rnd_Amount"
+    gkamp invalue "Amplitude"
+    gkdur invalue "Grain_Duration"  ; * saved in file preset
+    kpch  invalue "Pitch"           ; * saved in file preset
+    gkpch tablei kpch, giExp16, 1
+    outvalue "Pitch_Value", gkpch
+    gkfmd     invalue "Pitch_Offset"            ; * saved in file preset
+    gkdens    invalue "Density"                 ; * saved in file preset
+    gkphs     invalue "Grain_Phase"             ; * saved in file preset
+    gkpmd     invalue "Grain_Phase_Rnd_Offset"  ; * saved in file preset
+    gkfrpow   invalue "Dist_Rnd_Freq_Var"
+    gkprpow   invalue "Dist_Rnd_Phase_Var"
+    gkseedL   invalue "Seed_Value_L"
+    gkseedR   invalue "Seed_Value_R"
+    gkDensRnd invalue "Density_Rnd_Amount"
 
-		gkmaxolap		invalue	"Maximum_Overlaps"
-		gkwfn		invalue	"Grain_Envelope"
+    gkmaxolap invalue "Maximum_Overlaps"
+    gkwfn     invalue "Grain_Envelope"
 
-;AUDIO FILE CHANGE / LOAD IN POWER OF 2 TABLES **********************************************************************************************
-;Have put all this stuff in instr 10 to reduce the respons time when playing with midi
+    ; Audio file change / load in power of 2 tables
+    ; **********************************************************************************************
+    ; Have put all this stuff in instr 10 to reduce the respons time when playing with
+    ; midi
 
-		Sfile_new		strcpy	""										;INIT TO EMPTY STRING
+    Sfile_new strcpy ""  ; Init to empty string
 
-		Sfile		invalue	"_Browse"
-		Sfile_old		strcpyk	Sfile_new
-		Sfile_new		strcpyk	Sfile
-		kfile 		strcmpk	Sfile_new, Sfile_old
+    Sfile invalue "_Browse"
+    Sfile_old strcpyk Sfile_new
+    Sfile_new strcpyk Sfile
+    kfile strcmpk Sfile_new, Sfile_old
 
-		gkfile_new	init		0
-		if	kfile != 0	then											;IF A BANG HAD BEEN GENERATED IN THE LINE ABOVE
-			gkfile_new	=	1										;Flag to inform instr 1 that a new file is loaded
-				reinit	NEW_FILE										;REINITIALIZE FROM LABEL 'NEW_FILE'
-		endif
-		NEW_FILE:
-		;grain3 accept only power of 2 table size
-		ifnTemp		ftgentmp	0, 0, 0, 1, Sfile, 0, 0, 1					;Temporary table to get the audio file size
-		iftlen		= ftlen(ifnTemp)									;file size
-		iftlen2		pow	2, ceil(log(iftlen)/log(2))						;high nearest power of two table size
+    gkfile_new init 0
+    if kfile != 0 then  ; If a bang had been generated in the line above
+      gkfile_new = 1    ; Flag to inform instr 1 that a new file is loaded
+      reinit NEW_FILE   ; Reinitialize from label 'new_file'
+    endif
+NEW_FILE:
+    ; grain3 accept only power of 2 table size
+    ; Temporary table to get the audio file size
+    ifnTemp ftgentmp 0, 0, 0, 1, Sfile, 0, 0, 1
+    iftlen = ftlen(ifnTemp)                  ; file size
+    iftlen2 pow 2, ceil(log(iftlen)/log(2))  ; high nearest power of two table size
 
-		;FUNCTION TABLES NUMBERS OF THE SOUND FILE THAT WILL BE GRANULATED
-		ichn			filenchnls	Sfile
-		if ichn == 1 then
-			giFileL	ftgentmp	0, 0, iftlen2, 1, Sfile, 0, 0, 1			;READ MONO AUDIO FILE CHANNEL 1
-			giFileR	=		giFileL
-		else
-			giFileL	ftgentmp	0, 0, iftlen2, 1, Sfile, 0, 0, 1			;READ STEREO AUDIO FILE CHANNEL 1
-			giFileR	ftgentmp	0, 0, iftlen2, 1, Sfile, 0, 0, 2			;READ STEREO AUDIO FILE CHANNEL 2
-		endif
-		
-;*******************************************************************************************************************************************
-	endif
+    ; Function tables numbers of the sound file that will be granulated
+    ichn filenchnls Sfile
+    if ichn == 1 then
+      giFileL ftgentmp 0, 0, iftlen2, 1, Sfile, 0, 0, 1  ; Read mono audio file channel 1
+      giFileR = giFileL
+    else
+      ; Read stereo audio file channel 1
+      giFileL ftgentmp 0, 0, iftlen2, 1, Sfile, 0, 0, 1
+      ; Read stereo audio file channel 2
+      giFileR ftgentmp 0, 0, iftlen2, 1, Sfile, 0, 0, 2
+    endif
+
+    ; *******************************************************************************************************************************************
+  endif
 endin
 
-instr	1	;GRAIN3 INSTRUMENT
-	if	gkfile_new = 1	then												;test if a new file is loaded by instr 10
-		gkfile_new	=	0											;flag to zero for next file change
-			reinit	START											;REINITIALIZE FROM LABEL 'NEW_FILE1'
-	endif
+instr 1                   ; Grain3 instrument
+  if gkfile_new = 1 then  ; test if a new file is loaded by instr 10
+    gkfile_new = 0        ; flag to zero for next file change
+    reinit START          ; Reinitialize from label 'new_file1'
+  endif
 
-	kSwitch		changed	gkmaxolap, gkseedL, gkseedR, gkmode, gkwfn
-	if	kSwitch=1	then													;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	START												;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
-	endif
+  kSwitch changed gkmaxolap, gkseedL, gkseedR, gkmode, gkwfn
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit START       ; Begin a reinitialisation pass from label 'start'
+  endif
 
-	START:
-	imode	=		i(gkmode)											;SUM THE MODE BUTTON OUTPUTS
-	imaxovr 	= 		i(gkmaxolap)										;MAXIMUM NUMBER OF OVERLAPS
-	iwfn		=		giwfn1 + i(gkwfn)
-	kpitch 	= 		(sr*gkpch)/ftlen(giFileL)							;MATHEMATICALLY REINTERPRET USER INPUTTED PITCH RATIO VALUE INTO A FORMAT THAT IS USABLE AS AN INPUT ARGUMENT BY THE grain3 OPCODE - ftlen(x) FUNCTION RETURNS THE LENGTH OF A FUNCTION TABLE (no. x), REFER TO MANUAL FOR MORE INFO.
-	kphs 	= 		gkphs*(nsamp(giFileL)/ftlen(giFileL))					;MATHREMATICALLY REINTERPRET USER INPUTTED PHASE VALUE INTO A FORMAT THAT IS USABLE AS AN INPUT ARGUMENT  BY THE grain3 OPCODE
-	kDensRnd 	exprand	gkDensRnd											;CREATE A RANDOM OFFSET FACTOR THAT WILL BE APPLIED TO FOR DENSITY
-	kdens	=		gkdens * (1 + kDensRnd)								;DENSITY VALUE IS OFFSET BY RANDOM FACTOR
+START:
+  imode   = i(gkmode)     ; Sum the mode button outputs
+  imaxovr = i(gkmaxolap)  ; Maximum number of overlaps
+  iwfn    = giwfn1 + i(gkwfn)
+  ; Mathematically reinterpret user inputted pitch ratio value into a format that is
+  ; usable as an input argument by the grain3 opcode - ftlen(x) function returns the
+  ; length of a function table (no. X), refer to manual for more info.
+  kpitch = (sr*gkpch)/ftlen(giFileL)
+  ; Mathrematically reinterpret user inputted phase value into a format that is usable as
+  ; an input argument by the grain3 opcode
+  kphs = gkphs*(nsamp(giFileL)/ftlen(giFileL))
+  ; Create a random offset factor that will be applied to for density
+  kDensRnd exprand gkDensRnd
+  kdens = gkdens * (1 + kDensRnd)  ; Density value is offset by random factor
 
-	aSigL	grain3	kpitch, kphs, gkfmd, gkpmd, gkdur, kdens, imaxovr, giFileL, iwfn, gkfrpow, gkprpow , i(gkseedL), imode
-	aSigR	grain3	kpitch, kphs, gkfmd, gkpmd, gkdur, kdens, imaxovr, giFileL, iwfn, gkfrpow, gkprpow , i(gkseedR), imode
-			rireturn													;RETURN TO PERFORMANCE TIME PASSES
-			outs 	aSigL * gkamp, aSigR * gkamp							;SEND AUDIO TO OUTPUTS
+  aSigL grain3 kpitch, kphs, gkfmd, gkpmd, gkdur, kdens, imaxovr, giFileL, iwfn, gkfrpow, gkprpow, i(gkseedL), imode
+  aSigR grain3 kpitch, kphs, gkfmd, gkpmd, gkdur, kdens, imaxovr, giFileL, iwfn, gkfrpow, gkprpow, i(gkseedR), imode
+  rireturn                           ; Return to performance time passes
+  outs aSigL * gkamp, aSigR * gkamp  ; Send audio to outputs
 
-	kx		invalue	"Morph_X"
-	ky		invalue	"Morph_Y"
+  kx invalue "Morph_X"
+  ky invalue "Morph_Y"
 
-	ktrigger	changed	kx, ky
-	if		ktrigger!=1 kgoto SKIP
+  ktrigger changed kx, ky
+  if ktrigger != 1 kgoto SKIP
 
-	;A TEXT MACRO IS DEFINED THAT PROVIDES THE CODE THAT WILL BE USED TO DERIVE A VALUE FOR EACH PARAMETER GOVERNED BY THE PRESETS
-	;THIS CODE WILL BE REPEATED FOR EACH PARAMETER SO TO USE A MACRO GREATLY REDUCES THE AMOUNT OF CODE NEEDED, PARTICULARLY IF A LARGE NUMBER OF PARAMETERS ARE NEEDED 
-	;START OF TEXT MACRO
-#define	MORPH(VAR'WIDGET'NDX)	#
-	k$VAR1		table	$NDX, 1										;DERIVE PARAMETER FOR PRESET 1 (UPPER LEFT CORNER) 
-	k$VAR2		table	$NDX, 2										;DERIVE PARAMETER FOR PRESET 2 (UPPER RIGHT CORNER)
-	k$VAR3		table	$NDX, 3										;DERIVE PARAMETER FOR PRESET 3 (BOTTOM LEFT CORNER)
-	k$VAR4		table	$NDX, 4										;DERIVE PARAMETER FOR PRESET 4 (BOTTOM RIGHT CORNER)
-	k$VARXTop		ntrpol	k$VAR1,k$VAR2,kx								;CREATE AN INTERIM VARIABLE INTERPOLATED BETWEEN PRESET 1 AND PRESET 2 (UPPER EDGE OF GUI panel)
-	k$VARXBot		ntrpol	k$VAR3,k$VAR4,kx								;CREATE AN INTERIM VARIABLE INTERPOLATED BETWEEN PRESET 3 AND PRESET 4 (BOTTOM EDGE OF GUI panel)
-	k$VARi		ntrpol	k$VARXBot,k$VARXTop,ky							;DERIVE THE FINAL VALUE FOR THE REQUIRED PARAMETER BY INTERPOLATING BETWEEN UPPER EDGE VARIABLE AND BOTTOM EDGE VARIABLE
-				outvalue	"$WIDGET", k$VARi								;UPDATE SLIDER APPEARANCE FOR RELEVANT PARAMETER
-#
-	;END OF TEXT MACRO
+  ; A text macro is defined that provides the code that will be used to derive a value for
+  ; each parameter governed by the presets
+  ; This code will be repeated for each parameter so to use a macro greatly reduces the
+  ; amount of code needed, particularly if a large number of parameters are needed
+  ; Start of text macro
+  #define MORPH(VAR'WIDGET'NDX) #
+  k$VAR1 table $NDX, 1  ; Derive parameter for preset 1 (upper left corner)
+  k$VAR2 table $NDX, 2  ; Derive parameter for preset 2 (upper right corner)
+  k$VAR3 table $NDX, 3  ; Derive parameter for preset 3 (bottom left corner)
+  k$VAR4 table $NDX, 4  ; Derive parameter for preset 4 (bottom right corner)
+  ; Create an interim variable interpolated between preset 1 and preset 2 (upper edge of
+  ; GUI panel)
+  k$VARXTop ntrpol k$VAR1, k$VAR2, kx
+  ; Create an interim variable interpolated between preset 3 and preset 4 (bottom edge of
+  ; GUI panel)
+  k$VARXBot ntrpol k$VAR3, k$VAR4, kx
+  ; Derive the final value for the required parameter by interpolating between upper edge
+  ; variable and bottom edge variable
+  k$VARi ntrpol k$VARXBot, k$VARXTop, ky
+  outvalue "$WIDGET", k$VARi  ; Update slider appearance for relevant parameter
+  #
+  ; End of text macro
 
-	;CREATE AN ITERATION OF THE 'MORPH' CODE MACRO
-	$MORPH(dens'Density'0)
-	$MORPH(dur'Grain_Duration'1)
-	$MORPH(pch'Pitch'2)
-	$MORPH(fmd'Pitch_Offset'3)
-	$MORPH(phs'Grain_Phase'4)
-	$MORPH(pmd'Grain_Phase_Rnd_Offset'5)
+  ; Create an iteration of the 'morph' code macro
+  $MORPH(dens'Density'0)
+  $MORPH(dur'Grain_Duration'1)
+  $MORPH(pch'Pitch'2)
+  $MORPH(fmd'Pitch_Offset'3)
+  $MORPH(phs'Grain_Phase'4)
+  $MORPH(pmd'Grain_Phase_Rnd_Offset'5)
 SKIP:
 endin
 
-instr	11	;SAVE DATA TO A FUNCTION TABLE, THIS INSTRUMENT IS ACTIVATED EACH TIME A CORNER BUTTON IS PRESSED
-			;PARAMETER VALUE IS WRITTEN TO ITS OWN UNIQUE LOCATION IN THE FUNCTION TABLE FOR THAT PRESET
-	tableiw	i(gkdens), 0, p4
-	tableiw	i(gkdur),  1, p4
-	tableiw	i(gkpch),  2, p4
-	tableiw	i(gkfmd),  3, p4
-	tableiw	i(gkphs),  4, p4
-	tableiw	i(gkpmd),  5, p4
+; Save data to a function table, this instrument is activated each time a corner button is
+; pressed
+instr 11
+  ; Parameter value is written to its own unique location in the function table for that
+  ; preset
+  tableiw i(gkdens), 0, p4
+  tableiw i(gkdur), 1, p4
+  tableiw i(gkpch), 2, p4
+  tableiw i(gkfmd), 3, p4
+  tableiw i(gkphs), 4, p4
+  tableiw i(gkpmd), 5, p4
 endin
 
-instr	21	;LOAD DATA FROM STORED TEXT FILES, THIS INSTRUMENT IS ACTIVATED BRIEFLY WHENEVER THE 'Load' BUTTON IS PRESSED
-			;LOAD FILE TO FUNCTION TABLE
-	ftload	"Preset1.txt", 1, 1
-	ftload	"Preset2.txt", 1, 2
-	ftload	"Preset3.txt", 1, 3
-	ftload	"Preset4.txt", 1, 4
+; Load data from stored text files, this instrument is activated briefly whenever the
+; 'load' button is pressed
+instr 21
+  ; Load file to function table
+  ftload "Preset1.txt", 1, 1
+  ftload "Preset2.txt", 1, 2
+  ftload "Preset3.txt", 1, 3
+  ftload "Preset4.txt", 1, 4
 endin
 
-instr	31	;SAVE DATA TO TEXT FILES STORED ON DISK, THIS INSTRUMENT IS ACTIVATED BRIEFLY WHENEVER THE 'Save' BUTTON IS PRESSED
-			;FUNCTION TABLE IS SAVED AS A TEXT FILE (FILE EXTENSION COULD BE ANYTHING OR NOTHING BUT MAKING IT A TEXT FILE MAKES IT EASY TO OPEN AND EXAMINE AND POSSIBLY ALTER - FOR THIS, DATA TYPE FLAG SHOULD BE NON-ZERO)
-	ftsave	"Preset1.txt", 1, 1		
-	ftsave	"Preset2.txt", 1, 2
-	ftsave	"Preset3.txt", 1, 3
-	ftsave	"Preset4.txt", 1, 4
+; Save data to text files stored on disk, this instrument is activated briefly whenever
+; the 'save' button is pressed
+instr 31
+  ; Function table is saved as a text file (file extension could be anything or nothing
+  ; but making it a text file makes it easy to open and examine and possibly alter - for
+  ; this, data type flag should be non-zero)
+  ftsave "Preset1.txt", 1, 1
+  ftsave "Preset2.txt", 1, 2
+  ftsave "Preset3.txt", 1, 3
+  ftsave "Preset4.txt", 1, 4
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		3600		;GUI
-i 21		1		0.1 
+; Instr | start | duration
+i 10 0 3600  ; GUI
+i 21 1 0.1
 </CsScore>
 </CsoundSynthesizer>
 
@@ -222,9 +268,9 @@ i 21		1		0.1
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -242,15 +288,20 @@ i 21		1		0.1
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>85</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -268,11 +319,23 @@ i 21		1		0.1
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -290,14 +353,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -337,14 +400,14 @@ i 21		1		0.1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -366,14 +429,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -395,14 +458,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -426,6 +489,18 @@ i 21		1		0.1
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>
@@ -443,9 +518,9 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -470,14 +545,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -499,14 +574,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -546,14 +621,14 @@ i 21		1		0.1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -575,14 +650,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -622,14 +697,14 @@ i 21		1		0.1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -651,14 +726,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -698,14 +773,14 @@ i 21		1		0.1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -727,14 +802,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -774,14 +849,14 @@ i 21		1		0.1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -803,14 +878,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -850,14 +925,14 @@ i 21		1		0.1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -879,14 +954,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -926,14 +1001,14 @@ i 21		1		0.1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -955,14 +1030,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1002,14 +1077,14 @@ i 21		1		0.1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1031,14 +1106,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1078,14 +1153,14 @@ i 21		1		0.1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1107,14 +1182,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1154,14 +1229,14 @@ i 21		1		0.1
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1185,6 +1260,18 @@ i 21		1		0.1
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>IntegerLoc</objectName>
@@ -1204,6 +1291,18 @@ i 21		1		0.1
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1221,14 +1320,14 @@ i 21		1		0.1
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1251,14 +1350,14 @@ to CPS</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1282,6 +1381,18 @@ to CPS</label>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>NoInterp</objectName>
@@ -1301,6 +1412,18 @@ to CPS</label>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1319,14 +1442,14 @@ Waveform</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1348,14 +1471,14 @@ Waveform</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1379,6 +1502,18 @@ Waveform</label>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1396,14 +1531,14 @@ Waveform</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1427,6 +1562,18 @@ Waveform</label>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1445,14 +1592,14 @@ at Negative Phase</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1476,6 +1623,18 @@ at Negative Phase</label>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1494,14 +1653,14 @@ Modification</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1523,14 +1682,14 @@ Modification</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1550,14 +1709,14 @@ Modification</label>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -1626,14 +1785,14 @@ Modification</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1653,14 +1812,14 @@ Modification</label>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -1682,14 +1841,14 @@ Modification</label>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -1725,9 +1884,9 @@ Modification</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -1748,6 +1907,18 @@ Modification</label>
   <eventLine>i11 0 0 1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1613</objectName>
@@ -1767,6 +1938,18 @@ Modification</label>
   <eventLine>i11 0 0 2</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6977</objectName>
@@ -1786,6 +1969,18 @@ Modification</label>
   <eventLine>i11 0 0 3</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4149</objectName>
@@ -1805,6 +2000,18 @@ Modification</label>
   <eventLine>i11 0 0 4</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8915</objectName>
@@ -1824,6 +2031,18 @@ Modification</label>
   <eventLine>i21 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8762</objectName>
@@ -1843,6 +2062,18 @@ Modification</label>
   <eventLine>i31 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

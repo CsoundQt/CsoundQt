@@ -1,67 +1,82 @@
-;Written by Iain McCurdy
+; Written by Iain McCurdy
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	ksmps changed from 100 to 10	to avoid the message pvsfread: analysis frame overlap must be >= ksmps
-;	Add Browser for pvx files
-;	Put pvsynth in the "if then" to avoid noise when changing from Drum to Voice
+; Notes on modifications from original csd:
+; ksmps changed from 100 to 10 to avoid the message pvsfread: analysis frame overlap must
+; be >= ksmps
+; Add Browser for pvx files
+; Put pvsynth in the "if then" to avoid noise when changing from Drum to Voice
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../../SourceMaterials
+--env:SADIR+ = ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-instr	1	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkptr		invalue 	"File_Pointer"		;init 0.5
-		gkspeed		invalue 	"Pointer_Speed"	;init 1.0
-		gkGain		invalue 	"Gain"			;init 0.5
-		gkOnOff		invalue	"On_Off"
-		gkPtrMode		invalue	"PtrMode"
-		gkinput		invalue	"Input"
-	endif
+instr 1  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkptr     invalue "File_Pointer"   ; init 0.5
+    gkspeed   invalue "Pointer_Speed"  ; init 1.0
+    gkGain    invalue "Gain"           ; init 0.5
+    gkOnOff   invalue "On_Off"
+    gkPtrMode invalue "PtrMode"
+    gkinput   invalue "Input"
+  endif
 endin
 
-instr 	2
-	SAnalysisFile1		invalue	"_Browse1"				;Name of the analysis file with .pvx file extension made with pvanal utility; e.g. AndItsAll.pvx
-	SAnalysisFile2		invalue	"_Browse2"				;Name of the analysis file with .pvx file extension made with pvanal utility; e.g. loop.pvx 
+instr 2
+  ; Name of the analysis file with .pvx file extension made with pvanal utility; e.g.
+  ; AndItsAll.pvx
+  SAnalysisFile1 invalue "_Browse1"
+  ; Name of the analysis file with .pvx file extension made with pvanal utility; e.g.
+  ; loop.pvx
+  SAnalysisFile2 invalue "_Browse2"
 
-	ilen1	filelen		SAnalysisFile1					;DERIVE THE FILE LENGTH (IN SECONDS) OF THE CHOSEN ANALYSIS FILE	
-	ilen2	filelen		SAnalysisFile2					;DERIVE THE FILE LENGTH (IN SECONDS) OF THE CHOSEN ANALYSIS FILE	
+  ; Derive the file length (in seconds) of the chosen analysis file
+  ilen1 filelen SAnalysisFile1
+  ; Derive the file length (in seconds) of the chosen analysis file
+  ilen2 filelen SAnalysisFile2
 
-	klen	=	(gkinput=0?ilen1:ilen2)
+  klen = (gkinput = 0?ilen1:ilen2)
 
-	if	gkPtrMode=0	then								;IF POINTER MODE 'MANUAL' IS SELECTED...
-		kptr = gkptr									;SET kptr TO THE VALUE OF SLIDER VALUE gkptr
-	else												;OTHERWISE USE 'SPEED CONTROL' MODE
-		kptr	phasor	gkspeed/klen						;kptr IS A MOVING PHSE VALUE DIRECTLY PROPORTIONAL TO SLIDER VARIABLE gkspeed AND INVERESELY PROPORTIONAL TO FILE LENGTH
-	endif											;END OF CONDITIONAL BRANCHING
-	if	gkinput=0	then
-		;OUTPUT	OPCODE	POINTER     |   FILE
-		fsig1  	pvsfread	kptr * klen, SAnalysisFile1		;READ AN ANALYSIS FILE FROM THE HARD DRIVE ACCORDING TO THE GIVEN FILE POINTER LOCATION. OUTPUT AN F-SIGNAL.
-		aresyn 	pvsynth  	fsig1                      		;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
-	else	
-		;OUTPUT	OPCODE	POINTER     |   FILE
-		fsig2  	pvsfread	kptr * klen, SAnalysisFile2		;READ AN ANALYSIS FILE FROM THE HARD DRIVE ACCORDING TO THE GIVEN FILE POINTER LOCATION. OUTPUT AN F-SIGNAL.
-		aresyn	pvsynth  	fsig2                      		;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
-	endif
-				outs		aresyn * gkGain, aresyn * gkGain	;SEND THE RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS AND RESCALE USING ON-SCREEN GAIN CONTROL
+  if gkPtrMode = 0 then  ; If pointer mode 'manual' is selected...
+    kptr = gkptr         ; Set kptr to the value of slider value gkptr
+  else                   ; Otherwise use 'speed control' mode
+    ; Kptr is a moving phse value directly proportional to slider variable gkspeed and
+    ; inveresely proportional to file length
+    kptr phasor gkspeed/klen
+  endif  ; End of conditional branching
+  if gkinput = 0 then
+    ; Output opcode pointer     |   file
+    ; Read an analysis file from the hard drive according to the given file pointer
+    ; location. Output an f-signal.
+    fsig1 pvsfread kptr * klen, SAnalysisFile1
+    aresyn pvsynth fsig1  ; Resynthesize the f-signal as an audio signal
+  else
+    ; Output opcode pointer     |   file
+    ; Read an analysis file from the hard drive according to the given file pointer
+    ; location. Output an f-signal.
+    fsig2 pvsfread kptr * klen, SAnalysisFile2
+    aresyn pvsynth fsig2  ; Resynthesize the f-signal as an audio signal
+  endif
+  ; Send the resynthesized signal to the audio outputs and rescale using on-screen gain
+  ; control
+  outs aresyn * gkGain, aresyn * gkGain
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1		0	   3600	;GUI
+; Instr | start | duration
+i 1 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -75,9 +90,9 @@ i 1		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -95,15 +110,20 @@ i 1		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -124,15 +144,20 @@ i 1		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>181</r>
    <g>199</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -157,14 +182,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -183,11 +208,23 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>PtrMode</objectName>
@@ -230,14 +267,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -259,14 +296,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -306,14 +343,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -335,14 +372,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -382,14 +419,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -411,14 +448,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -458,14 +495,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -512,14 +549,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -543,6 +580,18 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -560,9 +609,9 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -587,14 +636,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -616,9 +665,9 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -645,6 +694,18 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -662,14 +723,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -691,14 +752,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -720,14 +781,14 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

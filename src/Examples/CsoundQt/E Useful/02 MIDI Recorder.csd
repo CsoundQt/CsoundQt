@@ -3,10 +3,10 @@
 -m128
 </CsOptions>
 <CsInstruments>
-sr = 44100
-ksmps = 64
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 /***** MIDI RECORDER *****/
 // Records MIDI note events
@@ -27,142 +27,142 @@ RecTime@global:k init 0
 RecNum@global:i init 1
 
 // guide all midi events to instr GetMidi
-massign(0,"GetMidi")
+massign(0, "GetMidi")
 
-// channels 
-chn_S("midi-received",2)
-chn_k("rec-is-on",2)
-chn_k("playback-progress",2)
-chn_S("file-saved",2)
+// channels
+chn_S( "midi-received", 2)
+chn_k( "rec-is-on", 2)
+chn_k( "playback-progress", 2)
+chn_S( "file-saved", 2)
 
 
 instr Init
-  chnset("","midi-received")
+  chnset("", "midi-received")
 endin
-schedule(Init,0,.1)
+schedule(Init, 0, .1)
 
 instr GetMidi
 
   // get midi events
-  s:k,ch:k,d1:k,d2:k = midiin()
-  
+  s:k, ch:k, d1:k, d2:k = midiin()
+
   // get note-on or -off messages
   if (s == 128) || (s == 144) then
-  
-    // note-on 
+
+    // note-on
     if (s == 144) && (d2 > 0) then
       // call the MidiSound instrument with note number as instance
-      schedulek(sprintfk("MidiSound.%03d",d1),0,-1,d1,d2)
+      schedulek(sprintfk("MidiSound.%03d", d1), 0, -1, d1, d2)
       // send info to gui
-      chnset(sprintfk("%-10s%-12d%-10d%.3f","ON",d1,d2,RecTime),"midi-received")
-      
-    // otherwise turn off the instance by sending a negative p1
+      chnset(sprintfk("%-10s%-12d%-10d%.3f", "ON", d1, d2, RecTime), "midi-received")
+
+      // otherwise turn off the instance by sending a negative p1
     else
       // only for gui display
       if (s == 128) then
-        chnset(sprintfk("%-10s%-12d%-10d%.3f","OFF",d1,d2,RecTime),"midi-received")
+        chnset(sprintfk("%-10s%-12d%-10d%.3f", "OFF", d1, d2, RecTime), "midi-received")
       else
-        chnset(sprintfk("%-10s%-12d%-10d%.3f","ON",d1,d2,RecTime),"midi-received")
+        chnset(sprintfk("%-10s%-12d%-10d%.3f", "ON", d1, d2, RecTime), "midi-received")
       endif
       // set d2 to zero for writing in array as note-on with zero velocity
       d2 = 0
-      schedulek(sprintfk("-MidiSound.%03d",d1),0,-1,d1,d2)
+      schedulek(sprintfk("-MidiSound.%03d", d1), 0, -1, d1, d2)
     endif
-        
+
     // write the data into the array
-    Arr[RecPointer] = RecTime
+    Arr[RecPointer]   = RecTime
     Arr[RecPointer+1] = d1
     Arr[RecPointer+2] = d2
-  
+
     // advance rec pointer
-    RecPointer += 3
-    
-  endif 
-  
+    RecPointer + = 3
+
+  endif
+
 endin
-schedule(GetMidi,0,-1)
+schedule(GetMidi, 0, -1)
 
 instr Record
 
   RecPointer init 0
-  RecTime init 0
-  RecTime += 1/kr
-  chnset(k(1),"rec-is-on")
+  RecTime    init 0
+  RecTime + = 1/kr
+  chnset(k(1), "rec-is-on")
   if lastcycle() == 1 then
-    chnset(k(0),"rec-is-on")
+    chnset(k(0), "rec-is-on")
   endif
 
 endin
 
 instr Play
 
-  readIndx:k init 0
+  readIndx:k  init 0
   localTime:k init 0
   nextTime:k = Arr[readIndx]
-    
+
   if ((readIndx < RecPointer) && localTime >= nextTime) then
 
     note_number:k = Arr[readIndx+1]
-    velocity:k = Arr[readIndx+2]
-    
+    velocity:k    = Arr[readIndx+2]
+
     // for positive verlocity call the MidiSound instrument with note number as instance
     if (velocity > 0) then
-      schedulek(sprintfk("MidiSound.%03d",note_number),0,-1,note_number,velocity)
-      chnset(sprintfk("%-10s%-12d%-10d%.3f","ON",note_number,velocity,localTime),"midi-received")
-    // otherwise turn off
+      schedulek(sprintfk( "MidiSound.%03d", note_number), 0, -1, note_number, velocity)
+      chnset(sprintfk(    "%-10s%-12d%-10d%.3f", "ON", note_number, velocity, localTime), "midi-received")
+      // otherwise turn off
     else
-      schedulek(sprintfk("-MidiSound.%03d",note_number),0,-1,note_number,velocity)
-      chnset(sprintfk("%-10s%-12d%-10d%.3f","OFF",note_number,velocity,localTime),"midi-received")
+      schedulek(sprintfk( "-MidiSound.%03d", note_number), 0, -1, note_number, velocity)
+      chnset(sprintfk(    "%-10s%-12d%-10d%.3f", "OFF", note_number, velocity, localTime), "midi-received")
     endif
-    
+
     // increase the read pointer
-    readIndx += 3
-    
+    readIndx + = 3
+
   endif
-  
-  localTime += 1/kr
-  
+
+  localTime + = 1/kr
+
   // stop any sound in case this instrument is turned off
   if (release() == 1) then
-    turnoff2(MidiSound,0,1)
+    turnoff2(MidiSound, 0, 1)
   endif
-  
+
   // show progress bar
-  chnset(localTime/Arr[RecPointer-3],"playback-progress")
+  chnset(localTime/Arr[RecPointer-3], "playback-progress")
 
 endin
 
 instr MidiSound //change to anything you like
 
-  note:i = p4
-  dB:k = scale2(p5/127,-40,0) //scale velocity to range of -40 to 0 dB
-  sound:a = poscil(ampdb(dB),mtof(note))+poscil(ampdb(dB)/10,mtof:k(note+randomi:k(23.85,24.15,10,3)))
-  outall(linenr:a(sound/2,.1,.1,.01))
+  note:i  = p4
+  dB:k    = scale2(p5/127, -40, 0) //scale velocity to range of -40 to 0 dB
+  sound:a = poscil(ampdb(dB), mtof(note))+poscil(ampdb(dB)/10, mtof:k(note+randomi:k(23.85, 24.15, 10, 3)))
+  outall(linenr:a(sound/2, .1, .1, .01))
 
 endin
 
 instr SaveToFile
 
-  filename:S = sprintf("MIDI-rec_%02d.csd",RecNum)
-  RecNum += 1
+  filename:S = sprintf("MIDI-rec_%02d.csd", RecNum)
+  RecNum + = 1
   outstring:S = {{
 <CsoundSynthesizer>
 <CsOptions>
--odac
+  -odac
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 64
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 instr MidiSound
 
-  note:i = p4
-  dB:k = scale2(p5/127,-40,0) //scale velocity to range of -40 to 0 dB
-  sound:a = poscil(ampdb(dB),mtof(note))+poscil(ampdb(dB)/10,mtof:k(note+randomi:k(23.85,24.15,10,3)))
-  outall(linenr:a(sound/2,.1,.1,.01))
+  note:i  = p4
+  dB:k    = scale2(p5/127, -40, 0) //scale velocity to range of -40 to 0 dB
+  sound:a = poscil(ampdb(dB), mtof(note))+poscil(ampdb(dB)/10, mtof:k(note+randomi:k(23.85, 24.15, 10, 3)))
+  outall(linenr:a(sound/2, .1, .1, .01))
 
 endin
 
@@ -170,18 +170,18 @@ endin
 <CsScore>
 }}
 
-  fprintks(filename,outstring)
+fprintks(filename, outstring)
 
-  pointer:i = 0
-  for kndx in [0 ... RecPointer-1,3] do
-    tim:k = Arr[kndx]
-    notnum:k = Arr[kndx+1]
-    vel:k = Arr[kndx+2]
-    iname:k = (vel == 0) ? -1 : 1
-    fprintks(filename,"i %d.%03d %.3f -1 %d %d\n",iname,notnum,tim,notnum,vel)
-  od
-  
-  fprintks(filename,"</CsScore>\n</CsoundSynthesizer>\n")
+pointer:i = 0
+for kndx in [0 ... RecPointer-1, 3] do
+  tim:k    = Arr[kndx]
+  notnum:k = Arr[kndx+1]
+  vel:k    = Arr[kndx+2]
+  iname:k  = (vel == 0) ? -1 : 1
+  fprintks(filename, "i %d.%03d %.3f -1 %d %d\n", iname, notnum, tim, notnum, vel)
+od
+
+fprintks(filename, "</CsScore>\n</CsoundSynthesizer>\n")
   chnset(sprintfk("File '%s' saved!",filename),"file-saved")
   turnoff
   

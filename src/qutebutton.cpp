@@ -367,19 +367,7 @@ QString QuteButton::getWidgetType()
 
 void QuteButton::applyProperties()
 {
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForWrite();
-#endif
-
     QString channel = property("CSQT_objectName").toString();
-    if (channel.isEmpty()) {
-        QMessageBox::warning(
-            nullptr,
-            tr("Missing Channel Name"),
-            tr("The button must have a channel name set!")
-            );
-    }
-
 	QString eventLine = line->text();
     while (eventLine.size() > 0 && eventLine[0] == ' ') {
         // remove all spaces at the beginning. This is needed for event queue lines
@@ -416,13 +404,7 @@ void QuteButton::applyProperties()
 				(flatPressedText.isValid() && flatPressedText != flatText) ? flatPressedText.name() : QString());
 	setProperty("CSQT_borderWidth", borderWidthSpinBox->value());
 	setProperty("CSQT_borderRadius", borderRadiusSpinBox->value());
-
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-    //Must be last to make sure the widgetChanged signal is last
     QuteWidget::applyProperties();
-    //  qDebug() << "QuteButton::applyProperties()" << m_value;
 }
 
 
@@ -946,67 +928,34 @@ bool QuteButton::hasIndefiniteDuration()
 
 void QuteButton::buttonPressed()
 {
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-
-    if (m_channel.isEmpty()) {
-        QMessageBox::warning(
-            nullptr,
-            tr("Missing Channel Name"),
-            tr("The button must have a channel name set!")
-            );
-        return;
-    }
-
     // open file browser on release
     if (m_channel.startsWith("_Browse") || m_channel.startsWith("_MBrowse")) {
         return;
     }
     auto w = static_cast<QPushButton *>(m_widget);
     if (property("CSQT_latch").toBool()) {
-
         m_currentValue = !w->isChecked() ? m_value : 0;
-        // test:
-        // bool test = w->isChecked();
-        // QDEBUG << "Button pressed, checked is : " << test << " value:  " << m_currentValue;
     } else {
 		m_currentValue = m_value;
     }
-
-
-
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
     performAction();
 }
 
 void QuteButton::buttonReleased()
 {
 	// Only produce events for event types
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
     if (m_channel.startsWith("_Browse") || m_channel.startsWith("_MBrowse")) {
         performAction();
         return;
     }
 	bool isLatch = property("CSQT_latch").toBool();
-
 	if (!isLatch ) {
         m_currentValue = 0;
-		if (  property("CSQT_type").toString().contains("event") && hasIndefiniteDuration() ) {
+		if (property("CSQT_type").toString().contains("event") && hasIndefiniteDuration() ) {
 			performAction(); // to stop the playing instrument
 		}
 	}
-
-
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
     emit newValue(QPair<QString, double>(m_channel, m_currentValue));
-
 }
 
 void QuteButton::browseFile()

@@ -8,153 +8,153 @@
 ; GUI and some additions by Josep M Comajuncosas, July 2001
 ; CsoundQt version by Andres Cabrera 2010
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 128
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
-gasig2 init 0	; global variable to send pulse waves to ensemble section
-ga2 init 0	; global variable to send output of ensemble to reverb
+gasig2 init 0  ; global variable to send pulse waves to ensemble section
+ga2    init 0  ; global variable to send output of ensemble to reverb
 
 
-instr 1	; Used to generate simple sawtooth-like waveforms
+instr 1  ; Used to generate simple sawtooth-like waveforms
 
-ifreq  = 440 * 2 ^((p4 -69)/12)
-print ifreq
-iharms=(sr*.4) / ifreq	; Limits number of harmonics in bandlimited
-			; pulse waveform
+  ifreq = 440 * 2 ^((p4 -69)/12)
+  print ifreq
+  iharms = (sr*.4) / ifreq  ; Limits number of harmonics in bandlimited
+  ; pulse waveform
 
-asig	gbuzz	1, ifreq, iharms, 1, .9, 2
-kenv 	madsr	1, 0,1,1.5
+  asig gbuzz 1, ifreq, iharms, 1, .9, 2
+  kenv madsr 1, 0, 1, 1.5
 
-aout = kenv * asig * .45
-; The output of instr 19 is sent to the "ensemble" chorusing
-; section. None of the dry signal will be heard in the output.
-gasig2 = gasig2 + aout
+  aout = kenv * asig * .45
+  ; The output of instr 19 is sent to the "ensemble" chorusing
+  ; section. None of the dry signal will be heard in the output.
+  gasig2 = gasig2 + aout
 
 endin
 
 
-instr 22	; Ensemble section. Takes static sawtooth waves,
-		; and produces an animated flanged/chorused/vibratoed
-		; output. The phase shifter follows the output
-		; of the ensemble.
+instr 22  ; Ensemble section. Takes static sawtooth waves,
+  ; and produces an animated flanged/chorused/vibratoed
+  ; output. The phase shifter follows the output
+  ; of the ensemble.
 
-kVcf1 invalue "Vcf1"
-kVcf2 invalue "Vcf2"
-kLfoWave invalue "LfoWave"
-kLfoDepth invalue "LfoDepth"
-kLfoFreq invalue "LfoFreq"
-kPhFreq invalue "PhFreq"
-kPhFdbk invalue "PhFdbk"
-kPhQ invalue "PhQ"
-kPhStages invalue "PhStages"
-kPhSep invalue "PhSep"
+  kVcf1     invalue "Vcf1"
+  kVcf2     invalue "Vcf2"
+  kLfoWave  invalue "LfoWave"
+  kLfoDepth invalue "LfoDepth"
+  kLfoFreq  invalue "LfoFreq"
+  kPhFreq   invalue "PhFreq"
+  kPhFdbk   invalue "PhFdbk"
+  kPhQ      invalue "PhQ"
+  kPhStages invalue "PhStages"
+  kPhSep    invalue "PhSep"
 
-ivib = p4 * .00025	; Determines amount of pitch change/vibrato/
-		; chorusing. A value of 1 gives moderately thick 
-		; chorusing, without excessive vibrato. Vary this 
-		; according to taste.
+  ivib = p4 * .00025  ; Determines amount of pitch change/vibrato/
+  ; chorusing. A value of 1 gives moderately thick
+  ; chorusing, without excessive vibrato. Vary this
+  ; according to taste.
 
-;LFOs
-ktimea	oscil	4, 0.33, 1
-ktimeb	oscil	4, 0.33, 1, .333
-ktimec	oscil	4, 0.33, 1, .667
+  ; Lfos
+  ktimea oscil 4, 0.33, 1
+  ktimeb oscil 4, 0.33, 1, .333
+  ktimec oscil 4, 0.33, 1, .667
 
-ktimed	oscil	1, 5.5, 1
-ktimee	oscil	1, 5.5, 1, .333
-ktimef	oscil	1, 5.5, 1, .667
+  ktimed oscil 1, 5.5, 1
+  ktimee oscil 1, 5.5, 1, .333
+  ktimef oscil 1, 5.5, 1, .667
 
 
-ktime1 = (ktimea + ktimed) * ivib
-ktime2 = (ktimeb + ktimee) * ivib
-ktime3 = (ktimec + ktimef) * ivib
+  ktime1 = (ktimea + ktimed) * ivib
+  ktime2 = (ktimeb + ktimee) * ivib
+  ktime3 = (ktimec + ktimef) * ivib
 
-;Chorus
-adummy	delayr	.030
-asig1	deltap3	ktime1 + .012
-asig2	deltap3	ktime2 + .012
-asig3 	deltap3	ktime3 + .012
-	delayw	gasig2
+  ; Chorus
+  adummy delayr .030
+  asig1 deltap3 ktime1 + .012
+  asig2 deltap3 ktime2 + .012
+  asig3 deltap3 ktime3 + .012
+  delayw gasig2
 
-aVcfIn = (asig1 + asig2 + asig3) * .01
-;Vcf
-klow limit 1-kVcf2,0,1
-kband mirror kVcf2,0,1
-khigh limit kVcf2-1,0,1
+  aVcfIn = (asig1 + asig2 + asig3) * .01
+  ; Vcf
+  klow limit 1-kVcf2, 0, 1
+  kband mirror kVcf2, 0, 1
+  khigh limit kVcf2-1, 0, 1
 
-alow, ahigh, aband	svfilter	aVcfIn, kVcf1, 10
-aPhaserIn mac klow,alow,kband,aband,khigh,ahigh
+  alow, ahigh, aband svfilter aVcfIn, kVcf1, 10
+  aPhaserIn mac klow, alow, kband, aband, khigh, ahigh
 
-outs aband, aband
-;Lfo
+  outs aband, aband
+  ; Lfo
 lfo:
-ilfowave = 10+i(kLfoWave)
-klfofrq	oscil	kLfoDepth, kLfoFreq, ilfowave,-1
-rigoto end
-;rireturn
-igoto skip0
-if ilfowave == kLfoWave kgoto skip0
-reinit lfo
+  ilfowave = 10+i(kLfoWave)
+  klfofrq oscil kLfoDepth, kLfoFreq, ilfowave, -1
+  rigoto end
+  ; rireturn
+  igoto skip0
+  if ilfowave == kLfoWave kgoto skip0
+  reinit lfo
 
 skip0:
-kmod	= kPhFreq*(1+klfofrq)
-kmod limit kmod,20,sr/4
+  kmod = kPhFreq*(1+klfofrq)
+  kmod limit kmod, 20, sr/4
 
-;Phaser
+  ; Phaser
 phaser:
-istages = i(kPhStages)
+  istages = i(kPhStages)
 
-aphs	phaser2 aPhaserIn, kmod, kPhQ, istages, 2, kPhSep, kPhFdbk
-	aout2=(aPhaserIn + aphs) * .5
+  aphs phaser2 aPhaserIn, kmod, kPhQ, istages, 2, kPhSep, kPhFdbk
+  aout2 = (aPhaserIn + aphs) * .5
 
-rireturn
-igoto skip1
-if istages == kPhStages kgoto skip1
-reinit phaser
+  rireturn
+  igoto skip1
+  if istages == kPhStages kgoto skip1
+  reinit phaser
 skip1:
-	
-ga2 = ga2 + aout2
+
+  ga2 = ga2 + aout2
 
 
-gasig2 = 0
+  gasig2 = 0
 end:
 endin
 
 
-instr 99	; Simple implementation of Feedback Delay Network (FDN)
-		; reverb, as described by John Stautner and Miller 
-		; Puckette, "Designing Multi-Channel Reverberators," 
+instr 99  ; Simple implementation of Feedback Delay Network (FDN)
+  ; reverb, as described by John Stautner and Miller
+  ; Puckette, "Designing Multi-Channel Reverberators,"
 
-kRevWet invalue "RevWet"
-kRevSize invalue "RevSize"
-kRevColor invalue "RevColor"
+  kRevWet   invalue "RevWet"
+  kRevSize  invalue "RevSize"
+  kRevColor invalue "RevColor"
 
-atap	multitap ga2, 0.00043, 0.0215, 0.00268, 0.0298, 0.00485, 0.0572, 0.00595, 0.0708, 0.00741, 0.0797, 0.0142, 0.134, 0.0217, 0.181, 0.0272, 0.192, 0.0379, 0.346, 0.0841, 0.504
+  atap multitap ga2, 0.00043, 0.0215, 0.00268, 0.0298, 0.00485, 0.0572, 0.00595, 0.0708, 0.00741, 0.0797, 0.0142, 0.134, 0.0217, 0.181, 0.0272, 0.192, 0.0379, 0.346, 0.0841, 0.504
 
-aRvb_FreeL, aRvb_FreeR freeverb ga2, ga2, kRevSize, kRevColor
+  aRvb_FreeL, aRvb_FreeR freeverb ga2, ga2, kRevSize, kRevColor
 
-outs aRvb_FreeL*kRevWet + ga2*(1-kRevWet), aRvb_FreeR*kRevWet + ga2*(1-kRevWet)
+  outs aRvb_FreeL*kRevWet + ga2*(1-kRevWet), aRvb_FreeR*kRevWet + ga2*(1-kRevWet)
 
-ga2 = 0
+  ga2 = 0
 
 endin
 
 </CsInstruments>
 <CsScore>
 
-f1 0 32768 10 1		; Sine wave for delay line modulation
-f2 0 8192 9 1 1 .25		; Cosine wave for gbuzz
+f1 0 32768 10 1      ; Sine wave for delay line modulation
+f2 0 8192 9 1 1 .25  ; Cosine wave for gbuzz
 
-;several shapes for the lfo
-f10 0 32768 10 1;sine
-f11 0 32768 7 0 15360 1 2048 -1 15360 0;saw up
-f12 0 32768 7 0 15360 -1 2048 1 15360 0;saw down
-f13 0 32768 7 0 8192 1 8192 0 8192 -1 8192 0;triangle
+; several shapes for the lfo
+f10 0 32768 10 1                              ; sine
+f11 0 32768 7 0 15360 1 2048 -1 15360 0       ; saw up
+f12 0 32768 7 0 15360 -1 2048 1 15360 0       ; saw down
+f13 0 32768 7 0 8192 1 8192 0 8192 -1 8192 0  ; triangle
 
 ; freeverb time constants, as direct (negative) sample, with arbitrary gains
-f71 0 16   -2  -1116 -1188 -1277 -1356 -1422 -1491 -1557 -1617  0.8  0.79  0.78  0.77  0.76  0.75  0.74  0.73  
-f72 0 16   -2  -556 -441 -341 -225 0.7  0.72  0.74  0.76
+f71 0 16 -2 -1116 -1188 -1277 -1356 -1422 -1491 -1557 -1617 0.8 0.79 0.78 0.77 0.76 0.75 0.74 0.73
+f72 0 16 -2 -556 -441 -341 -225 0.7 0.72 0.74 0.76
 
 ; Global instrument for ensemble/phaser effect. p4 sets amount
 ; of pitch change in chorusing.
@@ -195,9 +195,9 @@ i 1 6 2 52 100
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>42</r>
-  <g>46</g>
-  <b>50</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -217,15 +217,20 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
@@ -248,15 +253,20 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
@@ -279,15 +289,20 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
@@ -346,14 +361,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -377,14 +392,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -409,13 +424,13 @@ i 1 6 2 52 100
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -439,13 +454,13 @@ i 1 6 2 52 100
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -468,14 +483,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -499,14 +514,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -530,14 +545,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -562,13 +577,13 @@ i 1 6 2 52 100
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -592,13 +607,13 @@ i 1 6 2 52 100
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -622,13 +637,13 @@ i 1 6 2 52 100
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -651,14 +666,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -682,14 +697,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -713,14 +728,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -744,14 +759,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -775,14 +790,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -803,14 +818,14 @@ i 1 6 2 52 100
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <value>16.00000000</value>
   <resolution>1.00000000</resolution>
@@ -841,13 +856,13 @@ i 1 6 2 52 100
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -871,13 +886,13 @@ i 1 6 2 52 100
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -901,13 +916,13 @@ i 1 6 2 52 100
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -931,13 +946,13 @@ i 1 6 2 52 100
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
+   <r>220</r>
+   <g>135</g>
+   <b>48</b>
   </color>
-  <textcolor>#512900</textcolor>
+  <textcolor>#492d10</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -960,15 +975,20 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
@@ -996,11 +1016,11 @@ i 1 6 2 52 100
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00ff00</borderColor>
+  <borderColor>#32e632</borderColor>
   <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
+   <r>230</r>
+   <g>110</g>
+   <b>50</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
@@ -1028,14 +1048,14 @@ i 1 6 2 52 100
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

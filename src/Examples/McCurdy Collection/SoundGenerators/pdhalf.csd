@@ -1,168 +1,185 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table for exp slider
-;	Add INIT instrument
+; Notes on modifications from original csd:
+; Add table for exp slider
+; Add INIT instrument
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 64			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 64     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-giwave1		ftgen 	1, 0, 131072, 9, 1, 1, 0, 1.7, 1, 0, 2.31, 1, 0, 2.56, 1, 0, 3.67, 1, 0	;COMPLEX WAVEFORM
-giwave2		ftgen	2, 0, 131072, 10, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0				;ODD PARTIALS
-giwave3		ftgen	3, 0, 131072, 9, 1, 1, 270										;INVERTED COSINE
-giwave4		ftgen	4, 0, 131072, 7, 1, 65536, 1, 0, -1, 65537, -1						;SQUARE WAVE
-giwave5		ftgen	5, 0, 131072, 11, 40, 1, 1.1										;BUZZ WAVEFORM
-giwave6		ftgen	6, 0, 131072, 19, 3, 1, 0, 0, 7, 0.5, 0, 0, 13, 0.1, 0, 0				;SELECTED HARMONICS WAVEFORM
+; Complex waveform
+giwave1 ftgen 1, 0, 131072, 9, 1, 1, 0, 1.7, 1, 0, 2.31, 1, 0, 2.56, 1, 0, 3.67, 1, 0
+giwave2 ftgen 2, 0, 131072, 10, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0  ; Odd partials
+; Inverted cosine
+giwave3 ftgen 3, 0, 131072, 9, 1, 1, 270
+giwave4 ftgen 4, 0, 131072, 7, 1, 65536, 1, 0, -1, 65537, -1  ; Square wave
+giwave5 ftgen 5, 0, 131072, 11, 40, 1, 1.1                    ; Buzz waveform
+; Selected harmonics waveform
+giwave6 ftgen 6, 0, 131072, 19, 3, 1, 0, 0, 7, 0.5, 0, 0, 13, 0.1, 0, 0
 
-giExp1		ftgen	0, 0, 129, -25, 0, 20.0, 128, 2000.0								;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 2000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SLIDERS
-		gkamp		invalue	"Amplitude"
-		kfreq		invalue	"Frequency"   
-		gkfreq		tablei	kfreq, giExp1, 1
-					outvalue	"Frequency_Value", gkfreq
-		gkShapeAmount	invalue	"ShapeAmt"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Sliders
+    gkamp invalue "Amplitude"
+    kfreq invalue "Frequency"
+    gkfreq tablei kfreq, giExp1, 1
+    outvalue "Frequency_Value", gkfreq
+    gkShapeAmount invalue "ShapeAmt"
 
-		;KNOBS
-		gkstrlevS		invalue	"StrLevS"
-		gkatttimS		invalue	"AttTimS"
-		gkattlevS		invalue	"AttLevS"
-		gkdectimS		invalue	"DecTimS"
-		gksuslevS		invalue	"SusLevS"
-		gkreltimS		invalue	"RelTimS"
-		gkrellevS		invalue	"RelLevS"
-		gkvel		invalue	"Vel"
+    ; Knobs
+    gkstrlevS invalue "StrLevS"
+    gkatttimS invalue "AttTimS"
+    gkattlevS invalue "AttLevS"
+    gkdectimS invalue "DecTimS"
+    gksuslevS invalue "SusLevS"
+    gkreltimS invalue "RelTimS"
+    gkrellevS invalue "RelLevS"
+    gkvel     invalue "Vel"
 
-		gkstrlevA		invalue	"StrLevA"
-		gkatttimA		invalue	"AttTimA"
-		gkattlevA		invalue	"AttLevA"
-		gkdectimA		invalue	"DecTimA"
-		gksuslevA		invalue	"SusLevA"
-		gkreltimA		invalue	"RelTimA"
-		gkrellevA		invalue	"RelLevA"
+    gkstrlevA invalue "StrLevA"
+    gkatttimA invalue "AttTimA"
+    gkattlevA invalue "AttLevA"
+    gkdectimA invalue "DecTimA"
+    gksuslevA invalue "SusLevA"
+    gkreltimA invalue "RelTimA"
+    gkrellevA invalue "RelLevA"
 
-		gkLFOdepS		invalue	"LFODepth"
-		gkLFOratS		invalue	"LFORate"
-		gkLFOdelS		invalue	"LFODelay"
-		gkLFOrisS		invalue	"LFORise"
- 
-		;MENUS
-		gkfn			invalue	"Waveform"
-		gktype		invalue	"DistType"
-	endif
+    gkLFOdepS invalue "LFODepth"
+    gkLFOratS invalue "LFORate"
+    gkLFOdelS invalue "LFODelay"
+    gkLFOrisS invalue "LFORise"
+
+    ; Menus
+    gkfn   invalue "Waveform"
+    gktype invalue "DistType"
+  endif
 endin
 
-instr	11	;INIT
-			outvalue	"Amplitude"	, 0.15
-			outvalue	"Frequency"	, 0.65049
-			outvalue	"ShapeAmt"	, 0.0
-			outvalue	"StrLevS"		, 0.0
-			outvalue	"AttTimS"		, .005
-			outvalue	"AttLevS"		, 1.0
-			outvalue	"DecTimS"		, 1.0
-			outvalue	"SusLevS"		, 0.0
-			outvalue	"RelTimS"		, .5
-			outvalue	"RelLevS"		, 0.0
-			outvalue	"StrLevA"		, 0.0
-			outvalue	"AttTimA"		, .005
-			outvalue	"AttLevA"		, 1.0
-			outvalue	"DecTimA"		, 1.0
-			outvalue	"SusLevA"		, 1.0
-			outvalue	"RelTimA"		, .5
-			outvalue	"RelLevA"		, 0.0
-			outvalue	"LFODepth"	, 0.18
-			outvalue	"LFORate"		, 1.0
-			outvalue	"LFODelay"	, 0.0
-			outvalue	"LFORise"		, 0.4
-			outvalue	"Vel"		, 1.0
+instr 11  ; Init
+  outvalue "Amplitude", 0.15
+  outvalue "Frequency", 0.65049
+  outvalue "ShapeAmt", 0.0
+  outvalue "StrLevS", 0.0
+  outvalue "AttTimS", .005
+  outvalue "AttLevS", 1.0
+  outvalue "DecTimS", 1.0
+  outvalue "SusLevS", 0.0
+  outvalue "RelTimS", .5
+  outvalue "RelLevS", 0.0
+  outvalue "StrLevA", 0.0
+  outvalue "AttTimA", .005
+  outvalue "AttLevA", 1.0
+  outvalue "DecTimA", 1.0
+  outvalue "SusLevA", 1.0
+  outvalue "RelTimA", .5
+  outvalue "RelLevA", 0.0
+  outvalue "LFODepth", 0.18
+  outvalue "LFORate", 1.0
+  outvalue "LFODelay", 0.0
+  outvalue "LFORise", 0.4
+  outvalue "Vel", 1.0
 endin
 
-instr	1	;MIDI ACTIVATED INSTRUMENT
-	ktrig	changed	gkfn						;TEST WHETHER INPUT ARGUMENTS HAVE CHANGED. IF ANY OF THEM HAVE, OUTPUT A '1' OTHERWISE OUTPUT ZERO.
-	if		ktrig=1	then						;IF 'ktrig' IS '1'...
-			reinit	UPDATE					;BEGIN A REINITIALIZATION PASS AT LABEL 'UPDATE'
-	endif									;END OF CONDITIONALIZATION PASS
+instr 1  ; MIDI activated instrument
+  ; Test whether input arguments have changed. If any of them have, output a '1' otherwise
+  ; output zero.
+  ktrig changed gkfn
+  if ktrig = 1 then  ; IF 'ktrig' IS '1'...
+    reinit UPDATE    ; Begin a reinitialization pass at label 'update'
+  endif              ; End of conditionalization pass
 
-	ibipolar		=	0						;UNIPOLAR/BIPOLAR SWITCH (0=UNIPOLAR 1=BIPOLAR)
-	ifullscale	=	1						;FULLSCALE VALUE
-	ioct			octmidi
+  ibipolar   = 0  ; Unipolar/bipolar switch (0=unipolar 1=bipolar)
+  ifullscale = 1  ; Fullscale value
+  ioct octmidi
 
-	;PITCH BEND INFORMATION IS READ
-	iSemitoneBendRange=		2													;PITCH BEND RANGE IN SEMITONES
-	imin			=		0													;EQUILIBRIUM POSITION
-	imax			=		iSemitoneBendRange * .0833333								;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend		pchbend	imin, imax											;PITCH BEND VARIABLE (IN oct FORMAT)
-	kfreq		=		cpsoct(ioct+ kbend)
-	aosc        	phasor	kfreq												;DEFINE A PHASOR
-    	kShapeEnv		linsegr	i(gkstrlevS), i(gkatttimS), i(gkattlevS), i(gkdectimS), i(gksuslevS), i(gkreltimS), i(gkrellevS)	;ENVELOPE USED TO MODULATE 'SHAPE AMOUNT'
-    	ivel			veloc	0,1
-    	kShapeEnv		=		kShapeEnv * (gkvel * ivel)
-    	kLFOenv		linseg	0,i(gkLFOdelS)+0.00001,0,i(gkLFOrisS)+0.00001,1,1,1
-    	kShapeLFO		lfo		gkLFOdepS*kLFOenv, gkLFOratS, 1							;TRIANGLE WAVEFORM
-    	kShapeAmount	limit	kShapeEnv+kShapeLFO, -1, 1
-    	aAmpEnv		linsegr	i(gkstrlevA), i(gkatttimA), i(gkattlevA), i(gkdectimA), i(gksuslevA), i(gkreltimA), i(gkrellevA)	;ENVELOPE USED TO MODULATE AMPLITUDE
-    	apd1         	pdhalf	aosc, kShapeAmount, ibipolar, ifullscale					;PHASE DISTORT THE PHASOR (aosc) CREATED 4 LINES ABOVE
-    	apd2         	pdhalfy	aosc, kShapeAmount, ibipolar, ifullscale					;PHASE DISTORT THE PHASOR (aosc) CREATED 4 LINES ABOVE
+  ; Pitch bend information is read
+  iSemitoneBendRange = 2  ; Pitch bend range in semitones
+  imin               = 0  ; Equilibrium position
+  ; Max pitch displacement (in oct format)
+  imax = iSemitoneBendRange * .0833333
+  ; Pitch bend variable (in oct format)
+  kbend pchbend imin, imax
+  kfreq = cpsoct(ioct+ kbend)
+  aosc phasor kfreq  ; Define a phasor
+  ; Envelope used to modulate 'shape amount'
+  kShapeEnv linsegr i(gkstrlevS), i(gkatttimS), i(gkattlevS), i(gkdectimS), i(gksuslevS), i(gkreltimS), i(gkrellevS)
+  ivel veloc 0, 1
+  kShapeEnv = kShapeEnv * (gkvel * ivel)
+  kLFOenv linseg 0, i(gkLFOdelS)+0.00001, 0, i(gkLFOrisS)+0.00001, 1, 1, 1
+  kShapeLFO lfo gkLFOdepS*kLFOenv, gkLFOratS, 1  ; Triangle waveform
+  kShapeAmount limit kShapeEnv+kShapeLFO, -1, 1
+  ; Envelope used to modulate amplitude
+  aAmpEnv linsegr i(gkstrlevA), i(gkatttimA), i(gkattlevA), i(gkdectimA), i(gksuslevA), i(gkreltimA), i(gkrellevA)
+  ; Phase distort the phasor (aosc) created 4 lines above
+  apd1 pdhalf aosc, kShapeAmount, ibipolar, ifullscale
+  ; Phase distort the phasor (aosc) created 4 lines above
+  apd2 pdhalfy aosc, kShapeAmount, ibipolar, ifullscale
 
-	if		gktype=0	then
-		apd	=	apd1
-	elseif	gktype=1	then
-		apd	=	apd2
-	endif
-	UPDATE:																	;LABEL FOR WHERE TO BEGIN REINITIALIZATION PASS
-    	aout        	tablei	apd, i(gkfn)+1, 1										;READ WAVEFORM USING PHASE DISTORTED WAVEFORM
-    				rireturn														;RETURN TO PERFORMANCE
-				outs		aout * gkamp * aAmpEnv, aout * gkamp * aAmpEnv				;SEND AUDIO TO OUTPUTS
-endin   
+  if gktype = 0 then
+    apd = apd1
+  elseif gktype = 1 then
+    apd = apd2
+  endif
+  ; Label for where to begin reinitialization pass
+UPDATE:
+  ; Read waveform using phase distorted waveform
+  aout tablei apd, i(gkfn)+1, 1
+  rireturn                                             ; Return to performance
+  outs aout * gkamp * aAmpEnv, aout * gkamp * aAmpEnv  ; Send audio to outputs
+endin
 
-instr	2
-	ktrig		changed	gkfn													;TEST WHETHER INPUT ARGUMENTS HAVE CHANGED. IF ANY OF THEM HAVE, OUTPUT A '1' OTHERWISE OUTPUT ZERO.
-	if	ktrig=1	then															;IF 'ktrig' IS '1'...
-		reinit	UPDATE														;BEGIN A REINITIALIZATION PASS AT LABEL 'UPDATE'
-	endif																	;END OF CONDITIONALIZATION PASS
+instr 2
+  ; Test whether input arguments have changed. If any of them have, output a '1' otherwise
+  ; output zero.
+  ktrig changed gkfn
+  if ktrig = 1 then  ; IF 'ktrig' IS '1'...
+    reinit UPDATE    ; Begin a reinitialization pass at label 'update'
+  endif              ; End of conditionalization pass
 
-	ibipolar		=		0													;UNIPOLAR/BIPOLAR SWITCH (0=UNIPOLAR 1=BIPOLAR)
-	ifullscale	=		1													;FULLSCALE VALUE
-	aosc        	phasor	gkfreq												;DEFINE A PHASOR
-    	kLFOenv		linseg	0, i(gkLFOdelS)+0.00001, 0, i(gkLFOrisS)+0.00001, 1, 1, 1
-    	kShapeLFO		lfo		gkLFOdepS*kLFOenv, gkLFOratS, 1							;TRIANGLE WAVEFORM
-    	kShapeAmount	limit	gkShapeAmount+kShapeLFO, -1, 1
-    	apd1         	pdhalf	aosc, kShapeAmount, ibipolar, ifullscale					;PHASE DISTORT THE PHASOR (aosc) CREATED 4 LINES ABOVE
-    	apd2         	pdhalfy	aosc, kShapeAmount, ibipolar, ifullscale					;PHASE DISTORT THE PHASOR (aosc) CREATED 4 LINES ABOVE
+  ibipolar   = 0      ; Unipolar/bipolar switch (0=unipolar 1=bipolar)
+  ifullscale = 1      ; Fullscale value
+  aosc phasor gkfreq  ; Define a phasor
+  kLFOenv linseg 0, i(gkLFOdelS)+0.00001, 0, i(gkLFOrisS)+0.00001, 1, 1, 1
+  kShapeLFO lfo gkLFOdepS*kLFOenv, gkLFOratS, 1  ; Triangle waveform
+  kShapeAmount limit gkShapeAmount+kShapeLFO, -1, 1
+  ; Phase distort the phasor (aosc) created 4 lines above
+  apd1 pdhalf aosc, kShapeAmount, ibipolar, ifullscale
+  ; Phase distort the phasor (aosc) created 4 lines above
+  apd2 pdhalfy aosc, kShapeAmount, ibipolar, ifullscale
 
-	if		gktype=0	then
-		apd	=	apd1
-	elseif	gktype=1	then
-		apd	=	apd2
-	endif
-	UPDATE:																	;LABEL FOR WHERE TO BEGIN REINITIALIZATION PASS
-    	aout        	tablei	apd, i(gkfn)+1, 1										;READ WAVEFORM USING PHASE DISTORTED WAVEFORM
-   			 	rireturn														;RETURN TO PERFORMANCE
-				outs		aout * gkamp, aout * gkamp								;SEND AUDIO TO OUTPUTS
-endin   
+  if gktype = 0 then
+    apd = apd1
+  elseif gktype = 1 then
+    apd = apd2
+  endif
+UPDATE:                            ; Label for where to begin reinitialization pass
+  aout tablei apd, i(gkfn)+1, 1    ; Read waveform using phase distorted waveform
+  rireturn                         ; Return to performance
+  outs aout * gkamp, aout * gkamp  ; Send audio to outputs
+endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0.0	   3600	;GUI
-i 11		0.0     0.01	;INIT
+; Instr | start | duration
+i 10 0.0 3600  ; GUI
+i 11 0.0 0.01  ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -175,9 +192,9 @@ i 11		0.0     0.01	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -195,15 +212,20 @@ i 11		0.0     0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -224,15 +246,20 @@ i 11		0.0     0.01	;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -253,14 +280,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -282,14 +309,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -329,14 +356,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -358,14 +385,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -405,14 +432,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -434,14 +461,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -523,11 +550,23 @@ i 11		0.0     0.01	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off - MIDI</text>
+  <text>On / Off - MIDI</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -545,14 +584,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -599,14 +638,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -646,14 +685,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -675,14 +714,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -722,14 +761,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -751,14 +790,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -798,14 +837,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -827,14 +866,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -874,14 +913,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -903,14 +942,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -950,14 +989,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -979,14 +1018,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1026,14 +1065,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1055,14 +1094,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1102,14 +1141,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1131,14 +1170,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1178,14 +1217,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1207,14 +1246,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1236,15 +1275,20 @@ i 11		0.0     0.01	;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -1283,14 +1327,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1312,14 +1356,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1359,14 +1403,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1388,14 +1432,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1435,14 +1479,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1464,14 +1508,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1511,14 +1555,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1540,14 +1584,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1587,14 +1631,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1616,14 +1660,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1663,14 +1707,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1692,14 +1736,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1739,14 +1783,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1768,14 +1812,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1797,15 +1841,20 @@ i 11		0.0     0.01	;INIT
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -1844,14 +1893,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1873,14 +1922,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1920,14 +1969,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1949,14 +1998,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1996,14 +2045,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2025,14 +2074,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2072,14 +2121,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2101,14 +2150,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2131,15 +2180,20 @@ Phase Distortion Synthesis </label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -2161,14 +2215,14 @@ Phase Distortion Synthesis </label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>2</borderradius>

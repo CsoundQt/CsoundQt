@@ -1,89 +1,105 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, December 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, December 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Instrument 1 is activated by MIDI and by the GUI
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Instrument 1 is activated by MIDI and by the GUI
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	0, 0, 4096, 10, 1						;SINE WAVE
-giexp		ftgen	0, 0, 1024, 19, 0.5, 0.5, 270, 0.5			;EXPONENTIAL CURVE
-giExp1_5000	ftgen	0, 0, 129, -25, 0,  1.0, 128, 5000.0		;TABLE FOR EXP SLIDER
-giExp20_5000	ftgen	0, 0, 129, -25, 0,  20.0, 128, 5000.0		;TABLE FOR EXP SLIDER
+gisine       ftgen 0, 0, 4096, 10, 1                     ; Sine wave
+giexp        ftgen 0, 0, 1024, 19, 0.5, 0.5, 270, 0.5    ; Exponential curve
+giExp1_5000  ftgen 0, 0, 129, -25, 0, 1.0, 128, 5000.0   ; Table for exp slider
+giExp20_5000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 5000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkamp			invalue	"Amplitude"
-		gkoct			invalue	"Octaviation"
-		gkband			invalue	"Bandwidth"
-		gkdur			invalue	"Duration"
-		gkris			invalue	"Rise_Time"
-		gkdec			invalue	"Decay_Time"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkamp  invalue "Amplitude"
+    gkoct  invalue "Octaviation"
+    gkband invalue "Bandwidth"
+    gkdur  invalue "Duration"
+    gkris  invalue "Rise_Time"
+    gkdec  invalue "Decay_Time"
 
-		kfund			invalue	"X_Fund"
-		gkfund			tablei	kfund, giExp1_5000, 1
-						outvalue	"X_Fund_Value", gkfund
-		kform			invalue	"Y_Form"
-		gkform			tablei	kform, giExp20_5000, 1
-						outvalue	"Y_Form_Value", gkform
-	endif
+    kfund invalue "X_Fund"
+    gkfund tablei kfund, giExp1_5000, 1
+    outvalue "X_Fund_Value", gkfund
+    kform invalue "Y_Form"
+    gkform tablei kform, giExp20_5000, 1
+    outvalue "Y_Form_Value", gkform
+  endif
 endin
 
-instr	1
-	if p4!=0 then												;MIDI
-		ioct		= p4											;READ OCT VALUE FROM MIDI INPUT
-		;PITCH BEND======================================================================================================
-		iSemitoneBendRange = 12									;PITCH BEND RANGE IN SEMITONES
-		imin		= 0											;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333					;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax							;PITCH BEND VARIABLE (IN oct FORMAT)
-		kfund	=	cpsoct(ioct + kbend)						;SET FUNDEMENTAL
-		;=================================================================================================================
-	else														;GUI
-		kfund		= gkfund									;SET FUNDEMENTAL
-	endif
+instr 1
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read oct value from MIDI input
+    ; Pitch
+    ; bend======================================================================================================
+    iSemitoneBendRange = 12  ; Pitch bend range in semitones
+    imin               = 0   ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kfund = cpsoct(ioct + kbend)  ; Set fundemental
+    ; =================================================================================================================
+  else              ; GUI
+    kfund = gkfund  ; Set fundemental
+  endif
 
-	iporttime		=		0.2									;CREATE A VARIABLE THAT WILL BE USED FOR PORTAMENTO TIME
-	kporttime		linseg	0,0.001,iporttime						;CREATE A VARIABLE THAT WILL BE USED FOR PORTAMENTO TIME
-	kfund		portk	kfund, kporttime
-	kamp			portk	gkamp, kporttime						;APPLY PORTAMENTO TO SELECTED SLIDER VARIABLE AND CREATE NEW NON-GLOBAL VARIABLES TO BE USED BY THE FOF OPCODE
-	kform		portk	gkform, kporttime     					;APPLY PORTAMENTO TO SELECTED SLIDER VARIABLE AND CREATE NEW NON-GLOBAL VARIABLES TO BE USED BY THE FOF OPCODE
-	
-	iolaps		=		500									;MAXIMUM ALLOWED NUMBER OF GRAIN OVERLAPS (THE BEST IDEA IS TO SIMPLY OVERESTIMATE THIS VALUE)
-	ifna			=		gisine								;WAVEFORM USED BY THE GRAINS (NORMALLY A SINE WAVE)
-	ifnb			=		giexp								;WAVEFORM USED IN THE DESIGN OF THE EXPONENTIAL ATTACK AND DECAY OF THE GRAINS
-	itotdur		=		3600									;TOTAL DURATION OF THE FOF NOTE. IN NON-REALTIME THIS WILL BE p3. IN REALTIME OVERESTIMATE THIS VALUE, IN THIS CASE 1 HOUR - PERFORMANCE CAN STILL BE INTERRUPTED PREMATURELY
-	
-	;THE FOF OPCODE:
-	asig 		fof 		kamp, kfund, kform, gkoct, gkband, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur ;[, iphs] [, ifmode] [, iskip
-				outs		asig, asig							;OUTPUT OF fof OPCODE IS SENT TO THE OUTPUTS  
+  iporttime = 0.2  ; Create a variable that will be used for portamento time
+  ; Create a variable that will be used for portamento time
+  kporttime linseg 0, 0.001, iporttime
+  kfund portk kfund, kporttime
+  ; Apply portamento to selected slider variable and create new non-global variables to be
+  ; used by the fof opcode
+  kamp portk gkamp, kporttime
+  ; Apply portamento to selected slider variable and create new non-global variables to be
+  ; used by the fof opcode
+  kform portk gkform, kporttime
+
+  ; Maximum allowed number of grain overlaps (the best idea is to simply overestimate this
+  ; value)
+  iolaps = 500
+  ifna   = gisine  ; Waveform used by the grains (normally a sine wave)
+  ; Waveform used in the design of the exponential attack and decay of the grains
+  ifnb = giexp
+  ; Total duration of the fof note. In non-realtime this will be p3. In realtime
+  ; overestimate this value, in this case 1 hour - performance can still be interrupted
+  ; prematurely
+  itotdur = 3600
+
+  ; The fof opcode:
+  ; [, iphs] [, ifmode] [, iskip
+  asig fof kamp, kfund, kform, gkoct, gkband, gkris, gkdur, gkdec, iolaps, ifna, ifnb, itotdur
+  outs asig, asig  ; Output of fof opcode is sent to the outputs
 endin
 
-instr	2	;INIT
-		outvalue	"_SetPresetIndex", 0
+instr 2  ; Init
+  outvalue "_SetPresetIndex", 0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0		3600		;GUI
+; Instr | start | duration
+i 10 0 3600  ; GUI
 
-i 2	     0.1		 0		;INIT
+i 2 0.1 0  ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -98,9 +114,9 @@ i 2	     0.1		 0		;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -118,15 +134,20 @@ i 2	     0.1		 0		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>85</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -147,15 +168,20 @@ i 2	     0.1		 0		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
    <r>0</r>
    <g>85</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -177,14 +203,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -206,14 +232,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -253,14 +279,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -294,9 +320,9 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -312,11 +338,23 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off (MIDI)</text>
+  <text>On / Off (MIDI)</text>
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Bandwidth</objectName>
@@ -334,14 +372,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -381,14 +419,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -410,14 +448,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -457,14 +495,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -486,14 +524,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -533,14 +571,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -562,14 +600,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -609,14 +647,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -638,14 +676,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -685,14 +723,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -714,14 +752,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -743,14 +781,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -772,14 +810,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -801,14 +839,14 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

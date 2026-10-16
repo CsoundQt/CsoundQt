@@ -1,140 +1,161 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
-;DEMONSTRATION OF THE wgclar OPCODE. THIS IS A PHYSICALLY MODELLED CLARINET - SOUNDS MORE LIKE PAN PIPES AT TIMES... YUCK!
-;	- THE ALGORITHM USED IS SIMILAR TO THAT USED BY THE wgflute OPCODE
+; Demonstration of the wgclar opcode. This is a physically modelled clarinet - sounds more
+; like pan pipes at times... Yuck!
+; - The algorithm used is similar to that used by the wgflute opcode
 
-;kamp - AMPLITUDE
+; Kamp - amplitude
 
-;kfreq - THE FUNDEMENTAL OF THE TONE PRODUCED
+; Kfreq - the fundemental of the tone produced
 
-;kstiff - THE STIFFNESS OF THE REED - BUT I CAN'T GET IT TO DO ANYTHING! CAN YOU PROVE ME WRONG?
+; Kstiff - the stiffness of the reed - but i can't get it to do anything! Can you prove me
+; wrong?
 
-;iatt/idek - ATTACK AND DECAY TIMES.
-;	NOTE THAT THESE CONTROLS WILL IMPLEMENT AN ATTACK AND DECAY CHARACTERISTIC THAT IS MORE ELABORATE 
-;	-THAN JUST AN AMPLITUDE ENVELOPE STYLE ATTACK AND DECAY
-;	IN ORDER FOR THE DECAY TIME PARAMETER TO WORK PROPERLY NOTE DURATION MUST BE EXTENDED.
-;	IN A MIDI SITUATION THIS COULD BE DONE USING linenr, linsegr OR expsegr.
+; Iatt/idek - attack and decay times.
+; Note that these controls will implement an attack and decay characteristic that is more
+; elaborate
+; -Than just an amplitude envelope style attack and decay
+; In order for the decay time parameter to work properly note duration must be extended.
+; In a MIDI situation this could be done using linenr, linsegr or expsegr.
 
-;kngain - AMPLITUDE OF BREATH/WIND NOISE. THE FLUTE SOUND CONSISTS OF 2 MAIN ELEMENTS:
-;	THE RESONANT TONE AND THE BREATH NOISE. 
-;	THIS PARAMETER CONTROLS THE STRENGTH OF THE BREATH/WIND NOISE.
-;	A USEFUL RANGE FOR THIS IS ABOUT 0-1
-;	0=NO BREATH NOISE, 1=BREATH NOISE ONLY
+; Kngain - amplitude of breath/wind noise. The flute sound consists of 2 main elements:
+; The resonant tone and the breath noise.
+; This parameter controls the strength of the breath/wind noise.
+; A useful range for this is about 0-1
+; 0=No breath noise, 1=breath noise only
 
-;kvibf/kvibamp - THIS OPCODE IMPLEMENTS VIBRATO THAT GOES BEYOND JUST FREQUENCY MODULATION AND INCLUDES MODULATION 
-;	-UPON SEVERAL OTHER ASPECTS OF THE SOUND INCLUDING AMPLITUDE MODULATION
-;	A USEFUL RANGE FOR kvibamp (AMPLITUDE OF VIBRATO) IS 0-.25 WHERE 0=NO VIBRATO AND .25=A LOT OF VIBRATO
-;	kvibf IS USED TO CONTROL VIBRATO FREQUENCY, A NATURAL VIBRATO FREQUENCY IS ABOUT 5 HZ
+; Kvibf/kvibamp - this opcode implements vibrato that goes beyond just frequency
+; modulation and includes modulation
+; -Upon several other aspects of the sound including amplitude modulation
+; A useful range for kvibamp (amplitude of vibrato) is 0-.25 where 0=no vibrato and .25=a
+; lot of vibrato
+; Kvibf is used to control vibrato frequency, a natural vibrato frequency is about 5 hz
 
-;ifn - A FUNCTION TABLE WAVEFORM MUST BE GIVEN TO DEFINE THE SHAPE OF THE VIBRATO, 
-;	-THIS SHOULD NORMALLY BE A SINE WAVE.
+; Ifn - a function table waveform must be given to define the shape of the vibrato,
+; -This should normally be a sine wave.
 
-;THE OPCODE OFFERS 3 FURTHER *OPTIONAL* PARAMETERS:
+; The opcode offers 3 further *optional* parameters:
 
-;iminfreq - A MINIMUM FREQUENCY SETTING GIVEN TO THE ALGORITHM
-;	- TYPICALLY THIS IS SET TO A VALUE BELOW THE FREQUENCY SETTING GIVEN BY kfreq
-;	- IF kfreq GOES BELOW iminfreq IS CAN HAVE A STRANGE EFFECT ON THE SOUND AND THE SETTING FOR kfreq NO LONGER 
-;	-REFLECTS THE PITCH THAT IS ACTUALLY HEARD.
-
-
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
-
-
-;Notes on modifications from original csd:
-;	Add tables for exp slider
-;	INIT instrument added
+; Iminfreq - a minimum frequency setting given to the algorithm
+; - Typically this is set to a value below the frequency setting given by kfreq
+; - If kfreq goes below iminfreq is can have a strange effect on the sound and the setting
+; for kfreq no longer
+; -Reflects the pitch that is actually heard.
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+
+
+; Notes on modifications from original csd:
+; Add tables for exp slider
+; INIT instrument added
+
+
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-giExp1	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLE FOR EXP SLIDER
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Table for exp slider
 
 
-instr	2	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkamp		invalue	"Amp"
-		kfreq		invalue	"Freq"
-		gkfreq		tablei	kfreq, giExp1, 1
-					outvalue	"Freq_Value", gkfreq
-		gkstiff		invalue	"Stiff"
-		gkngain		invalue	"NoiseGain"
-		gkatt		invalue	"Attack"
-		gkdetk		invalue	"Decay"
-		gkvibf		invalue	"VibFreq"
-		gkvibamp		invalue	"VibAmp"
-		kminfreq		invalue	"MinFreq"
-		gkminfreq		tablei	kminfreq, giExp1, 1
-					outvalue	"MinFreq_Value", gkminfreq
-	endif
+instr 2  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkamp invalue "Amp"
+    kfreq invalue "Freq"
+    gkfreq tablei kfreq, giExp1, 1
+    outvalue "Freq_Value", gkfreq
+    gkstiff  invalue "Stiff"
+    gkngain  invalue "NoiseGain"
+    gkatt    invalue "Attack"
+    gkdetk   invalue "Decay"
+    gkvibf   invalue "VibFreq"
+    gkvibamp invalue "VibAmp"
+    kminfreq invalue "MinFreq"
+    gkminfreq tablei kminfreq, giExp1, 1
+    outvalue "MinFreq_Value", gkminfreq
+  endif
 endin
 
-instr	1	;MIDI ACTIVATED INSTRUMENT
-	ioct	octmidi											;READ NOTE VALUES FROM MIDI INPUT IN THE 'OCT' FORMAT
-	iamp	ampmidi	1										;AMPLITUDE IS READ FROM INCOMING MIDI NOTE
+instr 1           ; MIDI activated instrument
+  ioct octmidi    ; Read note values from MIDI input in the 'oct' format
+  iamp ampmidi 1  ; Amplitude is read from incoming MIDI note
 
-	;PITCH BEND INFORMATION IS READ
-	iSemitoneBendRange	=	2								;PITCH BEND RANGE IN SEMITONES (WILL BE DEFINED FURTHER LATER)
-	imin 			=	0								;EQUILIBRIUM POSITION
-	imax				=	iSemitoneBendRange * .0833333			;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend		pchbend	imin, imax						;PITCH BEND VARIABLE (IN oct FORMAT)
-	kfreq		=		cpsoct(ioct+ kbend)
-	aenv			linsegr	1, 3600, 1, i(gkdetk), 0				;THIS ENVELOPE, ALTHOUGH NOT USED AS A CONTROL SIGNAL FOR ANYTHING, SERVES TO KEEP THE INSTRUMENT RUNNING AFTER A NOTE OF HAS BEEN RECEIVED TO FACILITATE THE DECCAY TIME FOR wgclar
-	ifn			=		1								;WAVEFORM FUNCTION TABLE FOR THE SHAPE OF THE VIBRATO - SHOULD NORMALLY JUST BE A SINE WAVE OR SOMETHING SIMILAR
-	kSwitch		changed	gkminfreq, gkatt, gkdetk
-	if	kSwitch=1	then										;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE									;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
-	UPDATE:
-	;AN AUDIO SIGNAL IS CREATED USING THE wgclar OPCODE. NOTE THAT I-RATE VARIABLES MUST BE CONVERTED FROM K-RATE TO I-RATE SLIDERS
-	aclarinet 	wgclar	gkamp*iamp, kfreq, gkstiff, i(gkatt), i(gkdetk), gkngain,gkvibf, gkvibamp, ifn, i(gkminfreq)
-				rireturn									;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-				outs 	aclarinet * aenv, aclarinet * aenv
+  ; Pitch bend information is read
+  ; Pitch bend range in semitones (will be defined further later)
+  iSemitoneBendRange = 2
+  imin               = 0  ; Equilibrium position
+  ; Max pitch displacement (in oct format)
+  imax = iSemitoneBendRange * .0833333
+  ; Pitch bend variable (in oct format)
+  kbend pchbend imin, imax
+  kfreq = cpsoct(ioct+ kbend)
+  ; This envelope, although not used as a control signal for anything, serves to keep the
+  ; instrument running after a note of has been received to facilitate the deccay time for
+  ; wgclar
+  aenv linsegr 1, 3600, 1, i(gkdetk), 0
+  ; Waveform function table for the shape of the vibrato - should normally just be a sine
+  ; wave or something similar
+  ifn = 1
+  kSwitch changed gkminfreq, gkatt, gkdetk
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
+UPDATE:
+  ; An audio signal is created using the wgclar opcode. Note that i-rate variables must be
+  ; converted from k-rate to i-rate sliders
+  aclarinet wgclar gkamp*iamp, kfreq, gkstiff, i(gkatt), i(gkdetk), gkngain, gkvibf, gkvibamp, ifn, i(gkminfreq)
+  rireturn  ; Return from reinitialisation pass to performance time passes
+  outs aclarinet * aenv, aclarinet * aenv
 endin
 
-instr	3	;GUI TRIGGERED INSTRUMENT
-	kSwitch		changed	gkminfreq, gkatt, gkdetk
-	if	kSwitch=1	then										;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE									;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
-	UPDATE:
-	aenv			linsegr	1, 3600, 1, i(gkdetk), 0				;THIS ENVELOPE, ALTHOUGH NOT USED AS A CONTROL SIGNAL FOR ANYTHING, SERVES TO KEEP THE INSTRUMENT RUNNING AFTER A NOTE OF HAS BEEN RECEIVED TO FACILITATE THE DECCAY TIME FOR wgclar
-	ifn			=		1								;WAVEFORM FUNCTION TABLE FOR THE SHAPE OF THE VIBRATO - SHOULD NORMALLY JUST BE A SINE WAVE OR SOMETHING SIMILAR
-	;AN AUDIO SIGNAL IS CREATED USING THE wgclar OPCODE. NOTE THAT I-RATE VARIABLES MUST BE CONVERTED FROM K-RATE TO I-RATE SLIDERS
-	aclarinet 	wgclar	gkamp, gkfreq, gkstiff, i(gkatt), i(gkdetk), gkngain,gkvibf, gkvibamp, ifn, i(gkminfreq)
-				rireturn									;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-				outs 	aclarinet * aenv, aclarinet * aenv
+instr 3  ; GUI triggered instrument
+  kSwitch changed gkminfreq, gkatt, gkdetk
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
+UPDATE:
+  ; This envelope, although not used as a control signal for anything, serves to keep the
+  ; instrument running after a note of has been received to facilitate the deccay time for
+  ; wgclar
+  aenv linsegr 1, 3600, 1, i(gkdetk), 0
+  ; Waveform function table for the shape of the vibrato - should normally just be a sine
+  ; wave or something similar
+  ifn = 1
+  ; An audio signal is created using the wgclar opcode. Note that i-rate variables must be
+  ; converted from k-rate to i-rate sliders
+  aclarinet wgclar gkamp, gkfreq, gkstiff, i(gkatt), i(gkdetk), gkngain, gkvibf, gkvibamp, ifn, i(gkminfreq)
+  rireturn  ; Return from reinitialisation pass to performance time passes
+  outs aclarinet * aenv, aclarinet * aenv
 endin
 
-instr	4	;INIT
-		outvalue	"Amp"		, 0.3
-		outvalue	"Freq"		, 0.525
-		outvalue	"Stiff"		, .3
-		outvalue	"NoiseGain"	, .1
-		outvalue	"Attack"		, .03
-		outvalue	"Decay"		, .03
-		outvalue	"VibFreq"		, 5.0
-		outvalue	"VibAmp"		, .1
-		outvalue	"MinFreq"		, 0.0
+instr 4  ; Init
+  outvalue "Amp", 0.3
+  outvalue "Freq", 0.525
+  outvalue "Stiff", .3
+  outvalue "NoiseGain", .1
+  outvalue "Attack", .03
+  outvalue "Decay", .03
+  outvalue "VibFreq", 5.0
+  outvalue "VibAmp", .1
+  outvalue "MinFreq", 0.0
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 131072 10 1			;SINE WAVE (USED FOR VIBRATO)
+f 1 0 131072 10 1  ; Sine wave (used for vibrato)
 
-;INSTR | START | DURATION 
-i 2		0		3600		;GUI
-i 4		0		0.1		;INIT
+; Instr | start | duration
+i 2 0 3600  ; GUI
+i 4 0 0.1   ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -147,9 +168,9 @@ i 4		0		0.1		;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -167,15 +188,20 @@ i 4		0		0.1		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -196,14 +222,14 @@ i 4		0		0.1		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -243,14 +269,14 @@ i 4		0		0.1		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -272,15 +298,20 @@ i 4		0		0.1		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>147</r>
    <g>154</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -302,14 +333,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -328,11 +359,23 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 3 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -350,14 +393,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -397,14 +440,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -426,14 +469,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -473,14 +516,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -502,14 +545,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -549,14 +592,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -578,14 +621,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -625,14 +668,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -654,14 +697,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -701,14 +744,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -730,14 +773,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -777,14 +820,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -806,14 +849,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -853,14 +896,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -882,14 +925,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -929,14 +972,14 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

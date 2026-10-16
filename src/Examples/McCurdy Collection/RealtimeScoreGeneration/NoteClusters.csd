@@ -1,90 +1,94 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
-;Modified for QuteCsound by René, March 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, March 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add init instrument
+; Notes on modifications from original csd:
+; Add init instrument
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100	;SAMPLE RATE
-ksmps	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen		0,0,4096,10,1	;A SINE WAVE
+gisine ftgen 0, 0, 4096, 10, 1  ; A sine wave
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkClusterFrq	invalue	"ClusterFreq"
-		gkOctMin		invalue	"OctMin"
-		gkOctMax		invalue	"OctMax"
-		gkSpread		invalue	"EvtSprd"
-		gkDurMin		invalue	"DurMin"
-		gkDurMax		invalue	"DurMax"
-		gkPanSprd		invalue	"PanSprd"
-		gkGainMin		invalue	"GainMin"
-		gkGainMax		invalue	"GainMax"
-		gkAttTim		invalue	"Attack"
-		gkEvents		invalue	"NbEvts"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkClusterFrq invalue "ClusterFreq"
+    gkOctMin     invalue "OctMin"
+    gkOctMax     invalue "OctMax"
+    gkSpread     invalue "EvtSprd"
+    gkDurMin     invalue "DurMin"
+    gkDurMax     invalue "DurMax"
+    gkPanSprd    invalue "PanSprd"
+    gkGainMin    invalue "GainMin"
+    gkGainMax    invalue "GainMax"
+    gkAttTim     invalue "Attack"
+    gkEvents     invalue "NbEvts"
+  endif
 endin
 
-instr	1	;TRIGGER CLUSTER GENERATOR
-	kTrigger	metro		gkClusterFrq
-			schedkwhen	kTrigger, 0, 0, 2, 0, 0.001			;TRIGGER INSTR 2 FOR A VERY SHORT TIME
+instr 1  ; Trigger cluster generator
+  kTrigger metro gkClusterFrq
+  schedkwhen kTrigger, 0, 0, 2, 0, 0.001  ; Trigger instr 2 for a very short time
 endin
 
-instr	2	;TRIGGER EVENTS WITHIN A CLUSTER 
-			seed 	0									;RANDOM NUMBER GENERATORS SEEDED FROM SYSTEM CLOCK
-	kncr		=		1									;COUNTER INCREMENT
-	kndx		init		1									;COUNTER INITIAL VALUE
-	LABEL:												;POINT OF CODE TO LEAP BACK TO
-	kamp		random	gkGainMin,gkGainMax						;AMPLITUDE
-	kstart	init		0									;INITIAL START TIME
-	koct		random	gkOctMin, gkOctMax						;PITCH RANDOM RANGE
-	kpan		random	0.5-gkPanSprd, 0.5+gkPanSprd				;PANNING RANDOM RANGE
-	kdur		random	gkDurMin, gkDurMax						;DURATION RANDOM RANGE
-	;							        p4    p5    p6
-			event	"i", 3, kstart, kdur, kamp, koct, kpan		;TRIGGER NOTE EVENT IN INSTR 2
-	kstart	random	0, gkSpread							;RANDOM START TIME - RANGE DEFINED BY GUI 'Spread' SLIDER VALUE
-	kndx  	=		kndx + kncr							;INCREASE THE COUNTER (kndx) BY THE DEFINED INCREMENT AMOUNT (kncr)
-	if (kndx <= gkEvents) kgoto LABEL							;CHECK IF WE HAVE REACHED OUR MAXIMUM NUMBER OF EVENTS IN THIS CLUSTER 
-			turnoff										;TURNOFF THIS INSTRUMENT IMMEDIATELY
+instr 2  ; Trigger events within a cluster
+  ; Random number generators seeded from system clock
+  seed 0
+  kncr = 1                                  ; Counter increment
+  kndx init 1                               ; Counter initial value
+LABEL:                                      ; Point of code to leap back to
+  kamp random gkGainMin, gkGainMax          ; Amplitude
+  kstart init 0                             ; Initial start time
+  koct random gkOctMin, gkOctMax            ; Pitch random range
+  kpan random 0.5-gkPanSprd, 0.5+gkPanSprd  ; Panning random range
+  kdur random gkDurMin, gkDurMax            ; Duration random range
+  ; p4    p5    p6
+  event "i", 3, kstart, kdur, kamp, koct, kpan  ; Trigger note event in instr 2
+  ; Random start time - range defined by GUI 'spread' slider value
+  kstart random 0, gkSpread
+  kndx = kndx + kncr  ; Increase the counter (kndx) by the defined increment amount (kncr)
+  ; Check if we have reached our maximum number of events in this cluster
+  if (kndx <= gkEvents) kgoto LABEL
+  turnoff  ; Turnoff this instrument immediately
 endin
 
-instr	3	;SOUND PRODUCING INSTRUMENT
-	aenv		expseg	0.001,.005+(p3*i(gkAttTim)),1,(p3*(1-i(gkAttTim)))-.005,0.001	;CREATE AMPLITUDE ENVELOPE
-	asig		oscili	0.2*aenv*p4, cpsoct(p5), gisine							;AUDIO OSCILLATOR
-			outs		asig*p6, asig*(1-p6)									;SEND AUDIO TO OUTPUTS
+instr 3  ; Sound producing instrument
+  ; Create amplitude envelope
+  aenv expseg 0.001, .005+(p3*i(gkAttTim)), 1, (p3*(1-i(gkAttTim)))-.005, 0.001
+  asig oscili 0.2*aenv*p4, cpsoct(p5), gisine  ; Audio oscillator
+  outs asig*p6, asig*(1-p6)                    ; Send audio to outputs
 endin
 
-instr	100	;INIT
-		outvalue	"ClusterFreq"	, 0.5
-		outvalue	"OctMin"		, 9
-		outvalue	"OctMax"		, 12
-		outvalue	"EvtSprd"		, 0.5
-		outvalue	"DurMin"		, 1
-		outvalue	"DurMax"		, 3
-		outvalue	"PanSprd"		, 0.5
-		outvalue	"GainMin"		, 0.1
-		outvalue	"GainMax"		, 0.9
-		outvalue	"Attack"		, 0
-		outvalue	"NbEvts"		, 3
+instr 100  ; Init
+  outvalue "ClusterFreq", 0.5
+  outvalue "OctMin", 9
+  outvalue "OctMax", 12
+  outvalue "EvtSprd", 0.5
+  outvalue "DurMin", 1
+  outvalue "DurMax", 3
+  outvalue "PanSprd", 0.5
+  outvalue "GainMin", 0.1
+  outvalue "GainMax", 0.9
+  outvalue "Attack", 0
+  outvalue "NbEvts", 3
 endin
 </CsInstruments>
 <CsScore>
-i  10 0	3600		;GUI
-i 100 0.1	0.01		;INIT
+i 10 0 3600     ; GUI
+i 100 0.1 0.01  ; Init
 </CsScore>
 </CsoundSynthesizer>
 
@@ -99,9 +103,9 @@ i 100 0.1	0.01		;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -119,15 +123,20 @@ i 100 0.1	0.01		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -148,14 +157,14 @@ i 100 0.1	0.01		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -195,14 +204,14 @@ i 100 0.1	0.01		;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -221,11 +230,23 @@ i 100 0.1	0.01		;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -243,14 +264,14 @@ i 100 0.1	0.01		;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -272,15 +293,20 @@ i 100 0.1	0.01		;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -305,14 +331,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -332,14 +358,14 @@ The sounds themselves are simple sine waves.</label>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -375,9 +401,9 @@ The sounds themselves are simple sine waves.</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -408,9 +434,9 @@ The sounds themselves are simple sine waves.</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -429,14 +455,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -458,14 +484,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -487,14 +513,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -516,14 +542,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -575,9 +601,9 @@ The sounds themselves are simple sine waves.</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -608,9 +634,9 @@ The sounds themselves are simple sine waves.</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -629,14 +655,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -658,14 +684,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -687,14 +713,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -716,14 +742,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -775,9 +801,9 @@ The sounds themselves are simple sine waves.</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -808,9 +834,9 @@ The sounds themselves are simple sine waves.</label>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -829,14 +855,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -858,14 +884,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -887,14 +913,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -916,14 +942,14 @@ The sounds themselves are simple sine waves.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

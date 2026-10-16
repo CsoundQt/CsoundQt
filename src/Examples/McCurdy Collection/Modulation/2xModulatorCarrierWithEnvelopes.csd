@@ -1,157 +1,171 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 
 ; Modified for QuteCsound by René, November 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Instrument 1 is activated by MIDI and by the GUI
-;	Removed presets (included in QuteCsound)	
-;	Cannot display more than one space in Label, so can't display the schematic shown below:
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Instrument 1 is activated by MIDI and by the GUI
+; Removed presets (included in QuteCsound)
+; Cannot display more than one space in Label, so can't display the schematic shown below:
 
-	; 2 MODULATORS AND A CARRIER FM SYNTHESIS ALGORITHM
-	; -------------------------------------------------
-	;
-	;     +-------------+   +-------------+
-	;     |    oscil    |   |    oscil    |
-	;     |(modulator 1)|   |(modulator 2)|
-	;     +-----+-------+   +-----+-------+
-	;           |                 |
-	;           |                 |
-	;           +---------+-------+
-	;                     |
-	;                     |
-	;               +-----+-----+
-	;               |   oscil   |
-	;               | (carrier) |
-	;               +-----+-----+
-	;                     |
-	;                     |
-	;                    OUT
+  ; 2 Modulators and a carrier fm synthesis algorithm
+  ; -------------------------------------------------
+
+  ; +-------------+   +-------------+
+  ; |    oscil    |   |    oscil    |
+  ; |(modulator 1)|   |(modulator 2)|
+  ; +-----+-------+   +-----+-------+
+  ; |                 |
+  ; |                 |
+  ; +---------+-------+
+  ; |
+  ; |
+  ; +-----+-----+
+  ; |   oscil   |
+  ; | (carrier) |
+  ; +-----+-----+
+  ; |
+  ; |
+  ; Out
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	0, 0, 4096, 10, 1						;FUNCTION TABLE THAT STORES A SINGLE CYCLE OF A SINE WAVE
-giExp20000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0		;TABLES FOR EXP SLIDER
+; Function table that stores a single cycle of a sine wave
+gisine     ftgen 0, 0, 4096, 10, 1
+giExp20000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 20000.0  ; Tables for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kbasefreq		invalue 	"Base_Frequency"
-		gkbasefreq	tablei	kbasefreq, giExp20000, 1
-					outvalue	"Base_Frequency_Value", gkbasefreq		
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kbasefreq invalue "Base_Frequency"
+    gkbasefreq tablei kbasefreq, giExp20000, 1
+    outvalue "Base_Frequency_Value", gkbasefreq
 
-		gkindex		invalue 	"Modulation_Index_1"
-		gkindex2		invalue 	"Modulation_Index_2"
+    gkindex  invalue "Modulation_Index_1"
+    gkindex2 invalue "Modulation_Index_2"
 
-		gkCarRatio	invalue	"Carrier_Frequency"
-		gkModRatio	invalue	"Modulator1_Frequency"
-		gkModRatio2	invalue	"Modulator2_Frequency"	
-		
-		gkCarAmp		invalue 	"Carrier_Amplitude"
+    gkCarRatio  invalue "Carrier_Frequency"
+    gkModRatio  invalue "Modulator1_Frequency"
+    gkModRatio2 invalue "Modulator2_Frequency"
 
-		gkndxatt		invalue 	"Index1_Attack"
-		gkndxdec		invalue 	"Index1_Decay"
-		gkndxslev		invalue 	"Index1_Sustain"
-		gkndxrel		invalue 	"Index1_Release"
-		gkndxdel		invalue 	"Index1_Delay"
+    gkCarAmp invalue "Carrier_Amplitude"
 
-		gkndxatt2		invalue 	"Index2_Attack"
-		gkndxdec2		invalue 	"Index2_Decay"
-		gkndxslev2	invalue 	"Index2_Sustain"
-		gkndxrel2		invalue 	"Index2_Release"
-		gkndxdel2		invalue 	"Index2_Delay"
+    gkndxatt  invalue "Index1_Attack"
+    gkndxdec  invalue "Index1_Decay"
+    gkndxslev invalue "Index1_Sustain"
+    gkndxrel  invalue "Index1_Release"
+    gkndxdel  invalue "Index1_Delay"
 
-		gkampatt		invalue 	"Amp_Attack"
-		gkampdec		invalue 	"Amp_Decay"
-		gkampslev		invalue 	"Amp_Sustain"
-		gkamprel		invalue 	"Amp_Release"
-		gkampdel		invalue 	"Amp_Delay"
-	endif
+    gkndxatt2  invalue "Index2_Attack"
+    gkndxdec2  invalue "Index2_Decay"
+    gkndxslev2 invalue "Index2_Sustain"
+    gkndxrel2  invalue "Index2_Release"
+    gkndxdel2  invalue "Index2_Delay"
+
+    gkampatt  invalue "Amp_Attack"
+    gkampdec  invalue "Amp_Decay"
+    gkampslev invalue "Amp_Sustain"
+    gkamprel  invalue "Amp_Release"
+    gkampdel  invalue "Amp_Delay"
+  endif
 endin
 
-instr	1	;FM INSTRUMENT
-	if p4!=0 then													;MIDI
-		ioct		= p4												;READ OCT VALUE FROM MIDI INPUT
-		iamp		= p5												;READ midi-velocity-amp FROM MIDI INPUT
-		kCarAmp	= iamp * gkCarAmp									;SET AMPLITUDE TO RECEIVED p5 (I.E. MIDI VELOCITY) MULTIPLIED BY SLIDER "Carrier_Amplitude"
+instr 1            ; Fm instrument
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read oct value from MIDI input
+    iamp = p5      ; READ midi-velocity-amp FROM MIDI INPUT
+    ; Set amplitude to received p5 (i.e. MIDI velocity) multiplied by slider
+    ; "carrier_amplitude"
+    kCarAmp = iamp * gkCarAmp
 
-		;PITCH BEND===========================================================================================================================================================
-		iSemitoneBendRange = 4										;PITCH BEND RANGE IN SEMITONES
-		imin		= 0												;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333						;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax								;PITCH BEND VARIABLE (IN oct FORMAT)
-		kbasefreq	=	cpsoct(ioct + kbend)							;SET FUNDEMENTAL FROM MIDI
-		;=====================================================================================================================================================================
-	else															;GUI
-		kbasefreq = gkbasefreq										;SET FUNDEMENTAL FROM GUI SLIDER "Base_Frequency"
-		kCarAmp	= gkCarAmp										;SET kamp TO SLIDER VALUE "Carrier_Amplitude"
-	endif
+    ; Pitch
+    ; bend===========================================================================================================================================================
+    iSemitoneBendRange = 4  ; Pitch bend range in semitones
+    imin               = 0  ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kbasefreq = cpsoct(ioct + kbend)  ; Set fundemental from MIDI
+    ; =====================================================================================================================================================================
+  else                      ; GUI
+    kbasefreq = gkbasefreq  ; Set fundemental from GUI slider "base_frequency"
+    kCarAmp   = gkCarAmp    ; SET kamp TO SLIDER VALUE "Carrier_Amplitude"
+  endif
 
-	kporttime		linseg	0,0.001,0.02								;CREATE A VARIABLE FUNCTION THAT RAPIDLY RAMPS UP TO A SET VALUE	
-	kbasefreq		portk	kbasefreq, kporttime
+  ; Create a variable function that rapidly ramps up to a set value
+  kporttime linseg 0, 0.001, 0.02
+  kbasefreq portk kbasefreq, kporttime
 
-	kndxenv	 		madsr 	i(gkndxatt), i(gkndxdec), i(gkndxslev) + .0000001, i(gkndxrel) , i(gkndxdel)			;LINE SEGMENT ENVELOPE WITH MIDI RELEASE MECHANISM
-	kndxenv2		 	madsr 	i(gkndxatt2), i(gkndxdec2), i(gkndxslev2) + .0000001, i(gkndxrel2) , i(gkndxdel2)		;LINE SEGMENT ENVELOPE WITH MIDI RELEASE MECHANISM
-	kpeakdeviation		=		kbasefreq * gkindex * kndxenv													;DERIVE PEAK DEVIATION FOR MODULATOR 1 
-	kpeakdeviation2	=		kbasefreq * gkindex2 * kndxenv2												;DERIVE PEAK DEVIATION FOR MODULATOR 1
-	aModulator		oscili	kpeakdeviation, kbasefreq * gkModRatio, gisine									;CREATE MODULATOR 1
-	aModulator2		oscili	kpeakdeviation2, kbasefreq * gkModRatio2, gisine									;CREATE MODULATOR 2
-	aampenv 			mxadsr 	i(gkampatt), i(gkampdec), i(gkampslev) + .0000001, i(gkamprel) , i(gkampdel)			;EXPONENTIAL SEGMENT ENVELOPE WITH MIDI RELEASE MECHANISM
-	aCarrier			oscili	kCarAmp * aampenv, (kbasefreq * gkCarRatio) + aModulator + aModulator2, gisine			;CREATE CARRIER (ADD MODULATOR OUTPUTS TO FREQUENCY INPUT)
-					outs		aCarrier, aCarrier															;SEND AUDIO TO OUTPUTS
+  ; Line segment envelope with MIDI release mechanism
+  kndxenv madsr i(gkndxatt), i(gkndxdec), i(gkndxslev) + .0000001, i(gkndxrel), i(gkndxdel)
+  ; Line segment envelope with MIDI release mechanism
+  kndxenv2 madsr i(gkndxatt2), i(gkndxdec2), i(gkndxslev2) + .0000001, i(gkndxrel2), i(gkndxdel2)
+  kpeakdeviation = kbasefreq * gkindex * kndxenv  ; Derive peak deviation for modulator 1
+  ; Derive peak deviation for modulator 1
+  kpeakdeviation2 = kbasefreq * gkindex2 * kndxenv2
+  aModulator oscili kpeakdeviation, kbasefreq * gkModRatio, gisine  ; Create modulator 1
+  ; Create modulator 2
+  aModulator2 oscili kpeakdeviation2, kbasefreq * gkModRatio2, gisine
+  ; Exponential segment envelope with MIDI release mechanism
+  aampenv mxadsr i(gkampatt), i(gkampdec), i(gkampslev) + .0000001, i(gkamprel), i(gkampdel)
+  ; Create carrier (add modulator outputs to frequency input)
+  aCarrier oscili kCarAmp * aampenv, (kbasefreq * gkCarRatio) + aModulator + aModulator2, gisine
+  outs aCarrier, aCarrier  ; Send audio to outputs
 endin
 
-instr	2	;INIT
-	;OPCODE		DESTINATION		|   VALUE
-	outvalue	 	"Base_Frequency",		0.4035705		;325 Hz
+instr 2  ; Init
+  ; Opcode  destination  |   value
+  outvalue "Base_Frequency", 0.4035705  ; 325 Hz
 
-	outvalue	 	"Modulation_Index_1",	5.0
-	outvalue	 	"Modulation_Index_2",	0.702
+  outvalue "Modulation_Index_1", 5.0
+  outvalue "Modulation_Index_2", 0.702
 
-	outvalue	 	"Carrier_Frequency",	1.0
-	outvalue	 	"Modulator1_Frequency",	1.377
-	outvalue	 	"Modulator2_Frequency",	1.3853
+  outvalue "Carrier_Frequency", 1.0
+  outvalue "Modulator1_Frequency", 1.377
+  outvalue "Modulator2_Frequency", 1.3853
 
-	outvalue		"Carrier_Amplitude",	0.8
+  outvalue "Carrier_Amplitude", 0.8
 
-	outvalue	 	"Index1_Attack",		0.002
-	outvalue	 	"Index1_Decay",		3.0
-	outvalue	 	"Index1_Sustain",		0.0
-	outvalue	 	"Index1_Release",		0.5
-	outvalue	 	"Index1_Delay",		0.0
+  outvalue "Index1_Attack", 0.002
+  outvalue "Index1_Decay", 3.0
+  outvalue "Index1_Sustain", 0.0
+  outvalue "Index1_Release", 0.5
+  outvalue "Index1_Delay", 0.0
 
-	outvalue	 	"Index2_Attack",		0.002
-	outvalue	 	"Index2_Decay",		3.0
-	outvalue	 	"Index2_Sustain",		0.0
-	outvalue	 	"Index2_Release",		0.5
-	outvalue	 	"Index2_Delay",		0.0
+  outvalue "Index2_Attack", 0.002
+  outvalue "Index2_Decay", 3.0
+  outvalue "Index2_Sustain", 0.0
+  outvalue "Index2_Release", 0.5
+  outvalue "Index2_Delay", 0.0
 
-	outvalue	 	"Amp_Attack",			0.002
-	outvalue	 	"Amp_Decay",			7.0
-	outvalue 		"Amp_Sustain",			0.0
-	outvalue 		"Amp_Release",			0.5
-	outvalue 		"Amp_Delay",			0.0
+  outvalue "Amp_Attack", 0.002
+  outvalue "Amp_Decay", 7.0
+  outvalue "Amp_Sustain", 0.0
+  outvalue "Amp_Release", 0.5
+  outvalue "Amp_Delay", 0.0
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0	   3600		;GUI
-;INIT
-i 2		0.1		0		;INIT
+; Instr | start | duration
+i 10 0 3600  ; GUI
+; Init
+i 2 0.1 0  ; Init
 </CsScore>
 </CsoundSynthesizer>
 

@@ -4,11 +4,11 @@
 </CsOptions>
 <CsInstruments>
 instr 1 ;prints the values of table 1 or 2
- prints "%nFunction Table %d:%n", p4
+ prints "%nFunction Table %d:\n", p4
  indx init 0
  while indx < 7 do
   ival table indx, p4
-  prints "Index %d = %f%n", indx, ival
+  prints "Index %d = %f\n", indx, ival
   indx += 1
  od
 endin

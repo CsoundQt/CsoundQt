@@ -1173,7 +1173,7 @@ idur      tab_i     indxnotabs, iftdurs
 idb1, idb2 SS2_dbs_1 iftdb, iftenv, indxnotabs, indxnote, icount 
           event_i   "i", isubinstr, idurshift/76.2, idur/76.2, ifq1, ifq2, ifq3, ifq4, ifq5, idb1, idb2 
 if iprintjn == 1 then
-          prints    "%d.%d.%d.%-4d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f%n", 1, int(indxseq/5) + 1, (indxseq%5) + 1, indxnote + 1, idurshift, idurshift/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
+          prints    "%d.%d.%d.%-4d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f\n", 1, int(indxseq/5) + 1, (indxseq%5) + 1, indxnote + 1, idurshift, idurshift/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
 endif
 idurshift =         idurshift + idur 
 indxnotabs =        indxnotabs + 1 
@@ -1209,7 +1209,7 @@ istart    =         istartseq + (imaxdur - idur)
 endif
           event_i   "i", isubinstr, istart/76.2, idur/76.2, ifq1, ifq2, ifq3, ifq4, ifq5, idb1, idb2 
 if iprintjn == 1 then
-          prints    "%d.%d.%d.%-4d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f%n", 2, int(indxseq/5) + 1, (indxseq%5) + 1, indxnote + 1, istart, istart/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
+          prints    "%d.%d.%d.%-4d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f\n", 2, int(indxseq/5) + 1, (indxseq%5) + 1, indxnote + 1, istart, istart/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
 endif
 indxnotabs =        indxnotabs + 1 
           loop_lt   indxnote, 1, icount, note 
@@ -1236,7 +1236,7 @@ idb2      =         -40
 istart    tab_i     indxnotabs, iftstarts 
           event_i   "i", isubinstr, istart/76.2, idur/76.2, ifq1, ifq2, ifq3, ifq4, ifq5, idb1, idb2 
 if iprintjn == 1 then
-          prints    "%d.%d.%d.%-4d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f%n", 3, int(indxseq/5) + 1, (indxseq%5) + 1, indxnote + 1, istart, istart/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
+          prints    "%d.%d.%d.%-4d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f\n", 3, int(indxseq/5) + 1, (indxseq%5) + 1, indxnote + 1, istart, istart/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
 endif
 indxnotabs =        indxnotabs + 1 
           loop_lt   indxnote, 1, icount, note 
@@ -1271,7 +1271,7 @@ istart    =         istartseq + (imaxdur - idur)
 endif
           event_i   "i", isubinstr, istart/76.2, idur/76.2, ifq1, ifq2, ifq3, ifq4, ifq5, idb1, idb2 
 if iprintjn == 1 then 
-          prints    "%d.%d.%d.%-4d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f%n", 4, int(indxseq/5) + 1, (indxseq%5) + 1, indxnote + 1, istart, istart/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
+          prints    "%d.%d.%d.%-4d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f\n", 4, int(indxseq/5) + 1, (indxseq%5) + 1, indxnote + 1, istart, istart/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
 endif
 indxnotabs =        indxnotabs + 1 
           loop_lt   indxnote, 1, icount, note 
@@ -1298,7 +1298,7 @@ idb1      tab_i     indxnotabs * 2, iftdbs
 idb2      tab_i     indxnotabs * 2 + 1, iftdbs 
           event_i   "i", isubinstr, istart/76.2, idur/76.2, ifq1, ifq2, ifq3, ifq4, ifq5, idb1, idb2 
 if iprintjn == 1 then
-          prints    "%d.%d.%d.%-4d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f%n", 5, int(indxseq/5) + 1, (indxseq%5) + 1, indxnote + 1, istart, istart/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
+          prints    "%d.%d.%d.%-4d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f\n", 5, int(indxseq/5) + 1, (indxseq%5) + 1, indxnote + 1, istart, istart/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
 endif
 indxnotabs =        indxnotabs + 1 
           loop_lt   indxnote, 1, icount, note 
@@ -1332,7 +1332,7 @@ idb1      =         idb
 endif
           event_i   "i", isubinstr, istart/76.2, idur/76.2, ifq1, ifq2, ifq3, ifq4, ifq5, idb1, idb2 
 if iprintjn == 1 then
-          prints    "Coda.%-5d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f%n", indx+1, istart, istart/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
+          prints    "Coda.%-5d%-10.2f%-12.3f%-14.2f%-14.3f%-13.2f%-13.2f%-7.0f%-7.0f\n", indx+1, istart, istart/76.2, idur, idur/76.2, ifq1, ifq5, idb1, idb2 
 endif
 istart    =         istart + idur 
           loop_lt   indx, 1, ftlen(iftser), loop 
@@ -1378,7 +1378,7 @@ ift_U2 SS2_Umk ift_R2; inversion of R2
 ift_U3 SS2_Umk ift_R3; inversion of R3 
 ift_U4 SS2_Umk ift_R4; inversion of R4 
 ift_U5 SS2_Umk ift_R5; inversion of R5 
-          prints    "%n%nGENERATING NUMBER SQUARES:%n%n" 
+          prints    "%n%nGENERATING NUMBER SQUARES:\n\n" 
 TableDumpSimpS ift_R1, 0, "\nR1:", 5 
 TableDumpSimpS ift_R2, 0, "R2:", 5 
 TableDumpSimpS ift_R3, 0, "R3:", 5 
@@ -1404,7 +1404,7 @@ ift_Durs TabMultRecurs_i 61, 2.5, ifzwaf; durations in centimeters (1 sec = 76.2
 ift_Durs TabRvrs_i ift_Durs; reverse order 
 ;intensitäties oscillating between -30 and 0 
 ift_Intens SS2_MkGlob_dB_Tab 0, -30 
-          prints    "%n%nGENERATING TABLES OF MATERIAL:%n%n" 
+          prints    "%n%nGENERATING TABLES OF MATERIAL:\n\n" 
 TableDumpSimpS ift_Freqs, 0, "\nFREQUENCIES (Hz):", 5 
 TableDumpSimpS ift_Durs, 2, "\nDURATIONS (cm):", 5 
 TableDumpSimpS ift_Intens, 0, "\nINTENSITIES (dB):", 5 
@@ -1444,7 +1444,7 @@ iftfreqs_1 SS2_MkParamTab_Meth1 ift_Freqs, iftcounts_1, ift_R1, 3, ift_R2, ift_R
 iftdurs_1 SS2_MkParamTab_Meth1 ift_Durs, iftcounts_1, ift_R3, 1, ift_R4, ift_R3, ift_R4, ift_R5, 0; list of durations 
 iftdb_1 SS2_MkParamTab_Meth1 ift_Intens, iftcounts_1, ift_R2, 5, ift_R3, ift_R2, ift_R3, ift_R4, 0; list of intensities 
 iftstarts_1 SS2_Starts_part ift_Durs, iftcounts_1, ift_R4, 1, ift_U5, ift_R4, ift_R5, ift_R1, istart_1; starting times (one per sequence) 
-          prints    "%n%nGENERATING LIST OF EVENTS PART 1 (Events as Part.Set.Sequence.Note):%n%n" 
+          prints    "%n%nGENERATING LIST OF EVENTS PART 1 (Events as Part.Set.Sequence.Note):\n\n" 
           printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 SS2_TrigEvents_1 iftstarts_1, iftcounts_1, iftfreqs_1, iftdurs_1, iftdb_1, iftenv_1, isubinstr, iprintlines 
 
@@ -1472,7 +1472,7 @@ iftdurnorm_2 SS2_MkParamTab_Meth1 ift_Durs, iftcounts_2, ift_R4, 3, ift_R5, ift_
 iftdurs_2 SS2_durs2 iftdurnorm_2, iftcounts_2, iftenv_2; list of modified durations (see above in opcode SS2_durs2) 
 iftdb_2 SS2_MkParamTab_Meth1 ift_Intens, iftcounts_2, ift_R3, 2, ift_R4, ift_R5, ift_R1, ift_R2, 0; list of intensities 
 iftstarts_2 SS2_Starts_part ift_Durs, iftcounts_2, ift_R5, 3, ift_U1, ift_R2, ift_R3, ift_R4, istart_2; starting times (1 per seq) 
-          prints    "%n%nGENERATING LIST OF EVENTS PART 2 (Events as Part.Set.Sequence.Note):%n%n" 
+          prints    "%n%nGENERATING LIST OF EVENTS PART 2 (Events as Part.Set.Sequence.Note):\n\n" 
           printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 SS2_TrigEvents_2 iftstarts_2, iftcounts_2, iftfreqs_2, iftdurs_2, iftdb_2, iftenv_2, isubinstr, iprintlines 
 
@@ -1487,7 +1487,7 @@ iftfreqs_3 SS2_MkParamTab_Meth2 ift_Freqs, iftcounts_3, ift_R3, ift_R4, ift_R2, 
 iftdurs_3 SS2_MkParamTab_Meth1 ift_Durs, iftcounts_3, ift_R5, 4, ift_R1, ift_R4, ift_R5, ift_R1, 0; list of durations 
 iftdb_3 SS2_MkParamTab_Meth2 ift_Intens, iftcounts_3, ift_R4, ift_R5, ift_R4, ift_R5, ift_R1, 0; list of intensities 
 iftstarts_3 SS2_Starts_3 ift_Durs, iftcounts_3, ift_R1, 4, ift_U2, ift_R5, ift_R1, ift_R2, istart_3; starting points (one per note) 
-          prints    "%n%nGENERATING LIST OF EVENTS PART 3 (Events as Part.Set.Sequence.Note):%n%n" 
+          prints    "%n%nGENERATING LIST OF EVENTS PART 3 (Events as Part.Set.Sequence.Note):\n\n" 
           printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 SS2_TrigEvents_3 iftstarts_3, iftcounts_3, iftfreqs_3, iftdurs_3, iftdb_3, isubinstr, iprintlines 
 
@@ -1514,7 +1514,7 @@ iftdurnorm_4 SS2_MkParamTab_Meth1 ift_Durs, iftcounts_4, ift_R1, 2, ift_R2, ift_
 iftdurs_4 SS2_durs4 iftdurnorm_4, iftcounts_4, iftenv_4; list of modified durations (see above in opcode SS2_durs2) 
 iftdb_4 SS2_dbtab_4 ift_Intens, iftcounts_4, ift_R5, 1, ift_R1, ift_R1, ift_R2, ift_R3, iftenv_4; list of intensities 
 iftstarts_4 SS2_Starts_part ift_Durs, iftcounts_4, ift_R2, 2, ift_U3, ift_R3, ift_R4, ift_R5, istart_4; starting times (1 per seq) 
-          prints    "%n%nGENERATING LIST OF EVENTS PART 4 (Events as Part.Set.Sequence.Note):%n%n" 
+          prints    "%n%nGENERATING LIST OF EVENTS PART 4 (Events as Part.Set.Sequence.Note):\n\n" 
           printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 SS2_TrigEvents_4 iftstarts_4, iftcounts_4, iftfreqs_4, iftdurs_4, iftdb_4, iftenv_4, isubinstr, iprintlines 
 
@@ -1609,7 +1609,7 @@ iftdbs_5b SS2_dbtab_5b iftdbs_5a, iftkorrdbs_5
 iftdbs_5 SS2_dbs_5 iftdbs_5b, iftcounts_5, ifteventtyps_5, iftenv_5_typ1, iftenv_5_typ2, iftdurs_5 
 
 ;;TRIGGERING EVENTS
-          prints    "%n%nGENERATING LIST OF EVENTS PART 5 (Events as Part.Set.Sequence.Note):%n%n" 
+          prints    "%n%nGENERATING LIST OF EVENTS PART 5 (Events as Part.Set.Sequence.Note):\n\n" 
           printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 SS2_TrigEvents_5 iftstarts_5, iftfreqs_5, iftdurs_5, iftdbs_5, iftcounts_5, isubinstr, iprintlines 
 
@@ -1619,7 +1619,7 @@ SS2_TrigEvents_5 iftstarts_5, iftfreqs_5, iftdurs_5, iftdbs_5, iftcounts_5, isub
 ;============================================================================;
 
 istart_coda tab_i   ftlen(iftstarts_5) - 1, iftstarts_5 
-          prints    "%n%nGENERATING LIST OF EVENTS CODA (Events as Part.Set.Sequence.Note):%n%n" 
+          prints    "%n%nGENERATING LIST OF EVENTS CODA (Events as Part.Set.Sequence.Note):\n\n" 
           printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 iend SS2_TrigEvents_Coda ift_Durs, ift_Freqs, ift_Intens, iReihe, istart_coda, isubinstr, iprintlines 
 

@@ -1,4 +1,4 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
@@ -6,123 +6,144 @@
 ; Use midi controller 1 on channel 1 to control Grain_Size slider
 ; Plays midi on channel 1
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-giExp10	ftgen	0, 0, 129, -25, 0, 0.001, 128, 10.0	;TABLE FOR EXP SLIDER
+giExp10 ftgen 0, 0, 129, -25, 0, 0.001, 128, 10.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
 
-		gkdlt		invalue	"Grain_Size"
-		gkfeedback	invalue	"Feedback"
-		kdry			invalue	"Dry"
-		gkwet		invalue	"Wet"
-		katt			invalue	"Attack"
-		gkatt		tablei	katt, giExp10, 1
-					outvalue	"Attack_Value", gkatt
-		krel			invalue	"Release"
-		gkrel		tablei	krel, giExp10, 1
-					outvalue	"Release_Value", gkrel
-		gkamp		invalue	"Amplitude"
-	endif
+    gkdlt      invalue "Grain_Size"
+    gkfeedback invalue "Feedback"
+    kdry       invalue "Dry"
+    gkwet      invalue "Wet"
+    katt       invalue "Attack"
+    gkatt tablei katt, giExp10, 1
+    outvalue "Attack_Value", gkatt
+    krel invalue "Release"
+    gkrel tablei krel, giExp10, 1
+    outvalue "Release_Value", gkrel
+    gkamp invalue "Amplitude"
+  endif
 
-	;AUDIO INPUT
-	gasigL, gasigR	ins
-				outs		gasigL * kdry, gasigR * kdry
+  ; Audio input
+  gasigL, gasigR ins
+  outs gasigL * kdry, gasigR * kdry
 endin
 
-instr	1	; PITCH SHIFTER
-	ioct		octmidi
+instr 1  ; Pitch shifter
+  ioct octmidi
 
-	;PITCH BEND===========================================================================================================================================================
-	iSemitoneBendRange	= 2										;PITCH BEND RANGE IN SEMITONES (WILL BE DEFINED FURTHER LATER) - SUGGESTION - THIS COULD BE CONTROLLED BY AN FLTK COUNTER
-	imin				= 0										;EQUILIBRIUM POSITION
-	imax 		=		iSemitoneBendRange * .0833333				;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend		pchbend	imin, imax							;PITCH BEND VARIABLE (IN oct FORMAT)
-	koct			=		ioct + kbend
-	;=====================================================================================================================================================================
-	
-	;MIDI INPUT============================================================================================================================================================
-	;OUTPUT        OPCODE  CHANNEL | CC.NUMBER | MIN | MAX
-	kdlt			ctrl7	1,          1,      0,    1				;READ IN MIDI CONTROLLER
-	ktrig		changed	kdlt									;IF THE VARIABLE 'kptr' CHANGES FROM ITS PREVIOUS VALUE,
-															;I.E. IF THE MIDI SLIDER IS MOVED THEN THE VARIABLE ktrig WILL ASSUME THE VALUE '1', OTHERWISE IT WILL BE ZERO.
-	kdlt			scale	kdlt, 1, 0.001							;RESCALE VARIABLE
+  ; Pitch
+  ; bend===========================================================================================================================================================
+  ; Pitch bend range in semitones (will be defined further later) - suggestion - this
+  ; could be controlled by an FLTK counter
+  iSemitoneBendRange = 2
+  imin               = 0  ; Equilibrium position
+  ; Max pitch displacement (in oct format)
+  imax = iSemitoneBendRange * .0833333
+  ; Pitch bend variable (in oct format)
+  kbend pchbend imin, imax
+  koct = ioct + kbend
+  ; =====================================================================================================================================================================
 
-	if ktrig = 1 then
-				outvalue	"Grain_Size", kdlt						;UPDATE WIDGET WHEN A TRIGGER IS RECEIVED
-	endif
-	;======================================================================================================================================================================
+  ; MIDI
+  ; input============================================================================================================================================================
+  ; Output        opcode  channel | cc.number | min | max
+  kdlt ctrl7 1, 1, 0, 1  ; Read in MIDI controller
+  ktrig changed kdlt     ; If the variable 'kptr' changes from its previous value,
+  ; I.e. If the MIDI slider is moved then the variable ktrig will assume the value '1',
+  ; otherwise it will be zero.
+  kdlt scale kdlt, 1, 0.001  ; Rescale variable
 
-	;SET UP FUNCTION TO MODULATE DELAY TIME VARIABLE AND ENVELOPING FUNCTION=============================================================================================== 
-	iporttime		=		0.1									;PORTAMENTO TIME
-	kporttime		linseg	0,0.001,iporttime,1,iporttime				;CREATE A RAMPING UP FUNCTION THAT WILL BE USED FOR PORTAMENTO TIME
-	kdlt			portk	gkdlt, kporttime						;APPLY PORTAMENTO
-	adlt			interp	kdlt									;CREATE AN INTEROLATED A-RATE VERSION OF K-RATE VARIABLE
-	kratio		=		cpsoct(koct)/cpsoct(8)					;RATIO OF NEW FREQ TO A DECLARED BASE FREQUENCY (MIDDLE C)
-	krate		=		(kratio-1)/kdlt						;SUBTRACT 1/1 SPEED	
-	aphase1		phasor	-krate								;MOVING PHASE 1-0
-	aphase2		phasor	-krate, 0.5							;MOVING PHASE 1-0 - PHASE OFFSET BY 180 DEGREES (.5 RADIANS)	
-	agate1		tablei	aphase1, 1, 1, 0, 1						;WINDOW FUNC =HALF SINE
-	agate2		tablei	aphase2, 1, 1, 0, 1						;WINDOW FUNC =HALF SINE
-	;======================================================================================================================================================================
-	
-	;LEFT CHANNEL===========================================================================================================================================================
-	aignore		delayr	1									;ALLOC DELAY LINE
-	adelsig1		deltap3	aphase1 * adlt							;VARIABLE TAP
-	aGatedSig1	=		adelsig1 * agate1						;GATE 1ST SIGNAL
-				delayw	gasigL + (aGatedSig1 * gkfeedback)			; WRITE AUDIO TO THE BEGINNING OF THE DELAY BUFFER
-	
-	aignore		delayr	1									;ALLOC DELAY LINE
-	adelsig2		deltap3	aphase2 * adlt							;VARIABLE TAP
-	aGatedSig2	=		adelsig2 * agate2						;GATE 2ND SIGNAL
-				delayw	gasigL + (aGatedSig2 * gkfeedback)			;WRITE AUDIO TO THE BEGINNING OF THE DELAY BUFFER
-	
-	aGatedMixL	=		(aGatedSig1 + aGatedSig2) * .5			;MIX AND ATTENUATE
-	;=======================================================================================================================================================================
+  if ktrig = 1 then
+    outvalue "Grain_Size", kdlt  ; Update widget when a trigger is received
+  endif
+  ; ======================================================================================================================================================================
 
-	;RIGHT CHANNEL==========================================================================================================================================================
-	aignore		delayr	1									;ALLOC DELAY LINE
-	adelsig3		deltap3	aphase1 * adlt							;VARIABLE TAP
-	aGatedSig3	=		adelsig3 * agate1						;GATE 1ST SIGNAL
-				delayw	gasigR + (aGatedSig3 * gkfeedback)			; WRITE AUDIO TO THE BEGINNING OF THE DELAY BUFFER
-	
-	aignore		delayr	1									;ALLOC DELAY LINE
-	adelsig4		deltap3	aphase2 * adlt							;VARIABLE TAP
-	aGatedSig4	=		adelsig4 * agate2						;GATE 2ND SIGNAL
-				delayw	gasigR + (aGatedSig4 * gkfeedback)			;WRITE AUDIO TO THE BEGINNING OF THE DELAY BUFFER
-	
-	aGatedMixR	=		(aGatedSig3 + aGatedSig4) * .5			;MIX AND ATTENUATE
-	;=======================================================================================================================================================================
+  ; Set up function to modulate delay time variable and enveloping
+  ; function===============================================================================================
+  iporttime = 0.1  ; Portamento time
+  ; Create a ramping up function that will be used for portamento time
+  kporttime linseg 0, 0.001, iporttime, 1, iporttime
+  kdlt portk gkdlt, kporttime  ; Apply portamento
+  adlt interp kdlt             ; Create an interolated a-rate version of k-rate variable
+  ; Ratio of new freq to a declared base frequency (middle c)
+  kratio = cpsoct(koct)/cpsoct(8)
+  krate  = (kratio-1)/kdlt  ; Subtract 1/1 speed
+  aphase1 phasor -krate     ; Moving phase 1-0
+  ; Moving phase 1-0 - phase offset by 180 degrees (.5 radians)
+  aphase2 phasor -krate, 0.5
+  agate1 tablei aphase1, 1, 1, 0, 1  ; Window func =half sine
+  agate2 tablei aphase2, 1, 1, 0, 1  ; Window func =half sine
+  ; ======================================================================================================================================================================
 
-	iatt			init	i(gkatt)									;CONVERT ATTACK AND RELEASE CONTROLS TO I-RATE AND MAKE AVAILABLE AT I-TIME BY USING INIT
-	irel			init	i(gkrel)       							;CONVERT ATTACK AND RELEASE CONTROLS TO I-RATE AND MAKE AVAILABLE AT I-TIME BY USING INIT
-	
-	kenv			expsegr	0.001, iatt, 1, irel, 0.001				;AMPLITUDE ENVELOPE IS CREATED
-				outs		aGatedMixL * kenv * gkwet * gkamp, aGatedMixR * kenv *gkwet * gkamp
+  ; Left
+  ; channel===========================================================================================================================================================
+  aignore delayr 1                 ; Alloc delay line
+  adelsig1 deltap3 aphase1 * adlt  ; Variable tap
+  aGatedSig1 = adelsig1 * agate1   ; Gate 1st signal
+  ; Write audio to the beginning of the delay buffer
+  delayw gasigL + (aGatedSig1 * gkfeedback)
+
+  aignore delayr 1                 ; Alloc delay line
+  adelsig2 deltap3 aphase2 * adlt  ; Variable tap
+  aGatedSig2 = adelsig2 * agate2   ; Gate 2nd signal
+  ; Write audio to the beginning of the delay buffer
+  delayw gasigL + (aGatedSig2 * gkfeedback)
+
+  aGatedMixL = (aGatedSig1 + aGatedSig2) * .5  ; Mix and attenuate
+  ; =======================================================================================================================================================================
+
+  ; Right
+  ; channel==========================================================================================================================================================
+  aignore delayr 1                 ; Alloc delay line
+  adelsig3 deltap3 aphase1 * adlt  ; Variable tap
+  aGatedSig3 = adelsig3 * agate1   ; Gate 1st signal
+  ; Write audio to the beginning of the delay buffer
+  delayw gasigR + (aGatedSig3 * gkfeedback)
+
+  aignore delayr 1                 ; Alloc delay line
+  adelsig4 deltap3 aphase2 * adlt  ; Variable tap
+  aGatedSig4 = adelsig4 * agate2   ; Gate 2nd signal
+  ; Write audio to the beginning of the delay buffer
+  delayw gasigR + (aGatedSig4 * gkfeedback)
+
+  aGatedMixR = (aGatedSig3 + aGatedSig4) * .5  ; Mix and attenuate
+  ; =======================================================================================================================================================================
+
+  ; Convert attack and release controls to i-rate and make available at i-time by using
+  ; init
+  iatt init i(gkatt)
+  ; Convert attack and release controls to i-rate and make available at i-time by using
+  ; init
+  irel init i(gkrel)
+
+  kenv expsegr 0.001, iatt, 1, irel, 0.001  ; Amplitude envelope is created
+  outs aGatedMixL * kenv * gkwet * gkamp, aGatedMixR * kenv *gkwet * gkamp
 endin
 </CsInstruments>
 <CsScore>
-f 1 0 1025 9 0.5 1 0	;HALF SINE  WINDOW FUNCTION USED FOR AMPLITUDE ENVELOPING
+f 1 0 1025 9 0.5 1 0  ; Half sine  window function used for amplitude enveloping
 
-;INSTR | START | DURATION
-i 10		0	   3600	;GUI AND AUDIO INPUTS
+; Instr | start | duration
+i 10 0 3600  ; GUI and audio inputs
 </CsScore>
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
@@ -134,9 +155,9 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -154,15 +175,20 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -183,15 +209,20 @@ i 10		0	   3600	;GUI AND AUDIO INPUTS
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -220,9 +251,9 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
    <r>158</r>
@@ -249,14 +280,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -296,14 +327,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -325,14 +356,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -372,14 +403,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -401,14 +432,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -448,14 +479,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -477,14 +508,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -524,14 +555,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -553,14 +584,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -600,14 +631,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -629,14 +660,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -676,14 +707,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -705,14 +736,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -752,14 +783,14 @@ The Modulation wheel can be used to modulate 'Grain Size'.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

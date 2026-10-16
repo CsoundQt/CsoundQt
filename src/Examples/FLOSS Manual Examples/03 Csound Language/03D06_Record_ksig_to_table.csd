@@ -18,7 +18,7 @@ kFreq     randomi   400, 1000, 1 ;random frequency
 aSnd      poscil    .2, kFreq, giWave ;play it
           outs      aSnd, aSnd
 ;;record the k-signal
-          prints    "RECORDING!%n"
+          prints    "RECORDING!\n"
  ;create a writing pointer in the table,
  ;moving in 5 seconds from index 0 to the end
 kindx     linseg    0, 5, ftlen(giFt)
@@ -28,7 +28,7 @@ kindx     linseg    0, 5, ftlen(giFt)
 
   instr 2; read the values of the table and play it again
 ;;read the k-signal
-          prints    "PLAYING!%n"
+          prints    "PLAYING!\n"
  ;create a reading pointer in the table,
  ;moving in 5 seconds from index 0 to the end
 kindx     linseg    0, 5, ftlen(giFt)

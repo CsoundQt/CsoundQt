@@ -2,210 +2,223 @@
 ; Modified for QuteCsound by René, September 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Instrument 1 is activated by MIDI and by the GUI
-;	Add MIDI Pitch bend
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Instrument 1 is activated by MIDI and by the GUI
+; Add MIDI Pitch bend
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 48000		;SAMPLE RATE
-ksmps	= 64			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE (MAY NEED TO BE LOW WHEN WORKING WITH SHORT DELAY TIMES DEFINED INITIALLY AT KRATE)
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr = 48000  ; Sample rate
+; Number of audio samples in each control cycle (may need to be low when working with
+; short delay times defined initially at krate)
+ksmps  = 64
+nchnls = 2  ; Number of channels (2=stereo)
+0dbfs  = 1  ; Maximum sound intensity level regardless of bit depth
 
-gisine		ftgen	0, 0, 4096, 10, 1				;A SINE WAVE
-giExp10000	ftgen	0, 0, 129, -25, 0, 20, 128, 10000	;TABLE FOR EXP SLIDER
+gisine     ftgen 0, 0, 4096, 10, 1                  ; A sine wave
+giExp10000 ftgen 0, 0, 129, -25, 0, 20, 128, 10000  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkPartAmp1	invalue	"PartAmp1"
-		gkPartAmp2	invalue	"PartAmp2"
-		gkPartAmp3	invalue	"PartAmp3"
-		gkPartAmp4	invalue	"PartAmp4"
-		gkPartAmp5	invalue	"PartAmp5"
-		gkPartAmp6	invalue	"PartAmp6"
-		gkPartAmp7	invalue	"PartAmp7"
-		gkPartAmp8	invalue	"PartAmp8"
-		gkPartAmp9	invalue	"PartAmp9"
-		gkPartAmp10	invalue	"PartAmp10"
-		gkfund		invalue	"Fund_Freq"
-		gkfund		tablei	gkfund, giExp10000, 1
-					outvalue	"Fund_Freq_Value", gkfund
-		gkamp		invalue	"Amplitude"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkPartAmp1  invalue "PartAmp1"
+    gkPartAmp2  invalue "PartAmp2"
+    gkPartAmp3  invalue "PartAmp3"
+    gkPartAmp4  invalue "PartAmp4"
+    gkPartAmp5  invalue "PartAmp5"
+    gkPartAmp6  invalue "PartAmp6"
+    gkPartAmp7  invalue "PartAmp7"
+    gkPartAmp8  invalue "PartAmp8"
+    gkPartAmp9  invalue "PartAmp9"
+    gkPartAmp10 invalue "PartAmp10"
+    gkfund      invalue "Fund_Freq"
+    gkfund tablei gkfund, giExp10000, 1
+    outvalue "Fund_Freq_Value", gkfund
+    gkamp invalue "Amplitude"
 
-		gkratio1		invalue	"Ratio1"
-		gkratio2		invalue	"Ratio2"
-		gkratio3		invalue	"Ratio3"
-		gkratio4		invalue	"Ratio4"
-		gkratio5		invalue	"Ratio5"
-		gkratio6		invalue	"Ratio6"
-		gkratio7		invalue	"Ratio7"
-		gkratio8		invalue	"Ratio8"
-		gkratio9		invalue	"Ratio9"
-		gkratio10		invalue	"Ratio10"
+    gkratio1  invalue "Ratio1"
+    gkratio2  invalue "Ratio2"
+    gkratio3  invalue "Ratio3"
+    gkratio4  invalue "Ratio4"
+    gkratio5  invalue "Ratio5"
+    gkratio6  invalue "Ratio6"
+    gkratio7  invalue "Ratio7"
+    gkratio8  invalue "Ratio8"
+    gkratio9  invalue "Ratio9"
+    gkratio10 invalue "Ratio10"
 
-		gkampatt1		invalue	"Attack1"
-		gkampatt2		invalue	"Attack2"
-		gkampatt3		invalue	"Attack3"
-		gkampatt4		invalue	"Attack4"
-		gkampatt5		invalue	"Attack5"
-		gkampatt6		invalue	"Attack6"
-		gkampatt7		invalue	"Attack7"
-		gkampatt8		invalue	"Attack8"
-		gkampatt9		invalue	"Attack9"
-		gkampatt10	invalue	"Attack10"
+    gkampatt1  invalue "Attack1"
+    gkampatt2  invalue "Attack2"
+    gkampatt3  invalue "Attack3"
+    gkampatt4  invalue "Attack4"
+    gkampatt5  invalue "Attack5"
+    gkampatt6  invalue "Attack6"
+    gkampatt7  invalue "Attack7"
+    gkampatt8  invalue "Attack8"
+    gkampatt9  invalue "Attack9"
+    gkampatt10 invalue "Attack10"
 
-		gkampdec1		invalue	"Decay1"
-		gkampdec2		invalue	"Decay2"
-		gkampdec3  	invalue	"Decay3"
-		gkampdec4		invalue	"Decay4"
-		gkampdec5		invalue	"Decay5"
-		gkampdec6		invalue	"Decay6"
-		gkampdec7		invalue	"Decay7"
-		gkampdec8		invalue	"Decay8"
-		gkampdec9		invalue	"Decay9"
-		gkampdec10	invalue	"Decay10"
+    gkampdec1  invalue "Decay1"
+    gkampdec2  invalue "Decay2"
+    gkampdec3  invalue "Decay3"
+    gkampdec4  invalue "Decay4"
+    gkampdec5  invalue "Decay5"
+    gkampdec6  invalue "Decay6"
+    gkampdec7  invalue "Decay7"
+    gkampdec8  invalue "Decay8"
+    gkampdec9  invalue "Decay9"
+    gkampdec10 invalue "Decay10"
 
-		gkamprel1		invalue	"Release1"
-		gkamprel2		invalue	"Release2"
-		gkamprel3		invalue	"Release3"
-		gkamprel4		invalue	"Release4"
-		gkamprel5		invalue	"Release5"
-		gkamprel6		invalue	"Release6"
-		gkamprel7		invalue	"Release7"
-		gkamprel8		invalue	"Release8"
-		gkamprel9		invalue	"Release9"
-		gkamprel10	invalue	"Release10"
-	endif
+    gkamprel1  invalue "Release1"
+    gkamprel2  invalue "Release2"
+    gkamprel3  invalue "Release3"
+    gkamprel4  invalue "Release4"
+    gkamprel5  invalue "Release5"
+    gkamprel6  invalue "Release6"
+    gkamprel7  invalue "Release7"
+    gkamprel8  invalue "Release8"
+    gkamprel9  invalue "Release9"
+    gkamprel10 invalue "Release10"
+  endif
 endin
 
-instr 	1	;SYNTHESIS INSTRUMENT
-	if p4!=0 then														;MIDI
-		ioct		= p4													;READ OCT VALUE FROM MIDI INPUT
-		iamp		= p5													;READ IN A NOTE VELOCITY VALUE FROM THE MIDI INPUT
-		kamp = iamp * gkamp												;SET kamp TO MIDI KEY VELOCITY MULTIPLIED BY FLTK SLIDER VALUE gkamp
+instr 1            ; Synthesis instrument
+  if p4 != 0 then  ; MIDI
+    ioct = p4      ; Read oct value from MIDI input
+    iamp = p5      ; Read in a note velocity value from the MIDI input
+    ; Set kamp to MIDI key velocity multiplied by FLTK slider value gkamp
+    kamp = iamp * gkamp
 
-		;PITCH BEND===========================================================================================================================================================
-		iSemitoneBendRange	= 2											;PITCH BEND RANGE IN SEMITONES (WILL BE DEFINED FURTHER LATER) - SUGGESTION - THIS COULD BE CONTROLLED BY AN FLTK COUNTER
-		imin				= 0											;EQUILIBRIUM POSITION
-		imax				= iSemitoneBendRange * .0833333					;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend			pchbend	imin, imax							;PITCH BEND VARIABLE (IN oct FORMAT)
-		kfund			= cpsoct	(ioct + kbend)
-		;=====================================================================================================================================================================
-	else	
-		iporttime		= 0.05											;PORTAMENTO TIME VARIABLE
-		kporttime		linseg	0,0.001,iporttime,1,iporttime					;CREATE A RAMPING UP FUNCTION TO REPRESENT PORTAMENTO TIME
-		kfund		portk	gkfund, kporttime							;APPLY PORTAMENTO SMOOTHING
-		kamp			portk	gkamp, kporttime							;APPLY PORTAMENTO SMOOTHING
-	endif
+    ; Pitch
+    ; bend===========================================================================================================================================================
+    ; Pitch bend range in semitones (will be defined further later) - suggestion - this
+    ; could be controlled by an FLTK counter
+    iSemitoneBendRange = 2
+    imin               = 0  ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kfund = cpsoct (ioct + kbend)
+    ; =====================================================================================================================================================================
+  else
+    iporttime = 0.05  ; Portamento time variable
+    ; Create a ramping up function to represent portamento time
+    kporttime linseg 0, 0.001, iporttime, 1, iporttime
+    kfund portk gkfund, kporttime  ; Apply portamento smoothing
+    kamp  portk gkamp, kporttime   ; Apply portamento smoothing
+  endif
 
-	;AMPLITUDE ENVELOPES (WITH MIDI RELEASE SEGMENT)
-	aenv1		expsegr	.001, i(gkampatt1), 1.001, i(gkampdec1), .001, i(gkamprel1), .001
-	aenv2		expsegr	.001, i(gkampatt2), 1.001, i(gkampdec2), .001, i(gkamprel2), .001
-	aenv3		expsegr	.001, i(gkampatt3), 1.001, i(gkampdec3), .001, i(gkamprel3), .001
-	aenv4		expsegr	.001, i(gkampatt4), 1.001, i(gkampdec4), .001, i(gkamprel4), .001
-	aenv5		expsegr	.001, i(gkampatt5), 1.001, i(gkampdec5), .001, i(gkamprel5), .001
-	aenv6		expsegr	.001, i(gkampatt6), 1.001, i(gkampdec6), .001, i(gkamprel6), .001
-	aenv7		expsegr	.001, i(gkampatt7), 1.001, i(gkampdec7), .001, i(gkamprel7), .001
-	aenv8		expsegr	.001, i(gkampatt8), 1.001, i(gkampdec8), .001, i(gkamprel8), .001
-	aenv9		expsegr	.001, i(gkampatt9), 1.001, i(gkampdec9), .001, i(gkamprel9), .001
-	aenv10		expsegr	.001, i(gkampatt10),1.001, i(gkampdec10),.001, i(gkamprel10), .001
-	
-	;SEPARATE OSCILLATORS CREATE EACH OF THE PARTIALS (NOTE THAT FLTK VERTICAL SLIDERS ARE INVERTED TO ALLOW MINIMUM VALUES TO BE LOWEST ON THE SCREEN)
-	;OUTPUT		OPCODE	AMPLITUDE	                      	  | FREQUENCY    | FUNCTION_TABLE
-	apart1		oscili	kamp*(aenv1  - 0.001) * gkPartAmp1,  kfund*gkratio1, 	gisine
-	apart2		oscili	kamp*(aenv2  - 0.001) * gkPartAmp2,  kfund*gkratio2, 	gisine
-	apart3		oscili	kamp*(aenv3  - 0.001) * gkPartAmp3,  kfund*gkratio3, 	gisine
-	apart4		oscili	kamp*(aenv4  - 0.001) * gkPartAmp4,  kfund*gkratio4, 	gisine
-	apart5		oscili	kamp*(aenv5  - 0.001) * gkPartAmp5,  kfund*gkratio5, 	gisine
-	apart6		oscili	kamp*(aenv6  - 0.001) * gkPartAmp6,  kfund*gkratio6, 	gisine
-	apart7		oscili	kamp*(aenv7  - 0.001) * gkPartAmp7,  kfund*gkratio7, 	gisine
-	apart8		oscili	kamp*(aenv8  - 0.001) * gkPartAmp8,  kfund*gkratio8, 	gisine
-	apart9		oscili	kamp*(aenv9  - 0.001) * gkPartAmp9,  kfund*gkratio9, 	gisine
-	apart10      	oscili	kamp*(aenv10 - 0.001) * gkPartAmp10, kfund*gkratio10, 	gisine
-	                                                          
-	;SUM THE 10 OSCILLATORS:
-	amix			sum		apart1,\
-						apart2,\
-						apart3,\
-						apart4,\
-						apart5,\
-						apart6,\
-						apart7,\
-						apart8,\
-						apart9,\
-						apart10
-				
-				outs		amix, amix	;SEND MIXED SIGNAL TO THE OUTPUTS
+  ; Amplitude envelopes (with MIDI release segment)
+  aenv1  expsegr .001, i(gkampatt1), 1.001, i(gkampdec1), .001, i(gkamprel1), .001
+  aenv2  expsegr .001, i(gkampatt2), 1.001, i(gkampdec2), .001, i(gkamprel2), .001
+  aenv3  expsegr .001, i(gkampatt3), 1.001, i(gkampdec3), .001, i(gkamprel3), .001
+  aenv4  expsegr .001, i(gkampatt4), 1.001, i(gkampdec4), .001, i(gkamprel4), .001
+  aenv5  expsegr .001, i(gkampatt5), 1.001, i(gkampdec5), .001, i(gkamprel5), .001
+  aenv6  expsegr .001, i(gkampatt6), 1.001, i(gkampdec6), .001, i(gkamprel6), .001
+  aenv7  expsegr .001, i(gkampatt7), 1.001, i(gkampdec7), .001, i(gkamprel7), .001
+  aenv8  expsegr .001, i(gkampatt8), 1.001, i(gkampdec8), .001, i(gkamprel8), .001
+  aenv9  expsegr .001, i(gkampatt9), 1.001, i(gkampdec9), .001, i(gkamprel9), .001
+  aenv10 expsegr .001, i(gkampatt10), 1.001, i(gkampdec10), .001, i(gkamprel10), .001
+
+  ; Separate oscillators create each of the partials (note that FLTK vertical sliders are
+  ; inverted to allow minimum values to be lowest on the screen)
+  ; Output  opcode amplitude                          | frequency    | function_table
+  apart1  oscili kamp*(aenv1 - 0.001) * gkPartAmp1, kfund*gkratio1, gisine
+  apart2  oscili kamp*(aenv2 - 0.001) * gkPartAmp2, kfund*gkratio2, gisine
+  apart3  oscili kamp*(aenv3 - 0.001) * gkPartAmp3, kfund*gkratio3, gisine
+  apart4  oscili kamp*(aenv4 - 0.001) * gkPartAmp4, kfund*gkratio4, gisine
+  apart5  oscili kamp*(aenv5 - 0.001) * gkPartAmp5, kfund*gkratio5, gisine
+  apart6  oscili kamp*(aenv6 - 0.001) * gkPartAmp6, kfund*gkratio6, gisine
+  apart7  oscili kamp*(aenv7 - 0.001) * gkPartAmp7, kfund*gkratio7, gisine
+  apart8  oscili kamp*(aenv8 - 0.001) * gkPartAmp8, kfund*gkratio8, gisine
+  apart9  oscili kamp*(aenv9 - 0.001) * gkPartAmp9, kfund*gkratio9, gisine
+  apart10 oscili kamp*(aenv10 - 0.001) * gkPartAmp10, kfund*gkratio10, gisine
+
+  ; Sum the 10 oscillators:
+  amix sum apart1, \
+    apart2, \
+    apart3, \
+    apart4, \
+    apart5, \
+    apart6, \
+    apart7, \
+    apart8, \
+    apart9, \
+    apart10
+
+  outs amix, amix  ; Send mixed signal to the outputs
 endin
 
-instr 	3	;INIT
-		outvalue	"PartAmp1",	.05
-		outvalue	"PartAmp2",	.1
-		outvalue	"PartAmp3",	.23
-		outvalue	"PartAmp4",	1.0 
-		outvalue	"PartAmp5",	.2
-		outvalue	"PartAmp6",	.18
-		outvalue	"PartAmp7",	.1
-		outvalue	"PartAmp8",	.067
-		outvalue	"PartAmp9",	.05 
-		outvalue	"PartAmp10",	.3
-		outvalue	"Ratio1",		272/437
-		outvalue	"Ratio2",		538/437
-		outvalue	"Ratio3",		874/437
-		outvalue	"Ratio4",		1281/437
-		outvalue	"Ratio5",		1755/437
-		outvalue	"Ratio6",		2264/437
-		outvalue	"Ratio7",		2813/437
-		outvalue	"Ratio8",		3389/437
-		outvalue	"Ratio9",		4822/437
-		outvalue	"Ratio10",	5255/437	
-		outvalue	"Attack1",	.003
-		outvalue	"Attack2",	.003
-		outvalue	"Attack3",	.003
-		outvalue	"Attack4",	.003
-		outvalue	"Attack5",	.003
-		outvalue	"Attack6",	.003
-		outvalue	"Attack7",	.003
-		outvalue	"Attack8",	.003
-		outvalue	"Attack9",	.003
-		outvalue	"Attack10",	.003
-		outvalue	"Decay1",		4.5	
-		outvalue	"Decay2",		7.22
-		outvalue	"Decay3",		9.26
-		outvalue	"Decay4",		9.42
-		outvalue	"Decay5",		8.7	
-		outvalue	"Decay6",		4.98
-		outvalue	"Decay7",		4.5	
-		outvalue	"Decay8",		2.22
-		outvalue	"Decay9",		2.42
-		outvalue	"Decay10",	1.34
-		outvalue	"Release1",	.3
-		outvalue	"Release2",	.4	
-		outvalue	"Release3",	.5	
-		outvalue	"Release4",	.32	
-		outvalue	"Release5",	.25	
-		outvalue	"Release6",	.1	
-		outvalue	"Release7",	.04	
-		outvalue	"Release8",	.02	
-		outvalue	"Release9",	.01
-		outvalue	"Release10",	.005
-		outvalue	"Fund_Freq",	0.4962345		;437 Hz
-		outvalue	"Amplitude",	0.3 
+instr 3  ; Init
+  outvalue "PartAmp1", .05
+  outvalue "PartAmp2", .1
+  outvalue "PartAmp3", .23
+  outvalue "PartAmp4", 1.0
+  outvalue "PartAmp5", .2
+  outvalue "PartAmp6", .18
+  outvalue "PartAmp7", .1
+  outvalue "PartAmp8", .067
+  outvalue "PartAmp9", .05
+  outvalue "PartAmp10", .3
+  outvalue "Ratio1", 272/437
+  outvalue "Ratio2", 538/437
+  outvalue "Ratio3", 874/437
+  outvalue "Ratio4", 1281/437
+  outvalue "Ratio5", 1755/437
+  outvalue "Ratio6", 2264/437
+  outvalue "Ratio7", 2813/437
+  outvalue "Ratio8", 3389/437
+  outvalue "Ratio9", 4822/437
+  outvalue "Ratio10", 5255/437
+  outvalue "Attack1", .003
+  outvalue "Attack2", .003
+  outvalue "Attack3", .003
+  outvalue "Attack4", .003
+  outvalue "Attack5", .003
+  outvalue "Attack6", .003
+  outvalue "Attack7", .003
+  outvalue "Attack8", .003
+  outvalue "Attack9", .003
+  outvalue "Attack10", .003
+  outvalue "Decay1", 4.5
+  outvalue "Decay2", 7.22
+  outvalue "Decay3", 9.26
+  outvalue "Decay4", 9.42
+  outvalue "Decay5", 8.7
+  outvalue "Decay6", 4.98
+  outvalue "Decay7", 4.5
+  outvalue "Decay8", 2.22
+  outvalue "Decay9", 2.42
+  outvalue "Decay10", 1.34
+  outvalue "Release1", .3
+  outvalue "Release2", .4
+  outvalue "Release3", .5
+  outvalue "Release4", .32
+  outvalue "Release5", .25
+  outvalue "Release6", .1
+  outvalue "Release7", .04
+  outvalue "Release8", .02
+  outvalue "Release9", .01
+  outvalue "Release10", .005
+  outvalue "Fund_Freq", 0.4962345  ; 437 Hz
+  outvalue "Amplitude", 0.3
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
-i 3 0 0		;INIT
+i 10 0 3600  ; GUI
+i 3 0 0      ; Init
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 <bsbPanel>
  <label>Widgets</label>
@@ -217,9 +230,9 @@ i 3 0 0		;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -228,7 +241,9 @@ i 3 0 0		;INIT
   <width>612</width>
   <height>588</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -238,16 +253,23 @@ i 3 0 0		;INIT
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>211</r>
    <g>211</g>
    <b>211</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -259,7 +281,9 @@ i 3 0 0		;INIT
   <width>20</width>
   <height>250</height>
   <uuid>{a2478686-0cb1-4081-896c-03397bd19331}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -272,6 +296,7 @@ i 3 0 0		;INIT
   <yValue>0.05000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -283,9 +308,9 @@ i 3 0 0		;INIT
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -296,7 +321,9 @@ i 3 0 0		;INIT
   <width>347</width>
   <height>29</height>
   <uuid>{ab0e7272-d733-4ebb-bb0e-5be83cf2d34d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -306,16 +333,23 @@ i 3 0 0		;INIT
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -327,7 +361,9 @@ i 3 0 0		;INIT
   <width>20</width>
   <height>250</height>
   <uuid>{fdb44389-5b7d-408b-86f5-c6817a697505}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -340,6 +376,7 @@ i 3 0 0		;INIT
   <yValue>0.10000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -351,9 +388,9 @@ i 3 0 0		;INIT
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -364,7 +401,9 @@ i 3 0 0		;INIT
   <width>20</width>
   <height>250</height>
   <uuid>{20a90144-827d-437e-8a8f-9c6cd9e2a87f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -377,6 +416,7 @@ i 3 0 0		;INIT
   <yValue>0.23000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -388,9 +428,9 @@ i 3 0 0		;INIT
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -401,7 +441,9 @@ i 3 0 0		;INIT
   <width>20</width>
   <height>250</height>
   <uuid>{92d15a4b-d582-4ae2-8fb2-c0993d808c34}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -414,6 +456,7 @@ i 3 0 0		;INIT
   <yValue>1.00000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -425,9 +468,9 @@ i 3 0 0		;INIT
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -438,7 +481,9 @@ i 3 0 0		;INIT
   <width>20</width>
   <height>250</height>
   <uuid>{9a9e0651-0fc3-4772-ab39-364cac49aaae}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -451,6 +496,7 @@ i 3 0 0		;INIT
   <yValue>0.20000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -462,9 +508,9 @@ i 3 0 0		;INIT
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -475,7 +521,9 @@ i 3 0 0		;INIT
   <width>20</width>
   <height>250</height>
   <uuid>{dec8a20a-eadd-4a93-a400-bcb352406930}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -488,6 +536,7 @@ i 3 0 0		;INIT
   <yValue>0.18000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -499,9 +548,9 @@ i 3 0 0		;INIT
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -512,7 +561,9 @@ i 3 0 0		;INIT
   <width>20</width>
   <height>250</height>
   <uuid>{821ddbec-2c2c-418b-bef2-233c1c69fb97}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -525,6 +576,7 @@ i 3 0 0		;INIT
   <yValue>0.10000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -536,9 +588,9 @@ i 3 0 0		;INIT
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -549,7 +601,9 @@ i 3 0 0		;INIT
   <width>20</width>
   <height>250</height>
   <uuid>{238d4c2c-a4cd-4595-bfed-328db8c4bddf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -562,6 +616,7 @@ i 3 0 0		;INIT
   <yValue>0.06700000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -573,9 +628,9 @@ i 3 0 0		;INIT
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -586,7 +641,9 @@ i 3 0 0		;INIT
   <width>20</width>
   <height>250</height>
   <uuid>{90c161db-14bf-4937-b50b-44a6002eb02b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -599,6 +656,7 @@ i 3 0 0		;INIT
   <yValue>0.05000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -610,9 +668,9 @@ i 3 0 0		;INIT
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -623,7 +681,9 @@ i 3 0 0		;INIT
   <width>20</width>
   <height>250</height>
   <uuid>{95e1897f-d796-4dba-8b9c-f382985a0a57}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -636,6 +696,7 @@ i 3 0 0		;INIT
   <yValue>0.30000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -647,9 +708,9 @@ i 3 0 0		;INIT
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -658,23 +719,37 @@ i 3 0 0		;INIT
   <x>6</x>
   <y>6</y>
   <width>164</width>
-  <height>33</height>
+  <height>41</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   ON  : GUI
-   OFF : MIDI</text>
+  <text>ON  : GUI
+OFF : MIDI</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Fund_Freq</objectName>
@@ -683,7 +758,9 @@ i 3 0 0		;INIT
   <width>440</width>
   <height>27</height>
   <uuid>{086a860c-b45b-47f3-978f-2f6daac6338b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -702,7 +779,9 @@ i 3 0 0		;INIT
   <width>157</width>
   <height>30</height>
   <uuid>{109a592d-ca0d-4b82-bf17-3b42c0ff503a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -712,16 +791,23 @@ i 3 0 0		;INIT
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -733,7 +819,9 @@ i 3 0 0		;INIT
   <width>80</width>
   <height>23</height>
   <uuid>{30f36f54-9085-46d0-8f1f-4a4b89881919}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -743,16 +831,22 @@ i 3 0 0		;INIT
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -764,7 +858,9 @@ i 3 0 0		;INIT
   <width>440</width>
   <height>27</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -783,7 +879,9 @@ i 3 0 0		;INIT
   <width>156</width>
   <height>29</height>
   <uuid>{0200a063-5db8-4668-bc2d-2d989a083f6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -793,16 +891,23 @@ i 3 0 0		;INIT
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -814,7 +919,9 @@ i 3 0 0		;INIT
   <width>80</width>
   <height>23</height>
   <uuid>{ab191e3a-430d-4f1d-88aa-9840342cd2d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -824,16 +931,22 @@ i 3 0 0		;INIT
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -845,7 +958,9 @@ i 3 0 0		;INIT
   <width>305</width>
   <height>588</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -855,16 +970,23 @@ i 3 0 0		;INIT
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>211</r>
    <g>211</g>
    <b>211</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -876,7 +998,9 @@ i 3 0 0		;INIT
   <width>295</width>
   <height>559</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -889,16 +1013,23 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -910,7 +1041,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{08031554-c1a9-4b27-8130-4d04bafdc3b2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -920,16 +1053,23 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -941,7 +1081,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>62</width>
   <height>24</height>
   <uuid>{4be78f0d-4f01-441d-8a19-bb2a66844582}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -951,16 +1093,23 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -972,7 +1121,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>63</width>
   <height>25</height>
   <uuid>{7572a139-c5c0-4eb2-9d19-43e2c7d56009}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -982,16 +1133,23 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1003,7 +1161,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>65</width>
   <height>26</height>
   <uuid>{431c99be-899e-4e1c-ae02-6cb36c3c367e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1013,16 +1173,23 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1034,7 +1201,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{b5c3455d-19dc-46a0-b238-41ef2d8a63b7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1042,20 +1211,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.003</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack2</objectName>
@@ -1064,7 +1233,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{c5db3750-db94-4e17-a234-89a814b9def8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1072,20 +1243,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.003</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack4</objectName>
@@ -1094,7 +1265,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{67a1a1c1-feb0-4fc0-baf5-8e4185bef4c1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1102,20 +1275,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.003</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack3</objectName>
@@ -1124,7 +1297,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{c2082121-9dd3-451f-8391-ce3e7cd6662f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1132,20 +1307,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.003</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack7</objectName>
@@ -1154,7 +1329,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{cd9c12a1-b1f6-4f18-be9a-f98d4338101f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1162,20 +1339,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.003</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack8</objectName>
@@ -1184,7 +1361,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{cee1c633-28d2-4ad0-adaa-a8a8e31f2b5b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1192,20 +1371,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.003</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack6</objectName>
@@ -1214,7 +1393,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{56748a87-f4e0-4168-8f52-5b9425b6a019}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1222,20 +1403,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.003</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack5</objectName>
@@ -1244,7 +1425,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{c0e6b910-1159-47d5-a820-98e29134997c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1252,20 +1435,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.003</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack10</objectName>
@@ -1274,7 +1457,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{b6c1a5fc-6e36-4f45-b6b5-0c3171d12b12}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1282,20 +1467,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.003</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack9</objectName>
@@ -1304,7 +1489,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{ac95a03e-fc2f-44a9-bc9e-2da9cdbb4e54}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1312,20 +1499,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.003</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio9</objectName>
@@ -1334,7 +1521,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{55ee48d6-0187-430a-bfb4-11417a699680}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1342,14 +1531,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
@@ -1364,7 +1553,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{a052133e-1e47-467d-9d8e-ba6931b7d9f8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1372,14 +1563,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
@@ -1394,7 +1585,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{952bfb29-45b0-4fa4-8473-71df630e715f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1402,14 +1595,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
@@ -1424,7 +1617,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{b445bf02-cdb3-430b-ab5b-72afcf0c1d0e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1432,14 +1627,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
@@ -1454,7 +1649,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{69e80df2-0aff-4137-8c3c-d812f946356a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1462,14 +1659,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
@@ -1484,7 +1681,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{0e0a9fe0-5108-46b0-a00e-9dee1f447865}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1492,14 +1691,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
@@ -1514,7 +1713,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{64c42576-f5fd-4c28-a0bf-b95344aa5b7d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1522,14 +1723,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
@@ -1544,7 +1745,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{9e2a581e-4acf-4619-853e-66ff28fe6bbb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1552,14 +1755,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
@@ -1574,7 +1777,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{d631e600-a331-4510-888a-a95a4cdf4c35}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1582,14 +1787,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
@@ -1604,7 +1809,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{150e8605-5191-45a5-a294-797af2d7888c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1612,14 +1819,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
@@ -1634,7 +1841,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{ceb2ebd6-b322-4064-8c4c-0b201a81a16e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1642,20 +1851,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.01</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release10</objectName>
@@ -1664,7 +1873,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{6340cbdc-13d5-49d3-bfa9-52b8856e3f15}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1672,20 +1883,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.005</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release5</objectName>
@@ -1694,7 +1905,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{9ec8d741-c65a-429b-b3a0-725cb532d245}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1702,20 +1915,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.25</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release6</objectName>
@@ -1724,7 +1937,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{b95ac3ec-2423-4731-a322-7dd1ea660052}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1732,20 +1947,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.1</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release8</objectName>
@@ -1754,7 +1969,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{56f54488-7d61-404c-8625-638825975717}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1762,20 +1979,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.02</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release7</objectName>
@@ -1784,7 +2001,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{07b6107d-2904-424e-979f-549e275e6cff}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1792,20 +2011,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.04</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release3</objectName>
@@ -1814,7 +2033,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{47b9dff4-78bd-4ddd-8d7e-50dc7249baff}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1822,20 +2043,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.5</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release4</objectName>
@@ -1844,7 +2065,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{fefc5bd7-c4fe-4f78-a2ba-743746f1e319}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1852,20 +2075,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.32</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release2</objectName>
@@ -1874,7 +2097,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{818839cd-58f8-4fc5-8f44-ced0a4ec72db}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1882,20 +2107,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.4</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release1</objectName>
@@ -1904,7 +2129,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{8f773041-929b-435f-8d17-69f54ec907de}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1912,20 +2139,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.3</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay1</objectName>
@@ -1934,7 +2161,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{fe4802f2-a517-4a43-bad0-6cf90ee432aa}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1942,20 +2171,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>4.5</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay2</objectName>
@@ -1964,7 +2193,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{a382301e-950a-4fe5-ab2f-e61cb2866019}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1972,20 +2203,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>7.22</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay4</objectName>
@@ -1994,7 +2225,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{b5b261e0-e0da-49a7-b06f-3ab105131803}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2002,20 +2235,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>9.42</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay3</objectName>
@@ -2024,7 +2257,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{129cf9dd-0e95-47e3-bc2c-3fcda5598d88}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2032,20 +2267,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>9.26</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay7</objectName>
@@ -2054,7 +2289,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{53f95b7a-9805-46ea-8519-bd83ef160fa7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2062,20 +2299,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>4.5</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay8</objectName>
@@ -2084,7 +2321,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{4fc1e7dc-12ba-4f0d-80cc-6fe3ff16e7b7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2092,20 +2331,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2.22</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay6</objectName>
@@ -2114,7 +2353,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{97b405e8-f000-4483-a1f5-3577b3157af0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2122,20 +2363,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>4.98</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay5</objectName>
@@ -2144,7 +2385,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{f9901a43-c0e3-47b3-9e31-f1c5a7da1762}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2152,20 +2395,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>8.7</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay10</objectName>
@@ -2174,7 +2417,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{ff498b52-0632-44fc-ac27-66d239290bfa}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2182,20 +2427,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.34</value>
+  <value>0.001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay9</objectName>
@@ -2204,7 +2449,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <width>60</width>
   <height>24</height>
   <uuid>{6e96b539-4078-4497-807a-5c9b85c89981}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2212,20 +2459,20 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2.42</value>
+  <value>0.001</value>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

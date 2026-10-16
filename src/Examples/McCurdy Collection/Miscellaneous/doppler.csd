@@ -1,92 +1,101 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table for exp slider
-;	Can't change slider color, add flickering controler
+; Notes on modifications from original csd:
+; Add table for exp slider
+; Can't change slider color, add flickering controler
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-;AMPLITUDE SCALING CURVE
-giampcurve	ftgen	0,0,131072,5,0.01,131072*0.5,1,131072*0.5,0.01
+; Amplitude scaling curve
+giampcurve ftgen 0, 0, 131072, 5, 0.01, 131072*0.5, 1, 131072*0.5, 0.01
 
-;TABLES FOR EXP SLIDER
-giExp1		ftgen	0, 0, 129, -25, 0, 0.1, 128, 100.0
-giExp2		ftgen	0, 0, 129, -25, 0, 0.001, 128, 1.0
+; Tables for exp slider
+giExp1 ftgen 0, 0, 129, -25, 0, 0.1, 128, 100.0
+giExp2 ftgen 0, 0, 129, -25, 0, 0.001, 128, 1.0
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gksource			invalue	"Source"
-		gkmicrophone		invalue	"Microphone"
-		kRoomSize			invalue	"RoomSize"
-		gkRoomSize		tablei	kRoomSize, giExp1, 1
-						outvalue	"RoomSize_Value", gkRoomSize
-		gkfiltercutoff		invalue	"FilterCutoff"
-		gkVCOoct			invalue	"VCOPitch"
-		gksiren			invalue	"Siren"
-		kspeed			invalue	"Speed"
-		gkspeed			tablei	kspeed, giExp2, 1
-						outvalue	"Speed_Value", gkspeed
-		gkdepth			invalue	"Depth"
-		gkampscale		invalue	"AmpScaling"
-	endif
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gksource     invalue "Source"
+    gkmicrophone invalue "Microphone"
+    kRoomSize    invalue "RoomSize"
+    gkRoomSize tablei kRoomSize, giExp1, 1
+    outvalue "RoomSize_Value", gkRoomSize
+    gkfiltercutoff invalue "FilterCutoff"
+    gkVCOoct       invalue "VCOPitch"
+    gksiren        invalue "Siren"
+    kspeed         invalue "Speed"
+    gkspeed tablei kspeed, giExp2, 1
+    outvalue "Speed_Value", gkspeed
+    gkdepth    invalue "Depth"
+    gkampscale invalue "AmpScaling"
+  endif
 endin
 
-instr	1
-	;LFO(modulates source position slider)=================
-	klfo		lfo		gkdepth, gkspeed, 1						;SINE WAVE
-	klfo		=		klfo + 0.5							;OFFSET INTO THE POSITIVE DOMAIN
-	;ktrig	changed	klfo									;UPDATING THE SLIDER EVERY K CYCLE MIGHT BE TOO FREQUENT AND MAY CAUSE PERFORMANCE ISSUE IN WHICH CASE USE A SEPARATE TRIGGER AS SHOWN BELOW	
-	ktrig	metro	50									;SLIDER UPDATE RATE
-	if ktrig = 1 then
-		outvalue	"Source", klfo								;UPDATE 'Source Position' SLIDER
-	endif
-	;======================================================
-	
-	kporttime	linseg	0, 0.001, 0.1							;RAMPING UP PORTAMENTO TIME VARIABLE
-	;GENERATE A SOURCE SOUND (siren imitation)=============
-	ksiren	lfo		1, 1.3, 2								;UNIPOLAR SQUARE WAVE LFO
-			outvalue	"Source_L", ksiren						;Flickering light
-	asig		vco2		1, cpsoct(gkVCOoct+ksiren*(gksiren/12))		;GENERATE SIREN AUDIO
-	asig		tone		asig, 1200							;LOW PASS FILTER TO SOFTEN THE TONE
-	;=======================================================
-	
-	;DOPPLER================================================
-	ispeedofsound	init		340.29							;SPEED OF SOUND DEFINED
-	ksource		portk	gksource, kporttime					;SMOOTH SOURCE POSITION MOVEMENT
-	kmicrophone	portk	gkmicrophone, kporttime				;SMOOTH MICROPHOPNE POSITION MOVEMENT
-	ktrig		changed	gkfiltercutoff						;IF I-RATE VARIABLE SLIDER IS CHANGED GENERATE A '1'
-	if ktrig=1 then										;IF TRIGGER IS '1'...
-		reinit UPDATE										;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE' 
-	endif												;END OF THIS CONDITIONAL BRANCH
-	UPDATE:												;LABEL CALLED 'UPDATE'
-	kdisp		limit	ksource-(kmicrophone-0.5), 0, 1		;CALCULATE DISPLACEMENT (DISTANCE) BETWEEN SOURCE AND MICROPHONE AND LIMIT VALUE TO LIE BETWEEN ZERO AND 1
-	kamp			table	kdisp, giampcurve,1					;READ AMPLITUDE SCALING VALUE FROM TABLE
-	kamp			ntrpol	1, kamp, gkampscale					;CALCULATE AMOUNT OF AMPLITUDE SCALING DESIRED BY THE USER FROM THE ON SCREEN SLIDER
-	aout			doppler	asig*kamp, ksource*gkRoomSize, kmicrophone*gkRoomSize, ispeedofsound, i(gkfiltercutoff)			;APPLY DOPPLER EFFECT
-				rireturn									;RETURN FROM REINITIALISATION PASS
-	kpan			=		(gksource<gkmicrophone?0.9:0.1)		;CALCULATE PAN VALUE ACCORDING TO SOURCE AND MIC POSITION
-	kpan			portk	kpan, kporttime					;APPLY PORTAMENTO SMOOTHING TO PAN POSITION VALUE 
-				outs		aout*sqrt(kpan), aout*sqrt(1-kpan)		;SEND AUDIO TO OUTPUTSM AND APPLY PANNING
+instr 1
+  ; LFO(modulates source position slider)=================
+  klfo lfo gkdepth, gkspeed, 1  ; Sine wave
+  klfo = klfo + 0.5             ; Offset into the positive domain
+  ; Ktrig changed klfo ;updating the slider every k cycle might be too frequent and may
+  ; cause performance issue in which case use a separate trigger as shown below
+  ktrig metro 50  ; Slider update rate
+  if ktrig = 1 then
+    outvalue "Source", klfo  ; UPDATE 'Source Position' SLIDER
+  endif
+  ; ======================================================
+
+  kporttime linseg 0, 0.001, 0.1  ; Ramping up portamento time variable
+  ; GENERATE A SOURCE SOUND (siren imitation)=============
+  ksiren lfo 1, 1.3, 2                               ; Unipolar square wave LFO
+  outvalue "Source_L", ksiren                        ; Flickering light
+  asig vco2 1, cpsoct(gkVCOoct+ksiren*(gksiren/12))  ; Generate siren audio
+  asig tone asig, 1200                               ; Low pass filter to soften the tone
+  ; =======================================================
+
+  ; Doppler================================================
+  ispeedofsound init 340.29                  ; Speed of sound defined
+  ksource     portk gksource, kporttime      ; Smooth source position movement
+  kmicrophone portk gkmicrophone, kporttime  ; Smooth microphopne position movement
+  ; If i-rate variable slider is changed generate a '1'
+  ktrig changed gkfiltercutoff
+  if ktrig = 1 then  ; If trigger is '1'...
+    ; Begin a reinitialisation pass from label 'update'
+    reinit UPDATE
+  endif  ; End of this conditional branch
+UPDATE:  ; Label called 'update'
+  ; Calculate displacement (distance) between source and microphone and limit value to lie
+  ; between zero and 1
+  kdisp limit ksource-(kmicrophone-0.5), 0, 1
+  kamp table kdisp, giampcurve, 1  ; Read amplitude scaling value from table
+  ; Calculate amount of amplitude scaling desired by the user from the on screen slider
+  kamp ntrpol 1, kamp, gkampscale
+  ; Apply doppler effect
+  aout doppler asig*kamp, ksource*gkRoomSize, kmicrophone*gkRoomSize, ispeedofsound, i(gkfiltercutoff)
+  rireturn  ; Return from reinitialisation pass
+  ; Calculate pan value according to source and mic position
+  kpan = (gksource<gkmicrophone?0.9:0.1)
+  ; Apply portamento smoothing to pan position value
+  kpan portk kpan, kporttime
+  outs aout*sqrt(kpan), aout*sqrt(1-kpan)  ; Send audio to outputsm and apply panning
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -99,9 +108,9 @@ i 10 0 3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -119,15 +128,20 @@ i 10 0 3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -149,14 +163,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -178,15 +192,20 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -204,11 +223,23 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -226,14 +257,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -273,14 +304,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -302,14 +333,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -331,14 +362,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -360,14 +391,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -407,14 +438,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -436,14 +467,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -483,14 +514,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -512,14 +543,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -559,14 +590,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -588,14 +619,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -635,14 +666,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -664,14 +695,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -711,14 +742,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -740,14 +771,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -787,14 +818,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -816,14 +847,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -863,14 +894,14 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -898,15 +929,15 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -931,15 +962,15 @@ The opcode 'doppler' approximates the pitch shifting effect that occurs when a s
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
+   <r>80</r>
+   <g>177</g>
+   <b>80</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
 </bsbPanel>

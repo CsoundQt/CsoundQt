@@ -1,101 +1,107 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table for exp slider
+; Notes on modifications from original csd:
+; Add table for exp slider
 
 
-/*	                                                   Rhythmicon
-	------------------------------------------------------------------------------------------------------------------------
-	This example is an implmentation of the 'Rhythmicon', an instrument designed an built by the inventor Leon Theremin
-	and commissioned by the composer Henry Cowell.
-	This instrument presented users with a short 17 note keyboard. The first 16 notes produced a sequence of pitches
-	the fundamentals of which followed a harmonic series based on on the pitch produced by the first note.
-	Therefore if the first note played 100 Hz, the second played 200 Hz, the third 300 Hz, the fourth 400 Hz etc.
-	Each note sounded as a rhythmical pulse rising in speed up the keyboard.
-	The ratios of these pulsation speeds ascending the keyboard also followed the ratios of the harmonic series therefore the
-	second key played a pulse twice that of the first, the third three time that of the first and so on. The 17th note
-	produced no sound but instead acted as a switch that added a syncopation effect (I am unsure as to exactly how this was
-	implemented so I have omitted it from my instrument).
-	More information on the Rhythmicon can be found by searching on the internet.
-	In my example the fundamental rate of pulsation defaults to 0.5 Hz. The user can modulate this using the 'Rate' slider.
-	This example can be played either from a MIDI keyboard or by using the on-screen buttons.
-	The numbers on the GUI buttons indicate the rhythmic subdivisions of that note with respect to the pulsation rate
-	of the first note. These numbers therefore also indicate the ratios of frequencies of the tones they produce.
-	Two methods of tone generation are provided which can be chosen using the 'VOICE' radio button selector. Firstly a
-	plucked string physical model can be used (although certain tuning anomalies may be encountered). The reflectivity of the
-	fixings at either end of the string (damping) can be changed using the 'Pluck Reflection' slider. Secondly a VCO can be
-	employed. Waveform, filter cutoff and resonance can be modulated here.
-	The frequency of the lowest tone that the Rhythmicon will produce can be set using the 'Fundamental Freq.' slider.
-	The user can also define the lowest MIDI note that will activate the Rhythmicon with the 'Starting Note' counter.
+/* Rhythmicon
+  ------------------------------------------------------------------------------------------------------------------------
+  This example is an implmentation of the 'Rhythmicon', an instrument designed an built by the inventor Leon Theremin
+  and commissioned by the composer Henry Cowell.
+  This instrument presented users with a short 17 note keyboard. The first 16 notes produced a sequence of pitches
+  the fundamentals of which followed a harmonic series based on on the pitch produced by the first note.
+  Therefore if the first note played 100 Hz, the second played 200 Hz, the third 300 Hz, the fourth 400 Hz etc.
+  Each note sounded as a rhythmical pulse rising in speed up the keyboard.
+  The ratios of these pulsation speeds ascending the keyboard also followed the ratios of the harmonic series therefore the
+  second key played a pulse twice that of the first, the third three time that of the first and so on. The 17th note
+  produced no sound but instead acted as a switch that added a syncopation effect (I am unsure as to exactly how this was
+  implemented so I have omitted it from my instrument).
+  More information on the Rhythmicon can be found by searching on the internet.
+  In my example the fundamental rate of pulsation defaults to 0.5 Hz. The user can modulate this using the 'Rate' slider.
+  This example can be played either from a MIDI keyboard or by using the on-screen buttons.
+  The numbers on the GUI buttons indicate the rhythmic subdivisions of that note with respect to the pulsation rate
+  of the first note. These numbers therefore also indicate the ratios of frequencies of the tones they produce.
+  Two methods of tone generation are provided which can be chosen using the 'VOICE' radio button selector. Firstly a
+  plucked string physical model can be used (although certain tuning anomalies may be encountered). The reflectivity of the
+  fixings at either end of the string (damping) can be changed using the 'Pluck Reflection' slider. Secondly a VCO can be
+  employed. Waveform, filter cutoff and resonance can be modulated here.
+  The frequency of the lowest tone that the Rhythmicon will produce can be set using the 'Fundamental Freq.' slider.
+  The user can also define the lowest MIDI note that will activate the Rhythmicon with the 'Starting Note' counter.
 */
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine	ftgen	0,0,131072,10,1
-giExp1	ftgen	0, 0, 129, -25, 0, 20.0, 128, 2000.0		;TABLE FOR EXP SLIDER
-giExp2	ftgen	0, 0, 129, -25, 0, 100.0, 128, 10000.0		;TABLE FOR EXP SLIDER
+gisine ftgen 0, 0, 131072, 10, 1
+giExp1 ftgen 0, 0, 129, -25, 0, 20.0, 128, 2000.0    ; Table for exp slider
+giExp2 ftgen 0, 0, 129, -25, 0, 100.0, 128, 10000.0  ; Table for exp slider
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkrate		invalue	"Fund_Rate"
-		kfund		invalue 	"Fund_Pitch"
-		gkfund		tablei	kfund, giExp1, 1
-					outvalue	"Fund_Pitch_Value", gkfund
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkrate invalue "Fund_Rate"
+    kfund  invalue "Fund_Pitch"
+    gkfund tablei kfund, giExp1, 1
+    outvalue "Fund_Pitch_Value", gkfund
 
-		gkgain		invalue 	"Gain"		;100,    10000,   -1
-		gkdur		invalue 	"Note_Dur"
-		gkrefl		invalue 	"Pluck_Reflection"
-		gkVCOres		invalue 	"VCO_Resonance"
-		kVCOcf		invalue 	"VCO_Cutoff"
-		gkVCOcf		tablei	kVCOcf, giExp2, 1
-					outvalue	"VCO_Cutoff_Value", gkVCOcf
+    gkgain   invalue "Gain"  ; 100,    10000,   -1
+    gkdur    invalue "Note_Dur"
+    gkrefl   invalue "Pluck_Reflection"
+    gkVCOres invalue "VCO_Resonance"
+    kVCOcf   invalue "VCO_Cutoff"
+    gkVCOcf tablei kVCOcf, giExp2, 1
+    outvalue "VCO_Cutoff_Value", gkVCOcf
 
-		gkStartNote	invalue  	"StartNote"
-		gkvoice		invalue	"Voice"
-		gkwave		invalue	"Wave"
-	endif
+    gkStartNote invalue "StartNote"
+    gkvoice     invalue "Voice"
+    gkwave      invalue "Wave"
+  endif
 endin
 
-instr	1	;MIDI
-	inum		notnum												;READ IN MIDI NOTE NUMBER
-	iStartNote	init	i(gkStartNote)									;STARTING NOTE FOR THE RHYTHMICON
-	if	inum<=iStartNote	then										;IF A NOTE BELOW THE STARTING NOTE IS PLAYED...
-		turnoff													;...IT WILL BE IGNORED AND THIS INSTRUMENT WILL BE TURNED OFF
-	endif														;END OF CONDITIONAL BRANCHING
-	inum		=	inum - iStartNote									;CREATE A NEW VALUE FOR inum. I.E. COUNTING BEGINS AT RHYTHMICON START NOTE FROM 1
-	krate	=	gkrate * inum										;RATE IS A PRODUCT OF RHYTHMICON NOTE COUNT AND 'RATE' SLIDER
-	ktrigger	metro	krate										;GENERATE A METRONOME TRIGGER FOR THIS NOTE
-			schedkwhen	ktrigger, 0, 0, 30, 0, gkdur, gkfund * inum		;SCHEDULE NOTE PULSE (INSTR 30)
+instr 1                           ; MIDI
+  inum notnum                     ; Read in MIDI note number
+  iStartNote init i(gkStartNote)  ; Starting note for the rhythmicon
+  if inum <= iStartNote then      ; If a note below the starting note is played...
+    ; ...It will be ignored and this instrument will be turned off
+    turnoff
+  endif  ; End of conditional branching
+  ; Create a new value for inum. I.e. Counting begins at rhythmicon start note from 1
+  inum = inum - iStartNote
+  ; Rate is a product of rhythmicon note count and 'rate' slider
+  krate = gkrate * inum
+  ; Generate a metronome trigger for this note
+  ktrigger metro krate
+  schedkwhen ktrigger, 0, 0, 30, 0, gkdur, gkfund * inum  ; Schedule note pulse (instr 30)
 endin
 
-;DEFINE A MACRO FOR A GUI TRIGGERED NOTE
-#define	GUI_NOTE(I)
-#	
-instr	$I
-	inum		=	p4												;READ p4 VALUE
-	krate	=	gkrate * inum										;RATE IS A PRODUCT OF RHYTHMICON NOTE COUNT AND 'RATE' SLIDER
-	ktrigger	metro		krate									;GENERATE A METRONOME TRIGGER FOR THIS NOTE
-			schedkwhen	ktrigger, 0, 0, 30, 0, gkdur, gkfund * inum		;SCHEDULE NOTE PULSE (INSTR 30)		
+; Define a macro for a GUI triggered note
+#define GUI_NOTE(I)
+#
+instr $I
+  inum = p4  ; Read p4 value
+  ; Rate is a product of rhythmicon note count and 'rate' slider
+  krate = gkrate * inum
+  ; Generate a metronome trigger for this note
+  ktrigger metro krate
+  schedkwhen ktrigger, 0, 0, 30, 0, gkdur, gkfund * inum  ; Schedule note pulse (instr 30)
 endin
 #
 
-;CREATE INSTRUMENTS 11-26 USING A MACRO EXPANSION OF 'GUI_NOTE' WITH ARGUMENTS
+; Create instruments 11-26 using a macro expansion of 'gui_note' with arguments
 $GUI_NOTE(11)
 $GUI_NOTE(12)
 $GUI_NOTE(13)
@@ -114,25 +120,26 @@ $GUI_NOTE(25)
 $GUI_NOTE(26)
 
 
-instr	30	;SOUND PRODUCING INSTRUMENT
-	aenv		linseg	0,0.005,1, p3-0.005, 0							;AMPLITUDE ENVELOPE
-	ipick	init		0.1											;PICK-UP POSITION
-	iplk		random	0.85,0.98										;PLUCK POSITION
-	iamp		init		1											;AMPLITUDE
+instr 30                                ; Sound producing instrument
+  aenv linseg 0, 0.005, 1, p3-0.005, 0  ; Amplitude envelope
+  ipick init 0.1                        ; Pick-up position
+  iplk random 0.85, 0.98                ; Pluck position
+  iamp init 1                           ; Amplitude
 
-	if	gkvoice=0	then
-		asig 	wgpluck2	iplk, 1, p4, ipick, gkrefl					;PLUCKED STRING PHYSICAL MODEL
-		asig		=		asig  * aenv * gkgain						;SCALE AUDIO SIGNAL USING AMPLITUDE ENVELOPE AND OUTPUT GAIN SLIDER
-	elseif	gkvoice=1	then
-		asig 	vco 		aenv * i(gkgain), p4, i(gkwave)+1, 0.5, gisine
-		kcf		expon	i(gkVCOcf),p3,20
-		asig		moogvcf	asig, kcf, gkVCOres
-	endif
-				outs		asig, asig								;SEND AUDIO TO OUTPUTS
+  if gkvoice = 0 then
+    asig wgpluck2 iplk, 1, p4, ipick, gkrefl  ; Plucked string physical model
+    ; Scale audio signal using amplitude envelope and output gain slider
+    asig = asig * aenv * gkgain
+  elseif gkvoice = 1 then
+    asig vco aenv * i(gkgain), p4, i(gkwave)+1, 0.5, gisine
+    kcf expon i(gkVCOcf), p3, 20
+    asig moogvcf asig, kcf, gkVCOres
+  endif
+  outs asig, asig  ; Send audio to outputs
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
+i 10 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -145,9 +152,9 @@ i 10 0 3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -165,15 +172,20 @@ i 10 0 3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -194,15 +206,20 @@ i 10 0 3600	;GUI
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -221,14 +238,14 @@ i 10 0 3600	;GUI
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -252,14 +269,14 @@ i 10 0 3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -299,14 +316,14 @@ i 10 0 3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -328,14 +345,14 @@ i 10 0 3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -375,14 +392,14 @@ i 10 0 3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -404,14 +421,14 @@ i 10 0 3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -451,14 +468,14 @@ i 10 0 3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -480,14 +497,14 @@ i 10 0 3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -509,14 +526,14 @@ i 10 0 3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -556,14 +573,14 @@ i 10 0 3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -640,14 +657,14 @@ i 10 0 3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -669,14 +686,14 @@ i 10 0 3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -698,14 +715,14 @@ i 10 0 3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -745,14 +762,14 @@ i 10 0 3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -774,14 +791,14 @@ i 10 0 3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -821,14 +838,14 @@ i 10 0 3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -850,14 +867,14 @@ i 10 0 3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -897,14 +914,14 @@ i 10 0 3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -923,11 +940,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> 1</text>
+  <text>1</text>
   <image>/</image>
   <eventLine>i 11 0 -1 1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4082</objectName>
@@ -942,11 +971,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> 3</text>
+  <text>3</text>
   <image>/</image>
   <eventLine>i 13 0 -1 3</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2146</objectName>
@@ -961,11 +1002,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> 5</text>
+  <text>5</text>
   <image>/</image>
   <eventLine>i 15 0 -1 5</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5716</objectName>
@@ -980,11 +1033,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> 6</text>
+  <text>6</text>
   <image>/</image>
   <eventLine>i 16 0 -1 6</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4636</objectName>
@@ -999,11 +1064,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> 8</text>
+  <text>8</text>
   <image>/</image>
   <eventLine>i 18 0 -1 8</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3911</objectName>
@@ -1023,6 +1100,18 @@ i 10 0 3600	;GUI
   <eventLine>i 20 0 -1 10</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6846</objectName>
@@ -1042,6 +1131,18 @@ i 10 0 3600	;GUI
   <eventLine>i 22 0 -1 12</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b8535</objectName>
@@ -1061,6 +1162,18 @@ i 10 0 3600	;GUI
   <eventLine>i 23 0 -1 13</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2309</objectName>
@@ -1080,6 +1193,18 @@ i 10 0 3600	;GUI
   <eventLine>i 25 0 -1 15</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6513</objectName>
@@ -1094,11 +1219,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> 2</text>
+  <text>2</text>
   <image>/</image>
   <eventLine>i 12 0 -1 2</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3619</objectName>
@@ -1113,11 +1250,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> 4</text>
+  <text>4</text>
   <image>/</image>
   <eventLine>i 14 0 -1 4</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5269</objectName>
@@ -1132,11 +1281,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> 7</text>
+  <text>7</text>
   <image>/</image>
   <eventLine>i 17 0 -1 7</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2809</objectName>
@@ -1151,11 +1312,23 @@ i 10 0 3600	;GUI
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> 9</text>
+  <text>9</text>
   <image>/</image>
   <eventLine>i 19 0 -1 9</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6429</objectName>
@@ -1175,6 +1348,18 @@ i 10 0 3600	;GUI
   <eventLine>i 21 0 -1 11</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6020</objectName>
@@ -1194,6 +1379,18 @@ i 10 0 3600	;GUI
   <eventLine>i 24 0 -1 14</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1452</objectName>
@@ -1213,6 +1410,18 @@ i 10 0 3600	;GUI
   <eventLine>i 26 0 -1 16</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

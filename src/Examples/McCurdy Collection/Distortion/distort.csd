@@ -1,81 +1,87 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 
-;Modified for QuteCsound by René, September 2010, updated Feb 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, September 2010, updated Feb 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 10     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-;WAVESHAPING FUNCTIONS
-gifn1	ftgen	1,0,128,7,-1,128,1			;SAWTOOTH UP
-gifn2	ftgen	2,0,128,10,1				;SINE WAVE
-gifn3	ftgen	3,0,128,10,1,0,1,0,1,0,1,0,1	;ODD PARTIALS
-gifn4	ftgen	4,0,128,21,1				;WHITE NOISE
-gifn5	ftgen	5,0,128,9,.5,1,0			;HALF SINE
-gifn6	ftgen	6,0,128,7,1,64,1,0,-1,64,-1	;SQUARE WAVE
+; Waveshaping functions
+gifn1 ftgen 1, 0, 128, 7, -1, 128, 1                  ; Sawtooth up
+gifn2 ftgen 2, 0, 128, 10, 1                          ; Sine wave
+gifn3 ftgen 3, 0, 128, 10, 1, 0, 1, 0, 1, 0, 1, 0, 1  ; Odd partials
+gifn4 ftgen 4, 0, 128, 21, 1                          ; White noise
+gifn5 ftgen 5, 0, 128, 9, .5, 1, 0                    ; Half sine
+gifn6 ftgen 6, 0, 128, 7, 1, 64, 1, 0, -1, 64, -1     ; Square wave
 
-;TABLE FOR EXP SLIDER
-giExp50		ftgen	0, 0, 129, -25, 0, 0.0001, 128, 50.0
-giExp20000	ftgen	0, 0, 129, -25, 0, 0.0001, 128, 20000.0
+; Table for exp slider
+giExp50    ftgen 0, 0, 129, -25, 0, 0.0001, 128, 50.0
+giExp20000 ftgen 0, 0, 129, -25, 0, 0.0001, 128, 20000.0
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	1	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkdist		invalue	"Distortion_Amount"
-		khp			invalue	"Half_Point"
-		gkhp			tablei	khp, giExp20000, 1
-					outvalue	"Half_Point_Value", gkhp
-		koutgain		invalue	"Output_Gain"
-		gkoutgain		tablei	koutgain, giExp50, 1
-					outvalue	"Output_Gain_Value", gkoutgain
-		gkfn			invalue	"Function"
-	endif
+instr 1  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gkdist invalue "Distortion_Amount"
+    khp    invalue "Half_Point"
+    gkhp tablei khp, giExp20000, 1
+    outvalue "Half_Point_Value", gkhp
+    koutgain invalue "Output_Gain"
+    gkoutgain tablei koutgain, giExp50, 1
+    outvalue "Output_Gain_Value", gkoutgain
+    gkfn invalue "Function"
+  endif
 endin
 
-instr	2		;DISTORT INSTRUMENT
-	Sfile		invalue		"_Browse1"
-	asig, asigR	FilePlay2		Sfile, 1, 0, 1
-	kSwitch		changed		gkhp, gkfn							;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then												;IF A VARIABLE CHANGE INDICATOR IS RECEIVED...
-		reinit	START											;...BEGIN A REINITIALISATION PASS FROM LABEL 'START' 
-	endif														;END OF CONDITIONAL BRANCHING
-	START:														;LABEL
-	ar 			distort		asig, gkdist, i(gkfn)+1, i(gkhp);, istor]
-				rireturn											;RETURN TO PERFORMANCE PASSES FROM INITIALISATION PASS
-				outs			ar * gkoutgain, ar * gkoutgain			;SEND AUDIO TO OUTPUTS AND MULTIPLY BY OUTPUT GAIN FLTK SLIDER
+instr 2  ; Distort instrument
+  Sfile invalue "_Browse1"
+  asig, asigR FilePlay2 Sfile, 1, 0, 1
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch changed gkhp, gkfn
+  ; If a variable change indicator is received...
+  if kSwitch = 1 then
+    ; ...Begin a reinitialisation pass from label 'start'
+    reinit START
+  endif                                        ; End of conditional branching
+START:                                         ; Label
+  ar distort asig, gkdist, i(gkfn)+1, i(gkhp)  ; , istor]
+  ; Return to performance passes from initialisation pass
+  rireturn
+  ; Send audio to outputs and multiply by output gain FLTK slider
+  outs ar * gkoutgain, ar * gkoutgain
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1		0	   3600	;GUI
+; Instr | start | duration
+i 1 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 
@@ -90,9 +96,9 @@ i 1		0	   3600	;GUI
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -110,15 +116,20 @@ i 1		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -157,14 +168,14 @@ i 1		0	   3600	;GUI
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -186,14 +197,14 @@ i 1		0	   3600	;GUI
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -215,15 +226,20 @@ i 1		0	   3600	;GUI
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>158</r>
    <g>220</g>
    <b>158</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -248,14 +264,14 @@ An output gain control can be used to compensate for a loss in power when half p
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -277,14 +293,14 @@ An output gain control can be used to compensate for a loss in power when half p
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -324,14 +340,14 @@ An output gain control can be used to compensate for a loss in power when half p
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -350,11 +366,23 @@ An output gain control can be used to compensate for a loss in power when half p
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   On / Off</text>
+  <text>On / Off</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Function</objectName>
@@ -417,14 +445,14 @@ An output gain control can be used to compensate for a loss in power when half p
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -446,14 +474,14 @@ An output gain control can be used to compensate for a loss in power when half p
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -475,14 +503,14 @@ An output gain control can be used to compensate for a loss in power when half p
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -524,6 +552,18 @@ An output gain control can be used to compensate for a loss in power when half p
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -541,9 +581,9 @@ An output gain control can be used to compensate for a loss in power when half p
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>229</r>
@@ -568,14 +608,14 @@ An output gain control can be used to compensate for a loss in power when half p
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

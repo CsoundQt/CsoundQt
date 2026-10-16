@@ -20,11 +20,11 @@ instr 1; calculates first 12 fibonacci values and writes them to giFt
 endin
 
 instr 2; prints the values of the table
- prints "%nContent of Function Table:%n"
+ prints "%nContent of Function Table:\n"
  indx init 0
  while indx < 12 do
   ival table indx, giFt
-  prints "Index %d = %f%n", indx, ival
+  prints "Index %d = %f\n", indx, ival
   indx += 1
  od
   endin

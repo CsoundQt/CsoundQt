@@ -1,76 +1,78 @@
-;Written by Iain McCurdy, 2008
+; Written by Iain McCurdy, 2008
 
 ; Modified for QuteCsound by René, January 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Use wav header
-;	Pause change to avoid high cpu load
+; Notes on modifications from original csd:
+; Use wav header
+; Pause change to avoid high cpu load
 
 
-;my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt -+rtmidi=null
+; my flags on Ubuntu: -dm0 -iadc -odac -+rtaudio=jack -b16 -B4096 --expression-opt
+; -+rtmidi=null
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 256	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 256    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-gkrecdur		init	0
-gkplaydur		init 0
+gkrecdur  init 0
+gkplaydur init 0
 
-instr	1	;GUI
- 	gkPause	invalue	"Pause"
- 	kPlay	invalue	"Play"
- 	kPlayOn	trigger	kPlay, 0.5, 0
- 			chnset	kPlayOn, "PlayOn"
-	kInstr2	active	2
-	kInstr3	active	3
+instr 1  ; GUI
+  gkPause invalue "Pause"
+  kPlay   invalue "Play"
+  kPlayOn trigger kPlay, 0.5, 0
+  chnset kPlayOn, "PlayOn"
+  kInstr2 active 2
+  kInstr3 active 3
 
-	if kPlayOn = 1 && kInstr2 = 0 && kInstr3 = 0 then
-		event	"i", 2, 0, 3600				;start playback for one hour maximum
-	endif
+  if kPlayOn = 1 && kInstr2 = 0 && kInstr3 = 0 then
+    event "i", 2, 0, 3600  ; start playback for one hour maximum
+  endif
 
-			outvalue	"RecDur", gkrecdur
-			outvalue	"PlayDur", gkplaydur
+  outvalue "RecDur", gkrecdur
+  outvalue "PlayDur", gkplaydur
 endin
 
-instr	2	;PLAYBACK
-	if	gkPause = 1	then							;IF PAUSE BUTTON IS ACTIVATED... 
-		kgoto	END								;GOTO 'END' LABEL
-	endif										;END OF CONDITIONAL BRANCHING
-	
-	asig	diskin2	"32BitRecording.wav", 1
-		outs		asig, asig						;SEND AUDIO TO OUTPUTS
+instr 2                ; Playback
+  if gkPause = 1 then  ; If pause button is activated...
+    kgoto END          ; Goto 'end' label
+  endif                ; End of conditional branching
 
- 	kPlayOn	chnget	"PlayOn"	
-	kPlay_Led	invalue	"Play_Led"
+  asig diskin2 "32BitRecording.wav", 1
+  outs asig, asig  ; Send audio to outputs
 
-	gkplaydur	line		0,1,1
+  kPlayOn chnget "PlayOn"
+  kPlay_Led invalue "Play_Led"
 
-	
-	if	(gkplaydur >= gkrecdur) || (kPlayOn == 1 && kPlay_Led == 1) 	then		;IF END OF RECORDING IS REACHED...
-		outvalue	"Play_Led", 0						;...DEACTIVATE PLAY BUTTON LED &
-		turnoff									;TURN OFF THIS INSTRUMENT IMMEDIATELY.
-	else
-		outvalue	"Play_Led", 1						;...ACTIVATE PLAY BUTTON LED &
-	endif										;END OF CONDITIONAL BRANCHING
-	END:
+  gkplaydur line 0, 1, 1
+
+
+  ; If end of recording is reached...
+  if (gkplaydur >= gkrecdur) || (kPlayOn == 1 && kPlay_Led == 1) then
+    outvalue "Play_Led", 0  ; ...Deactivate play button led &
+    turnoff                 ; Turn off this instrument immediately.
+  else
+    outvalue "Play_Led", 1  ; ...Activate play button led &
+  endif                     ; End of conditional branching
+END:
 endin
 
-instr	3	;RECORD
-	if	gkPause = 1	then							;IF PAUSE BUTTON IS ACTIVATED...
-		kgoto	END								;GOTO 'END' LABEL
-	endif										;END OF CONDITIONAL BRANCHING
-	
-	ain		inch		1							;READ AUDIO FROM LIVE INPUT CHANNEL 1
-			fout		"32BitRecording.wav", 16, ain
-	gkrecdur	line		0,1,1						;record duration
+instr 3                ; Record
+  if gkPause = 1 then  ; If pause button is activated...
+    kgoto END          ; Goto 'end' label
+  endif                ; End of conditional branching
 
-	END:
+  ain inch 1  ; Read audio from live input channel 1
+  fout "32BitRecording.wav", 16, ain
+  gkrecdur line 0, 1, 1  ; record duration
+
+END:
 endin
 </CsInstruments>
 <CsScore>
@@ -106,15 +108,20 @@ i 1 0 3600
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>181</r>
-   <g>199</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -141,14 +148,14 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -167,11 +174,23 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     Record </text>
+  <text>Record</text>
   <image>/</image>
   <eventLine>i 3 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Pause</objectName>
@@ -186,11 +205,23 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     Pause  </text>
+  <text>Pause</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Play</objectName>
@@ -205,11 +236,23 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>       Play  </text>
+  <text>Play</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -239,9 +282,9 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -260,15 +303,20 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -289,14 +337,14 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -318,15 +366,20 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -347,14 +400,14 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

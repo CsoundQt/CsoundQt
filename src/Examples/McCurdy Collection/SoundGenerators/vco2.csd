@@ -1,134 +1,141 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
 
-;Modified for QuteCsound by René, April 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, April 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table for exp slider
-;	Add INIT instrument
-;	Use of QuteCsound internal midi for Pulse Width widget control by CC#1
-;	Add vco2init for user defined waveform
+; Notes on modifications from original csd:
+; Add table for exp slider
+; Add INIT instrument
+; Use of QuteCsound internal midi for Pulse Width widget control by CC#1
+; Add vco2init for user defined waveform
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 64			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 64     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-gisine	ftgen	0,0,4096,10,1							;TABLE THAT STORES A SINGLE CYCLE OF A SINE WAVE
-giExp1	ftgen	0, 0, 129, -25, 0, 2.0, 128, 10000.0		;TABLE FOR EXP SLIDER
+; Table that stores a single cycle of a sine wave
+gisine ftgen 0, 0, 4096, 10, 1
+giExp1 ftgen 0, 0, 129, -25, 0, 2.0, 128, 10000.0  ; Table for exp slider
 
 
 ; user defined waveform -1: trapezoid wave with default parameters
-itmp		ftgen	1, 0, 16384, 7, 0, 2048, 1, 4096, 1, 4096, -1, 4096, -1, 2048, 0
-ift		vco2init	-1, 10000, 0, 0, 0, 1
+itmp ftgen 1, 0, 16384, 7, 0, 2048, 1, 4096, 1, 4096, -1, 4096, -1, 2048, 0
+ift vco2init -1, 10000, 0, 0, 0, 1
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		;SWITCHES
-		gkKPhs		invalue	"Phase"  
-		kmode		invalue	"Waveform"
-		;SLIDERS
-		gkamp		invalue	"Amplitude"
-		kcps			invalue	"Frequency"
-		gkcps		tablei	kcps, giExp1, 1
-					outvalue	"Frequency_Value", gkcps
-		gknyx		invalue	"Harmonics"
-		gkpw			invalue	"PW"
-		gkphs		invalue	"InitPhase"
-		gkphsDep		invalue	"PhaseDepth"
-		gkphsRte		invalue	"PhaseRate"
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    ; Switches
+    gkKPhs invalue "Phase"
+    kmode  invalue "Waveform"
+    ; Sliders
+    gkamp invalue "Amplitude"
+    kcps  invalue "Frequency"
+    gkcps tablei kcps, giExp1, 1
+    outvalue "Frequency_Value", gkcps
+    gknyx    invalue "Harmonics"
+    gkpw     invalue "PW"
+    gkphs    invalue "InitPhase"
+    gkphsDep invalue "PhaseDepth"
+    gkphsRte invalue "PhaseRate"
 
-		gkmode	= (kmode*2)+ gkKPhs
-	endif
+    gkmode = (kmode*2)+ gkKPhs
+  endif
 endin
 
-instr	11	;INIT
-		outvalue	"Amplitude"	, 0.1
-		outvalue	"Frequency"	, 0.45927
-		outvalue	"Harmonics"	, 0.25
-		outvalue	"PW"			, 0.5
-		outvalue	"InitPhase"	, 0.0
-		outvalue	"PhaseDepth"	, 0.0
-		outvalue	"PhaseRate"	, 0.001
+instr 11  ; Init
+  outvalue "Amplitude", 0.1
+  outvalue "Frequency", 0.45927
+  outvalue "Harmonics", 0.25
+  outvalue "PW", 0.5
+  outvalue "InitPhase", 0.0
+  outvalue "PhaseDepth", 0.0
+  outvalue "PhaseRate", 0.001
 endin
 
-instr	1	;MIDI INPUT INSTRUMENT
-	icps		cpsmidi									;READ CYCLES PER SECOND VALUE FROM MIDI INPUT
-	iamp		ampmidi	1								;READ IN A NOTE VELOCITY VALUE FROM THE MIDI INPUT
+instr 1           ; MIDI input instrument
+  icps cpsmidi    ; Read cycles per second value from MIDI input
+  iamp ampmidi 1  ; Read in a note velocity value from the MIDI input
 
-	;PITCH BEND===========================================================================================================================================================
-	iSemitoneBendRange=	2								;PITCH BEND RANGE IN SEMITONES
-	imin		=		0								;EQUILIBRIUM POSITION
-	imax		=		iSemitoneBendRange / 12				;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-	kbend	pchbend	imin, imax						;PITCH BEND VARIABLE (IN oct FORMAT)
-	ioct		=		octcps(icps)
-	kcps		=		cpsoct(ioct + kbend)
-	;=====================================================================================================================================================================
+  ; Pitch
+  ; bend===========================================================================================================================================================
+  iSemitoneBendRange = 2                        ; Pitch bend range in semitones
+  imin               = 0                        ; Equilibrium position
+  imax               = iSemitoneBendRange / 12  ; Max pitch displacement (in oct format)
+  kbend pchbend imin, imax                      ; Pitch bend variable (in oct format)
+  ioct = octcps(icps)
+  kcps = cpsoct(ioct + kbend)
+  ; =====================================================================================================================================================================
 
-	iporttime	=		0.05								;PORTAMENTO TIME VARIABLE
-	kporttime	linseg	0,0.001,iporttime					;CREATE A RAMPING UP FUNCTION TO REPRESENT PORTAMENTO TIME
-	kpw		portk	gkpw, kporttime					;APPLY PORTAMENTO SMOOTHING
-	kenv		linsegr	0,0.01,1,0.01,0					;ANTI-CLICK ENVELOPE
-	if	gkmode=2	then									;IF 'SAWTOOTH/TRIANGLE/RAMP' HAS BEEN SELECTED...
-		gkpw	limit	gkpw, 0.01, 0.99					;LIMIT PULSE WIDTH TO BE BETWEEN 0.01 AND 0.99
-	endif											;END OF CONDITIONAL BRANCH
-	kSwitch	changed	gknyx, gkmode
-	if	kSwitch=1	then									;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE								;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
-	UPDATE:
-	if i(gkKPhs)=0 then
-		kphs	=	gkphs								;INITIAL PHASE SLIDER USED
-	else
-		kphs	poscil	gkphsDep*0.5,gkphsRte,gisine			;PHASE MODULATION
-		kphs	=		kphs + 0.5						;PHASE DEPTH
-	endif
-	asig		vco2		kenv*iamp*gkamp, kcps, i(gkmode), kpw, kphs, i(gknyx)		;CREATE vco2 OSCILLATOR
-			rireturn													;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-			outs		asig, asig										;SEND AUDIO TO OUTPUTS
+  iporttime = 0.05  ; Portamento time variable
+  ; Create a ramping up function to represent portamento time
+  kporttime linseg 0, 0.001, iporttime
+  kpw portk gkpw, kporttime         ; Apply portamento smoothing
+  kenv linsegr 0, 0.01, 1, 0.01, 0  ; Anti-click envelope
+  if gkmode = 2 then                ; If 'sawtooth/triangle/ramp' has been selected...
+    gkpw limit gkpw, 0.01, 0.99     ; Limit pulse width to be between 0.01 and 0.99
+  endif                             ; End of conditional branch
+  kSwitch changed gknyx, gkmode
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
+UPDATE:
+  if i(gkKPhs) = 0 then
+    kphs = gkphs  ; Initial phase slider used
+  else
+    kphs poscil gkphsDep*0.5, gkphsRte, gisine  ; Phase modulation
+    kphs = kphs + 0.5                           ; Phase depth
+  endif
+  ; Create vco2 oscillator
+  asig vco2 kenv*iamp*gkamp, kcps, i(gkmode), kpw, kphs, i(gknyx)
+  rireturn         ; Return from reinitialisation pass to performance time passes
+  outs asig, asig  ; Send audio to outputs
 endin
 
-instr	2	;VCO2 INSTRUMENT
-	iporttime	=		0.05								;PORTAMENTO TIME VARIABLE
-	kporttime	linseg	0, 0.001, iporttime					;CREATE A RAMPING UP FUNCTION TO REPRESENT PORTAMENTO TIME
+instr 2             ; Vco2 instrument
+  iporttime = 0.05  ; Portamento time variable
+  ; Create a ramping up function to represent portamento time
+  kporttime linseg 0, 0.001, iporttime
 
-	kcps		portk	gkcps, kporttime					;SET FUNDEMENTAL TO GUI SLIDER gkcps and APPLY PORTAMENTO SMOOTHING 
-	kpw		portk	gkpw, kporttime					;APPLY PORTAMENTO SMOOTHING
-	kenv		linsegr	0,0.01,1,0.01,0					;ANTI-CLICK ENVELOPE
-	if	gkmode=2	then									;IF 'SAWTOOTH/TRIANGLE/RAMP' HAS BEEN SELECTED...
-		gkpw	limit	gkpw, 0.01, 0.99					;LIMIT PULSE WIDTH TO BE BETWEEN 0.01 AND 0.99
-	endif											;END OF CONDITIONAL BRANCH
-	kSwitch	changed	gknyx, gkmode
-	if	kSwitch=1	then									;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
-		reinit	UPDATE								;BEGIN A REINITIALISATION PASS FROM LABEL 'UPDATE'
-	endif
-	UPDATE:
-	if i(gkKPhs)=0 then
-		kphs	=	gkphs								;INITIAL PHASE SLIDER USED
-	else
-		kphs	poscil	gkphsDep*0.5,gkphsRte,gisine			;PHASE MODULATION
-		kphs	=		kphs + 0.5						;PHASE DEPTH
-	endif
-	asig		vco2		kenv*gkamp, kcps, i(gkmode), kpw, kphs, i(gknyx)			;CREATE vco2 OSCILLATOR
-			rireturn													;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
-			outs		asig, asig										;SEND AUDIO TO OUTPUTS
+  ; Set fundemental to GUI slider gkcps and apply portamento smoothing
+  kcps portk gkcps, kporttime
+  kpw  portk gkpw, kporttime        ; Apply portamento smoothing
+  kenv linsegr 0, 0.01, 1, 0.01, 0  ; Anti-click envelope
+  if gkmode = 2 then                ; If 'sawtooth/triangle/ramp' has been selected...
+    gkpw limit gkpw, 0.01, 0.99     ; Limit pulse width to be between 0.01 and 0.99
+  endif                             ; End of conditional branch
+  kSwitch changed gknyx, gkmode
+  if kSwitch = 1 then  ; If i-rate variable change trigger is '1'...
+    reinit UPDATE      ; Begin a reinitialisation pass from label 'update'
+  endif
+UPDATE:
+  if i(gkKPhs) = 0 then
+    kphs = gkphs  ; Initial phase slider used
+  else
+    kphs poscil gkphsDep*0.5, gkphsRte, gisine  ; Phase modulation
+    kphs = kphs + 0.5                           ; Phase depth
+  endif
+  asig vco2 kenv*gkamp, kcps, i(gkmode), kpw, kphs, i(gknyx)  ; Create vco2 oscillator
+  ; Return from reinitialisation pass to performance time passes
+  rireturn
+  outs asig, asig  ; Send audio to outputs
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 10		0.0	   3600	;GUI
-i 11		0.0     0.01	;INIT
+; Instr | start | duration
+i 10 0.0 3600  ; GUI
+i 11 0.0 0.01  ; Init
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -141,9 +148,9 @@ i 11		0.0     0.01	;INIT
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -161,15 +168,20 @@ i 11		0.0     0.01	;INIT
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -190,14 +202,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -219,14 +231,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -266,14 +278,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -295,14 +307,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -342,14 +354,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -371,14 +383,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -470,11 +482,23 @@ i 11		0.0     0.01	;INIT
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off - MIDI</text>
+  <text>On / Off - MIDI</text>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -492,14 +516,14 @@ i 11		0.0     0.01	;INIT
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -522,15 +546,20 @@ vco2 </label>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="background">
    <r>106</r>
    <g>117</g>
    <b>150</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -557,14 +586,14 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>2</borderradius>
@@ -583,11 +612,23 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <type>value</type>
   <pressedValue>16.00000000</pressedValue>
   <stringvalue/>
-  <text>    k-rate Phase</text>
+  <text>k-rate Phase</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -605,14 +646,14 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -634,14 +675,14 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -681,14 +722,14 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -710,14 +751,14 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -757,14 +798,14 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -786,14 +827,14 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -833,14 +874,14 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -862,14 +903,14 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>0</b>
+   <r>244</r>
+   <g>244</g>
+   <b>72</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

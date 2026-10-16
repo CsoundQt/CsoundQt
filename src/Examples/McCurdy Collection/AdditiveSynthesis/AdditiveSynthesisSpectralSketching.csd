@@ -2,340 +2,356 @@
 ; Modified for QuteCsound by René, September 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-;	Add denorm in reverb to avoid CPU overload when instruments 1 and 3 are not activated.
-;	Add denorm to portk in OSCILLATOR macros to avoid CPU overload when PartAmp sliders are zeros.
-;	Add table(s) for exp slider
-;	Instrument 1 is activated by MIDI and by the GUI
+; Notes on modifications from original csd:
+; Add denorm in reverb to avoid CPU overload when instruments 1 and 3 are not activated.
+; Add denorm to portk in OSCILLATOR macros to avoid CPU overload when PartAmp sliders are
+; zeros.
+; Add table(s) for exp slider
+; Instrument 1 is activated by MIDI and by the GUI
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0 --midi-key-oct=4 --midi-velocity-amp=5
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100
-ksmps 	= 32
-nchnls 	= 2
-0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100
+ksmps  = 32
+nchnls = 2
+0dbfs  = 1  ; Maximum sound intensity level regardless of bit depth
 
-gasend		init		0
+gasend init 0
 
-gisine		ftgen	0,0,4096,10,1													;SINE WAVE
-giwaveform	ftgen	0,0,32,-2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0	;TABLE THAT CONTAINS PARTIAL STRENGTHS. THIS WILL BE UPDATED BY MOVEMENTS ON THE X-Y PANEL
+gisine ftgen 0, 0, 4096, 10, 1  ; Sine wave
+; Table that contains partial strengths. This will be updated by movements on the x-y
+; panel
+giwaveform ftgen 0, 0, 32, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
-;TABLES FOR EXP SLIDERS
-giExp8000		ftgen	0, 0, 129, -25, 0, 4, 128, 8000
-giExp20000	ftgen	0, 0, 129, -25, 0, 20, 128, 20000
+; Tables for exp sliders
+giExp8000  ftgen 0, 0, 129, -25, 0, 4, 128, 8000
+giExp20000 ftgen 0, 0, 129, -25, 0, 20, 128, 20000
 
-instr	10	;GUI
-	ktrig	metro	10
+instr 10  ; GUI
+  ktrig metro 10
 
-	if (ktrig == 1) then
+  if (ktrig == 1) then
 
-#define	PART(COUNT)	
-	#
-	gkPartAmp$COUNT	invalue	"PartAmp$COUNT"
-	gkRatio$COUNT		invalue	"Ratio$COUNT"
-	#
+    #define PART(COUNT)
+    #
+    gkPartAmp$COUNT invalue "PartAmp$COUNT"
+    gkRatio$COUNT   invalue "Ratio$COUNT"
+    #
 
-		$PART(1) 
-		$PART(2) 
-		$PART(3) 
-		$PART(4) 
-		$PART(5) 
-		$PART(6) 
-		$PART(7) 
-		$PART(8) 
-		$PART(9) 
-		$PART(10)
-		$PART(11)
-		$PART(12)
-		$PART(13)
-		$PART(14)
-		$PART(15)
-		$PART(16)
-		$PART(17)
-		$PART(18)
-		$PART(19)
-		$PART(20)
-		$PART(21)
-		$PART(22)
-		$PART(23)
-		$PART(24)
-		$PART(25)
-		$PART(26)
-		$PART(27)
-		$PART(28)
-		$PART(29)
-		$PART(30)
+    $PART(1)
+    $PART(2)
+    $PART(3)
+    $PART(4)
+    $PART(5)
+    $PART(6)
+    $PART(7)
+    $PART(8)
+    $PART(9)
+    $PART(10)
+    $PART(11)
+    $PART(12)
+    $PART(13)
+    $PART(14)
+    $PART(15)
+    $PART(16)
+    $PART(17)
+    $PART(18)
+    $PART(19)
+    $PART(20)
+    $PART(21)
+    $PART(22)
+    $PART(23)
+    $PART(24)
+    $PART(25)
+    $PART(26)
+    $PART(27)
+    $PART(28)
+    $PART(29)
+    $PART(30)
 
-		gkamp		invalue	"Amplitude"
-		gkFundFrq		invalue	"Fund_Freq"					
-		gkFundFrq		tablei	gkFundFrq, giExp8000, 1
-					outvalue	"Fund_Freq_Value", gkFundFrq
-		gkAmpPort		invalue	"Amp_Fund_Port"
-		gkRatiosPort	invalue	"Ratio_Port"
-		gkAttTim		invalue	"Attack_Time"
-		gkRelTim		invalue 	"Release_Time"
-		gkRvbMix		invalue	"Reverb_Mix"
-		gkRvbFbl		invalue	"Reverb_Time"
-		gkRvbLPF		invalue 	"Reverb_LPF"
-		gkRvbLPF		tablei	gkRvbLPF, giExp20000, 1
-	endif
+    gkamp     invalue "Amplitude"
+    gkFundFrq invalue "Fund_Freq"
+    gkFundFrq tablei gkFundFrq, giExp8000, 1
+    outvalue "Fund_Freq_Value", gkFundFrq
+    gkAmpPort    invalue "Amp_Fund_Port"
+    gkRatiosPort invalue "Ratio_Port"
+    gkAttTim     invalue "Attack_Time"
+    gkRelTim     invalue "Release_Time"
+    gkRvbMix     invalue "Reverb_Mix"
+    gkRvbFbl     invalue "Reverb_Time"
+    gkRvbLPF     invalue "Reverb_LPF"
+    gkRvbLPF tablei gkRvbLPF, giExp20000, 1
+  endif
 endin
 
-instr	1	;SOUND GENERATING INSTRUMENT
+instr 1  ; Sound generating instrument
 
-	if p4!=0 then											;MIDI
-		ioct		= p4										;READ OCT VALUE FROM MIDI INPUT
-		iamp		= p5	* 0.1								;READ IN A NOTE VELOCITY VALUE FROM THE MIDI INPUT
-		kamp 	= iamp * gkamp								;SET kamp TO MIDI KEY VELOCITY MULTIPLIED BY SLIDER VALUE gkamp
+  if p4 != 0 then        ; MIDI
+    ioct = p4            ; Read oct value from MIDI input
+    iamp = p5 * 0.1      ; Read in a note velocity value from the MIDI input
+    kamp = iamp * gkamp  ; Set kamp to MIDI key velocity multiplied by slider value gkamp
 
-		;PITCH BEND===========================================================================================================================================================
-		iSemitoneBendRange = 2								;PITCH BEND RANGE IN SEMITONES (WILL BE DEFINED FURTHER LATER) - SUGGESTION - THIS COULD BE CONTROLLED BY AN COUNTER
-		imin		= 0										;EQUILIBRIUM POSITION
-		imax		= iSemitoneBendRange * .0833333				;MAX PITCH DISPLACEMENT (IN oct FORMAT)
-		kbend	pchbend	imin, imax						;PITCH BEND VARIABLE (IN oct FORMAT)
-		kFundFrq	=	cpsoct(ioct + kbend)
-		;=====================================================================================================================================================================
-	else													;GUI
-		kamp			= gkamp * 0.1							;SET kamp TO SLIDER VALUE gkamp
-		kFundFrq		= gkFundFrq							;SET FUNDEMENTAL TO SLIDER gkfund
-	endif
+    ; Pitch
+    ; bend===========================================================================================================================================================
+    ; Pitch bend range in semitones (will be defined further later) - suggestion - this
+    ; could be controlled by an counter
+    iSemitoneBendRange = 2
+    imin               = 0  ; Equilibrium position
+    ; Max pitch displacement (in oct format)
+    imax = iSemitoneBendRange * .0833333
+    ; Pitch bend variable (in oct format)
+    kbend pchbend imin, imax
+    kFundFrq = cpsoct(ioct + kbend)
+    ; =====================================================================================================================================================================
+  else                      ; GUI
+    kamp     = gkamp * 0.1  ; Set kamp to slider value gkamp
+    kFundFrq = gkFundFrq    ; Set fundemental to slider gkfund
+  endif
 
-	kporttime		linseg	0, 0.001, 1, 1, 1					;CREATE A RAMPING UP VARIABLE TO PREVENT PORTAMENTO GLIDE UPON NOTE ONSET
-	kAmpPort		=		kporttime * gkAmpPort				;VARIABLE THAT WILL BE USED FOR AMPLITUDE (AND FUNDEMENTAL) PORTAMENTO
-	kRatiosPort	=		kporttime * gkRatiosPort				;VARIABLE THAT WILL BE USED FOR AMPLITUDE (AND FUNDEMENTAL) PORTAMENTO
-	kfund		portk	kFundFrq, kAmpPort					;APPLY PORTAMENTO TO FUNDEMENTAL SLIDER OUTPUT
-	amix			init		0
+  ; Create a ramping up variable to prevent portamento glide upon note onset
+  kporttime linseg 0, 0.001, 1, 1, 1
+  ; Variable that will be used for amplitude (and fundemental) portamento
+  kAmpPort = kporttime * gkAmpPort
+  ; Variable that will be used for amplitude (and fundemental) portamento
+  kRatiosPort = kporttime * gkRatiosPort
+  kfund portk kFundFrq, kAmpPort  ; Apply portamento to fundemental slider output
+  amix init 0
 
-#define	OSCILLATOR(COUNT)	
-	#
-	kPartAmp$COUNT		table	$COUNT-1, giwaveform							;READ RELEVANT PARTIAL AMPLITUDE FROM TABLE
-	kPartAmp$COUNT		portk	0.000001 + kPartAmp$COUNT , kAmpPort				;APPLY PORTAMENTO SMOOTHING TO CHANGES IN PARTIAL AMPLITUDE
-	kRatio$COUNT		portk	gkRatio$COUNT, kRatiosPort						;READ RELEVANT PARTIAL RATIO
-	apart$COUNT		oscil	kamp*kPartAmp$COUNT, kfund*kRatio$COUNT, gisine		;GENERATE AUDIO FOR PARTIAL
-	amix				=		amix + apart$COUNT								;ADD PARTIAL AUDIO TO CUMULATIVE AUDIO VARIABLE
-	#
+  #define OSCILLATOR(COUNT)
+  #
+  kPartAmp$COUNT table $COUNT-1, giwaveform  ; Read relevant partial amplitude from table
+  ; Apply portamento smoothing to changes in partial amplitude
+  kPartAmp$COUNT portk 0.000001 + kPartAmp$COUNT, kAmpPort
+  kRatio$COUNT   portk gkRatio$COUNT, kRatiosPort  ; Read relevant partial ratio
+  ; Generate audio for partial
+  apart$COUNT oscil kamp*kPartAmp$COUNT, kfund*kRatio$COUNT, gisine
+  amix = amix + apart$COUNT  ; Add partial audio to cumulative audio variable
+  #
 
-	$OSCILLATOR(1) 
-	$OSCILLATOR(2) 
-	$OSCILLATOR(3) 
-	$OSCILLATOR(4) 
-	$OSCILLATOR(5) 
-	$OSCILLATOR(6) 
-	$OSCILLATOR(7) 
-	$OSCILLATOR(8) 
-	$OSCILLATOR(9) 
-	$OSCILLATOR(10)
-	$OSCILLATOR(11)
-	$OSCILLATOR(12)
-	$OSCILLATOR(13)
-	$OSCILLATOR(14)
-	$OSCILLATOR(15)
-	$OSCILLATOR(16)
-	$OSCILLATOR(17)
-	$OSCILLATOR(18)
-	$OSCILLATOR(19)
-	$OSCILLATOR(20)
-	$OSCILLATOR(21)
-	$OSCILLATOR(22)
-	$OSCILLATOR(23)
-	$OSCILLATOR(24)
-	$OSCILLATOR(25)
-	$OSCILLATOR(26)
-	$OSCILLATOR(27)
-	$OSCILLATOR(28)
-	$OSCILLATOR(29)
-	$OSCILLATOR(30)
-	
-	aenv		linsegr	0, i(gkAttTim), 1, i(gkRelTim), 0						;AMPLITUDE ENVELOPE
-	amix		=		amix * aenv										;ANTI-CLICK ENVELOPE
-	gasend	=		gasend +  (amix * gkRvbMix)
-			outs		amix * (1 - gkRvbMix), amix * (1 - gkRvbMix)				;SEND DRY SIGNAL TO OUTPUTS
-			clear	amix
+  $OSCILLATOR(1)
+  $OSCILLATOR(2)
+  $OSCILLATOR(3)
+  $OSCILLATOR(4)
+  $OSCILLATOR(5)
+  $OSCILLATOR(6)
+  $OSCILLATOR(7)
+  $OSCILLATOR(8)
+  $OSCILLATOR(9)
+  $OSCILLATOR(10)
+  $OSCILLATOR(11)
+  $OSCILLATOR(12)
+  $OSCILLATOR(13)
+  $OSCILLATOR(14)
+  $OSCILLATOR(15)
+  $OSCILLATOR(16)
+  $OSCILLATOR(17)
+  $OSCILLATOR(18)
+  $OSCILLATOR(19)
+  $OSCILLATOR(20)
+  $OSCILLATOR(21)
+  $OSCILLATOR(22)
+  $OSCILLATOR(23)
+  $OSCILLATOR(24)
+  $OSCILLATOR(25)
+  $OSCILLATOR(26)
+  $OSCILLATOR(27)
+  $OSCILLATOR(28)
+  $OSCILLATOR(29)
+  $OSCILLATOR(30)
+
+  aenv linsegr 0, i(gkAttTim), 1, i(gkRelTim), 0  ; Amplitude envelope
+  amix   = amix * aenv                            ; Anti-click envelope
+  gasend = gasend + (amix * gkRvbMix)
+  outs  amix * (1 - gkRvbMix), amix * (1 - gkRvbMix)  ; Send dry signal to outputs
+  clear amix
 endin
 
-instr	2	;UPDATE SLIDERS
+instr 2  ; Update sliders
 
-	kx			invalue	"X_Part"
-	ky			invalue	"Y_Amp"
-	kx			=		int(kx)										;CONVERT X-AXIS VALUES TO INTEGERS 
-	ktrig_XY		changed	kx, ky										;GENERATE A TRIGGER (MOMENTARY '1') IF X OR Y AXIS VALUES CHANGE
-	
-	;	SCHEDKWHEN KTRIGGER, KMINTIM, KMAXNUM, KINSNUM, KWHEN, KDUR, p4,  p5
-		schedkwhen ktrig_XY,    0,       0,       4,     0,    0,    kx,  ky		;TRIGGER INSTRUMENT THAT UPDATES THE TABLE
+  kx invalue "X_Part"
+  ky invalue "Y_Amp"
+  kx = int(kx)  ; Convert x-axis values to integers
+  ; Generate a trigger (momentary '1') if x or y axis values change
+  ktrig_XY changed kx, ky
 
-#define	UPDATE_SLIDER(COUNT)	
-	#
-	kPartAmp$COUNT	table	$COUNT-1, giwaveform							;READ RELEVANT PARTIAL AMPLITUDE FROM TABLE (DEPENDENT UPON Y LOCATION OF POINTER)
-				outvalue	"PartAmp$COUNT", kPartAmp$COUNT
-	#
-	
-	if (ktrig_XY == 1)	then
-		$UPDATE_SLIDER(1) 
-		$UPDATE_SLIDER(2) 
-		$UPDATE_SLIDER(3) 
-		$UPDATE_SLIDER(4) 
-		$UPDATE_SLIDER(5) 
-		$UPDATE_SLIDER(6) 
-		$UPDATE_SLIDER(7) 
-		$UPDATE_SLIDER(8) 
-		$UPDATE_SLIDER(9) 
-		$UPDATE_SLIDER(10)
-		$UPDATE_SLIDER(11)
-		$UPDATE_SLIDER(12)
-		$UPDATE_SLIDER(13)
-		$UPDATE_SLIDER(14)
-		$UPDATE_SLIDER(15)
-		$UPDATE_SLIDER(16)
-		$UPDATE_SLIDER(17)
-		$UPDATE_SLIDER(18)
-		$UPDATE_SLIDER(19)
-		$UPDATE_SLIDER(20)
-		$UPDATE_SLIDER(21)
-		$UPDATE_SLIDER(22)
-		$UPDATE_SLIDER(23)
-		$UPDATE_SLIDER(24)
-		$UPDATE_SLIDER(25)
-		$UPDATE_SLIDER(26)
-		$UPDATE_SLIDER(27)
-		$UPDATE_SLIDER(28)
-		$UPDATE_SLIDER(29)
-		$UPDATE_SLIDER(30)
-	endif
+  ; Schedkwhen ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur, p4,  p5
+  schedkwhen ktrig_XY, 0, 0, 4, 0, 0, kx, ky  ; Trigger instrument that updates the table
+
+  #define UPDATE_SLIDER(COUNT)
+  #
+  ; Read relevant partial amplitude from table (dependent upon y location of pointer)
+  kPartAmp$COUNT table $COUNT-1, giwaveform
+  outvalue "PartAmp$COUNT", kPartAmp$COUNT
+  #
+
+  if (ktrig_XY == 1) then
+    $UPDATE_SLIDER(1)
+    $UPDATE_SLIDER(2)
+    $UPDATE_SLIDER(3)
+    $UPDATE_SLIDER(4)
+    $UPDATE_SLIDER(5)
+    $UPDATE_SLIDER(6)
+    $UPDATE_SLIDER(7)
+    $UPDATE_SLIDER(8)
+    $UPDATE_SLIDER(9)
+    $UPDATE_SLIDER(10)
+    $UPDATE_SLIDER(11)
+    $UPDATE_SLIDER(12)
+    $UPDATE_SLIDER(13)
+    $UPDATE_SLIDER(14)
+    $UPDATE_SLIDER(15)
+    $UPDATE_SLIDER(16)
+    $UPDATE_SLIDER(17)
+    $UPDATE_SLIDER(18)
+    $UPDATE_SLIDER(19)
+    $UPDATE_SLIDER(20)
+    $UPDATE_SLIDER(21)
+    $UPDATE_SLIDER(22)
+    $UPDATE_SLIDER(23)
+    $UPDATE_SLIDER(24)
+    $UPDATE_SLIDER(25)
+    $UPDATE_SLIDER(26)
+    $UPDATE_SLIDER(27)
+    $UPDATE_SLIDER(28)
+    $UPDATE_SLIDER(29)
+    $UPDATE_SLIDER(30)
+  endif
 endin
 
-instr	4	;UPDATE PARTIAL VALUE
-				tableiw	p5, p4, giwaveform					;UPDATE AMPLITUDE VALUE IN TABLE
+instr 4                       ; Update partial value
+  tableiw p5, p4, giwaveform  ; Update amplitude value in table
 endin
 
-instr	5	;HARMONIC RATIOS
-	outvalue	"Ratio1",1 
-	outvalue	"Ratio2",2 
-	outvalue	"Ratio3",3
-	outvalue	"Ratio4",4
-	outvalue	"Ratio5",5
-	outvalue	"Ratio6",6
-	outvalue	"Ratio7",7
-	outvalue	"Ratio8",8
-	outvalue	"Ratio9",9
-	outvalue	"Ratio10",10
-	outvalue	"Ratio11",11
-	outvalue	"Ratio12",12
-	outvalue	"Ratio13",13
-	outvalue	"Ratio14",14
-	outvalue	"Ratio15",15
-	outvalue	"Ratio16",16
-	outvalue	"Ratio17",17
-	outvalue	"Ratio18",18
-	outvalue	"Ratio19",19
-	outvalue	"Ratio20",20
-	outvalue	"Ratio21",21
-	outvalue	"Ratio22",22
-	outvalue	"Ratio23",23
-	outvalue	"Ratio24",24
-	outvalue	"Ratio25",25
-	outvalue	"Ratio26",26
-	outvalue	"Ratio27",27
-	outvalue	"Ratio28",28
-	outvalue	"Ratio29",29
-	outvalue	"Ratio30",30
+instr 5  ; Harmonic ratios
+  outvalue "Ratio1", 1
+  outvalue "Ratio2", 2
+  outvalue "Ratio3", 3
+  outvalue "Ratio4", 4
+  outvalue "Ratio5", 5
+  outvalue "Ratio6", 6
+  outvalue "Ratio7", 7
+  outvalue "Ratio8", 8
+  outvalue "Ratio9", 9
+  outvalue "Ratio10", 10
+  outvalue "Ratio11", 11
+  outvalue "Ratio12", 12
+  outvalue "Ratio13", 13
+  outvalue "Ratio14", 14
+  outvalue "Ratio15", 15
+  outvalue "Ratio16", 16
+  outvalue "Ratio17", 17
+  outvalue "Ratio18", 18
+  outvalue "Ratio19", 19
+  outvalue "Ratio20", 20
+  outvalue "Ratio21", 21
+  outvalue "Ratio22", 22
+  outvalue "Ratio23", 23
+  outvalue "Ratio24", 24
+  outvalue "Ratio25", 25
+  outvalue "Ratio26", 26
+  outvalue "Ratio27", 27
+  outvalue "Ratio28", 28
+  outvalue "Ratio29", 29
+  outvalue "Ratio30", 30
 endin
 
-instr	6	;RANDOMIZE RATIOS
+instr 6  ; Randomize ratios
 
-#define	RANDOMIZE_RATIO(COUNT)
-	#
-	iratio	random	1,30
-			outvalue	"Ratio$COUNT", iratio
-	#
-	$RANDOMIZE_RATIO(1) 
-	$RANDOMIZE_RATIO(2) 
-	$RANDOMIZE_RATIO(3) 
-	$RANDOMIZE_RATIO(4) 
-	$RANDOMIZE_RATIO(5) 
-	$RANDOMIZE_RATIO(6) 
-	$RANDOMIZE_RATIO(7) 
-	$RANDOMIZE_RATIO(8) 
-	$RANDOMIZE_RATIO(9) 
-	$RANDOMIZE_RATIO(10)
-	$RANDOMIZE_RATIO(11)
-	$RANDOMIZE_RATIO(12)
-	$RANDOMIZE_RATIO(13)
-	$RANDOMIZE_RATIO(14)
-	$RANDOMIZE_RATIO(15)
-	$RANDOMIZE_RATIO(16)
-	$RANDOMIZE_RATIO(17)
-	$RANDOMIZE_RATIO(18)
-	$RANDOMIZE_RATIO(19)
-	$RANDOMIZE_RATIO(20)
-	$RANDOMIZE_RATIO(21)
-	$RANDOMIZE_RATIO(22)
-	$RANDOMIZE_RATIO(23)
-	$RANDOMIZE_RATIO(24)
-	$RANDOMIZE_RATIO(25)
-	$RANDOMIZE_RATIO(26)
-	$RANDOMIZE_RATIO(27)
-	$RANDOMIZE_RATIO(28)
-	$RANDOMIZE_RATIO(29)
-	$RANDOMIZE_RATIO(30)
+  #define RANDOMIZE_RATIO(COUNT)
+  #
+  iratio random 1, 30
+  outvalue "Ratio$COUNT", iratio
+  #
+  $RANDOMIZE_RATIO(1)
+  $RANDOMIZE_RATIO(2)
+  $RANDOMIZE_RATIO(3)
+  $RANDOMIZE_RATIO(4)
+  $RANDOMIZE_RATIO(5)
+  $RANDOMIZE_RATIO(6)
+  $RANDOMIZE_RATIO(7)
+  $RANDOMIZE_RATIO(8)
+  $RANDOMIZE_RATIO(9)
+  $RANDOMIZE_RATIO(10)
+  $RANDOMIZE_RATIO(11)
+  $RANDOMIZE_RATIO(12)
+  $RANDOMIZE_RATIO(13)
+  $RANDOMIZE_RATIO(14)
+  $RANDOMIZE_RATIO(15)
+  $RANDOMIZE_RATIO(16)
+  $RANDOMIZE_RATIO(17)
+  $RANDOMIZE_RATIO(18)
+  $RANDOMIZE_RATIO(19)
+  $RANDOMIZE_RATIO(20)
+  $RANDOMIZE_RATIO(21)
+  $RANDOMIZE_RATIO(22)
+  $RANDOMIZE_RATIO(23)
+  $RANDOMIZE_RATIO(24)
+  $RANDOMIZE_RATIO(25)
+  $RANDOMIZE_RATIO(26)
+  $RANDOMIZE_RATIO(27)
+  $RANDOMIZE_RATIO(28)
+  $RANDOMIZE_RATIO(29)
+  $RANDOMIZE_RATIO(30)
 endin
 
-instr	7	;ZERO PARTIAL AMPLITUDES
+instr 7  ; Zero partial amplitudes
 
-#define	ZERO_AMPLITUDE(COUNT)
-	#
-	outvalue		"PartAmp$COUNT", 0
-	tableiw		0, $COUNT - 1, giwaveform	;UPDATE AMPLITUDE VALUE IN TABLE
-	#
-	$ZERO_AMPLITUDE(1) 
-	$ZERO_AMPLITUDE(2) 
-	$ZERO_AMPLITUDE(3) 
-	$ZERO_AMPLITUDE(4) 
-	$ZERO_AMPLITUDE(5) 
-	$ZERO_AMPLITUDE(6) 
-	$ZERO_AMPLITUDE(7) 
-	$ZERO_AMPLITUDE(8) 
-	$ZERO_AMPLITUDE(9) 
-	$ZERO_AMPLITUDE(10)
-	$ZERO_AMPLITUDE(11)
-	$ZERO_AMPLITUDE(12)
-	$ZERO_AMPLITUDE(13)
-	$ZERO_AMPLITUDE(14)
-	$ZERO_AMPLITUDE(15)
-	$ZERO_AMPLITUDE(16)
-	$ZERO_AMPLITUDE(17)
-	$ZERO_AMPLITUDE(18)
-	$ZERO_AMPLITUDE(19)
-	$ZERO_AMPLITUDE(20)
-	$ZERO_AMPLITUDE(21)
-	$ZERO_AMPLITUDE(22)
-	$ZERO_AMPLITUDE(23)
-	$ZERO_AMPLITUDE(24)
-	$ZERO_AMPLITUDE(25)
-	$ZERO_AMPLITUDE(26)
-	$ZERO_AMPLITUDE(27)
-	$ZERO_AMPLITUDE(28)
-	$ZERO_AMPLITUDE(29)
-	$ZERO_AMPLITUDE(30)
+  #define ZERO_AMPLITUDE(COUNT)
+  #
+  outvalue "PartAmp$COUNT", 0
+  tableiw 0, $COUNT - 1, giwaveform  ; Update amplitude value in table
+  #
+  $ZERO_AMPLITUDE(1)
+  $ZERO_AMPLITUDE(2)
+  $ZERO_AMPLITUDE(3)
+  $ZERO_AMPLITUDE(4)
+  $ZERO_AMPLITUDE(5)
+  $ZERO_AMPLITUDE(6)
+  $ZERO_AMPLITUDE(7)
+  $ZERO_AMPLITUDE(8)
+  $ZERO_AMPLITUDE(9)
+  $ZERO_AMPLITUDE(10)
+  $ZERO_AMPLITUDE(11)
+  $ZERO_AMPLITUDE(12)
+  $ZERO_AMPLITUDE(13)
+  $ZERO_AMPLITUDE(14)
+  $ZERO_AMPLITUDE(15)
+  $ZERO_AMPLITUDE(16)
+  $ZERO_AMPLITUDE(17)
+  $ZERO_AMPLITUDE(18)
+  $ZERO_AMPLITUDE(19)
+  $ZERO_AMPLITUDE(20)
+  $ZERO_AMPLITUDE(21)
+  $ZERO_AMPLITUDE(22)
+  $ZERO_AMPLITUDE(23)
+  $ZERO_AMPLITUDE(24)
+  $ZERO_AMPLITUDE(25)
+  $ZERO_AMPLITUDE(26)
+  $ZERO_AMPLITUDE(27)
+  $ZERO_AMPLITUDE(28)
+  $ZERO_AMPLITUDE(29)
+  $ZERO_AMPLITUDE(30)
 endin
 
-instr	8	;REVERB
-				denorm	gasend
+instr 8  ; Reverb
+  denorm gasend
 
-	;OUTPUTS		OPCODE		INPUTS    |FEEDBACK|LPF_CUTPFF
-	arvbL,arvbR	reverbsc	gasend, gasend, gkRvbFbl,gkRvbLPF		;CREATE A REVERBERATED SIGNAL
+  ; Outputs  opcode  inputs    |feedback|lpf_cutpff
+  arvbL, arvbR reverbsc gasend, gasend, gkRvbFbl, gkRvbLPF  ; Create a reverberated signal
 
-				outs		arvbL, arvbR						;SEND AUDIO SIGNAL TO THE OUTPUTS
-				clear	gasend
+  outs arvbL, arvbR  ; Send audio signal to the outputs
+  clear gasend
 endin
 </CsInstruments>
 <CsScore>
-i 2  0 3600	;INSTRUMENT 2 PLAYS FOR 1 HOUR
-i 8  0 3600	;INSTRUMENT 8 PLAYS FOR 1 HOUR	(REVERB)
-i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
+i 2 0 3600   ; Instrument 2 plays for 1 hour
+i 8 0 3600   ; Instrument 8 plays for 1 hour (reverb)
+i 10 0 3600  ; Instrument 10 plays for 1 hour (GUI)
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -348,9 +364,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>208</r>
-  <g>208</g>
-  <b>208</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -368,15 +384,20 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>170</r>
    <g>170</g>
    <b>170</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -409,9 +430,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -442,9 +463,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -475,9 +496,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -508,9 +529,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -541,9 +562,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -574,9 +595,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -607,9 +628,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -640,9 +661,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -673,9 +694,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -706,9 +727,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -739,9 +760,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -772,9 +793,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -805,9 +826,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -838,9 +859,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -871,9 +892,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -904,9 +925,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -937,9 +958,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -970,9 +991,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1003,9 +1024,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1036,9 +1057,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1069,9 +1090,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1102,9 +1123,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1135,9 +1156,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1168,9 +1189,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1201,9 +1222,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1234,9 +1255,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1267,9 +1288,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1300,9 +1321,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1333,9 +1354,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1366,9 +1387,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1399,9 +1420,9 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>52</r>
+   <g>52</g>
+   <b>52</b>
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1420,14 +1441,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1449,14 +1470,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1478,14 +1499,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1507,14 +1528,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1536,14 +1557,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1565,14 +1586,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1594,14 +1615,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1623,14 +1644,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1652,14 +1673,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1681,14 +1702,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1710,14 +1731,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1739,14 +1760,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1768,14 +1789,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1797,14 +1818,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1826,14 +1847,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1855,14 +1876,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1884,14 +1905,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1913,14 +1934,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1942,14 +1963,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -1971,14 +1992,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2000,14 +2021,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2029,14 +2050,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2058,14 +2079,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2087,14 +2108,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2116,14 +2137,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2145,14 +2166,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2174,14 +2195,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2203,14 +2224,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2232,14 +2253,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2261,14 +2282,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2287,12 +2308,24 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>     ON  : GUI
-     OFF : MIDI</text>
+  <text>ON  : GUI
+OFF : MIDI</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b7155</objectName>
@@ -2312,6 +2345,18 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <eventLine>i 7 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5000</objectName>
@@ -2331,6 +2376,18 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <eventLine>i 6 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1973</objectName>
@@ -2350,6 +2407,18 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <eventLine>i 5 0 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Reverb_Mix</objectName>
@@ -2529,14 +2598,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2558,14 +2627,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2587,14 +2656,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2616,14 +2685,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2645,14 +2714,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2674,14 +2743,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2703,14 +2772,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2732,14 +2801,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2761,14 +2830,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2790,14 +2859,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2819,14 +2888,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2848,14 +2917,14 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2877,15 +2946,20 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>170</r>
    <g>170</g>
    <b>170</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -2917,14 +2991,14 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -2944,9 +3018,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -2977,9 +3051,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3010,9 +3084,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3043,9 +3117,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3076,9 +3150,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3109,9 +3183,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3142,9 +3216,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3175,9 +3249,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3208,9 +3282,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3241,9 +3315,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3274,9 +3348,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3307,9 +3381,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3340,9 +3414,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3373,9 +3447,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3406,9 +3480,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3439,9 +3513,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3472,9 +3546,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3505,9 +3579,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3538,9 +3612,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3571,9 +3645,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3604,9 +3678,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3637,9 +3711,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3670,9 +3744,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3703,9 +3777,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3736,9 +3810,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3769,9 +3843,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3802,9 +3876,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3835,9 +3909,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3868,9 +3942,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3901,9 +3975,9 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>255</r>
@@ -3936,14 +4010,14 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -3965,14 +4039,14 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>

@@ -9,7 +9,7 @@ nchnls = 1
 0dbfs = 1
 
   instr 1
-        prints       "atone%n"     ; indicate filter type in console
+        prints       "atone\n"     ; indicate filter type in console
 aSig    vco2         0.2, 150      ; input signal is a sawtooth waveform
 kcf     expon        20, p3, 20000 ; define envelope for cutoff frequency
 aSig    atone        aSig, kcf     ; filter audio signal
@@ -17,7 +17,7 @@ aSig    atone        aSig, kcf     ; filter audio signal
   endin
 
   instr 2
-        prints       "buthp%n"     ; indicate filter type in console
+        prints       "buthp\n"     ; indicate filter type in console
 aSig    vco2         0.2, 150      ; input signal is a sawtooth waveform
 kcf     expon        20, p3, 20000 ; define envelope for cutoff frequency
 aSig    buthp        aSig, kcf     ; filter audio signal
@@ -25,7 +25,7 @@ aSig    buthp        aSig, kcf     ; filter audio signal
   endin
 
   instr 3
-        prints       "bqrez(mode:1)%n" ; indicate filter type in console
+        prints       "bqrez(mode:1)\n" ; indicate filter type in console
 aSig    vco2         0.03, 150         ; input signal is a sawtooth waveform
 kcf     expon        20, p3, 20000     ; define envelope for cutoff frequency
 aSig    bqrez        aSig, kcf, 30, 1  ; filter audio signal

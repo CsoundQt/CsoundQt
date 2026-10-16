@@ -1,67 +1,67 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../../SourceMaterials
+--env:SSDIR+ = ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 64
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 /*****Playing a soundfile from a buffer for looping*****/
-;written by joachim heintz and andrés cabrera
-;mar 2009 / aug 2025
+; written by joachim heintz and andrés cabrera
+; mar 2009 / aug 2025
 
-chn_S("_Browse",1)
-chn_k("skip",1)
-chn_k("loop",1)
-chn_k("loop-start",1)
-chn_k("loop-end",1)
-chn_k("speed",1)
-chn_k("dB",1)
+chn_S( "_Browse", 1)
+chn_k( "skip", 1)
+chn_k( "loop", 1)
+chn_k( "loop-start", 1)
+chn_k( "loop-end", 1)
+chn_k( "speed", 1)
+chn_k( "dB", 1)
 
 instr Copy_file_to_table
 
-	file:S = chnget("_Browse")  ;GUI input
-	filelength@global:i = filelen(file)
-	filenumchnls@global:i = filenchnls(file)
-	// make sure that file exists
-	if (filevalid(file) == 1) then
-	  tablenum@global:i = ftgen(0,0,0,-1,file,0,0,0)
-	else
-	  puts("File does not exist!",1)
-	endif
+  file:S                = chnget("_Browse")  ; GUI input
+  filelength@global:i   = filelen(file)
+  filenumchnls@global:i = filenchnls(file)
+  // make sure that file exists
+  if (filevalid(file) == 1) then
+    tablenum@global:i = ftgen(0, 0, 0, -1, file, 0, 0, 0)
+  else
+    puts("File does not exist!", 1)
+  endif
 
 endin
-schedule(Copy_file_to_table,0,0)
+schedule(Copy_file_to_table, 0, 0)
 
 instr Play
 
   loopstart:k = chnget:k("loop-start") * filelength
-  loopend:k = chnget:k("loop-end") * filelength
-  speed:k = chnget("speed")
-  amp:k = ampdb(chnget:k("dB"))
+  loopend:k   = chnget:k("loop-end") * filelength
+  speed:k     = chnget("speed")
+  amp:k       = ampdb(chnget:k("dB"))
   // as flooper2 expects start < end we care for it
   // and allow the user to do anything
   startl:k = (loopstart < loopend) ? loopstart : loopend
-  endl:k = (loopstart < loopend) ? loopend : loopstart
+  endl:k   = (loopstart < loopend) ? loopend : loopstart
   // we also avoid to have start = end
   endl = (abs(startl-endl) < 1/16) ? endl+1/16 : endl
   // ensure mono or stereo both to work
   if (filenumchnls == 1) then
-    aL = flooper2(amp,speed,startl,endl,.01,tablenum)
+    aL = flooper2(amp, speed, startl, endl, .01, tablenum)
     aR = aL
   else
-    aL,aR = flooper2(amp,speed,startl,endl,.01,tablenum)
+    aL, aR = flooper2(amp, speed, startl, endl, .01, tablenum)
   endif
-  out(aL,aR)
-  
+  out(aL, aR)
+
 endin
 
 instr Stop
 
-  turnoff2_i("Play",0,1)
+  turnoff2_i("Play", 0, 1)
 
 endin
 </CsInstruments>

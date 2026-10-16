@@ -1,93 +1,108 @@
-;Written by Iain McCurdy, 2009
+; Written by Iain McCurdy, 2009
 ; Modified for QuteCsound by René, September 2010
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 815
 
-;Notes on modifications from original csd:
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 44100		;SAMPLE RATE
-ksmps	= 128		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 128    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz 
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
+instr 10  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
 
-		gkGain	invalue	"Gain"		;init 0.7
-		gkMix	invalue	"Mix"		;init 0.17
+    gkGain invalue "Gain"  ; init 0.7
+    gkMix  invalue "Mix"   ; init 0.17
 
-		gkinput	invalue	"Input"
-		gkfile	invalue	"File"
-	endif
+    gkinput invalue "Input"
+    gkfile  invalue "File"
+  endif
 endin
 
-instr	1	;GENERATE INPUT AUDIO INDEPENDENTLY OF REVERBERATING INSTRUMENT
-	kon invalue "on"
+instr 1  ; Generate input audio independently of reverberating instrument
+  kon invalue "on"
 
-	if	gkinput=0	then								;IF 'Sound File' IS SELECTED...
-		Sfile	invalue	"_Browse1"
-		gaL, gaR	FilePlay2	Sfile, 1, 0, 1				;READ AUDIO FROM SOUND FILE ON HARD DISC
-	elseif	gkinput=1	then							;IF 'Live Input' IS SELECTED
-		gaL	inch	 1								;READ AUDIO FROM SOUND CARD'S FIRST (LEFT) INPUT
-		gaR	=	gaL								;MONO INPUT THEREFORE ASSIGN RIGHT CHANNEL TO LEFT CHANNEL ALSO 
-	endif
-	gaL = gaL *kon
-	gaR = gaR *kon
+  if gkinput = 0 then  ; If 'sound file' is selected...
+    Sfile invalue "_Browse1"
+    gaL, gaR FilePlay2 Sfile, 1, 0, 1  ; Read audio from sound file on hard disc
+  elseif gkinput = 1 then              ; If 'live input' is selected
+    gaL inch 1                         ; Read audio from sound card's first (left) input
+    ; Mono input therefore assign right channel to left channel also
+    gaR = gaL
+  endif
+  gaL = gaL *kon
+  gaR = gaR *kon
 endin
 
-instr	2	;CONVOLUTION REVERB INSTRUMENT
-			
-			
-		 Sir invalue "_Browse2"
-		 kSwitch = changed(gkfile) + changed(Sir) ;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
-	if	kSwitch=1	then								;IF I-RATE VARIABLE IS CHANGED...
-		reinit	UPDATE							;BEGIN A REINITIALISATION PASS IN ORDER TO EFFECT THIS CHANGE. BEGIN THIS PASS AT LABEL ENTITLED 'UPDATE' AND CONTINUE UNTIL rireturn OPCODE 
-	endif										;END OF CONDITIONAL BRANCHING
-	UPDATE:										;LABEL
-if	gkfile=0	then									;IF 'STAIRWELL' IS CHOSEN AS CONVOLUTION FILE...
-		ar1	pconvolve gaL, "StairwellL.wav"			;PERFORM CONVOLUTION BETWEEN AUDIO INPUT FROM INSTR 1 AND SOUNDFILE STORED ON DISK (LEFT CHANNEL)
-		ar2	pconvolve gaR, "StairwellR.wav"			;PERFORM CONVOLUTION BETWEEN AUDIO INPUT FROM INSTR 1 AND SOUNDFILE STORED ON DISK (RIGHT CHANNEL)
-	elseif	gkfile=1	then							;IF 'DISH' IS CHOSEN AS CONVOLUTION FILE...
-		ar1	pconvolve gaL, "dishL.wav"				;PERFORM CONVOLUTION BETWEEN AUDIO INPUT FROM INSTR 1 AND SOUNDFILE STORED ON DISK (LEFT CHANNEL)
-		ar2	pconvolve gaR, "dishR.wav"				;PERFORM CONVOLUTION BETWEEN AUDIO INPUT FROM INSTR 1 AND SOUNDFILE STORED ON DISK (RIGHT CHANNEL)
-	elseif gkfile==2 then
-		ar1	pconvolve gaL, Sir, 0, 1
-		ar2	pconvolve gaR, Sir, 0, 1
-	endif										;END OF CONDITIONAL BRANCHING
-	aL	ntrpol	gaL, ar1*0.1, gkMix					;CREATE DRY/WET MIX (LEFT CHANNEL)  
-	aR	ntrpol	gaR, ar2*0.1, gkMix					;CREATE DRY/WET MIX (RIGHT CHANNEL)
-		outs		aL*gkGain, aR*gkGain				;SEND AUDIO TO OUTPUTS
-	gaL	= 0										;CLEAR GLOBAL AUDIO SIGNAL FROM INSTR 1 (LEFT CHANNEL) 
-	gaR	= 0										;CLEAR GLOBAL AUDIO SIGNAL FROM INSTR 1 (RIGHT CHANNEL)
+instr 2  ; Convolution reverb instrument
+
+
+  Sir invalue "_Browse2"
+  ; Generate a momentary '1' pulse in output 'kswitch' if any of the scanned input
+  ; variables change. (output 'kswitch' is normally zero)
+  kSwitch = changed(gkfile) + changed(Sir)
+  if kSwitch = 1 then  ; If i-rate variable is changed...
+    ; Begin a reinitialisation pass in order to effect this change. Begin this pass at
+    ; label entitled 'update' and continue until rireturn opcode
+    reinit UPDATE
+  endif               ; End of conditional branching
+UPDATE:               ; Label
+  if gkfile = 0 then  ; If 'stairwell' is chosen as convolution file...
+    ; Perform convolution between audio input from instr 1 and soundfile stored on disk
+    ; (left channel)
+    ar1 pconvolve gaL, "StairwellL.wav"
+    ; Perform convolution between audio input from instr 1 and soundfile stored on disk
+    ; (right channel)
+    ar2 pconvolve gaR, "StairwellR.wav"
+  elseif gkfile = 1 then  ; If 'dish' is chosen as convolution file...
+    ; Perform convolution between audio input from instr 1 and soundfile stored on disk
+    ; (left channel)
+    ar1 pconvolve gaL, "dishL.wav"
+    ; Perform convolution between audio input from instr 1 and soundfile stored on disk
+    ; (right channel)
+    ar2 pconvolve gaR, "dishR.wav"
+  elseif gkfile == 2 then
+    ar1 pconvolve gaL, Sir, 0, 1
+    ar2 pconvolve gaR, Sir, 0, 1
+  endif                          ; End of conditional branching
+  aL ntrpol gaL, ar1*0.1, gkMix  ; Create dry/wet mix (left channel)
+  aR ntrpol gaR, ar2*0.1, gkMix  ; Create dry/wet mix (right channel)
+  outs aL*gkGain, aR*gkGain      ; Send audio to outputs
+  gaL = 0                        ; Clear global audio signal from instr 1 (left channel)
+  gaR = 0                        ; Clear global audio signal from instr 1 (right channel)
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600	;GUI
-i  1 0 3600	;INSTRUMENT 1 (SOURCE INSTRUMENT) RUNS FOR 1
-i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS REAL-TIME PERFORMANCE GOING) 
+i 10 0 3600  ; GUI
+i 1 0 3600   ; Instrument 1 (source instrument) runs for 1
+; Instrument 2 (convolution instrument) runs for 1 hour (and keeps real-time performance
+; going)
+i 2 0 3600
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -100,9 +115,9 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -120,15 +135,20 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -146,11 +166,23 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>   ON / OFF</text>
+  <text>ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
@@ -186,14 +218,14 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -215,14 +247,14 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -244,15 +276,20 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -275,14 +312,14 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>65</r>
+   <g>65</g>
+   <b>65</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -304,14 +341,14 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -333,14 +370,14 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -435,14 +472,14 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -464,14 +501,14 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -495,6 +532,18 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -512,9 +561,9 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>
@@ -539,14 +588,14 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -570,6 +619,18 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
@@ -587,9 +648,9 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="nobackground">
    <r>206</r>

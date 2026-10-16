@@ -1,112 +1,120 @@
-;Written by Iain McCurdy, 2010
+; Written by Iain McCurdy, 2010
 
-;Modified for QuteCsound by René, February 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
+; Modified for QuteCsound by René, February 2011
+; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add table for exp slider
+; Notes on modifications from original csd:
+; Add table for exp slider
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps = 64    ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine	ftgen	0,0,4096,10,1
-giExp1	ftgen	0, 0, 129, -25, 0, 8.176, 128, 12543.85		;TABLE FOR EXP SLIDER
+gisine ftgen 0, 0, 4096, 10, 1
+giExp1 ftgen 0, 0, 129, -25, 0, 8.176, 128, 12543.85  ; Table for exp slider
 
 
-instr	100	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gktone	invalue	"Tone"
+instr 100  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    gktone invalue "Tone"
 
-		kcpsIP 	invalue	"cpsIP"
-		gkcpsIP	tablei	kcpsIP, giExp1, 1
+    kcpsIP invalue "cpsIP"
+    gkcpsIP tablei kcpsIP, giExp1, 1
 
-		gkcps	invalue	"i_cps"
-		gkoct	invalue	"i_oct"
-		gkpch	invalue	"i_pch"
-		gknum	invalue	"i_MIDI"
-	endif
+    gkcps invalue "i_cps"
+    gkoct invalue "i_oct"
+    gkpch invalue "i_pch"
+    gknum invalue "i_MIDI"
+  endif
 endin
 
-instr	1	;MIDI INPUT CONVERTED INTO FOUR FORMATS
-	icps		cpsmidi						;READ IN MIDI AS CPS 
-	ioct		octmidi						;READ IN MIDI AS OCT FORMAT
-	ipch		pchmidi						;READ IN MIDI AS PCH FORMAT
-	inum		notnum						;READ IN MIDI AS NOTE NUMBER 
+instr 1         ; MIDI input converted into four formats
+  icps cpsmidi  ; Read in MIDI as cps
+  ioct octmidi  ; Read in MIDI as oct format
+  ipch pchmidi  ; Read in MIDI as pch format
+  inum notnum   ; Read in MIDI as note number
 
-			outvalue	"i_cps",  icps			;SEND CPS VALUE TO CPS TEXT BOX
-			outvalue	"i_oct",  ioct			;SEND OCT VALUE TO CPS TEXT BOX
-			outvalue	"i_pch",  ipch			;SEND PCH VALUE TO CPS TEXT BOX
-			outvalue	"i_MIDI", inum			;SEND NOTE NUMBER VALUE TO CPS TEXT BOX
+  outvalue "i_cps", icps   ; Send cps value to cps text box
+  outvalue "i_oct", ioct   ; Send oct value to cps text box
+  outvalue "i_pch", ipch   ; Send pch value to cps text box
+  outvalue "i_MIDI", inum  ; Send note number value to cps text box
 endin
 
-instr	2	;PRINT SLIDER CHANGES TO VALUE BOXES
-	koct		=	octcps(gkcpsIP)					;CONVERT SLIDER VALUE FROM CPS TO OCT
+instr 2                   ; Print slider changes to value boxes
+  koct = octcps(gkcpsIP)  ; Convert slider value from cps to oct
 
-			outvalue	"d_cps", gkcpsIP				;SEND CPS VALUE TO CPS TEXT BOX
-			outvalue	"d_oct", koct					;SEND OCT TO OCT VALUE BOX
-			outvalue 	"d_pch", pchoct(koct)			;SEND PCH TO PCH VALUE BOX
-			outvalue 	"d_MIDI", (koct-3)*12			;CONVERT OCT TO MIDI NUMBER USING MATHS AND SEND TO MIDI NOTE NUMBER VALUE BOX
+  outvalue "d_cps", gkcpsIP       ; Send cps value to cps text box
+  outvalue "d_oct", koct          ; Send oct to oct value box
+  outvalue "d_pch", pchoct(koct)  ; Send pch to pch value box
+  ; Convert oct to MIDI number using maths and send to MIDI note number value box
+  outvalue "d_MIDI", (koct-3)*12
 endin
 
-instr	3	;SEND CPS BOX VALUE TO THE OTHER 3 BOXES
-	ioct		init	octcps(i(gkcps))					;DERIVE OCT FORMAT VALUE FROM CPS
+instr 3                       ; Send cps box value to the other 3 boxes
+  ioct init octcps(i(gkcps))  ; Derive oct format value from cps
 
-			outvalue	"i_oct", ioct					;SEND OCT VALUE TO OCT BOX
-			outvalue	"i_pch", pchoct(ioct)			;CONVERT OCT TO PCH AND SEND TO PCH BOX
-			outvalue	"i_MIDI", (ioct-3)*12			;DERIVE MIDI NOTE NUMBER FROM OCT VALUE AND SEND TO MIDI NOTE NUMBER BOX
+  outvalue "i_oct", ioct          ; Send oct value to oct box
+  outvalue "i_pch", pchoct(ioct)  ; Convert oct to pch and send to pch box
+  ; Derive MIDI note number from oct value and send to MIDI note number box
+  outvalue "i_MIDI", (ioct-3)*12
 endin
 
-instr	4	;SEND OCT BOX VALUE TO THE OTHER 3 BOXES
-			outvalue	"i_cps", cpsoct(i(gkoct))		;CONVERT OCT VALUE TO CPS AND SEND TO CPS BOX
-			outvalue	"i_pch", pchoct(i(gkoct))		;CONVERT OCT VALUE TO PCH AND SEND TO PCH BOX
-			outvalue	"i_MIDI", (i(gkoct)-3)*12		;DERIVE MIDI NOTE NUMBER FROM OCT VALUE AND SEND TO MIDI NOTE NUMBER BOX
+instr 4                               ; Send oct box value to the other 3 boxes
+  outvalue "i_cps", cpsoct(i(gkoct))  ; Convert oct value to cps and send to cps box
+  outvalue "i_pch", pchoct(i(gkoct))  ; Convert oct value to pch and send to pch box
+  ; Derive MIDI note number from oct value and send to MIDI note number box
+  outvalue "i_MIDI", (i(gkoct)-3)*12
 endin
 
-instr	5	;SEND PCH BOX VALUE TO THE OTHER 3 BOXES
-			outvalue	"i_cps", cpspch(i(gkpch))		;CONVERT PCH VALUE TO CPS FORMAT AND SEND TO CPS BOX
+instr 5  ; Send pch box value to the other 3 boxes
+  ; Convert pch value to cps format and send to cps box
+  outvalue "i_cps", cpspch(i(gkpch))
 
-	ipch		init	i(gkpch)							;CONVERT PCH VALUE TO I-RATE LOCAL PCH VALUE
-	ioct		=	octpch(ipch)						;CONVERT PCH VALUE TO OCT FORMAT VALUE
+  ipch init i(gkpch)   ; Convert pch value to i-rate local pch value
+  ioct = octpch(ipch)  ; Convert pch value to oct format value
 
-			outvalue	"i_oct", ioct					;SEND OCT VALUE TO OCT BOX 
-			outvalue	"i_MIDI", (ioct-3)*12			;DERIVE MIDI NOTE NUMBER FROM OCT VALUE AND SEND TO MIDI BOTE NUMBER BOX
+  outvalue "i_oct", ioct  ; Send oct value to oct box
+  ; Derive MIDI note number from oct value and send to MIDI bote number box
+  outvalue "i_MIDI", (ioct-3)*12
 endin
 
-instr	6	;SEND MIDI NOTE NUMBER BOX VALUE TO THE OTHER 3 BOXES
-			outvalue	"i_cps", cpsmidinn(i(gknum))		;CONVERT MIDI NOTE NUMBER TO CPS FORMAT AND SEND TO CPS BOX
-			outvalue	"i_oct", octmidinn(i(gknum))		;CONVERT MIDI NOTE NUMBER TO OCT FORMAT AND SEND TO OCT BOX
-			outvalue	"i_pch", pchmidinn(i(gknum))		;CONVERT MIDI NOTE NUMBER TO PCH FORMAT AND SEND TO PCH BOX
+instr 6  ; Send MIDI note number box value to the other 3 boxes
+  ; Convert MIDI note number to cps format and send to cps box
+  outvalue "i_cps", cpsmidinn(i(gknum))
+  ; Convert MIDI note number to oct format and send to oct box
+  outvalue "i_oct", octmidinn(i(gknum))
+  ; Convert MIDI note number to pch format and send to pch box
+  outvalue "i_pch", pchmidinn(i(gknum))
 endin
 
-instr	10	;GENERATE A TONE
-	ktrig1	changed	gkcpsIP						;IF SLIDER IS CHANGED GENERATE A MOMENTARY '1' (BANG)
-	ktrig2	changed	gkcps						;IF CPS BOX IS CHANGED GENERATE A MOMENTARY '1' (BANG)
+instr 10                  ; Generate a tone
+  ktrig1 changed gkcpsIP  ; If slider is changed generate a momentary '1' (bang)
+  ktrig2 changed gkcps    ; If cps box is changed generate a momentary '1' (bang)
 
-	if ktrig1=1	 then							;IF SLIDER HAS BEEN CHANGED...
-		kcps	= gkcpsIP								;TAKE LOCAL CPS VALUE FROM SLIDER
-	elseif ktrig2=1 then							;IF CPS TEXT BOX HAS BEEN CHANGED...
-		kcps	= gkcps								;TAKE LOCAL CPS VALUE FROM CPS TEXT BOX
-	endif										;END OF THIS CONDITIONAL BRANCH
-	asig	poscil	0.1*gktone, kcps, gisine				;GENERATE A TONE
-		outs		asig, asig						;SEND AUDIO TO OUTPUTS
+  if ktrig1 = 1 then                    ; If slider has been changed...
+    kcps = gkcpsIP                      ; Take local cps value from slider
+  elseif ktrig2 = 1 then                ; If cps text box has been changed...
+    kcps = gkcps                        ; Take local cps value from cps text box
+  endif                                 ; End of this conditional branch
+  asig poscil 0.1*gktone, kcps, gisine  ; Generate a tone
+  outs asig, asig                       ; Send audio to outputs
 endin
 </CsInstruments>
 <CsScore>
-i 100 0 3600	;GUI
+i 100 0 3600  ; GUI
 
-i 2 0 3600	;SCAN FOR CHANGES TO SLIDER - UPDATE DISPLAY BOXES
-i 10 0 3600	;PLAY A TONE
+i 2 0 3600   ; Scan for changes to slider - update display boxes
+i 10 0 3600  ; Play a tone
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -119,9 +127,9 @@ i 10 0 3600	;PLAY A TONE
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>241</r>
-  <g>226</g>
-  <b>185</b>
+  <r>239</r>
+  <g>239</g>
+  <b>239</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -139,15 +147,20 @@ i 10 0 3600	;PLAY A TONE
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -180,14 +193,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -209,15 +222,20 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="background">
-   <r>5</r>
-   <g>27</g>
-   <b>150</b>
+   <r>28</r>
+   <g>33</g>
+   <b>62</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -235,11 +253,23 @@ In the lower panel values can be typed directly in and converted into the other 
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  Tone On/Off</text>
+  <text>Tone On/Off</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <latched>true</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>cpsIP</objectName>
@@ -275,15 +305,20 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -304,15 +339,20 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>158</r>
+   <g>158</g>
+   <b>158</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -333,14 +373,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -362,14 +402,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -391,14 +431,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -420,14 +460,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -449,14 +489,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -478,14 +518,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -507,14 +547,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -536,14 +576,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -565,14 +605,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -594,14 +634,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -623,14 +663,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -652,14 +692,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
@@ -683,6 +723,18 @@ In the lower panel values can be typed directly in and converted into the other 
   <eventLine>i 3 0 0.01</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b9833</objectName>
@@ -702,6 +754,18 @@ In the lower panel values can be typed directly in and converted into the other 
   <eventLine>i 4 0 0.01</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1889</objectName>
@@ -721,6 +785,18 @@ In the lower panel values can be typed directly in and converted into the other 
   <eventLine>i 5 0 0.01</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5334</objectName>
@@ -740,6 +816,18 @@ In the lower panel values can be typed directly in and converted into the other 
   <eventLine>i 6 0 0.01</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>203</r>
+   <g>206</g>
+   <b>255</b>
+  </color>
+  <pressedColor>#9a9cc1</pressedColor>
+  <borderColor>#9a9cc1</borderColor>
+  <textColor>#202020</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>5</borderRadius>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>i_cps</objectName>
@@ -755,14 +843,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.01000000</resolution>
   <minimum>0</minimum>
@@ -784,14 +872,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.01000000</resolution>
   <minimum>0</minimum>
@@ -813,14 +901,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>0.01000000</resolution>
   <minimum>0</minimum>
@@ -842,14 +930,14 @@ In the lower panel values can be typed directly in and converted into the other 
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>

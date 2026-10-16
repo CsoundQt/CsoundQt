@@ -12,7 +12,7 @@ nchnls = 1
 gisine ftgen 0,0,2^12,10,1
 
   instr 1 ; 1 impulse (midi channel 1)
-prints "instrument/midi channel: %d%n",p1 ;print instrument number to terminal
+prints "instrument/midi channel: %d\n",p1 ;print instrument number to terminal
 reset:                                    ;label 'reset'
      timout 0, 1, impulse                 ;jump to 'impulse' for 1 second
      reinit reset                         ;reninitialise pass from 'reset'
@@ -23,7 +23,7 @@ aSig poscil    aenv, 500, gisine          ;audio oscillator
   endin
 
   instr 2 ; 2 impulses (midi channel 2)
-prints "instrument/midi channel: %d%n",p1
+prints "instrument/midi channel: %d\n",p1
 reset:
      timout 0, 1, impulse
      reinit reset
@@ -35,7 +35,7 @@ a2   delay     aSig, 0.15                 ; short delay adds another impulse
   endin
 
   instr 3 ; 3 impulses (midi channel 3)
-prints "instrument/midi channel: %d%n",p1
+prints "instrument/midi channel: %d\n",p1
 reset:
      timout 0, 1, impulse
      reinit reset

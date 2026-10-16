@@ -1,65 +1,74 @@
-;Written by Iain McCurdy, 2006
+; Written by Iain McCurdy, 2006
 
 
 ; Modified for QuteCsound by René, November 2010
 ; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
 
-;Notes on modifications from original csd:
-;	Add table(s) for exp slider
+; Notes on modifications from original csd:
+; Add table(s) for exp slider
 
 
-;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 1		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
-0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
+sr     = 44100  ; Sample rate
+ksmps  = 1      ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
+0dbfs  = 1      ; Maximum amplitude regardless of bit depth
 
 
-gisine		ftgen	0, 0, 4096, 10, 1						;FUNCTION TABLE THAT STORES A SINGLE CYCLE OF A SINE WAVE
-giExp2000		ftgen	0, 0, 129, -25, 0,  20.0, 128, 2000.0		;TABLES FOR EXP SLIDER
+; Function table that stores a single cycle of a sine wave
+gisine    ftgen 0, 0, 4096, 10, 1
+giExp2000 ftgen 0, 0, 129, -25, 0, 20.0, 128, 2000.0  ; Tables for exp slider
 
 
-instr	1	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		kbasefreq		invalue	"X_Base_Freq"
-		gkbasefreq	tablei	kbasefreq, giExp2000, 1
-					outvalue	"X_Base_Freq_Value", gkbasefreq		
-		gkindex		invalue	"Y_Index"
-		gkCarRatio	invalue  	"Carrier_Frequency"
-		gkModRatio	invalue  	"Modulator_Frequency"
-		gkCarAmp		invalue	"Carrier_Amplitude"
-	endif
+instr 1  ; GUI
+  ktrig metro 10
+  if (ktrig == 1) then
+    kbasefreq invalue "X_Base_Freq"
+    gkbasefreq tablei kbasefreq, giExp2000, 1
+    outvalue "X_Base_Freq_Value", gkbasefreq
+    gkindex    invalue "Y_Index"
+    gkCarRatio invalue "Carrier_Frequency"
+    gkModRatio invalue "Modulator_Frequency"
+    gkCarAmp   invalue "Carrier_Amplitude"
+  endif
 endin
 
-instr	2
-	iporttime		=		0.05															;PORTAMENTO TIME VARIABLE
-	kporttime		linseg	0,0.001,iporttime,1,iporttime										;CREATE A RAMPING UP FUNCTION TO REPRESENT PORTAMENTO TIME
-	kindex		portk	gkindex, kporttime												;APPLY PORTAMENTO SMOOTHING
-	kbasefreq		portk	gkbasefreq, kporttime											;APPLY PORTAMENTO SMOOTHING
-	kCarAmp		portk	gkCarAmp, kporttime												;APPLY PORTAMENTO SMOOTHING
-	kpeakdeviation	=		kbasefreq * kindex												;CALCUALATE THE PEAK DEVIATION OF THE MODULATOR FROM THE VALUES GIVEN FOR BASE FREQUENCY AND THE INDEX OF MODULATION
-	
-	;OUTPUT		OPCODE	AMPLITUDE      |   FREQUENCY                         | FUNCTION_TABLE
-	aModulator	oscili	kpeakdeviation, kbasefreq * gkModRatio,                gisine			;DEFINE THE MODULATOR WAVEFORM
-	aCarrier		oscili	kCarAmp,        (kbasefreq * gkCarRatio) + aModulator, gisine			;DEFINE THE CARRIER WAVEFORM (NOTE HOW ITS FREQUENCY IS MODULATED (THROUGH ADDITION) BY THE AUDIO OUTPUT OF THE MODULATOR WAVEFORM)
-	dispfft aCarrier, 0.1, 2048
-				outs		aCarrier, aCarrier												;SEND THE AUDIO OUTPUT OF THE CARRIER WAVEFORM *ONLY* TO THE OUTPUTS 
+instr 2
+  iporttime = 0.05  ; Portamento time variable
+  ; Create a ramping up function to represent portamento time
+  kporttime linseg 0, 0.001, iporttime, 1, iporttime
+  kindex    portk gkindex, kporttime     ; Apply portamento smoothing
+  kbasefreq portk gkbasefreq, kporttime  ; Apply portamento smoothing
+  kCarAmp   portk gkCarAmp, kporttime    ; Apply portamento smoothing
+  ; Calcualate the peak deviation of the modulator from the values given for base
+  ; frequency and the index of modulation
+  kpeakdeviation = kbasefreq * kindex
 
-	ktrig	  	metro	10															;CREATE A REPEATING TRIGGER SIGNAL
-	if ktrig = 1 then
-				outvalue	"Peak_Deviation", kpeakdeviation									;UPDATE VALUE BOX WITH THE VALUE kpeakdeviation WHENEVER A TRIGGER PULSE IS RECEIVED
-	endif
+  ; Output  opcode amplitude      |   frequency                         | function_table
+  ; Define the modulator waveform
+  aModulator oscili kpeakdeviation, kbasefreq * gkModRatio, gisine
+  ; Define the carrier waveform (note how its frequency is modulated (through addition) by
+  ; the audio output of the modulator waveform)
+  aCarrier oscili kCarAmp, (kbasefreq * gkCarRatio) + aModulator, gisine
+  dispfft aCarrier, 0.1, 2048
+  ; Send the audio output of the carrier waveform *only* to the outputs
+  outs aCarrier, aCarrier
+
+  ktrig metro 10  ; Create a repeating trigger signal
+  if ktrig = 1 then
+    ; Update value box with the value kpeakdeviation whenever a trigger pulse is received
+    outvalue "Peak_Deviation", kpeakdeviation
+  endif
 endin
 </CsInstruments>
 <CsScore>
-;INSTR | START | DURATION
-i 1		0	   3600		;GUI
+; Instr | start | duration
+i 1 0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
 

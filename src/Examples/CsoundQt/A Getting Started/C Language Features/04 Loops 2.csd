@@ -28,7 +28,7 @@ iIndex = 0						; index
 iLimit = p4
 loop1:							; label
 	event_i "i",100, 0, 1, iLimit		; this generates a scoreline from the instrument..
-	prints "Instance of instr 100 by loop1_%d created!%n", iIndex+1
+	prints "Instance of instr 100 by loop1_%d created!\n", iIndex+1
 	iIndex =  iIndex+1
 if (iIndex < 5) igoto loop1
 endin
@@ -39,7 +39,7 @@ iIndex = 0							; index
 iLimit = p4
 loop2:								; label
 	event_i "i",100, 0, 1, iLimit			; this generates a scoreline from the instrument..
-	prints "Instance of instr 100 by loop2_%d created!%n", iIndex+1
+	prints "Instance of instr 100 by loop2_%d created!\n", iIndex+1
 loop_lt iIndex, 1, 5, loop2
 endin
 </CsInstruments>

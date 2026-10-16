@@ -1,55 +1,55 @@
-;Writen by Iain McCurdy, 2006
+; Writen by Iain McCurdy, 2006
 
 ; Modified for QuteCsound by René, February 2011
 ; Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
-;Notes on modifications from original csd:
-;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
+; Notes on modifications from original csd:
+; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
-;my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
+; my flags on Ubuntu: -dm0 -odac -+rtaudio=alsa -b1024 -B2048 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr 		= 44100	;SAMPLE RATE
-ksmps 	= 16		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
-nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
+sr     = 44100  ; Sample rate
+ksmps  = 16     ; Number of audio samples in each control cycle
+nchnls = 2      ; Number of channels (2=stereo)
 
 
-opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
-	;gives stereo output regardless your soundfile is mono or stereo
-	Sfil, kspeed, iskip, iloop	xin
-	ichn		filenchnls	Sfil
-	if ichn == 1 then
-		aL		diskin2	Sfil, kspeed, iskip, iloop
-		aR		=		aL
-	else
-		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
-	endif
-		xout		aL, aR
+opcode FilePlay2, aa, Skoo  ; Credit to Joachim Heintz
+  ; gives stereo output regardless your soundfile is mono or stereo
+  Sfil, kspeed, iskip, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aL diskin2 Sfil, kspeed, iskip, iloop
+    aR = aL
+  else
+    aL, aR diskin2 Sfil, kspeed, iskip, iloop
+  endif
+  xout aL, aR
 endop
 
 
-instr	1	
+instr 1
 
-	Sfile		invalue	"_Browse"
+  Sfile invalue "_Browse"
 
-	iporttime		=		.01
-	kporttime		linseg	0, .001, iporttime, 1, iporttime
-	
-	kbend		pchbend	0, 1
-	kratio		=		cpsoct(8+kbend)/cpsoct(8)
-	kratio		portk	kratio, kporttime
-		
-	asigL, asigR	FilePlay2	Sfile, kratio, 0, 1
-				outs		asigL, asigR
+  iporttime = .01
+  kporttime linseg 0, .001, iporttime, 1, iporttime
+
+  kbend pchbend 0, 1
+  kratio = cpsoct(8+kbend)/cpsoct(8)
+  kratio portk kratio, kporttime
+
+  asigL, asigR FilePlay2 Sfile, kratio, 0, 1
+  outs asigL, asigR
 endin
 
 </CsInstruments>
 <CsScore>
-f 0 86400			;ALLOWS REALTIME MIDI PLAYING FOR 1 DAY
+f 0 86400  ; Allows realtime MIDI playing for 1 day
 </CsScore>
 </CsoundSynthesizer>
 
