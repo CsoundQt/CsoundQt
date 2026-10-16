@@ -158,6 +158,9 @@ i 10 0 3600  ; GUI
 </CsoundSynthesizer>
 
 
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -179,14 +182,20 @@ i 10 0 3600  ; GUI
   <width>1037</width>
   <height>348</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>compress</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -213,9 +222,12 @@ i 10 0 3600  ; GUI
   <width>100</width>
   <height>30</height>
   <uuid>{24979132-c53f-4414-ac6b-6b4f503ecfe8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -223,7 +235,9 @@ i 10 0 3600  ; GUI
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -231,7 +245,7 @@ i 10 0 3600  ; GUI
    <b>255</b>
   </color>
   <pressedColor>#9a9cc1</pressedColor>
-  <borderColor>#9a9cc1</borderColor>
+  <borderColor>#7278c6</borderColor>
   <textColor>#202020</textColor>
   <pressedTextColor/>
   <borderWidth>2</borderWidth>
@@ -244,14 +258,20 @@ i 10 0 3600  ; GUI
   <width>506</width>
   <height>98</height>
   <uuid>{cdc434d0-b9e7-4f6f-aa90-800ec76dced6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Input</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -278,9 +298,12 @@ i 10 0 3600  ; GUI
   <width>170</width>
   <height>30</height>
   <uuid>{b9431a61-61f7-432b-bf6f-c47ddc7f9050}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>SynthPad.wav</stringvalue>
@@ -288,7 +311,9 @@ i 10 0 3600  ; GUI
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -309,10 +334,14 @@ i 10 0 3600  ; GUI
   <width>326</width>
   <height>28</height>
   <uuid>{68b5f90b-b78e-4581-b434-232db5f4c40f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>SynthPad.wav</label>
+  <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
@@ -328,6 +357,14 @@ i 10 0 3600  ; GUI
    <b>229</b>
   </bgcolor>
   <background>nobackground</background>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
@@ -336,9 +373,12 @@ i 10 0 3600  ; GUI
   <width>120</width>
   <height>30</height>
   <uuid>{be1f1edc-082e-4433-a418-1e81baf4e305}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Live Input</name>
@@ -361,14 +401,20 @@ i 10 0 3600  ; GUI
   <width>120</width>
   <height>30</height>
   <uuid>{2c897206-0dbc-47b5-ba68-915d83839ab6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Live Input Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -379,9 +425,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Gain</objectName>
@@ -390,9 +441,12 @@ i 10 0 3600  ; GUI
   <width>300</width>
   <height>27</height>
   <uuid>{304e78d8-b320-453a-b28f-86b0ca872b86}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -408,14 +462,19 @@ i 10 0 3600  ; GUI
   <width>60</width>
   <height>30</height>
   <uuid>{94c7e961-7981-4d21-942f-80bcc647daf5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -426,9 +485,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -437,14 +501,20 @@ i 10 0 3600  ; GUI
   <width>506</width>
   <height>98</height>
   <uuid>{f264412d-1014-4e65-bc0b-e8dabda1779d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Detect</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -471,9 +541,12 @@ i 10 0 3600  ; GUI
   <width>170</width>
   <height>30</height>
   <uuid>{fd6d018b-1bcd-43b4-88e9-f240b379d7d0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>808loop.wav</stringvalue>
@@ -481,7 +554,9 @@ i 10 0 3600  ; GUI
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -502,10 +577,14 @@ i 10 0 3600  ; GUI
   <width>326</width>
   <height>28</height>
   <uuid>{8616b387-3762-43e0-9492-10006eb9c01f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>808loop.wav</label>
+  <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
@@ -521,6 +600,14 @@ i 10 0 3600  ; GUI
    <b>229</b>
   </bgcolor>
   <background>nobackground</background>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Detect</objectName>
@@ -529,9 +616,12 @@ i 10 0 3600  ; GUI
   <width>120</width>
   <height>30</height>
   <uuid>{78d0d7ed-0b48-41de-bec3-8b85723c1dd6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Live Input</name>
@@ -554,14 +644,20 @@ i 10 0 3600  ; GUI
   <width>120</width>
   <height>30</height>
   <uuid>{5df5ef4b-3db4-4c45-a343-9a1a05ec99fb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Detect Signal Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -572,9 +668,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Detect_Gain</objectName>
@@ -583,12 +684,15 @@ i 10 0 3600  ; GUI
   <width>300</width>
   <height>27</height>
   <uuid>{59bb85ee-6e9a-4e00-9fd1-ace42baf2654}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <value>0.29000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -601,43 +705,19 @@ i 10 0 3600  ; GUI
   <width>60</width>
   <height>30</height>
   <uuid>{2c621be3-47b0-4dfd-9037-ef64aa6676df}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <description/>
+  <label>0.290</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
-  <x>513</x>
-  <y>42</y>
-  <width>520</width>
-  <height>302</height>
-  <uuid>{326530f7-646b-4eec-923b-c87806f17ed9}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label/>
-  <alignment>left</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -649,29 +729,35 @@ i 10 0 3600  ; GUI
    <b>224</b>
   </bgcolor>
   <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
   </bordercolor>
-  <bordermode>border</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>516</x>
-  <y>78</y>
-  <width>180</width>
-  <height>30</height>
-  <uuid>{640b50b7-7200-4f81-8394-89d9843ae939}</uuid>
+  <x>513</x>
+  <y>42</y>
+  <width>520</width>
+  <height>302</height>
+  <uuid>{326530f7-646b-4eec-923b-c87806f17ed9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>Noise Gate Threshold (dB)</label>
+  <description/>
+  <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -682,9 +768,54 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>123</r>
+   <g>130</g>
+   <b>213</b>
+  </bordercolor>
+  <bordermode>true</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>2</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>516</x>
+  <y>78</y>
+  <width>180</width>
+  <height>30</height>
+  <uuid>{640b50b7-7200-4f81-8394-89d9843ae939}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <label>Noise Gate Threshold (dB)</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>
+   <r>32</r>
+   <g>32</g>
+   <b>32</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>224</r>
+   <g>224</g>
+   <b>224</b>
+  </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Gate_Threshold</objectName>
@@ -693,9 +824,12 @@ i 10 0 3600  ; GUI
   <width>500</width>
   <height>27</height>
   <uuid>{5585fa6f-0f63-4ac3-bf1b-809c2b1d9134}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
   <value>0.00000000</value>
@@ -711,14 +845,19 @@ i 10 0 3600  ; GUI
   <width>60</width>
   <height>30</height>
   <uuid>{b731b52e-e14a-476a-a583-f3b2bd885539}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -729,9 +868,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -740,14 +884,20 @@ i 10 0 3600  ; GUI
   <width>506</width>
   <height>102</height>
   <uuid>{557603bf-8a2a-4845-9090-466ac15ef873}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Presets</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -774,14 +924,20 @@ i 10 0 3600  ; GUI
   <width>180</width>
   <height>30</height>
   <uuid>{989564b0-b237-4c22-9d10-b76b7c7e4e4c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Low Knee Break Point (dB)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -792,9 +948,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Low_Knee</objectName>
@@ -803,9 +964,12 @@ i 10 0 3600  ; GUI
   <width>500</width>
   <height>27</height>
   <uuid>{84cd664e-fb67-4dd4-aac3-adbcf2c81fe6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>100.00000000</maximum>
   <value>48.00000000</value>
@@ -821,14 +985,19 @@ i 10 0 3600  ; GUI
   <width>60</width>
   <height>30</height>
   <uuid>{ba8682a6-056f-4432-946b-4e3ee82c47a1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>48.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -839,9 +1008,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -850,14 +1024,20 @@ i 10 0 3600  ; GUI
   <width>180</width>
   <height>30</height>
   <uuid>{76044785-79c4-4202-b7ce-07aee4868219}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>High Knee Break Point (dB)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -868,9 +1048,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>High_Knee</objectName>
@@ -879,9 +1064,12 @@ i 10 0 3600  ; GUI
   <width>500</width>
   <height>27</height>
   <uuid>{0f952e77-ff9b-4621-b1af-23252bb9c2a6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>100.00000000</maximum>
   <value>60.00000000</value>
@@ -897,14 +1085,19 @@ i 10 0 3600  ; GUI
   <width>60</width>
   <height>30</height>
   <uuid>{7b92c0ca-2fe8-4b4f-9ed0-f618c1b3cb5c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>60.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -915,9 +1108,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -926,14 +1124,20 @@ i 10 0 3600  ; GUI
   <width>180</width>
   <height>30</height>
   <uuid>{ca41878c-b561-486b-9cf9-d0da6b48448b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Ratio</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -944,9 +1148,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Ratio</objectName>
@@ -955,9 +1164,12 @@ i 10 0 3600  ; GUI
   <width>500</width>
   <height>27</height>
   <uuid>{2800fb88-347a-402c-88ed-fc97af6a36be}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.55199999</value>
@@ -973,14 +1185,19 @@ i 10 0 3600  ; GUI
   <width>60</width>
   <height>30</height>
   <uuid>{5d1ba94c-536a-4178-be6c-c0d9d2f75e3d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>5.007</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -991,9 +1208,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1002,14 +1224,20 @@ i 10 0 3600  ; GUI
   <width>180</width>
   <height>30</height>
   <uuid>{cdd71125-b224-471a-9c41-9c05d8d28d0c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Attack Time (secs)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -1020,9 +1248,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack</objectName>
@@ -1031,9 +1264,12 @@ i 10 0 3600  ; GUI
   <width>500</width>
   <height>27</height>
   <uuid>{7a83bb1f-f25d-47e0-bf2d-9c5c86e0756b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.22200000</value>
@@ -1049,14 +1285,19 @@ i 10 0 3600  ; GUI
   <width>60</width>
   <height>30</height>
   <uuid>{7f8d2709-bf8c-46ab-83f0-36fc620b0d56}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.005</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -1067,9 +1308,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1078,14 +1324,20 @@ i 10 0 3600  ; GUI
   <width>180</width>
   <height>30</height>
   <uuid>{9519d46e-b6e4-422e-8653-ae5db12b1c04}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Release Time (secs)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -1096,9 +1348,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Release</objectName>
@@ -1107,9 +1364,12 @@ i 10 0 3600  ; GUI
   <width>500</width>
   <height>27</height>
   <uuid>{0f9b569d-7f5b-4540-a415-6fd6762f6fe9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.66600001</value>
@@ -1125,14 +1385,19 @@ i 10 0 3600  ; GUI
   <width>60</width>
   <height>30</height>
   <uuid>{df4e20a1-b9a6-46ca-bb02-911779f6b4b5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.100</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -1143,9 +1408,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1154,14 +1424,20 @@ i 10 0 3600  ; GUI
   <width>180</width>
   <height>30</height>
   <uuid>{1089c148-0c3a-497a-a8d5-a62e3d62ff54}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Look Ahead Time (secs)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -1172,9 +1448,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Look_Ahead</objectName>
@@ -1183,9 +1464,12 @@ i 10 0 3600  ; GUI
   <width>500</width>
   <height>27</height>
   <uuid>{cb90b71f-234b-4c3e-875b-ce04075ae3ee}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.10000000</value>
@@ -1201,14 +1485,19 @@ i 10 0 3600  ; GUI
   <width>60</width>
   <height>30</height>
   <uuid>{54d08872-94cf-49c9-b64f-605fddc65867}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.100</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -1219,9 +1508,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1230,14 +1524,20 @@ i 10 0 3600  ; GUI
   <width>180</width>
   <height>30</height>
   <uuid>{8c81bb50-0c7b-4902-9178-d05f83831ade}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Make Up Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -1248,9 +1548,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
@@ -1259,9 +1564,12 @@ i 10 0 3600  ; GUI
   <width>500</width>
   <height>27</height>
   <uuid>{6ef7cd84-2fc3-4cb0-b69d-4d037f7406af}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.96399999</value>
@@ -1277,14 +1585,19 @@ i 10 0 3600  ; GUI
   <width>60</width>
   <height>30</height>
   <uuid>{9481489d-99dd-43af-8282-21a31584dd71}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.522</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -1295,9 +1608,14 @@ i 10 0 3600  ; GUI
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4095</objectName>
@@ -1306,9 +1624,12 @@ i 10 0 3600  ; GUI
   <width>100</width>
   <height>30</height>
   <uuid>{fd55c818-d471-4651-9897-987cd1ad2797}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1316,7 +1637,9 @@ i 10 0 3600  ; GUI
   <image>/</image>
   <eventLine>i2 0 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -1337,9 +1660,12 @@ i 10 0 3600  ; GUI
   <width>100</width>
   <height>30</height>
   <uuid>{7cab7fde-7c56-4940-bef7-cb79e979fbc4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1347,7 +1673,9 @@ i 10 0 3600  ; GUI
   <image>/</image>
   <eventLine>i2 0 0 1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -1368,9 +1696,12 @@ i 10 0 3600  ; GUI
   <width>100</width>
   <height>30</height>
   <uuid>{0c604f4c-26b3-4cf9-84a2-7d962e5b21b6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1378,7 +1709,9 @@ i 10 0 3600  ; GUI
   <image>/</image>
   <eventLine>i2 0 0 2</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -1399,9 +1732,12 @@ i 10 0 3600  ; GUI
   <width>100</width>
   <height>30</height>
   <uuid>{56984bf7-2754-4d29-a8c2-5f1f99ab744a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1409,7 +1745,9 @@ i 10 0 3600  ; GUI
   <image>/</image>
   <eventLine>i2 0 0 3</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -1602,4 +1940,3 @@ i 10 0 3600  ; GUI
 <value id="{56984bf7-2754-4d29-a8c2-5f1f99ab744a}" mode="4" >0</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

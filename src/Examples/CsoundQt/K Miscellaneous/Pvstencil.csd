@@ -4,39 +4,39 @@
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 128
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 /*****pvstencil simple*****/
-;example for CsoundQt
-;written by joachim heintz
-;mai 2009
+; example for CsoundQt
+; written by joachim heintz
+; mai 2009
 
-gifftsize	=		1024
-gitab		ftgen		0, 0, gifftsize, 7, 1, gifftsize, 1; ftable just filled with 1
+gifftsize = 1024
+gitab ftgen 0, 0, gifftsize, 7, 1, gifftsize, 1  ; ftable just filled with 1
 
-  opcode TakeAll, a, Si
-;don't care whether your sound is mono or stereo
-Sfil, iloop	xin
-ichn		filenchnls	Sfil
-if ichn == 1 then
-aout		diskin2	Sfil, 1, 0, iloop
-else ;if stereo, just the first channel is taken
-aout, ano	diskin2	Sfil, 1, 0, iloop
-endif
-		xout		aout
-  endop
+opcode TakeAll, a, Si
+  ; don't care whether your sound is mono or stereo
+  Sfil, iloop xin
+  ichn filenchnls Sfil
+  if ichn == 1 then
+    aout diskin2 Sfil, 1, 0, iloop
+  else  ; if stereo, just the first channel is taken
+    aout, ano diskin2 Sfil, 1, 0, iloop
+  endif
+  xout aout
+endop
 
 instr 1
-Sfile		invalue	"_Browse1"
-asig		TakeAll	Sfile, 1; 1=loop, 0=no loop
-fsig		pvsanal	asig, gifftsize, gifftsize/4, gifftsize, 0
-klevel		invalue	"leveldb"
-fstencil	pvstencil	fsig, 0, ampdb(klevel), gitab
-aout		pvsynth	fstencil
-		outs		aout, aout
+  Sfile invalue "_Browse1"
+  asig TakeAll Sfile, 1  ; 1=loop, 0=no loop
+  fsig pvsanal asig, gifftsize, gifftsize/4, gifftsize, 0
+  klevel invalue "leveldb"
+  fstencil pvstencil fsig, 0, ampdb(klevel), gitab
+  aout pvsynth fstencil
+  outs aout, aout
 endin
 
 
@@ -46,6 +46,8 @@ i 1 0 999
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 <bsbPanel>
@@ -69,11 +71,14 @@ e
   <width>295</width>
   <height>24</height>
   <uuid>{3ef56546-3859-4d35-9a8e-e49afa43c980}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>BratscheMono.wav</label>
+  <label>0.000</label>
+  <instant>true</instant>
   <alignment>left</alignment>
   <font>Noto Sans</font>
   <fontsize>14</fontsize>
@@ -89,6 +94,14 @@ e
    <b>255</b>
   </bgcolor>
   <background>nobackground</background>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
@@ -97,7 +110,9 @@ e
   <width>100</width>
   <height>30</height>
   <uuid>{f65a18f9-f166-4be0-abc7-869a050cafdc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -111,6 +126,18 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>188</r>
+   <g>177</g>
+   <b>148</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#7d7663</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -119,7 +146,9 @@ e
   <width>384</width>
   <height>231</height>
   <uuid>{9679894d-ad89-4220-b5ee-cf5c5f5e746b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -129,6 +158,8 @@ e
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -139,6 +170,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -150,7 +186,9 @@ e
   <width>248</width>
   <height>155</height>
   <uuid>{3b712f67-5ab1-42fc-b918-20ec414d60e0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -161,6 +199,8 @@ For another application, see the Noise Reduction example.</label>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -171,6 +211,11 @@ For another application, see the Noise Reduction example.</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>
@@ -182,7 +227,9 @@ For another application, see the Noise Reduction example.</label>
   <width>398</width>
   <height>35</height>
   <uuid>{4df7df4d-05c2-4648-988f-11f640ee4779}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -192,6 +239,8 @@ For another application, see the Noise Reduction example.</label>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -202,6 +251,11 @@ For another application, see the Noise Reduction example.</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -213,13 +267,15 @@ For another application, see the Noise Reduction example.</label>
   <width>25</width>
   <height>210</height>
   <uuid>{3ca11a62-cebd-437a-9ed2-7d12be82426e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>-100.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>-26.80000000</value>
+  <value>-18.09523810</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -232,7 +288,9 @@ For another application, see the Noise Reduction example.</label>
   <width>80</width>
   <height>25</height>
   <uuid>{2f6de60d-3f52-4185-83a2-82d0c8a55dbe}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -253,7 +311,7 @@ For another application, see the Noise Reduction example.</label>
   <minimum>-1e+12</minimum>
   <maximum>0</maximum>
   <randomizable group="0">false</randomizable>
-  <value>-26.8</value>
+  <value>-18.0952</value>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

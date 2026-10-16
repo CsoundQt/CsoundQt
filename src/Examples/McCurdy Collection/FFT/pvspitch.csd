@@ -37,13 +37,17 @@ instr 1
   ; Create an oscillator, the frequency and amplitude of which are based on data derived
   ; from the live input audio stream
   aout oscili kamp, kfr, giwaveform
-  out aout*kOutGain  ; Send the rescaled, resynthesized signal to the audio outputs
+  kenv = kamp > db(-80) && kfr > 80 && kfr < 2000 ? kamp : 0
+  out aout * kOutGain * interp(kenv)  ; Send the rescaled, resynthesized signal to the audio outputs
 endin
 </CsInstruments>
 <CsScore>
 f 0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -65,14 +69,20 @@ f 0 3600
   <width>512</width>
   <height>230</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>pvspitch</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -99,14 +109,20 @@ f 0 3600
   <width>284</width>
   <height>230</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>pvspitch</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -133,16 +149,22 @@ f 0 3600
   <width>278</width>
   <height>200</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-------------------------------------------------------------------
 'pvspitch' analyses a fsig and generates k-rate estimates of fundemental frequency and amplitude. In this example the live audio input is analysed and the analysed data is used to define the frequency and amplitude of a synthesized tone.
 Threshold can be used to define a threshold beneath which sound components will be ignored. This can be used to filter out ambient noise between notes from the analysis.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>65</r>
    <g>65</g>
@@ -153,9 +175,14 @@ Threshold can be used to define a threshold beneath which sound components will 
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b3253</objectName>
@@ -164,9 +191,12 @@ Threshold can be used to define a threshold beneath which sound components will 
   <width>100</width>
   <height>30</height>
   <uuid>{24979132-c53f-4414-ac6b-6b4f503ecfe8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -174,7 +204,9 @@ Threshold can be used to define a threshold beneath which sound components will 
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>true</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -195,14 +227,19 @@ Threshold can be used to define a threshold beneath which sound components will 
   <width>60</width>
   <height>30</height>
   <uuid>{745d6bee-b951-4a03-9fe8-9e10d5ae4556}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>2.340</label>
+  <description/>
+  <label>1.824</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -213,9 +250,14 @@ Threshold can be used to define a threshold beneath which sound components will 
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
@@ -224,12 +266,15 @@ Threshold can be used to define a threshold beneath which sound components will 
   <width>500</width>
   <height>27</height>
   <uuid>{06814721-6151-4baa-84e2-8f39843b07a4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>2.34000000</value>
+  <value>1.82400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -242,14 +287,20 @@ Threshold can be used to define a threshold beneath which sound components will 
   <width>180</width>
   <height>30</height>
   <uuid>{c6d7165c-6730-426f-b293-52b411bc73cf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Input Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -260,9 +311,14 @@ Threshold can be used to define a threshold beneath which sound components will 
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Threshold</objectName>
@@ -271,14 +327,19 @@ Threshold can be used to define a threshold beneath which sound components will 
   <width>60</width>
   <height>30</height>
   <uuid>{96be62fb-9f2a-4761-9be8-9aef6d88dda7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.085</label>
+  <description/>
+  <label>0.602</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -289,9 +350,14 @@ Threshold can be used to define a threshold beneath which sound components will 
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Threshold</objectName>
@@ -300,12 +366,15 @@ Threshold can be used to define a threshold beneath which sound components will 
   <width>500</width>
   <height>27</height>
   <uuid>{592ae49e-376b-419b-aa00-13c6872a64e7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00100000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.08491600</value>
+  <value>0.60239800</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -318,14 +387,20 @@ Threshold can be used to define a threshold beneath which sound components will 
   <width>180</width>
   <height>30</height>
   <uuid>{cfbe3e3a-7a32-4ca8-aa84-7da2153cd059}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Threshold</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -336,9 +411,14 @@ Threshold can be used to define a threshold beneath which sound components will 
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>OutGain</objectName>
@@ -347,14 +427,19 @@ Threshold can be used to define a threshold beneath which sound components will 
   <width>60</width>
   <height>30</height>
   <uuid>{59581403-249b-41d7-a156-8fecc4c57eb9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.624</label>
+  <description/>
+  <label>0.788</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -365,9 +450,14 @@ Threshold can be used to define a threshold beneath which sound components will 
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>OutGain</objectName>
@@ -376,12 +466,15 @@ Threshold can be used to define a threshold beneath which sound components will 
   <width>500</width>
   <height>27</height>
   <uuid>{d0db0fef-0b84-4670-9350-204802c497dc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.62400000</value>
+  <value>0.78800000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -394,14 +487,20 @@ Threshold can be used to define a threshold beneath which sound components will 
   <width>180</width>
   <height>30</height>
   <uuid>{8cecc9b3-e38a-4be6-8564-0b15fc468eb5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Output Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -412,11 +511,15 @@ Threshold can be used to define a threshold beneath which sound components will 
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

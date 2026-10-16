@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-# Modernize the Csound orchestra/score code inside .csd example files.
+# Modernize the Csound orchestra code inside .csd example files.
 #
-# Only the region up to and including </CsoundSynthesizer> is touched; the
-# <bsbPanel> widget XML and everything after it is left byte-for-byte
-# unchanged.
+# Only lines strictly inside <CsInstruments>...</CsInstruments> are ever
+# changed. Header prose, <CsOptions>, <CsScore>, every XML tag and
+# everything after </CsoundSynthesizer> (widget panels etc.) is left
+# byte-for-byte identical.
 #
 # Transformations applied to the code region:
 #   0. Structural indentation, inside <CsInstruments>/<CsScore> only: the
@@ -217,30 +218,18 @@ def new_syntax_code(code, udo_arities, opcode_arities):
 def reindent(records):
     """Rule 0: recompute indentation from block structure.
 
-    Only lines inside <CsInstruments>/<CsScore> are touched; header prose,
-    <CsOptions> and XML tags keep their (tab-expanded) indentation. The
-    level changes only on flow-control keywords (instr/opcode/if/then/
-    else/elseif/endif/for/while/until/do/od/switch/endsw/endin/endop);
-    every other line (rireturn, outs, labels, ...) is rendered at the
-    current level. A trailing `\\` continues the statement: the next
-    non-blank line gets one extra level.
+    Callers pass only <CsInstruments> body lines. The level changes solely
+    on flow-control keywords (instr/opcode/if/then/else/elseif/endif/for/
+    while/until/do/od/switch/endsw/endin/endop); every other line
+    (rireturn, outs, ...) is rendered at the current level, except
+    `<label>:` lines, which go to column 0 like instr/opcode. A trailing
+    `\\` continues the statement: the next non-blank line gets one extra
+    level.
     """
     level = 0
     extra = 0
-    in_code = False
     for record in records:
         if record["tag"] is not None:
-            tag = record["tag"].strip().lower()
-            if tag in ("<csinstruments>", "<csscore>"):
-                in_code = True
-                level = 0
-                extra = 0
-            elif tag in ("</csinstruments>", "</csscore>"):
-                in_code = False
-                level = 0
-                extra = 0
-            continue
-        if not in_code:
             continue
         if not record["code"] and not record["comment"]:
             record["indent"] = ""
@@ -428,23 +417,13 @@ def apply_ksmps(records, value):
     """Rule 7: set the header assignment to `ksmps = <value>`.
 
     Existing assignments are replaced wholesale; when none exists, one is
-    inserted right after the `sr` line (or first inside <CsInstruments>).
-    Only the orchestra header is affected (<CsInstruments> section).
+    inserted right after the `sr` line (or first in the body). Callers pass
+    only <CsInstruments> body lines.
     """
-    in_instruments = False
     replaced = False
     found_sr = None
-    section_start = None
     for pos, record in enumerate(records):
-        if record["tag"] is not None:
-            tag = record["tag"].strip().lower()
-            if tag == "<csinstruments>":
-                in_instruments = True
-                section_start = pos
-            elif tag == "</csinstruments>":
-                in_instruments = False
-            continue
-        if not in_instruments or not record["code"]:
+        if record["tag"] is not None or not record["code"]:
             continue
         if KSAMPS_RE.match(record["code"]):
             record["code"] = "ksmps = %d" % value
@@ -453,11 +432,8 @@ def apply_ksmps(records, value):
             found_sr = pos
     if replaced:
         return
-    anchor = found_sr if found_sr is not None else section_start
-    if anchor is None:
-        return
-    indent = records[anchor]["indent"] \
-        if records[anchor]["tag"] is None else ""
+    anchor = found_sr if found_sr is not None else -1
+    indent = records[anchor]["indent"] if anchor >= 0 else ""
     records.insert(anchor + 1, {"indent": indent,
                                 "code": "ksmps = %d" % value,
                                 "comment": None, "tag": None})
@@ -563,25 +539,27 @@ def build_line(record):
 
 
 def fix_once(text, new_syntax=False, opcode_arities=None, ksmps=None):
-    """A single modernization pass over the code region."""
+    """A single modernization pass over the <CsInstruments> body.
+
+    Everything outside <CsInstruments>...</CsInstruments> -- header prose,
+    <CsOptions>, <CsScore>, all XML tags and the widget panels -- is left
+    byte-for-byte identical.
+    """
     lines = text.split("\n")
-    end = next((pos for pos, line in enumerate(lines)
-                if "</CsoundSynthesizer>" in line), None)
-    if end is None:
+    start = next((pos for pos, line in enumerate(lines)
+                  if line.strip() == "<CsInstruments>"), None)
+    stop = next((pos for pos, line in enumerate(lines)
+                 if line.strip() == "</CsInstruments>"), None)
+    if start is None or stop is None or stop <= start:
         return text
-    records = parse_region(lines[:end + 1])
+    records = parse_region(lines[start + 1:stop])
     reindent(records)
     if ksmps is not None:
         apply_ksmps(records, ksmps)
     if new_syntax:
         udo_arities = collect_udo_arities(text)
-        in_instruments = False
         for record in records:
-            if record["tag"] is not None:
-                in_instruments = record["tag"].strip().lower() \
-                    == "<csinstruments>"
-                continue
-            if in_instruments and record["code"]:
+            if record["tag"] is None and record["code"]:
                 converted = new_syntax_code(record["code"], udo_arities,
                                             opcode_arities)
                 if converted is not None:
@@ -599,8 +577,8 @@ def fix_once(text, new_syntax=False, opcode_arities=None, ksmps=None):
         if record["tag"] is None and record["code"] \
                 and not record["comment"]:
             record["code"] = record["code"].rstrip()
-    new_region = [build_line(record) for record in records]
-    return "\n".join(new_region + lines[end + 1:])
+    new_body = [build_line(record) for record in records]
+    return "\n".join(lines[:start + 1] + new_body + lines[stop:])
 
 
 def fix_text(text, new_syntax=False, opcode_arities=None, ksmps=None):

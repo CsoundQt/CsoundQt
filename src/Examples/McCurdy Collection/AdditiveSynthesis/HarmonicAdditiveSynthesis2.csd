@@ -178,7 +178,7 @@ instr 3  ; Presets
 endin
 </CsInstruments>
 <CsScore>
-i 10 0 3600  ; Instrument 10 (GUI) plays for 1 hour
+i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
 </CsScore>
 </CsoundSynthesizer>
 
