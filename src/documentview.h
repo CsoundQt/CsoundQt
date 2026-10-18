@@ -41,8 +41,18 @@ public:
 
 	bool insertComplete; // Whether to insert full text or only opcode name
 
+	// (Re)apply the popup's style for the current application palette. Called
+	// by DocumentView::setTheme() so a theme switch does not leave the popup
+	// with the colours of the previous one; does nothing when the light/dark
+	// state has not changed.
+	void applyStyle();
+
 protected:
     virtual void keyPressEvent(QKeyEvent * event);
+
+private:
+	bool m_styleApplied = false; // whether the sheet below was built at all
+	bool m_darkStyle = false;    // and for which palette it was built
 };
 
 class HoverWidget :
@@ -106,6 +116,11 @@ public:
     void gotoLineDialog();
     void markCurrentPosition();
     const QStringList getAllWords();
+
+	// BaseView::setTheme() switches the syntax highlighting; the completion
+	// popup is a separate top-level window with colours of its own, so it has
+	// to be restyled here too.
+	void setTheme(const QString &theme) override;
 
 
 public slots:
@@ -189,7 +204,7 @@ private:
 	// character, or the configured number of spaces when "use spaces" is on.
 	QString indentString() const;
 
-	MySyntaxMenu *syntaxMenu;
+	MySyntaxMenu *syntaxMenu = nullptr;
 
 	HoverWidget *m_hoverWidget;
 	QLabel *m_hoverText;

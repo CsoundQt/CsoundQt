@@ -109,7 +109,7 @@ public:
 	void setAppText(QString text);
 	void setAppProperties(AppProperties properties);
 	void showLineArea(bool visible);
-    void setTheme(const QString &theme) {
+    virtual void setTheme(const QString &theme) {
         m_highlighter.setTheme(theme);
         auto defaultFormat = m_highlighter.getFormat("default");
         auto fg = defaultFormat.foreground().color();

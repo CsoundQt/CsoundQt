@@ -35,6 +35,14 @@
 
 static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesizer", "CsOptions"};
 
+// Colours of the opcode/word completion popup (MySyntaxMenu) in the light
+// theme. The popup is its own top-level window and does not take the editor's
+// colours, so its light palette is chosen here. A warm off-white keeps it just
+// off the editor's white page, and a hairline border a little darker than that
+// keeps its edge visible against it.
+#define COMPLETION_MENU_BG_LIGHT     "#fffeef"
+#define COMPLETION_MENU_BORDER_LIGHT "#b7b19a"
+
 // Smart case: only match case sensitively when the query itself contains an
 // upper case character, otherwise search case insensitively (like the help
 // panel find box).
@@ -2591,6 +2599,13 @@ void DocumentView::setParsedUDOs(QStringList udos) {
     m_highlighter.setUDOs(udos);
 }
 
+void DocumentView::setTheme(const QString &theme)
+{
+    BaseView::setTheme(theme);
+    if (syntaxMenu)
+        syntaxMenu->applyStyle();
+}
+
 MySyntaxMenu::MySyntaxMenu(QWidget * parent) :
 	QMenu(parent)
 
@@ -2601,10 +2616,34 @@ MySyntaxMenu::MySyntaxMenu(QWidget * parent) :
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlag(Qt::NoDropShadowWindowHint, true);
 
+    applyStyle();
+}
+
+// The popup is light in both themes -- it has always been, and against the dark
+// editor it stands out well -- but it must not disappear into the light editor
+// either, hence the border and the warm off-white in the light palette.
+void MySyntaxMenu::applyStyle()
+{
+    // Same light/dark test CsoundQt uses for the "auto" theme mode.
+    const QPalette pal = palette();
+    const bool dark = pal.text().color().lightness() > pal.window().color().lightness();
+    if (m_styleApplied && dark == m_darkStyle)
+        return; // already styled for this palette
+    m_styleApplied = true;
+    m_darkStyle = dark;
+
+    const QString background = dark ? QStringLiteral("#f8f8f8")
+                                    : QStringLiteral(COMPLETION_MENU_BG_LIGHT);
+    const QString border = dark ? QString()
+                                : QStringLiteral("border: 1px solid " COMPLETION_MENU_BORDER_LIGHT "; ");
+    // The selected item is a solid blue bar, so its text only has to be light.
+    const QString selectedText = dark ? QStringLiteral("#f8f8f8") : background;
+
     this->setStyleSheet(
         "QMenu {"
-        "  background-color: #f8f8f8; "
+        "  background-color: " + background + "; "
         "  color: #5050A0 !important; "
+        + border +
         "  border-radius: 8px;        "
         "  menu-scrollable: 1;        "
         "  padding: 4px;"
@@ -2618,7 +2657,7 @@ MySyntaxMenu::MySyntaxMenu(QWidget * parent) :
         "  padding-right: 4px;"
         "}"
         "QMenu::item:selected {         "
-        "    color: #f8f8f8;            "
+        "    color: " + selectedText + ";            "
         "    background-color: #3daee9; "
         "}"
         "QMenu::separator {"
