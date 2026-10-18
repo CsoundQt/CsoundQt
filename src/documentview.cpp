@@ -35,13 +35,16 @@
 
 static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesizer", "CsOptions"};
 
-// Colours of the opcode/word completion popup (MySyntaxMenu) in the light
-// theme. The popup is its own top-level window and does not take the editor's
-// colours, so its light palette is chosen here. A warm off-white keeps it just
-// off the editor's white page, and a hairline border a little darker than that
-// keeps its edge visible against it.
+// Colours of the opcode/word completion popup (MySyntaxMenu). The popup is its
+// own top-level window and does not take the editor's colours, so they are
+// chosen here. A warm off-white keeps it just off the light editor's white
+// page, and a hairline border a little darker than that keeps its edge visible
+// against it; the dark theme keeps the popup's original plain light background,
+// which already stands out, so the separator below sits on a light background
+// in both themes.
 #define COMPLETION_MENU_BG_LIGHT     "#fffeef"
 #define COMPLETION_MENU_BORDER_LIGHT "#b7b19a"
+#define COMPLETION_MENU_SEPARATOR    "#7070c0"
 
 // Smart case: only match case sensitively when the query itself contains an
 // upper case character, otherwise search case insensitively (like the help
@@ -2661,7 +2664,7 @@ void MySyntaxMenu::applyStyle()
         "    background-color: #3daee9; "
         "}"
         "QMenu::separator {"
-        "    background: 7070c0;"
+        "    background: " COMPLETION_MENU_SEPARATOR ";"
         "}");
 
 }
