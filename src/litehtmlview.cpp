@@ -607,6 +607,27 @@ void LiteHtmlView::mouseMoveEvent(QMouseEvent *e)
     }
 }
 
+// Ctrl+<plus>/<minus> zoom the help page. Ctrl+= (the unshifted form of "+")
+// and Ctrl+_ (Shift+minus) are accepted as aliases, and "=" / "+" and "-" on
+// the numeric keypad produce the same key values, so they all work too.
+// Returns +1 for zoom in, -1 for zoom out, 0 when the event is not a zoom key.
+static int zoomKeyDirection(const QKeyEvent *e)
+{
+    if (!(e->modifiers() & Qt::ControlModifier) || (e->modifiers() & Qt::AltModifier))
+        return 0;
+    switch (e->key())
+    {
+    case Qt::Key_Plus:
+    case Qt::Key_Equal:
+        return +1;
+    case Qt::Key_Minus:
+    case Qt::Key_Underscore:
+        return -1;
+    default:
+        return 0;
+    }
+}
+
 bool LiteHtmlView::event(QEvent *e)
 {
     // Claim Alt+Left/Right from the application-wide shortcuts (e.g. the
@@ -620,12 +641,29 @@ bool LiteHtmlView::event(QEvent *e)
             e->accept();
             return true;
         }
+        // Claim Ctrl+<plus>/<minus> from the editor's font-size shortcuts so
+        // that, with the help panel focused, they zoom the page instead of
+        // the editor. Accepting the override makes Qt deliver a plain key
+        // press to keyPressEvent() below instead of triggering the action.
+        if (zoomKeyDirection(ke) != 0)
+        {
+            e->accept();
+            return true;
+        }
     }
     return QWidget::event(e);
 }
 
 void LiteHtmlView::keyPressEvent(QKeyEvent *e)
 {
+    if (int dir = zoomKeyDirection(e))
+    {
+        if (dir > 0)
+            zoomIn();
+        else
+            zoomOut();
+        return;
+    }
     if (e->matches(QKeySequence::Copy))
     {
         copySelection();
@@ -709,6 +747,21 @@ void LiteHtmlView::keyPressEvent(QKeyEvent *e)
 
 void LiteHtmlView::wheelEvent(QWheelEvent *e)
 {
+    // Ctrl+wheel zooms the page instead of scrolling it.
+    if (e->modifiers() & Qt::ControlModifier)
+    {
+        // Accumulate notches so trackpad pixel deltas zoom smoothly while a
+        // mouse wheel still steps once per 120-unit notch.
+        const int angle = e->angleDelta().y();
+        m_zoomRemainder += (angle != 0) ? angle / 120.0 : e->pixelDelta().y() / 50.0;
+        while (m_zoomRemainder >= 1.0)  { zoomIn();  m_zoomRemainder -= 1.0; }
+        while (m_zoomRemainder <= -1.0) { zoomOut(); m_zoomRemainder += 1.0; }
+        m_wheelRemainder = 0;
+        m_scrollVelocity = 0;
+        m_flingTimer->stop();
+        e->accept();
+        return;
+    }
     // Prefer pixel deltas (trackpads/Wayland); fall back to notched deltas.
     QPoint delta = e->pixelDelta();
     qreal  step;

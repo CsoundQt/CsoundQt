@@ -171,6 +171,7 @@ private:
     QStringList               m_history;
     int                       m_historyPos = -1;
     qreal                     m_zoomFactor = 1.0;
+    qreal                     m_zoomRemainder = 0;   // Ctrl+wheel notch accumulator
     int                       m_renderedWidth = -1;
     qreal                     m_wheelRemainder = 0;
     qreal                     m_scrollVelocity = 0;
