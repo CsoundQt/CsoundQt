@@ -129,11 +129,16 @@ private slots:
     void runManualSearch();
     void openSearchResult(QListWidgetItem *item);
     void onFlingTick();
+    void commitZoom();
 
 private:
     void doLoad(const QString &path, const QString &fragment, bool pushHistory);
     void navigateToHistory();
     void relayout();
+    void updateScrollBars(qreal keepFractionV = -1.0, qreal keepFractionH = -1.0);
+    // The page is magnified by this much while a zoom is being previewed; 1.0
+    // once the document has been rebuilt at the requested zoom.
+    qreal previewScale() const { return m_renderedZoom > 0.0 ? m_zoomFactor / m_renderedZoom : 1.0; }
     void recordAllFragments();
     void updateLineTable();
     void rebuildSearch();
@@ -155,6 +160,7 @@ private:
     QScrollBar               *m_vbar = nullptr;
     QScrollBar               *m_hbar = nullptr;
     QTimer                   *m_flingTimer = nullptr;
+    QTimer                   *m_zoomCommitTimer = nullptr;
     QLineEdit                *m_findEdit = nullptr;
     QWidget                  *m_searchPanel = nullptr;
     QLineEdit                *m_searchEdit = nullptr;
@@ -171,6 +177,7 @@ private:
     QStringList               m_history;
     int                       m_historyPos = -1;
     qreal                     m_zoomFactor = 1.0;
+    qreal                     m_renderedZoom = 1.0;  // zoom m_doc was built at
     qreal                     m_zoomRemainder = 0;   // Ctrl+wheel notch accumulator
     int                       m_renderedWidth = -1;
     qreal                     m_wheelRemainder = 0;
