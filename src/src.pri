@@ -67,6 +67,7 @@ HEADERS = "src/about.h" \
     "src/qutetext.h" \
     "src/qutewidget.h" \
     "src/texteditor.h" \
+    "src/themedicons.h" \
     "src/types.h" \
     "src/valuemapping.h" \
     "src/utilitiesdialog.h" \
@@ -139,6 +140,7 @@ SOURCES = "src/about.cpp" \
     "src/qutetext.cpp" \
     "src/qutewidget.cpp" \
     "src/texteditor.cpp" \
+    "src/themedicons.cpp" \
     "src/utilitiesdialog.cpp" \
     "src/widgetlayout.cpp" \
     "src/widgetpanel.cpp" \
