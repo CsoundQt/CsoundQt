@@ -64,7 +64,6 @@ class QuteWidget;
 typedef enum {
 	CSQT_NO_FLAGS = 0,
 	CSQT_NO_COPY_BUFFER = 1,
-	CSQT_NO_PYTHON_CALLBACK = 2,
 	CSQT_NO_CONSOLE_MESSAGES = 4,
 	CSQT_NO_RT_EVENTS = 8
 } PerfFlags;

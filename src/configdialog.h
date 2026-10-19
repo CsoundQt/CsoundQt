@@ -72,8 +72,9 @@ private slots:
 	void browseFavorite();
     void browseExamplePath();
 	void browseCsoundExecutable();
-	void browseLogFile();
 	void browseTemplateDir();
+	void openDebugLog();
+	void updateLogPathLabel();
 	void browseTerminal();
 	void browseBrowser();
 	void browseWaveEditor();

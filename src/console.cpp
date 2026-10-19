@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -177,7 +178,7 @@ void Console::setColors(QColor textColor, QColor bgColor)
     else {
         // dark background
         m_warningColor = QColor("orange");
-        m_errorColor = QColor("#FF4040");
+        m_errorColor = QColor("#ff974c");
         m_infoColor = QColor("#90EE90"); // light green
     }
     // Debug messages are muted towards the background so they stay unobtrusive

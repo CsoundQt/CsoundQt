@@ -23,13 +23,19 @@
 
 #include <QDir>
 //#include <QOperatingSystemVersion> // not present before Qt 5.9
+#include <QDesktopServices>
+#include <QFile>
+#include <QMessageBox>
 #include <QSysInfo>
+#include <QUrl>
 
 #include "csoundqt.h"
 #include "configdialog.h"
 #include "options.h"
+#include "widgetstyle.h"
 #include "types.h"
 #include "configlists.h"
+#include "debuglog.h"
 
 
 typedef QPair<QString, QString> QStringPair;
@@ -212,6 +218,55 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     themeComboBox->setItemData(3, "light-classic");
     themeComboBox->setCurrentIndex(themeComboBox->findData(m_options->themeMode));
 
+    // Qt widget styles available on this platform, minus the hidden legacy
+    // styles (see widgetstyle.h). Fusion is offered first as the recommended,
+    // fully palette-driven style; the remaining styles keep Qt's own order.
+    QStringList styleKeys = availableWidgetStyleNames();
+    for (int i = 0; i < styleKeys.size(); ++i) {
+        if (styleKeys.at(i).compare(QStringLiteral("Fusion"), Qt::CaseInsensitive) == 0) {
+            styleKeys.move(i, 0);
+            break;
+        }
+    }
+    for (const QString &key : styleKeys)
+        widgetStyleComboBox->addItem(key, key);
+    bool haveFusion = false;
+    for (int i = 0; i < widgetStyleComboBox->count(); ++i) {
+        if (widgetStyleComboBox->itemData(i).toString()
+                .compare(QStringLiteral("Fusion"), Qt::CaseInsensitive) == 0) {
+            haveFusion = true;
+            break;
+        }
+    }
+    if (!haveFusion)
+        widgetStyleComboBox->addItem(QStringLiteral("Fusion"), QStringLiteral("Fusion"));
+
+    // Select the configured style. When none is configured yet (or the
+    // configured one is hidden), show the style that is actually in use (the
+    // platform default).
+    QString wanted = m_options->widgetStyle;
+    if (wanted.isEmpty() || isHiddenWidgetStyle(wanted))
+        wanted = currentWidgetStyleName();
+    if (isHiddenWidgetStyle(wanted))
+        wanted.clear();
+    int styleIndex = -1;
+    for (int i = 0; i < widgetStyleComboBox->count(); ++i) {
+        if (widgetStyleComboBox->itemData(i).toString()
+                .compare(wanted, Qt::CaseInsensitive) == 0) {
+            styleIndex = i;
+            break;
+        }
+    }
+    // Keep a configured style that is no longer available selectable, so saving
+    // the dialog does not silently change it.
+    if (styleIndex < 0 && !wanted.isEmpty()) {
+        widgetStyleComboBox->addItem(wanted, wanted);
+        styleIndex = widgetStyleComboBox->count() - 1;
+    }
+    if (styleIndex < 0)
+        styleIndex = 0;
+    widgetStyleComboBox->setCurrentIndex(styleIndex);
+
 
 
 	autoplayCheckBox->setChecked(m_options->autoPlay);
@@ -236,9 +291,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
 	showTooltipsCheckBox->setChecked(m_options->showTooltips);
     graphUpdateRateSpinBox->setValue(m_options->graphUpdateRate);
-	enableFLTKCheckBox->setChecked(m_options->enableFLTK);
-	terminalFLTKCheckBox->setChecked(m_options->terminalFLTK);
-	terminalFLTKCheckBox->setEnabled(m_options->enableFLTK);
 	openPropertiesCheckBox->setChecked(m_options->openProperties);
 	fontScalingSpinBox->setValue(m_options->fontScaling);
 	fontOffsetSpinBox->setValue(m_options->fontOffset);
@@ -253,7 +305,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	noMessagesCheckBox->setChecked(m_options->noMessages);
 	noBufferCheckBox->setChecked(m_options->noBuffer);
-	noPythonCheckBox->setChecked(m_options->noPython);
 	noEventsCheckBox->setChecked(m_options->noEvents);
 
 	//  threadCheckBox->setChecked(m_options->thread);
@@ -375,8 +426,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	favoriteLineEdit->setText(m_options->favoriteDir);
     examplePathlineEdit->setText(m_options->examplePath);
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
-	logFileLineEdit->setText(m_options->logFile);
 	templateLineEdit->setText(m_options->templateDir);
+	logDebugCheckBox->setChecked(m_options->logDebug);
 
 	TerminalLineEdit->setText(m_options->terminal);
 #if defined(FLATPAK_BUILD)
@@ -422,8 +473,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
 	connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
 	connect(pdfViewerToolButton, SIGNAL(clicked()), this, SLOT(browsePdfViewer()));
-	connect(logFileToolButton, SIGNAL(clicked()), this, SLOT(browseLogFile()));
 	connect(templateToolButton, SIGNAL(clicked()), this, SLOT(browseTemplateDir()));
+	connect(logDebugCheckBox, &QCheckBox::toggled, this, &ConfigDialog::updateLogPathLabel);
+	connect(openLogToolButton, &QToolButton::clicked, this, &ConfigDialog::openDebugLog);
+	updateLogPathLabel();
 
 	//  connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
 	connect(audioInputToolButton, SIGNAL(released()), this, SLOT(selectAudioInput()));
@@ -450,11 +503,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	//connect(RtMidiModuleComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(checkRtMidiModule(QString)) );
 
-
-#ifndef CSQT_PYTHONQT
-	noPythonCheckBox->setEnabled(false);
-	noPythonCheckBox->setChecked(false);
-#endif
 
     m_selectedOutputDeviceIndex = -1;
 }
@@ -533,6 +581,7 @@ void ConfigDialog::accept()
 
     // deal with localized themes:
     m_options->themeMode = themeComboBox->currentData().toString();    // to allow to be translated
+    m_options->widgetStyle = widgetStyleComboBox->currentData().toString();
     //m_options->highlightingTheme = highlightingThemeComboBox->currentData().toString();
 
     m_options->colorVariables = m_options->highlightingTheme != "none";
@@ -556,8 +605,6 @@ void ConfigDialog::accept()
 	m_options->midiCcToCurrentPageOnly = midiCcToCurrentPageOnlyCheckBox->isChecked();
 	m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
 	m_options->showTooltips = showTooltipsCheckBox->isChecked();
-	m_options->enableFLTK = enableFLTKCheckBox->isChecked();
-	m_options->terminalFLTK = terminalFLTKCheckBox->isChecked();
 	m_options->openProperties = openPropertiesCheckBox->isChecked();
 	m_options->fontScaling = fontScalingSpinBox->value();
 	m_options->fontOffset = fontOffsetSpinBox->value();
@@ -576,7 +623,6 @@ void ConfigDialog::accept()
 	m_options->midiOutInterfaceName = midiOutInterfaceComboBox->currentText();
 	m_options->noMessages = noMessagesCheckBox->isChecked();
 	m_options->noBuffer = noBufferCheckBox->isChecked();
-	m_options->noPython = noPythonCheckBox->isChecked();
 	m_options->noEvents = noEventsCheckBox->isChecked();
 	if (m_options->consoleBufferSize < 0)
 		m_options->consoleBufferSize = 0;
@@ -658,8 +704,8 @@ void ConfigDialog::accept()
 	m_options->favoriteDir = favoriteLineEdit->text();
     m_options->examplePath = examplePathlineEdit->text();
 	m_options->csoundExecutable = csoundExecutableLineEdit->text();
-	m_options->logFile = logFileLineEdit->text();
 	m_options->templateDir = templateLineEdit->text();
+	m_options->logDebug = logDebugCheckBox->isChecked();
 
 	m_options->terminal = TerminalLineEdit->text();
 	m_options->browser = browserLineEdit->text();
@@ -790,10 +836,28 @@ void ConfigDialog::browsePdfViewer()
 	pdfViewerLineEdit->setText(m_options->pdfviewer);
 }
 
-void ConfigDialog::browseLogFile()
+void ConfigDialog::openDebugLog()
 {
-	browseSaveFile(m_options->logFile);
-	logFileLineEdit->setText(m_options->logFile);
+	const QString path = DebugLog::filePath();
+	if (!QFile::exists(path)) {
+		QMessageBox::information(this, tr("CsoundQt"),
+								 tr("No log file exists yet.\n\n"
+									"The log file is created when \"Log debug info\" "
+									"is enabled:\n%1").arg(path));
+		return;
+	}
+	if (!QDesktopServices::openUrl(QUrl::fromLocalFile(path))) {
+		QMessageBox::warning(this, tr("CsoundQt"),
+							 tr("Could not open the log file:\n%1").arg(path));
+	}
+}
+
+void ConfigDialog::updateLogPathLabel()
+{
+	const bool enabled = logDebugCheckBox->isChecked();
+	logPathLabel->setVisible(enabled);
+	logPathLabel->setText(enabled ? DebugLog::filePath() : QString());
+	logPathLabel->setToolTip(enabled ? DebugLog::filePath() : QString());
 }
 
 void ConfigDialog::browseTemplateDir()

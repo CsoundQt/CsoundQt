@@ -183,13 +183,14 @@ public slots:
 	//    void updateWidgets();
 	void openExample();
 	void openTemplate();
-	void logMessage(QString msg);
     void statusBarMessage(QString message);
 	//    void registerLiveEvent(QWidget *e);
 	void evaluateCsound(QString code = QString());
 	void breakpointReached();
     void setParsedUDOs();
     void openExternalBrowser(QUrl url = QUrl());
+
+    QMenu *createPopupMenu() override;
 
     void increaseFontSize();
     void decreaseFontSize();
@@ -292,6 +293,8 @@ private slots:
     void documentWasModified(bool status=true);
     void configure();
 	void applySettings();
+	void applyWidgetStyle();
+	void applyPaletteToChrome(); // re-assert the app palette on tool/menu bars (see setColors)
 	void setCurrentOptionsForPage(DocumentPage *p);
 	void applyDefaultDockLayout(); // initial dock arrangement when there is no saved layout
 	void ensurePanelTabOrder(); // Widgets before Help in the right-hand tab group
@@ -385,7 +388,6 @@ private:
 	QString getSaveFileName();
 	// void createQuickRefPdf();
 	void deleteTab(int index = -1);
-	void openLogFile();
 	void setupEnvironment();
     void openHtmlHelp(QString fileName, QString entry, bool external);
     // Drag & drop of non-Csound files
@@ -420,7 +422,6 @@ private:
 #endif
 	MidiHandler *midiHandler;
 	MidiLearnDialog *m_midiLearn;
-	QFile logFile;
 	QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
 	QMenu *fileMenu;
 	QMenu *recentMenu;

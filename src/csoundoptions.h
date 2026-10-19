@@ -52,7 +52,6 @@ public:
 	QString fileName2;
 	bool rt; //FIXME make sure this is set!
 
-	bool enableFLTK;
 	int bufferSize;
 	bool bufferSizeActive;
 	int HwBufferSize;

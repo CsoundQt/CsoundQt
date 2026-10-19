@@ -23,23 +23,30 @@
 #include "options.h"
 // #include "configlists.h"
 #include "types.h"
+#include "widgetstyle.h"
 #include "stdlib.h"
 
 Options::Options(ConfigLists *configlists) :
     CsoundOptions(configlists)
 {
-    // The editor font is bundled with CsoundQt (see bundledfonts.cpp), so it is
-    // available on every platform; use it everywhere rather than per-OS fonts.
+    // The editor and console fonts are bundled with CsoundQt (see
+    // bundledfonts.cpp), so they are available on every platform; use them
+    // everywhere rather than per-OS fonts.
     font = "JetBrains Mono";
     theme = "breeze";
     themeMode = "auto";
+    // Default widget style: Fusion on Linux (consistent look everywhere), and
+    // the native Qt style elsewhere (macOS, windows11/windowsvista on Windows).
+    widgetStyle = defaultWidgetStyleName();
     fontPointSize = 10;
     showLineNumberArea = true;
     lineEnding = 0; // 0=Unix (LF) 1=Windows(CR+LF)
-    consoleFont = "Courier";
+    consoleFont = "JetBrains Mono";
     consoleFontPointSize = 9;
-    consoleFontColor = Qt::black;
-    consoleBgColor = Qt::white;
+    // Dark text on a light background. In dark theme the console colours are
+    // swapped (see CsoundQt::setColors/applyThemeToPage).
+    consoleFontColor = QColor("#1e1e1e");
+    consoleBgColor = QColor("#eeeeee");
     editorBgColor = Qt::white;
 
     tabWidth = 4;
@@ -65,7 +72,6 @@ Options::Options(ConfigLists *configlists) :
 
     showWidgetsOnRun = true;
     showTooltips = false;
-    terminalFLTK = false;
     openProperties = true;  // Open properties automatically when creating a widget
     fontScaling = 1.0;
     fontOffset = 0.0;
@@ -96,8 +102,8 @@ Options::Options(ConfigLists *configlists) :
 #else
     csoundExecutable = "csound ";
 #endif
-    logFile = ""; // "log.txt"; - don't log by default...
     templateDir = "";
+    logDebug = false;
     evalLanguage = CS_ORC;
 
 #ifdef USE_WEBENGINE

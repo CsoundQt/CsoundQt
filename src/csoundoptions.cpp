@@ -39,7 +39,6 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 
 	rt = true;
 
-	enableFLTK = true;
     bufferSize = 1024;
 	bufferSizeActive = false;
 	HwBufferSize = 2048;

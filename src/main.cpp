@@ -21,12 +21,15 @@
 */
 
 #include <QApplication>
-#include <QProxyStyle>
+#include <QDir>
+#include <QSettings>
 #ifndef CSQT_NO_SPLASH
 #include <QSplashScreen>
 #endif
 #include "csoundqt.h"
 #include "bundledfonts.h"
+#include "widgetstyle.h"
+#include "debuglog.h"
 #include <QLocalSocket>
 
 #ifdef Q_OS_WIN
@@ -66,38 +69,41 @@ BOOL IsWow64() {
 // than the application palette, so they can end up dark-on-dark when
 // CsoundQt uses a dark palette. Use text-only dialog buttons everywhere
 // instead, matching the Fusion style behaviour.
-class DialogButtonStyle : public QProxyStyle
+// DialogButtonStyle and the widget-style helpers live in widgetstyle.h so the
+// style can be re-applied when it is changed in the settings dialog.
+
+#if defined(Q_OS_LINUX) && !defined(FLATPAK_BUILD)
+// The Qt CsoundQt is built against may not ship the desktop widget styles
+// (Breeze, Adwaita, Oxygen, ...). Those are provided by the distribution's Qt
+// plugin packages, so also look in the usual system plugin directories. Only
+// directories that actually contain style plugins are added, and only when
+// CsoundQt is not running from a self-contained bundle (AppImage) whose Qt
+// plugins may not match the host's.
+static void addSystemStylePluginPaths()
 {
-public:
-    using QProxyStyle::QProxyStyle;
-    QIcon standardIcon(StandardPixmap standardIcon,
-                       const QStyleOption *option = nullptr,
-                       const QWidget *widget = nullptr) const override
-    {
-        switch (standardIcon) {
-        case SP_DialogOkButton:
-        case SP_DialogCancelButton:
-        case SP_DialogCloseButton:
-        case SP_DialogApplyButton:
-        case SP_DialogResetButton:
-        case SP_DialogHelpButton:
-        case SP_DialogSaveButton:
-        case SP_DialogSaveAllButton:
-        case SP_DialogOpenButton:
-        case SP_DialogYesButton:
-        case SP_DialogYesToAllButton:
-        case SP_DialogNoButton:
-        case SP_DialogNoToAllButton:
-        case SP_DialogAbortButton:
-        case SP_DialogRetryButton:
-        case SP_DialogIgnoreButton:
-        case SP_DialogDiscardButton:
-            return QIcon();
-        default:
-            return QProxyStyle::standardIcon(standardIcon, option, widget);
-        }
+    QStringList candidates;
+    candidates << QStringLiteral("/usr/lib/qt6/plugins")
+               << QStringLiteral("/usr/lib64/qt6/plugins")
+               << QStringLiteral("/usr/local/lib/qt6/plugins");
+
+    // Debian/Ubuntu style multiarch directories, e.g.
+    // /usr/lib/x86_64-linux-gnu/qt6/plugins
+    const QDir libDir(QStringLiteral("/usr/lib"));
+    const QStringList arches = libDir.entryList(
+                QStringList() << QStringLiteral("*-linux-gnu"),
+                QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString &arch : arches)
+        candidates << QStringLiteral("/usr/lib/") + arch + QStringLiteral("/qt6/plugins");
+
+    const QStringList libraryPaths = QCoreApplication::libraryPaths();
+    for (const QString &path : candidates) {
+        if (libraryPaths.contains(path))
+            continue; // already searched
+        if (QDir(path + QStringLiteral("/styles")).exists())
+            QCoreApplication::addLibraryPath(path);
     }
-};
+}
+#endif
 
 // If another CsoundQt is running, give it the files to open - or, when there is
 // nothing to open, ask whether a second window is really wanted - and tell the
@@ -138,12 +144,24 @@ int main(int argc, char *argv[])
     // Set a global template for ALL qDebug messages.
 	qSetMessagePattern("[%{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}][%{file}:%{line} %{function}] %{message}");
 
+    // Route CsoundQt's own debug output through our handler so it can also be
+    // written to a log file (Settings > Environment > "Log debug info").
+    DebugLog::install();
+
     // in Qt6 not needed, High-DPI always enabled
     //QApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // TO test if this solved hight DPI problems
     //QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QStringList fileNames;
     QApplication qapp(argc, argv);
+
+    // Start logging as early as possible (before the main window is built) so
+    // that startup problems are captured too. The setting is re-applied in
+    // CsoundQt::applySettings() when it is changed at runtime.
+    {
+        QSettings settings("csoundqt", "csoundqt");
+        DebugLog::setEnabled(settings.value("Environment/logDebug", false).toBool());
+    }
 
     // Make the bundled widget fonts available (used only by the widget panel).
     BundledFonts::registerFonts();
@@ -158,19 +176,35 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_WIN
     // To force qml elemtns follow colour theme
-    qApp->setStyle(QStyleFactory::create("Fusion")); // this is not necessary by Qt 6.8 any more
     QQuickStyle::setStyle(QStringLiteral("Fusion"));
     qDebug() << "QQC2 style requested:" << QQuickStyle::name();
-#elif defined(FLATPAK_BUILD)
-    qDebug() << "Flatpak build, setting style to Fusion";
-    qApp->setStyle(QStyleFactory::create("Fusion"));
-    // QQuickStyle::setStyle(QStringLiteral("Fusion"));
 #endif
 
-    // Strip style-provided dialog button icons (see DialogButtonStyle).
-    // This wraps whatever style is active, so it also applies to the
-    // message boxes shown below and to every dialog in the application.
-    qApp->setStyle(new DialogButtonStyle(qApp->style()));
+#if defined(Q_OS_LINUX) && !defined(FLATPAK_BUILD)
+    // Make the distribution's widget styles (Breeze, Adwaita, ...) available.
+    if (!qEnvironmentVariableIsSet("APPIMAGE") && !qEnvironmentVariableIsSet("APPDIR"))
+        addSystemStylePluginPaths();
+#endif
+
+    // Qt widget style. The default is Fusion on Linux (so CsoundQt looks the
+    // same everywhere) and Qt's native style on macOS and Windows; the user can
+    // pick another available style in Settings > General > Theme. The style is
+    // wrapped in DialogButtonStyle (see widgetstyle.h) so dialog buttons stay
+    // text-only; this also applies to the message boxes shown below and to
+    // every dialog in the application.
+    QString widgetStyle;
+    {
+        QSettings styleSettings("csoundqt", "csoundqt");
+        widgetStyle = styleSettings.value("GUI/widgetStyle",
+                                          defaultWidgetStyleName()).toString();
+    }
+    if (QStyle *widgetStyleBase = createWidgetStyle(resolveWidgetStyleName(widgetStyle))) {
+        qApp->setStyle(new DialogButtonStyle(widgetStyleBase));
+    } else {
+        // No explicit style (macOS/Windows default): keep Qt's style, just
+        // strip themed dialog button icons.
+        qApp->setStyle(new DialogButtonStyle(qApp->style()));
+    }
 
     bool autoplay = false;
     bool forceNew = false;

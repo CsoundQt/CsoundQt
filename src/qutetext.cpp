@@ -485,7 +485,8 @@ QString QuteText::getWidgetXmlText()
 
 	s.writeTextElement("font", property("CSQT_font").toString());
 	s.writeTextElement("fontsize", QString::number(property("CSQT_fontsize").toInt()));
-	s.writeTextElement("precision", QString::number(property("CSQT_precision").toInt()));
+	if (m_type != "label") // labels have no numeric precision
+		s.writeTextElement("precision", QString::number(property("CSQT_precision").toInt()));
 	s.writeTextElement("padding", QString::number(property("CSQT_padding").toInt()));
 	if (m_type == "label") {
 		s.writeTextElement("locked", property("CSQT_locked").toBool() ? "true" : "false");
@@ -563,16 +564,22 @@ void QuteText::createPropertiesDialog()
     bgColor->setColor(property("CSQT_bgcolor").value<QColor>());
     layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
 
-    label = new QLabel("Precision", dialog);
-    layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
-    precisionSpinBox = new QSpinBox(dialog);
-    precisionSpinBox->unsetLocale();
-    precisionSpinBox->setValue(property("CSQT_precision").toInt());
-    layout->addWidget(precisionSpinBox, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    // Precision only makes sense for numeric displays; labels are just text.
+    precisionSpinBox = nullptr;
+    if (m_type != "label") {
+        label = new QLabel("Precision", dialog);
+        layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+        precisionSpinBox = new QSpinBox(dialog);
+        precisionSpinBox->unsetLocale();
+        precisionSpinBox->setValue(property("CSQT_precision").toInt());
+        layout->addWidget(precisionSpinBox, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    }
 
+    // Labels have no precision field, so let the border colour use the full row.
+    const bool isLabel = (m_type == "label");
     label = new QLabel(tr("Border Color"), dialog);
     label->setToolTip(tr("Color of the border. Defaults to the text color when not set."));
-    layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 7, isLabel ? 0 : 2, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["borderColor"] = label;
     borderColor = new SelectColorButton(dialog);
     {
@@ -581,7 +588,7 @@ void QuteText::createPropertiesDialog()
         borderColor->setColor(m_borderColorSet ? storedBorder
                                                : property("CSQT_color").value<QColor>());
     }
-    layout->addWidget(borderColor, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(borderColor, 7, isLabel ? 1 : 3, Qt::AlignLeft|Qt::AlignVCenter);
     // While the border color is unset it follows the text color.
     connect(textColor, &SelectColorButton::clicked, this, [this]() {
         if (!m_borderColorSet) {
@@ -811,8 +818,10 @@ void QuteText::applyProperties()
     setProperty("CSQT_bordermode", borderWidth->value() > 0);
     setProperty("CSQT_borderradius", borderRadius->value());
 	setProperty("CSQT_borderwidth", borderWidth->value());
-    m_precision = precisionSpinBox->value();
-    setProperty("CSQT_precision", m_precision);
+    if (precisionSpinBox) {
+        m_precision = precisionSpinBox->value();
+        setProperty("CSQT_precision", m_precision);
+    }
     if (paddingSpinBox) {
         setProperty("CSQT_padding", paddingSpinBox->value());
     }

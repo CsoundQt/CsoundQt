@@ -865,10 +865,6 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	//connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
 	connect(m_view,SIGNAL(setHelp()), this, SLOT(setHelp()));
 
-	// For logging of Csound output to file
-	connect(m_console, SIGNAL(logMessage(QString)),
-			static_cast<CsoundQt *>(parent), SLOT(logMessage(QString)));
-
 
 	// Connect for clearing marked lines and letting inspector know text has changed
 	connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));

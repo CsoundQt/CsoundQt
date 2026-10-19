@@ -23,7 +23,9 @@ HEADERS = "src/about.h" \
     "src/configlists.h" \
     "src/console.h" \
     "src/bundledfonts.h" \
+    "src/widgetstyle.h" \
     "src/notification.h" \
+    "src/debuglog.h" \
     "src/csoundengine.h" \
     "src/csoundoptions.h" \
     "src/curve.h" \
@@ -90,6 +92,7 @@ SOURCES = "src/about.cpp" \
     "src/console.cpp" \
     "src/bundledfonts.cpp" \
     "src/notification.cpp" \
+    "src/debuglog.cpp" \
     "src/csoundengine.cpp" \
     "src/csoundoptions.cpp" \
     "src/curve.cpp" \

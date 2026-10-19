@@ -45,56 +45,58 @@
 #define CSQT_MAX_MIDI_QUEUE 128
 
 #ifdef Q_OS_LINUX
-#define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
 #ifdef FLATPAK_BUILD
 // Terminal bundled with the flatpak, always used for "Run in Terminal"
 #define FLATPAK_TERM_EXECUTABLE "/app/bin/foot"
+#define DEFAULT_TERM_EXECUTABLE FLATPAK_TERM_EXECUTABLE
+#else
+// No default external applications: an empty setting means "open with the
+// system's default application" (QDesktopServices). There is no desktop
+// default for a terminal, so the user must pick one if they want it.
+#define DEFAULT_TERM_EXECUTABLE ""
 #endif
 #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
-#define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"
-#define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
-#define DEFAULT_LOG_FILE ""
+#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
+#define DEFAULT_WAVEPLAYER_EXECUTABLE ""
+#define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_SOLARIS
-#define DEFAULT_TERM_EXECUTABLE "/usr/openwin/bin/xterm"
+#define DEFAULT_TERM_EXECUTABLE ""
 #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/local/bin/audacity"
-#define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/jmplay"
-#define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
-#define DEFAULT_LOG_FILE ""
+#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
+#define DEFAULT_WAVEPLAYER_EXECUTABLE ""
+#define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_MAC
+// Terminal.app is always present, and there is no desktop-default equivalent
+// for running a script in a terminal. Everything else uses the system default.
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
 #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
-#define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
-#define DEFAULT_PDFVIEWER_EXECUTABLE "/Applications/Preview.app"
-#define DEFAULT_LOG_FILE ""
+#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
+#define DEFAULT_WAVEPLAYER_EXECUTABLE ""
+#define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_WIN32
+// cmd.exe is always present; everything else uses the system default.
 #define DEFAULT_TERM_EXECUTABLE "cmd.exe"
 #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #define DEFAULT_PDFVIEWER_EXECUTABLE ""
-#define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_OS_HAIKU
-#define DEFAULT_TERM_EXECUTABLE "Terminal"
+#define DEFAULT_TERM_EXECUTABLE ""
 #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
-#define DEFAULT_WAVEPLAYER_EXECUTABLE "/boot/system/apps/MediaPlayer"
-#define DEFAULT_PDFVIEWER_EXECUTABLE "/boot/apps/BePDF/BePDF"
-#define DEFAULT_LOG_FILE ""
+#define DEFAULT_WAVEPLAYER_EXECUTABLE ""
+#define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_OPENBSD
-#define DEFAULT_TERM_EXECUTABLE "xterm"
+#define DEFAULT_TERM_EXECUTABLE ""
 #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity"
-#define DEFAULT_WAVEPLAYER_EXECUTABLE "paplay"
+#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
+#define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #define DEFAULT_PDFVIEWER_EXECUTABLE ""
-#define DEFAULT_LOG_FILE ""
 #endif
 
 #define CSQT_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 64\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"

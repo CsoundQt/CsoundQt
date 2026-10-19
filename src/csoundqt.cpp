@@ -49,6 +49,8 @@
 #include "opentryparser.h"
 #include "options.h"
 #include "csoundqt.h"
+#include "widgetstyle.h"
+#include "debuglog.h"
 #include "widgetpanel.h"
 #include "utilitiesdialog.h"
 #include "keyboardshortcuts.h"
@@ -474,8 +476,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     resize(size);
 #endif
 
-    //openLogFile();
-
     // FIXME is there still need for no atexit?
     int init = csoundInitialize(0);
     if (init < 0) {
@@ -596,6 +596,10 @@ void CsoundQt::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
     m_startupShown = true;
+    // Breeze (and similar Linux styles) re-polish the tool/menu bars during
+    // show(), giving them a light palette; re-assert the forced one afterwards
+    // so the chrome honours the Colour theme. No-op for palette-driven styles.
+    applyPaletteToChrome();
     // Re-apply the requested window size now that the window is actually shown.
     // A resize requested before the window is mapped is not always honoured by
     // the window manager/compositor, so this guarantees the requested size.
@@ -876,13 +880,6 @@ void CsoundQt::openTemplate()
 
 }
 
-void CsoundQt::logMessage(QString msg)
-{
-    if (logFile.isOpen()) {
-        logFile.write(msg.toLatin1());
-    }
-}
-
 void CsoundQt::statusBarMessage(QString message)
 {
     statusBar()->showMessage(message.replace("<br />", " "));
@@ -915,9 +912,6 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     }
     foreach (QString tempFile, tempScriptFiles) {
         QDir().remove(tempFile);
-    }
-    if (logFile.isOpen()) {
-        logFile.close();
     }
     showUtilities(false);  // Close utilities dialog if open
     delete helpPanel;
@@ -1418,26 +1412,6 @@ void CsoundQt::deleteTab(int index)
     }
     if (curPage < 0)
         curPage = 0; // deleting the document page decreases curPage, so must check
-}
-
-void CsoundQt::openLogFile()
-{
-    if (logFile.isOpen()) {
-        logFile.close();
-    }
-    logFile.setFileName(m_options->logFile);
-    if (m_options->logFile.isEmpty())
-        return;
-    if (logFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
-        logFile.readAll();
-        QString text = "--**-- " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss")
-                + " CsoundQt Logging Started: "
-                + "\n";
-        logFile.write(text.toLatin1());
-    }
-    else {
-        qDebug() << "CsoundQt::openLogFile() Error. Could not open log file! NO logging. " << logFile.fileName();
-    }
 }
 
 void CsoundQt::setupEnvironment()
@@ -2340,9 +2314,6 @@ void CsoundQt::play(bool realtime, int index)
     }
     QString fileName = page->getFileName();
     QString fileName2;
-    QString msg = "__**__ " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss");
-    msg += " Play: " + fileName + "\n";
-    logMessage(msg);
     m_options->csdPath = "";
     if (fileName.contains('/')) {
         //FIXME is it necessary to set the csdPath here?
@@ -2440,11 +2411,6 @@ void CsoundQt::play(bool realtime, int index)
     if (curPage == oldPage) {
         runAct->setChecked(true);  // In case the call comes from a button
     }
-    if (page->usesFltk() && m_options->terminalFLTK) {
-        runInTerm();
-        curPage = oldPage;
-        return;
-    }
     int ret = page->play(m_options);
     if (ret == -1) {
         QMessageBox::critical(this, "CsoundQt", tr("Internal error running Csound."),
@@ -2466,26 +2432,21 @@ void CsoundQt::play(bool realtime, int index)
             return;
         }
         if (m_options->enableWidgets && m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
-            if(page->usesFltk()) {
-                // Don't bring up widget panel if there's an FLTK panel
-                qDebug() << "Page uses FLTK, CsoundQt's widgets will not be shown";
-            } else {
-                if (!m_options->widgetsIndependent) {
-                    // Show and raise the panel even when docked: if it was hidden
-                    // or its tab sits behind another dock (e.g. Help), it must be
-                    // brought forward, otherwise the widgets stay hidden until the
-                    // user interacts with the panel.
-                    widgetPanel->show();
-                    widgetPanel->raise();
-                    showWidgetsAct->setChecked(true);
-                }
-                else {
-                    page->widgetsVisible(true);
-                    showWidgetsAct->setChecked(true);
-                }
-                widgetPanel->setFocus(Qt::OtherFocusReason);
-                page->focusWidgets();
+            if (!m_options->widgetsIndependent) {
+                // Show and raise the panel even when docked: if it was hidden
+                // or its tab sits behind another dock (e.g. Help), it must be
+                // brought forward, otherwise the widgets stay hidden until the
+                // user interacts with the panel.
+                widgetPanel->show();
+                widgetPanel->raise();
+                showWidgetsAct->setChecked(true);
             }
+            else {
+                page->widgetsVisible(true);
+                showWidgetsAct->setChecked(true);
+            }
+            widgetPanel->setFocus(Qt::OtherFocusReason);
+            page->focusWidgets();
         }
     } else {
         qDebug() << "play: Return value not understood!";
@@ -2547,6 +2508,13 @@ void CsoundQt::runInTerm(bool realtime)
     // so always use the foot terminal bundled with the flatpak.
     termexe = QStringLiteral(FLATPAK_TERM_EXECUTABLE);
 #endif
+    if (termexe.isEmpty()) {
+        QMessageBox::information(this, tr("Run in Terminal"),
+                                 tr("No terminal application is configured.\n"
+                                    "Set one in Settings > External."));
+        runAct->setChecked(false);
+        return;
+    }
 #if defined(Q_OS_MACOS)
     args << "-a" << termexe << scriptFileName;
     termexe = "open";
@@ -3436,10 +3404,6 @@ void CsoundQt::reportExternalLaunchFailure(const QString &tool, const QString &t
     const QString details = lines.join(QLatin1Char('\n'));
 
     qWarning().noquote() << "Could not open external" << tool << ":\n" << details;
-    if (logFile.isOpen()) {
-        logFile.write((details + QLatin1Char('\n')).toUtf8());
-        logFile.flush();
-    }
     if (m_console != nullptr) {
         m_console->appendMessage(tr("Could not open external %1:\n%2\n").arg(tool, details));
     }
@@ -3915,13 +3879,63 @@ void CsoundQt::configure()
     configureTab = dialog.currentTab();
 }
 
+void CsoundQt::applyWidgetStyle()
+{
+    // Apply the configured widget style (see widgetstyle.h for the defaults:
+    // Fusion on Linux, Qt's native style on macOS/Windows). An empty name means
+    // "keep Qt's platform default", in which case there is nothing to switch to
+    // unless the current style differs from the requested one.
+    const QString name = resolveWidgetStyleName(m_options->widgetStyle);
+    if (name.isEmpty()
+            || name.compare(currentWidgetStyleName(), Qt::CaseInsensitive) == 0)
+        return; // already active (or platform default)
+
+    if (QStyle *style = createWidgetStyle(name))
+        qApp->setStyle(new DialogButtonStyle(style));
+}
+
+void CsoundQt::applyPaletteToChrome()
+{
+    // Some styles (notably Breeze on Linux) give the tool bar and the menu bar
+    // their own widget palette during polish(), so an application-wide
+    // setPalette() never reaches them: with a forced dark palette the rest of
+    // the window turns dark while the tool/menu bars stay light, making the
+    // light "breeze-dark" icons unreadable on them. Re-assert the (already
+    // computed) application palette on those widgets so the whole window honours
+    // the chosen Colour theme. Fusion and similar palette-driven styles render
+    // from the palette anyway, so this is a harmless no-op there.
+    //
+    // Linux only: on macOS and Windows the native styles (macOS, windows11/
+    // windowsvista) are deliberately driven by the OS theme, so we do not fight
+    // them with an application palette (use "auto", or Fusion, there).
+#ifdef Q_OS_LINUX
+    // In "auto" mode no application palette is forced: the style/desktop theme
+    // governs the chrome too, so there is nothing to re-assert.
+    if (m_options->themeMode == "auto")
+        return;
+    const QPalette pal = qApp->palette();
+    const QList<QToolBar *> toolBars = { controlToolBar, configureToolBar };
+    for (QToolBar *toolBar : toolBars) {
+        if (!toolBar)
+            continue;
+        toolBar->setPalette(pal);
+        toolBar->setAutoFillBackground(true);
+    }
+    if (QMenuBar *bar = menuBar()) {
+        bar->setPalette(pal);
+        bar->setAutoFillBackground(true);
+    }
+#endif
+}
+
 void CsoundQt::applySettings()
 {
-    // This is called at initialization, when clicking "apply" in the settings dialog
-    // and when closing it with "OK"
-
+    applyWidgetStyle();
 
     setColors(m_options->themeMode);  // Centralized theme handling
+
+    // Apply the debug logging preference (may have been changed in the dialog).
+    DebugLog::setEnabled(m_options->logDebug);
 
     for (int i = 0; i < documentPages.size(); i++) {
         setCurrentOptionsForPage(documentPages[i]);
@@ -4058,7 +4072,6 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->enableScoreSyntaxHighlighting(m_options->highlightScore);
 
     int flags = m_options->noBuffer ? CSQT_NO_COPY_BUFFER : 0;
-    flags |= m_options->noPython ? CSQT_NO_PYTHON_CALLBACK : 0;
     flags |= m_options->noMessages ? CSQT_NO_CONSOLE_MESSAGES : 0;
     flags |= m_options->noEvents ? CSQT_NO_RT_EVENTS : 0;
     p->setFlags(flags);
@@ -4190,6 +4203,7 @@ void CsoundQt::setColors(QString themeMode)
         isDarkPalette = themeMode == "dark";
         QPalette pal = makeAppPalette(isDarkPalette);
         qApp->setPalette(pal);
+        applyPaletteToChrome();
         // QString existing = qApp->styleSheet();
         // QString toolTipCss = QString(
         //             "QToolTip { color: %1; background-color: %2; border: 1px solid %3; }")
@@ -6103,6 +6117,31 @@ void CsoundQt::setToolbarIconSize(int size) {
     configureToolBar->setIconSize(QSize(size, size));
 }
 
+QMenu *CsoundQt::createPopupMenu()
+{
+    // Context menu shown when right-clicking a tool bar (or a dock area). Add a
+    // checkable "Lock Toolbars" action that mirrors Settings > Editor.
+    QMenu *menu = QMainWindow::createPopupMenu();
+    if (!menu)
+        return nullptr;
+
+    menu->addSeparator();
+    QAction *lockAction = menu->addAction(tr("Lock Toolbars"));
+    lockAction->setCheckable(true);
+    lockAction->setChecked(m_options->lockToolbar);
+    connect(lockAction, &QAction::toggled, this, [this](bool locked) {
+        m_options->lockToolbar = locked;
+        if (controlToolBar)
+            controlToolBar->setMovable(!locked);
+        if (configureToolBar)
+            configureToolBar->setMovable(!locked);
+        QSettings settings("csoundqt", "csoundqt");
+        settings.beginGroup("GUI");
+        settings.setValue("lockToolbar", locked);
+    });
+    return menu;
+}
+
 void CsoundQt::createStatusBar()
 {
     auto statusbar = statusBar();
@@ -6153,6 +6192,8 @@ void CsoundQt::readSettings()
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
     m_options->themeMode = settings.value("themeMode", "auto").toString();
+    m_options->widgetStyle = settings.value("widgetStyle",
+                                           defaultWidgetStyleName()).toString();
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     if(!pos.isNull())
         move(pos);
@@ -6223,23 +6264,13 @@ void CsoundQt::readSettings()
     settings.endGroup();
     settings.beginGroup("Options");
     settings.beginGroup("Editor");
-    // The editor font is bundled with CsoundQt (see bundledfonts.cpp), so it is
-    // available on every platform; default to it unconditionally. The console
-    // font stays platform specific.
+    // The editor and console fonts are bundled with CsoundQt (see
+    // bundledfonts.cpp), so they are available on every platform; default to
+    // them unconditionally.
     m_options->font = settings.value("font", "JetBrains Mono").toString();
     m_options->fontPointSize = settings.value("fontsize", 10).toDouble();
-#ifdef Q_OS_MACOS
-    m_options->consoleFont = settings.value("consolefont", "Menlo").toString();
-    m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
-#endif
-#ifdef Q_OS_WIN
-    m_options->consoleFont = settings.value("consolefont", "Consolas").toString();
-    m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
-#endif
-#ifdef Q_OS_LINUX
-    m_options->consoleFont = settings.value("consolefont", "Liberation Mono").toString();
-    m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
-#endif
+    m_options->consoleFont = settings.value("consolefont", "JetBrains Mono").toString();
+    m_options->consoleFontPointSize = settings.value("consolefontsize", 9).toDouble();
     m_options->showLineNumberArea = settings.value("showLineNumberArea", true).toBool();
 
 #ifdef Q_OS_WIN
@@ -6252,9 +6283,9 @@ void CsoundQt::readSettings()
     //m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
 
     m_options->consoleFontColor = settings.value("consoleFontColor",
-                                                 QVariant(QColor(Qt::black))).value<QColor>();
+                                                 QVariant(QColor("#1e1e1e"))).value<QColor>();
     m_options->consoleBgColor = settings.value("consoleBgColor",
-                                               QVariant(QColor(Qt::white))).value<QColor>();
+                                               QVariant(QColor("#eeeeee"))).value<QColor>();
     // m_options->editorBgColor = settings.value("editorBgColor",
     //                                           QVariant(QColor(Qt::white))).value<QColor>();
 
@@ -6296,8 +6327,6 @@ void CsoundQt::readSettings()
     m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
     m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
     m_options->showTooltips = settings.value("showTooltips", true).toBool();
-    m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
-    m_options->terminalFLTK = settings.value("terminalFLTK", true).toBool();
     m_options->openProperties = settings.value("openProperties", true).toBool();
     m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
     m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
@@ -6321,7 +6350,6 @@ void CsoundQt::readSettings()
     m_options->midiOutInterface = settings.value("midiOutInterface", 9999).toInt();
     m_options->midiOutInterfaceName = settings.value("midiOutInterfaceName", "None").toString();
     m_options->noBuffer = settings.value("noBuffer", false).toBool();
-    m_options->noPython = settings.value("noPython", false).toBool();
     m_options->noMessages = settings.value("noMessages", false).toBool();
     m_options->noEvents = settings.value("noEvents", false).toBool();
 
@@ -6408,8 +6436,8 @@ void CsoundQt::readSettings()
     m_options->favoriteDir = settings.value("favoriteDir","").toString();
     m_options->examplePath = settings.value("examplePath", "").toString();
     m_options->csoundExecutable = settings.value("csoundExecutable","csound").toString();
-    m_options->logFile = settings.value("logFile",DEFAULT_LOG_FILE).toString();
     m_options->templateDir = settings.value("templateDir","").toString();
+    m_options->logDebug = settings.value("logDebug", false).toBool();
     m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
     m_options->opcodexmldirActive = settings.value("opcodexmldirActive","").toBool();
     settings.endGroup();
@@ -6508,6 +6536,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("recentFiles", recentFiles);
         settings.setValue("theme", m_options->theme);
         settings.setValue("themeMode", m_options->themeMode);
+        settings.setValue("widgetStyle", m_options->widgetStyle);
         settings.setValue("windowState", saveState());
         settings.setValue("windowGeometry", saveGeometry());
         settings.setValue("editorVisible", showEditorAct->isChecked());
@@ -6554,8 +6583,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
         settings.setValue("graphUpdateRate", m_options->graphUpdateRate);
         settings.setValue("showTooltips", m_options->showTooltips);
-        settings.setValue("enableFLTK", m_options->enableFLTK);
-        settings.setValue("terminalFLTK", m_options->terminalFLTK);
         settings.setValue("openProperties", m_options->openProperties);
         settings.setValue("fontOffset", m_options->fontOffset);
         settings.setValue("fontScaling", m_options->fontScaling);
@@ -6585,7 +6612,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("midiOutInterface", m_options->midiOutInterface);
         settings.setValue("midiOutInterfaceName", m_options->midiOutInterfaceName);
         settings.setValue("noBuffer", m_options->noBuffer);
-        settings.setValue("noPython", m_options->noPython);
         settings.setValue("noMessages", m_options->noMessages);
         settings.setValue("noEvents", m_options->noEvents);
         settings.setValue("bufferSize", m_options->bufferSize);
@@ -6653,8 +6679,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("favoriteDir",m_options->favoriteDir);
         settings.setValue("examplePath", m_options->examplePath);
         settings.setValue("csoundExecutable", m_options->csoundExecutable);
-        settings.setValue("logFile",m_options->logFile);
         settings.setValue("templateDir",m_options->templateDir);
+        settings.setValue("logDebug", m_options->logDebug);
         settings.setValue("opcodexmldir", m_options->opcodexmldir); // TEST can be that this is the reason for crash MacOS -  dir set wrong from corrupted plist file
         settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
         settings.endGroup(); // options/environment

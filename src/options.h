@@ -35,6 +35,7 @@ public:
 
     QString theme;  // Icon theme name TODO: rename to iconTheme
     QString themeMode; // "auto", "dark", "light", "light-classic" the last goes for highlighting theme.
+    QString widgetStyle; // Qt widget style ("Fusion", "Breeze", ...); empty = default
 	QString font;
 	float fontPointSize;
 	bool showLineNumberArea;
@@ -74,7 +75,6 @@ public:
 	bool showWidgetsOnRun;
 	bool showTooltips;
     int graphUpdateRate;
-	bool terminalFLTK;
 	bool openProperties;  // Open properties automatically when creating a widget
 	double fontScaling;
 	double fontOffset;
@@ -98,7 +98,6 @@ public:
 	int rtMidiApi; // "UNSPECIFIED" | "LINUX_ALSA" | "UNIX_JACK" | "MACOSX_CORE" | "WINDOWS_MM" see RtMidi.h
 	// Csound engine flags
 	bool noBuffer;
-	bool noPython;
 	bool noMessages;
 	bool noEvents;
 
@@ -112,8 +111,8 @@ public:
 	QString favoriteDir;
     QString examplePath;
 	QString csoundExecutable;
-	QString logFile;
 	QString templateDir;
+	bool logDebug;  // write CsoundQt's own debug output to a log file
 
 	typedef enum {
 		CS_ORC = 0x01,
