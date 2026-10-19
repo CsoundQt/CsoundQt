@@ -99,6 +99,38 @@ public:
     }
 };
 
+// If another CsoundQt is running, give it the files to open - or, when there is
+// nothing to open, ask whether a second window is really wanted - and tell the
+// caller whether it should quit. --force-new skips this altogether, so a new
+// instance is started even when one is already running; the files then belong
+// to the new instance.
+static bool handOverToRunningInstance(const QStringList &fileNames)
+{
+    QLocalSocket socket;
+    socket.connectToServer("csoundqt");
+    if (!socket.waitForConnected(200)) {
+        // wait for the given ms, returns true if the server in other instance is listening
+        return false;
+    }
+    if (!fileNames.isEmpty()) {
+        qDebug() << "Opening file(s) in already running instance";
+        QString message = "open ***" + fileNames.join("***"); // use a separator that is probably not in the file name
+        socket.write(message.toLocal8Bit());
+        socket.waitForBytesWritten(1000);
+        socket.close();
+        return true; // let the other instance open the file
+    }
+    socket.close();
+    //qDebug() << "Another instance already running.";
+    int answer = QMessageBox::warning(nullptr, QObject::tr("CsoundQt"),
+                                      QObject::tr("Another instance is already running. "
+                                                  "Are you sure you want to open a new"
+                                                  " window?"),
+                                      QMessageBox::Open|QMessageBox::Cancel,
+                                      QMessageBox::Cancel);
+    return answer == QMessageBox::Cancel;
+}
+
 int main(int argc, char *argv[])
 {
     int result = 0;
@@ -141,6 +173,7 @@ int main(int argc, char *argv[])
     qApp->setStyle(new DialogButtonStyle(qApp->style()));
 
     bool autoplay = false;
+    bool forceNew = false;
     QStringList args = qapp.arguments();
     args.removeAt(0); // Remove program name
     for(int i=0; i < args.size(); i++) {
@@ -150,12 +183,16 @@ int main(int argc, char *argv[])
             out << "\n\n";
             out << "Options:" << Qt::endl;
             out << "   --play        Autoplay the last file passed via command line" << Qt::endl;
+            out << "   --force-new   Start a new instance even if one is already running" << Qt::endl;
             out << "   --help        This message" << Qt::endl;
             out << Qt::endl;
             exit(0);
         }
         if(arg == "--play") {
             autoplay = true;
+        }
+        if(arg == "--force-new") {
+            forceNew = true;
         }
     }
 
@@ -164,31 +201,11 @@ int main(int argc, char *argv[])
             fileNames.append(arg);
         }
     }
-    // check if another instance is already running. If yes, ask it to open the file in new tab and quit
-    QLocalSocket * socket = new QLocalSocket();
-    socket->connectToServer("csoundqt");
-    if (socket->waitForConnected(200)) {
-        // wait for the given ms, returns true if the server in other instance is listening
-        if (!fileNames.isEmpty()) {
-            qDebug()<<"Opening file(s) in already running instance";
-            QString message = "open ***" + fileNames.join("***"); // use a separator that is probably not in the file name
-            socket->write(message.toLocal8Bit());
-            socket->waitForBytesWritten(1000);
-            socket->close();
-            return 0; // exit and leave the other instance open the file
-        } else {
-            socket->close();
-            //qDebug()<<"Another instance already running.";
-            int answer = QMessageBox::warning(nullptr, QObject::tr("CsoundQt"),
-                                              QObject::tr("Another instance is already running. "
-                                                          "Are you sure you want to open a new"
-                                                          " window?"),
-                                              QMessageBox::Open|QMessageBox::Cancel,
-                                              QMessageBox::Cancel);
-            if (answer==QMessageBox::Cancel) {
-                return 0;
-            }
-        }
+    // If another instance is already running, hand it the files (or ask before
+    // opening a second window) and quit. --force-new skips all that and always
+    // starts a new instance.
+    if (!forceNew && handOverToRunningInstance(fileNames)) {
+        return 0;
     }
     // forming filenames was here before. now before localSocket
     FileOpenEater filterObj;
