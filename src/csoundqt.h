@@ -290,6 +290,7 @@ private slots:
 	void applySettings();
 	void setCurrentOptionsForPage(DocumentPage *p);
 	void applyDefaultDockLayout(); // initial dock arrangement when there is no saved layout
+	void ensurePanelTabOrder(); // Widgets before Help in the right-hand tab group
 	void runUtility(QString flags);
 	//     void widgetDockLocationChanged(Qt::DockWidgetArea area);
 	void updateInspector();
@@ -578,6 +579,7 @@ private:
     bool m_startupShown = false;
     bool m_hasSavedDockState = false;   // a saved dock layout was restored
     bool m_applyDefaultDockLayout = false; // arrange docks on first show (no saved layout)
+    bool m_panelTabsOrdered = false;    // Widgets/Help tab order already enforced
     QSize m_pendingWindowSize;          // size to re-apply once the window is shown
     bool m_manualDownloadInProgress = false;
     bool isDarkPalette;

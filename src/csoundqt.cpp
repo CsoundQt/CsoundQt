@@ -606,6 +606,12 @@ void CsoundQt::showEvent(QShowEvent *event)
         m_applyDefaultDockLayout = false;
         QTimer::singleShot(0, this, [this]{ applyDefaultDockLayout(); });
     }
+    // Enforce the Widgets-before-Help tab order once, after the window (and any
+    // restored dock layout) is in place.
+    if (!m_panelTabsOrdered) {
+        m_panelTabsOrdered = true;
+        QTimer::singleShot(0, this, [this]{ ensurePanelTabOrder(); });
+    }
     // Start risset detection only once the window is actually shown, so its
     // external processes never delay startup. initRisset() is idempotent.
     if (!m_rissetInitialized)
@@ -1694,6 +1700,36 @@ static bool isDockWidgetActive(QMainWindow *window, const QDockWidget *dock)
         }
     }
     return true; // Visible and not part of a tab group
+}
+
+// The tab bar order of a dock area follows the order the docks were added to
+// it. Widgets is added after Help, so it would sit second; move it in front of
+// Help so the tab order matches the Focus shortcuts (Ctrl+1 Widgets, Ctrl+2
+// Help). A saved layout may already have them in another arrangement, in which
+// case this only fixes the order, not the arrangement.
+static void ensureTabOrder(QMainWindow *window, QDockWidget *first, QDockWidget *second)
+{
+    const auto tabBars = window->findChildren<QTabBar *>();
+    for (QTabBar *tabBar : tabBars) {
+        int firstIndex = -1;
+        int secondIndex = -1;
+        for (int i = 0; i < tabBar->count(); i++) {
+            const quintptr data = qvariant_cast<quintptr>(tabBar->tabData(i));
+            if (data == reinterpret_cast<quintptr>(first))
+                firstIndex = i;
+            else if (data == reinterpret_cast<quintptr>(second))
+                secondIndex = i;
+        }
+        if (firstIndex >= 0 && secondIndex >= 0 && firstIndex > secondIndex) {
+            tabBar->moveTab(firstIndex, secondIndex);
+            return;
+        }
+    }
+}
+
+void CsoundQt::ensurePanelTabOrder()
+{
+    ensureTabOrder(this, widgetPanel, helpPanel);
 }
 
 void CsoundQt::toggleEditorPanel()
