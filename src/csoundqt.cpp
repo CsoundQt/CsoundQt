@@ -5674,49 +5674,64 @@ void CsoundQt::connectActions()
 
 QString CsoundQt::getExamplePath(QString dir)
 {
-    QString examplePath;
+    QStringList candidateRoots;
 
-    if (!m_options->examplePath.isEmpty() && QDir(m_options->examplePath + dir).exists()) {
-        examplePath = m_options->examplePath + dir;
-        return examplePath;
+    // An explicitly configured directory takes precedence. Accept both the
+    // Examples directory itself and its parent (e.g. /usr/share/csoundqt).
+    if (!m_options->examplePath.isEmpty()) {
+        const QString configured =
+                QDir::fromNativeSeparators(m_options->examplePath);
+        candidateRoots << configured
+                       << configured + "/Examples";
     }
 
 #ifdef Q_OS_WIN32
-    examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
-    if (!QDir(examplePath).exists()) {
-        QString programFilesPath= QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
-        examplePath =  programFilesPath + "/Csound6/bin/Examples/" + dir; // NB! with csound6.0.6 no Floss/mCcurdy/Stria examples there. Copy manually
-    }
+    candidateRoots << qApp->applicationDirPath() + "/Examples";
+    const QString programFilesPath =
+            QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
+    // NB: with csound6.0.6 no Floss/mCcurdy/Stria examples are installed
+    // there, but keep looking in case they were copied manually.
+    candidateRoots << programFilesPath + "/Csound6/bin/Examples"
+                   << programFilesPath + "/Csound7/bin/Examples";
 #elif defined(Q_OS_MAC)
-    examplePath = qApp->applicationDirPath() + "/../Resources/Examples/" + dir;
+    candidateRoots << qApp->applicationDirPath() + "/../Resources/Examples"
+                   << qApp->applicationDirPath() + "/../share/csoundqt/Examples";
 #else
-    examplePath = QString();
-    QStringList possiblePaths;
-    possiblePaths << qApp->applicationDirPath() + "/Examples"
-                  << qApp->applicationDirPath() + "/../src/Examples"
-                  << qApp->applicationDirPath() + "/../../CsoundQt/src/Examples"
-                  << qApp->applicationDirPath() + "/../share/csoundqt/Examples"
-                  << "~/.local/share/csoundqt/Examples"
-                  << "/usr/share/csoundqt/Examples"
-                  << "/usr/local/share/csoundqt/Examples";
+    candidateRoots << qApp->applicationDirPath() + "/Examples"
+                   << qApp->applicationDirPath() + "/../share/csoundqt/Examples"
+                   << QDir::homePath() + "/.local/share/csoundqt/Examples"
+                   << "/usr/share/csoundqt/Examples"
+                   << "/usr/local/share/csoundqt/Examples";
+#endif
 
-    foreach (QString path, possiblePaths) {
-        path += QDir::separator() + dir;
-        if (QDir(path).exists()) {
-            examplePath = path;
+    // Also try the working directory, for builds launched from the source
+    // tree (e.g. ./bin/CsoundQt-d-cs7 from the repository root).
+    candidateRoots << QDir::currentPath() + "/Examples"
+                   << QDir::currentPath() + "/src/Examples";
+
+    // Shadow builds keep the binary in <repo>/build/<kit>/bin while the
+    // examples stay in <repo>/src/Examples. Walk up from the executable
+    // instead of hard-coding a particular build layout, so the Examples menu
+    // also works in Qt Creator and CMake builds.
+    QDir appDir(qApp->applicationDirPath());
+    for (int level = 0; level < 6; ++level) {
+        candidateRoots << appDir.absolutePath() + "/Examples"
+                       << appDir.absolutePath() + "/src/Examples";
+        if (!appDir.cdUp())
             break;
+    }
+
+    for (const QString &root : candidateRoots) {
+        const QString path = QDir::cleanPath(
+                    dir.isEmpty() ? root : root + "/" + dir);
+        if (QDir(path).exists()) {
+            qDebug() << "ExamplePath: " << path;
+            return path;
         }
     }
 
-#endif
-
-    if (QDir(examplePath).isEmpty() || !QDir(examplePath).exists()) {
-        qDebug() << "ExamplePath: not found!";
-    } else {
-        qDebug() << "ExamplePath: " << examplePath;
-    }
-
-    return examplePath;
+    qDebug() << "ExamplePath: not found!";
+    return QString();
 }
 
 
@@ -5863,29 +5878,34 @@ void CsoundQt::createMenus()
 
 void CsoundQt::fillExampleMenu()
 {
-    QString examplePath = getExamplePath("");
-    if (examplePath.isEmpty() ) {
-        qDebug() << "examplePath not set";
+    // Always create the menu. Previously it was only added when the examples
+    // directory could be found, which made the whole menu silently disappear
+    // when a build layout was not recognised.
+    QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
+
+    const QString examplePath = getExamplePath("");
+    if (examplePath.isEmpty()) {
+        QAction *notFoundAct =
+                examplesMenu->addAction(tr("Examples folder not found"));
+        notFoundAct->setEnabled(false);
+        examplesMenu->addAction(
+                    tr("Set the Examples Folder in the Configuration Window"),
+                    this, SLOT(configure()));
         return;
     }
-
-    QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
 
     QDir dir(examplePath);
     if (dir.count() > 0) {
         fillExampleSubmenu(dir.absolutePath(), examplesMenu, 0);
     }
 
-    if (!examplePath.isEmpty()) {
-        examplesMenu->addSeparator();
-        openExamplesFolderAct = new QAction(tr("Open Examples Folder"), this);
-        openExamplesFolderAct->setStatusTip(tr("Save the document under a new name"));
-        openExamplesFolderAct->setShortcutContext(Qt::ApplicationShortcut);
-        connect(openExamplesFolderAct, SIGNAL(triggered()), this, SLOT(openExamplesFolder()));
-        examplesMenu->addAction(openExamplesFolderAct);
-    }
-
-
+    examplesMenu->addSeparator();
+    openExamplesFolderAct = new QAction(tr("Open Examples Folder"), this);
+    openExamplesFolderAct->setStatusTip(
+                tr("Open the folder containing the bundled examples"));
+    openExamplesFolderAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(openExamplesFolderAct, SIGNAL(triggered()), this, SLOT(openExamplesFolder()));
+    examplesMenu->addAction(openExamplesFolderAct);
 }
 
 void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
