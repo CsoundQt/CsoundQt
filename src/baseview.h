@@ -82,7 +82,7 @@ public:
 	void setOtherCsdText(QString text);
 	void setOtherText(QString text);
 	void showLineArea(bool visible);
-    void setTheme(const QString &theme) {
+    virtual void setTheme(const QString &theme) {
         m_highlighter.setTheme(theme);
         auto defaultFormat = m_highlighter.getFormat("default");
         auto fg = defaultFormat.foreground().color();

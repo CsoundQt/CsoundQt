@@ -183,6 +183,14 @@ LiteHtmlView::LiteHtmlView(QWidget *parent)
     m_flingTimer->setInterval(16);
     connect(m_flingTimer, &QTimer::timeout, this, &LiteHtmlView::onFlingTick);
 
+    // Rebuilding the document at a new zoom is expensive (it re-parses the
+    // article and the site stylesheet), so it is done once, shortly after the
+    // last zoom request; until then the page is shown magnified.
+    m_zoomCommitTimer = new QTimer(this);
+    m_zoomCommitTimer->setSingleShot(true);
+    m_zoomCommitTimer->setInterval(140);
+    connect(m_zoomCommitTimer, &QTimer::timeout, this, &LiteHtmlView::commitZoom);
+
     // In-panel find box (shown on Ctrl+F / the DockHelp find toggle).
     m_findEdit = new QLineEdit(this);
     m_findEdit->setPlaceholderText(tr("Find (Enter next, Shift+Enter previous, Esc close)"));
@@ -256,6 +264,7 @@ bool LiteHtmlView::loadFile(const QString &path, const QString &fragment)
 
 void LiteHtmlView::doLoad(const QString &path, const QString &fragment, bool pushHistory)
 {
+    m_zoomCommitTimer->stop(); // this load renders the requested zoom
     if (m_currentHtml.isEmpty() || m_currentPath != path)
     {
         QFile f(path);
@@ -269,6 +278,7 @@ void LiteHtmlView::doLoad(const QString &path, const QString &fragment, bool pus
     m_currentPath = path;
     m_container.setBaseDir(QFileInfo(path).absolutePath());
     m_container.setDefaultFontSize(qRound(16.0 * m_zoomFactor));
+    m_renderedZoom = m_zoomFactor; // the preview scale is 1 from here on
     std::string css = loadStylesheets(findSiteRoot(path));
     m_doc = document::createFromString(m_currentHtml.toStdString(), &m_container, master_css, css);
     m_selecting = false;
@@ -315,9 +325,46 @@ void LiteHtmlView::navigateToHistory()
 
 void LiteHtmlView::setZoomFactor(qreal factor)
 {
-    m_zoomFactor = qBound(0.5, factor, 4.0);
-    if (m_doc)
-        doLoad(m_currentPath, QString(), false); // re-create doc with new base font size
+    factor = qBound(0.5, factor, 4.0);
+    if (qFuzzyCompare(factor, m_zoomFactor))
+        return;
+
+    if (!m_doc)
+    {
+        // Nothing rendered yet: the next load will use the new factor.
+        m_zoomFactor = m_renderedZoom = factor;
+        return;
+    }
+
+    const qreal oldScale = previewScale();
+    m_zoomFactor = factor;
+    const qreal newScale = previewScale();
+    if (qFuzzyCompare(oldScale, newScale))
+        return;
+
+    // Show the new zoom right away by scaling what is already drawn (it is
+    // cheap), and rebuild the document at the new base font size once the
+    // user stops asking for zoom -- that path re-parses the stylesheet and
+    // costs ~100 ms, far too much to run per wheel notch.
+    const qreal docX = m_hbar->value() / oldScale;
+    const qreal docY = m_vbar->value() / oldScale;
+    updateScrollBars();
+    m_hbar->setValue(qBound(0, qRound(docX * newScale), m_hbar->maximum()));
+    m_vbar->setValue(qBound(0, qRound(docY * newScale), m_vbar->maximum()));
+    update();
+    m_zoomCommitTimer->start();
+}
+
+void LiteHtmlView::commitZoom()
+{
+    if (!m_doc || qFuzzyCompare(m_renderedZoom, m_zoomFactor))
+        return;
+    // The reflowed document has a different height, so keep the same relative
+    // position rather than the same pixel offset.
+    const qreal fracV = m_vbar->maximum() > 0 ? qreal(m_vbar->value()) / m_vbar->maximum() : 0.0;
+    const qreal fracH = m_hbar->maximum() > 0 ? qreal(m_hbar->value()) / m_hbar->maximum() : 0.0;
+    doLoad(m_currentPath, QString(), false); // re-parses at m_zoomFactor
+    updateScrollBars(fracV, fracH);
 }
 
 void LiteHtmlView::zoomIn()
@@ -487,12 +534,32 @@ void LiteHtmlView::relayout()
         m_fragmentsDirty = true;
         m_searchDirty = true;
     }
-    int ch = int(m_doc->height());
-    int cw = int(m_doc->width());
+    updateScrollBars();
+    update();
+}
+
+// The scrollbars work in view (scaled) pixels, i.e. document size x preview
+// scale. When the scale changes but the document does not, pass the fraction
+// of the scrollable range to keep, so the page does not jump.
+void LiteHtmlView::updateScrollBars(qreal keepFractionV, qreal keepFractionH)
+{
+    const qreal s = previewScale();
+    const int docH = m_doc ? int(m_doc->height()) : 0;
+    const int docW = m_doc ? int(m_doc->width()) : 0;
     int oldV = m_vbar->value();
     int oldH = m_hbar->value();
-    m_vbar->setRange(0, qMax(0, ch - height()));
-    m_hbar->setRange(0, qMax(0, cw - width()));
+    // The magnified page is genuinely taller, so the vertical range scales...
+    m_vbar->setRange(0, qMax(0, int(docH * s) - height()));
+    // ...but the page is laid out to fit the viewport horizontally, so during a
+    // preview the range is capped at the (scaled) real overflow: magnifying a
+    // page that fits must not make a horizontal scrollbar flash in and out
+    // while the wheel is turning.
+    const int hOverflow = qMin(int(docW * s) - width(), qRound((docW - width()) * s));
+    m_hbar->setRange(0, qMax(0, hOverflow));
+    if (keepFractionV >= 0.0 && m_vbar->maximum() > 0)
+        oldV = qRound(keepFractionV * m_vbar->maximum());
+    if (keepFractionH >= 0.0 && m_hbar->maximum() > 0)
+        oldH = qRound(keepFractionH * m_hbar->maximum());
     m_vbar->setValue(oldV);
     m_hbar->setValue(oldH);
     m_vbar->setPageStep(height());
@@ -503,7 +570,6 @@ void LiteHtmlView::relayout()
     m_vbar->move(width() - m_scrollbarWidth, 0);
     m_vbar->setVisible(m_vbar->maximum() > 0);
     m_hbar->setVisible(m_hbar->maximum() > 0);
-    update();
 }
 
 void LiteHtmlView::paintEvent(QPaintEvent *)
@@ -518,10 +584,17 @@ void LiteHtmlView::paintEvent(QPaintEvent *)
         m_fragmentsDirty = false;
     }
     p.save();
-    p.translate(-m_hbar->value(), -m_vbar->value());
+    // The scrollbars are in view pixels; while a zoom is only previewed the
+    // document is magnified by previewScale() instead of re-laid out.
+    const qreal s = previewScale();
+    p.scale(s, s);
+    p.translate(-m_hbar->value() / s, -m_vbar->value() / s);
     // Visible rectangle in document coordinates; lets litehtml cull
     // off-screen elements instead of redrawing the whole page each frame.
-    position clip = {m_hbar->value(), m_vbar->value(), width(), height()};
+    position clip = {pixel_t(qFloor(qreal(m_hbar->value()) / s)),
+                     pixel_t(qFloor(qreal(m_vbar->value()) / s)),
+                     pixel_t(qCeil(qreal(width()) / s) + 1),
+                     pixel_t(qCeil(qreal(height()) / s) + 1)};
     m_container.setRecordFragments(false);
     m_container.setPainter(&p);
     m_doc->draw(reinterpret_cast<uint_ptr>(&p), 0, 0, &clip);
@@ -566,7 +639,8 @@ void LiteHtmlView::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton && m_doc)
     {
         clearSelection();
-        QPointF pos(e->pos().x() + m_hbar->value(), e->pos().y() + m_vbar->value());
+        const qreal s = previewScale();
+        QPointF pos((e->pos().x() + m_hbar->value()) / s, (e->pos().y() + m_vbar->value()) / s);
         m_selAnchor = pos;
         m_selCurrent = pos;
         m_selecting = true;
@@ -582,7 +656,9 @@ void LiteHtmlView::mouseReleaseEvent(QMouseEvent *e)
         m_selecting = false;
         if (m_selAnchor != m_selCurrent)
             m_hasSelection = true;
-        m_doc->on_lbutton_up(e->pos().x() + m_hbar->value(), e->pos().y() + m_vbar->value(),
+        const qreal s = previewScale();
+        m_doc->on_lbutton_up(int((e->pos().x() + m_hbar->value()) / s),
+                             int((e->pos().y() + m_vbar->value()) / s),
                              e->pos().x(), e->pos().y(),
                              [this](const position &b) { update(); });
     }
@@ -590,20 +666,44 @@ void LiteHtmlView::mouseReleaseEvent(QMouseEvent *e)
 
 void LiteHtmlView::mouseMoveEvent(QMouseEvent *e)
 {
+    const qreal s = previewScale();
     if (m_selecting && m_doc)
     {
-        m_selCurrent = QPointF(e->pos().x() + m_hbar->value(), e->pos().y() + m_vbar->value());
+        m_selCurrent = QPointF((e->pos().x() + m_hbar->value()) / s,
+                               (e->pos().y() + m_vbar->value()) / s);
         m_hasSelection = m_selAnchor != m_selCurrent;
         update();
         return;
     }
     if (m_doc)
     {
-        bool changed = m_doc->on_mouse_over(e->pos().x() + m_hbar->value(), e->pos().y() + m_vbar->value(),
+        bool changed = m_doc->on_mouse_over(int((e->pos().x() + m_hbar->value()) / s),
+                                            int((e->pos().y() + m_vbar->value()) / s),
                                             e->pos().x(), e->pos().y(),
                                             [this](const position &b) { update(); });
         if (changed)
             update();
+    }
+}
+
+// Ctrl+<plus>/<minus> zoom the help page. Ctrl+= (the unshifted form of "+")
+// and Ctrl+_ (Shift+minus) are accepted as aliases, and "=" / "+" and "-" on
+// the numeric keypad produce the same key values, so they all work too.
+// Returns +1 for zoom in, -1 for zoom out, 0 when the event is not a zoom key.
+static int zoomKeyDirection(const QKeyEvent *e)
+{
+    if (!(e->modifiers() & Qt::ControlModifier) || (e->modifiers() & Qt::AltModifier))
+        return 0;
+    switch (e->key())
+    {
+    case Qt::Key_Plus:
+    case Qt::Key_Equal:
+        return +1;
+    case Qt::Key_Minus:
+    case Qt::Key_Underscore:
+        return -1;
+    default:
+        return 0;
     }
 }
 
@@ -620,12 +720,29 @@ bool LiteHtmlView::event(QEvent *e)
             e->accept();
             return true;
         }
+        // Claim Ctrl+<plus>/<minus> from the editor's font-size shortcuts so
+        // that, with the help panel focused, they zoom the page instead of
+        // the editor. Accepting the override makes Qt deliver a plain key
+        // press to keyPressEvent() below instead of triggering the action.
+        if (zoomKeyDirection(ke) != 0)
+        {
+            e->accept();
+            return true;
+        }
     }
     return QWidget::event(e);
 }
 
 void LiteHtmlView::keyPressEvent(QKeyEvent *e)
 {
+    if (int dir = zoomKeyDirection(e))
+    {
+        if (dir > 0)
+            zoomIn();
+        else
+            zoomOut();
+        return;
+    }
     if (e->matches(QKeySequence::Copy))
     {
         copySelection();
@@ -709,6 +826,21 @@ void LiteHtmlView::keyPressEvent(QKeyEvent *e)
 
 void LiteHtmlView::wheelEvent(QWheelEvent *e)
 {
+    // Ctrl+wheel zooms the page instead of scrolling it.
+    if (e->modifiers() & Qt::ControlModifier)
+    {
+        // Accumulate notches so trackpad pixel deltas zoom smoothly while a
+        // mouse wheel still steps once per 120-unit notch.
+        const int angle = e->angleDelta().y();
+        m_zoomRemainder += (angle != 0) ? angle / 120.0 : e->pixelDelta().y() / 50.0;
+        while (m_zoomRemainder >= 1.0)  { zoomIn();  m_zoomRemainder -= 1.0; }
+        while (m_zoomRemainder <= -1.0) { zoomOut(); m_zoomRemainder += 1.0; }
+        m_wheelRemainder = 0;
+        m_scrollVelocity = 0;
+        m_flingTimer->stop();
+        e->accept();
+        return;
+    }
     // Prefer pixel deltas (trackpads/Wayland); fall back to notched deltas.
     QPoint delta = e->pixelDelta();
     qreal  step;
@@ -924,7 +1056,9 @@ void LiteHtmlView::scrollToAnchor(const QString &name)
     if (ri)
     {
         position p = ri->calc_placement(0, 0);
-        m_vbar->setValue(qBound(0, int(p.y) - 20, m_vbar->maximum()));
+        // p is in document coordinates; the scrollbar counts view pixels.
+        const qreal s = previewScale();
+        m_vbar->setValue(qBound(0, qRound(float(p.y) * s) - 20, m_vbar->maximum()));
     }
 }
 
@@ -1015,7 +1149,8 @@ void LiteHtmlView::scrollToMatch(int i)
     if (i < 0 || i >= m_matches.size())
         return;
     QRectF r = rectForMatch(m_matches.at(i));
-    int    y = int(r.center().y());
+    // r is in document coordinates; the scrollbar counts view pixels.
+    int    y = qRound(r.center().y() * previewScale());
     m_vbar->setValue(qBound(0, y - height() / 3, m_vbar->maximum()));
 }
 

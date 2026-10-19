@@ -3237,6 +3237,12 @@ void CsoundQt::showVirtualKeyboard(bool show)
         // explicitly (see VirtualKeyboard.qml) to avoid black-on-dark text.
         setQuickControlsPalette(m_virtualKeyboard->rootContext());
         m_virtualKeyboard->setSource(QUrl("qrc:/QML/VirtualKeyboard.qml"));
+        // Let the keyboard follow the size of the window (see the table editor
+        // below). By default a QQuickWidget sizes the view to the root item and
+        // then keeps the root item at the size the QML declares (600x180 for the
+        // keyboard), so resizing the window left the keyboard in a corner of a
+        // larger, empty window - as good as unresizable.
+        m_virtualKeyboard->setResizeMode(QQuickWidget::SizeRootObjectToView);
         QObject *rootObject = m_virtualKeyboard->rootObject();
         m_virtualKeyboard->setFocus();
         connect(rootObject, SIGNAL(genNote(QVariant,QVariant,QVariant,QVariant)),
