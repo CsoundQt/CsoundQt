@@ -49,6 +49,13 @@
 
 ## Commits
 
+**Do not commit on your own initiative.** After making changes, leave them in
+the working tree so the user can test or adjust them, and wait to be asked.
+
+An explicit instruction to commit is enough, however short: "commit",
+"Ok. commit", "great, commit" all mean *commit the pending changes now*.
+Never push unless asked.
+
 When commiting yourself, think that commits are where we build a knowledge base 
 for future development. Be clear about what was the idea behind the commit or part of the commit:
 
