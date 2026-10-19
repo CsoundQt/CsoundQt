@@ -268,6 +268,12 @@ bool DockConsole::widgetHasFocus()
 	return widget()->hasFocus();
 }
 
+void DockConsole::focusText()
+{
+	if (QWidget *w = widget())
+		w->setFocus(Qt::ActiveWindowFocusReason);
+}
+
 void DockConsole::appendMessage(QString msg)
 {
 	static_cast<Console *>(widget())->appendMessage(msg);

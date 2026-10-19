@@ -89,6 +89,7 @@ public:
 	~DockConsole();
 	void copy();
 	bool widgetHasFocus();
+	void focusText();
 	void appendMessage(QString msg);
 
 public slots:

@@ -59,7 +59,6 @@ class ConfigLists;
 class DocumentPage;
 class UtilitiesDialog;
 class Curve;
-class GraphicWindow;
 class KeyboardShortcuts;
 class EventDispatcher;
 class EventSheet;
@@ -206,13 +205,8 @@ private slots:
 	void openFromAction();
 	void openFromAction(QString fileName);
     void handleDroppedFiles(QList<QUrl> urls, QPoint globalPos);
-	void runScriptFromAction();
-	void runScript(QString fileName);
-	void createCodeGraph();
-	void closeGraph();
 	bool save();
 	bool saveAs();
-	void createApp();
 	bool saveNoWidgets();
 	void info();
 	// Edition
@@ -237,7 +231,6 @@ private slots:
 	void getToIn();
 	void inToGet();
 	void insertMidiControlInstrument();
-	void updateCsladspaText();
 	void updateCabbageText();
     void saveWidgetsToQml();
 	void setCurrentAudioFile(const QString fileName);
@@ -259,6 +252,11 @@ private slots:
     void focusWidgets();
     void focusHelp();
     void focusInspector();
+    void toggleEditorPanel();
+    void toggleWidgetsPanel();
+    void toggleHelpPanel();
+    void toggleInspectorPanel();
+    void toggleConsolePanel();
     void updateFocusIndicator(QWidget *focused);
     void applyFocusIndicator();
     void showDebugger(bool show);
@@ -291,6 +289,7 @@ private slots:
     void configure();
 	void applySettings();
 	void setCurrentOptionsForPage(DocumentPage *p);
+	void applyDefaultDockLayout(); // initial dock arrangement when there is no saved layout
 	void runUtility(QString flags);
 	//     void widgetDockLocationChanged(Qt::DockWidgetArea area);
 	void updateInspector();
@@ -305,6 +304,7 @@ private slots:
 	void showOther(bool);
 	void showOtherCsd(bool);
 	void showWidgetEdit(bool);
+	void setSplitViewActionsEnabled(bool enabled);
 	void toggleLineArea();
 	void toggleParameterMode();
     void autocomplete();
@@ -355,7 +355,6 @@ private:
 	void addToRecentFiles(const QString &fileName);
 	void fillFavoriteMenu();
 	void fillFavoriteSubMenu(QDir dir, QMenu *m, int depth);
-	void fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth);
 	void createToolBars();
     void createStatusBar();
 	void readSettings();
@@ -393,7 +392,6 @@ private:
 
     ConfigLists m_configlists;
 	QTabWidget *documentTabs;
-	GraphicWindow *m_graphic;  // To display the code graph images
 	QVector<DocumentPage *> documentPages;
 	Options *m_options;
 	DockConsole *m_console;
@@ -437,11 +435,9 @@ private:
 	QAction *reloadAct;
 	QAction *saveAct;
 	QAction *saveAsAct;
-	QAction *createAppAct;
 	QAction *saveNoWidgetsAct;
 	QAction *closeTabAct;
 	QAction *printAct;
-	QAction *createCodeGraphAct;
 	QAction *infoAct;
 	QAction *exitAct;
 	QList<QAction *> openRecentAct;
@@ -458,7 +454,6 @@ private:
 	QAction *getToInAct;
 	QAction *inToGetAct;
 	QAction *midiControlAct;
-	QAction *csladspaAct;
 	QAction *cabbageAct;
     QAction *qmlAct;
     QAction *findAct;
@@ -562,7 +557,7 @@ private:
 	bool m_resetPrefs; // Flag to reset preferences to default when closing
 	bool m_inspectorNeedsUpdate;
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
-    int m_editorWidth = 0; // stored editor width for hide/restore
+    QByteArray m_editorHiddenDockState; // dock layout saved while the editor is hidden
     UtilitiesDialog *utilitiesDialog;
 	QIcon modIcon;
 	QString currentAudioFile;
@@ -581,6 +576,9 @@ private:
     QString m_helpStartPage;
     bool m_helpLoaded = false;
     bool m_startupShown = false;
+    bool m_hasSavedDockState = false;   // a saved dock layout was restored
+    bool m_applyDefaultDockLayout = false; // arrange docks on first show (no saved layout)
+    QSize m_pendingWindowSize;          // size to re-apply once the window is shown
     bool m_manualDownloadInProgress = false;
     bool isDarkPalette;
     QStringList m_longOptions = {
