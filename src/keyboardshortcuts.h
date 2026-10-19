@@ -39,7 +39,7 @@ public:
 	~KeyboardShortcuts();
 
 	void refreshTable();
-	bool shortcutTaken(QString shortcut);
+	bool shortcutTaken(QString shortcut, int excludeRow = -1);
     bool needsSave() { return m_modified; }
 
 private:
@@ -67,8 +67,7 @@ public:
 	~KeySelector();
 	QString newShortcut;
 
-protected:
-	virtual void keyPressEvent(QKeyEvent *event);
+	void accept() override;
 };
 
 #endif

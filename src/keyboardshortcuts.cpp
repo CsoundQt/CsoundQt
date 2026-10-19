@@ -23,6 +23,33 @@
 #include "keyboardshortcuts.h"
 #include <QAction>
 
+namespace {
+// Qt fires the shorter shortcut immediately when one sequence is a prefix of
+// the other, so such bindings cannot coexist.
+bool sequencesConflict(const QKeySequence &a, const QKeySequence &b)
+{
+	if (a.isEmpty() || b.isEmpty()) {
+		return false;
+	}
+	const int chords = qMin(a.count(), b.count());
+	for (int i = 0; i < chords; i++) {
+		if (a[i] != b[i]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+// Name shown in this dialog. Actions whose menu text is terse (e.g. the
+// checkable panel entries "Editor", "Widgets", ...) can carry a clearer
+// "shortcutName" property without changing the View menu.
+QString shortcutName(QAction *action)
+{
+	const QVariant custom = action->property("shortcutName");
+	return custom.isValid() ? custom.toString() : action->text().remove("&");
+}
+}
+
 KeyboardShortcuts::KeyboardShortcuts(QWidget *parent, const QVector<QAction *> keyActions)
 	: QDialog(parent), m_keyActions(keyActions)
 {
@@ -41,7 +68,7 @@ KeyboardShortcuts::KeyboardShortcuts(QWidget *parent, const QVector<QAction *> k
 KeyboardShortcuts::~KeyboardShortcuts()
 {
 	for (int i = 0; i < m_keyActions.size(); i++) {
-		m_keyActions[i]->setShortcut(getShortcut(m_keyActions[i]->text().remove("&")));
+		m_keyActions[i]->setShortcut(getShortcut(shortcutName(m_keyActions[i])));
 	}
 }
 
@@ -61,7 +88,7 @@ void KeyboardShortcuts::refreshTable()
 			key = new QTableWidgetItem();
 			tableWidget->setItem(i,1, key);
 		}
-		name->setText(m_keyActions[i]->text().remove("&"));
+		name->setText(shortcutName(m_keyActions[i]));
 		key->setText(m_keyActions[i]->shortcut().toString());
 	}
     tableWidget->sortItems(0);
@@ -81,12 +108,20 @@ void KeyboardShortcuts::filterTable(const QString &filter)
 	}
 }
 
-bool KeyboardShortcuts::shortcutTaken(QString shortcut)
+bool KeyboardShortcuts::shortcutTaken(QString shortcut, int excludeRow)
 {
+	const QKeySequence candidate(shortcut);
+	if (candidate.isEmpty()) {
+		return false; // An empty shortcut clears the assignment
+	}
 	int rows = tableWidget->rowCount();
 	for (int i = 0; i < rows; i++) {
+		if (i == excludeRow) {
+			continue;
+		}
 		QTableWidgetItem *key = tableWidget->item(i, 1);
-		if (key != 0 && key->text() == shortcut) {
+		if (key != 0 && !key->text().isEmpty()
+				&& sequencesConflict(candidate, QKeySequence(key->text()))) {
 			return true;
 		}
 	}
@@ -133,11 +168,9 @@ void KeyboardShortcuts::assignShortcut(int row, int /*column*/)
 	QString key = keyitem->text();
 	KeySelector dialog(this, name, key);
 	if (dialog.exec() == QDialog::Accepted) {
-		if (dialog.newShortcut == "")
-			return;
-		if (shortcutTaken(dialog.newShortcut)) {
+		if (shortcutTaken(dialog.newShortcut, row)) {
 			QMessageBox::warning(this, tr("Invalid shortcut"),
-								 tr("Shortcut cannot be assigned.\nIt is already used."),
+								 tr("Shortcut cannot be assigned.\nIt is already used or is a prefix of another shortcut."),
 								 QMessageBox::Ok,
 								 QMessageBox::Ok);
 			return;
@@ -157,24 +190,17 @@ KeySelector::KeySelector(QWidget *parent, QString command, QString currentShortc
 	setWindowTitle(tr("Press Key Combination"));
 	commandLabel->setText(command);
 	currentLabel->setText(currentShortcut != "" ? currentShortcut: tr("None"));
-	newLabel->setText("");
+	// QKeySequenceEdit supports multi-chord sequences (e.g. "Ctrl+T, E").
+	keySequenceEdit->setKeySequence(QKeySequence(currentShortcut));
+	keySequenceEdit->setFocus();
 }
 
 KeySelector::~KeySelector()
 {
 }
 
-void KeySelector::keyPressEvent(QKeyEvent *event)
+void KeySelector::accept()
 {
-	int key = event->key();
-	int modifiers = event->modifiers();
-	//   qDebug() << key << "         " << modifiers;
-	if (key == 16777248 || key == 16777249 || key == 16777249 || key == 16777250 || key == 16777251)
-		return; // Only a modifier was pressed
-	QString keyName;
-	if (modifiers != 0)
-		keyName += QKeySequence(modifiers).toString();
-	keyName += QKeySequence(key).toString();
-	newLabel->setText(keyName);
-	newShortcut = keyName;
+	newShortcut = keySequenceEdit->keySequence().toString();
+	QDialog::accept();
 }

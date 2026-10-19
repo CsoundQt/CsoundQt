@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>392</width>
-    <height>145</height>
+    <height>160</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>100</y>
+     <y>115</y>
      <width>371</width>
      <height>33</height>
     </rect>
@@ -64,7 +64,7 @@
      <x>10</x>
      <y>10</y>
      <width>371</width>
-     <height>86</height>
+     <height>101</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -97,9 +97,9 @@
      </widget>
     </item>
     <item row="4" column="1">
-     <widget class="QLabel" name="newLabel">
-      <property name="text">
-       <string>new</string>
+     <widget class="QKeySequenceEdit" name="keySequenceEdit">
+      <property name="toolTip">
+       <string>Press the shortcut. A sequence of up to four key combinations is accepted (e.g. Ctrl+T, E).</string>
       </property>
      </widget>
     </item>
