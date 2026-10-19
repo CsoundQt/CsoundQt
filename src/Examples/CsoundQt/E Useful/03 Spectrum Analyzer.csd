@@ -26,7 +26,7 @@ instr PlayPeak
   ; play the detected peak frequency
   kamp = ampdb(gk_peakGain)
   apeak oscili kamp, sc_lag(gk_peakFreq, 0.1)
-  apeak * = linsegr:a(0, 0.1, 1, 0.1, 0)
+  apeak *= linsegr:a(0, 0.1, 1, 0.1, 0)
   outch 1, apeak
 endin
 
@@ -68,19 +68,19 @@ instr Spectrum
   a1 inch 2
   a2 init 0
   a3 init 0
-  a0 * = k0
-  a1 * = k1
+  a0 *= k0
+  a1 *= k1
   if nchnls > 2 then
     a2 inch 3
-    a2 * = k2
+    a2 *= k2
     if nchnls > 3 then
       a3 inch 4
-      a3 * = k3
+      a3 *= k3
     endif
   endif
 
   amix = sum(a0, a1, a2, a3)
-  amix * = ampdb(kinGain)
+  amix *= ampdb(kinGain)
 
   ; filter low frequencies from spectrum
   if kfilterlow == 1 then
@@ -116,6 +116,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -308,7 +310,6 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -348,7 +349,6 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -406,7 +406,6 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -479,7 +478,6 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -552,7 +550,6 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -592,7 +589,6 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -703,7 +699,6 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -743,7 +738,6 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
   <padding>7</padding>
   <locked>false</locked>
   <color>
@@ -784,7 +778,6 @@ Spectral Analysis of Live Input (up to four input channels)</label>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
