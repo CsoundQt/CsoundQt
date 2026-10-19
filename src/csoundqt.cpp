@@ -35,6 +35,7 @@
 #include <QShortcut>
 #include <QToolTip>
 #include <QScreen>
+#include <QResizeEvent>
 #include <QtConcurrent/QtConcurrentRun>
 
 #include <memory>
@@ -198,6 +199,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // Added last to the right area, so it stacks below the (tabbed) Widgets/Help
     // panels: the right-hand column is Widgets|Help on top, Console underneath.
     addDockWidget(Qt::RightDockWidgetArea, m_console);
+
+    // Watch the right-column docks so a divider drag updates the editor/dock
+    // ratio that window resizes preserve (see resizeEvent/eventFilter).
+    helpPanel->installEventFilter(this);
+    widgetPanel->installEventFilter(this);
+    m_console->installEventFilter(this);
 
     m_inspector = new Inspector(this);
     m_inspector->setObjectName("Inspector");
@@ -607,10 +614,13 @@ void CsoundQt::showEvent(QShowEvent *event)
         QTimer::singleShot(0, this, [this]{ applyDefaultDockLayout(); });
     }
     // Enforce the Widgets-before-Help tab order once, after the window (and any
-    // restored dock layout) is in place.
+    // restored dock layout) is in place, and remember the editor/dock ratio.
     if (!m_panelTabsOrdered) {
         m_panelTabsOrdered = true;
-        QTimer::singleShot(0, this, [this]{ ensurePanelTabOrder(); });
+        QTimer::singleShot(0, this, [this]{
+            ensurePanelTabOrder();
+            recordRightDockRatio();
+        });
     }
     // Start risset detection only once the window is actually shown, so its
     // external processes never delay startup. initRisset() is idempotent.
@@ -1730,6 +1740,73 @@ static void ensureTabOrder(QMainWindow *window, QDockWidget *first, QDockWidget 
 void CsoundQt::ensurePanelTabOrder()
 {
     ensureTabOrder(this, widgetPanel, helpPanel);
+}
+
+int CsoundQt::rightDockColumnWidth() const
+{
+    QDockWidget *const docks[] = {m_console, widgetPanel, helpPanel};
+    for (QDockWidget *dock : docks) {
+        if (dock != nullptr && dock->isVisible() && !dock->isFloating() && dock->width() > 0)
+            return dock->width();
+    }
+    return 0;
+}
+
+void CsoundQt::recordRightDockRatio()
+{
+    // With the editor hidden the docks take the whole width, which says nothing
+    // about the split the user chose.
+    if (documentTabs != nullptr && !documentTabs->isVisible())
+        return;
+    const int column = rightDockColumnWidth();
+    if (column > 0 && width() > 0)
+        m_rightDockRatio = qreal(column) / width();
+}
+
+void CsoundQt::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    // CsoundQt is effectively a two-column layout (editor | Widgets/Help/
+    // Console). Qt gives a window resize entirely to the central widget and
+    // keeps the docks at a fixed pixel width, so maximizing would leave the
+    // docks small. Instead keep the editor/dock ratio: if the right column took
+    // m_rightDockRatio of the width, it takes the same fraction of the new
+    // width. The ratio is updated on divider drags (see eventFilter).
+    m_lastWindowWidth = width();
+    if (m_rightDockRatio > 0.0
+            && event->oldSize().width() > 0
+            && event->size().width() != event->oldSize().width()) {
+        // QMainWindow is still laying out during resizeEvent; applying the dock
+        // size here is overridden. Do it once the event loop settles.
+        QTimer::singleShot(0, this, [this] {
+            QDockWidget *dock = nullptr;
+            QDockWidget *const docks[] = {m_console, widgetPanel, helpPanel};
+            for (QDockWidget *d : docks) {
+                if (d != nullptr && d->isVisible() && !d->isFloating()) {
+                    dock = d;
+                    break;
+                }
+            }
+            if (dock != nullptr) {
+                const int maximum = qMax(150, width() - documentTabs->minimumWidth());
+                const int target = qBound(150, qRound(m_rightDockRatio * width()), maximum);
+                resizeDocks({dock}, {target}, Qt::Horizontal);
+            }
+        });
+    }
+}
+
+bool CsoundQt::eventFilter(QObject *obj, QEvent *event)
+{
+    // A resize of a right-column dock is a divider drag only if the window
+    // width did not change; otherwise it is just the window being resized and
+    // the ratio must not be overwritten with the old pixel width.
+    if (event->type() == QEvent::Resize
+            && (obj == m_console || obj == widgetPanel || obj == helpPanel)) {
+        if (width() == m_lastWindowWidth)
+            recordRightDockRatio();
+    }
+    return QMainWindow::eventFilter(obj, event);
 }
 
 void CsoundQt::toggleEditorPanel()

@@ -198,6 +198,10 @@ public slots:
 protected:
 	virtual void closeEvent(QCloseEvent *event);
 	virtual void showEvent(QShowEvent *event);
+	void resizeEvent(QResizeEvent *event) override;
+	bool eventFilter(QObject *obj, QEvent *event) override;
+	int rightDockColumnWidth() const;
+	void recordRightDockRatio();
 	//    virtual void keyPressEvent(QKeyEvent *event);
 private slots:
 	void open();
@@ -580,6 +584,8 @@ private:
     bool m_hasSavedDockState = false;   // a saved dock layout was restored
     bool m_applyDefaultDockLayout = false; // arrange docks on first show (no saved layout)
     bool m_panelTabsOrdered = false;    // Widgets/Help tab order already enforced
+    qreal m_rightDockRatio = -1.0;      // right dock width / window width (<0 = unset)
+    int m_lastWindowWidth = 0;          // last window width seen in resizeEvent
     QSize m_pendingWindowSize;          // size to re-apply once the window is shown
     bool m_manualDownloadInProgress = false;
     bool isDarkPalette;
