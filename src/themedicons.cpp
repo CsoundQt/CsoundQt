@@ -114,7 +114,7 @@ const QHash<QString, QString> &iconNameMap()
 		{ QStringLiteral("widgets"),       QStringLiteral("view-grid") },
 		{ QStringLiteral("editor"),        QStringLiteral("accessories-text-editor") },
 		{ QStringLiteral("devel"),         QStringLiteral("applications-utilities") },
-		{ QStringLiteral("midi-keyboard"), QStringLiteral("input-keyboard") },
+		{ QStringLiteral("midi-keyboard"), QStringLiteral("audio-midi") },
 		{ QStringLiteral("info"),          QStringLiteral("dialog-information") },
 		{ QStringLiteral("settings"),      QStringLiteral("configure") },
 		{ QStringLiteral("home"),          QStringLiteral("go-home") },
