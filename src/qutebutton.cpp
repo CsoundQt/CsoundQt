@@ -118,13 +118,20 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 
 	// Flat style. Disabled by default, so existing buttons keep the native
 	// look. When enabled the button paints itself (see QutePushButton).
+	// The default colours follow the widget panel background (light/dark): a
+	// light panel gets a light grey button with dark text, a dark panel gets the
+	// inverted colours. So a flat button looks right without manual tweaking.
 	setProperty("CSQT_flatStyle", false);
-	setProperty("CSQT_color", m_widget->palette().color(QPalette::Button));
-	setProperty("CSQT_pressedColor", QString()); // empty = same as background
-	setProperty("CSQT_borderColor", m_widget->palette().color(QPalette::Mid).name());
-	setProperty("CSQT_textColor", m_widget->palette().color(QPalette::ButtonText).name());
+	const bool darkPanel = isDarkTheme();
+	auto shade = [darkPanel](int r, int g, int b) {
+		return darkPanel ? QColor(255 - r, 255 - g, 255 - b) : QColor(r, g, b);
+	};
+	setProperty("CSQT_color", shade(0xf3, 0xf3, 0xf3));            // background
+	setProperty("CSQT_pressedColor", shade(0xc3, 0xc3, 0xc3).name()); // pressed background
+	setProperty("CSQT_borderColor", shade(0xad, 0xad, 0xad).name());
+	setProperty("CSQT_textColor", shade(0x20, 0x20, 0x20).name());
 	setProperty("CSQT_pressedTextColor", QString()); // empty = same as text
-	setProperty("CSQT_borderWidth", 0);
+	setProperty("CSQT_borderWidth", 1);
 	setProperty("CSQT_borderRadius", 3);
 
 	QPixmap p = QPixmap(8, 8);
