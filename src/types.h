@@ -54,7 +54,6 @@
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
-#define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_OS_SOLARIS
@@ -63,7 +62,6 @@
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/local/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/jmplay"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
-#define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_OS_MAC
@@ -72,7 +70,6 @@
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/Applications/Preview.app"
-#define DEFAULT_DOT_EXECUTABLE "/usr/local/bin/dot"
 #define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_OS_WIN32
@@ -81,7 +78,6 @@
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #define DEFAULT_PDFVIEWER_EXECUTABLE ""
-#define DEFAULT_DOT_EXECUTABLE ""
 #define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_OS_HAIKU
@@ -90,7 +86,6 @@
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/boot/system/apps/MediaPlayer"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/boot/apps/BePDF/BePDF"
-#define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_OS_OPENBSD
@@ -99,7 +94,6 @@
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "paplay"
 #define DEFAULT_PDFVIEWER_EXECUTABLE ""
-#define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
 #endif
 

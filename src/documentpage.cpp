@@ -32,7 +32,6 @@
                         // reserved channels) and for connecting from console to log file
 #include "opentryparser.h"
 #include "types.h"
-#include "dotgenerator.h"
 #include "highlighter.h"
 #include "widgetlayout.h"
 #include "console.h"
@@ -214,24 +213,6 @@ QString DocumentPage::getFullText()
         fullText.replace("\r\n", "\n");
     }
 	return fullText;
-}
-
-QString DocumentPage::getDotText()
-{
-	if (fileName.endsWith("sco")) {
-		qDebug() << "No dot for sco files";
-		return QString();
-	}
-	QString orcText = getFullText();
-	if (!fileName.endsWith("orc")) { //asume csd
-        if (orcText.contains("<CsInstruments>")) {
-            auto start = orcText.indexOf("<CsInstruments>");
-            orcText = orcText.mid(start + 15,
-                                  orcText.indexOf("</CsInstruments>") - start - 15);
-		}
-	}
-	DotGenerator dot(fileName, orcText, m_opcodeTree);
-	return dot.getDotText();
 }
 
 QString DocumentPage::getSelectedText(int section)
@@ -534,7 +515,7 @@ bool DocumentPage::isModified()
 bool DocumentPage::isRunning()
 {
 	// TODO what to do with pause?
-	return m_csEngine->isRunning() || m_pythonRunning;
+	return m_csEngine->isRunning();
 }
 
 bool DocumentPage::isRecording()
@@ -546,20 +527,6 @@ bool DocumentPage::isRecording()
 bool DocumentPage::usesFltk()
 {
 	return m_view->getBasicText().contains("FLpanel");
-}
-
-void DocumentPage::updateCsLadspaText()
-{
-	QString text = "<csLADSPA>\nName=";
-	text += fileName.mid(fileName.lastIndexOf("/") + 1) + "\n";
-	text += "Maker=CsoundQt\n";
-    QString id = QString::number(QRandomGenerator::global()->generate());
-	text += "UniqueID=" + id + "\n";
-	text += "Copyright=none\n";
-	//FIXME allow multiple
-	text += m_widgetLayouts[0]->getCsladspaLines();
-	text += "</csLADSPA>";
-	m_view->setLadspaText(text);
 }
 
 QString DocumentPage::getQml()
@@ -851,11 +818,6 @@ void DocumentPage::setWidgetEnabled(bool enabled)
 	m_csEngine->enableWidgets(enabled);
 }
 
-void DocumentPage::setPythonExecutable(QString pythonExec)
-{
-	m_pythonExecutable = pythonExec;
-}
-
 void DocumentPage::registerButton(QuteButton *b)
 {
 	//  qDebug();
@@ -919,7 +881,6 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 			this, SLOT(perfEnded()));
 
 	//  detachWidgets();
-	m_pythonRunning = false;
 }
 
 WidgetLayout* DocumentPage::newWidgetLayout()
@@ -938,22 +899,13 @@ WidgetLayout* DocumentPage::newWidgetLayout()
 
 int DocumentPage::play(CsoundOptions *options)
 {
-	if (fileName.endsWith(".py")) {
-		m_console->reset(); // Clear consoles
-		return runPython();
-	}
-	else {
-		m_view->unmarkErrorLines();  // Clear error lines when running
-		return BaseDocument::play(options);
-	}
+	m_view->unmarkErrorLines();  // Clear error lines when running
+	return BaseDocument::play(options);
 }
 
 void DocumentPage::stop()
 {
 	BaseDocument::stop();
-	if (m_pythonRunning == true) {
-		m_pythonRunning = false;
-	}
 }
 
 int DocumentPage::record(int format)
@@ -1004,29 +956,6 @@ void DocumentPage::setHelp()
 {
 	emit setHelpSignal();
 }
-
-int DocumentPage::runPython()
-{
-	QProcess p;
-	QDir::setCurrent(fileName.mid(fileName.lastIndexOf("/") + 1));
-    p.start(m_pythonExecutable, QStringList() <<  " \"" + fileName + "\"");
-	m_pythonRunning = true;
-	while (!p.waitForFinished (100) && m_pythonRunning) {
-		// TODO make stop button stop python too
-		QByteArray sout = p.readAllStandardOutput();
-		QByteArray serr = p.readAllStandardError();
-		m_console->appendMessage(sout);
-		m_console->appendMessage(serr);
-		qApp->processEvents();
-	}
-	QByteArray sout = p.readAllStandardOutput();
-	QByteArray serr = p.readAllStandardError();
-	m_console->appendMessage(sout);
-	m_console->appendMessage(serr);
-	emit stopSignal();
-	return p.exitCode();
-}
-
 
 void DocumentPage::showWidgets(bool show)
 {

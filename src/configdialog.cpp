@@ -374,11 +374,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	//  defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
 	favoriteLineEdit->setText(m_options->favoriteDir);
     examplePathlineEdit->setText(m_options->examplePath);
-	pythonDirLineEdit->setText(m_options->pythonDir);
-	pythonExecutableLineEdit->setText(m_options->pythonExecutable);
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
 	logFileLineEdit->setText(m_options->logFile);
-	sdkLineEdit->setText(m_options->sdkDir);
 	templateLineEdit->setText(m_options->templateDir);
 
 	TerminalLineEdit->setText(m_options->terminal);
@@ -401,7 +398,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     browserToolButton->setEnabled(false);
     label_20->setEnabled(false);
 #endif
-	dotLineEdit->setText(m_options->dot);
 	WaveEditorLineEdit->setText(m_options->waveeditor);
 	WavePlayerLineEdit->setText(m_options->waveplayer);
 	pdfViewerLineEdit->setText(m_options->pdfviewer);
@@ -423,13 +419,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     connect(examplePathToolButton, SIGNAL(clicked()), this, SLOT(browseExamplePath()) );
     connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
 	connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
-	connect(dotToolButton, SIGNAL(clicked()), this, SLOT(browseDot()));
 	connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
 	connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
 	connect(pdfViewerToolButton, SIGNAL(clicked()), this, SLOT(browsePdfViewer()));
-	connect(pythonDirToolButton, SIGNAL(clicked()), this, SLOT(browsePythonDir()));
 	connect(logFileToolButton, SIGNAL(clicked()), this, SLOT(browseLogFile()));
-	connect(sdkToolButton, SIGNAL(clicked()), this, SLOT(browseSdkDir()));
 	connect(templateToolButton, SIGNAL(clicked()), this, SLOT(browseTemplateDir()));
 
 	//  connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
@@ -451,7 +444,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     // connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(uDir(bool)));
 
 	connect(csoundExecutableToolButton,SIGNAL(clicked()),this, SLOT(browseCsoundExecutable()));
-    connect(pythonExecutableToolButton,SIGNAL(clicked()),this, SLOT(browsePythonExecutable()));
 
     connect(testAudioSetupButton, SIGNAL(released()), this, SLOT(testAudioSetup()));
     // connect(envirRecommendButton, SIGNAL(clicked()), this, SLOT(recommendEnvironmentSettings()));
@@ -460,8 +452,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 
 #ifndef CSQT_PYTHONQT
-	pythonDirLineEdit->setEnabled(false);
-	pythonDirToolButton->setEnabled(false);
 	noPythonCheckBox->setEnabled(false);
 	noPythonCheckBox->setChecked(false);
 #endif
@@ -667,16 +657,12 @@ void ConfigDialog::accept()
 	//  m_options->defaultCsd = defaultCsdLineEdit->text();
 	m_options->favoriteDir = favoriteLineEdit->text();
     m_options->examplePath = examplePathlineEdit->text();
-	m_options->pythonDir = pythonDirLineEdit->text();
-	m_options->pythonExecutable = pythonExecutableLineEdit->text();
 	m_options->csoundExecutable = csoundExecutableLineEdit->text();
 	m_options->logFile = logFileLineEdit->text();
-	m_options->sdkDir = sdkLineEdit->text();
 	m_options->templateDir = templateLineEdit->text();
 
 	m_options->terminal = TerminalLineEdit->text();
 	m_options->browser = browserLineEdit->text();
-	m_options->dot = dotLineEdit->text();
 	m_options->waveeditor = WaveEditorLineEdit->text();
 	m_options->waveplayer = WavePlayerLineEdit->text();
 	m_options->pdfviewer = pdfViewerLineEdit->text();
@@ -751,13 +737,6 @@ void ConfigDialog::browseCsoundExecutable()
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
 }
 
-void ConfigDialog::browsePythonExecutable()
-{
-    browseFile(m_options->pythonExecutable);
-    pythonExecutableLineEdit->setText(m_options->pythonExecutable);
-}
-
-
 //void ConfigDialog::browseDefaultCsd()
 //{
 //  browseFile(m_options->defaultCsd);
@@ -793,12 +772,6 @@ void ConfigDialog::browseBrowser()
 	browserLineEdit->setText(m_options->browser);
 }
 
-void ConfigDialog::browseDot()
-{
-	browseFile(m_options->dot);
-	dotLineEdit->setText(m_options->dot);
-}
-
 void ConfigDialog::browseWaveEditor()
 {
 	browseFile(m_options->waveeditor);
@@ -817,22 +790,10 @@ void ConfigDialog::browsePdfViewer()
 	pdfViewerLineEdit->setText(m_options->pdfviewer);
 }
 
-void ConfigDialog::browsePythonDir()
-{
-	browseDir(m_options->pythonDir);
-	pythonDirLineEdit->setText(m_options->pythonDir);
-}
-
 void ConfigDialog::browseLogFile()
 {
 	browseSaveFile(m_options->logFile);
 	logFileLineEdit->setText(m_options->logFile);
-}
-
-void ConfigDialog::browseSdkDir()
-{
-	browseDir(m_options->sdkDir);
-	sdkLineEdit->setText(m_options->sdkDir);
 }
 
 void ConfigDialog::browseTemplateDir()

@@ -41,31 +41,6 @@ typedef enum {
 	EDIT_GENERIC_MODE = -1
 } editor_mode_t;
 
-class AppProperties {
-public:
-	bool used; // Flag to mark if properties are used
-	QString appName;
-	QString targetDir;
-	QString author;
-	QString version;
-	QString date;
-	QString email;
-	QString website;
-	QString instructions;
-
-	bool autorun;
-	bool showRun;
-	bool saveState;
-	int runMode;
-	bool newParser;
-
-	bool useSdk;
-
-	bool useCustomPaths;
-	QString libDir;
-	QString opcodeDir;
-};
-
 class BaseView : public QScrollArea
 {
 	friend class CsoundQt; // FIXME now that it's a friend class some things can be simplified in the code
@@ -106,8 +81,6 @@ public:
 	QString getCabbageText();
 	void setOtherCsdText(QString text);
 	void setOtherText(QString text);
-	void setAppText(QString text);
-	void setAppProperties(AppProperties properties);
 	void showLineArea(bool visible);
     void setTheme(const QString &theme) {
         m_highlighter.setTheme(theme);
@@ -145,8 +118,6 @@ public:
 	QString getFileB(); // Embedded files. With tags (for filenames)
 	QString getExtraCsdText();  // All other tags like version and licence with tags
 	QString getExtraText(); // Text outside any known tags
-	QString getAppText();
-	AppProperties getAppProperties();
 
 	void clearUndoRedoStack();
 
@@ -173,7 +144,6 @@ protected:
 	// 32 = show remaining Text outside CsoundSynthesizer tag
 	// 64 = show remaining text inside CsoundSynthesizer tag
 	// 128 = show Widget, Preset and Extra Options sections
-	// 256 = show CsApp section
 	Highlighter m_highlighter;
 	OpEntryParser *m_opcodeTree;
 	QSplitter *splitter;
@@ -185,8 +155,6 @@ protected:
 	TextEditor *m_otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd. Also called information text elsewhere
 	TextEditor *m_otherCsdEditor;  // Extra text and tags inside CsoundSynthesizer tags
 	TextEditor *m_widgetEditor;
-	TextEditor *m_appEditor;
-	AppProperties m_appProperties;
 
 	int m_orcStartLine;
 	int m_scoStartLine;

@@ -34,7 +34,6 @@ class DocumentView;
 class OpEntryParser;
 class ConsoleWidget;
 class QuteButton; // For registering buttons with main application
-class AppProperties;
 
 enum class PlayStopStatus { Ok, Starting, Stopping };
 
@@ -51,7 +50,6 @@ public:
 	virtual WidgetLayout* newWidgetLayout();
 	void widgetsVisible(bool visible);
 	void setFlags(int flags);
-	void setAppProperties(AppProperties properties);
 	virtual QString getFullText();
 	QString getBasicText();
 	QString getOrc();
@@ -59,7 +57,6 @@ public:
 	QString getOptionsText();
 	QString getWidgetsText();
 	QString getPresetsText();
-	AppProperties getAppProperties();
 	//    void setOpcodeNameList(QStringList opcodeNameList);
 	// Get internal components
 	WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel

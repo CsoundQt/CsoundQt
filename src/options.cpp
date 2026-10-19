@@ -28,13 +28,9 @@
 Options::Options(ConfigLists *configlists) :
     CsoundOptions(configlists)
 {
-#ifdef Q_OS_MACOS
-    font = "Menlo";
-#elif defined(Q_OS_WIN)
-    font = "Consolas";
-#else
-    font = "Monospace";
-#endif
+    // The editor font is bundled with CsoundQt (see bundledfonts.cpp), so it is
+    // available on every platform; use it everywhere rather than per-OS fonts.
+    font = "JetBrains Mono";
     theme = "breeze";
     themeMode = "auto";
     fontPointSize = 10;
@@ -47,9 +43,9 @@ Options::Options(ConfigLists *configlists) :
     editorBgColor = Qt::white;
 
     tabWidth = 4;
-    tabUseSpaces = false;
+    tabUseSpaces = true;
     tabSpaces = 2;
-    flashFocus = true;
+    flashFocus = false;
     colorVariables = true;
     highlightingTheme = "light";
     autoPlay = true;
@@ -95,15 +91,12 @@ Options::Options(ConfigLists *configlists) :
     opcodexmldirActive = false;
     favoriteDir = "";
     examplePath = "";
-    pythonDir = "";
-    pythonExecutable = "python3";
 #ifdef Q_OS_MACOS
     csoundExecutable = "/usr/local/bin/csound ";
 #else
     csoundExecutable = "csound ";
 #endif
     logFile = ""; // "log.txt"; - don't log by default...
-    sdkDir = "";
     templateDir = "";
     evalLanguage = CS_ORC;
 
@@ -114,7 +107,6 @@ Options::Options(ConfigLists *configlists) :
     // External applications
     terminal = "";
     browser = "";
-    dot = "";
     waveeditor = "";
     waveplayer = "";
     pdfviewer = "";

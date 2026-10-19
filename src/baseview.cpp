@@ -80,9 +80,8 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
 	m_otherCsdEditor->setPalette(p);
 	m_otherCsdEditor->setTextColor(QColor("gray"));
 	m_widgetEditor = new TextEditor(this);
-    m_appEditor = new TextEditor(this);
     editors << m_mainEditor << m_orcEditor << m_scoreEditor << m_optionsEditor << m_filebEditor
-			<< m_otherEditor << m_otherCsdEditor << m_widgetEditor << m_appEditor;
+			<< m_otherEditor << m_otherCsdEditor << m_widgetEditor;
     for (QWidget *w : editors) {
         if (TextEditor *te = qobject_cast<TextEditor *>(w)) {
             connect(te, &TextEditor::fileDropped, this,
@@ -110,7 +109,6 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
     m_highlighter.setOpcodeNameList(opcodeTree->opcodeNameList());
 	m_highlighter.setDocument(m_mainEditor->document());
 	m_viewMode = 0;
-	m_appProperties.used = false;
 }
 
 BaseView::~BaseView()
@@ -139,42 +137,6 @@ void BaseView::setFullText(QString text, bool goToTop)
 	}
 	int startIndex,endIndex, offset, endoffset;
 	QString tag, sectionText;
-	// Get app info text. This text will never be visible in the full editor, so it is here
-	sectionText = "";
-	tag = "CsApp";
-	startIndex = text.indexOf("<" + tag + ">");
-	endIndex = text.indexOf("</" + tag + ">", startIndex) + tag.size() + 3;
-	endoffset = text.size() > endIndex
-			&& text[endIndex] == '\n' ? 1: 0;
-	if (startIndex >= 0 && endIndex > startIndex) {
-		sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
-		text.remove(sectionText);
-		QDomDocument d;
-		if (!d.setContent(sectionText)) {
-			qDebug()  << "Error parsing CsApp. Section will be discarded.";
-		} else {
-			QDomNodeList csapp = d.elementsByTagName("CsApp");
-			QDomElement p = csapp.item(0).toElement();
-			m_appProperties.appName = p.firstChildElement("appName").firstChild().nodeValue();
-			m_appProperties.targetDir = p.firstChildElement("targetDir").firstChild().nodeValue();
-			m_appProperties.author = p.firstChildElement("author").firstChild().nodeValue();
-			m_appProperties.version = p.firstChildElement("version").firstChild().nodeValue();
-			m_appProperties.date = p.firstChildElement("date").firstChild().nodeValue();
-			m_appProperties.email = p.firstChildElement("email").firstChild().nodeValue();
-			m_appProperties.website = p.firstChildElement("website").firstChild().nodeValue();
-			m_appProperties.instructions = p.firstChildElement("instructions").firstChild().nodeValue();
-			m_appProperties.autorun = p.firstChildElement("autorun").firstChild().nodeValue() == "true";
-			m_appProperties.showRun = p.firstChildElement("showRun").firstChild().nodeValue() == "true";
-			m_appProperties.saveState = p.firstChildElement("saveState").firstChild().nodeValue() == "true";
-			m_appProperties.runMode = p.firstChildElement("runMode").firstChild().nodeValue().toInt();
-			m_appProperties.newParser = p.firstChildElement("newParser").firstChild().nodeValue() == "true";
-			m_appProperties.useSdk = p.firstChildElement("useSdk").firstChild().nodeValue() == "true";
-			m_appProperties.useCustomPaths = p.firstChildElement("useCustomPaths").firstChild().nodeValue() == "true";
-			m_appProperties.libDir = p.firstChildElement("libDir").firstChild().nodeValue();
-			m_appProperties.opcodeDir = p.firstChildElement("opcodeDir").firstChild().nodeValue();
-			m_appProperties.used = true;
-		}
-	}
 	if (m_viewMode < 2) {  // Unified view
 		m_mainEditor->setUndoRedoEnabled(false);
 		QTextCursor cursor = m_mainEditor->textCursor();
@@ -289,7 +251,6 @@ void BaseView::setFont(QFont font)
 	m_otherEditor->setFont(font);
 	m_otherCsdEditor->setFont(font);
 	m_widgetEditor->setFont(font);
-	m_appEditor->setFont(font);
 }
 
 void BaseView::setFontPointSize(float size)
@@ -302,7 +263,6 @@ void BaseView::setFontPointSize(float size)
 	m_otherEditor->setFontPointSize(size);
 	m_otherCsdEditor->setFontPointSize(size);
 	m_widgetEditor->setFontPointSize(size);
-	m_appEditor->setFontPointSize(size);
 }
 
 void BaseView::setTabStopWidth(int width)
@@ -315,7 +275,6 @@ void BaseView::setTabStopWidth(int width)
     m_otherEditor->setTabStopDistance(width);
     m_otherCsdEditor->setTabStopDistance(width);
     m_widgetEditor->setTabStopDistance(width);
-    m_appEditor->setTabStopDistance(width);
 }
 
 void BaseView::setTabIndents(bool indents)
@@ -332,7 +291,6 @@ void BaseView::setTabUseSpaces(bool useSpaces)
 	m_otherEditor->setTabUseSpaces(useSpaces);
 	m_otherCsdEditor->setTabUseSpaces(useSpaces);
 	m_widgetEditor->setTabUseSpaces(useSpaces);
-	m_appEditor->setTabUseSpaces(useSpaces);
 }
 
 void BaseView::setTabSpaces(int spaces)
@@ -344,7 +302,6 @@ void BaseView::setTabSpaces(int spaces)
 	m_otherEditor->setTabSpaces(spaces);
 	m_otherCsdEditor->setTabSpaces(spaces);
 	m_widgetEditor->setTabSpaces(spaces);
-	m_appEditor->setTabSpaces(spaces);
 }
 
 void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
@@ -357,7 +314,6 @@ void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
 	m_otherEditor->setLineWrapMode(mode);
 	m_otherCsdEditor->setLineWrapMode(mode);
 	m_widgetEditor->setLineWrapMode(mode);
-	m_appEditor->setLineWrapMode(mode);
 }
 
 void BaseView::setColorVariables(bool color)
@@ -649,16 +605,6 @@ void BaseView::setOtherText(QString text)
 	}
 }
 
-void BaseView::setAppText(QString text)
-{
-	m_appEditor->setPlainText(text);
-}
-
-void BaseView::setAppProperties(AppProperties properties)
-{
-	m_appProperties = properties;
-}
-
 void BaseView::toggleLineArea()
 {
 	showLineArea(!m_mainEditor->lineAreaVisble());
@@ -854,7 +800,6 @@ QString BaseView::getFullText()
 	if (!text.endsWith("\n")) {
 		text += "\n";
 	}
-	text += getAppText();
 	return text;
 }
 
@@ -921,50 +866,6 @@ QString BaseView::getExtraText()
 	return m_otherEditor->toPlainText();
 }
 
-QString BaseView::getAppText()
-{
-	if (!m_appProperties.used) {
-		return QString();
-	}
-	QString appText;
-	QXmlStreamWriter s(&appText);
-	s.setAutoFormatting(true);
-	s.writeStartElement("CsApp");
-	//  s.writeAttribute("type", getWidgetType());
-
-	s.writeTextElement("appName", m_appProperties.appName);
-	s.writeTextElement("targetDir", m_appProperties.targetDir);
-	s.writeTextElement("author", m_appProperties.author);
-	s.writeTextElement("version", m_appProperties.version);
-	s.writeTextElement("date", m_appProperties.date);
-	s.writeTextElement("email", m_appProperties.email);
-	s.writeTextElement("website", m_appProperties.website);
-	s.writeTextElement("instructions", m_appProperties.instructions);
-
-	s.writeTextElement("autorun", m_appProperties.autorun ? "true" : "false");
-	s.writeTextElement("showRun", m_appProperties.showRun ? "true" : "false");
-	s.writeTextElement("saveState", m_appProperties.saveState ? "true" : "false");
-	s.writeTextElement("runMode", QString::number((int)m_appProperties.runMode));
-	s.writeTextElement("newParser", m_appProperties.newParser ? "true" : "false");
-
-	s.writeTextElement("useSdk", m_appProperties.useSdk ? "true" : "false");
-
-	s.writeTextElement("useCustomPaths", m_appProperties.useCustomPaths ? "true" : "false");
-	s.writeTextElement("libDir", m_appProperties.libDir);
-	s.writeTextElement("opcodeDir", m_appProperties.opcodeDir);
-
-	s.writeEndElement();
-
-	appText += "\n";
-	return appText;
-}
-
-AppProperties BaseView::getAppProperties()
-{
-	return m_appProperties;
-}
-
-
 //void BaseView::setOpcodeNameList(QStringList list)
 //{
 //  m_highlighter.setOpcodeNameList(list);
@@ -985,7 +886,6 @@ void BaseView::hideAllEditors()
 	m_otherEditor->hide();
 	m_otherCsdEditor->hide();
 	m_widgetEditor->hide();
-	m_appEditor->hide();
 	for (int i = 0; i < 9; i++) {
 		QSplitterHandle *h = splitter->handle(i);
 		if (h) {
@@ -1007,7 +907,6 @@ void BaseView::clearUndoRedoStack()
 		m_otherEditor->document()->setModified(false);
 		m_otherCsdEditor->document()->setModified(false);
 		m_widgetEditor->document()->setModified(false);
-		m_appEditor->document()->setModified(false);
 		//		m_orcEditor->document()->clearUndoRedoStacks();
 		//		m_scoreEditor->clearUndoRedoStacks();
 		//		m_optionsEditor->document()->clearUndoRedoStacks();

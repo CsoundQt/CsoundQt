@@ -76,16 +76,6 @@ rtmidi {
 	LIBS += -framework CoreMidi -framework CoreAudio
 }
 
-quteapp_f {
-	message(Bundling QuteApp_f)
-	RESOURCES += "src/quteapp_f_osx.qrc"
-}
-
-quteapp_d {
-	message(Bundling QuteApp_d)
-	RESOURCES += "src/quteapp_d_osx.qrc"
-}
-
 # Link against the Csound library detected by config.pri.
 # If CSOUND_LIBRARY_DIR points inside a .framework (e.g.
 # ~/Library/Frameworks/CsoundLib64.framework/Versions/Current), link it as a

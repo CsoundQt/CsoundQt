@@ -508,7 +508,6 @@ void DocumentView::setViewMode(int mode)
 		m_otherEditor->setVisible(m_viewMode & 32);
 		m_otherCsdEditor->setVisible(m_viewMode & 64);
 		m_widgetEditor->setVisible(m_viewMode & 128);
-		m_appEditor->setVisible(m_viewMode & 256);
         auto defaultFormat = m_highlighter.getFormat("default");
         // auto sheet =  QString("QTextEdit { color: %1; background-color: %2}")
         //         .arg(defaultFormat.foreground().color().name())
@@ -558,9 +557,6 @@ QString DocumentView::getSelectedText(int section)
 		break;
 	case 7:
 		text = m_widgetEditor->textCursor().selectedText();
-		break;
-	case 8:
-		text = m_appEditor->textCursor().selectedText();
 		break;
 	default:
 		qDebug() << "Section " << section << " not implemented.";
@@ -1904,14 +1900,6 @@ void DocumentView::showWidgetEdit(bool show)
 	// FIXME set m_viewmode
 	if (m_viewMode >= 2) {
 		m_widgetEditor->setVisible(show);
-	}
-}
-
-void DocumentView::showAppEdit(bool show)
-{
-	// FIXME set m_viewmode
-	if (m_viewMode >= 2) {
-		m_appEditor->setVisible(show);
 	}
 }
 

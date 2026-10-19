@@ -111,11 +111,8 @@ public:
 	bool opcodexmldirActive;
 	QString favoriteDir;
     QString examplePath;
-	QString pythonDir;
-	QString pythonExecutable;
 	QString csoundExecutable;
 	QString logFile;
-	QString sdkDir;
 	QString templateDir;
 
 	typedef enum {
@@ -130,7 +127,6 @@ public:
 	// External applications
 	QString terminal;
 	QString browser;
-	QString dot;
 	QString waveeditor;
 	QString waveplayer;
 	QString pdfviewer;

@@ -146,7 +146,6 @@ public slots:
 	void showOther(bool);
 	void showOtherCsd(bool);
 	void showWidgetEdit(bool);
-	void showAppEdit(bool);
 
 	void cut();
 	void copy();

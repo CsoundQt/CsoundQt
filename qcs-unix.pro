@@ -59,14 +59,6 @@ system_rtmidi {
     LIBS += -lrtmidi
 }
 
-quteapp_f {
-message(Bundling QuteApp_f)
-RESOURCES += "src/quteapp_f.qrc"
-}
-quteapp_d {
-message(Bundling QuteApp_d)
-RESOURCES += "src/quteapp_d.qrc"
-}
 build32:LCSOUND = -L$${CSOUND_LIBRARY_DIR} -lcsound
 build64:LCSOUND = -L$${CSOUND_LIBRARY_DIR} -lcsound64
 

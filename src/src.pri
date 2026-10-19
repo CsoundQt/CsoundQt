@@ -10,9 +10,6 @@ FORMS = "src/about.ui" \
     "src/keyboardshortcuts.ui" \
     "src/keyselector.ui" \
     "src/utilitiesdialog.ui" \
-    "src/appdetailspage.ui" \
-    "src/pluginspage.ui" \
-    "src/additionalfilespage.ui" \
     "src/filebeditor.ui" \
     src/midilearndialog.ui \
     src/debugpanel.ui \
@@ -36,13 +33,11 @@ HEADERS = "src/about.h" \
     "src/searchindex.h" \
     "src/documentpage.h" \
     "src/documentview.h" \
-    "src/dotgenerator.h" \
     "src/externallauncher.h" \
     "src/eventsheet.h" \
     "src/findreplace.h" \
     "src/findbar.h" \
     "src/framewidget.h" \
-    "src/graphicwindow.h" \
     "src/highlighter.h" \
     "src/inspector.h" \
     "src/keyboardshortcuts.h" \
@@ -77,10 +72,6 @@ HEADERS = "src/about.h" \
     "src/qutesheet.h" \
     "src/basedocument.h" \
     "src/baseview.h" \
-    "src/appwizard.h" \
-    "src/appdetailspage.h" \
-    "src/pluginspage.h" \
-    "src/additionalfilespage.h" \
     "src/scoreeditor.h" \
     "src/filebeditor.h" \
     $$PWD/csound_threaded_csqt.hpp \
@@ -108,13 +99,11 @@ SOURCES = "src/about.cpp" \
     "src/searchindex.cpp" \
     "src/documentpage.cpp" \
     "src/documentview.cpp" \
-    "src/dotgenerator.cpp" \
     "src/externallauncher.cpp" \
     "src/eventsheet.cpp" \
     "src/findreplace.cpp" \
     "src/findbar.cpp" \
     "src/framewidget.cpp" \
-    "src/graphicwindow.cpp" \
     "src/highlighter.cpp" \
     "src/inspector.cpp" \
     "src/keyboardshortcuts.cpp" \
@@ -148,10 +137,6 @@ SOURCES = "src/about.cpp" \
     "src/qutesheet.cpp" \
     "src/basedocument.cpp" \
     "src/baseview.cpp" \
-    "src/appwizard.cpp" \
-    "src/appdetailspage.cpp" \
-    "src/pluginspage.cpp" \
-    "src/additionalfilespage.cpp" \
     "src/scoreeditor.cpp" \
     "src/filebeditor.cpp" \
     $$PWD/risset.cpp \

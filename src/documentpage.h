@@ -73,7 +73,6 @@ public:
     void setParsedUDOs(QStringList udos);
     void enableScoreSyntaxHighlighting(bool status);
     virtual QString getFullText();
-	QString getDotText();
 	QString getSelectedText(int section = -1);
 	QString getSelectedWidgetsText();
 	QString getHtmlText();
@@ -118,7 +117,6 @@ public:
 	bool isRunning();
 	bool isRecording();
 	bool usesFltk();
-	void updateCsLadspaText();
 	void updateCabbageText();
 	void focusWidgets();
 	QString getFileName();
@@ -168,7 +166,6 @@ public:
 	// Internal Options setters
 	void setConsoleBufferSize(int size);
 	void setWidgetEnabled(bool enabled);
-	void setPythonExecutable(QString pythonExec);
 	virtual void registerButton(QuteButton *button);
 	void queueMidiIn(std::vector<unsigned char> *message);
     void queueVirtualMidiIn(std::vector<unsigned char> &message);
@@ -193,7 +190,6 @@ public slots:
 	void perfEnded();
 	void sampleRateMismatch(int orchestraSr, int backendSr, const QString &backendName);
 	void setHelp();
-	int runPython();  // Called when file is a python file
 	void showWidgets(bool show = true);
 	void hideWidgets();
 	void passSelectedWidget(QuteWidget* widget);
@@ -231,8 +227,6 @@ private:
 	CsoundOptions getParentOptions();
 	virtual WidgetLayout* newWidgetLayout();
 	QString companionFile;
-	bool m_pythonRunning;
-	QString m_pythonExecutable;
 	MidiLearnDialog *m_midiLearn;
 	//    DocumentView *m_view;
 	// Options

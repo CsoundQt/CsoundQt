@@ -71,15 +71,11 @@ private slots:
 	//    void browseDefaultCsd();
 	void browseFavorite();
     void browseExamplePath();
-	void browsePythonDir();
 	void browseCsoundExecutable();
-    void browsePythonExecutable();
 	void browseLogFile();
-	void browseSdkDir();
 	void browseTemplateDir();
 	void browseTerminal();
 	void browseBrowser();
-	void browseDot();
 	void browseWaveEditor();
 	void browseWavePlayer();
 	void browsePdfViewer();

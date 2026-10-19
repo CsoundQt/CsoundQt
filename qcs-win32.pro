@@ -55,15 +55,6 @@ win32-msvc2017:LIBS += winmm.lib
 win32-msvc:LIBS += winmm.lib
 }
 
-quteapp_f {
-message(Bundling QuteApp_f)
-RESOURCES += "src/quteapp_f_win.qrc"
-}
-quteapp_d {
-message(Bundling QuteApp_d)
-RESOURCES += "src/quteapp_d_win.qrc"
-}
-
 # For OleInitialize() FLTK bug workaround
 win32-g++:LIBS *= -lole32
 win32-msvc2013:LIBS *= ole32.lib
