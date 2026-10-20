@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+ = ../../SourceMaterials
+--env:SSDIR+= ../../SourceMaterials
 -m128
 </CsOptions>
 <CsInstruments>
@@ -83,7 +83,7 @@ instr Play
   chnset(sprintfk( "%02d", int(progress)), "sec")
   chnset(sprintfk( "%03d", int(frac(progress)*1000)), "ms")
 
-  tsec:k + = 1/kr
+  tsec:k += 1/kr
 
 endin
 
@@ -111,7 +111,7 @@ opcode CsQtMeter, 0, SSak
       kOn = 0
     endif
   endif
-  kTim + = ksmps/sr
+  kTim += ksmps/sr
 endop
 
 // show the first two output channels (although you can play

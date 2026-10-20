@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 -nm128
---env:SSDIR+ = ../../SourceMaterials
+--env:SSDIR+= ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 
@@ -48,8 +48,8 @@ opcode Mbrowse2Array, S[], S
     ipos       = strindex(Substring, "|")
     Sname      = strsub(Substring, 0, ipos)
     Sout[indx] = Sname
-    istart + = ipos+1
-    indx   + = 1
+    istart += ipos+1
+    indx   += 1
   od
   xout Sout
 endop

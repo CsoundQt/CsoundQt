@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+ = ../../SourceMaterials
+--env:SSDIR+= ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 
@@ -60,12 +60,12 @@ instr Main
         if (abs(stream) > abs(accum)) then
           accum = stream
         endif
-        counter + = 1
+        counter += 1
 
         // ... reaching decimation value
       else
         fprintks(outfile, "%f\n", accum)
-        print_counter + = 1
+        print_counter += 1
         counter = 0
         accum   = 0
       endif
@@ -75,13 +75,13 @@ instr Main
 
       // on the run ...
       if (counter < decimation) then
-        accum   + = abs(stream)
-        counter + = 1
+        accum   += abs(stream)
+        counter += 1
 
         // ... reaching decimation value
       else
         fprintks(outfile, "%f\n", accum/counter)
-        print_counter + = 1
+        print_counter += 1
         counter = 0
         accum   = 0
       endif
@@ -89,7 +89,7 @@ instr Main
     endif
 
     // increment counting
-    count_samples + = 1
+    count_samples += 1
 
   od
 

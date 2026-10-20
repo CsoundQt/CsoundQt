@@ -15,7 +15,7 @@
 ; --midi-key-oct=4 --midi-velocity-amp=5
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+ = ../../SourceMaterials
+--env:SADIR+= ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr     = 44100  ; Sample rate

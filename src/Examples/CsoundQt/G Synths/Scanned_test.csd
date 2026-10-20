@@ -8,7 +8,7 @@ By Tarmo Johannes trmjhnns@gmail.com 2013/2016
 
 <CsoundSynthesizer>
 <CsOptions>
--odac --env:SSDIR+ = ../../SourceMaterials
+-odac --env:SSDIR+= ../../SourceMaterials
 ; -d ; ucomment if you don't want to have output about tables and fft analyse
 </CsOptions>
 <CsInstruments>

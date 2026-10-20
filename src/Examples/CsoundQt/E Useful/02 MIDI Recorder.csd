@@ -75,7 +75,7 @@ instr GetMidi
     Arr[RecPointer+2] = d2
 
     // advance rec pointer
-    RecPointer + = 3
+    RecPointer += 3
 
   endif
 
@@ -86,7 +86,7 @@ instr Record
 
   RecPointer init 0
   RecTime    init 0
-  RecTime + = 1/kr
+  RecTime += 1/kr
   chnset(k(1), "rec-is-on")
   if lastcycle() == 1 then
     chnset(k(0), "rec-is-on")
@@ -116,11 +116,11 @@ instr Play
     endif
 
     // increase the read pointer
-    readIndx + = 3
+    readIndx += 3
 
   endif
 
-  localTime + = 1/kr
+  localTime += 1/kr
 
   // stop any sound in case this instrument is turned off
   if (release() == 1) then
@@ -144,7 +144,7 @@ endin
 instr SaveToFile
 
   filename:S = sprintf("MIDI-rec_%02d.csd", RecNum)
-  RecNum + = 1
+  RecNum += 1
   outstring:S = {{
 <CsoundSynthesizer>
 <CsOptions>

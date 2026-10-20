@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 --midi-key   = 4 --midi-velocity-amp = 5 -m128
---env:SSDIR+ = ../../SourceMaterials
+--env:SSDIR+= ../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 /***Imitative Additive Synthesis***/

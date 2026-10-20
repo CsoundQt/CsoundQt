@@ -34,7 +34,7 @@ opcode CsQtMeter, 0, SSak
       chnset(kOn, S_chan_clip)
     endif
   endif
-  kTim + = ksmps/sr
+  kTim += ksmps/sr
 endop
 
 ; declare software channels for input
