@@ -47,6 +47,12 @@
   document text via `CsoundOptions::textSetsDbfs()`), and the flag itself is
   added in `CsoundOptions::generateCmdLineFlagsList()`.
 
+## Working style
+
+- **Ask before guessing.** When something is ambiguous or you are missing
+  information (a test path, expected behaviour, a design choice), ask the user
+  instead of inventing assumptions.
+
 ## Commits
 
 **Do not commit on your own initiative.** After making changes, leave them in
