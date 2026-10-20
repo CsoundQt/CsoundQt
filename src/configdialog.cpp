@@ -56,6 +56,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     connect(tabUseSpacesCheckBox, &QCheckBox::toggled,
             tabSpacesSpinBox, &QWidget::setEnabled);
 
+    // "Apply" must copy the widget values before the main window applies them.
+    // (The main window connects its applySettings() slot to the same signal.)
+    connect(applyButton, &QPushButton::released, this, &ConfigDialog::apply);
+
 	m_configlists->refreshModules();
 
 	if(m_configlists->rtAudioNames.size() == 1) {
@@ -567,6 +571,12 @@ void ConfigDialog::setCurrentTab(int index)
 
 void ConfigDialog::accept()
 {
+	apply();
+	QDialog::accept();
+}
+
+void ConfigDialog::apply()
+{
 	m_options->font = fontComboBox->currentText();
 	m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
 	m_options->showLineNumberArea = lineNumbersCheckBox->isChecked();
@@ -719,7 +729,6 @@ void ConfigDialog::accept()
     m_options->highlightScore = highlightScoreCheckBox->isChecked();
 
 	//  emit(changeFont());
-	QDialog::accept();
 }
 
 void ConfigDialog::browseInputFilename()

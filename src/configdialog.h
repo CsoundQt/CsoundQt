@@ -59,6 +59,7 @@ private:
 
 private slots:
 	virtual void accept();
+	void apply(); // copy the widget values into m_options (OK and Apply)
 	void browseInputFilename();
 	void browseOutputFilename();
 	void browseCsdocdir();
