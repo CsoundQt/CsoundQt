@@ -147,6 +147,12 @@ public:
 	void applyRisset();
 	// Loads the manual start page the first time the help panel is shown.
 	void loadHelpOnce();
+	// Returns the Csound manual directory: the configured path when valid, else
+	// the platform's usual install locations. Empty when no manual is found.
+	QString findManualDirectory() const;
+	// Points the help panel at the manual found by findManualDirectory(). When
+	// reload is true, an already loaded (or visible) manual is refreshed too.
+	void applyManualDirectory(bool reload);
 	void stkCheck();
 	// localServer
 	bool startServer();
@@ -580,6 +586,7 @@ private:
     bool m_rissetInitialized = false;
     bool m_rissetReady = false;
     QString m_helpStartPage;
+    QString m_appliedCsdocdir; // csdocdir value currently applied to the help panel
     bool m_helpLoaded = false;
     bool m_startupShown = false;
     bool m_hasSavedDockState = false;   // a saved dock layout was restored

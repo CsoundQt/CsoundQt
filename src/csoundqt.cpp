@@ -411,60 +411,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
         newFile();
     }
 
-    // try to find directory for manual, if not set
-    QString docDir = QString(); //m_options->csdocdir;
-    if (m_options->csdocdir.isEmpty() ||
-            !QFile::exists(m_options->csdocdir+"/index.html") ) {
-        QStringList possibleDirectories;
-#if defined(Q_OS_WIN)
-        QString programFilesPath = QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
-        QString programFilesPathx86 = QDir::fromNativeSeparators(qgetenv("PROGRAMFILES(X86)"));
-        possibleDirectories << initialDir +"/doc/manual"
-                            << programFilesPath + "/Csound6/doc/manual"
-                            << programFilesPathx86 + "/Csound6/doc/manual"
-                            << programFilesPath + "/Csound6_x64/doc/manual"
-                            << programFilesPath + "/csound/doc/manual";
-#elif defined(FLATPAK_BUILD)
-        // Csound manual is bundled with the flatpak in /app/share/manual
-        possibleDirectories << "/app/share/manual";
-#elif defined(Q_OS_MACOS)
-        possibleDirectories << initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual")
-                            << initialDir + QString("/../Resources/Manual")
-                            << "/Library/Frameworks/CsoundLib64.framework/Resources/Manual";
-#else
-        possibleDirectories << "/usr/share/doc/csound-manual/html"
-                            << "/usr/share/doc/csound-doc/html"
-                            << "/usr/local/share/doc/csound/html"
-                            << QCoreApplication::applicationDirPath() + "/../share/doc/csound-manual/html"   // for transportable apps like AppImage and perhas others
-                            << QCoreApplication::applicationDirPath() + "/../share/doc/csound-doc/html";
-#endif
-        foreach (QString dir, possibleDirectories) {
-            qDebug() << "Looking manual in: " << dir;
-            if (QFile::exists(dir+"/index.html")) {
-                docDir = dir;
-                qDebug()<<"Found manual in: "<<docDir;
-                break;
-            }
-        }
-    } else {
-        docDir = m_options->csdocdir;
-    }
-    helpPanel->docDir = docDir;
-    // Load the manual lazily, the first time the help panel is actually shown,
-    // so parsing a large manual does not delay startup.
-    if (QFile::exists(docDir + "/indexall.html"))
-        m_helpStartPage = docDir + "/indexall.html";
-    else if (QFile::exists(docDir + "/reference/opcodesReference.html"))
-        m_helpStartPage = docDir + "/reference/opcodesReference.html";
+    // Locate the Csound manual and set up the help panel. The manual itself is
+    // loaded lazily, the first time the help panel is actually shown, so parsing
+    // a large manual does not delay startup.
+    applyManualDirectory(false);
     connect(helpPanel, &QDockWidget::visibilityChanged, this, [this](bool visible) {
         if (visible && m_startupShown)
             loadHelpOnce();
     });
-
-    // Whole-manual search roots. Registered lazily; parsed on first search.
-    // The default root (empty label) gets no source tag in the result list.
-    if (QFile::exists(docDir + "/search/search_index.json"))
-        helpPanel->addSearchRoot(docDir, QString());
     // The risset search root is added by initRisset() once risset is detected.
 
     applySettings();
@@ -629,7 +583,7 @@ void CsoundQt::showEvent(QShowEvent *event)
     // Start risset detection only once the window is actually shown, so its
     // external processes never delay startup. initRisset() is idempotent.
     if (!m_rissetInitialized)
-        QTimer::singleShot(0, this, [this]{ initRisset(); });
+        QTimer::singleShot(1000, this, [this]{ initRisset(); });
     // If the help panel is already the active dock tab, visibilityChanged never
     // fires, so load the manual here. loadHelpOnce() is idempotent.
     if (!m_helpLoaded && helpPanel->isVisible())
@@ -642,6 +596,130 @@ void CsoundQt::loadHelpOnce()
         return;
     m_helpLoaded = true;
     helpPanel->loadFile(m_helpStartPage);
+}
+
+// Expands a leading "~" and normalises separators. QFile does not expand "~",
+// so a path typed as "~/manual/site" would otherwise never be found.
+static QString normalizedUserPath(QString path)
+{
+    path = path.trimmed();
+    if (path.startsWith(QLatin1Char('~')))
+        path = QDir::homePath() + path.mid(1);
+    return QDir::cleanPath(QDir::fromNativeSeparators(path));
+}
+
+// A directory is usable as a manual when it contains a landing page or the
+// opcodes/ section (which is what opcode help needs). Some installs only have
+// the latter at a location the user points at.
+static bool isManualDirectory(const QString &dir)
+{
+    if (dir.isEmpty() || !QFileInfo(dir).isDir())
+        return false;
+    return QFile::exists(dir + "/index.html")
+            || QFileInfo(dir + "/opcodes").isDir();
+}
+
+QString CsoundQt::findManualDirectory() const
+{
+    // An explicitly configured directory wins when it is a usable manual.
+    const QString configured = normalizedUserPath(m_options->csdocdir);
+    if (!configured.isEmpty()) {
+        if (isManualDirectory(configured))
+            return configured;
+        qWarning() << "Not a Csound manual directory:" << configured;
+    }
+
+    QStringList possibleDirectories;
+#if defined(Q_OS_WIN)
+    QString programFilesPath = QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
+    QString programFilesPathx86 = QDir::fromNativeSeparators(qgetenv("PROGRAMFILES(X86)"));
+    possibleDirectories << initialDir + "/doc/manual"
+                        << programFilesPath + "/Csound6/doc/manual"
+                        << programFilesPathx86 + "/Csound6/doc/manual"
+                        << programFilesPath + "/Csound6_x64/doc/manual"
+                        << programFilesPath + "/csound/doc/manual";
+#elif defined(FLATPAK_BUILD)
+    // Csound manual is bundled with the flatpak in /app/share/manual
+    possibleDirectories << "/app/share/manual";
+#elif defined(Q_OS_MACOS)
+    possibleDirectories << initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual")
+                        << initialDir + QString("/../Resources/Manual")
+                        << "/Library/Frameworks/CsoundLib64.framework/Resources/Manual";
+#else
+    possibleDirectories << "/usr/share/doc/csound-manual/html"
+                        << "/usr/share/doc/csound-doc/html"
+                        << "/usr/local/share/doc/csound/html"
+                        << QCoreApplication::applicationDirPath() + "/../share/doc/csound-manual/html"   // for transportable apps like AppImage and perhaps others
+                        << QCoreApplication::applicationDirPath() + "/../share/doc/csound-doc/html";
+#endif
+    for (const QString &dir : possibleDirectories) {
+        qDebug() << "Looking manual in: " << dir;
+        if (isManualDirectory(dir)) {
+            qDebug() << "Found manual in: " << dir;
+            return dir;
+        }
+    }
+    return QString();
+}
+
+void CsoundQt::applyManualDirectory(bool reload)
+{
+    const QString oldDir = helpPanel->docDir;
+    const QString configured = normalizedUserPath(m_options->csdocdir);
+    const QString docDir = findManualDirectory();
+    helpPanel->docDir = docDir;
+
+    // When the configured directory was used, store its expanded form so that
+    // the rest of the application (e.g. opcode help) resolves it directly.
+    if (!docDir.isEmpty() && docDir == configured)
+        m_options->csdocdir = docDir;
+    m_appliedCsdocdir = m_options->csdocdir;
+
+    // Warn (non-modal banner) when the user set a directory that is not a
+    // usable Csound manual instead of silently showing nothing.
+    if (reload && !configured.isEmpty() && !isManualDirectory(configured)) {
+        // Anchor to the active window so the banner is visible over the (modal)
+        // settings dialog when Apply is used.
+        QWidget *context = QApplication::activeWindow();
+        Notification::showTransient(context ? context : this,
+            tr("No Csound manual found in %1").arg(configured),
+            tr("Html Doc Directory"), 8000);
+    }
+
+    if (QFile::exists(docDir + "/indexall.html"))
+        m_helpStartPage = docDir + "/indexall.html";
+    else if (QFile::exists(docDir + "/reference/opcodesReference.html"))
+        m_helpStartPage = docDir + "/reference/opcodesReference.html";
+    else if (QFile::exists(docDir + "/index.html"))
+        m_helpStartPage = docDir + "/index.html";
+    else
+        m_helpStartPage.clear();
+
+    // Keep whole-manual search in sync with the manual being displayed. The
+    // roots are registered lazily and parsed on the first search.
+    if (oldDir != docDir) {
+        if (!oldDir.isEmpty())
+            helpPanel->removeSearchRoot(oldDir);
+        if (QFile::exists(docDir + "/search/search_index.json"))
+            helpPanel->addSearchRoot(docDir, QString());
+    }
+
+    if (!reload)
+        return;
+
+    if (docDir.isEmpty() || m_helpStartPage.isEmpty()) {
+        // The directory was cleared, is not a manual, or has no landing page:
+        // empty the view instead of leaving the previous manual on screen.
+        helpPanel->clear();
+        m_helpLoaded = false;
+        return;
+    }
+
+    // Load the manual now and bring the Help panel to the front, so setting the
+    // directory gives immediate visible feedback even when Help was hidden.
+    m_helpLoaded = true;
+    helpPanel->loadFile(m_helpStartPage);
+    helpPanel->setVisibleAndRaise(true);
 }
 
 void CsoundQt::initRisset()
@@ -3712,15 +3790,7 @@ void CsoundQt::downloadManual()
             }
 
             m_options->csdocdir = installedManualPath;
-            helpPanel->docDir = installedManualPath;
-            m_helpStartPage = QFileInfo::exists(QDir(installedManualPath).filePath("indexall.html"))
-                                  ? QDir(installedManualPath).filePath("indexall.html")
-                                  : QDir(installedManualPath).filePath("index.html");
-            helpPanel->addSearchRoot(installedManualPath, QString());
-            if (m_helpLoaded)
-                helpPanel->loadFile(m_helpStartPage);
-            else if (helpPanel->isVisible())
-                loadHelpOnce();
+            applyManualDirectory(true);
 
             QSettings settings("csoundqt", "csoundqt");
             settings.setValue("Options/Environment/csdocdir", installedManualPath);
@@ -3936,6 +4006,10 @@ void CsoundQt::applySettings()
 
     // Apply the debug logging preference (may have been changed in the dialog).
     DebugLog::setEnabled(m_options->logDebug);
+
+    // Load/reload the manual when its directory was changed in the dialog.
+    if (m_options->csdocdir != m_appliedCsdocdir)
+        applyManualDirectory(true);
 
     for (int i = 0; i < documentPages.size(); i++) {
         setCurrentOptionsForPage(documentPages[i]);
