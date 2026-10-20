@@ -140,13 +140,15 @@ i 11 0.0 0.1   ; Init
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>540</x>
- <y>251</y>
- <width>825</width>
- <height>434</height>
+ <x>0</x>
+ <y>0</y>
+ <width>816</width>
+ <height>430</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -172,7 +174,6 @@ i 11 0.0 0.1   ; Init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -248,7 +249,6 @@ i 11 0.0 0.1   ; Init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -327,7 +327,6 @@ i 11 0.0 0.1   ; Init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -370,7 +369,6 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -438,7 +436,6 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -553,7 +550,6 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -614,7 +610,6 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -714,7 +709,6 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -814,7 +808,6 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -914,7 +907,6 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -1014,7 +1006,6 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -1114,7 +1105,6 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
