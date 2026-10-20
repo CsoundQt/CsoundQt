@@ -352,10 +352,13 @@ void BaseView::setColorVariables(bool color)
 
 void BaseView::setBackgroundColor(QColor color)
 {
+    // Clear the stylesheet first: re-polishing it after setting the palette
+    // can reset the widget palette to the application colours.
+    m_mainEditor->setStyleSheet("");
     QPalette palette = m_mainEditor->palette();
     palette.setColor(QPalette::Base, color);
     m_mainEditor->setPalette(palette);
-    m_mainEditor->setStyleSheet(""); // Clear stylesheet to ensure palette applies
+    m_mainEditor->setEditorBackground(color);
 }
 
 void BaseView::setTextColor(QColor color)
@@ -368,11 +371,14 @@ void BaseView::setTextColor(QColor color)
 
 void BaseView::setColors(QColor text, QColor background)
 {
+    // Clear the stylesheet before setting the palette; doing it afterwards
+    // can reset the palette again.
+    m_mainEditor->setStyleSheet("");
     QPalette palette = m_mainEditor->palette();
     palette.setColor(QPalette::Text, text);
     palette.setColor(QPalette::Base, background);
     m_mainEditor->setPalette(palette);
-    m_mainEditor->setStyleSheet("");
+    m_mainEditor->setEditorBackground(background);
 }
 
 
@@ -627,6 +633,35 @@ void BaseView::toggleParameterMode()
 void BaseView::showLineArea(bool visible)
 {
     m_mainEditor->setLineAreaVisible(visible);
+}
+
+void BaseView::setLineNumberContrast(int contrast)
+{
+    m_lineNumberContrast = qBound(0, contrast, 100);
+    updateLineAreaColors();
+}
+
+void BaseView::setEditorPadding(int padding)
+{
+    m_mainEditor->setEditorPadding(padding);
+}
+
+void BaseView::updateLineAreaColors()
+{
+    const auto defaultFormat = m_highlighter.getFormat(QStringLiteral("default"));
+    QColor foreground = defaultFormat.foreground().color();
+    QColor background = defaultFormat.background().color();
+    if (foreground.lightness() < background.lightness()) {
+        // light
+        foreground = foreground.lighter(120);
+        background = background.darker(100);
+    }
+    else {
+        // dark
+        foreground = foreground.darker(140);
+        background = background.lighter(125);
+    }
+    m_mainEditor->setLineAreaColors(foreground, background, m_lineNumberContrast);
 }
 
 QString BaseView::getBasicText()

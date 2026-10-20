@@ -9,6 +9,12 @@
 #include <QGuiApplication>
 #include <QSharedPointer>
 
+#if defined(Q_OS_LINUX) && defined(QT_DBUS_LIB)
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusMessage>
+#endif
+
 namespace ExternalLauncher {
 
 namespace {
@@ -23,14 +29,50 @@ namespace {
 // Flatpak the sandbox forbids executing a host binary altogether. URLs are
 // therefore always handed to the system URL handler (which uses the
 // freedesktop portal under Flatpak).
+bool isFlatpakSession()
+{
+    return qEnvironmentVariableIsSet("FLATPAK_ID")
+            || QFileInfo::exists(QStringLiteral("/.flatpak-info"));
+}
+
+bool isAppImage()
+{
+    return qEnvironmentVariableIsSet("APPIMAGE")
+            || qEnvironmentVariableIsSet("APPDIR");
+}
+
 bool relyOnSystemUrlHandler()
 {
-    if (qEnvironmentVariableIsSet("APPIMAGE") || qEnvironmentVariableIsSet("APPDIR"))
-        return true;
-    if (qEnvironmentVariableIsSet("FLATPAK_ID"))
-        return true;
-    return QFileInfo::exists(QStringLiteral("/.flatpak-info"));
+    return isFlatpakSession() || isAppImage();
 }
+
+#if defined(Q_OS_LINUX) && defined(QT_DBUS_LIB)
+// Ask the running file manager to show the folder. This goes through the
+// session bus, so no child inherits our library paths. It also works from an
+// AppImage, where launching a host binary directly is fragile, and avoids
+// kde-open's attempt to read a directory as a file.
+bool showFolderWithFileManager1(const QString &path, const QString &feature)
+{
+    QDBusInterface manager(QStringLiteral("org.freedesktop.FileManager1"),
+                           QStringLiteral("/org/freedesktop/FileManager1"),
+                           QStringLiteral("org.freedesktop.FileManager1"),
+                           QDBusConnection::sessionBus());
+    if (!manager.isValid())
+        return false;
+    manager.setTimeout(5000);
+
+    const QString uri = QUrl::fromLocalFile(QDir(path).absolutePath()).toString();
+    qDebug().noquote() << "External open attempt: feature=" << feature
+                       << "mechanism=filemanager1" << "target=" << uri;
+    const QDBusMessage reply = manager.call(QStringLiteral("ShowFolders"),
+                                            QStringList{uri}, QString());
+    const bool ok = reply.type() != QDBusMessage::ErrorMessage;
+    qDebug().noquote() << "External open result: feature=" << feature
+                       << "mechanism=filemanager1" << "result=" << ok
+                       << (ok ? QString() : reply.errorMessage());
+    return ok;
+}
+#endif
 
 QString systemHandlerReason(const QString &configuredBrowser)
 {
@@ -210,6 +252,36 @@ bool openWithDefaultApplication(const QUrl &url, QString *errorString, const QSt
     if (errorString)
         *errorString = QObject::tr("QDesktopServices::openUrl() returned false.");
     return false;
+}
+
+bool openFolder(const QString &path, QString *errorString, const QString &feature)
+{
+    const QFileInfo info(path);
+    if (!info.exists() || !info.isDir()) {
+        if (errorString)
+            *errorString = QObject::tr("Not a directory: %1").arg(path);
+        return false;
+    }
+
+    const QString request = feature.isEmpty() ? QStringLiteral("open-folder") : feature;
+
+#if defined(Q_OS_LINUX)
+    // A Flatpak sandbox must use the portal through QDesktopServices. Outside
+    // Flatpak, ask the running file manager over the session bus: no child
+    // inherits our LD_LIBRARY_PATH, and kde-open (which would try to read the
+    // directory as a file) is not involved.
+    if (!isFlatpakSession()) {
+#if defined(QT_DBUS_LIB)
+        if (showFolderWithFileManager1(info.absoluteFilePath(), request))
+            return true;
+#endif
+    }
+#endif
+
+    QString folder = info.absoluteFilePath();
+    if (!folder.endsWith(QLatin1Char('/')))
+        folder += QLatin1Char('/');
+    return openWithDefaultApplication(QUrl::fromLocalFile(folder), errorString, request);
 }
 
 bool openBrowser(const QString &configuredBrowser, const QUrl &url, QString *errorString,

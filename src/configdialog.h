@@ -55,11 +55,14 @@ private:
 	void browseFile(QString &destination);
 	void browseSaveFile(QString &destination);
 	void browseDir(QString &destination);
+	void populateEditorThemes();
     int m_selectedOutputDeviceIndex;
 
 private slots:
 	virtual void accept();
 	void apply(); // copy the widget values into m_options (OK and Apply)
+	void duplicateEditorTheme();
+	void openThemesFolder();
 	void browseInputFilename();
 	void browseOutputFilename();
 	void browseCsdocdir();

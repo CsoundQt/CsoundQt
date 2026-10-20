@@ -57,242 +57,6 @@ QColor saturateColor(QColor color, int percent) {
     return QColor::fromHsl(color.hue(), sat, color.lightness());
 }
 
-bool Highlighter::applyBuiltInTheme(const QString &theme) {
-    if(theme == "none") {
-        defaultFormat.setForeground(QColor("black"));
-        defaultFormat.setBackground(QColor(250, 250, 250));
-    }
-    else if(theme == "light classic") {
-        defaultFormat.setForeground(QColor("black"));
-        defaultFormat.setBackground(QColor(250, 250, 250));
-
-        csdtagFormat.setForeground(QColor("brown"));
-        csdtagFormat.setFontWeight(QFont::Bold);
-
-        instFormat.setForeground(QColor("purple"));
-        instFormat.setFontWeight(QFont::Bold);
-
-        keywordFormat.setForeground(QColor("#E65100"));
-        keywordFormat.setFontWeight(QFont::Bold);
-
-        headerFormat.setForeground(QColor("brown"));
-        headerFormat.setFontWeight(QFont::Bold);
-
-        opcodeFormat.setForeground(QColor("blue"));
-        opcodeFormat.setFontWeight(QFont::Bold);
-        deprecatedFormat = opcodeFormat;
-
-        singleLineCommentFormat.setForeground(QColor("green"));
-        singleLineCommentFormat.setFontItalic(true);
-
-        macroDefineFormat.setForeground(QColor("green"));
-        macroDefineFormat.setFontWeight(QFont::Bold);
-
-        pfieldFormat.setFontWeight(QFont::Bold);
-
-        irateFormat.setForeground(QColor("darkCyan"));
-        krateFormat.setForeground(QColor("darkCyan"));
-
-        arateFormat.setForeground(QColor("darkCyan"));
-        arateFormat.setFontWeight(QFont::Bold);
-
-        stringVarFormat.setForeground(QColor(Qt::darkYellow));
-        stringVarFormat.setFontWeight(QFont::Bold);
-
-        fsigFormat.setForeground(QColor(Qt::gray));
-        fsigFormat.setFontWeight(QFont::Bold);
-
-        booleanFormat.setForeground(QColor("darkorange"));
-        booleanFormat.setFontWeight(QFont::Bold);
-
-        complexFormat.setForeground(QColor("teal"));
-        complexFormat.setFontWeight(QFont::Bold);
-
-        labelFormat.setForeground(QColor(205,92,92));
-        labelFormat.setFontWeight(QFont::Bold);
-
-        nameFormat.setForeground(QColor("#880E4F"));
-        nameFormat.setFontWeight(QFont::Bold);
-        // nameFormat.setFontUnderline(true);
-
-        quotationFormat.setForeground(Qt::red);
-        multiLineCommentFormat.setForeground(QColor("green"));
-
-        ioFormat = opcodeFormat;
-        udoFormat = opcodeFormat;
-        operatorFormat = defaultFormat;
-        importantCommentFormat = singleLineCommentFormat;
-        scoreLetterFormat = opcodeFormat;
-    }
-    else if(theme == "light") {
-        defaultFormat.setForeground(QColor("#030303"));
-        defaultFormat.setBackground(QColor("#F9F9F9"));
-
-        // csdtagFormat.setFontWeight(QFont::Bold);
-
-        instFormat.setForeground(QColor("#82387B"));
-        instFormat.setFontWeight(QFont::Bold);
-
-        keywordFormat.setForeground(QColor("#D64100"));
-        keywordFormat.setFontWeight(QFont::Bold);
-
-        // headerFormat.setForeground(QColor("#C62828"));
-        // headerFormat.setFontWeight(QFont::Bold);
-        headerFormat = keywordFormat;
-
-        opcodeFormat.setForeground(QColor("#303F9F"));
-        opcodeFormat.setFontWeight(QFont::Bold);
-
-        deprecatedFormat.setForeground(QColor("#880000"));
-        deprecatedFormat.setFontUnderline(true);
-
-        singleLineCommentFormat.setForeground(QColor("#8F8F7F"));
-        singleLineCommentFormat.setFontItalic(true);
-
-
-        importantCommentFormat.setBackground(QColor("#FFFFA0"));
-        importantCommentFormat.setForeground(
-                    singleLineCommentFormat.foreground().color().darker(150));
-        // importantCommentFormat.setFontItalic(true);
-
-        macroDefineFormat.setForeground(QColor("#00695C"));
-        macroDefineFormat.setFontWeight(QFont::Bold);
-
-        pfieldFormat.setFontWeight(QFont::Bold);
-
-
-        krateFormat.setForeground(QColor("#10796C"));
-        irateFormat.setForeground(QColor("#546E7A"));
-
-        // arateFormat.setForeground(QColor("#C62828"));
-        arateFormat.setForeground(QColor("#B71C1C"));
-        //arateFormat.setFontWeight(QFont::Bold);
-
-        stringVarFormat.setForeground(QColor(Qt::darkYellow));
-        stringVarFormat.setFontWeight(QFont::Normal);
-
-        fsigFormat.setForeground(QColor("#Ad1457"));
-        fsigFormat.setFontWeight(QFont::Bold);
-
-        booleanFormat.setForeground(QColor("#7B1FA2"));
-        //booleanFormat.setFontWeight(QFont::Bold);
-
-        complexFormat.setForeground(QColor("#6D4C41"));
-        //complexFormat.setFontWeight(QFont::Bold);
-
-        labelFormat.setForeground(QColor(205,92,92));
-        labelFormat.setFontWeight(QFont::Bold);
-        labelFormat.setFontUnderline(true);
-
-        nameFormat.setForeground(QColor("#F50057"));
-        nameFormat.setFontWeight(QFont::Bold);
-        // nameFormat.setFontUnderline(true);
-
-        // quotationFormat.setForeground(QColor("#4CAf50"));
-        quotationFormat.setForeground(QColor("#827717"));
-        multiLineCommentFormat.setForeground(quotationFormat.foreground());
-
-        ioFormat.setForeground(QColor("#8844BB"));
-        ioFormat.setFontWeight(QFont::Bold);
-        // ioFormat.setFontItalic(true);
-
-        udoFormat = opcodeFormat;
-        udoFormat.setForeground(opcodeFormat.foreground().color().darker(150));
-
-        csdtagFormat.setForeground(instFormat.foreground());
-
-        operatorFormat.setForeground(instFormat.foreground().color());
-
-        scoreLetterFormat.setForeground(opcodeFormat.foreground());
-        scoreLetterFormat.setFontWeight(QFont::Bold);
-
-    }
-    else if(theme == "dark") {
-        defaultFormat.setForeground(QColor("#FBFBFB"));
-        defaultFormat.setBackground(QColor("#161616"));
-
-        // csdtagFormat.setFontWeight(QFont::Bold);
-
-        instFormat.setForeground(QColor("#B268AB"));
-        instFormat.setFontWeight(QFont::Bold);
-
-        keywordFormat.setForeground(QColor("#FF9800"));
-        keywordFormat.setFontWeight(QFont::Bold);
-
-        // headerFormat.setForeground(QColor("#FFD54F"));
-        // headerFormat.setFontWeight(QFont::Bold);
-        headerFormat = keywordFormat;
-
-        opcodeFormat.setForeground(QColor("#4FC3F7"));
-        opcodeFormat.setFontWeight(QFont::Bold);
-
-        deprecatedFormat.setForeground(saturateColor(opcodeFormat.foreground().color(), 50));
-        deprecatedFormat.setUnderlineColor("#880000");
-        deprecatedFormat.setFontUnderline(true);
-
-        // singleLineCommentFormat.setForeground(QColor("#9F9F8F"));
-        singleLineCommentFormat.setForeground(QColor("#856CB0"));
-        singleLineCommentFormat.setFontItalic(true);
-
-        importantCommentFormat.setBackground(defaultFormat.background().color().lighter(140));
-        importantCommentFormat.setForeground(
-                    singleLineCommentFormat.foreground().color().lighter(175));
-
-        macroDefineFormat.setForeground(QColor("#F06292"));
-        macroDefineFormat.setFontWeight(QFont::Bold);
-
-        pfieldFormat.setFontWeight(QFont::Bold);
-
-        krateFormat.setForeground(QColor("#66EEBB"));
-        irateFormat.setForeground(QColor("#A0A0FF"));
-
-        arateFormat.setForeground(QColor("#F75C5C"));
-        //arateFormat.setFontWeight(QFont::Bold);
-
-
-        fsigFormat.setForeground(QColor("#BD2467"));
-        fsigFormat.setFontWeight(QFont::Bold);
-
-        booleanFormat.setForeground(QColor("#D4E157"));
-        // booleanFormat.setFontWeight(QFont::Bold);
-
-        complexFormat.setForeground(QColor("#26A69A"));
-        // complexFormat.setFontWeight(QFont::Bold);
-
-        labelFormat.setForeground(instFormat.foreground());
-        labelFormat.setFontWeight(QFont::Bold);
-        labelFormat.setFontUnderline(true);
-
-        nameFormat.setForeground(QColor("#D298FB"));
-        nameFormat.setFontWeight(QFont::Bold);
-
-        // quotationFormat.setForeground(QColor("#66FFAA"));
-        quotationFormat.setForeground(QColor("#91FF55"));
-        stringVarFormat.setForeground(quotationFormat.foreground());
-        stringVarFormat.setFontWeight(QFont::Normal);
-
-        multiLineCommentFormat.setForeground(quotationFormat.foreground());
-
-        ioFormat.setForeground(QColor("#FFD54F"));
-        ioFormat.setFontWeight(QFont::Bold);
-
-        udoFormat.setForeground(opcodeFormat.foreground());
-        udoFormat.setFontWeight(QFont::Normal);
-
-        // ioFormat.setFontItalic(true);
-        csdtagFormat.setForeground(instFormat.foreground());
-        operatorFormat.setForeground(nameFormat.foreground().color());
-
-        scoreLetterFormat.setForeground(opcodeFormat.foreground());
-        scoreLetterFormat.setFontWeight(QFont::Bold);
-
-    }
-    else {
-        return false;
-    }
-    return true;
-}
-
 void Highlighter::finishTheme()
 {
     // --------------------------------------
@@ -408,16 +172,13 @@ QTextCharFormat *Highlighter::formatForName(const QString &name)
     return nullptr;
 }
 
-void Highlighter::applyUserTheme(const EditorThemes::Theme &theme)
+void Highlighter::applyFormats(const QHash<QString, EditorThemes::FormatSpec> &formats)
 {
-    defaultFormat.setForeground(theme.defaultForeground);
-    defaultFormat.setBackground(theme.defaultBackground);
-
-    for (auto it = theme.formats.constBegin(); it != theme.formats.constEnd(); ++it) {
+    for (auto it = formats.constBegin(); it != formats.constEnd(); ++it) {
         QTextCharFormat *format = formatForName(it.key());
         if (!format) {
-            qDebug() << "CsoundQt: editor theme" << theme.name
-                     << "- unknown format" << it.key() << "; ignored";
+            qDebug() << "CsoundQt: editor theme - unknown format"
+                     << it.key() << "; ignored";
             continue;
         }
         const EditorThemes::FormatSpec &spec = it.value();
@@ -438,6 +199,13 @@ void Highlighter::applyUserTheme(const EditorThemes::Theme &theme)
     }
 }
 
+void Highlighter::applyTheme(const EditorThemes::Theme &theme)
+{
+    defaultFormat.setForeground(theme.defaultForeground);
+    defaultFormat.setBackground(theme.defaultBackground);
+    applyFormats(theme.formats);
+}
+
 void Highlighter::setTheme(const QString &theme)
 {
     // Re-applying an unchanged theme would force a full rehighlight of the
@@ -447,24 +215,29 @@ void Highlighter::setTheme(const QString &theme)
         return;
 
     QString applied = theme;
-    resetFormats();
+    const EditorThemes::Theme *definition = EditorThemes::find(theme);
+    if (!definition) {
+        qDebug() << "CsoundQt: editor theme" << theme
+                 << "not found, falling back to light";
+        applied = QStringLiteral("light");
+        definition = EditorThemes::find(applied);
+    }
 
-    if (!applyBuiltInTheme(theme)) {
-        const EditorThemes::Theme *userTheme = EditorThemes::find(theme);
-        if (!userTheme) {
-            qDebug() << "CsoundQt: editor theme" << theme
-                     << "not found, falling back to light";
-            applied = QStringLiteral("light");
-            applyBuiltInTheme(applied);
-        }
-        else {
-            // A user theme only describes what it changes. Start from its
-            // built-in light or dark base, then overlay the defined values;
-            // everything else keeps the base.
-            applyBuiltInTheme(userTheme->dark ? QStringLiteral("dark")
-                                              : QStringLiteral("light"));
-            applyUserTheme(*userTheme);
-        }
+    resetFormats();
+    if (definition && definition->source != EditorThemes::Source::BuiltIn) {
+        // A JSON theme only describes what it changes. Start from its built-in
+        // light or dark base, then overlay the defined values.
+        const EditorThemes::Theme *base =
+                EditorThemes::find(definition->dark ? QStringLiteral("dark")
+                                                    : QStringLiteral("light"));
+        if (base)
+            applyTheme(*base);
+        defaultFormat.setForeground(definition->defaultForeground);
+        defaultFormat.setBackground(definition->defaultBackground);
+        applyFormats(definition->formats);
+    }
+    else if (definition) {
+        applyTheme(*definition);
     }
     finishTheme();
 

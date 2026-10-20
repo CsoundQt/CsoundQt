@@ -45,6 +45,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Concurrent Network PrintSupport QuickWidgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Concurrent Network Xml PrintSupport QuickWidgets LinguistTools)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  # Used to ask the running file manager to show a folder without launching it
+  # as a child process (see ExternalLauncher::openFolder).
+  find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus)
+endif()
 
 # Validate Qt version
 if(QT_VERSION_MAJOR EQUAL 5)
@@ -90,6 +95,10 @@ target_link_libraries(CsoundQt PRIVATE
   Qt${QT_VERSION_MAJOR}::PrintSupport
   Qt${QT_VERSION_MAJOR}::QuickWidgets
 )
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  target_link_libraries(CsoundQt PRIVATE Qt${QT_VERSION_MAJOR}::DBus)
+endif()
 
 # Bundled litehtml (HTML/CSS renderer) for the documentation viewer
 add_subdirectory(litehtml)

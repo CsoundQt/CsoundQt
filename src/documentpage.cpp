@@ -134,6 +134,16 @@ void DocumentPage::showLineNumbers(bool show)
 	m_view->showLineArea(show);
 }
 
+void DocumentPage::setLineNumberContrast(int contrast)
+{
+	m_view->setLineNumberContrast(contrast);
+}
+
+void DocumentPage::setEditorPadding(int padding)
+{
+	m_view->setEditorPadding(padding);
+}
+
 void DocumentPage::insertText(QString text, int section)
 {
 	return m_view->insertText(text, section);
@@ -205,13 +215,10 @@ QString DocumentPage::getFullText()
 		fullText += liveEventsText;
 	}
 */
-	if (m_lineEnding == 1) { // Windows line ending mode
-		fullText.replace("\n", "\r\n");
-        fullText.replace("\r\r\n", "\r\n");
-    } else {
-        fullText.replace("\r\r\n", "\r\n");
-        fullText.replace("\r\n", "\n");
-    }
+	// Always write Unix line endings; reading normalizes CRLF/CR to LF.
+    fullText.replace("\r\r\n", "\r\n");
+    fullText.replace("\r\n", "\n");
+    fullText.replace("\r", "\n");
 	return fullText;
 }
 
@@ -567,11 +574,6 @@ QString DocumentPage::getFileName()
 QString DocumentPage::getCompanionFileName()
 {
 	return companionFile;
-}
-
-void DocumentPage::setLineEnding(int lineEndingMode)
-{
-	m_lineEnding = lineEndingMode;
 }
 
 void DocumentPage::copy()

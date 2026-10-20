@@ -341,6 +341,7 @@ private slots:
     void checkSyntaxMenuAction();
     void tabMoved(int to, int from);
     void openExamplesFolder();
+    void openThemesFolder();
     void setLineAndColumn(int line, int column);
 
     DocumentPage *getCurrentDocumentPage() {
@@ -570,6 +571,7 @@ private:
     QAction *insertOpcodeAct;
 //	QAction *showParametersAct;
     QAction *openExamplesFolderAct;
+    QAction *openThemesFolderAct;
     QAction *increaseFontAction;
     QAction *decreaseFontAction;
     QAction *wrapLinesAct;
@@ -603,7 +605,6 @@ private:
 #endif
     QByteArray m_preFullScreenState;
     QString m_fullScreenComponent;
-    QString m_lastFocusPanel;
     QDir m_rissetDataPath;
     bool m_rissetInitialized = false;
     bool m_rissetReady = false;

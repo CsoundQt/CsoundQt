@@ -35,12 +35,22 @@ struct FormatSpec {
     std::optional<bool> strikeout;
 };
 
+enum class Source {
+    BuiltIn,   // compiled in, always present, cannot be overridden
+    Shipped,   // JSON resource (:/syntax-themes/...)
+    User       // JSON file in userThemeDir()
+};
+
 struct Theme {
     QString name;                 // also the id used in the settings
+    Source source = Source::User;
+    QString filePath;             // resource or absolute path; empty for built-ins
     bool dark = false;            // chosen from the required default colours
     QColor defaultForeground;
     QColor defaultBackground;
-    QHash<QString, FormatSpec> formats; // only validated entries
+    // For built-ins this is the complete definition. For JSON themes it holds
+    // only the overrides; the built-in light or dark theme is applied first.
+    QHash<QString, FormatSpec> formats;
 };
 
 // Folder scanned for *.json themes. Empty if no writable location exists.
@@ -57,14 +67,20 @@ QStringList builtInNames();
 // True for the compiled-in themes (including the hidden "none").
 bool isBuiltIn(const QString &name);
 
-// User theme names, sorted for display.
-QStringList userThemeNames();
+// Names of all JSON themes (shipped and user), sorted for display.
+QStringList jsonThemeNames();
 
-// Look up a loaded user theme; nullptr for built-ins or unknown names.
+// Look up any loaded theme (built-in, shipped or user); nullptr if unknown.
 const Theme *find(const QString &name);
 
-// True if name is a built-in or a loaded user theme.
+// True if name is a built-in, shipped or user theme.
 bool exists(const QString &name);
+
+// Write a copy of the named theme to the user theme folder under a unique
+// "<name>-<number>" name. Returns the new name, or an empty string on error
+// (error is set to a user-presentable message). On success the theme registry
+// is reloaded, so the new theme is immediately available.
+QString duplicateTheme(const QString &name, QString *error);
 
 } // namespace EditorThemes
 

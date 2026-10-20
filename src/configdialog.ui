@@ -1763,11 +1763,6 @@
                   <string>light</string>
                  </property>
                 </item>
-                <item>
-                 <property name="text">
-                  <string>light classic</string>
-                 </property>
-                </item>
                </widget>
               </item>
               <item row="1" column="0">
@@ -1812,12 +1807,38 @@
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="0">
-                 <widget class="QCheckBox" name="lineNumbersCheckBox">
-                  <property name="text">
-                   <string>Show line numbers</string>
-                  </property>
-                 </widget>
+                <item row="4" column="0" colspan="2">
+                 <layout class="QHBoxLayout" name="lineNumbersLayout">
+                  <item>
+                   <widget class="QCheckBox" name="lineNumbersCheckBox">
+                    <property name="text">
+                     <string>Line Numbers</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="lineNumberContrastSpinBox">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Contrast of the line numbers against the gutter background (0 = invisible, 100 = full text colour)</string>
+                    </property>
+                    <property name="suffix">
+                     <string> %</string>
+                    </property>
+                    <property name="maximum">
+                     <number>100</number>
+                    </property>
+                    <property name="value">
+                     <number>50</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item row="3" column="0">
                  <widget class="QCheckBox" name="highlightScoreCheckBox">
@@ -2033,59 +2054,58 @@
                  </widget>
                 </item>
                 <item row="2" column="1">
-                 <widget class="QComboBox" name="editorThemeComboBox">
-                  <property name="toolTip">
-                   <string>Syntax highlighting theme of the editor. &quot;auto&quot; follows the application theme. User themes are loaded from the CsoundQt theme folder.</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_34">
-                  <property name="text">
-                   <string>Line Ending Mode</string>
-                  </property>
+                 <widget class="QWidget" name="editorThemeWidget" native="true">
+                  <layout class="QHBoxLayout" name="editorThemeLayout">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QComboBox" name="editorThemeComboBox">
+                     <property name="toolTip">
+                      <string>Syntax highlighting theme of the editor. &quot;auto&quot; follows the application theme. User themes are loaded from the CsoundQt theme folder.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="duplicateThemeButton">
+                     <property name="toolTip">
+                      <string>Create an editable copy of the selected theme in the user theme folder</string>
+                     </property>
+                     <property name="text">
+                      <string>Duplicate</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                 <item row="3" column="1">
-                 <widget class="QComboBox" name="lineEndingComboBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>80</width>
-                    <height>0</height>
-                   </size>
+                 <widget class="QPushButton" name="openThemesFolderButton">
+                  <property name="toolTip">
+                   <string>Open the folder where user editor themes are stored</string>
                   </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>80</width>
-                    <height>16777215</height>
-                   </size>
+                  <property name="text">
+                   <string>Open Themes Folder</string>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">margin-top: 2; margin-bottom: 2; padding: 2</string>
-                  </property>
-                  <property name="currentIndex">
-                   <number>0</number>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Unix</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Windows</string>
-                   </property>
-                  </item>
                  </widget>
                 </item>
-                <item row="4" column="0">
+                <item row="5" column="0">
                  <widget class="QLabel" name="tabSizeLabel">
                   <property name="text">
                    <string>Tab Size</string>
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="1">
+                <item row="5" column="1">
                  <widget class="QSpinBox" name="tabSizeSpinBox">
                   <property name="minimumSize">
                    <size>
@@ -2113,7 +2133,42 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0" colspan="2">
+                <item row="6" column="0">
+                 <widget class="QLabel" name="editorPaddingLabel">
+                  <property name="text">
+                   <string>Editor padding</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QSpinBox" name="editorPaddingSpinBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Padding between the editor border (or line number gutter) and the text, in pixels</string>
+                  </property>
+                  <property name="suffix">
+                   <string> px</string>
+                  </property>
+                  <property name="maximum">
+                   <number>40</number>
+                  </property>
+                  <property name="value">
+                   <number>8</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0" colspan="2">
                  <widget class="QCheckBox" name="tabUseSpacesCheckBox">
                   <property name="toolTip">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, pressing Tab inserts spaces instead of a tab character. The number of spaces is the &quot;Tab Size&quot; below, which is also the width used to display tab characters.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -2147,16 +2202,6 @@
               <string>Behavior</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_24">
-              <item row="1" column="0">
-               <widget class="QCheckBox" name="flashFocusCheckBox">
-                <property name="toolTip">
-                 <string>Briefly outline the panel that receives keyboard focus</string>
-                </property>
-                <property name="text">
-                 <string>Flash focus</string>
-                </property>
-               </widget>
-              </item>
               <item row="10" column="1">
                <widget class="QSpinBox" name="menusDepthSpinBox">
                 <property name="minimumSize">

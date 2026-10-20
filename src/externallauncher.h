@@ -59,6 +59,18 @@ bool openBrowser(const QString &configuredBrowser,
 bool openWithDefaultApplication(const QUrl &url, QString *errorString = nullptr,
                                 const QString &feature = QStringLiteral("external"));
 
+/**
+ * Open a directory in the system file manager.
+ *
+ * On Linux this prefers "gio open", which launches the default handler for
+ * inode/directory directly. kde-open (used by xdg-open on KDE) can try to read
+ * a directory as a file and fail with "Could not read file", so it is only
+ * used as a fallback. On other platforms, and inside AppImage/Flatpak, the
+ * directory URL is handed to QDesktopServices::openUrl().
+ */
+bool openFolder(const QString &path, QString *errorString = nullptr,
+                const QString &feature = QStringLiteral("open-folder"));
+
 /** Return a privacy-conscious target string suitable for diagnostic logs. */
 QString redactUrlForLog(const QUrl &url);
 

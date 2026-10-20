@@ -99,6 +99,7 @@ signals:
 };
 
 class LineNumberArea;
+class EditorPaddingArea;
 
 class TextEditLineNumbers : public TextEditor
 {
@@ -109,7 +110,9 @@ public:
 	void setLineAreaVisible(bool visible);
     bool lineAreaVisble() {return m_lineAreaVisble;}
 	QAction *toggleAction;
-    void setLineAreaColors(QColor foreground, QColor background);
+    void setLineAreaColors(QColor foreground, QColor background, int contrast);
+    void setEditorPadding(int padding);
+    void setEditorBackground(const QColor &color);
 
 public slots:
 	void markDebugLine(int line);
@@ -121,14 +124,32 @@ protected:
 
 private:
 	LineNumberArea *lineNumberArea;
+	EditorPaddingArea *paddingArea;
 	bool m_lineAreaVisble;
-    // padding between line number area and editor (in pixels)
-    int m_editorPadding;
+    int m_leftPadding = 8;
 	QVector<int> m_debugLines;
+
+private:
+	void updateMargins();
 
 private slots:
 	void updateLineArea(int);
 	void updateLineArea();
+};
+
+class EditorPaddingArea : public QWidget
+{
+	Q_OBJECT
+
+public:
+	explicit EditorPaddingArea(QWidget *parent) : QWidget(parent) {}
+	void setColor(const QColor &color) { m_color = color; update(); }
+
+protected:
+	void paintEvent(QPaintEvent *) override;
+
+private:
+	QColor m_color;
 };
 
 class LineNumberArea : public QWidget
@@ -150,9 +171,11 @@ public:
     void setLineNumberSizeScaling(qreal factor) {m_lineNumbersSizeFactor = factor;}
     qreal lineNumberSizeScaling() { return m_lineNumbersSizeFactor; }
     int padding() { return m_padding; }
-    void setColors(QColor foreground, QColor background) {
+    void setColors(QColor foreground, QColor background, int contrast) {
         m_foreground = foreground;
         m_background = background;
+        m_contrast = contrast;
+        update();
     }
 
 protected:
@@ -165,6 +188,7 @@ private:
     double m_lineNumbersSizeFactor;
     QColor m_background;
     QColor m_foreground;
+    int m_contrast = 100;
     TextEditLineNumbers *codeEditor;
 };
 

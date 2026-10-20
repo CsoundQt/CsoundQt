@@ -82,21 +82,14 @@ public:
 	void setOtherCsdText(QString text);
 	void setOtherText(QString text);
 	void showLineArea(bool visible);
+	// 0 makes the numbers vanish into the gutter, 100 uses the full editor
+	// foreground colour.
+	void setLineNumberContrast(int contrast);
+	void setEditorPadding(int padding);
+	void updateLineAreaColors();
     virtual void setTheme(const QString &theme) {
         m_highlighter.setTheme(theme);
-        auto defaultFormat = m_highlighter.getFormat("default");
-        auto fg = defaultFormat.foreground().color();
-        auto bg = defaultFormat.background().color();
-        if(fg.lightness() < bg.lightness()) {
-            // light
-            m_mainEditor->setLineAreaColors(fg.lighter(120),
-                                            bg.darker(100));
-        } else {
-            // dark
-            m_mainEditor->setLineAreaColors(fg.darker(140),
-                                            bg.lighter(125));
-        
-        }
+        updateLineAreaColors();
     }
     void enableScoreSyntaxHighlighting(bool state) {
         m_highlighter.enableScoreSyntaxHighlighting(state);
@@ -144,6 +137,7 @@ protected:
 	// 64 = show remaining text inside CsoundSynthesizer tag
 	// 128 = show Widget, Preset and Extra Options sections
 	Highlighter m_highlighter;
+	int m_lineNumberContrast = 50;
 	OpEntryParser *m_opcodeTree;
 	QSplitter *splitter;
 	TextEditLineNumbers *m_mainEditor;

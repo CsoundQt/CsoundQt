@@ -61,6 +61,7 @@ debugger {
 }
 
 QT += concurrent network widgets printsupport quickwidgets quickcontrols2
+linux: QT += dbus
 
 
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")

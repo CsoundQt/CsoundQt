@@ -34,12 +34,14 @@ public:
 	~Options();
 
     QString theme;  // Icon theme name TODO: rename to iconTheme
-    QString themeMode; // application theme: "auto", "dark", "light", "light-classic"
+    QString themeMode; // application theme: "auto", "dark", "light"
     QString widgetStyle; // Qt widget style ("Fusion", "Breeze", ...); empty = default
 	QString font;
 	float fontPointSize;
 	bool showLineNumberArea;
-	int lineEnding; // 0=Unix (LF) 1=Windows(CR+LF)
+	// Line number contrast against the gutter background: 0 = invisible,
+	// 100 = full editor foreground colour.
+	int lineNumberContrast;
 	QString consoleFont;
 	float consoleFontPointSize;
 	QColor consoleFontColor;
@@ -48,7 +50,7 @@ public:
 	bool tabUseSpaces;  // insert spaces instead of a tab character when Tab is pressed
 	int tabSpaces;      // tab size in spaces: how many spaces a tab is equivalent
 	                    // to, both for insertion and for the display width of tabs
-	bool flashFocus;    // briefly outline the panel that receives keyboard focus
+	int editorPadding;  // padding around the editor text, in pixels
 	bool colorVariables;
     // Editor syntax theme chosen by the user: "auto" follows the application
     // theme, otherwise a theme id such as "light" or "dark" is forced.

@@ -34,7 +34,7 @@
 
 #include <QRegularExpression>
 
-namespace EditorThemes { struct Theme; }
+namespace EditorThemes { struct Theme; struct FormatSpec; }
 
 enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection, HtmlSection };
 
@@ -115,12 +115,12 @@ protected:
     bool isOpcode(QString name);
 
 private:
-    // Theme handling: applyBuiltInTheme() fills the formats for a compiled-in
-    // theme, applyUserTheme() overlays a JSON theme on its light/dark base, and
+    // Theme handling: applyTheme() applies a complete definition (built-in or
+    // an already based-upon user theme), applyFormats() applies overrides, and
     // finishTheme() derives the remaining roles (gi*, error, html, ...).
     void resetFormats();
-    bool applyBuiltInTheme(const QString &theme);
-    void applyUserTheme(const EditorThemes::Theme &theme);
+    void applyTheme(const EditorThemes::Theme &theme);
+    void applyFormats(const QHash<QString, EditorThemes::FormatSpec> &formats);
     void finishTheme();
     QTextCharFormat *formatForName(const QString &name);
 

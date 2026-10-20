@@ -40,7 +40,7 @@ Options::Options(ConfigLists *configlists) :
     widgetStyle = defaultWidgetStyleName();
     fontPointSize = 10;
     showLineNumberArea = true;
-    lineEnding = 0; // 0=Unix (LF) 1=Windows(CR+LF)
+    lineNumberContrast = 50;
     consoleFont = "JetBrains Mono";
     consoleFontPointSize = 9;
     // Dark text on a light background. In dark theme the console colours are
@@ -51,7 +51,7 @@ Options::Options(ConfigLists *configlists) :
 
     tabUseSpaces = true;
     tabSpaces = 2;
-    flashFocus = false;
+    editorPadding = 8;
     colorVariables = true;
     editorTheme = "auto";
     highlightingTheme = "light";

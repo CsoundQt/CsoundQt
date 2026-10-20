@@ -52,6 +52,8 @@ public:
 	void setCompanionFileName(QString name);
 	void setEditorFocus();
 	void showLineNumbers(bool show);
+	void setLineNumberContrast(int contrast);
+	void setEditorPadding(int padding);
 	void insertText(QString text, int section = -1);
 	// Drag & drop helpers (see BaseView).
 	void insertPathAtCursor(const QString &path);
@@ -81,7 +83,6 @@ public:
     QString lineUnderCursor();
 	QRect getWidgetLayoutOuterGeometry();
 	void setWidgetLayoutOuterGeometry(QRect r);
-	void setLineEnding(int lineEndingMode);
 	void setChannelValue(QString channel, double value);
 	double getChannelValue(QString channel);
 	void setChannelString(QString channel, QString value);
@@ -235,7 +236,6 @@ private:
 	//    DocumentView *m_view;
 	// Options
 	bool saveLiveEvents;
-	int m_lineEnding;
     QString m_colorTheme;
     QStringList m_parsedUdos;
     bool m_parseUdosNeeded;

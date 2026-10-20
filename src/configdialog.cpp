@@ -37,6 +37,7 @@
 #include "configlists.h"
 #include "debuglog.h"
 #include "editorthemes.h"
+#include "externallauncher.h"
 
 
 typedef QPair<QString, QString> QStringPair;
@@ -173,8 +174,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
 	fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
 	lineNumbersCheckBox->setChecked(m_options->showLineNumberArea);
+	lineNumberContrastSpinBox->setValue(m_options->lineNumberContrast);
 
-	lineEndingComboBox->setCurrentIndex(m_options->lineEnding);
 	consoleFontComboBox->setCurrentIndex(consoleFontComboBox->findText(m_options->consoleFont) );
 	consoleFontSizeComboBox->setCurrentIndex(consoleFontSizeComboBox->findText(QString::number((int) m_options->consoleFontPointSize)));
 	QPixmap pixmap(64,64);
@@ -202,7 +203,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	tabUseSpacesCheckBox->setChecked(m_options->tabUseSpaces);
 	tabSizeSpinBox->setValue(m_options->tabSpaces);
-	flashFocusCheckBox->setChecked(m_options->flashFocus);
+	editorPaddingSpinBox->setValue(m_options->editorPadding);
 
     // allow translations for highlightingThemeComboBox and themeCombobox
     // NB! make sure that the strings are the same as in configdialog.ui
@@ -216,19 +217,21 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     themeComboBox->setItemData(0, "auto");
     themeComboBox->setItemData(1, "dark");
     themeComboBox->setItemData(2, "light");
-    themeComboBox->setItemData(3, "light-classic");
     themeComboBox->setCurrentIndex(themeComboBox->findData(m_options->themeMode));
 
-    // Built-ins are compiled in; user themes were scanned at startup.
-    editorThemeComboBox->clear();
-    editorThemeComboBox->addItem(tr("auto"), "auto");
-    for (const QString &name : EditorThemes::builtInNames())
-        editorThemeComboBox->addItem(name, name);
-    for (const QString &name : EditorThemes::userThemeNames())
-        editorThemeComboBox->addItem(name, name);
-
-    int editorThemeIndex = editorThemeComboBox->findData(m_options->editorTheme);
-    editorThemeComboBox->setCurrentIndex(editorThemeIndex < 0 ? 0 : editorThemeIndex);
+    populateEditorThemes();
+    connect(duplicateThemeButton, &QPushButton::clicked,
+            this, &ConfigDialog::duplicateEditorTheme);
+    connect(openThemesFolderButton, &QPushButton::clicked,
+            this, &ConfigDialog::openThemesFolder);
+    lineNumberContrastSpinBox->setEnabled(lineNumbersCheckBox->isChecked());
+    connect(lineNumbersCheckBox, &QCheckBox::toggled,
+            lineNumberContrastSpinBox, &QWidget::setEnabled);
+    connect(editorThemeComboBox, &QComboBox::currentIndexChanged,
+            this, [this](int) {
+        duplicateThemeButton->setEnabled(
+                    editorThemeComboBox->currentData().toString() != "auto");
+    });
 
     // Qt widget styles available on this platform, minus the hidden legacy
     // styles (see widgetstyle.h). Fusion is offered first as the recommended,
@@ -522,6 +525,79 @@ ConfigDialog::~ConfigDialog()
 {
 }
 
+void ConfigDialog::populateEditorThemes()
+{
+    const QString wanted = editorThemeComboBox->currentData().toString().isEmpty()
+            ? m_options->editorTheme
+            : editorThemeComboBox->currentData().toString();
+
+    editorThemeComboBox->clear();
+    editorThemeComboBox->addItem(tr("auto"), "auto");
+    for (const QString &name : EditorThemes::builtInNames())
+        editorThemeComboBox->addItem(name, name);
+    for (const QString &name : EditorThemes::jsonThemeNames())
+        editorThemeComboBox->addItem(name, name);
+
+    int index = editorThemeComboBox->findData(wanted);
+    if (index < 0)
+        index = editorThemeComboBox->findData(m_options->editorTheme);
+    editorThemeComboBox->setCurrentIndex(index < 0 ? 0 : index);
+    duplicateThemeButton->setEnabled(
+                editorThemeComboBox->currentData().toString() != "auto");
+}
+
+void ConfigDialog::duplicateEditorTheme()
+{
+    const QString name = editorThemeComboBox->currentData().toString();
+    if (name.isEmpty() || name == QLatin1String("auto"))
+        return;
+
+    QString error;
+    const QString newName = EditorThemes::duplicateTheme(name, &error);
+    if (newName.isEmpty()) {
+        QMessageBox::warning(this, tr("Duplicate theme"),
+                             error.isEmpty()
+                             ? tr("Could not duplicate the theme.")
+                             : error);
+        return;
+    }
+
+    populateEditorThemes();
+    const int index = editorThemeComboBox->findData(newName);
+    if (index >= 0)
+        editorThemeComboBox->setCurrentIndex(index);
+
+    const QString dirPath = EditorThemes::userThemeDir();
+    QMessageBox box(this);
+    box.setIcon(QMessageBox::Information);
+    box.setWindowTitle(tr("Theme duplicated"));
+    box.setText(tr("A copy of the theme \"%1\" was created as \"%2\" in:\n%3")
+                .arg(name, newName, QDir::toNativeSeparators(dirPath)));
+    box.setInformativeText(tr("You can edit the JSON file in that folder."));
+    QPushButton *openButton = box.addButton(tr("Open Theme Folder"),
+                                            QMessageBox::ActionRole);
+    QPushButton *okButton = box.addButton(QMessageBox::Ok);
+    // Esc dismisses the dialog without opening the folder, just like Ok.
+    box.setEscapeButton(okButton);
+    box.exec();
+    if (box.clickedButton() == openButton)
+        openThemesFolder();
+}
+
+void ConfigDialog::openThemesFolder()
+{
+    const QString dirPath = EditorThemes::userThemeDir();
+    QDir().mkpath(dirPath);
+    QString error;
+    if (!ExternalLauncher::openFolder(dirPath, &error,
+                                      QStringLiteral("themes-folder"))) {
+        QMessageBox::warning(this, tr("Open Themes Folder"),
+                             error.isEmpty()
+                             ? tr("Could not open the themes folder:\n%1").arg(dirPath)
+                             : error);
+    }
+}
+
 void ConfigDialog::onRtModuleComboBoxChanged(int index) {
     Q_UNUSED(index);
     // Todo: remember the settings for each backend in a hash table, and set it to the last
@@ -587,12 +663,12 @@ void ConfigDialog::apply()
 	m_options->font = fontComboBox->currentText();
 	m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
 	m_options->showLineNumberArea = lineNumbersCheckBox->isChecked();
-	m_options->lineEnding = lineEndingComboBox->currentIndex();
+	m_options->lineNumberContrast = lineNumberContrastSpinBox->value();
 	m_options->consoleFont = consoleFontComboBox->currentText();
 	m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
 	m_options->tabUseSpaces = tabUseSpacesCheckBox->isChecked();
 	m_options->tabSpaces = tabSizeSpinBox->value();
-	m_options->flashFocus = flashFocusCheckBox->isChecked();
+	m_options->editorPadding = editorPaddingSpinBox->value();
 
     // deal with localized themes:
     m_options->themeMode = themeComboBox->currentData().toString();    // to allow to be translated

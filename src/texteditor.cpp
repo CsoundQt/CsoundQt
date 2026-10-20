@@ -159,13 +159,16 @@ void TextEditor::dropEvent(QDropEvent *event)
 TextEditLineNumbers::TextEditLineNumbers(QWidget *parent)
     : TextEditor(parent)
 {
-	setLineAreaVisible(false);
 	lineNumberArea = new LineNumberArea(this);
+	paddingArea = new EditorPaddingArea(this);
+	setLineAreaVisible(false);
 	connect(this->document(),SIGNAL(blockCountChanged(int)),this,SLOT(updateLineArea(int)));
 	connect(this->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(updateLineArea(int)));
 	connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(updateLineArea()));
     lineNumberArea->setLineNumberSizeScaling(0.8);
-    m_editorPadding = 6;
+    // Palette-based colours are used at runtime (BaseView::setColors clears the
+    // stylesheet), so remove the frame itself instead of relying on CSS.
+    setFrameShape(QFrame::NoFrame);
     this->setStyleSheet("QTextEdit { border: none !important; }");
 
 }
@@ -183,24 +186,14 @@ int TextEditLineNumbers::getAreaWidth()
 void TextEditLineNumbers::resizeEvent(QResizeEvent *e)
 {
 	QTextEdit::resizeEvent(e);
-	if (m_lineAreaVisble) {
-        setViewportMargins(getAreaWidth()+m_editorPadding, 0, 0, 0); // since font might have changed
-		QRect cr = contentsRect();
-		lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), getAreaWidth(), cr.height()));
-    } else
-        setViewportMargins(m_editorPadding, 0, 0, 0); // since font might have changed
+    updateMargins(); // font might have changed, so the gutter width changed
 
 }
 
 void TextEditLineNumbers::setLineAreaVisible(bool visible)
 {
 	m_lineAreaVisble = visible;
-	if (m_lineAreaVisble) {
-        setViewportMargins(getAreaWidth() + m_editorPadding, 0, 0, 0);
-	}
-	else {
-        setViewportMargins(m_editorPadding, 0, 0, 0);
-	}
+    updateMargins();
 }
 
 void TextEditLineNumbers::markDebugLine(int line)
@@ -237,9 +230,40 @@ void TextEditLineNumbers::updateLineArea()
 	lineNumberArea->update();
 }
 
-void TextEditLineNumbers::setLineAreaColors(QColor foreground, QColor background)
+void TextEditLineNumbers::setLineAreaColors(QColor foreground, QColor background,
+                                            int contrast)
 {
-    lineNumberArea->setColors(foreground, background);
+    lineNumberArea->setColors(foreground, background, contrast);
+}
+
+void TextEditLineNumbers::setEditorPadding(int padding)
+{
+    m_leftPadding = qMax(0, padding);
+    updateMargins();
+}
+
+void TextEditLineNumbers::setEditorBackground(const QColor &color)
+{
+    paddingArea->setColor(color);
+}
+
+void TextEditLineNumbers::updateMargins()
+{
+    const QRect cr = contentsRect();
+    const int gutterWidth = m_lineAreaVisble ? getAreaWidth() : 0;
+    setViewportMargins(gutterWidth + m_leftPadding, 0, 0, 0);
+    lineNumberArea->setVisible(m_lineAreaVisble);
+    if (m_lineAreaVisble)
+        lineNumberArea->setGeometry(cr.left(), cr.top(), gutterWidth, cr.height());
+    paddingArea->setGeometry(cr.left() + gutterWidth, cr.top(),
+                             m_leftPadding, cr.height());
+    paddingArea->setVisible(m_leftPadding > 0);
+}
+
+void EditorPaddingArea::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.fillRect(rect(), m_color);
 }
 
 void LineNumberArea::paintEvent(QPaintEvent *)
@@ -255,7 +279,14 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 	QTextBlock current_block = codeEditor->document()->findBlock(codeEditor->textCursor().position());
 
 	int line_count = 0;
-    painter.setPen(m_foreground); // not exactly black
+    // Blend the number colour towards the gutter background. 100 keeps the
+    // full foreground colour, 0 makes the numbers disappear into the gutter.
+    const qreal contrast = qBound(0, m_contrast, 100) / 100.0;
+    const QColor numberColor(
+                qRound(m_background.red()   + (m_foreground.red()   - m_background.red())   * contrast),
+                qRound(m_background.green() + (m_foreground.green() - m_background.green()) * contrast),
+                qRound(m_background.blue()  + (m_foreground.blue()  - m_background.blue())  * contrast));
+    painter.setPen(numberColor);
 
     bool bold;
 	QFont font = painter.font();
@@ -298,4 +329,11 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 		}
 		block = block.next();
 	}
+
+    // A single-pixel separator between the gutter and the editor. There is no
+    // margin between them any more, so this is the only divider.
+    QColor separator = m_foreground;
+    separator.setAlpha(60);
+    painter.setPen(QPen(separator, 1));
+    painter.drawLine(this->width() - 1, 0, this->width() - 1, this->height());
 }
