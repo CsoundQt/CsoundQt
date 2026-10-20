@@ -98,6 +98,11 @@ void DockHelp::loadFile(QString fileName, QString anchor) {
     m_view->loadFile(fileName, anchor);
 }
 
+void DockHelp::clear()
+{
+    m_view->clear();
+}
+
 void DockHelp::setIconTheme(QString theme)
 {
     ui->backButton->setIcon(QIcon(QString(":/themes/%1/browse-prev.png").arg(theme)));
@@ -116,6 +121,11 @@ void DockHelp::changeFontSize(int change)
 void DockHelp::addSearchRoot(const QString &rootPath, const QString &label)
 {
     m_view->addSearchRoot(rootPath, label);
+}
+
+void DockHelp::removeSearchRoot(const QString &rootPath)
+{
+    m_view->removeSearchRoot(rootPath);
 }
 
 void DockHelp::closeEvent(QCloseEvent * /*event*/)

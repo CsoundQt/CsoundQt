@@ -41,11 +41,13 @@ public:
 
 	bool hasFocus();
     void loadFile(QString fileName, QString anchor="");
+    void clear();
 	bool externalBrowser;
 	QString docDir;
     void setIconTheme(QString theme);
     void changeFontSize(int change);
     void addSearchRoot(const QString &rootPath, const QString &label);
+    void removeSearchRoot(const QString &rootPath);
 
 private:
 	LiteHtmlView *m_view;

@@ -71,11 +71,23 @@ void SearchIndexManager::tokenize(const QString &s, QStringList &out) const
 
 void SearchIndexManager::addRoot(const QString &rootPath, const QString &label)
 {
+    for (const Root &existing : m_roots) {
+        if (existing.root == rootPath)
+            return; // already registered
+    }
     Root r;
     r.root = rootPath;
     r.label = label;
     r.indexFile = rootPath + "/search/search_index.json";
     m_roots.append(r);
+}
+
+void SearchIndexManager::removeRoot(const QString &rootPath)
+{
+    for (int i = m_roots.size() - 1; i >= 0; --i) {
+        if (m_roots.at(i).root == rootPath)
+            m_roots.removeAt(i);
+    }
 }
 
 void SearchIndexManager::loadRoot(Root &r)

@@ -69,6 +69,7 @@ public:
     ~LiteHtmlView() override;
 
     bool loadFile(const QString &path, const QString &fragment = QString());
+    void clear();
     QString currentPath() const { return m_currentPath; }
 
     void back();
@@ -95,6 +96,7 @@ public:
 
     // Whole-manual search (roots are populated lazily on first search).
     void addSearchRoot(const QString &rootPath, const QString &label);
+    void removeSearchRoot(const QString &rootPath);
     void showSearchPanel();
 
     // Copy the current text selection to the clipboard.

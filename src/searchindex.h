@@ -55,6 +55,7 @@ public:
     };
 
     void addRoot(const QString &rootPath, const QString &label);
+    void removeRoot(const QString &rootPath);
     const QList<Root> &roots() const { return m_roots; }
 
     // Parses/indexes any not-yet-loaded roots (once). Returns false if all

@@ -262,6 +262,31 @@ bool LiteHtmlView::loadFile(const QString &path, const QString &fragment)
     return true;
 }
 
+void LiteHtmlView::clear()
+{
+    // Drop the rendered document and all state that refers to it (history,
+    // selection, search matches) so nothing of the previous manual remains.
+    m_doc.reset();
+    m_currentPath.clear();
+    m_currentHtml.clear();
+    m_history.clear();
+    m_historyPos = -1;
+    m_selecting = false;
+    m_hasSelection = false;
+    m_renderedWidth = -1;
+    m_matches.clear();
+    m_currentMatch = -1;
+    m_searchLines.clear();
+    m_searchDirty = true;
+    m_fragmentsDirty = true;
+    m_vbar->setRange(0, 0);
+    m_hbar->setRange(0, 0);
+    m_vbar->setVisible(false);
+    m_hbar->setVisible(false);
+    emit historyChanged();
+    update();
+}
+
 void LiteHtmlView::doLoad(const QString &path, const QString &fragment, bool pushHistory)
 {
     m_zoomCommitTimer->stop(); // this load renders the requested zoom
@@ -456,6 +481,17 @@ void LiteHtmlView::toggleFindBar(bool show)
 void LiteHtmlView::addSearchRoot(const QString &rootPath, const QString &label)
 {
     m_searchManager.addRoot(rootPath, label);
+}
+
+void LiteHtmlView::removeSearchRoot(const QString &rootPath)
+{
+    m_searchManager.removeRoot(rootPath);
+    // Stored results refer to the old set of roots by index, so drop them.
+    m_searchResults.clear();
+    if (m_searchList)
+        m_searchList->clear();
+    // Rebuild the index for the remaining roots on the next search.
+    m_searchLoaded = false;
 }
 
 void LiteHtmlView::showSearchPanel()
