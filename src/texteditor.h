@@ -26,6 +26,19 @@
 #include <QTextEdit>
 #include <QAction>
 #include <QUrl>
+#include <QFontMetricsF>
+
+// The tab size is configured in spaces, as in most editors: it is both the
+// number of spaces the Tab key inserts and the number of columns a tab
+// character occupies. QTextEdit's tab stop distance is in pixels, so it has to
+// be derived from the current font. The editor fonts are monospaced, hence one
+// space is exactly one tab column.
+inline int tabStopDistanceForFont(const QFont &font, int tabSize)
+{
+	const int columns = tabSize > 0 ? tabSize : 1;
+	const QFontMetricsF metrics(font);
+	return qMax(1, qRound(metrics.horizontalAdvance(QLatin1Char(' ')) * columns));
+}
 
 class TextEditor : public QTextEdit
 {

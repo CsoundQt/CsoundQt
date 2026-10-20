@@ -54,7 +54,7 @@ public:
 	void setFileType(editor_mode_t mode); // For higlighting mode
 	void setFont(QFont font);
 	void setFontPointSize(float size);
-	void setTabStopWidth(int width);
+	void setTabSize(int tabSize);
 	void setTabIndents(bool indents);
 	void setTabUseSpaces(bool useSpaces);
 	void setTabSpaces(int spaces);
@@ -161,6 +161,8 @@ protected:
 
 	QVector<QWidget *> editors; // A vector to hold pointers for the above for easy processing
 	TextEditor *m_lastDropEditor = nullptr; // Editor that last received a file drop
+	int m_tabSize = 2; // tab size in spaces, see setTabSize()
+	void applyTabSize();
 };
 
 #endif // BASEVIEW_H

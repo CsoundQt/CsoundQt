@@ -52,9 +52,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     setMaximumSize(  QGuiApplication::primaryScreen()->geometry().width()  * 0.9,
                    QGuiApplication::primaryScreen()->geometry().height() * 0.9);
 
-    // The number of spaces is only meaningful when spaces are used for tabs.
-    connect(tabUseSpacesCheckBox, &QCheckBox::toggled,
-            tabSpacesSpinBox, &QWidget::setEnabled);
+    // "Tab Size" applies in both modes: it is the width of a tab character and,
+    // when spaces are inserted, the number of spaces a Tab press inserts.
 
     // "Apply" must copy the widget values before the main window applies them.
     // (The main window connects its applySettings() slot to the same signal.)
@@ -200,11 +199,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	framePixmap.fill(m_options->widgetFrameColorSelected);
 	frameColorSelectedButton->setIcon(framePixmap);
 
-	tabWidthSpinBox->setValue(m_options->tabWidth);
 	tabIndentCheckBox->setChecked(m_options->tabIndents);
 	tabUseSpacesCheckBox->setChecked(m_options->tabUseSpaces);
-	tabSpacesSpinBox->setValue(m_options->tabSpaces);
-	tabSpacesSpinBox->setEnabled(m_options->tabUseSpaces);
+	tabSizeSpinBox->setValue(m_options->tabSpaces);
 	flashFocusCheckBox->setChecked(m_options->flashFocus);
 
     // allow translations for highlightingThemeComboBox and themeCombobox
@@ -583,10 +580,9 @@ void ConfigDialog::apply()
 	m_options->lineEnding = lineEndingComboBox->currentIndex();
 	m_options->consoleFont = consoleFontComboBox->currentText();
 	m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
-	m_options->tabWidth = tabWidthSpinBox->value();
 	m_options->tabIndents = tabIndentCheckBox->isChecked();
 	m_options->tabUseSpaces = tabUseSpacesCheckBox->isChecked();
-	m_options->tabSpaces = tabSpacesSpinBox->value();
+	m_options->tabSpaces = tabSizeSpinBox->value();
 	m_options->flashFocus = flashFocusCheckBox->isChecked();
 
     // deal with localized themes:
@@ -1102,7 +1098,6 @@ void ConfigDialog::selectWidgetFrameColorSelected()
 		frameColorSelectedButton->setIcon(pixmap);
 	}
 }
-
 
 void ConfigDialog::clearTemplate()
 {

@@ -45,10 +45,10 @@ public:
 	QColor consoleFontColor;
 	QColor consoleBgColor;
 	QColor editorBgColor;
-	int tabWidth;
 	bool tabIndents;
 	bool tabUseSpaces;  // insert spaces instead of a tab character when Tab is pressed
-	int tabSpaces;      // number of spaces per tab (used when tabUseSpaces is true)
+	int tabSpaces;      // tab size in spaces: how many spaces a tab is equivalent
+	                    // to, both for insertion and for the display width of tabs
 	bool flashFocus;    // briefly outline the panel that receives keyboard focus
 	bool colorVariables;
     QString highlightingTheme;
