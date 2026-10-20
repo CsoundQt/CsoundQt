@@ -213,10 +213,18 @@ void QuteGraph::mousePressEvent(QMouseEvent *event) {
             m_spectrumPeakMarkers[index]->setVisible(true);
             m_spectrumPeakTexts[index]->setVisible(true);
             m_mouseDragging = true;
+            m_lastPeakFreq = 0;
             auto view = getView(index);
-            auto peakIndex = view->mapToScene(event->x(), 0).x();
             auto curve = curves[index];
-            auto freq = peakIndex / curve->get_size() * this->m_ud->sampleRate*0.5;
+            const size_t curveSize = curve->get_size();
+            if (curveSize == 0)
+                return;
+            // event->pos() is in QuteGraph coordinates, while mapToScene()
+            // expects viewport coordinates. The view has a frame and the stacked
+            // widget may add margins, so map through the viewport explicitly.
+            const QPoint viewportPos = view->viewport()->mapFrom(this, event->position().toPoint());
+            const auto peakIndex = view->mapToScene(viewportPos).x();
+            const auto freq = peakIndex / curveSize * this->m_ud->sampleRate*0.5;
             m_showPeakTempFrequency = freq;
             return;
         }
@@ -1108,6 +1116,138 @@ size_t QuteGraph::spectrumGetPeak(Curve *curve, double freq, double bandwidth) {
     return maxindex;
 }
 
+size_t QuteGraph::spectrumGetNearestPeak(Curve *curve, double freq, double windowHz, int step) {
+    const qreal nyquist = this->getSr(44100.) * 0.5;
+    const int curveSize = int(curve->get_size());
+    if (curveSize < 3 || nyquist <= 0.0)
+        return 0;
+
+    step = qMax(1, step);
+    const double clickBin = qBound(0.0, freq / nyquist * curveSize, double(curveSize - 1));
+    const double halfWindowHz = qMax(windowHz * 0.5, nyquist / curveSize);
+    const double halfWindowBins = halfWindowHz / nyquist * curveSize;
+
+    const int firstBin = qMax(1, int(std::floor(clickBin - halfWindowBins)));
+    const int lastBin = qMin(curveSize - 2, int(std::ceil(clickBin + halfWindowBins)));
+    if (firstBin > lastBin)
+        return size_t(qBound(0.0, std::round(clickBin), double(curveSize - 1)));
+
+    auto ampAt = [&](int i) -> double {
+        if (m_frozen && i >= 0 && i < frozenCurve.size())
+            return double(frozenCurve[i]);
+        return double(curve->get_data(i));
+    };
+
+    // Use the same per-pixel envelope as drawSpectrum(): when several FFT bins
+    // are drawn into one pixel, only the loudest bin of that column can be a
+    // peak. This keeps invisible noise wiggles from being selected.
+    struct Column {
+        int colStart;
+        int bin;
+        double amp;
+    };
+    QVector<Column> columns;
+    auto addColumn = [&](int colStart) {
+        const int colEnd = qMin(colStart + step, curveSize);
+        int bestBin = colStart;
+        double bestAmp = ampAt(colStart);
+        for (int i = colStart + 1; i < colEnd; ++i) {
+            const double amp = ampAt(i);
+            if (amp > bestAmp) {
+                bestAmp = amp;
+                bestBin = i;
+            }
+        }
+        columns.append(Column{colStart, bestBin, bestAmp});
+    };
+
+    const int firstColumnStart = (firstBin / step) * step;
+    const int lastColumnStart = (lastBin / step) * step;
+    // Include one column on each side so a column at the window edge is only a
+    // local maximum if it is also one in the full displayed envelope.
+    const int scanStart = qMax(0, firstColumnStart - step);
+    const int scanEnd = qMin(curveSize - 1, lastColumnStart + step);
+    for (int colStart = scanStart; colStart <= scanEnd; colStart += step)
+        addColumn(colStart);
+    if (columns.isEmpty())
+        return size_t(qBound(0.0, std::round(clickBin), double(curveSize - 1)));
+
+    const int candidateFirst = (firstColumnStart - scanStart) / step;
+    const int candidateLast = (lastColumnStart - scanStart) / step;
+
+    // Weight a peak by its distance to the click: 1 at the click, 0 at the
+    // window edge. The amplitude is linear, like the values in Curve.
+    auto scoreOf = [&](const Column &column, double &distanceFactor) -> double {
+        const double binFreq = double(column.bin) / curveSize * nyquist;
+        const double t = qBound(0.0, qAbs(binFreq - freq) / halfWindowHz, 1.0);
+        distanceFactor = 1.0 - t;
+        return column.amp * distanceFactor;
+    };
+
+    const double epsilon = 1e-12;
+    double bestScore = -1.0;
+    double bestDistanceFactor = 2.0;
+    double bestAmp = -1.0;
+    int bestBin = -1;
+
+    auto consider = [&](const Column &column) {
+        double distanceFactor = 0.0;
+        const double score = scoreOf(column, distanceFactor);
+        if (score > bestScore + epsilon
+            || (qAbs(score - bestScore) <= epsilon && distanceFactor > bestDistanceFactor + epsilon)
+            || (qAbs(score - bestScore) <= epsilon
+                && qAbs(distanceFactor - bestDistanceFactor) <= epsilon
+                && column.amp > bestAmp)) {
+            bestScore = score;
+            bestDistanceFactor = distanceFactor;
+            bestAmp = column.amp;
+            bestBin = column.bin;
+        }
+    };
+
+    // Prefer local maxima of the displayed envelope. Only columns inside the
+    // search window are candidates; the extra columns only serve as neighbours.
+    int localMaxima = 0;
+    const int columnCount = int(columns.size());
+    for (int i = candidateFirst; i <= candidateLast; ++i) {
+        const bool leftOk = i == 0 || columns[i].amp >= columns[i - 1].amp;
+        const bool rightOk = i == columnCount - 1 || columns[i].amp > columns[i + 1].amp;
+        if (leftOk && rightOk) {
+            consider(columns[i]);
+            ++localMaxima;
+        }
+    }
+
+    // Clicking on a slope (or a window narrower than three columns) has no
+    // local maximum: fall back to the best-scoring column in the window.
+    if (localMaxima == 0) {
+        for (int i = candidateFirst; i <= candidateLast; ++i)
+            consider(columns[i]);
+    }
+
+    // All candidates were at the window edge (weight 0): use the nearest one.
+    if (bestBin < 0 || bestScore <= 0.0) {
+        int nearest = -1;
+        double nearestDistance = 0.0;
+        for (int i = candidateFirst; i <= candidateLast; ++i) {
+            const double binFreq = double(columns[i].bin) / curveSize * nyquist;
+            const double distance = qAbs(binFreq - freq);
+            if (nearest < 0 || distance < nearestDistance - epsilon
+                || (qAbs(distance - nearestDistance) <= epsilon
+                    && columns[i].amp > columns[nearest].amp)) {
+                nearest = i;
+                nearestDistance = distance;
+            }
+        }
+        if (nearest >= 0)
+            bestBin = columns[nearest].bin;
+    }
+
+    if (bestBin < 0)
+        bestBin = int(qBound(0.0, std::round(clickBin), double(curveSize - 1)));
+    return size_t(bestBin);
+}
+
 QString mton(double midinote) {
     //                                C  C# D D#  E  F  F# G G# A Bb B
     static const int _pc2idx[] = {2, 2, 3, 3, 4, 5, 5, 6, 6, 0, 1, 1};
@@ -1286,17 +1426,28 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
 
     if(m_showPeak || m_showPeakTemp) {
         auto freq = m_showPeakTemp ? m_showPeakTempFrequency : m_showPeakCenterFrequency;
-        double bandwidth;
+        size_t peakIndex;
         if(m_showPeakTemp) {
-            // if using the mouse to point at a near peak, we take zoom into account and
-            // the bandwidth is a fraction of the displayed frequency range.
-            // auto zoomx = property("CSQT_zoomx").toDouble();
-            auto zoomx = m_zoomx;
-            bandwidth = nyquist / zoomx / 8.0;
+            // Search a fraction of the visible width, clamped to 8..48 pixels
+            // (total width). Candidates are weighted by their distance to the
+            // click, so a loud peak at the window edge no longer beats a
+            // quieter peak under the cursor.
+            const int viewportWidth = view->viewport()->width();
+            const double sceneLeft = view->mapToScene(0, 0).x();
+            const double sceneRight = view->mapToScene(viewportWidth, 0).x();
+            const double visibleSceneWidth = qAbs(sceneRight - sceneLeft);
+            const double windowPx = qBound(8.0, double(viewportWidth) / 10.0, 48.0);
+            double windowHz;
+            if(viewportWidth > 0 && visibleSceneWidth > 0.0 && curveSize > 0)
+                windowHz = windowPx * (visibleSceneWidth / viewportWidth) * nyquist / curveSize;
+            else
+                windowHz = nyquist / m_zoomx / 8.0;
+            peakIndex = this->spectrumGetNearestPeak(curve, freq, windowHz, step);
         }
-        else
-            bandwidth = freq * m_showPeakRelativeBandwidth;
-        size_t peakIndex = this->spectrumGetPeak(curve, freq, bandwidth);
+        else {
+            double bandwidth = freq * m_showPeakRelativeBandwidth;
+            peakIndex = this->spectrumGetPeak(curve, freq, bandwidth);
+        }
         auto data = m_frozen ? frozenCurve[peakIndex] : curve->get_data(peakIndex);
         double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
         auto marker = m_spectrumPeakMarkers[index];

@@ -73,6 +73,7 @@ public:
 	QStringList transitoryProperties() const override;
 	virtual void setWidgetEnabled(bool enabled);
     size_t spectrumGetPeak(Curve *curve, double freq, double relativeBandwidth);
+    size_t spectrumGetNearestPeak(Curve *curve, double freq, double windowHz, int step);
     QuteWidgetType getWidgetTypeID() override;
 
 protected:
