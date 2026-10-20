@@ -21,6 +21,8 @@
 */
 
 #include "highlighter.h"
+
+#include "editorthemes.h"
 // #include "types.h"
 
 #include <QRegularExpression>
@@ -55,17 +57,12 @@ QColor saturateColor(QColor color, int percent) {
     return QColor::fromHsl(color.hue(), sat, color.lightness());
 }
 
-void Highlighter::setTheme(const QString &theme) {
-    // Re-applying an unchanged theme would force a full rehighlight of the
-    // document. On an already laid-out, visible editor that is extremely
-    // expensive (seconds on large files), so skip it.
-    if (m_themeSet && theme == m_theme)
-        return;
+bool Highlighter::applyBuiltInTheme(const QString &theme) {
     if(theme == "none") {
         defaultFormat.setForeground(QColor("black"));
         defaultFormat.setBackground(QColor(250, 250, 250));
     }
-    else if(theme == "classic") {
+    else if(theme == "light classic") {
         defaultFormat.setForeground(QColor("black"));
         defaultFormat.setBackground(QColor(250, 250, 250));
 
@@ -291,10 +288,13 @@ void Highlighter::setTheme(const QString &theme) {
 
     }
     else {
-        qDebug() << "Theme" << theme << "not defined, using default";
-        this->setTheme("classic");
-        return;
+        return false;
     }
+    return true;
+}
+
+void Highlighter::finishTheme()
+{
     // --------------------------------------
     girateFormat.setForeground(irateFormat.foreground());
     // girateFormat.setFontWeight(QFont::Bold);
@@ -331,12 +331,147 @@ void Highlighter::setTheme(const QString &theme) {
     tagNameFormat = arateFormat;
     attrFormat = irateFormat;
     jsKeywordFormat =  krateFormat;// keywordFormat;
+}
 
-    m_theme = theme;
+void Highlighter::resetFormats()
+{
+    // Start every theme from scratch. Otherwise attributes that a previous
+    // theme set (bold, underline, ...) would leak into the next one.
+    csdtagFormat = QTextCharFormat();
+    instFormat = QTextCharFormat();
+    headerFormat = QTextCharFormat();
+    irateFormat = QTextCharFormat();
+    krateFormat = QTextCharFormat();
+    arateFormat = QTextCharFormat();
+    girateFormat = QTextCharFormat();
+    gkrateFormat = QTextCharFormat();
+    garateFormat = QTextCharFormat();
+    stringVarFormat = QTextCharFormat();
+    gstringVarFormat = QTextCharFormat();
+    fsigFormat = QTextCharFormat();
+    gfsigFormat = QTextCharFormat();
+    booleanFormat = QTextCharFormat();
+    complexFormat = QTextCharFormat();
+    opcodeFormat = QTextCharFormat();
+    udoFormat = QTextCharFormat();
+    macroDefineFormat = QTextCharFormat();
+    pfieldFormat = QTextCharFormat();
+    singleLineCommentFormat = QTextCharFormat();
+    importantCommentFormat = QTextCharFormat();
+    multiLineCommentFormat = QTextCharFormat();
+    quotationFormat = QTextCharFormat();
+    functionFormat = QTextCharFormat();
+    nameFormat = QTextCharFormat();
+    ioFormat = QTextCharFormat();
+    deprecatedFormat = QTextCharFormat();
+    operatorFormat = QTextCharFormat();
+    scoreLetterFormat = QTextCharFormat();
+    errorFormat = QTextCharFormat();
+    labelFormat = QTextCharFormat();
+    csoundOptionFormat = QTextCharFormat();
+    defaultFormat = QTextCharFormat();
+    keywordFormat = QTextCharFormat();
+    jsKeywordFormat = QTextCharFormat();
+    htmlTagFormat = QTextCharFormat();
+    tagNameFormat = QTextCharFormat();
+    attrFormat = QTextCharFormat();
+}
+
+QTextCharFormat *Highlighter::formatForName(const QString &name)
+{
+    if (name == QLatin1String("default")) return &defaultFormat;
+    if (name == QLatin1String("csdtag")) return &csdtagFormat;
+    if (name == QLatin1String("inst")) return &instFormat;
+    if (name == QLatin1String("header")) return &headerFormat;
+    if (name == QLatin1String("keyword")) return &keywordFormat;
+    if (name == QLatin1String("opcode")) return &opcodeFormat;
+    if (name == QLatin1String("deprecated")) return &deprecatedFormat;
+    if (name == QLatin1String("singleLineComment")) return &singleLineCommentFormat;
+    if (name == QLatin1String("importantComment")) return &importantCommentFormat;
+    if (name == QLatin1String("multiLineComment")) return &multiLineCommentFormat;
+    if (name == QLatin1String("macroDefine")) return &macroDefineFormat;
+    if (name == QLatin1String("pfield")) return &pfieldFormat;
+    if (name == QLatin1String("irate")) return &irateFormat;
+    if (name == QLatin1String("krate")) return &krateFormat;
+    if (name == QLatin1String("arate")) return &arateFormat;
+    if (name == QLatin1String("stringVar")) return &stringVarFormat;
+    if (name == QLatin1String("fsig")) return &fsigFormat;
+    if (name == QLatin1String("boolean")) return &booleanFormat;
+    if (name == QLatin1String("complex")) return &complexFormat;
+    if (name == QLatin1String("label")) return &labelFormat;
+    if (name == QLatin1String("name")) return &nameFormat;
+    if (name == QLatin1String("quotation")) return &quotationFormat;
+    if (name == QLatin1String("io")) return &ioFormat;
+    if (name == QLatin1String("udo")) return &udoFormat;
+    if (name == QLatin1String("operator")) return &operatorFormat;
+    if (name == QLatin1String("scoreLetter")) return &scoreLetterFormat;
+    return nullptr;
+}
+
+void Highlighter::applyUserTheme(const EditorThemes::Theme &theme)
+{
+    defaultFormat.setForeground(theme.defaultForeground);
+    defaultFormat.setBackground(theme.defaultBackground);
+
+    for (auto it = theme.formats.constBegin(); it != theme.formats.constEnd(); ++it) {
+        QTextCharFormat *format = formatForName(it.key());
+        if (!format) {
+            qDebug() << "CsoundQt: editor theme" << theme.name
+                     << "- unknown format" << it.key() << "; ignored";
+            continue;
+        }
+        const EditorThemes::FormatSpec &spec = it.value();
+        if (spec.foreground)
+            format->setForeground(*spec.foreground);
+        if (spec.background)
+            format->setBackground(*spec.background);
+        if (spec.underlineColor)
+            format->setUnderlineColor(*spec.underlineColor);
+        if (spec.bold)
+            format->setFontWeight(*spec.bold ? QFont::Bold : QFont::Normal);
+        if (spec.italic)
+            format->setFontItalic(*spec.italic);
+        if (spec.underline)
+            format->setFontUnderline(*spec.underline);
+        if (spec.strikeout)
+            format->setFontStrikeOut(*spec.strikeout);
+    }
+}
+
+void Highlighter::setTheme(const QString &theme)
+{
+    // Re-applying an unchanged theme would force a full rehighlight of the
+    // document. On an already laid-out, visible editor that is extremely
+    // expensive (seconds on large files), so skip it.
+    if (m_themeSet && theme == m_theme)
+        return;
+
+    QString applied = theme;
+    resetFormats();
+
+    if (!applyBuiltInTheme(theme)) {
+        const EditorThemes::Theme *userTheme = EditorThemes::find(theme);
+        if (!userTheme) {
+            qDebug() << "CsoundQt: editor theme" << theme
+                     << "not found, falling back to light";
+            applied = QStringLiteral("light");
+            applyBuiltInTheme(applied);
+        }
+        else {
+            // A user theme only describes what it changes. Start from its
+            // built-in light or dark base, then overlay the defined values;
+            // everything else keeps the base.
+            applyBuiltInTheme(userTheme->dark ? QStringLiteral("dark")
+                                              : QStringLiteral("light"));
+            applyUserTheme(*userTheme);
+        }
+    }
+    finishTheme();
+
+    m_theme = applied;
     m_themeSet = true;
     clearTypedVars();
     rehighlight();
-    // emit this->rehighlight();
 }
 
 QTextCharFormat Highlighter::getFormat(QString tag) {

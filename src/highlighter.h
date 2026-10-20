@@ -34,6 +34,8 @@
 
 #include <QRegularExpression>
 
+namespace EditorThemes { struct Theme; }
+
 enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection, HtmlSection };
 
 struct ParenthesisInfo
@@ -113,6 +115,15 @@ protected:
     bool isOpcode(QString name);
 
 private:
+    // Theme handling: applyBuiltInTheme() fills the formats for a compiled-in
+    // theme, applyUserTheme() overlays a JSON theme on its light/dark base, and
+    // finishTheme() derives the remaining roles (gi*, error, html, ...).
+    void resetFormats();
+    bool applyBuiltInTheme(const QString &theme);
+    void applyUserTheme(const EditorThemes::Theme &theme);
+    void finishTheme();
+    QTextCharFormat *formatForName(const QString &name);
+
 	struct HighlightingRule
 	{
         QRegularExpression pattern;

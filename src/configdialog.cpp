@@ -36,6 +36,7 @@
 #include "types.h"
 #include "configlists.h"
 #include "debuglog.h"
+#include "editorthemes.h"
 
 
 typedef QPair<QString, QString> QStringPair;
@@ -217,6 +218,17 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     themeComboBox->setItemData(2, "light");
     themeComboBox->setItemData(3, "light-classic");
     themeComboBox->setCurrentIndex(themeComboBox->findData(m_options->themeMode));
+
+    // Built-ins are compiled in; user themes were scanned at startup.
+    editorThemeComboBox->clear();
+    editorThemeComboBox->addItem(tr("auto"), "auto");
+    for (const QString &name : EditorThemes::builtInNames())
+        editorThemeComboBox->addItem(name, name);
+    for (const QString &name : EditorThemes::userThemeNames())
+        editorThemeComboBox->addItem(name, name);
+
+    int editorThemeIndex = editorThemeComboBox->findData(m_options->editorTheme);
+    editorThemeComboBox->setCurrentIndex(editorThemeIndex < 0 ? 0 : editorThemeIndex);
 
     // Qt widget styles available on this platform, minus the hidden legacy
     // styles (see widgetstyle.h). Fusion is offered first as the recommended,
@@ -584,10 +596,9 @@ void ConfigDialog::apply()
 
     // deal with localized themes:
     m_options->themeMode = themeComboBox->currentData().toString();    // to allow to be translated
+    m_options->editorTheme = editorThemeComboBox->currentData().toString();
     m_options->widgetStyle = widgetStyleComboBox->currentData().toString();
-    //m_options->highlightingTheme = highlightingThemeComboBox->currentData().toString();
 
-    m_options->colorVariables = m_options->highlightingTheme != "none";
 	m_options->autoJoin = autoJoinCheckBox->isChecked();
 	m_options->menuDepth = menusDepthSpinBox->value();
 	m_options->saveChanges = saveChangesCheckBox->isChecked();

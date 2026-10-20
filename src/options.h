@@ -34,7 +34,7 @@ public:
 	~Options();
 
     QString theme;  // Icon theme name TODO: rename to iconTheme
-    QString themeMode; // "auto", "dark", "light", "light-classic" the last goes for highlighting theme.
+    QString themeMode; // application theme: "auto", "dark", "light", "light-classic"
     QString widgetStyle; // Qt widget style ("Fusion", "Breeze", ...); empty = default
 	QString font;
 	float fontPointSize;
@@ -50,6 +50,10 @@ public:
 	                    // to, both for insertion and for the display width of tabs
 	bool flashFocus;    // briefly outline the panel that receives keyboard focus
 	bool colorVariables;
+    // Editor syntax theme chosen by the user: "auto" follows the application
+    // theme, otherwise a theme id such as "light" or "dark" is forced.
+    QString editorTheme;
+    // Resolved editor theme actually handed to the documents (never "auto").
     QString highlightingTheme;
 	bool autoJoin;
 	bool midiCcToCurrentPageOnly;

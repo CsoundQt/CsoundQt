@@ -54,6 +54,7 @@
 #include "csoundqt.h"
 #include "widgetstyle.h"
 #include "debuglog.h"
+#include "editorthemes.h"
 #include "widgetpanel.h"
 #include "utilitiesdialog.h"
 #include "keyboardshortcuts.h"
@@ -293,6 +294,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     createActions(); // Must be before readSettings: this sets default shortcuts
     createStatusBar();
     createToolBars();
+    // User editor themes must be known before the settings are read, so a
+    // missing theme can fall back to "auto".
+    EditorThemes::initialize();
     readSettings();
     createMenus(); // creating menu must be after readSettings. probably create Status- and toolbars, too?
     this->setToolbarIconSize(m_options->toolbarIconSize);
@@ -4624,23 +4628,28 @@ void CsoundQt::setColors(QString themeMode)
     // shape, border, and shadow rendering.
     configureNativeToolTips();
 
-    // Map theme mode to theme name (used in icon paths) and highlighting theme
+    // Map the application theme to the icon theme only. The editor's syntax
+    // theme is an independent choice (Settings/Editor/Editor theme).
     if (m_options->themeMode == "dark") {
         m_options->theme = "breeze-dark";
-        m_options->highlightingTheme = "dark";
     }
-    else if (m_options->themeMode == "light") {
+    else if (m_options->themeMode == "light"
+             || m_options->themeMode == "light-classic") {
         m_options->theme = "breeze";
-        m_options->highlightingTheme = "light";
-    }
-    else if (m_options->themeMode == "light-classic") {
-        m_options->theme = "breeze";
-        m_options->highlightingTheme = "classic";
     }
     else { // auto
         m_options->theme = isDarkPalette ? "breeze-dark" : "breeze";
+    }
+
+    // Resolve the editor theme. "auto" follows the application palette; any
+    // other value is a syntax theme id and is forced regardless of the chrome.
+    if (m_options->editorTheme.isEmpty() || m_options->editorTheme == "auto") {
         m_options->highlightingTheme = isDarkPalette ? "dark" : "light";
     }
+    else {
+        m_options->highlightingTheme = m_options->editorTheme;
+    }
+    m_options->colorVariables = m_options->highlightingTheme != "none";
 
     if (helpPanel) {
         helpPanel->setIconTheme(m_options->theme);
@@ -6722,12 +6731,19 @@ void CsoundQt::readSettings()
 
     m_options->tabUseSpaces = settings.value("tabUseSpaces", true).toBool();
     m_options->tabSpaces = settings.value("tabSpaces", 2).toInt();
-    // m_options->colorVariables = settings.value("colorvariables", true).toBool();
+    // "auto" keeps the editor theme following the application theme. The
+    // resolved theme is computed in CsoundQt::setColors().
+    m_options->editorTheme = settings.value("editorTheme", "auto").toString();
+    // "classic" was used briefly before editor themes became name-based.
+    if (m_options->editorTheme == "classic")
+        m_options->editorTheme = "light classic";
+    if (m_options->editorTheme != "auto"
+            && !EditorThemes::exists(m_options->editorTheme)) {
+        qDebug() << "CsoundQt: editor theme" << m_options->editorTheme
+                 << "does not exist; falling back to auto";
+        m_options->editorTheme = "auto";
+    }
 
-    // NB! temporary comment out for highlightingTheme
-    //m_options->highlightingTheme = settings.value("highlightingTheme", "light").toString();
-
-    m_options->colorVariables = m_options->highlightingTheme != "none";
     m_options->autoJoin = settings.value("autoJoin", true).toBool();
     m_options->menuDepth = settings.value("menuDepth", 3).toInt();
     m_options->saveChanges = settings.value("savechanges", false).toBool();
@@ -6970,7 +6986,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("tabUseSpaces", m_options->tabUseSpaces);
     settings.setValue("tabSpaces", m_options->tabSpaces);
     settings.setValue("colorvariables", m_options->colorVariables);
-    settings.setValue("highlightingTheme", m_options->highlightingTheme);
+    settings.setValue("editorTheme", m_options->editorTheme);
     settings.setValue("autoJoin", m_options->autoJoin);
     settings.setValue("menuDepth", m_options->menuDepth);
     settings.setValue("savechanges", m_options->saveChanges);

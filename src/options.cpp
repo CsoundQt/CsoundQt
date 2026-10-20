@@ -53,6 +53,7 @@ Options::Options(ConfigLists *configlists) :
     tabSpaces = 2;
     flashFocus = false;
     colorVariables = true;
+    editorTheme = "auto";
     highlightingTheme = "light";
     autoJoin = false;
 	midiCcToCurrentPageOnly = false;
