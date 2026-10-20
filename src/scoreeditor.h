@@ -38,7 +38,7 @@ public slots:
 	void setMode(int mode);
 	void setPlainText(QString text);
 	void setFontPointSize(float size);
-	void setTabStopWidth(int width);
+	void setTabSize(int tabSize);
 	void setTabUseSpaces(bool useSpaces);
 	void setTabSpaces(int spaces);
 	void setLineWrapMode(QTextEdit::LineWrapMode mode);
@@ -64,7 +64,10 @@ public slots:
 protected:
 
 private:
+	void applyTabSize();
+
 	int m_mode; // 0=text 1=sheet
+	int m_tabSize = 2; // tab size in spaces, see setTabSize()
 	TextEditor *m_textEditor;
 	EventSheet *m_sheet;
 

@@ -49,7 +49,6 @@ Options::Options(ConfigLists *configlists) :
     consoleBgColor = QColor("#eeeeee");
     editorBgColor = Qt::white;
 
-    tabWidth = 4;
     tabUseSpaces = true;
     tabSpaces = 2;
     flashFocus = false;

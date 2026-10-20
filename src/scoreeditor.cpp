@@ -92,12 +92,19 @@ void ScoreEditor::setFontPointSize(float size)
     default:
         break;
     }
-
+    // The tab stop is in pixels, so it depends on the font size.
+    applyTabSize();
 }
 
-void ScoreEditor::setTabStopWidth(int width)
+void ScoreEditor::setTabSize(int tabSize)
 {
-    m_textEditor->setTabStopDistance(width);
+    m_tabSize = tabSize > 0 ? tabSize : 1;
+    applyTabSize();
+}
+
+void ScoreEditor::applyTabSize()
+{
+    m_textEditor->setTabStopDistance(tabStopDistanceForFont(m_textEditor->font(), m_tabSize));
 }
 
 void ScoreEditor::setTabUseSpaces(bool useSpaces)

@@ -1891,7 +1891,7 @@
                 <item row="8" column="0" colspan="2">
                  <widget class="QCheckBox" name="tabUseSpacesCheckBox">
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, pressing Tab inserts spaces instead of a tab character.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, pressing Tab inserts spaces instead of a tab character. The number of spaces is the "Tab Size" below, which is also the width used to display tab characters.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
                    <string>Insert spaces instead of tabs</string>
@@ -1899,14 +1899,17 @@
                  </widget>
                 </item>
                 <item row="9" column="0">
-                 <widget class="QLabel" name="tabSpacesLabel">
+                 <widget class="QLabel" name="tabSizeLabel">
                   <property name="text">
-                   <string>Spaces per Tab</string>
+                   <string>Tab Size</string>
                   </property>
                  </widget>
                 </item>
                 <item row="9" column="1">
-                 <widget class="QSpinBox" name="tabSpacesSpinBox">
+                 <widget class="QSpinBox" name="tabSizeSpinBox">
+                  <property name="toolTip">
+                   <string>Number of spaces a tab is equivalent to. This is both how many spaces the Tab key inserts (when "Insert spaces instead of tabs" is checked) and how wide tab characters are displayed.</string>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>80</width>
@@ -2098,44 +2101,6 @@
                     <string>Windows</string>
                    </property>
                   </item>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_19">
-                  <property name="text">
-                   <string>Tab Width</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QSpinBox" name="tabWidthSpinBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>100</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>100</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">margin-top: 2; margin-bottom: 2</string>
-                  </property>
-                  <property name="minimum">
-                   <number>10</number>
-                  </property>
-                  <property name="maximum">
-                   <number>120</number>
-                  </property>
-                  <property name="singleStep">
-                   <number>10</number>
-                  </property>
-                  <property name="value">
-                   <number>80</number>
-                  </property>
                  </widget>
                 </item>
                </layout>

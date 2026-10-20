@@ -251,6 +251,8 @@ void BaseView::setFont(QFont font)
 	m_otherEditor->setFont(font);
 	m_otherCsdEditor->setFont(font);
 	m_widgetEditor->setFont(font);
+	// The tab stop is in pixels, so it depends on the font.
+	applyTabSize();
 }
 
 void BaseView::setFontPointSize(float size)
@@ -263,18 +265,30 @@ void BaseView::setFontPointSize(float size)
 	m_otherEditor->setFontPointSize(size);
 	m_otherCsdEditor->setFontPointSize(size);
 	m_widgetEditor->setFontPointSize(size);
+	// The tab stop is in pixels, so it depends on the font size.
+	applyTabSize();
 }
 
-void BaseView::setTabStopWidth(int width)
+/**
+ * Set the tab size in spaces. It is used both for the number of spaces the Tab
+ * key inserts (see TextEditor::setTabSpaces) and for the display width of tab
+ * characters, so files indented with tab characters and files indented with
+ * spaces line up the same way.
+ */
+void BaseView::setTabSize(int tabSize)
 {
-    m_mainEditor->setTabStopDistance(width);
-    m_orcEditor->setTabStopDistance(width);
-    m_scoreEditor->setTabStopWidth(width);
-    m_optionsEditor->setTabStopDistance(width);
-    //  m_filebEditor->setTabStopDistance(width);
-    m_otherEditor->setTabStopDistance(width);
-    m_otherCsdEditor->setTabStopDistance(width);
-    m_widgetEditor->setTabStopDistance(width);
+	m_tabSize = tabSize > 0 ? tabSize : 1;
+	applyTabSize();
+}
+
+void BaseView::applyTabSize()
+{
+	for (QWidget *w : editors) {
+		if (TextEditor *editor = qobject_cast<TextEditor *>(w)) {
+			editor->setTabStopDistance(tabStopDistanceForFont(editor->font(), m_tabSize));
+		}
+	}
+	m_scoreEditor->setTabSize(m_tabSize);
 }
 
 void BaseView::setTabIndents(bool indents)

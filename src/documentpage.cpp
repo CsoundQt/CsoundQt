@@ -668,9 +668,9 @@ void DocumentPage::setTextFont(QFont font)
 
 }
 
-void DocumentPage::setTabStopWidth(int tabWidth)
+void DocumentPage::setTabSize(int tabSize)
 {
-	m_view->setTabStopWidth(tabWidth);
+	m_view->setTabSize(tabSize);
 }
 
 void DocumentPage::setTabIndents(bool indents)

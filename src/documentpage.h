@@ -133,7 +133,7 @@ public:
 	//    void *getCsound();
 	// Document view properties and actions
 	void setTextFont(QFont font);
-	void setTabStopWidth(int tabWidth);
+	void setTabSize(int tabSize);
 	void setTabIndents(bool indents);
 	void setTabUseSpaces(bool useSpaces);
 	void setTabSpaces(int spaces);
