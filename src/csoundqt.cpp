@@ -2125,21 +2125,18 @@ bool CsoundQt::closeTab(bool forceCloseApp, int index)
                 return false;
         }
     }
-    if (!forceCloseApp) {
-        if (documentPages.size() <= 1) {
-            if (QMessageBox::warning(this, tr("CsoundQt"),
-                                     tr("Do you want to exit CsoundQt?"),
-                                     QMessageBox::Yes | QMessageBox::Default,
-                                     QMessageBox::No) == QMessageBox::Yes)
-            {
-                close();
-                return false;
-            }
-            else {
-                newFile();
-                curPage = 0;
-            }
+    if (!forceCloseApp && documentPages.size() <= 1) {
+        if (m_options->quitOnLastTabClosed) {
+            // Close the tab first: closeEvent() would otherwise offer to save
+            // the same modified document a second time.
+            deleteTab(index);
+            close();
+            return false;
         }
+        // Keep the application open. Open a fresh document before removing the
+        // last one, so the tab bar is never empty.
+        newFile();
+        curPage = 0;
     }
     deleteTab(index);
     changePage(curPage);
@@ -3907,17 +3904,16 @@ void CsoundQt::openLocalManualInBrowser()
 
 void CsoundQt::resetPreferences()
 {
-    int ret = QMessageBox::question (this, tr("Reset Preferences"),
-                                     tr("Are you sure you want to revert CsoundQt's "
-                                        "preferences\nto their initial default values? "),
-                                     QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
-    if (ret ==  QMessageBox::Ok) {
-        m_resetPrefs = true;
-        storeSettings();
-        QMessageBox::information(this, tr("Reset Preferences"),
-                                 tr("Preferences have been reset.\nYou must restart CsoundQt."),
-                                 QMessageBox::Ok, QMessageBox::Ok);
-    }
+    // Remove the stored configuration immediately. Waiting for the normal
+    // shutdown would write the current state (window geometry, open files,
+    // recent files, ...) straight back and undo the reset.
+    clearSettings();
+    // Keep this set until the process exits: no later storeSettings() call may
+    // recreate the state we have just removed.
+    m_resetPrefs = true;
+    Notification::showTransient(this,
+        tr("Preferences have been reset. Restart CsoundQt to apply the defaults."),
+        6000);
 }
 
 void CsoundQt::reportBug()
@@ -6734,7 +6730,7 @@ void CsoundQt::readSettings()
     m_options->colorVariables = m_options->highlightingTheme != "none";
     m_options->autoJoin = settings.value("autoJoin", true).toBool();
     m_options->menuDepth = settings.value("menuDepth", 3).toInt();
-    m_options->saveChanges = settings.value("savechanges", true).toBool();
+    m_options->saveChanges = settings.value("savechanges", false).toBool();
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
     m_options->saveWidgets = settings.value("savewidgets", true).toBool();
     m_options->midiCcToCurrentPageOnly = settings.value("midiCcToActivePageOnly", false).toBool();
@@ -6839,6 +6835,7 @@ void CsoundQt::readSettings()
     m_options->rtMidiOutputDevice = settings.value("rtMidiOutputDevice", "").toString();
     m_options->useCsoundMidi = settings.value("useCsoundMidi", false).toBool();
     m_options->simultaneousRun = settings.value("simultaneousRun", "").toBool();
+    m_options->quitOnLastTabClosed = settings.value("quitOnLastTabClosed", false).toBool();
     m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
     settings.endGroup();
     settings.beginGroup("Environment");
@@ -6921,6 +6918,14 @@ void CsoundQt::storeSettings()
 
 void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 {
+    if (m_resetPrefs) {
+        // Preferences were reset during this session. Writing the current
+        // state would restore the geometry, open documents and recent files
+        // that were just removed, so keep the cleared defaults for the next
+        // start instead.
+        QDEBUG << "Not writing settings after a preference reset";
+        return;
+    }
     QSettings settings("csoundqt", "csoundqt");
     QDEBUG << "writing settings";
 
@@ -6931,195 +6936,178 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         shortcuts[act->text().remove("&")] = QVariant(act->shortcut().toString());
     }
 
-    if(m_resetPrefs) {
-        settings.beginGroup("GUI");
-        settings.setValue("shortcuts", QVariant(shortcuts));
-        settings.endGroup();
-        settings.beginGroup("Options");
-        for(auto groupName: {"Editor", "Run", "Environment", "External"}) {
-            settings.beginGroup(groupName);
-            settings.remove("");  // removes all settings in the section
-            settings.endGroup();
-        }
-        settings.beginGroup("Template");
-        settings.setValue("csdTemplate", m_options->csdTemplate);
-        settings.endGroup();
-        settings.endGroup();; // options
-        m_resetPrefs = false;
+    settings.beginGroup("GUI");
+    settings.setValue("shortcuts", QVariant(shortcuts));
+    settings.setValue("pos", pos());
+    settings.setValue("size", size());
+    settings.setValue("dockstate", saveState());
+    settings.setValue("lastuseddir", lastUsedDir);
+    settings.setValue("lastfiledir", lastFileDir);
+    settings.setValue("language", m_configlists.languageCodes[m_options->language]);
+    //  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
+    settings.setValue("recentFiles", recentFiles);
+    settings.setValue("theme", m_options->theme);
+    settings.setValue("themeMode", m_options->themeMode);
+    settings.setValue("widgetStyle", m_options->widgetStyle);
+    settings.setValue("windowState", saveState());
+    settings.setValue("windowGeometry", saveGeometry());
+    settings.setValue("editorVisible", showEditorAct->isChecked());
+    settings.endGroup();
 
-    } else {
-        settings.beginGroup("GUI");
-        settings.setValue("shortcuts", QVariant(shortcuts));
-        settings.setValue("pos", pos());
-        settings.setValue("size", size());
-        settings.setValue("dockstate", saveState());
-        settings.setValue("lastuseddir", lastUsedDir);
-        settings.setValue("lastfiledir", lastFileDir);
-        settings.setValue("language", m_configlists.languageCodes[m_options->language]);
-        //  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
-        settings.setValue("recentFiles", recentFiles);
-        settings.setValue("theme", m_options->theme);
-        settings.setValue("themeMode", m_options->themeMode);
-        settings.setValue("widgetStyle", m_options->widgetStyle);
-        settings.setValue("windowState", saveState());
-        settings.setValue("windowGeometry", saveGeometry());
-        settings.setValue("editorVisible", showEditorAct->isChecked());
-        settings.endGroup();
+    settings.beginGroup("Options");
+    settings.beginGroup("Editor");
+    settings.setValue("font", m_options->font );
+    settings.setValue("fontsize", m_options->fontPointSize);
+    settings.setValue("showLineNumberArea", m_options->showLineNumberArea);
+    settings.setValue("lineEnding", m_options->lineEnding);
+    settings.setValue("consolefont", m_options->consoleFont );
+    settings.setValue("consolefontsize", m_options->consoleFontPointSize);
+    settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
+    settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
+    // settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
+    settings.setValue("widgetFrameColorUnselected", QVariant(m_options->widgetFrameColorUnselected));
+    settings.setValue("widgetFrameColorSelected", QVariant(m_options->widgetFrameColorSelected));
+    settings.setValue("tabUseSpaces", m_options->tabUseSpaces);
+    settings.setValue("tabSpaces", m_options->tabSpaces);
+    settings.setValue("colorvariables", m_options->colorVariables);
+    settings.setValue("highlightingTheme", m_options->highlightingTheme);
+    settings.setValue("autoJoin", m_options->autoJoin);
+    settings.setValue("menuDepth", m_options->menuDepth);
+    settings.setValue("savechanges", m_options->saveChanges);
+    settings.setValue("rememberfile", m_options->rememberFile);
+    settings.setValue("savewidgets", m_options->saveWidgets);
+    settings.setValue("midiCcToActivePageOnly", m_options->midiCcToCurrentPageOnly);
+    settings.setValue("widgetsIndependent", m_options->widgetsIndependent);
+    settings.setValue("iconText", m_options->iconText);
+    settings.setValue("showToolbar", m_options->showToolbar);
+    settings.setValue("lockToolbar", m_options->lockToolbar);
+    settings.setValue("toolbarIconSize", m_options->toolbarIconSize);
+    settings.setValue("wrapLines", m_options->wrapLines);
+    settings.setValue("autoComplete", m_options->autoComplete);
+    settings.setValue("flashFocus", m_options->flashFocus);
+    settings.setValue("autoCompleteDelay", m_options->autoCompleteDelay);
+    settings.setValue("autoParameterMode", m_options->autoParameterMode);
+    settings.setValue("enableWidgets", m_options->enableWidgets);
+    settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
+    settings.setValue("graphUpdateRate", m_options->graphUpdateRate);
+    settings.setValue("showTooltips", m_options->showTooltips);
+    settings.setValue("openProperties", m_options->openProperties);
+    settings.setValue("fontOffset", m_options->fontOffset);
+    settings.setValue("fontScaling", m_options->fontScaling);
+    settings.setValue("debugPort", m_options->debugPort);
+    settings.setValue("tabShortcutActive", m_options->tabShortcutActive);
+    settings.setValue("tabShowCloseButton", m_options->tabShowCloseButton);
+    settings.setValue("highlightScore", m_options->highlightScore);
 
-        settings.beginGroup("Options");
-        settings.beginGroup("Editor");
-        settings.setValue("font", m_options->font );
-        settings.setValue("fontsize", m_options->fontPointSize);
-        settings.setValue("showLineNumberArea", m_options->showLineNumberArea);
-        settings.setValue("lineEnding", m_options->lineEnding);
-        settings.setValue("consolefont", m_options->consoleFont );
-        settings.setValue("consolefontsize", m_options->consoleFontPointSize);
-        settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
-        settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
-        // settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
-        settings.setValue("widgetFrameColorUnselected", QVariant(m_options->widgetFrameColorUnselected));
-        settings.setValue("widgetFrameColorSelected", QVariant(m_options->widgetFrameColorSelected));
-        settings.setValue("tabUseSpaces", m_options->tabUseSpaces);
-        settings.setValue("tabSpaces", m_options->tabSpaces);
-        settings.setValue("colorvariables", m_options->colorVariables);
-        settings.setValue("highlightingTheme", m_options->highlightingTheme);
-        settings.setValue("autoJoin", m_options->autoJoin);
-        settings.setValue("menuDepth", m_options->menuDepth);
-        settings.setValue("savechanges", m_options->saveChanges);
-        settings.setValue("rememberfile", m_options->rememberFile);
-        settings.setValue("savewidgets", m_options->saveWidgets);
-        settings.setValue("midiCcToActivePageOnly", m_options->midiCcToCurrentPageOnly);
-        settings.setValue("widgetsIndependent", m_options->widgetsIndependent);
-        settings.setValue("iconText", m_options->iconText);
-        settings.setValue("showToolbar", m_options->showToolbar);
-        settings.setValue("lockToolbar", m_options->lockToolbar);
-        settings.setValue("toolbarIconSize", m_options->toolbarIconSize);
-        settings.setValue("wrapLines", m_options->wrapLines);
-        settings.setValue("autoComplete", m_options->autoComplete);
-        settings.setValue("flashFocus", m_options->flashFocus);
-        settings.setValue("autoCompleteDelay", m_options->autoCompleteDelay);
-        settings.setValue("autoParameterMode", m_options->autoParameterMode);
-        settings.setValue("enableWidgets", m_options->enableWidgets);
-        settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
-        settings.setValue("graphUpdateRate", m_options->graphUpdateRate);
-        settings.setValue("showTooltips", m_options->showTooltips);
-        settings.setValue("openProperties", m_options->openProperties);
-        settings.setValue("fontOffset", m_options->fontOffset);
-        settings.setValue("fontScaling", m_options->fontScaling);
-        settings.setValue("debugPort", m_options->debugPort);
-        settings.setValue("tabShortcutActive", m_options->tabShortcutActive);
-        settings.setValue("tabShowCloseButton", m_options->tabShowCloseButton);
-        settings.setValue("highlightScore", m_options->highlightScore);
-
-        settings.setValue("lastfiles", openFiles);
-        settings.setValue("lasttabindex", lastIndex);
-        // if(openFiles.size() > 0 && lastIndex != 0) {
-        if(openFiles.size() > 0) {
-             settings.setValue("lastfiles", openFiles);
-             if(lastIndex > 0) {
-                settings.setValue("lasttabindex", lastIndex);
-             }
-        }
-        settings.endGroup(); // Options/Editor
-
-        settings.beginGroup("Run");
-        settings.setValue("useAPI", m_options->useAPI);
-        settings.setValue("keyRepeat", m_options->keyRepeat);
-        settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
-        settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
-        settings.setValue("midiInterface", m_options->midiInterface);
-        settings.setValue("midiInterfaceName", m_options->midiInterfaceName);
-        settings.setValue("midiOutInterface", m_options->midiOutInterface);
-        settings.setValue("midiOutInterfaceName", m_options->midiOutInterfaceName);
-        settings.setValue("noBuffer", m_options->noBuffer);
-        settings.setValue("noMessages", m_options->noMessages);
-        settings.setValue("noEvents", m_options->noEvents);
-        settings.setValue("bufferSize", m_options->bufferSize);
-        settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
-        settings.setValue("HwBufferSize",m_options->HwBufferSize);
-        settings.setValue("HwBufferSizeActive", m_options->HwBufferSizeActive);
-        settings.setValue("fallbackDbfs", m_options->fallbackDbfs);
-        settings.setValue("dither", m_options->dither);
-        settings.setValue("realtimeFlag", m_options->realtimeFlag);
-        settings.setValue("sampleAccurateFlag", m_options->sampleAccurateFlag);
-        settings.setValue("newParser", m_options->newParser);
-        settings.setValue("multicore", m_options->multicore);
-        settings.setValue("numThreads", m_options->numThreads);
-        settings.setValue("useSystemSamplerate", m_options->useSystemSamplerate);
-        settings.setValue("overrideSamplerate", m_options->samplerate);
-        settings.setValue("overrideNumChannels", m_options->overrideNumChannels);
-        settings.setValue("numChannels", m_options->numChannels);
-        settings.setValue("numInputChannels", m_options->numInputChannels);
-        settings.setValue("useLimiter", m_options->useLimiter);
-        settings.setValue("limitValue", m_options->limitValue);
-        settings.setValue("additionalFlags", m_options->additionalFlags);
-        settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);
-        settings.setValue("fileUseOptions", m_options->fileUseOptions);
-        settings.setValue("fileOverrideOptions", m_options->fileOverrideOptions);
-        settings.setValue("fileAskFilename", m_options->fileAskFilename);
-        settings.setValue("filePlayFinished", m_options->filePlayFinished);
-        settings.setValue("fileFileType", m_options->fileFileType);
-        settings.setValue("fileSampleFormat", m_options->fileSampleFormat);
-        settings.setValue("fileInputFilenameActive", m_options->fileInputFilenameActive);
-        settings.setValue("fileInputFilename", m_options->fileInputFilename);
-        settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
-        settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
-        settings.setValue("rtUseOptions", m_options->rtUseOptions);
-        settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
-        settings.setValue("rtAudioModule", m_options->rtAudioModule);
-        settings.setValue("rtInputDevice", m_options->rtInputDevice);
-        settings.setValue("rtOutputDevice", m_options->rtOutputDevice);
-        settings.setValue("connectSuccessiveJackPorts", m_options->connectSuccessiveJackPorts);
-        settings.setValue("rtJackName", m_options->rtJackName);
-        settings.setValue("rtMidiModule", m_options->rtMidiModule);
-        settings.setValue("rtMidiInputDevice", m_options->rtMidiInputDevice);
-        settings.setValue("rtMidiOutputDevice", m_options->rtMidiOutputDevice);
-        settings.setValue("useCsoundMidi", m_options->useCsoundMidi);
-        settings.setValue("simultaneousRun", m_options->simultaneousRun);
-        settings.setValue("sampleFormat", m_options->sampleFormat);
-        settings.setValue("checkSyntaxBeforeRun", m_options->checkSyntaxBeforeRun);
-        settings.endGroup(); // Options/Run
-
-        settings.beginGroup("Environment");
-        settings.setValue("csdocdir", m_options->csdocdir);
-        settings.setValue("opcode7dir64",m_options->opcode7dir64);
-        settings.setValue("opcode7dir64Active",m_options->opcode7dir64Active);
-        settings.setValue("sadir",m_options->sadir);
-        settings.setValue("sadirActive",m_options->sadirActive);
-        settings.setValue("ssdir",m_options->ssdir);
-        settings.setValue("ssdirActive",m_options->ssdirActive);
-        settings.setValue("sfdir",m_options->sfdir);
-        settings.setValue("sfdirActive",m_options->sfdirActive);
-        settings.setValue("incdir",m_options->incdir);
-        settings.setValue("incdirActive",m_options->incdirActive);
-        settings.setValue("rawWave",m_options->rawWave);
-        settings.setValue("rawWaveActive",m_options->rawWaveActive);
-        settings.setValue("defaultCsd",m_options->defaultCsd);
-        settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
-        settings.setValue("favoriteDir",m_options->favoriteDir);
-        settings.setValue("examplePath", m_options->examplePath);
-        settings.setValue("csoundExecutable", m_options->csoundExecutable);
-        settings.setValue("templateDir",m_options->templateDir);
-        settings.setValue("logDebug", m_options->logDebug);
-        settings.setValue("opcodexmldir", m_options->opcodexmldir); // TEST can be that this is the reason for crash MacOS -  dir set wrong from corrupted plist file
-        settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
-        settings.endGroup(); // options/environment
-
-        settings.beginGroup("External");
-        settings.setValue("terminal", m_options->terminal);
-        settings.setValue("browser", m_options->browser);
-        settings.setValue("waveeditor", m_options->waveeditor);
-        settings.setValue("waveplayer", m_options->waveplayer);
-        settings.setValue("pdfviewer", m_options->pdfviewer);
-        settings.endGroup(); // options/external
-
-        settings.beginGroup("Template");
-        settings.setValue("csdTemplate", m_options->csdTemplate);
-        settings.endGroup(); // options/template
-
-        settings.endGroup(); // options
-
+    settings.setValue("lastfiles", openFiles);
+    settings.setValue("lasttabindex", lastIndex);
+    // if(openFiles.size() > 0 && lastIndex != 0) {
+    if(openFiles.size() > 0) {
+         settings.setValue("lastfiles", openFiles);
+         if(lastIndex > 0) {
+            settings.setValue("lasttabindex", lastIndex);
+         }
     }
+    settings.endGroup(); // Options/Editor
+
+    settings.beginGroup("Run");
+    settings.setValue("useAPI", m_options->useAPI);
+    settings.setValue("keyRepeat", m_options->keyRepeat);
+    settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
+    settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
+    settings.setValue("midiInterface", m_options->midiInterface);
+    settings.setValue("midiInterfaceName", m_options->midiInterfaceName);
+    settings.setValue("midiOutInterface", m_options->midiOutInterface);
+    settings.setValue("midiOutInterfaceName", m_options->midiOutInterfaceName);
+    settings.setValue("noBuffer", m_options->noBuffer);
+    settings.setValue("noMessages", m_options->noMessages);
+    settings.setValue("noEvents", m_options->noEvents);
+    settings.setValue("bufferSize", m_options->bufferSize);
+    settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
+    settings.setValue("HwBufferSize",m_options->HwBufferSize);
+    settings.setValue("HwBufferSizeActive", m_options->HwBufferSizeActive);
+    settings.setValue("fallbackDbfs", m_options->fallbackDbfs);
+    settings.setValue("dither", m_options->dither);
+    settings.setValue("realtimeFlag", m_options->realtimeFlag);
+    settings.setValue("sampleAccurateFlag", m_options->sampleAccurateFlag);
+    settings.setValue("newParser", m_options->newParser);
+    settings.setValue("multicore", m_options->multicore);
+    settings.setValue("numThreads", m_options->numThreads);
+    settings.setValue("useSystemSamplerate", m_options->useSystemSamplerate);
+    settings.setValue("overrideSamplerate", m_options->samplerate);
+    settings.setValue("overrideNumChannels", m_options->overrideNumChannels);
+    settings.setValue("numChannels", m_options->numChannels);
+    settings.setValue("numInputChannels", m_options->numInputChannels);
+    settings.setValue("useLimiter", m_options->useLimiter);
+    settings.setValue("limitValue", m_options->limitValue);
+    settings.setValue("additionalFlags", m_options->additionalFlags);
+    settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);
+    settings.setValue("fileUseOptions", m_options->fileUseOptions);
+    settings.setValue("fileOverrideOptions", m_options->fileOverrideOptions);
+    settings.setValue("fileAskFilename", m_options->fileAskFilename);
+    settings.setValue("filePlayFinished", m_options->filePlayFinished);
+    settings.setValue("fileFileType", m_options->fileFileType);
+    settings.setValue("fileSampleFormat", m_options->fileSampleFormat);
+    settings.setValue("fileInputFilenameActive", m_options->fileInputFilenameActive);
+    settings.setValue("fileInputFilename", m_options->fileInputFilename);
+    settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
+    settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
+    settings.setValue("rtUseOptions", m_options->rtUseOptions);
+    settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
+    settings.setValue("rtAudioModule", m_options->rtAudioModule);
+    settings.setValue("rtInputDevice", m_options->rtInputDevice);
+    settings.setValue("rtOutputDevice", m_options->rtOutputDevice);
+    settings.setValue("connectSuccessiveJackPorts", m_options->connectSuccessiveJackPorts);
+    settings.setValue("rtJackName", m_options->rtJackName);
+    settings.setValue("rtMidiModule", m_options->rtMidiModule);
+    settings.setValue("rtMidiInputDevice", m_options->rtMidiInputDevice);
+    settings.setValue("rtMidiOutputDevice", m_options->rtMidiOutputDevice);
+    settings.setValue("useCsoundMidi", m_options->useCsoundMidi);
+    settings.setValue("simultaneousRun", m_options->simultaneousRun);
+    settings.setValue("quitOnLastTabClosed", m_options->quitOnLastTabClosed);
+    settings.setValue("sampleFormat", m_options->sampleFormat);
+    settings.setValue("checkSyntaxBeforeRun", m_options->checkSyntaxBeforeRun);
+    settings.endGroup(); // Options/Run
+
+    settings.beginGroup("Environment");
+    settings.setValue("csdocdir", m_options->csdocdir);
+    settings.setValue("opcode7dir64",m_options->opcode7dir64);
+    settings.setValue("opcode7dir64Active",m_options->opcode7dir64Active);
+    settings.setValue("sadir",m_options->sadir);
+    settings.setValue("sadirActive",m_options->sadirActive);
+    settings.setValue("ssdir",m_options->ssdir);
+    settings.setValue("ssdirActive",m_options->ssdirActive);
+    settings.setValue("sfdir",m_options->sfdir);
+    settings.setValue("sfdirActive",m_options->sfdirActive);
+    settings.setValue("incdir",m_options->incdir);
+    settings.setValue("incdirActive",m_options->incdirActive);
+    settings.setValue("rawWave",m_options->rawWave);
+    settings.setValue("rawWaveActive",m_options->rawWaveActive);
+    settings.setValue("defaultCsd",m_options->defaultCsd);
+    settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
+    settings.setValue("favoriteDir",m_options->favoriteDir);
+    settings.setValue("examplePath", m_options->examplePath);
+    settings.setValue("csoundExecutable", m_options->csoundExecutable);
+    settings.setValue("templateDir",m_options->templateDir);
+    settings.setValue("logDebug", m_options->logDebug);
+    settings.setValue("opcodexmldir", m_options->opcodexmldir); // TEST can be that this is the reason for crash MacOS -  dir set wrong from corrupted plist file
+    settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
+    settings.endGroup(); // options/environment
+
+    settings.beginGroup("External");
+    settings.setValue("terminal", m_options->terminal);
+    settings.setValue("browser", m_options->browser);
+    settings.setValue("waveeditor", m_options->waveeditor);
+    settings.setValue("waveplayer", m_options->waveplayer);
+    settings.setValue("pdfviewer", m_options->pdfviewer);
+    settings.endGroup(); // options/external
+
+    settings.beginGroup("Template");
+    settings.setValue("csdTemplate", m_options->csdTemplate);
+    settings.endGroup(); // options/template
+
+    settings.endGroup(); // options
+
     settings.sync();
     return;
 

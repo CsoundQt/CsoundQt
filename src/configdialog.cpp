@@ -401,6 +401,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	RtMidiOutputLineEdit->setText(m_options->rtMidiOutputDevice);
 	csoundMidiCheckBox->setChecked(m_options->useCsoundMidi);
 	simultaneousCheckBox->setChecked(m_options->simultaneousRun);
+	quitOnLastTabClosedCheckBox->setChecked(m_options->quitOnLastTabClosed);
 
 	sampleFormatComboBox->setCurrentIndex(m_options->sampleFormat);
 	debugPortSpinBox->setValue(m_options->debugPort);
@@ -683,6 +684,7 @@ void ConfigDialog::apply()
 	m_options->rtMidiOutputDevice = RtMidiOutputLineEdit->text();
 	m_options->useCsoundMidi = csoundMidiCheckBox->isChecked();
 	m_options->simultaneousRun = simultaneousCheckBox->isChecked();
+	m_options->quitOnLastTabClosed = quitOnLastTabClosedCheckBox->isChecked();
 
 	m_options->sampleFormat = sampleFormatComboBox->currentIndex();
 

@@ -589,7 +589,7 @@ private:
 	QHash<DocumentPage *, QString> m_playbackTempFiles;
 	bool m_recoveryChecked = false;
 	int lastTabIndex;
-	bool m_resetPrefs; // Flag to reset preferences to default when closing
+	bool m_resetPrefs; // Preferences were reset: do not save any settings until restart
 	bool m_inspectorNeedsUpdate;
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
     QByteArray m_editorHiddenDockState; // dock layout saved while the editor is hidden

@@ -56,7 +56,8 @@ Options::Options(ConfigLists *configlists) :
     highlightingTheme = "light";
     autoJoin = false;
 	midiCcToCurrentPageOnly = false;
-    saveChanges = true;
+    saveChanges = false;
+    quitOnLastTabClosed = false;
     rememberFile = true;
     saveWidgets = true;
     // iconText = true;

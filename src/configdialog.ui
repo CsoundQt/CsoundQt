@@ -1615,6 +1615,16 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QCheckBox" name="quitOnLastTabClosedCheckBox">
+               <property name="toolTip">
+                <string>Exit CsoundQt when the last document tab is closed instead of opening an empty document</string>
+               </property>
+               <property name="text">
+                <string>Quit when all tabs are closed</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
            <item row="1" column="0" rowspan="2">

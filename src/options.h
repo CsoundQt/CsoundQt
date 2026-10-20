@@ -54,6 +54,7 @@ public:
 	bool autoJoin;
 	bool midiCcToCurrentPageOnly;
 	bool saveChanges;
+	bool quitOnLastTabClosed; // exit instead of opening an empty document
 	bool rememberFile;
 	bool saveWidgets;
 	bool iconText;
