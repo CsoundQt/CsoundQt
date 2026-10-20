@@ -2149,23 +2149,6 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="3">
-               <widget class="QCheckBox" name="askIfTemporaryCheckBox">
-                <property name="text">
-                 <string>Ask when playing a temporary file</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="3">
-               <widget class="QCheckBox" name="autoplayCheckBox">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Autoplay files when launched from file</string>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="0">
                <widget class="QCheckBox" name="toolbarCheckBox">
                 <property name="text">

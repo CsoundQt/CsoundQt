@@ -51,11 +51,9 @@ public:
 	bool flashFocus;    // briefly outline the panel that receives keyboard focus
 	bool colorVariables;
     QString highlightingTheme;
-	bool autoPlay;
 	bool autoJoin;
 	bool midiCcToCurrentPageOnly;
 	bool saveChanges;
-    bool askIfTemporary;
 	bool rememberFile;
 	bool saveWidgets;
 	bool iconText;

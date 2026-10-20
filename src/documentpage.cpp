@@ -1125,8 +1125,12 @@ void DocumentPage::showWidgetEdit(bool show)
 
 void DocumentPage::textChanged()
 {
-    // setModified(true);
     m_parseUdosNeeded = true;
+    // Keep the page's modified state in sync with the editor. Loading a file
+    // also inserts text, but loadFile()/setTextString() clear the state again
+    // right afterwards. isModified() additionally covers modified widget
+    // layouts, so clearing an undone text change must not forget about them.
+    setModified(isModified());
     // This signal triggers an inspector update
 	emit currentTextUpdated();
 }

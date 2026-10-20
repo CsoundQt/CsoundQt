@@ -54,11 +54,9 @@ Options::Options(ConfigLists *configlists) :
     flashFocus = false;
     colorVariables = true;
     highlightingTheme = "light";
-    autoPlay = true;
     autoJoin = false;
 	midiCcToCurrentPageOnly = false;
     saveChanges = true;
-    askIfTemporary = false;
     rememberFile = true;
     saveWidgets = true;
     // iconText = true;

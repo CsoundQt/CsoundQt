@@ -175,6 +175,10 @@ public:
     int widgetHistoryIndex; // Current point in history
     QString getQml();
 	QString getMidiControllerInstrument();
+	// Display name for a document without a file on disk (e.g. one recovered
+	// from a previous session). Saving still asks for a real file name.
+	QString getTemporaryName() const { return m_temporaryName; }
+	void setTemporaryName(const QString &name) { m_temporaryName = name; }
     void parseUdos(bool force=false);
     void gotoLine(int line);
     void gotoLineDialog();
@@ -226,6 +230,7 @@ private:
 	CsoundOptions getParentOptions();
 	virtual WidgetLayout* newWidgetLayout();
 	QString companionFile;
+	QString m_temporaryName;
 	MidiLearnDialog *m_midiLearn;
 	//    DocumentView *m_view;
 	// Options

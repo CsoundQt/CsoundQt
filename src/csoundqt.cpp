@@ -36,6 +36,9 @@
 #include <QToolTip>
 #include <QScreen>
 #include <QResizeEvent>
+#include <QDateTime>
+#include <QLockFile>
+#include <QRegularExpression>
 #include <QtConcurrent/QtConcurrentRun>
 
 #include <memory>
@@ -331,8 +334,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     connect(showEditorAct, &QAction::triggered, this, &CsoundQt::toggleEditorPanel);
     documentTabs->setVisible(showEditorAct->isChecked());
     documentTabs->setDocumentMode(true);
-    modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
-    modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
     documentTabs->setMinimumSize(QSize(500, 500));
 
     // set shortcuts to change between tabs,Alt +<tab no>
@@ -399,7 +400,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // Open files passed in the command line. Here to make sure they are the active tab.
     foreach (QString fileName, fileNames) {
         if (QFile::exists(fileName)) {
-            loadFile(fileName, m_options->autoPlay);
+            loadFile(fileName);
         }
         else {
             qDebug() << "CsoundQt::CsoundQt could not open file:" << fileName;
@@ -588,6 +589,11 @@ void CsoundQt::showEvent(QShowEvent *event)
     // fires, so load the manual here. loadHelpOnce() is idempotent.
     if (!m_helpLoaded && helpPanel->isVisible())
         QTimer::singleShot(0, this, [this]{ loadHelpOnce(); });
+    // Offer files that a previous, abnormally terminated session left behind.
+    // Deferred until the window is actually on screen so the dialog can be
+    // centred on it.
+    if (!m_recoveryChecked)
+        QTimer::singleShot(0, this, [this]{ checkForRecoveredFiles(); });
 }
 
 void CsoundQt::loadHelpOnce()
@@ -991,6 +997,8 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     foreach (QString tempFile, tempScriptFiles) {
         QDir().remove(tempFile);
     }
+    // A normal quit leaves no playback copies behind.
+    cleanupPlaybackTempFiles();
     showUtilities(false);  // Close utilities dialog if open
     delete helpPanel;
     //  delete closeTabButton;
@@ -1014,7 +1022,7 @@ void CsoundQt::newFile()
     documentPages[curPage]->loadTextString(m_options->csdTemplate);
     documentPages[curPage]->setFileName("");
     setWindowModified(false);
-    // documentTabs->setTabIcon(curPage, modIcon);
+    documentTabs->setTabIcon(curPage, QIcon());
     documentTabs->setTabText(curPage, "default.csd");
     connectActions();
 }
@@ -1045,7 +1053,7 @@ void CsoundQt::open()
         m_inspector->show();
     foreach (QString fileName, fileNames) {
         if (!fileName.isEmpty()) {
-            loadFile(fileName, m_options->autoPlay);
+            loadFile(fileName);
         }
     }
 }
@@ -1054,6 +1062,11 @@ void CsoundQt::reload()
 {
     if (documentPages[curPage]->isModified()) {
         QString fileName = documentPages[curPage]->getFileName();
+        if (fileName.isEmpty()) {
+            // There is no file on disk to reload. Keep the unsaved content.
+            Notification::showTransient(this, tr("Save the document before reloading it"), 3000);
+            return;
+        }
         deleteTab();
         loadFile(fileName);
         // auto doc = documentPages[curPage];
@@ -1402,6 +1415,10 @@ QString CsoundQt::getSaveFileName()
         m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
     QString dir = lastUsedDir;
     QString name = documentPages[curPage]->getFileName();
+    // A recovered document has no file on disk, but its old temporary name is
+    // a useful default for Save As.
+    if (name.isEmpty())
+        name = documentPages[curPage]->getTemporaryName();
     dir += name.mid(name.lastIndexOf("/") + 1);
     QString fileName = QFileDialog::getSaveFileName(
                 this, tr("Save File As"), dir,
@@ -1467,6 +1484,7 @@ void CsoundQt::deleteTab(int index)
     }
     DocumentPage *d = documentPages[index];
     d->stop();
+    removePlaybackTempFile(d);
     midiHandler->removeListener(d);
     if (!m_options->widgetsIndependent) {
         QRect panelGeometry = widgetPanel->geometry();
@@ -2082,10 +2100,18 @@ bool CsoundQt::closeTab(bool forceCloseApp, int index)
         index = curPage;
     }
     //   qDebug("CsoundQt::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
-    if (documentPages.size() > 0 && documentPages[index]->isModified()) {
-        QString message = tr("The document ")
-                + (documentPages[index]->getFileName() != ""
-                ? documentPages[index]->getFileName(): "untitled.csd")
+    // A recovered document has no file on disk, so its content is always at
+    // risk even if an undo happens to clear the modified flag. Keep asking.
+    const bool recovered = documentPages.size() > 0
+            && !documentPages[index]->getTemporaryName().isEmpty();
+    if (documentPages.size() > 0
+            && (documentPages[index]->isModified() || recovered)) {
+        QString documentName = documentPages[index]->getFileName();
+        if (documentName.isEmpty())
+            documentName = documentPages[index]->getTemporaryName();
+        if (documentName.isEmpty())
+            documentName = "untitled.csd";
+        QString message = tr("The document ") + documentName
                 + tr("\nhas been modified.\nDo you want to save the changes before closing?");
         int ret = QMessageBox::warning(this, tr("CsoundQt"),
                                        message,
@@ -2347,40 +2373,17 @@ void CsoundQt::play(bool realtime, int index)
 
     QFileInfo fileInfo(QFileInfo(page->getFileName()).path());
 
-    if (page->getFileName().isEmpty()) {
-        int answer;
-        if(!m_options->askIfTemporary)
-            answer= QMessageBox::Ok;
-        else
-            answer = QMessageBox::question(this, tr("Run as temporary file?"),
-                tr("press <b>OK</b>, if you don't care about this file in "
-                   "future.\n Press <b>Save</b>, if you want to save it with "
-                   "given name.\n You can always save the file with <b>Save As</b> "
-                   "also later, if you use the temporary file."),
-                QMessageBox::Ok|QMessageBox::Save|QMessageBox::Cancel );
-        bool saved = false;
-        if (answer==QMessageBox::Save) {
-            saved = saveAs();
-        } else if (answer==QMessageBox::Ok) {
-            auto tempPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-            if (!tempPath.isEmpty() && saveFile(tempPath + "/csoundqt-temp.csd")) {
-                saved = true;
-            } else {
-                QMessageBox::critical(this,tr("Save error"), tr("Could not save temporary file"));
-            }
-        }
-        if (!saved) {
-            if (curPage == oldPage) {
-                runAct->setChecked(false);
-            }
-            curPage = oldPage;
-            return;
-        }
-    }
-
-    //else if (page->isModified()) {
-    else if (m_options->saveChanges && fileInfo.isWritable() &&
-            !page->readOnly &&  !page->getFileName().startsWith(":/")) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
+    // Save a real, writable document before playing it when that is requested.
+    // Documents that are not written to disk here (unnamed, examples and other
+    // read-only sources, unwritable locations, or "save before playing" turned
+    // off) must be played from a session copy of the editor text, otherwise
+    // Csound would read the old contents of the file on disk.
+    const bool saveBeforePlay = !page->getFileName().isEmpty()
+            && m_options->saveChanges && fileInfo.isWritable()
+            && !page->readOnly
+            && !page->getFileName().startsWith(":/", Qt::CaseInsensitive);
+    bool savedToFile = false;
+    if (saveBeforePlay) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
         if (!save()) {
             if (curPage == oldPage) {
                 runAct->setChecked(false);
@@ -2388,6 +2391,7 @@ void CsoundQt::play(bool realtime, int index)
             curPage = oldPage;
             return;
         }
+        savedToFile = true;
     }
     QString fileName = page->getFileName();
     QString fileName2;
@@ -2408,7 +2412,8 @@ void CsoundQt::play(bool realtime, int index)
         curPage = documentTabs->currentIndex();
         return;
     }
-    if (!fileName.endsWith(".csd",Qt::CaseInsensitive)
+    if (!fileName.isEmpty()
+            && !fileName.endsWith(".csd",Qt::CaseInsensitive)
             && !fileName.endsWith(".py",Qt::CaseInsensitive))  {
         if (page->askForFile)
             getCompanionFileName();
@@ -2424,54 +2429,41 @@ void CsoundQt::play(bool realtime, int index)
         else
             fileName2 = page->getCompanionFileName();
     }
-    QString runFileName1, runFileName2;
-    QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
-    runFileName1 = fileName;
-    if(fileName.startsWith(":/", Qt::CaseInsensitive) || !m_options->saveChanges || !fileInfo.isWritable() ) {
+    QString runFileName1 = fileName;
+    QString runFileName2;
+    const bool isCsd = fileName.isEmpty()
+            || fileName.endsWith(".csd", Qt::CaseInsensitive);
+    // Whenever the editor text did not reach the file we are about to play,
+    // write it to a session copy first. This covers unnamed documents,
+    // examples read from the resource or their read-only source directory,
+    // and any case where the pre-play save above was skipped.
+    const bool needsTempFile = !savedToFile;
+    if (needsTempFile && isCsd) {
         QDEBUG << "***** Using temporary file for filename" << fileName;
-        QString tmpFileName = QDir::tempPath();
-        if (!tmpFileName.endsWith("/") && !tmpFileName.endsWith("\\")) {
-            tmpFileName += QDir::separator();
-        }
-        if (fileName.endsWith(".csd",Qt::CaseInsensitive)) {
-            tmpFileName += QString("csound-tmpXXXXXXXX.csd");
-            csdFile.setFileTemplate(tmpFileName);
-            if (!csdFile.open()) {
-                qDebug() << "Error creating temporary file " << tmpFileName;
-                QMessageBox::critical(this, tr("CsoundQt"), tr("Error creating temporary file."),
-                                      QMessageBox::Ok);
-                return;
+        const QString tempPath = writePlaybackTempFile(page, fileName);
+        if (tempPath.isEmpty()) {
+            QMessageBox::critical(this, tr("CsoundQt"),
+                                  tr("Error creating temporary file."),
+                                  QMessageBox::Ok);
+            if (curPage == oldPage) {
+                runAct->setChecked(false);
             }
-            // If example, just copy, since readonly anyway, otherwise get contents from editor.
-            // Necessary since examples may contain <CsFileB> section with data.
-            if (!fileName.startsWith(":/examples/", Qt::CaseInsensitive) ) {
-                csdFile.write(page->getBasicText().toLatin1());
-            } else {
-                auto fullText = page->getView()->getFullText();
-                if(!fullText.contains("<CsFileB")) {
-                    csdFile.write(fullText.toLatin1());
-                } else {
-                    qDebug() << "File has embedded elements via <CsFileB> tag";
-                    QFile file(fileName);
-                    if(!file.open(QFile::ReadOnly)) {
-                        qDebug() << "Could not open file " << fileName;
-                        return;
-                    }
-                    int result = csdFile.write(file.readAll());
-                    file.close();
-                    if (result<=0) {
-                        qDebug()<< "*** ERROR: Failed to copy to example to temporary "
-                                   "location ***";
-                        return;
-                    }
-                }
-            }
-            csdFile.flush();
-            runFileName1 = csdFile.fileName();
+            curPage = oldPage;
+            return;
         }
+        // A previous play of this page may still be registered. Replace its
+        // file only after the new one has been written successfully.
+        const QString previousTemp = m_playbackTempFiles.value(page);
+        if (!previousTemp.isEmpty() && previousTemp != tempPath) {
+            QFile::remove(previousTemp);
+        }
+        m_playbackTempFiles.insert(page, tempPath);
+        runFileName1 = tempPath;
     }
     runFileName2 = page->getCompanionFileName();
-    m_options->docName = fileName;
+    // Keep a meaningful name for auto-named JACK clients when the document
+    // itself has no file name.
+    m_options->docName = fileName.isEmpty() ? runFileName1 : fileName;
     m_options->fileName1 = runFileName1;
     m_options->fileName2 = runFileName2;
     m_options->rt = realtime;
@@ -2489,6 +2481,11 @@ void CsoundQt::play(bool realtime, int index)
         runAct->setChecked(true);  // In case the call comes from a button
     }
     int ret = page->play(m_options);
+    if (ret != 0) {
+        // No engine is using the session copy. Its source document is still in
+        // memory, so keeping the copy would only create false recovery data.
+        removePlaybackTempFile(page);
+    }
     if (ret == -1) {
         QMessageBox::critical(this, "CsoundQt", tr("Internal error running Csound."),
                               QMessageBox::Ok);
@@ -2502,13 +2499,14 @@ void CsoundQt::play(bool realtime, int index)
     } else if (ret == 0) {
         // No problem:
         // set playing icon on tab
-        documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
+        updateTabIcon(index);
 
         // enable widgets
         if(m_options->checkSyntaxOnly) {
+            removePlaybackTempFile(page);
             return;
         }
-        if (m_options->enableWidgets && m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
+        if (m_options->enableWidgets && m_options->showWidgetsOnRun && isCsd) {
             if (!m_options->widgetsIndependent) {
                 // Show and raise the panel even when docked: if it was hidden
                 // or its tab sits behind another dock (e.g. Help), it must be
@@ -2545,12 +2543,286 @@ void CsoundQt::play(bool realtime, int index)
     curPage = oldPage;
 }
 
+QString CsoundQt::sessionTempDir()
+{
+    if (!m_sessionTempDir.isEmpty() && QDir(m_sessionTempDir).exists())
+        return m_sessionTempDir;
+
+    if (m_sessionLock) {
+        m_sessionLock->unlock();
+        delete m_sessionLock;
+        m_sessionLock = nullptr;
+    }
+    const QString path = QDir::tempPath() + QDir::separator()
+            + QString("CsoundQt-session-%1-%2")
+              .arg(QDateTime::currentMSecsSinceEpoch())
+              .arg(QCoreApplication::applicationPid());
+    if (!QDir().mkpath(path)) {
+        qWarning() << "Could not create temporary session directory" << path;
+        return QString();
+    }
+#ifndef Q_OS_WIN
+    // Temporary sources can contain user code; keep them private to the owner.
+    QFile::setPermissions(path, QFileDevice::ReadOwner | QFileDevice::WriteOwner
+                                | QFileDevice::ExeOwner);
+#endif
+    m_sessionTempDir = path;
+
+    // The lock tells a second CsoundQt instance that this session is still
+    // alive, so it must not offer or delete its files.
+    m_sessionLock = new QLockFile(path + QDir::separator() + ".lock");
+    m_sessionLock->setStaleLockTime(0);
+    if (!m_sessionLock->tryLock(0))
+        qWarning() << "Could not lock temporary session directory" << path;
+    return m_sessionTempDir;
+}
+
+QString CsoundQt::writePlaybackTempFile(DocumentPage *page,
+                                        const QString &sourceFileName)
+{
+    const QString dirPath = sessionTempDir();
+    if (dirPath.isEmpty())
+        return QString();
+
+    QString baseName;
+    if (!sourceFileName.isEmpty()) {
+        baseName = QFileInfo(sourceFileName).fileName();
+    } else {
+        const int index = documentPages.indexOf(page);
+        if (index >= 0)
+            baseName = documentTabs->tabText(index);
+    }
+    baseName = baseName.trimmed();
+    // The tab label carries the modified marker; it is not part of the name.
+    if (baseName.endsWith(QLatin1Char('*')))
+        baseName.chop(1);
+    if (baseName.isEmpty())
+        baseName = "untitled.csd";
+    // Keep the recovered names usable on every platform.
+    baseName.replace(QRegularExpression("[\\\\/:*?\"<>|]"), "_");
+    if (QFileInfo(baseName).suffix().isEmpty())
+        baseName += ".csd";
+
+    QDir dir(dirPath);
+    QString path = dir.absoluteFilePath(baseName);
+    if (QFile::exists(path)) {
+        const QString stem = QFileInfo(baseName).completeBaseName();
+        const QString suffix = QFileInfo(baseName).suffix();
+        for (int n = 2; ; ++n) {
+            path = dir.absoluteFilePath(
+                        QString("%1-%2.%3").arg(stem).arg(n).arg(suffix));
+            if (!QFile::exists(path))
+                break;
+        }
+    }
+
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly)) {
+        qWarning() << "Could not create playback temporary file" << path
+                   << file.errorString();
+        return QString();
+    }
+#ifndef Q_OS_WIN
+    file.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner);
+#endif
+
+    QByteArray data;
+    if (sourceFileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
+        // Examples can contain a <CsFileB> section with embedded data. The
+        // editor text cannot reproduce that, so copy the original file then.
+        const QString fullText = page->getView()->getFullText();
+        if (!fullText.contains("<CsFileB")) {
+            data = fullText.toUtf8();
+        } else {
+            QFile original(sourceFileName);
+            if (!original.open(QIODevice::ReadOnly)) {
+                qWarning() << "Could not open example file" << sourceFileName;
+                file.close();
+                QFile::remove(path);
+                return QString();
+            }
+            data = original.readAll();
+        }
+    } else {
+        data = page->getBasicText().toUtf8();
+    }
+
+    if (file.write(data) != data.size()) {
+        qWarning() << "Could not write playback temporary file" << path
+                   << file.errorString();
+        file.close();
+        QFile::remove(path);
+        return QString();
+    }
+    file.close();
+    return path;
+}
+
+void CsoundQt::removePlaybackTempFile(DocumentPage *page)
+{
+    const QString path = m_playbackTempFiles.take(page);
+    if (!path.isEmpty())
+        QFile::remove(path);
+}
+
+void CsoundQt::cleanupPlaybackTempFiles()
+{
+    for (auto it = m_playbackTempFiles.cbegin();
+         it != m_playbackTempFiles.cend(); ++it) {
+        QFile::remove(it.value());
+    }
+    m_playbackTempFiles.clear();
+
+    if (m_sessionLock) {
+        m_sessionLock->unlock();
+        delete m_sessionLock;
+        m_sessionLock = nullptr;
+    }
+    if (!m_sessionTempDir.isEmpty()) {
+        QDir(m_sessionTempDir).removeRecursively();
+        m_sessionTempDir.clear();
+    }
+}
+
+void CsoundQt::checkForRecoveredFiles()
+{
+    if (m_recoveryChecked)
+        return;
+    m_recoveryChecked = true;
+
+    QDir tempDir(QDir::tempPath());
+    const QStringList dirNames = tempDir.entryList(
+                QStringList() << "CsoundQt-session-*",
+                QDir::Dirs | QDir::NoDotAndDotDot,
+                QDir::Time | QDir::Reversed);
+    if (dirNames.isEmpty())
+        return;
+
+    QStringList staleDirs;
+    QString recoveryDir;
+    QStringList files;
+    for (const QString &name : dirNames) {
+        const QString dirPath = tempDir.absoluteFilePath(name);
+        if (dirPath == m_sessionTempDir)
+            continue;
+        // If the lock can be acquired, the previous owner is gone.
+        QLockFile lock(dirPath + QDir::separator() + ".lock");
+        lock.setStaleLockTime(0);
+        if (!lock.tryLock(0))
+            continue;
+        lock.unlock();
+        staleDirs << dirPath;
+        if (!recoveryDir.isEmpty())
+            continue;
+        QDir dir(dirPath);
+        const QStringList entries = dir.entryList(
+                    QDir::Files | QDir::NoDotAndDotDot, QDir::Name);
+        for (const QString &entry : entries) {
+            if (entry == ".lock")
+                continue;
+            if (recoveryDir.isEmpty())
+                recoveryDir = dirPath;
+            files << dir.absoluteFilePath(entry);
+        }
+    }
+
+    QStringList selected;
+    if (!files.isEmpty()) {
+        QDialog dialog(this);
+        dialog.setWindowTitle(tr("Recover temporary files"));
+        auto *layout = new QVBoxLayout(&dialog);
+        auto *label = new QLabel(tr("CsoundQt did not shut down normally. "
+                                    "These files were being played and were not "
+                                    "removed. Select the files to recover:"),
+                                 &dialog);
+        label->setWordWrap(true);
+        layout->addWidget(label);
+        auto *list = new QListWidget(&dialog);
+        for (const QString &path : files) {
+            auto *item = new QListWidgetItem(QFileInfo(path).fileName(), list);
+            item->setData(Qt::UserRole, path);
+            item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+            item->setCheckState(Qt::Checked);
+        }
+        layout->addWidget(list);
+        auto *buttons = new QDialogButtonBox(QDialogButtonBox::Ok
+                                             | QDialogButtonBox::Cancel,
+                                             &dialog);
+        buttons->button(QDialogButtonBox::Ok)->setText(tr("Recover"));
+        buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+        buttons->button(QDialogButtonBox::Cancel)->setText(tr("Discard"));
+        connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+        connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+        layout->addWidget(buttons);
+        dialog.resize(560, 320);
+
+        if (dialog.exec() == QDialog::Accepted) {
+            for (int i = 0; i < list->count(); ++i) {
+                QListWidgetItem *item = list->item(i);
+                if (item->checkState() == Qt::Checked)
+                    selected << item->data(Qt::UserRole).toString();
+            }
+        }
+    }
+
+    if (!selected.isEmpty()) {
+        // The initial empty document is only a placeholder. Remove it before
+        // adding the recovered documents, unless the user already opened a
+        // real file (or restored a session) in the meantime.
+        if (documentPages.size() == 1
+                && documentPages[0]->getFileName().isEmpty()
+                && !documentPages[0]->isModified()) {
+            deleteTab(0);
+        }
+        for (const QString &path : selected)
+            openRecoveredFile(path);
+        if (documentPages.isEmpty())
+            newFile();
+    }
+
+    // The old session is over; do not offer these files again next time.
+    for (const QString &dirPath : staleDirs) {
+        if (dirPath != m_sessionTempDir)
+            QDir(dirPath).removeRecursively();
+    }
+}
+
+void CsoundQt::openRecoveredFile(const QString &path)
+{
+    const QString displayName = QFileInfo(path).fileName();
+    const QString oldLastUsedDir = lastUsedDir;
+    const int index = loadFile(path);
+    if (index < 0 || index >= documentPages.size())
+        return;
+    DocumentPage *page = documentPages[index];
+    if (page->getFileName() != path)
+        return; // e.g. a PDF opened in a viewer instead of a tab
+
+    // The copy only holds the text that was being played. The open document
+    // must not keep pointing at it: it is deleted after recovery, and Save must
+    // ask for a real file name.
+    m_fileWatcher->removePath(path);
+    recentFiles.removeAll(path);
+    lastUsedDir = oldLastUsedDir;
+    page->setFileName("");
+    page->setTemporaryName(displayName);
+    setCurrentFile("");
+    // DocumentPage::setModified(true) only announces the change; the actual
+    // state lives in the view and is what closeTab()/save() query.
+    page->getView()->setModified(true);
+    page->setModified(true);
+    updateTabText(index);
+    if (index == curPage)
+        setWindowModified(true);
+    fillFileMenu();
+}
+
 void CsoundQt::runInTerm(bool realtime)
 {
     QString fileName = documentPages[curPage]->getFileName();
     QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "CsoundQtExample-XXXXXX.csd");
     tempFile.setAutoRemove(false);
-    if (fileName.startsWith(":/")) {
+    if (fileName.isEmpty() || fileName.startsWith(":/")) {
         if (!tempFile.open()) {
             QMessageBox::critical(this, tr("Error running terminal"),
                                   tr("Error creating temp file"));
@@ -2559,7 +2831,7 @@ void CsoundQt::runInTerm(bool realtime)
         }
         QString csdText = documentPages[curPage]->getBasicText();
         fileName = tempFile.fileName();
-        tempFile.write(csdText.toLatin1());
+        tempFile.write(csdText.toUtf8());
         tempFile.flush();
         if (!tempScriptFiles.contains(fileName))
             tempScriptFiles << fileName;
@@ -2652,7 +2924,7 @@ void CsoundQt::stop(int index)
 
     if (documentPages[docIndex]->isRunning()) {
         documentPages[docIndex]->stop();
-        documentTabs->setTabIcon(docIndex, QIcon());
+        updateTabIcon(docIndex);
 
 #ifdef Q_OS_WIN
         // necessary since sometimes fltk plugin closes the OLE/COM connection on csoundCleanup
@@ -2663,7 +2935,8 @@ void CsoundQt::stop(int index)
 #endif
 
     }
-    documentTabs->setTabIcon(docIndex, QIcon());
+    removePlaybackTempFile(documentPages[docIndex]);
+    updateTabIcon(docIndex);
     markStopped();
 }
 
@@ -2671,7 +2944,8 @@ void CsoundQt::stopAll()
 {
     for (int i = 0; i < documentPages.size(); i++) {
         documentPages[i]->stop();
-        documentTabs->setTabIcon(i, QIcon());
+        removePlaybackTempFile(documentPages[i]);
+        updateTabIcon(i);
     }
     markStopped();
 }
@@ -2682,7 +2956,8 @@ void CsoundQt::stopAllOthers()
         if (i != curPage) {
             DocumentPage *documentPage = documentPages[i];
             documentPage->stop();
-            documentTabs->setTabIcon(i, QIcon());
+            removePlaybackTempFile(documentPage);
+            updateTabIcon(i);
         }
     }
     //	markStopped();
@@ -2694,9 +2969,10 @@ void CsoundQt::markStopped()
     if (senderPage) {
         int index = documentPages.indexOf(senderPage);
         //qDebug() << "Stop was sent from: " << index;
-        documentTabs->setTabIcon(index, QIcon());
+        removePlaybackTempFile(senderPage);
+        updateTabIcon(index);
     }
-    documentTabs->setTabIcon(curPage, QIcon());
+    updateTabIcon(curPage);
     runAct->setChecked(false);
     recAct->setChecked(false);
 #ifdef CSQT_DEBUGGER
@@ -2717,20 +2993,30 @@ void CsoundQt::record(bool rec, int index=-1)
 {
     if (index==-1) index=curPage;
     if (rec) {
+        // A recording is written next to the document. Unnamed documents no
+        // longer receive a temporary CSD name for playback, so ask for a real
+        // destination first instead of writing an audio file next to an empty
+        // name in the current directory.
+        if (index == curPage && documentPages[index]->getFileName().isEmpty()) {
+            if (!saveAs()) {
+                QSignalBlocker blocker(recAct);
+                recAct->setChecked(false);
+                return;
+            }
+        }
         if (!documentPages[index]->isRunning()) {
             play();
         }
         int ret = documentPages[index]->record(m_options->sampleFormat);
-        documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme )));
+        updateTabIcon(index);
         if (ret != 0) {
             recAct->setChecked(false);
-            documentTabs->setTabIcon(index, QIcon());
         }
     }
     else {
         documentPages[index]->stopRecording();
+        updateTabIcon(index);
         QMessageBox::information(nullptr, tr("Record"), tr("Recorded to audiofile ") + this->currentAudioFile);
-        // documentTabs->setTabIcon(curPage, QIcon());
     }
 }
 
@@ -3526,6 +3812,15 @@ void CsoundQt::decreaseFontSize()
     changeFontSize(-1);
 }
 
+void CsoundQt::setWrapLines(bool enabled)
+{
+    m_options->wrapLines = enabled;
+    for (int i = 0; i < documentPages.size(); i++) {
+        documentPages[i]->setLineWrapMode(enabled ? QTextEdit::WidgetWidth
+                                                  : QTextEdit::NoWrap);
+    }
+}
+
 void CsoundQt::changeFontSize(int change)
 {
     if (helpPanel->hasFocus() ) {
@@ -3916,16 +4211,48 @@ void CsoundQt::donate()
     openExternalBrowser(QUrl("https://www.paypal.com/paypalme/tarmojohannes"));
 }
 
+void CsoundQt::updateTabIcon(int index)
+{
+    if (index < 0 || index >= documentPages.size())
+        return;
+    DocumentPage *page = documentPages[index];
+    if (page->isRunning()) {
+        documentTabs->setTabIcon(index,
+                QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme)));
+    }
+    else if (page->isRecording()) {
+        documentTabs->setTabIcon(index,
+                QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme)));
+    }
+    else {
+        documentTabs->setTabIcon(index, QIcon());
+    }
+}
+
+void CsoundQt::updateTabText(int index)
+{
+    if (index < 0 || index >= documentPages.size())
+        return;
+    QString name = documentTabs->tabText(index);
+    // Toggle only the marker, so special labels like "default.csd" and the
+    // display name of a recovered document are preserved.
+    if (name.endsWith(QLatin1Char('*')))
+        name.chop(1);
+    if (documentPages[index]->isModified())
+        name += QLatin1Char('*');
+    documentTabs->setTabText(index, name);
+}
+
 void CsoundQt::documentWasModified(bool status)
 {
     if(status) {
         setWindowModified(true);
-        documentTabs->setTabIcon(curPage, modIcon);
     }
     else {
         setWindowModified(false);
-        documentTabs->setTabIcon(curPage, QIcon());
     }
+    updateTabIcon(curPage);
+    updateTabText(curPage);
 }
 
 void CsoundQt::configure()
@@ -4012,6 +4339,12 @@ void CsoundQt::applySettings()
 
     for (int i = 0; i < documentPages.size(); i++) {
         setCurrentOptionsForPage(documentPages[i]);
+    }
+    // The Settings/Editor checkbox and the View menu action are two views of
+    // the same option. Avoid re-emitting toggled() while syncing the action.
+    if (wrapLinesAct) {
+        QSignalBlocker blocker(wrapLinesAct);
+        wrapLinesAct->setChecked(m_options->wrapLines);
     }
     auto toolButtonStyle = (m_options->iconText ? Qt::ToolButtonTextUnderIcon :
                                                   Qt::ToolButtonIconOnly);
@@ -4425,15 +4758,7 @@ void CsoundQt::setColors(QString themeMode)
         //p->setHighlightingTheme(m_options->highlightingTheme);
         //p->setConsoleColors(fontColor, bgColor);
 
-        if (p->isRunning()) {
-            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme)));
-        } else if (p->isRecording()) {
-            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme)));
-        } else if (p->isModified()) {
-            documentTabs->setTabIcon(i, modIcon);
-        } else {
-            documentTabs->setTabIcon(i, QIcon());
-        }
+        updateTabIcon(i);
     }
 
 #ifdef Q_OS_MACOS
@@ -5556,6 +5881,14 @@ void CsoundQt::createActions()
     addAction(increaseFontAction);
     addAction(decreaseFontAction);
 
+    // Editing option also exposed in the View menu. Kept in sync with the
+    // Settings/Editor checkbox through Options::wrapLines.
+    wrapLinesAct = new QAction(tr("Wrap lines"), this);
+    wrapLinesAct->setCheckable(true);
+    wrapLinesAct->setChecked(m_options->wrapLines);
+    connect(wrapLinesAct, &QAction::toggled, this, &CsoundQt::setWrapLines);
+    addAction(wrapLinesAct);
+
     // F3 is a fixed alternative for "Find next" (Shift+F3 is on findPreviousAct).
     // It is a QShortcut rather than an action shortcut because the configurable
     // shortcuts (restored from settings) would otherwise drop the extra key.
@@ -5913,6 +6246,7 @@ void CsoundQt::createMenus()
     viewMenu->addSeparator();
     viewMenu->addAction(increaseFontAction);
     viewMenu->addAction(decreaseFontAction);
+    viewMenu->addAction(wrapLinesAct);
 
 
     fillExampleMenu();
@@ -6398,11 +6732,9 @@ void CsoundQt::readSettings()
     //m_options->highlightingTheme = settings.value("highlightingTheme", "light").toString();
 
     m_options->colorVariables = m_options->highlightingTheme != "none";
-    m_options->autoPlay = settings.value("autoplay", false).toBool();
     m_options->autoJoin = settings.value("autoJoin", true).toBool();
     m_options->menuDepth = settings.value("menuDepth", 3).toInt();
     m_options->saveChanges = settings.value("savechanges", true).toBool();
-    m_options->askIfTemporary = settings.value("askIfTemporary", false).toBool();
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
     m_options->saveWidgets = settings.value("savewidgets", true).toBool();
     m_options->midiCcToCurrentPageOnly = settings.value("midiCcToActivePageOnly", false).toBool();
@@ -6651,11 +6983,9 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("tabSpaces", m_options->tabSpaces);
         settings.setValue("colorvariables", m_options->colorVariables);
         settings.setValue("highlightingTheme", m_options->highlightingTheme);
-        settings.setValue("autoplay", m_options->autoPlay);
         settings.setValue("autoJoin", m_options->autoJoin);
         settings.setValue("menuDepth", m_options->menuDepth);
         settings.setValue("savechanges", m_options->saveChanges);
-        settings.setValue("askIfTemporary", m_options->askIfTemporary);
         settings.setValue("rememberfile", m_options->rememberFile);
         settings.setValue("savewidgets", m_options->saveWidgets);
         settings.setValue("midiCcToActivePageOnly", m_options->midiCcToCurrentPageOnly);
@@ -6873,7 +7203,7 @@ int CsoundQt::execute(QString executable, QString options)
 
 int CsoundQt::loadFileFromSystem(QString fileName)
 {
-    return loadFile(fileName,m_options->autoPlay);
+    return loadFile(fileName);
 }
 
 void CsoundQt::handleDroppedFiles(QList<QUrl> urls, QPoint globalPos)
@@ -7289,6 +7619,8 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
 
     if (fileName != documentPages[curPage]->getFileName()) {
         documentPages[curPage]->setFileName(fileName);
+        // The document now has a real destination; the recovery label is gone.
+        documentPages[curPage]->setTemporaryName(QString());
         setCurrentFile(fileName);
     }
     lastUsedDir = fileName;
@@ -7325,6 +7657,11 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
         m_fileWatcher->addPath(fileName);
     }
 
+    // The document now has a real destination we may write to, even when it
+    // started as a read-only example or manual page. Without this, saving an
+    // example under a new name would keep asking for a file name on every
+    // later Save.
+    documentPages[curPage]->readOnly = false;
     documentPages[curPage]->setModified(false);
     setWindowModified(false);
     documentTabs->setTabIcon(curPage, QIcon());
@@ -7334,13 +7671,19 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
 void CsoundQt::setCurrentFile(const QString &fileName)
 {
     QString shownName;
-    if (fileName.isEmpty())
-        shownName = "untitled.csd";
-    else
+    if (fileName.isEmpty()) {
+        DocumentPage *page = getCurrentDocumentPage();
+        if (page && !page->getTemporaryName().isEmpty())
+            shownName = page->getTemporaryName();
+        else
+            shownName = "untitled.csd";
+    } else {
         shownName = strippedName(fileName);
+    }
 
     setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("CsoundQt")));
     documentTabs->setTabText(curPage, shownName);
+    updateTabText(curPage);
     //  updateWidgets();
 }
 

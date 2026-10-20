@@ -47,6 +47,7 @@ class QAction;
 class QMenu;
 class QTextEdit;
 class QFileSystemWatcher;
+class QLockFile;
 
 class DockHelp;
 class WidgetPanel;
@@ -163,7 +164,7 @@ public:
 
 public slots:
 	int loadFile(QString fileName, bool runNow = false);
-	int loadFileFromSystem(QString fileName); // checks for m_options->autoPlay, if the function is called from other class
+	int loadFileFromSystem(QString fileName);
 	void newFile();
 	bool closeTab(bool forceCloseApp = false, int index = -1);
 	bool saveFile(const QString &fileName, bool saveWidgets = true);
@@ -200,6 +201,7 @@ public slots:
 
     void increaseFontSize();
     void decreaseFontSize();
+    void setWrapLines(bool enabled);
 
 
 protected:
@@ -297,6 +299,12 @@ private slots:
 	void about();
 	void donate();
     void documentWasModified(bool status=true);
+    // Show playing / recording state of a document tab. The single tab icon
+    // must be restored after playback ends.
+    void updateTabIcon(int index);
+    // Mark a modified document with a trailing "*" in its tab label, and
+    // remove it again once the document is saved or reverted.
+    void updateTabText(int index);
     void configure();
 	void applySettings();
 	void applyWidgetStyle();
@@ -402,6 +410,16 @@ private:
     void insertDroppedFtgen(const QString &fileName);
     void insertDroppedScoreTable(const QString &fileName);
     int nextFreeTableNumber();
+
+    // Temporary copies of documents being played. They live in a per-session
+    // directory under the system temporary directory. Files that survive an
+    // abnormal exit are offered for recovery on the next start.
+    QString sessionTempDir();
+    QString writePlaybackTempFile(DocumentPage *page, const QString &sourceFileName);
+    void removePlaybackTempFile(DocumentPage *page);
+    void cleanupPlaybackTempFiles();
+    void checkForRecoveredFiles();
+    void openRecoveredFile(const QString &path);
 
     ConfigLists m_configlists;
 	QTabWidget *documentTabs;
@@ -554,6 +572,7 @@ private:
     QAction *openExamplesFolderAct;
     QAction *increaseFontAction;
     QAction *decreaseFontAction;
+    QAction *wrapLinesAct;
 
     QSignalMapper *focusMapper;
 	int curPage;
@@ -565,13 +584,16 @@ private:
 	QStringList recentFiles;
 	QStringList lastFiles;
 	QStringList tempScriptFiles; //Remember temp files to delete them later
+	QString m_sessionTempDir;
+	QLockFile *m_sessionLock = nullptr;
+	QHash<DocumentPage *, QString> m_playbackTempFiles;
+	bool m_recoveryChecked = false;
 	int lastTabIndex;
 	bool m_resetPrefs; // Flag to reset preferences to default when closing
 	bool m_inspectorNeedsUpdate;
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
     QByteArray m_editorHiddenDockState; // dock layout saved while the editor is hidden
     UtilitiesDialog *utilitiesDialog;
-	QIcon modIcon;
 	QString currentAudioFile;
 	QString initialDir;
 	QMutex closemutex;

@@ -269,11 +269,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 
 
-	autoplayCheckBox->setChecked(m_options->autoPlay);
 	autoJoinCheckBox->setChecked(m_options->autoJoin);
 	menusDepthSpinBox->setValue(m_options->menuDepth);
 	saveChangesCheckBox->setChecked(m_options->saveChanges);
-    askIfTemporaryCheckBox->setChecked(m_options->askIfTemporary);
 	rememberFileCheckBox->setChecked(m_options->rememberFile);
 	saveWidgetsCheckBox->setChecked(m_options->saveWidgets);
 	widgetsIndependentCheckBox->setChecked(m_options->widgetsIndependent);
@@ -589,11 +587,9 @@ void ConfigDialog::apply()
     //m_options->highlightingTheme = highlightingThemeComboBox->currentData().toString();
 
     m_options->colorVariables = m_options->highlightingTheme != "none";
-    m_options->autoPlay = autoplayCheckBox->isChecked();
 	m_options->autoJoin = autoJoinCheckBox->isChecked();
 	m_options->menuDepth = menusDepthSpinBox->value();
 	m_options->saveChanges = saveChangesCheckBox->isChecked();
-    m_options->askIfTemporary = askIfTemporaryCheckBox->isChecked();
 	m_options->widgetsIndependent = widgetsIndependentCheckBox->isChecked();
 	m_options->rememberFile = rememberFileCheckBox->isChecked();
 	m_options->saveWidgets = saveWidgetsCheckBox->isChecked();

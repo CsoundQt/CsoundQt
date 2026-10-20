@@ -425,10 +425,15 @@ void DocumentView::setModified(bool mod)
 //    auto sender = static_cast<QTextEdit*>(this->sender());
 //    auto senderName = sender != nullptr ? sender->property("name").toString() : "";
 //    qDebug() << "sender: " << senderName << "modified:"<<mod;
-    if (mod) {
-        emit contentsChanged();
-    }
 	m_isModified = mod;
+    if (!mod) {
+        // Clear the editors' save point too. Otherwise document()->isModified()
+        // stays true after a save, and undoing back to the saved text would
+        // keep reporting the document as modified.
+        m_mainEditor->document()->setModified(false);
+        if (m_orcEditor)
+            m_orcEditor->document()->setModified(false);
+    }
 }
 
 void DocumentView::insertText(QString text, int section)
@@ -1213,7 +1218,13 @@ void DocumentView::textChanged() {
 
     //test: seems to do the trick and solve "always modified bug
     bool modified = m_mainEditor->document()->isModified();
+    // In split view the main editor may not be the one being edited.
+    if (m_orcEditor)
+        modified = modified || m_orcEditor->document()->isModified();
     setModified(modified);
+    // Let the page update its modified indicator in both directions: an undo
+    // back to the saved state must clear the marker as well.
+    emit contentsChanged();
     if(!modified) {
         return;
     }
