@@ -9,17 +9,17 @@
 ; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 ; Add init instrument
 
+/*
 
-; Reverb structure:
+Reverb structure:
 
-
-; +------+   +----------+   +----------+
-; +---|Reverb|---|compressor|---|(input)   |
-; Input->+   +------+   +----------+   |noise gate|--->output
-; |                             |          |
-; +----------------------------->(trigger) |
-; +----------+
-
+             +--------+      +------------+      +------------+
+Input ------>| Reverb |----->| Compressor |----->| Noise Gate |-----> Output
+      |      +--------+      +------------+      |            |
+      |                                          |  (trigger) |
+      +----------------------------------------->|            |
+                                                 +------------+
+*/
 
 ; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
@@ -138,6 +138,8 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
 i 11 0.0 0.1   ; Init
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 

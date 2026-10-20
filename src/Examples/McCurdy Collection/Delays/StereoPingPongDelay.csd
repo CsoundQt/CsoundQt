@@ -14,37 +14,40 @@
 
 ; Notes on modifications from original csd:
 ; Add table(s) for exp slider
-; Cannot display more than one space in Label, so can't display the schematic shown below:
 
-; (feedback)
-; +-------<------+
-; |              |
-; v  +--------+  ^
-; |  |        |  |
-; +-----------------+--+Delay l +--+---->left_out
-; |                    |time x 2|
-; |                    +--------+
-; |
-; In->-+
-; |
-; |     +--------+     +--------+
-; |     |Offset  |     |        |
-; +-----+Delay   +--+--+Delay  R+--+---->RIGHT_OUT
-; |time x 1|  |  |time x 2|  |
-; +--------+  ^  +--------+  v
-; |              |
-; +-------<------+
-; (feedback)
+/*
+
+                     (feedback)
+                  +-------<------+
+                  |              |
+                  v  +--------+  ^
+                  |  |        |  |
++-----------------+--+Delay l +--+---->left_out
+|                    |time x 2|
+|                    +--------+
+|
+ In->-+
+      |
+|     +--------+     +--------+
+|     |Offset  |     |        |
++-----+Delay   +--+--+Delay  R+--+---->RIGHT_OUT
+      |time x 1|  |  |time x 2|  |
+      +--------+  ^  +--------+  v
+                  |              |
+                  +-------<------+
+                     (feedback)
+test
+
+*/
 
 
-; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr     = 48000  ; Sample rate
-ksmps  = 10     ; Number of audio samples in each control cycle
+ksmps  = 64     ; Number of audio samples in each control cycle
 nchnls = 2      ; Number of channels (2=stereo)
 0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
@@ -100,13 +103,13 @@ instr 2           ; Stereo ping-pong delay instrument - also reads live input si
   adlt interp kdlt
 
   ; ;;Right channel offset;;;no
-  ; feedback!!;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ; feedback!!;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   abufferR_OS delayr gimaxdelay  ; Create a delay buffer of imaxdelay seconds duration
   adelsigR_OS deltap3 adlt       ; Tap the delay line at adlt seconds
   delayw aInL                    ; Write audio source into the beginning of the buffer
 
   ; ;;Left channel
-  ; delay;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ; delay;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ; Create a delay buffer of 5 seconds duration (equivalent to the maximum delay time
   ; possible using this example)
   abufferL delayr gimaxdelay*2
@@ -134,8 +137,6 @@ i 2 0 -1   ; Instrument 2 (delay instrument) plays a held note
 f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
 </CsScore>
 </CsoundSynthesizer>
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -157,14 +158,19 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <width>524</width>
   <height>310</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>     Stereo Ping-Pong Delay</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -191,9 +197,12 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <width>160</width>
   <height>30</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -201,7 +210,9 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <image>/</image>
   <eventLine>i 1 0 0.1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -222,9 +233,12 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <width>500</width>
   <height>27</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00200000</value>
@@ -240,14 +254,19 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <width>140</width>
   <height>30</height>
   <uuid>{0200a063-5db8-4668-bc2d-2d989a083f6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Live Input Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -258,9 +277,14 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Live_Input_Gain</objectName>
@@ -269,14 +293,19 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <width>59</width>
   <height>30</height>
   <uuid>{ab191e3a-430d-4f1d-88aa-9840342cd2d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.002</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -287,9 +316,14 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -298,14 +332,19 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <width>468</width>
   <height>310</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Stereo Ping-Pong Delay</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -332,15 +371,20 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <width>465</width>
   <height>279</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-------------------------------------------------------------------------------------------------
 This example implements the classic ping-pong delay effect. To implement the effect a total of three delay buffers are required. One for the left channel with its own feedback loop, one for the right channel with its own feedback loop and a third one to create an initial delay offset in the right channel. The first echo we will hear will be in the left channel. The offsetting delay buffer has no feedback loop. The schematic is shown in the csd. The delay time for the offsetting delay is the same as that defined by the on-screen slider for delay time. The delay times for the other two delays with feedback are twice the value defined by the slider. When the echoes alternate the perceived delay time will be the same as that defined by the slider. The input sound for the effect in this example can be either a short synthesised impulse triggered by the button or the computer's live input controlled by the 'Input Gain' slider.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>65</r>
    <g>65</g>
@@ -351,9 +395,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay_Time_Value</objectName>
@@ -362,14 +411,19 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>60</width>
   <height>30</height>
   <uuid>{732b2008-7445-4893-a260-e68561cf8e71}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.218</label>
+  <description/>
+  <label>0.030</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -380,9 +434,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -391,14 +450,19 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>140</width>
   <height>30</height>
   <uuid>{b57ba536-8f28-4986-9bf7-8eb84262d8ca}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Dry/Wet Mix</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -409,9 +473,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time</objectName>
@@ -420,12 +489,15 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>500</width>
   <height>27</height>
   <uuid>{b8fa76b9-3d04-4156-a2f2-a413d3864da3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.49600000</value>
+  <value>0.17600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -438,14 +510,19 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>60</width>
   <height>30</height>
   <uuid>{5f670bb1-e411-4f17-94a3-2321fdf5742b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.502</label>
+  <description/>
+  <label>0.736</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -456,9 +533,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
@@ -467,12 +549,15 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>500</width>
   <height>27</height>
   <uuid>{1920efdc-fe11-4010-a22c-50efec0c27d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.50200000</value>
+  <value>0.73600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -485,14 +570,19 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>140</width>
   <height>30</height>
   <uuid>{aea841b2-29e6-42d6-ac23-02439b1cc47f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Delay Time (sec.)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -503,9 +593,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Amount</objectName>
@@ -514,12 +609,15 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>500</width>
   <height>27</height>
   <uuid>{afe11ed2-eb11-423d-a391-3677ebeda4f1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.66800000</value>
+  <value>0.80400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -532,14 +630,19 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>60</width>
   <height>30</height>
   <uuid>{d6bd3764-66b6-499b-8028-0113ff526003}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.668</label>
+  <description/>
+  <label>0.804</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -550,9 +653,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -561,14 +669,19 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>140</width>
   <height>30</height>
   <uuid>{4100a5b8-76c3-4420-9229-a606f4defaf9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Feedback Amount</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -579,9 +692,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Amplitude_Rescaling</objectName>
@@ -590,14 +708,19 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>60</width>
   <height>30</height>
   <uuid>{54ac276d-3b29-4d80-bbeb-a86bdb760fe3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.702</label>
+  <description/>
+  <label>0.844</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -608,9 +731,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -619,14 +747,19 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>180</width>
   <height>30</height>
   <uuid>{224170e9-6fd8-4117-9cb2-a90d433639ec}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Output Amplitude Rescaling</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -637,9 +770,14 @@ This example implements the classic ping-pong delay effect. To implement the eff
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Amplitude_Rescaling</objectName>
@@ -648,12 +786,15 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <width>500</width>
   <height>27</height>
   <uuid>{f188ef98-8516-4b91-9a8e-7bf3a39b6227}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.70200000</value>
+  <value>0.84400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -662,4 +803,3 @@ This example implements the classic ping-pong delay effect. To implement the eff
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

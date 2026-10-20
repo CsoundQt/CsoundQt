@@ -13,43 +13,42 @@
 ; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 ; Add init instrument
 
+/*
 
-; Reverb structure:
+Reverb structure:
 
-; +----+
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; | +----+ |
-; +        +
-; | +----+ |
-; +-|comb|-+
-; | +----+ | +-------+ +-------+ +-------+ +-------+
-; IN-->|        |-|allpass|-|allpass|-|allpass|-|allpass|-->OUT
-; | +----+ | +-------+ +-------+ +-------+ +-------+
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; +----+
-
-
-; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+          +----+
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+IN --> |          | --> [allpass] --> [allpass] --> [allpass] --> [allpass] --> OUT
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+          +----+
+*/
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
@@ -106,6 +105,7 @@ instr 2  ; Reverb - always on
   if kSwitch = 1 then    ; IF kSwitch=1 THEN
     reinit UPDATE        ; Begin a reinitialization pass from label 'update'
   endif                  ; End of conditional branching
+
 UPDATE:                  ; A label
   denorm gasigL, gasigR  ; Denormalize both channels of audio signal
   arvbL, arvbR freeverb gasigL, gasigR, gkRoomSize, gkHFDamp, sr, i(gkskip)
@@ -152,14 +152,19 @@ i 11 0.0 0.1   ; Init
   <width>512</width>
   <height>374</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>freeverb</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -186,9 +191,12 @@ i 11 0.0 0.1   ; Init
   <width>100</width>
   <height>30</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -196,7 +204,9 @@ i 11 0.0 0.1   ; Init
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>true</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -217,14 +227,19 @@ i 11 0.0 0.1   ; Init
   <width>120</width>
   <height>30</height>
   <uuid>{0200a063-5db8-4668-bc2d-2d989a083f6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Live input Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -235,9 +250,14 @@ i 11 0.0 0.1   ; Init
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>LiveGain</objectName>
@@ -246,14 +266,19 @@ i 11 0.0 0.1   ; Init
   <width>60</width>
   <height>30</height>
   <uuid>{ab191e3a-430d-4f1d-88aa-9840342cd2d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.130</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -264,9 +289,14 @@ i 11 0.0 0.1   ; Init
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -275,14 +305,19 @@ i 11 0.0 0.1   ; Init
   <width>300</width>
   <height>374</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>freeverb</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -309,16 +344,21 @@ i 11 0.0 0.1   ; Init
   <width>295</width>
   <height>351</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-----------------------------------------------------------------------
 freeverb is a Csound implementation of Jezar's Freeverb reverb plugin effect. This algorithm uses 8 parallel comb filters followed by 4 series allpass filters (as show below). The opcode is stereo and this algorithm is applied separately on both channels. The comb and allpass filters on the right channel are detuned with respect to those on the left in order to create a stereo effect. Input arguments include room size and high frequency damping. Optional arguments are for a value defining the expected sample rate (default=44100) and an optional 2-way switch is provided, if non-zero initialisation will, whenever possible, be skipped.
 In this example the user can choose between a sound file input or the computer's live input. An input gain control on the live input is also provided.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>65</r>
    <g>65</g>
@@ -329,9 +369,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
@@ -340,9 +385,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>120</width>
   <height>30</height>
   <uuid>{9b81a1f2-bcb8-4582-925b-9ae56def3865}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Audio File</name>
@@ -365,14 +413,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>80</width>
   <height>30</height>
   <uuid>{62eeb695-9b83-42da-81cd-8000c232d9b9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Input</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -383,9 +436,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
@@ -394,9 +452,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>170</width>
   <height>30</height>
   <uuid>{9b992da1-8c0f-449e-af03-7913cc05efed}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>808loop.wav</stringvalue>
@@ -404,7 +465,9 @@ In this example the user can choose between a sound file input or the computer's
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -425,10 +488,14 @@ In this example the user can choose between a sound file input or the computer's
   <width>330</width>
   <height>28</height>
   <uuid>{15a8ec14-710f-43e6-be9e-f5dc8c8786cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>808loop.wav</label>
+  <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
@@ -444,6 +511,14 @@ In this example the user can choose between a sound file input or the computer's
    <b>229</b>
   </bgcolor>
   <background>nobackground</background>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -452,14 +527,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>330</width>
   <height>34</height>
   <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Restart the instrument after changing the audio file.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -470,9 +550,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>LiveGain</objectName>
@@ -481,9 +566,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>500</width>
   <height>27</height>
   <uuid>{2a8dc6e2-12f4-443d-af9b-59e4373cc24b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.13000000</value>
@@ -499,14 +587,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>120</width>
   <height>30</height>
   <uuid>{4fa545c6-e2f1-4387-8c9f-4a9dd388bb42}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Room Size</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -517,9 +610,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>RoomSize</objectName>
@@ -528,14 +626,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>60</width>
   <height>30</height>
   <uuid>{b0ad1916-b43e-44c2-be40-bca29f5cb1f4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -546,9 +649,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>RoomSize</objectName>
@@ -557,9 +665,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>500</width>
   <height>27</height>
   <uuid>{9069e547-5638-4568-896f-980087c61de0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -575,14 +686,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>180</width>
   <height>30</height>
   <uuid>{ada34c8d-83fe-4eae-b207-ac7e38c5251f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>High Frequency Damping</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -593,9 +709,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>HFDamping</objectName>
@@ -604,14 +725,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>60</width>
   <height>30</height>
   <uuid>{c333f6de-006b-45d6-bfec-c6a0205b39e8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -622,9 +748,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>HFDamping</objectName>
@@ -633,9 +764,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>500</width>
   <height>27</height>
   <uuid>{07f985ef-961c-4c4a-b40b-ac266b8e938d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -651,14 +785,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>172</width>
   <height>33</height>
   <uuid>{aea49d35-076f-4f53-973f-218c07658afd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -669,9 +808,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
@@ -680,14 +824,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>60</width>
   <height>30</height>
   <uuid>{e618dde4-1681-4841-ad6b-2f09a0dc7e42}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -698,9 +847,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
@@ -709,9 +863,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>500</width>
   <height>27</height>
   <uuid>{d92cf2f2-852e-4c61-ba7a-5211a302ad02}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -727,9 +884,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>150</width>
   <height>30</height>
   <uuid>{06f94b79-d73c-44b8-a647-21b9f1e5537b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Initialisation On </name>

@@ -17,7 +17,7 @@
 </CsOptions>
 <CsInstruments>
 sr     = 44100  ; Sample rate
-ksmps  = 16     ; Number of audio samples in each control cycle
+ksmps  = 64     ; Number of audio samples in each control cycle
 nchnls = 2      ; Number of channels (2=stereo)
 0dbfs  = 1      ; Maximum sound intensity level regardless of bit depth
 
@@ -200,6 +200,8 @@ i 2 0 3600  ; Update function tables
 i 4 0 3600  ; Reverb
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -221,14 +223,19 @@ i 4 0 3600  ; Reverb
   <width>512</width>
   <height>584</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>wterrain</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -255,14 +262,19 @@ i 4 0 3600  ; Reverb
   <width>160</width>
   <height>30</height>
   <uuid>{0200a063-5db8-4668-bc2d-2d989a083f6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>1</midichan>
   <midicc>3</midicc>
+  <description/>
   <label>X Radius (CC#3)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -273,9 +285,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>XRadius</objectName>
@@ -284,14 +301,19 @@ i 4 0 3600  ; Reverb
   <width>60</width>
   <height>30</height>
   <uuid>{ab191e3a-430d-4f1d-88aa-9840342cd2d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.300</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>244</r>
    <g>244</g>
@@ -302,9 +324,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>XRadius</objectName>
@@ -313,12 +340,15 @@ i 4 0 3600  ; Reverb
   <width>500</width>
   <height>27</height>
   <uuid>{2a8dc6e2-12f4-443d-af9b-59e4373cc24b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>1</midichan>
   <midicc>3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>0.30000001</value>
+  <value>0.30000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -331,14 +361,19 @@ i 4 0 3600  ; Reverb
   <width>150</width>
   <height>30</height>
   <uuid>{4fa545c6-e2f1-4387-8c9f-4a9dd388bb42}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>1</midichan>
   <midicc>4</midicc>
+  <description/>
   <label>Y Radius (CC#4)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -349,9 +384,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>YRadius</objectName>
@@ -360,14 +400,19 @@ i 4 0 3600  ; Reverb
   <width>60</width>
   <height>30</height>
   <uuid>{b0ad1916-b43e-44c2-be40-bca29f5cb1f4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.300</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>244</r>
    <g>244</g>
@@ -378,9 +423,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>YRadius</objectName>
@@ -389,12 +439,15 @@ i 4 0 3600  ; Reverb
   <width>500</width>
   <height>27</height>
   <uuid>{9069e547-5638-4568-896f-980087c61de0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>1</midichan>
   <midicc>4</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>0.30000001</value>
+  <value>0.30000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -407,14 +460,19 @@ i 4 0 3600  ; Reverb
   <width>160</width>
   <height>30</height>
   <uuid>{b066c36d-a132-4a1a-aee4-e421b02bca48}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Frequency</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -425,9 +483,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Freq_Value</objectName>
@@ -436,14 +499,19 @@ i 4 0 3600  ; Reverb
   <width>60</width>
   <height>30</height>
   <uuid>{262729b5-3e13-43d4-af01-99d1e8aabf34}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>400.002</label>
+  <description/>
+  <label>135.267</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>244</r>
    <g>244</g>
@@ -454,9 +522,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Freq</objectName>
@@ -465,12 +538,15 @@ i 4 0 3600  ; Reverb
   <width>500</width>
   <height>27</height>
   <uuid>{f4910f7d-2341-46e1-aa20-a4d3db351c24}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.66660601</value>
+  <value>0.54600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -483,14 +559,19 @@ i 4 0 3600  ; Reverb
   <width>160</width>
   <height>30</height>
   <uuid>{5a8c0afb-17da-4ca7-a331-f3ef38db1431}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>1</midichan>
   <midicc>1</midicc>
+  <description/>
   <label>X Centre (CC#1)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -501,9 +582,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>XCentre</objectName>
@@ -512,14 +598,19 @@ i 4 0 3600  ; Reverb
   <width>60</width>
   <height>30</height>
   <uuid>{12d2c823-daba-4a56-9f0c-462a6c951992}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.200</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>244</r>
    <g>244</g>
@@ -530,9 +621,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>XCentre</objectName>
@@ -541,9 +637,12 @@ i 4 0 3600  ; Reverb
   <width>500</width>
   <height>27</height>
   <uuid>{5442ecac-367f-413c-a49e-5f42a2727519}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>1</midichan>
   <midicc>1</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.20000000</value>
@@ -559,14 +658,19 @@ i 4 0 3600  ; Reverb
   <width>160</width>
   <height>30</height>
   <uuid>{d1ad1809-ed86-4ecd-b6c9-15b4c9686e35}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>1</midichan>
   <midicc>2</midicc>
+  <description/>
   <label>Y Centre (CC#2)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -577,9 +681,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>YCentre</objectName>
@@ -588,14 +697,19 @@ i 4 0 3600  ; Reverb
   <width>60</width>
   <height>30</height>
   <uuid>{39d4f770-c1eb-4c2d-9b6d-41b78e8955f0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.700</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>244</r>
    <g>244</g>
@@ -606,9 +720,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>YCentre</objectName>
@@ -617,12 +736,15 @@ i 4 0 3600  ; Reverb
   <width>500</width>
   <height>27</height>
   <uuid>{37911dd5-758c-4ec8-9871-ce3f5cd67670}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>1</midichan>
   <midicc>2</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.69999999</value>
+  <value>0.70000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -635,9 +757,12 @@ i 4 0 3600  ; Reverb
   <width>120</width>
   <height>26</height>
   <uuid>{bb365f4a-6dbc-4ef6-b3f4-b623c7af324b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -645,7 +770,9 @@ i 4 0 3600  ; Reverb
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -666,14 +793,19 @@ i 4 0 3600  ; Reverb
   <width>160</width>
   <height>30</height>
   <uuid>{f6eecd9b-9e04-4bc9-8f38-d5cdef0e1628}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Amplitude</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -684,9 +816,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
@@ -695,14 +832,19 @@ i 4 0 3600  ; Reverb
   <width>60</width>
   <height>30</height>
   <uuid>{53e84345-464e-45f5-bdba-80119763a99e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.400</label>
+  <description/>
+  <label>0.218</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>244</r>
    <g>244</g>
@@ -713,9 +855,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
@@ -724,12 +871,15 @@ i 4 0 3600  ; Reverb
   <width>500</width>
   <height>27</height>
   <uuid>{5348aae7-441e-4ca6-a685-db94cde77834}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.40000001</value>
+  <value>0.21800000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -742,14 +892,19 @@ i 4 0 3600  ; Reverb
   <width>160</width>
   <height>30</height>
   <uuid>{194590ce-4b68-4ab7-a669-167d987634ad}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Attack Time</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -760,9 +915,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack</objectName>
@@ -771,14 +931,19 @@ i 4 0 3600  ; Reverb
   <width>60</width>
   <height>30</height>
   <uuid>{663f7507-ede2-46e5-9b1d-adcbbaf8de08}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.200</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>244</r>
    <g>244</g>
@@ -789,9 +954,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Attack</objectName>
@@ -800,12 +970,15 @@ i 4 0 3600  ; Reverb
   <width>500</width>
   <height>27</height>
   <uuid>{1671df5f-df01-4402-a171-c6ddba540e83}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.01000000</minimum>
   <maximum>10.00000000</maximum>
-  <value>1.20000005</value>
+  <value>1.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -818,14 +991,19 @@ i 4 0 3600  ; Reverb
   <width>160</width>
   <height>30</height>
   <uuid>{22534f63-bbf9-40e1-961e-c46cdd6ebb93}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Release Time</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -836,9 +1014,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Release</objectName>
@@ -847,14 +1030,19 @@ i 4 0 3600  ; Reverb
   <width>60</width>
   <height>30</height>
   <uuid>{1e05445f-2bc1-4869-97f0-020e2725a2ee}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>5.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>244</r>
    <g>244</g>
@@ -865,9 +1053,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Release</objectName>
@@ -876,9 +1069,12 @@ i 4 0 3600  ; Reverb
   <width>500</width>
   <height>27</height>
   <uuid>{3a045162-cb0c-4152-80a5-ba325e63a103}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.01000000</minimum>
   <maximum>10.00000000</maximum>
   <value>5.00000000</value>
@@ -894,14 +1090,19 @@ i 4 0 3600  ; Reverb
   <width>250</width>
   <height>190</height>
   <uuid>{4287ed37-444f-4e6b-af0b-4ea806038bfe}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Y Wave</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -928,9 +1129,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{9fd2a26c-3bc1-4e82-80da-fa9765f313c7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -946,14 +1150,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{d651f34e-5355-4c8a-91d8-19077f112481}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>01</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -964,9 +1173,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_2</objectName>
@@ -975,9 +1189,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{865e5dea-2ec1-4f19-bfd1-0ed71940968c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -993,14 +1210,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{6c0b700d-777a-4927-a685-0845b96f1805}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>02</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1011,9 +1233,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_3</objectName>
@@ -1022,9 +1249,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{5fe7ab43-c4b4-4980-a4b5-60eaa4729bc2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1040,14 +1270,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{562c8cdb-cb65-4af3-9529-7cbcde34d358}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>03</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1058,9 +1293,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_4</objectName>
@@ -1069,9 +1309,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{df1ea1e0-2242-4442-98a3-8a0c2c9ca697}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1087,14 +1330,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{a71d6720-71c0-4840-87e4-f687148cdf8a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>04</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1105,9 +1353,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_5</objectName>
@@ -1116,9 +1369,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{76636528-5c13-45d6-82b7-0638dbe93a7a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1134,14 +1390,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{b1661c45-8931-47be-a3d9-0a8285949869}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>05</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1152,9 +1413,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_6</objectName>
@@ -1163,9 +1429,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{58561484-9ecf-44c6-8a17-5fa7d774cb18}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1181,14 +1450,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{079ed1b1-3462-4fcf-9227-2a45576da903}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>06</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1199,9 +1473,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_7</objectName>
@@ -1210,9 +1489,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{f766d35b-ff1e-478b-99d9-edd44962eb61}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1228,14 +1510,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{7c2f9ccd-95f9-46e3-bbed-d62bb3317da7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>07</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1246,9 +1533,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_8</objectName>
@@ -1257,9 +1549,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{8615bd15-a1a8-44af-9629-5dfb5acb0d04}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1275,14 +1570,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{2190af00-c89f-43ac-874c-93d0c1048fe3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>08</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1293,9 +1593,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_9</objectName>
@@ -1304,9 +1609,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{f6e2f11b-ab15-429a-aa21-079530d1b5ed}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1322,14 +1630,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{4a5a15b3-eefc-4c6b-9d64-e18daa096a86}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>09</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1340,9 +1653,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_10</objectName>
@@ -1351,9 +1669,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{fc4e96d4-340c-47e6-bce2-85dcf494664d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1369,14 +1690,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{0903fa4d-27b9-47d2-a554-43fe945f991e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>10</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1387,9 +1713,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_11</objectName>
@@ -1398,9 +1729,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{88d8c5a9-6137-4b0b-b588-634cce3fa391}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1416,14 +1750,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{30167e36-917c-4c40-883d-3bfca81d88fa}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>11</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1434,9 +1773,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>2_12</objectName>
@@ -1445,9 +1789,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{4f01a501-533c-4273-bc3b-0a1fe6e2eee8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1463,14 +1810,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{d1f9bed7-4eee-4068-ad41-2ba20e6bb1a8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>12</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1481,9 +1833,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1492,14 +1849,19 @@ i 4 0 3600  ; Reverb
   <width>250</width>
   <height>190</height>
   <uuid>{41494c45-26c5-44c7-b917-f44e64a3bcc1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>X Wave</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1526,9 +1888,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{c145d997-7eb7-4a8a-bd7e-b54aed6ab077}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -1544,14 +1909,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{923fe6dc-f878-487f-9538-bb9670a68f4a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>01</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1562,9 +1932,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_2</objectName>
@@ -1573,9 +1948,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{1062f3df-437f-4148-9f0e-5c106f34f075}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1591,14 +1969,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{3435882e-f0ff-43e6-b8c4-c9703105db71}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>02</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1609,9 +1992,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_3</objectName>
@@ -1620,12 +2008,15 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{11f92b16-b7ed-4b22-bc1c-714dbbf20b72}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.33000001</value>
+  <value>0.33000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1638,14 +2029,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{d9ea5ba4-2d00-4dc5-88da-a997d1e031e6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>03</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1656,9 +2052,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_4</objectName>
@@ -1667,9 +2068,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{d85098a5-feab-4e9a-bbc0-a61cf9b85efa}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1685,14 +2089,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{f5ae74a6-c924-4c63-b097-d50577621716}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>04</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1703,9 +2112,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_5</objectName>
@@ -1714,9 +2128,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{362169f3-3a60-4212-841d-7f5850b6635d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.20000000</value>
@@ -1732,14 +2149,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{3a01fe9a-ea13-466b-951d-d7f54a9f0e30}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>05</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1750,9 +2172,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_6</objectName>
@@ -1761,9 +2188,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{3dc3b469-85b4-4c39-8055-4c9beafdc5a9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1779,14 +2209,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{199514eb-ac75-4246-a28f-28e274b47aa2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>06</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1797,9 +2232,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_7</objectName>
@@ -1808,9 +2248,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{41cf9d6e-074e-4362-9685-a0bfeeb2f02d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.14000000</value>
@@ -1826,14 +2269,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{46b7d6fe-34f2-467d-bc05-34851cd3fe1b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>07</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1844,9 +2292,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_8</objectName>
@@ -1855,9 +2308,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{54ad466a-d9d8-4e3c-afcc-2de083f45ef8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1873,14 +2329,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{33fa643d-9c32-4978-8da4-a3596908fe0a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>08</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1891,9 +2352,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_9</objectName>
@@ -1902,9 +2368,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{48e4c4c6-23f8-431b-b24f-26d7d2e99b57}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.11000000</value>
@@ -1920,14 +2389,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{93dce410-0add-41d2-bd8d-e1198481fb9d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>09</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1938,9 +2412,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_10</objectName>
@@ -1949,9 +2428,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{b10e45e9-f857-489d-8825-3cbf04ae02da}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -1967,14 +2449,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{d8df6dde-959b-4612-b2df-674096578a43}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>10</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -1985,9 +2472,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_11</objectName>
@@ -1996,9 +2488,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{df81e33c-859e-4526-987b-d1723f5c4e4e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -2014,14 +2509,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{3572210f-6514-4c93-97b9-c007c5ab2d2a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>11</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -2032,9 +2532,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>1_12</objectName>
@@ -2043,9 +2548,12 @@ i 4 0 3600  ; Reverb
   <width>19</width>
   <height>100</height>
   <uuid>{66e7ba26-e273-4f45-8b67-880cac1fdac2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -2061,14 +2569,19 @@ i 4 0 3600  ; Reverb
   <width>20</width>
   <height>22</height>
   <uuid>{9c35250c-99f0-4bfd-913e-666a3a9f48c0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>20</midicc>
+  <description/>
   <label>12</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -2079,9 +2592,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2090,14 +2608,19 @@ i 4 0 3600  ; Reverb
   <width>160</width>
   <height>30</height>
   <uuid>{99a7ec10-317f-4d8d-880b-c3e6730f2106}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Reverb Amount</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -2108,9 +2631,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Reverb</objectName>
@@ -2119,14 +2647,19 @@ i 4 0 3600  ; Reverb
   <width>60</width>
   <height>30</height>
   <uuid>{3f88953d-50d6-4aba-8b8a-d2a21d536e34}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>244</r>
    <g>244</g>
@@ -2137,9 +2670,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Reverb</objectName>
@@ -2148,9 +2686,12 @@ i 4 0 3600  ; Reverb
   <width>500</width>
   <height>27</height>
   <uuid>{0a3aa261-956a-465d-b784-031cbc4ece26}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -2166,14 +2707,19 @@ i 4 0 3600  ; Reverb
   <width>150</width>
   <height>30</height>
   <uuid>{920c9108-aa70-4f42-aabe-afab96e001f5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>X Radius Jitter Amount</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -2184,9 +2730,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>XJitter</objectName>
@@ -2195,9 +2746,12 @@ i 4 0 3600  ; Reverb
   <width>240</width>
   <height>27</height>
   <uuid>{0b37ee81-2cdc-4048-81fa-eb86aff81c73}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
   <value>0.05000000</value>
@@ -2213,14 +2767,19 @@ i 4 0 3600  ; Reverb
   <width>150</width>
   <height>30</height>
   <uuid>{c6213bd8-c765-403f-98fd-373fcd70c6b0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Y Radius Jitter Amount</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -2231,9 +2790,14 @@ i 4 0 3600  ; Reverb
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>YJitter</objectName>
@@ -2242,9 +2806,12 @@ i 4 0 3600  ; Reverb
   <width>240</width>
   <height>27</height>
   <uuid>{af17f9d9-167d-41ce-8d8a-de417430c8f9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
   <value>0.05000000</value>
@@ -2260,14 +2827,19 @@ i 4 0 3600  ; Reverb
   <width>410</width>
   <height>584</height>
   <uuid>{4eaa267f-4f93-4c19-b1d3-a11b1e5438ef}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>wterrain</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -2294,9 +2866,12 @@ i 4 0 3600  ; Reverb
   <width>398</width>
   <height>545</height>
   <uuid>{c99aefc5-2fb5-4324-ae25-e9e02945ea8f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>------------------------------------------------------------------------------------------------
 wterrain is an implementation of wave terrain synthesis. In wave terrain synthesis two single cycle waveforms are defined and a 3-dimensional 'wave terrain' is constructed by setting these at 90 degrees to wach other.
 In this implemention elliptical movement through this wave terrain is defined by first defining the frequency of this movement, then the centre and amplitude (radius) of movement in the x axis and the centre and amplitude (radius) of movement in the y axis.
@@ -2305,9 +2880,11 @@ A simple ASR envelope also modulates the radius values. The user can adjust the 
 A user definable amount of jitter can be applied to the two paramters. This can be useful in preventing static sounding timbres. Some reverb can also be added in this example to further warm up the sound.
 This example can also be played from a MIDI keyboard. In this mode MIDI pitch is translated to frequency of the elliptical movement. (GUI defined frequency will be ignored.) MIDI note velocity will also modulate the two radii parameters ised in forming the ellipse. Aurally this equates to 'brightness'. Some keyboard scaling is used in MIDI actuated notes. This is done in order to prevent excessive shrillness in the upper register with respect to how notes sound in the lower register. The two 'centre' and 'radius' paramters can also be modulated using MIDI controllers 1-4 as indicated in the GUI.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>244</r>
    <g>244</g>
@@ -2318,9 +2895,14 @@ This example can also be played from a MIDI keyboard. In this mode MIDI pitch is
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>2</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -12,24 +12,26 @@
 ; Notes on modifications from original csd:
 ; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
+/*
 
-; Reverb structure:
+          +----+
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |     +---------+    +---------+
+IN --> |          | --> | allpass |--->| allpass |--> OUT
+       |  +----+  |     +---------+    +---------+
+       +--|comb|--+     
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+          +----+
 
-; +----+
-; +-|comb|-+
-; | +----+ |
-; +        +
-; | +----+ |
-; +-|comb|-+
-; | +----+ | +------+ +------+
-; IN-->|        |-|alpass|-|alpass|-->OUT
-; | +----+ | +------+ +------+
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; +----+
+*/
 
 
 ; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
@@ -94,6 +96,8 @@ i 10 0.0 3600  ; GUI
 i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going)
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -115,14 +119,19 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
   <width>512</width>
   <height>316</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>reverb</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -149,9 +158,12 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
   <width>100</width>
   <height>30</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -159,7 +171,9 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -180,14 +194,19 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
   <width>120</width>
   <height>30</height>
   <uuid>{0200a063-5db8-4668-bc2d-2d989a083f6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Live input Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -198,9 +217,14 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>LiveGain</objectName>
@@ -209,14 +233,19 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
   <width>60</width>
   <height>30</height>
   <uuid>{ab191e3a-430d-4f1d-88aa-9840342cd2d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.130</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -227,9 +256,14 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -238,14 +272,19 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
   <width>430</width>
   <height>316</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>reverb</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -272,17 +311,22 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
   <width>427</width>
   <height>293</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-------------------------------------------------------------------------------------------------------
 reverb is a basic reverberation unit. Within the opcode an algorithm consisting of four parallel comb filters and two series allpass filters is employed Its only obligatory input argument besides the input audio signal is for reverb time in seconds. An optional 2-way switch defines the initial disposition of the delay loop data (0=cleared, 1=previous data retained). It should be bourne in mind that the 'reverb' algorithm represents quite a basic reverb algorithm and that with transient input audio granularity in the reverb effect becomes quite evident. (0=no filtering, 1=more filtering) In this example a Dry/Wet Mix crossfader is also implemented.
 
 In this example the user can choose between a sound file input or the computer's live input. An input gain control on the live input is also provided.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>65</r>
    <g>65</g>
@@ -293,9 +337,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
@@ -304,9 +353,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>120</width>
   <height>30</height>
   <uuid>{9b81a1f2-bcb8-4582-925b-9ae56def3865}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Audio File</name>
@@ -329,14 +381,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>80</width>
   <height>30</height>
   <uuid>{62eeb695-9b83-42da-81cd-8000c232d9b9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Input</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -347,9 +404,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
@@ -358,9 +420,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>170</width>
   <height>30</height>
   <uuid>{9b992da1-8c0f-449e-af03-7913cc05efed}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>808loop.wav</stringvalue>
@@ -368,7 +433,9 @@ In this example the user can choose between a sound file input or the computer's
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -389,10 +456,14 @@ In this example the user can choose between a sound file input or the computer's
   <width>330</width>
   <height>28</height>
   <uuid>{15a8ec14-710f-43e6-be9e-f5dc8c8786cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>808loop.wav</label>
+  <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
@@ -408,6 +479,14 @@ In this example the user can choose between a sound file input or the computer's
    <b>229</b>
   </bgcolor>
   <background>nobackground</background>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -416,14 +495,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>330</width>
   <height>34</height>
   <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Restart the instrument after changing the audio file.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -434,9 +518,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>LiveGain</objectName>
@@ -445,9 +534,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>500</width>
   <height>27</height>
   <uuid>{2a8dc6e2-12f4-443d-af9b-59e4373cc24b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.13000000</value>
@@ -463,14 +555,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>120</width>
   <height>30</height>
   <uuid>{4fa545c6-e2f1-4387-8c9f-4a9dd388bb42}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Reverb Time</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -481,9 +578,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ReverbTime</objectName>
@@ -492,14 +594,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>60</width>
   <height>30</height>
   <uuid>{b0ad1916-b43e-44c2-be40-bca29f5cb1f4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>5.121</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -510,9 +617,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>ReverbTime</objectName>
@@ -521,9 +633,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>500</width>
   <height>27</height>
   <uuid>{9069e547-5638-4568-896f-980087c61de0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00100000</minimum>
   <maximum>20.00000000</maximum>
   <value>5.12074400</value>
@@ -539,14 +654,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>172</width>
   <height>33</height>
   <uuid>{aea49d35-076f-4f53-973f-218c07658afd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -557,9 +677,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
@@ -568,14 +693,19 @@ In this example the user can choose between a sound file input or the computer's
   <width>60</width>
   <height>30</height>
   <uuid>{e618dde4-1681-4841-ad6b-2f09a0dc7e42}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.534</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -586,9 +716,14 @@ In this example the user can choose between a sound file input or the computer's
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
@@ -597,9 +732,12 @@ In this example the user can choose between a sound file input or the computer's
   <width>500</width>
   <height>27</height>
   <uuid>{d92cf2f2-852e-4c61-ba7a-5211a302ad02}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.53400000</value>

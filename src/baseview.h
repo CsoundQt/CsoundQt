@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *   Copyright (C) 2010 by Andres Cabrera                                  *
  *   mantaraya36@gmail.com                                                 *
@@ -88,14 +89,13 @@ public:
         auto bg = defaultFormat.background().color();
         if(fg.lightness() < bg.lightness()) {
             // light
-            m_mainEditor->setLineAreaColors(fg.lighter(140),
-                                            bg.darker(125));
-            // m_mainEditor->setLineAreaColors(QColor("#303030"), QColor("#C0C0C0"));
+            m_mainEditor->setLineAreaColors(fg.lighter(120),
+                                            bg.darker(100));
         } else {
+            // dark
             m_mainEditor->setLineAreaColors(fg.darker(140),
                                             bg.lighter(125));
-            // m_mainEditor->setLineAreaColors(QColor("#C0C0C0"), QColor("#303030"));
-
+        
         }
     }
     void enableScoreSyntaxHighlighting(bool state) {

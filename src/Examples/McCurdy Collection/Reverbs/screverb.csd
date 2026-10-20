@@ -14,41 +14,40 @@
 ; Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 ; Add init instrument
 
+/*
 
-; Reverb structure:
-
-; +----+
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; | +----+ |
-; +        +
-; | +----+ |
-; +-|comb|-+
-; | +----+ | +-------+ +-------+ +-------+ +-------+
-; IN-->|        |-|allpass|-|allpass|-|allpass|-|allpass|-->OUT
-; | +----+ | +-------+ +-------+ +-------+ +-------+
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; | +----+ |
-; |        |
-; | +----+ |
-; +-|comb|-+
-; +----+
-
+          +----+
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+IN --> |          | --> [allpass] --> [allpass] --> [allpass] --> [allpass] --> OUT
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+       |  +----+  |
+       |          |
+       |  +----+  |
+       +--|comb|--+
+          +----+
+*/
 
 ; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
@@ -141,6 +140,8 @@ i 2 0.0 3600   ; Reverb instrument plays for 1 hour (and keeps performance going
 i 11 0.0 0.1   ; Init
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -162,14 +163,19 @@ i 11 0.0 0.1   ; Init
   <width>512</width>
   <height>430</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>screverb</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -196,9 +202,12 @@ i 11 0.0 0.1   ; Init
   <width>100</width>
   <height>30</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -206,7 +215,9 @@ i 11 0.0 0.1   ; Init
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -227,14 +238,19 @@ i 11 0.0 0.1   ; Init
   <width>120</width>
   <height>30</height>
   <uuid>{0200a063-5db8-4668-bc2d-2d989a083f6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Live input Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -245,9 +261,14 @@ i 11 0.0 0.1   ; Init
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>LiveGain</objectName>
@@ -256,14 +277,19 @@ i 11 0.0 0.1   ; Init
   <width>60</width>
   <height>30</height>
   <uuid>{ab191e3a-430d-4f1d-88aa-9840342cd2d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.334</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -274,9 +300,14 @@ i 11 0.0 0.1   ; Init
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -285,14 +316,19 @@ i 11 0.0 0.1   ; Init
   <width>410</width>
   <height>430</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>screverb</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -319,15 +355,20 @@ i 11 0.0 0.1   ; Init
   <width>404</width>
   <height>414</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>----------------------------------------------------------------------------------------------------
 screverb is an implementation of an 8 delay line stereo FDN reverb, with feedback matrix based upon physical modeling scattering junction of 8 lossless waveguides of equal characteristic impedance. This opcode is based on a Csound orchestra version of the described algorithm by Sean Costello. Rather than explicity define reverb time, the length of the reverb tail is defined by a feedback control (range 0 to 1). A value of of 0 here removes the reverb effect and a value of 1 creates a reverb effect of infinite duration. The author of the opcode suggests 0.6 for a small live room sound, 0.8 for a small hall and 0.9 for a large hall. First order lowpass filters are placed in the feedback loops of the 8 delays lines, the cutoff frequencies of these are controllable from a single input argument here represented by the 'cutoff frequency' slider. Optional arguments are for a value defining the expected sample rate (default=44100), a value defining the amount of delay time modulation employed (default=1). An optional 2-way switch (default=0) is provided, if non-zero initialisation will, whenever possible, be skipped. In this example a dry/wet crossfader is included. High settings for feedback can create amplitude build ups so a slider for rescaling amplitude is also included. In this example the user can choose between a sound file input or the computer's live input. An input gain control on the live input is also provided.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>65</r>
    <g>65</g>
@@ -338,9 +379,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
@@ -349,9 +395,12 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>120</width>
   <height>30</height>
   <uuid>{9b81a1f2-bcb8-4582-925b-9ae56def3865}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Audio File</name>
@@ -374,14 +423,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>80</width>
   <height>30</height>
   <uuid>{62eeb695-9b83-42da-81cd-8000c232d9b9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Input</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -392,9 +446,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
@@ -403,9 +462,12 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>170</width>
   <height>30</height>
   <uuid>{9b992da1-8c0f-449e-af03-7913cc05efed}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>808loop.wav</stringvalue>
@@ -413,7 +475,9 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
   <color>
    <r>203</r>
@@ -434,10 +498,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>330</width>
   <height>28</height>
   <uuid>{15a8ec14-710f-43e6-be9e-f5dc8c8786cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>808loop.wav</label>
+  <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
@@ -453,6 +521,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <b>229</b>
   </bgcolor>
   <background>nobackground</background>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -461,14 +537,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>330</width>
   <height>34</height>
   <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Restart the instrument after changing the audio file.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -479,9 +560,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>LiveGain</objectName>
@@ -490,9 +576,12 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>500</width>
   <height>27</height>
   <uuid>{2a8dc6e2-12f4-443d-af9b-59e4373cc24b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.13000000</value>
@@ -508,14 +597,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>120</width>
   <height>30</height>
   <uuid>{4fa545c6-e2f1-4387-8c9f-4a9dd388bb42}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Feedback Level</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -526,9 +620,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>FBLevel</objectName>
@@ -537,14 +636,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>60</width>
   <height>30</height>
   <uuid>{b0ad1916-b43e-44c2-be40-bca29f5cb1f4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.700</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -555,9 +659,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>FBLevel</objectName>
@@ -566,9 +675,12 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>500</width>
   <height>27</height>
   <uuid>{9069e547-5638-4568-896f-980087c61de0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.69999999</value>
@@ -584,14 +696,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>180</width>
   <height>30</height>
   <uuid>{ada34c8d-83fe-4eae-b207-ac7e38c5251f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Cutoff Frequency</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -602,9 +719,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>CutFreq_Value</objectName>
@@ -613,14 +735,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>60</width>
   <height>30</height>
   <uuid>{c333f6de-006b-45d6-bfec-c6a0205b39e8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>10001.476</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -631,9 +758,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>CutFreq</objectName>
@@ -642,9 +774,12 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>500</width>
   <height>27</height>
   <uuid>{07f985ef-961c-4c4a-b40b-ac266b8e938d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.89964998</value>
@@ -660,14 +795,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>172</width>
   <height>33</height>
   <uuid>{aea49d35-076f-4f53-973f-218c07658afd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Delay Time Modulation</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -678,9 +818,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Modulation</objectName>
@@ -689,14 +834,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>60</width>
   <height>30</height>
   <uuid>{e618dde4-1681-4841-ad6b-2f09a0dc7e42}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -707,9 +857,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Modulation</objectName>
@@ -718,9 +873,12 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>500</width>
   <height>27</height>
   <uuid>{d92cf2f2-852e-4c61-ba7a-5211a302ad02}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>20.00000000</maximum>
   <value>1.00000000</value>
@@ -736,9 +894,12 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>150</width>
   <height>30</height>
   <uuid>{06f94b79-d73c-44b8-a647-21b9f1e5537b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Initialisation On </name>
@@ -761,14 +922,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>180</width>
   <height>30</height>
   <uuid>{8e21ec7d-44b5-4ca0-a463-9ec9285bda81}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Dry / Wet Mix</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -779,9 +945,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
@@ -790,14 +961,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>60</width>
   <height>30</height>
   <uuid>{b0ca2f7f-a050-4f1e-a535-c50c41d3e5a1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -808,9 +984,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
@@ -819,9 +1000,12 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>500</width>
   <height>27</height>
   <uuid>{9800c17d-02ef-45c9-8f67-e4d15970588d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -837,14 +1021,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>172</width>
   <height>33</height>
   <uuid>{29fad642-3ee4-4b23-bb66-1b6c9052c213}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Amplitude</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>32</r>
    <g>32</g>
@@ -855,9 +1044,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
@@ -866,14 +1060,19 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>60</width>
   <height>30</height>
   <uuid>{38aca655-2941-45e8-81a4-58dac984ca90}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.600</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>32</r>
    <g>32</g>
@@ -884,9 +1083,14 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
    <g>224</g>
    <b>224</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
@@ -895,9 +1099,12 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <width>500</width>
   <height>27</height>
   <uuid>{82295eff-99d5-4889-ba99-c947a31cef6b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.60000002</value>
