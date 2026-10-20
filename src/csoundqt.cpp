@@ -4120,7 +4120,6 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     // The tab size (in spaces) is shared by tab rendering and by the number of
     // spaces the Tab key inserts (see setTabSpaces below).
     p->setTabSize(m_options->tabSpaces);
-    p->setTabIndents(m_options->tabIndents);
     p->setTabUseSpaces(m_options->tabUseSpaces);
     p->setTabSpaces(m_options->tabSpaces);
     p->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
@@ -6391,7 +6390,6 @@ void CsoundQt::readSettings()
             settings.value("widgetFrameColorSelected",
                            QVariant(FrameWidget::frameColorSelected())).value<QColor>();
 
-    m_options->tabIndents = settings.value("tabIndents", false).toBool();
     m_options->tabUseSpaces = settings.value("tabUseSpaces", true).toBool();
     m_options->tabSpaces = settings.value("tabSpaces", 2).toInt();
     // m_options->colorVariables = settings.value("colorvariables", true).toBool();
@@ -6649,7 +6647,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         // settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
         settings.setValue("widgetFrameColorUnselected", QVariant(m_options->widgetFrameColorUnselected));
         settings.setValue("widgetFrameColorSelected", QVariant(m_options->widgetFrameColorSelected));
-        settings.setValue("tabIndents", m_options->tabIndents);
         settings.setValue("tabUseSpaces", m_options->tabUseSpaces);
         settings.setValue("tabSpaces", m_options->tabSpaces);
         settings.setValue("colorvariables", m_options->colorVariables);

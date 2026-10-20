@@ -291,11 +291,6 @@ void BaseView::applyTabSize()
 	m_scoreEditor->setTabSize(m_tabSize);
 }
 
-void BaseView::setTabIndents(bool indents)
-{
-	m_mainEditor->setTabIndents(indents);
-}
-
 void BaseView::setTabUseSpaces(bool useSpaces)
 {
 	m_mainEditor->setTabUseSpaces(useSpaces);

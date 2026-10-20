@@ -673,11 +673,6 @@ void DocumentPage::setTabSize(int tabSize)
 	m_view->setTabSize(tabSize);
 }
 
-void DocumentPage::setTabIndents(bool indents)
-{
-	m_view->setTabIndents(indents);
-}
-
 void DocumentPage::setTabUseSpaces(bool useSpaces)
 {
 	m_view->setTabUseSpaces(useSpaces);

@@ -45,7 +45,6 @@ public:
 	QColor consoleFontColor;
 	QColor consoleBgColor;
 	QColor editorBgColor;
-	bool tabIndents;
 	bool tabUseSpaces;  // insert spaces instead of a tab character when Tab is pressed
 	int tabSpaces;      // tab size in spaces: how many spaces a tab is equivalent
 	                    // to, both for insertion and for the display width of tabs

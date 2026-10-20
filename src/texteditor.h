@@ -46,7 +46,6 @@ class TextEditor : public QTextEdit
 public:
 	TextEditor(QWidget *parent = 0);
 
-	void setTabIndents(bool indents) {m_tabIndents = indents;}
 	void setTabUseSpaces(bool useSpaces) {m_tabUseSpaces = useSpaces;}
 	void setTabSpaces(int spaces) {m_tabSpaces = spaces > 0 ? spaces : 1;}
 	bool tabUseSpaces() const {return m_tabUseSpaces;}
@@ -74,7 +73,6 @@ protected:
     virtual void dragMoveEvent(QDragMoveEvent *event);
     virtual void insertFromMimeData(const QMimeData *source);
 
-	bool m_tabIndents;
 	bool m_tabUseSpaces;
 	int  m_tabSpaces;
 	bool m_parameterMode;

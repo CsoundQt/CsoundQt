@@ -199,7 +199,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	framePixmap.fill(m_options->widgetFrameColorSelected);
 	frameColorSelectedButton->setIcon(framePixmap);
 
-	tabIndentCheckBox->setChecked(m_options->tabIndents);
 	tabUseSpacesCheckBox->setChecked(m_options->tabUseSpaces);
 	tabSizeSpinBox->setValue(m_options->tabSpaces);
 	flashFocusCheckBox->setChecked(m_options->flashFocus);
@@ -580,7 +579,6 @@ void ConfigDialog::apply()
 	m_options->lineEnding = lineEndingComboBox->currentIndex();
 	m_options->consoleFont = consoleFontComboBox->currentText();
 	m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
-	m_options->tabIndents = tabIndentCheckBox->isChecked();
 	m_options->tabUseSpaces = tabUseSpacesCheckBox->isChecked();
 	m_options->tabSpaces = tabSizeSpinBox->value();
 	m_options->flashFocus = flashFocusCheckBox->isChecked();

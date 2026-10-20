@@ -84,7 +84,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -1604,11 +1604,11 @@
              </item>
              <item>
               <widget class="QCheckBox" name="simultaneousCheckBox">
-               <property name="layoutDirection">
-                <enum>Qt::LayoutDirection::LeftToRight</enum>
-               </property>
                <property name="toolTip">
                 <string>Simultaneous play may cause problems under certain audio backends</string>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LayoutDirection::LeftToRight</enum>
                </property>
                <property name="text">
                 <string>Allow simultaneous play</string>
@@ -1796,30 +1796,20 @@
                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
                 </property>
                 <item row="0" column="0">
-                 <widget class="QCheckBox" name="tabIndentCheckBox">
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>Tab key always indents</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
                  <widget class="QCheckBox" name="wrapLinesCheckBox">
                   <property name="text">
                    <string>Wrap Lines</string>
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="0">
+                <item row="4" column="0">
                  <widget class="QCheckBox" name="lineNumbersCheckBox">
                   <property name="text">
                    <string>Show line numbers</string>
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="0">
+                <item row="3" column="0">
                  <widget class="QCheckBox" name="highlightScoreCheckBox">
                   <property name="toolTip">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apply syntax highlighting to the score. &lt;/p&gt;&lt;p&gt;In very long scores, deactivating syntax highlighting can reduce loading time significantly&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -1829,7 +1819,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1">
+                <item row="1" column="1">
                  <widget class="QSpinBox" name="autoCompleteDelaySpinBox">
                   <property name="minimumSize">
                    <size>
@@ -1851,7 +1841,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="0">
+                <item row="1" column="0">
                  <widget class="QCheckBox" name="autoCompleteCheckBox">
                   <property name="toolTip">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If on, the autocompletion menu is shown after the given number of idle ms. Autocompletion can also be triggered manually from the menu &amp;quot;Edit/Autocomplete&amp;quot; or via the corresponding keyboard shortcut  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -1861,14 +1851,14 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0" colspan="2">
+                <item row="2" column="0" colspan="2">
                  <widget class="QCheckBox" name="autoParameterModeCheckBox">
                   <property name="text">
                    <string>Show signature after autocomplete</string>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="0" colspan="2">
+                <item row="5" column="0" colspan="2">
                  <widget class="QCheckBox" name="tabShortcutActiveCheckBox">
                   <property name="toolTip">
                    <string>Switch tabs using alt+[1-9] or control+[1-9] depending on the platform. Requires restart </string>
@@ -1881,49 +1871,10 @@
                   </property>
                  </widget>
                 </item>
-                <item row="7" column="0">
+                <item row="6" column="0">
                  <widget class="QCheckBox" name="tabCloseButtonCheckBox">
                   <property name="text">
                    <string>Show tab close button</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="0" colspan="2">
-                 <widget class="QCheckBox" name="tabUseSpacesCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, pressing Tab inserts spaces instead of a tab character. The number of spaces is the "Tab Size" below, which is also the width used to display tab characters.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Insert spaces instead of tabs</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="9" column="0">
-                 <widget class="QLabel" name="tabSizeLabel">
-                  <property name="text">
-                   <string>Tab Size</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="9" column="1">
-                 <widget class="QSpinBox" name="tabSizeSpinBox">
-                  <property name="toolTip">
-                   <string>Number of spaces a tab is equivalent to. This is both how many spaces the Tab key inserts (when "Insert spaces instead of tabs" is checked) and how wide tab characters are displayed.</string>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>80</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>16</number>
-                  </property>
-                  <property name="value">
-                   <number>2</number>
                   </property>
                  </widget>
                 </item>
@@ -1971,13 +1922,13 @@
                  <widget class="QComboBox" name="fontSizeComboBox">
                   <property name="minimumSize">
                    <size>
-                    <width>100</width>
+                    <width>80</width>
                     <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>100</width>
+                    <width>80</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2075,13 +2026,13 @@
                  <widget class="QComboBox" name="lineEndingComboBox">
                   <property name="minimumSize">
                    <size>
-                    <width>100</width>
+                    <width>80</width>
                     <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>100</width>
+                    <width>80</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2101,6 +2052,51 @@
                     <string>Windows</string>
                    </property>
                   </item>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="tabSizeLabel">
+                  <property name="text">
+                   <string>Tab Size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QSpinBox" name="tabSizeSpinBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Number of spaces a tab is equivalent to. This is both how many spaces the Tab key inserts (when &quot;Insert spaces instead of tabs&quot; is checked) and how wide tab characters are displayed.</string>
+                  </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>16</number>
+                  </property>
+                  <property name="value">
+                   <number>2</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0" colspan="2">
+                 <widget class="QCheckBox" name="tabUseSpacesCheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, pressing Tab inserts spaces instead of a tab character. The number of spaces is the &quot;Tab Size&quot; below, which is also the width used to display tab characters.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Insert spaces instead of tabs</string>
+                  </property>
                  </widget>
                 </item>
                </layout>
@@ -2138,7 +2134,20 @@
                </widget>
               </item>
               <item row="10" column="1">
-               <widget class="QSpinBox" name="menusDepthSpinBox"/>
+               <widget class="QSpinBox" name="menusDepthSpinBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>80</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>80</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
               </item>
               <item row="3" column="3">
                <widget class="QCheckBox" name="askIfTemporaryCheckBox">
@@ -2170,6 +2179,12 @@
                  <size>
                   <width>80</width>
                   <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>80</width>
+                  <height>16777215</height>
                  </size>
                 </property>
                 <property name="suffix">
@@ -2901,7 +2916,7 @@ Default directory for sound files. Used if no full path is given for sound files
                  <string/>
                 </property>
                 <property name="textInteractionFlags">
-                 <set>Qt::TextSelectableByMouse</set>
+                 <set>Qt::TextInteractionFlag::TextSelectableByMouse</set>
                 </property>
                </widget>
               </item>

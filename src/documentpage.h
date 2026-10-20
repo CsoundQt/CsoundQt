@@ -134,7 +134,6 @@ public:
 	// Document view properties and actions
 	void setTextFont(QFont font);
 	void setTabSize(int tabSize);
-	void setTabIndents(bool indents);
 	void setTabUseSpaces(bool useSpaces);
 	void setTabSpaces(int spaces);
 	void setLineWrapMode(QTextEdit::LineWrapMode wrapLines);
