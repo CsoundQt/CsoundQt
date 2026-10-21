@@ -244,7 +244,6 @@ private slots:
 	void getToIn();
 	void inToGet();
 	void insertMidiControlInstrument();
-	void updateCabbageText();
     void saveWidgetsToQml();
 	void setCurrentAudioFile(const QString fileName);
 	void openExternalEditor();
@@ -350,6 +349,8 @@ private slots:
         return documentPages[curPage];
     }
     void gotoLineDialog();
+    // Jump to the definition of the name at the cursor.
+    void goToSource();
 
 #ifdef CSQT_DEBUGGER
 	void runDebugger();
@@ -485,7 +486,6 @@ private:
 	QAction *getToInAct;
 	QAction *inToGetAct;
 	QAction *midiControlAct;
-	QAction *cabbageAct;
     QAction *qmlAct;
     QAction *findAct;
 	QAction *findAgainAct;
@@ -559,6 +559,7 @@ private:
 	QAction *killToEndAct;
     QAction *gotoLineAct;
     QAction *goBackAct = nullptr;
+    QAction *goToSourceAct = nullptr;
 	QAction *aboutAct;
 	QAction *donateAct;
 	//    QAction *aboutQtAct;

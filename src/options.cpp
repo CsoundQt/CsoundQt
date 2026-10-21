@@ -68,6 +68,9 @@ Options::Options(ConfigLists *configlists) :
     toolbarIconSize = 20;
     wrapLines = true;
     autoComplete = true;
+    // The width the autocomplete menu had before it became configurable: the
+    // entries are 42 characters wide.
+    autocompleteMenuWidth = 42;
 
     showWidgetsOnRun = true;
     showTooltips = false;

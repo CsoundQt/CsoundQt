@@ -70,6 +70,8 @@ public:
 	bool wrapLines;
 	bool autoComplete;
     int autoCompleteDelay;
+    // Width of the autocomplete menu, in characters of the entries it lists.
+    int autocompleteMenuWidth;
 	bool autoParameterMode;
     bool tabShortcutActive;
     bool tabShowCloseButton;

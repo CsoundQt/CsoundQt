@@ -32,6 +32,7 @@
 #include <QDockWidget>
 #include <vector>
 #include "basedocument.h"
+#include "sourcedefinitions.h"
 
 class OpEntryParser;
 class DocumentView;
@@ -118,7 +119,6 @@ public:
 	bool isRunning();
 	bool isRecording();
 	bool usesFltk();
-	void updateCabbageText();
 	void focusWidgets();
 	QString getFileName();
 	QString getCompanionFileName();
@@ -141,6 +141,7 @@ public:
 	void setColorVariables(bool colorVariables);
 	//    void setOpcodeNameList(QStringList opcodeNameList);
     void setAutoComplete(bool autoComplete, int delay = 0);
+    void setAutoCompleteMenuWidth(int width);
 	void setAutoParameterMode(bool autoParameterMode);
 	QString getActiveSection();
 	QString getActiveText();
@@ -186,9 +187,16 @@ public:
     void goBackToPreviousPosition();
     void autocomplete();
     void insertOpcode();
+    // Jump to the definition of the name at the cursor (a user-defined
+    // opcode, a scheduled instrument, a macro or a struct type).
+    void goToSourceAtCursor();
 
 public slots:
 	virtual int play(CsoundOptions *options);
+	// Jump to the definition of the given name. isScheduleArgument tells
+	// whether the name is the first argument of a schedule() or schedulek()
+	// call, which is how an instrument is reached.
+	void goToSource(const QString &name, bool isScheduleArgument);
 	void stop();
 	int record(int format);
 	void perfEnded();
@@ -239,7 +247,9 @@ private:
     QString m_colorTheme;
     QStringList m_parsedUdos;
     bool m_parseUdosNeeded;
-    QRegularExpression regexUdo;
+    // The names defined in the document (user-defined opcodes, named
+    // instruments, macros and struct types), used by "Go to Source".
+    SourceDefinitions m_definitions;
 
 private slots:
 	void textChanged();

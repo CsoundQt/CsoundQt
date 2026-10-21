@@ -618,6 +618,17 @@ static QString normalizedUserPath(QString path)
     return QDir::cleanPath(QDir::fromNativeSeparators(path));
 }
 
+// Where downloadManual() installs the manual. Kept in one place so that
+// findManualDirectory() can still find an earlier download when no directory
+// is configured (e.g. after the preferences were reset).
+static QString downloadedManualDirectory()
+{
+    QString dataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    if (dataPath.isEmpty())
+        dataPath = QDir::home().filePath(".local/share");
+    return QDir(dataPath).filePath("csoundqt/csound-manual");
+}
+
 // A directory is usable as a manual when it contains a landing page or the
 // opcodes/ section (which is what opcode help needs). Some installs only have
 // the latter at a location the user points at.
@@ -637,6 +648,15 @@ QString CsoundQt::findManualDirectory() const
         if (isManualDirectory(configured))
             return configured;
         qWarning() << "Not a Csound manual directory:" << configured;
+    }
+
+    // A manual downloaded by CsoundQt itself is preferred over system-wide
+    // installs: it is the one the user asked for, and it stays usable when the
+    // configured path is gone (e.g. after resetting the preferences).
+    const QString downloadedDir = downloadedManualDirectory();
+    if (isManualDirectory(downloadedDir)) {
+        qDebug() << "Found downloaded manual in: " << downloadedDir;
+        return downloadedDir;
     }
 
     QStringList possibleDirectories;
@@ -2271,35 +2291,6 @@ void CsoundQt::getToIn()
     documentPages[curPage]->getToIn();
 }
 
-void CsoundQt::updateCabbageText()
-{
-    documentPages[curPage]->updateCabbageText();
-    // check if necessary options for Cabbage
-    QString optionsText=documentPages[curPage]->getOptionsText().trimmed();
-    if (!(optionsText.contains("-d") && optionsText.contains("-n"))) {
-        int answer = QMessageBox::question(this, tr("Insert Cabbage options?"),
-                              tr("There seems to be no Cabbage specific options in <CsOptions>.\n Do you want to insert it?\nNB! Comment your old options out, if necessary!"), QMessageBox::Yes|QMessageBox::No );
-        if (answer==QMessageBox::Yes) {
-            if (!optionsText.simplified().isEmpty()) {
-                optionsText += "\n"; // add newline if there is some text
-            }
-            optionsText += "-n -d -+rtmidi=NULL -M0 --midi-key-cps=4 --midi-velocity-amp=5";
-            documentPages[curPage]->setOptionsText(optionsText);
-        }
-    }
-    QString scoreText = documentPages[curPage]->getSco();
-    if (scoreText.simplified().isEmpty()) {
-        int answer = QMessageBox::question(this, tr("Insert scorelines for Cabbage?"),
-                                           tr("The score is empty. Cabbage needs some lines "
-                                              "to work.\n Do you want to insert it?"),
-                                           QMessageBox::Yes|QMessageBox::No );
-        if (answer==QMessageBox::Yes) {
-            documentPages[curPage]->setSco("f 0 3600\n"
-                                           ";i 1 0 3600 ; don't forget to start your instrument if you are using it as an effect!");
-        }
-    }
-}
-
 void CsoundQt::saveWidgetsToQml()
 {
     QString qml = documentPages[curPage]->getQml();
@@ -3174,8 +3165,10 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
     if (entry.startsWith('#')) { // For #define and friends
         entry.remove(0,1);
     }
-    QString dir = external ? m_options->csdocdir
-                           : (m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir);
+    // Fall back to the manual located by findManualDirectory() (possibly the
+    // one CsoundQt downloaded) when no directory is configured, so opcode help
+    // also works in an external browser after the preferences were reset.
+    QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir;
     if (external && (dir.isEmpty() || !QFile::exists(dir + "/index.html"))) {
         QMessageBox::critical(this, tr("Error"),
                               tr("HTML Documentation directory is not set or does not contain index.html.\n"
@@ -3917,11 +3910,8 @@ void CsoundQt::downloadManual()
     if (m_manualDownloadInProgress)
         return;
 
-    QString dataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-    if (dataPath.isEmpty())
-        dataPath = QDir::home().filePath(".local/share");
-    const QString manualParentPath = QDir(dataPath).filePath("csoundqt");
-    const QString installedManualPath = QDir(manualParentPath).filePath("csound-manual");
+    const QString installedManualPath = downloadedManualDirectory();
+    const QString manualParentPath = QFileInfo(installedManualPath).absolutePath();
     if (!QDir().mkpath(manualParentPath)) {
         QMessageBox::warning(this, tr("Download Csound Manual"),
                              tr("Could not create a writable location for the manual."));
@@ -4429,6 +4419,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setTabSpaces(m_options->tabSpaces);
     p->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     p->setAutoComplete(m_options->autoComplete, m_options->autoCompleteDelay);
+    p->setAutoCompleteMenuWidth(m_options->autocompleteMenuWidth);
     p->setAutoParameterMode(m_options->autoParameterMode);
     p->setWidgetEnabled(m_options->enableWidgets);
     p->showWidgetTooltips(m_options->showTooltips);
@@ -5013,6 +5004,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     killToEndAct->setShortcut(tr("Shift+Alt+K"));
     gotoLineAct->setShortcut(tr("Ctrl+L"));
     goBackAct->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Left));
+    goToSourceAct->setShortcut(tr("Ctrl+B"));
     showOrcAct->setShortcut(tr("Shift+Alt+1"));
     showScoreAct->setShortcut(tr("Shift+Alt+2"));
     showOptionsAct->setShortcut(tr("Shift+Alt+3"));
@@ -5331,11 +5323,6 @@ void CsoundQt::createActions()
     midiControlAct->setStatusTip(tr("Generate instrument according to MIDI bindings of widgets"));
     midiControlAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(midiControlAct, SIGNAL(triggered()), this, SLOT(insertMidiControlInstrument()));
-
-    cabbageAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Insert/Update Cabbage text"), this);
-    cabbageAct->setStatusTip(tr("Insert/Update Cabbage section to csd file"));
-    cabbageAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(cabbageAct, SIGNAL(triggered()), this, SLOT(updateCabbageText()));
 
     qmlAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Export widgets to QML"), this);
     qmlAct->setStatusTip(tr("Export widgets in QML format"));
@@ -5793,6 +5780,11 @@ void CsoundQt::createActions()
     // Sync with the current focus: the widget panel may already hold it.
     onFocusChanged(nullptr, QApplication::focusWidget());
 
+    goToSourceAct = new QAction(tr("Go to Source"), this);
+    goToSourceAct->setStatusTip(tr("Go to the definition of the opcode or instrument at the cursor"));
+    goToSourceAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(goToSourceAct, &QAction::triggered, [this]() { this->goToSource(); });
+
     aboutAct = new QAction(tr("&About CsoundQt"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
     //   aboutAct->setIconText(tr("About"));
@@ -5967,6 +5959,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(killToEndAct);
     m_keyActions.append(gotoLineAct);
     m_keyActions.append(goBackAct);
+    m_keyActions.append(goToSourceAct);
     m_keyActions.append(evaluateAct);
     m_keyActions.append(evaluateSectionAct);
     m_keyActions.append(showOrcAct);
@@ -6161,6 +6154,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(findAct);
     editMenu->addAction(gotoLineAct);
     editMenu->addAction(goBackAct);
+    editMenu->addAction(goToSourceAct);
     editMenu->addSeparator();
     editMenu->addAction(commentAct);
     //  editMenu->addAction(uncommentAct);
@@ -6740,6 +6734,7 @@ void CsoundQt::readSettings()
     m_options->wrapLines = settings.value("wrapLines", true).toBool();
     m_options->autoComplete = settings.value("autoComplete", true).toBool();
     m_options->autoCompleteDelay = settings.value("autoCompleteDelay", 150).toInt();
+    m_options->autocompleteMenuWidth = settings.value("autocompleteMenuWidth", 42).toInt();
     m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();
     m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
     m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
@@ -6983,6 +6978,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("wrapLines", m_options->wrapLines);
     settings.setValue("autoComplete", m_options->autoComplete);
     settings.setValue("autoCompleteDelay", m_options->autoCompleteDelay);
+    settings.setValue("autocompleteMenuWidth", m_options->autocompleteMenuWidth);
     settings.setValue("autoParameterMode", m_options->autoParameterMode);
     settings.setValue("enableWidgets", m_options->enableWidgets);
     settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
@@ -8458,4 +8454,11 @@ void CsoundQt::setParsedUDOs() {
 void CsoundQt::gotoLineDialog() {
     auto doc = this->getCurrentDocumentPage();
     doc->gotoLineDialog();
+}
+
+void CsoundQt::goToSource() {
+    auto doc = this->getCurrentDocumentPage();
+    if (doc == nullptr)
+        return;
+    doc->goToSourceAtCursor();
 }

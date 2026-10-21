@@ -38,7 +38,7 @@ namespace EditorThemes { struct Theme; struct FormatSpec; }
 
 enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection, HtmlSection };
 
-struct ParenthesisInfo
+struct BracketInfo
 {
 	char character;
 	int position;
@@ -49,15 +49,63 @@ class TextBlockData : public QTextBlockUserData
 public:
 	TextBlockData();
 
-	QVector<ParenthesisInfo *> parentheses();
-	void insert(ParenthesisInfo *info);
-    CsdSection section;
-    void clearParenthesis() { m_parentheses.clear(); }
+	// Brackets of the block, sorted by position. Stored by value: the data
+	// object is replaced on every rehighlight, so pointers would leak.
+	const QVector<BracketInfo> &brackets() const { return m_brackets; }
+	void insert(const BracketInfo &info);
+    CsdSection section = UnknownSection;
+    void clearBrackets() { m_brackets.clear(); }
 
 private:
-	QVector<ParenthesisInfo *> m_parentheses;
+	QVector<BracketInfo> m_brackets;
 
 };
+
+// Lexical scanning of a Csound line: the parts that are comments or strings.
+// Brackets inside them are not part of the matching, so the scanner keeps them
+// out of the bracket index.
+//
+// The rules are the ones of the Csound language: /* ... */ comments (which
+// may span lines), ; and // line comments, "..." strings and {{ ... }} strings
+// (which may span lines). Unlike the highlighter, which colours a line as it
+// finds it, the scanner walks the line from left to right, so a ';' inside a
+// string does not start a comment.
+namespace CsoundLex {
+
+struct Line
+{
+	QVector<QPair<int, int>> comments; // half-open [start, end) ranges
+	QVector<QPair<int, int>> strings;  // half-open [start, end) ranges
+	// The {{ ... }} strings, which may span lines. They are kept apart from
+	// the "..." strings because the highlighter paints them.
+	QVector<QPair<int, int>> multilineStrings;
+	// State at the end of the line: 0 none, 1 inside a /* */ comment,
+	// 2 inside a {{ }} string.
+	int endState = 0;
+};
+
+// Scans one line. startState is the state at the end of the previous line.
+Line scan(const QString &line, int startState);
+
+// True when the position is not part of a comment or a string.
+inline bool isCode(const Line &info, int position)
+{
+	for (const QPair<int, int> &range : info.comments) {
+		if (position >= range.first && position < range.second)
+			return false;
+	}
+	for (const QPair<int, int> &range : info.strings) {
+		if (position >= range.first && position < range.second)
+			return false;
+	}
+	for (const QPair<int, int> &range : info.multilineStrings) {
+		if (position >= range.first && position < range.second)
+			return false;
+	}
+	return true;
+}
+
+} // namespace CsoundLex
 
 class Highlighter : public QSyntaxHighlighter
 {
@@ -77,6 +125,10 @@ public:
         m_sectionType = sectionType;
     }
     void setTheme(const QString &theme);
+    // Marks the parenthesis pair at the given document positions (the one next
+    // to the cursor). The mark is drawn by the highlighter itself, because a
+    // QTextEdit extra selection cannot change the font weight. Pass -1 to clear.
+    void setMatchedParentheses(int first, int second);
     void enableScoreSyntaxHighlighting(bool status) {
         m_scoreSyntaxHighlighting = status;
     }
@@ -185,6 +237,10 @@ private:
 
     QString m_theme;
     bool m_themeSet = false;
+
+    // The pair currently marked next to the cursor (document positions).
+    int m_matchedParentheses[2] = { -1, -1 };
+    QTextCharFormat matchedParenthesisFormat;
 
 	// for html
     QTextCharFormat jsKeywordFormat, htmlTagFormat, attrFormat, tagNameFormat;

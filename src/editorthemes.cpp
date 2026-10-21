@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *   Copyright (C) 2026 by the CsoundQt developers                          *
  *                                                                         *
@@ -130,7 +131,7 @@ Theme makeDarkTheme()
     const QColor keywordColor(QStringLiteral("#FF9800"));
     const QColor opcodeColor(QStringLiteral("#4FC3F7"));
     const QColor commentColor(QStringLiteral("#856CB0"));
-    const QColor quotationColor(QStringLiteral("#91FF55"));
+    const QColor quotationColor(QStringLiteral("#07e6a7"));//(QStringLiteral("#91FF55"));
     const QColor nameColor(QStringLiteral("#D298FB"));
     QHash<QString, FormatSpec> &f = theme.formats;
     f[QStringLiteral("inst")] = makeSpec(instanceColor, {}, QFont::Bold);
@@ -147,14 +148,14 @@ Theme makeDarkTheme()
     f[QStringLiteral("pfield")] = makeSpec({}, {}, QFont::Bold);
     f[QStringLiteral("krate")] = makeSpec(QColor(QStringLiteral("#66EEBB")));
     f[QStringLiteral("irate")] = makeSpec(QColor(QStringLiteral("#A0A0FF")));
-    f[QStringLiteral("arate")] = makeSpec(QColor(QStringLiteral("#F75C5C")));
+    f[QStringLiteral("arate")] = makeSpec(QColor(QStringLiteral("#ff9662")));
     f[QStringLiteral("fsig")] = makeSpec(QColor(QStringLiteral("#BD2467")), {}, QFont::Bold);
     f[QStringLiteral("boolean")] = makeSpec(QColor(QStringLiteral("#D4E157")));
     f[QStringLiteral("complex")] = makeSpec(QColor(QStringLiteral("#26A69A")));
     f[QStringLiteral("label")] = makeSpec(instanceColor, {}, QFont::Bold, false, true);
     f[QStringLiteral("name")] = makeSpec(nameColor, {}, QFont::Bold);
     f[QStringLiteral("quotation")] = makeSpec(quotationColor);
-    f[QStringLiteral("stringVar")] = f[QStringLiteral("quotation")];
+    f[QStringLiteral("stringVar")] = makeSpec(QColor(QStringLiteral("#aaff7f")));// f[QStringLiteral("quotation")];
     f[QStringLiteral("multiLineComment")] = f[QStringLiteral("quotation")];
     f[QStringLiteral("io")] = makeSpec(QColor(QStringLiteral("#FFD54F")), {}, QFont::Bold);
     f[QStringLiteral("udo")] = makeSpec(opcodeColor);

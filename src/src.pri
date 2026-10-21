@@ -41,6 +41,8 @@ HEADERS = "src/about.h" \
     "src/findreplace.h" \
     "src/findbar.h" \
     "src/framewidget.h" \
+    "src/bracketmatcher.h" \
+    "src/sourcedefinitions.h" \
     "src/highlighter.h" \
     "src/inspector.h" \
     "src/keyboardshortcuts.h" \
@@ -109,6 +111,8 @@ SOURCES = "src/about.cpp" \
     "src/findreplace.cpp" \
     "src/findbar.cpp" \
     "src/framewidget.cpp" \
+    "src/bracketmatcher.cpp" \
+    "src/sourcedefinitions.cpp" \
     "src/highlighter.cpp" \
     "src/inspector.cpp" \
     "src/keyboardshortcuts.cpp" \

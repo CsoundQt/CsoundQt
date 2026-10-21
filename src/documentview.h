@@ -28,6 +28,7 @@
 #include <QtPrintSupport/QPrintDialog>
 
 #include "baseview.h"
+#include "bracketmatcher.h"
 
 #include <QKeyEvent> // For syntax menu class
 #include <QPair>
@@ -80,6 +81,7 @@ public:
 
 	void insertText(QString text, int section = -1);
     void setAutoComplete(bool autoComplete, int delay = 0);
+    void setAutoCompleteMenuWidth(int width);
 	void setAutoParameterMode(bool autoParameterMode);
 	void setViewMode(int mode);
 
@@ -108,15 +110,20 @@ public:
 	void print(QPrinter *printer);
 
 
-	bool matchLeftParenthesis(QTextBlock currentBlock, int i, int numLeftParentheses);
-	bool matchRightParenthesis(QTextBlock currentBlock, int index, int numRightParentheses);
-	void createParenthesisSelection(int pos, bool paired=true);
     void setParsedUDOs(QStringList udos);
     Highlighter* getHighlighter() { return &m_highlighter; }
     void gotoLineDialog();
     void markCurrentPosition();
     const QStringList getAllWords();
 
+	// The Csound name at the cursor in the editor the user is working in, for
+	// the "Go to Source" action.
+	QString identifierAtCursor() const;
+	// True when the cursor is on the first argument of a schedule() or
+	// schedulek() call.
+	bool isScheduleArgumentAtCursor() const;
+	// Jumps to the definition of a name and leaves the cursor on the name.
+	void jumpToDefinition(int line, int column);
 	// BaseView::setTheme() switches the syntax highlighting; the completion
 	// popup is a separate top-level window with colours of its own, so it has
 	// to be restyled here too.
@@ -198,6 +205,14 @@ private:
 	void updateFindStatus();
 	void refreshFindAfterEdit();
 	void jumpToLineInternal(int line, bool mark, bool focus);
+	// The editor the line numbers of the document refer to (the whole
+	// document in the unified view, the orchestra in the split view).
+	TextEditor *currentLineEditor() const;
+	// The editor the user is working in.
+	TextEditor *activeEditor() const;
+	// The cursor at the given position of the main editor, which is given in
+	// the coordinates of that editor.
+	QTextCursor cursorAt(const QPoint &pos) const;
 
 	// The string used for one indentation step in the current mode: a tab
 	// character, or the configured number of spaces when "use spaces" is on.
@@ -213,6 +228,8 @@ private:
 	bool m_isModified;
 	bool m_autoComplete;
     int m_autoCompleteDelay = 150;
+    // Width of the autocomplete menu, in characters of its entries.
+    int m_autoCompleteMenuWidth = 42;
     QTimer* m_autoCompleteTimer = nullptr;
     bool m_autoParameterMode;
 	bool errorMarked;
@@ -222,6 +239,10 @@ private:
 	bool lastCaseSensitive; // These last three are for search and replace
 	QString lastSearch;
 	QString lastReplace;
+
+	// Marks the parenthesis pair next to the cursor; owns the pair state and the
+	// document it belongs to.
+	BracketMatcher m_bracketMatcher;
 
 	FindBar *m_findBar = nullptr;
 	OpcodeInsertBar *m_opcodeInsertBar = nullptr;
@@ -273,6 +294,9 @@ signals:
 	void closeExtraPanels();
 	void evaluate(QString code);
     void newLineAndColumn(int line, int column);
+    // Request a jump to the definition of a name. The flag tells whether the
+    // name is the first argument of a schedule() or schedulek() call.
+    void goToSourceRequested(const QString &name, bool isScheduleArgument);
 
 };
 

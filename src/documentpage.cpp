@@ -50,7 +50,6 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 	m_view->showLineArea(true);
 	m_midiLearn = midiLearn;
     m_colorTheme = "";
-    regexUdo.setPattern("\\n\\s*\\bopcode\\s+(\\w+)\\s*,\\s*[a-zA-Z0\\[\\]]+\\s*,\\s*[a-zA-Z0\\[\\]]+");
     m_parseUdosNeeded = true;
 	foreach(WidgetLayout* wl, m_widgetLayouts) {
 		connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
@@ -547,18 +546,6 @@ QString DocumentPage::getMidiControllerInstrument()
 	return m_widgetLayouts[0]->getMidiControllerInstrument();
 }
 
-void DocumentPage::updateCabbageText()
-{
-	if (widgetCount()==0) {
-        QMessageBox::warning(nullptr, tr("No widgets"), tr("There are no widgets to convert!"));
-		return;
-	}
-	QString text = "<Cabbage>\n";
-	text += m_widgetLayouts[0]->getCabbageWidgets();
-	text += "</Cabbage>";
-	m_view->setCabbageText(text);
-}
-
 void DocumentPage::focusWidgets()
 {
 	//FIXME allow multiple
@@ -698,6 +685,11 @@ void DocumentPage::setColorVariables(bool colorVariables)
 void DocumentPage::setAutoComplete(bool autoComplete, int delay)
 {
     m_view->setAutoComplete(autoComplete, delay);
+}
+
+void DocumentPage::setAutoCompleteMenuWidth(int width)
+{
+    m_view->setAutoCompleteMenuWidth(width);
 }
 
 void DocumentPage::setAutoParameterMode(bool autoParameterMode)
@@ -861,6 +853,11 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 
 	//connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
 	connect(m_view,SIGNAL(setHelp()), this, SLOT(setHelp()));
+	// The definition index lives in the page, so the view only asks for the
+	// jump. The new style of connect is used on purpose: it is checked when
+	// the program is compiled and does not depend on the meta-object at run
+	// time, so the request cannot get lost.
+	connect(m_view, &DocumentView::goToSourceRequested, this, &DocumentPage::goToSource);
 
 
 	// Connect for clearing marked lines and letting inspector know text has changed
@@ -1165,21 +1162,46 @@ void DocumentPage::setParsedUDOs(QStringList udos) {
 void DocumentPage::parseUdos(bool force) {
     if(!m_parseUdosNeeded && !force)
         return;
-    auto text = this->getBasicText();
-    QRegularExpressionMatchIterator i = regexUdo.globalMatch(text);
-    int numUdos = m_parsedUdos.size();
-    m_parsedUdos.clear();
-    while(i.hasNext()) {
-        QRegularExpressionMatch match = i.next();
-        QString udoName = match.captured(1);
-        m_parsedUdos.append(udoName);
-    }
+    const QStringList oldUdos = m_parsedUdos;
+    m_definitions.scan(this->getBasicText());
+    m_parsedUdos = m_definitions.udoNames();
     auto highlighter = m_view->getHighlighter();
     highlighter->setUDOs(m_parsedUdos);
-    if(numUdos != m_parsedUdos.size()) {
+    if(oldUdos != m_parsedUdos) {
         highlighter->rehighlight();
     }
     m_parseUdosNeeded = false;
+}
+
+void DocumentPage::goToSourceAtCursor()
+{
+    goToSource(m_view->identifierAtCursor(), m_view->isScheduleArgumentAtCursor());
+}
+
+void DocumentPage::goToSource(const QString &name, bool isScheduleArgument)
+{
+    // The index of definitions is refreshed on every text change, but only
+    // when the timer gets to it, so it is brought up to date here.
+    m_definitions.scan(this->getBasicText());
+
+    if (name.isEmpty()) {
+        qDebug() << "Go to source: there is no name at the cursor";
+        return;
+    }
+    const SourceDefinitions::Definition *definition = m_definitions.find(name);
+    if (definition == nullptr) {
+        qDebug() << "Go to source:" << name << "is not defined in this document";
+        Notification::showTransient(static_cast<QWidget *>(parent()),
+            tr("Go to source: \"%1\" not defined").arg(name), 4000);
+        return;
+    }
+    if (definition->kind == SourceDefinitions::Instrument && !isScheduleArgument) {
+        // An instrument is only reached through a schedule() or schedulek()
+        // call: anywhere else the name may be a variable or a string.
+        qDebug() << "Go to source:" << name << "is an instrument but is not scheduled here";
+        return;
+    }
+    m_view->jumpToDefinition(definition->line, definition->column);
 }
 
 void DocumentPage::autocomplete() {

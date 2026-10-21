@@ -28,26 +28,101 @@
 #include <QRegularExpression>
 
 
-TextBlockData::TextBlockData()
-{
-	// Nothing to do
-    section = UnknownSection;
-}
+TextBlockData::TextBlockData() = default;
 
-QVector<ParenthesisInfo *> TextBlockData::parentheses()
-{
-	return m_parentheses;
-}
-
-
-void TextBlockData::insert(ParenthesisInfo *info)
+void TextBlockData::insert(const BracketInfo &info)
 {
 	int i = 0;
-    while (i < m_parentheses.size() && info->position > m_parentheses.at(i)->position)
+    while (i < m_brackets.size() && info.position > m_brackets.at(i).position)
 		++i;
 
-	m_parentheses.insert(i, info);
+	m_brackets.insert(i, info);
 }
+
+
+namespace CsoundLex {
+
+Line scan(const QString &line, int startState)
+{
+	Line info;
+	const int length = line.length();
+	int pos = 0;
+
+	// A line can continue a comment or a string from the previous one.
+	if (startState == 1) {
+		const int end = line.indexOf("*/");
+		if (end < 0) {
+			info.comments.append({0, length});
+			info.endState = 1;
+			return info;
+		}
+		info.comments.append({0, end + 2});
+		pos = end + 2;
+	} else if (startState == 2) {
+		const int end = line.indexOf("}}");
+		if (end < 0) {
+			info.multilineStrings.append({0, length});
+			info.endState = 2;
+			return info;
+		}
+		info.multilineStrings.append({0, end + 2});
+		pos = end + 2;
+	}
+
+	while (pos < length) {
+		const QChar c = line.at(pos);
+		if (c == QLatin1Char('"')) {
+			// A string ends at the next quote; an unterminated one runs to the
+			// end of the line.
+			const int end = line.indexOf('"', pos + 1);
+			if (end < 0) {
+				info.strings.append({pos, length});
+				pos = length;
+			} else {
+				info.strings.append({pos, end + 1});
+				pos = end + 1;
+			}
+		} else if (c == QLatin1Char('/') && pos + 1 < length) {
+			const QChar next = line.at(pos + 1);
+			if (next == QLatin1Char('*')) {
+				const int end = line.indexOf("*/", pos + 2);
+				if (end < 0) {
+					info.comments.append({pos, length});
+					info.endState = 1;
+					return info; // the comment goes on in the next line
+				}
+				info.comments.append({pos, end + 2});
+				pos = end + 2;
+				continue;
+			}
+			if (next == QLatin1Char('/')) {
+				info.comments.append({pos, length});
+				return info; // the comment goes to the end of the line
+			}
+			++pos;
+		} else if (c == QLatin1Char(';')) {
+			info.comments.append({pos, length});
+			return info; // the comment goes to the end of the line
+		} else if (c == QLatin1Char('{') && pos + 1 < length
+				   && line.at(pos + 1) == QLatin1Char('{')) {
+			// A {{ ... }} string, which may span lines.
+			const int end = line.indexOf("}}", pos + 2);
+			if (end < 0) {
+				info.multilineStrings.append({pos, length});
+				info.endState = 2;
+				return info; // the string goes on in the next line
+			}
+			info.multilineStrings.append({pos, end + 2});
+			pos = end + 2;
+		} else {
+			++pos;
+		}
+	}
+
+	return info;
+}
+
+} // namespace CsoundLex
 
 QColor saturateColor(QColor color, int percent) {
     int sat = color.saturation();
@@ -89,6 +164,15 @@ void Highlighter::finishTheme()
 
     QColor color = saturateColor(headerFormat.foreground().color().lighter(150), 150);
     csoundOptionFormat.setForeground(color);
+
+    // The matched parenthesis pair is emphasised by weight and contrast only, so
+    // its background stays the editor's. White is used on dark themes and black
+    // on light ones, decided the same way as the theme itself: by comparing the
+    // lightness of the text and background colours.
+    const bool darkTheme = defaultFormat.foreground().color().lightness()
+            > defaultFormat.background().color().lightness();
+    matchedParenthesisFormat.setFontWeight(QFont::Bold);
+    matchedParenthesisFormat.setForeground(QColor(darkTheme ? "#ffffff" : "#000000"));
 
     // html
     htmlTagFormat = csdtagFormat;
@@ -139,6 +223,7 @@ void Highlighter::resetFormats()
     htmlTagFormat = QTextCharFormat();
     tagNameFormat = QTextCharFormat();
     attrFormat = QTextCharFormat();
+    matchedParenthesisFormat = QTextCharFormat();
 }
 
 QTextCharFormat *Highlighter::formatForName(const QString &name)
@@ -245,6 +330,12 @@ void Highlighter::setTheme(const QString &theme)
     m_themeSet = true;
     clearTypedVars();
     rehighlight();
+}
+
+void Highlighter::setMatchedParentheses(int first, int second)
+{
+    m_matchedParentheses[0] = first;
+    m_matchedParentheses[1] = second;
 }
 
 QTextCharFormat Highlighter::getFormat(QString tag) {
@@ -547,40 +638,36 @@ void Highlighter::registerGlobalTypedVar(const QString &name, const QString &typ
 
 void Highlighter::highlightBlock(const QString &text)
 {
-    if(m_theme == "none")
-        return;
-
-    // for parenthesis
     auto data = static_cast<TextBlockData*>(currentBlockUserData());
     if(data == nullptr) {
         data = new TextBlockData;
     }
     else {
-        data->clearParenthesis();
-    }
-
-    int leftPos = text.indexOf('(');
-    while (leftPos != -1) {
-        ParenthesisInfo *info = new ParenthesisInfo;
-        info->character = '(';
-        info->position = leftPos;
-
-        data->insert(info);
-        leftPos = text.indexOf('(', leftPos + 1);
-    }
-
-    int rightPos = text.indexOf(')');
-    while (rightPos != -1) {
-        ParenthesisInfo *info = new ParenthesisInfo;
-        info->character = ')';
-        info->position = rightPos;
-
-        data->insert(info);
-
-        rightPos = text.indexOf(')', rightPos +1);
+        data->clearBrackets();
     }
     setCurrentBlockUserData(data);
 
+    // The lexical scan runs first: it knows which parts of the line are
+    // comments, strings and {{ }} strings, and it provides the state that the
+    // next line continues from. Only Csound code is scanned; the other
+    // languages keep their brackets as they are.
+    CsoundLex::Line lex;
+    const bool csoundCode = (m_mode == 0 || m_mode == 3 || m_mode == 4 || m_mode == 5);
+    if (csoundCode)
+        lex = CsoundLex::scan(text, previousBlockState());
+
+    // A line that lies inside a {{ ... }} string is not code: the code
+    // highlighting is skipped for it, so that its contents stay plain.
+    bool insideMultilineString = false;
+    for (const QPair<int, int> &range : lex.multilineStrings) {
+        if (range.first == 0 && range.second >= text.length()) {
+            insideMultilineString = true;
+            break;
+        }
+    }
+
+    // The theme only decides whether the block is decorated; the mark below is
+    // painted in any case.
     if(m_theme != "none") {
         // find previous valid block
         auto block = currentBlock().previous();
@@ -592,32 +679,66 @@ void Highlighter::highlightBlock(const QString &text)
             }
             block = block.previous();
         }
+
+        if (!insideMultilineString) {
+            switch (m_mode) { // mode is set by the file type
+            case 0:  // Csound mode
+                highlightCsoundBlock(text);
+                break;
+            case 1:  // Python mode
+                highlightPythonBlock(text);
+                break;
+            case 2:  // Xml mode
+                highlightXmlBlock(text);
+                break;
+            case 3:  // Orc
+                highlightCsoundBlock(text);
+                break;
+            case 4:  // Sco
+                highlightCsoundBlock(text);
+                break;
+            case 5:  // Inc
+                highlightCsoundBlock(text); // maybe anything not python or xml should be higlighter as csound?
+                break;
+            case 6:  // Html
+                highlightHtmlBlock(text);
+                break;
+            }
+        }
+
+        // The {{ ... }} strings are painted after the code highlighting, so
+        // that their contents keep the colour of a string.
+        for (const QPair<int, int> &range : lex.multilineStrings) {
+            setFormat(range.first, range.second - range.first, quotationFormat);
+        }
     }
 
-    switch (m_mode) { // mode is set by the file type
-	case 0:  // Csound mode
-		highlightCsoundBlock(text);
-		break;
-	case 1:  // Python mode
-		highlightPythonBlock(text);
-		break;
-	case 2:  // Xml mode
-		highlightXmlBlock(text);
-		break;
-	case 3:  // Orc
-		highlightCsoundBlock(text);
-		break;
-    case 4:  // Sco
-		highlightCsoundBlock(text);
-		break;
-    case 5:  // Inc
-        highlightCsoundBlock(text); // maybe anything not python or xml should be higlighter as csound?
-        break;
-	case 6:  // Html
-		highlightHtmlBlock(text);
-		break;
-	}
+    if (csoundCode)
+        setCurrentBlockState(lex.endState);
 
+    BracketInfo info;
+    for (int i = 0; i < text.length(); ++i) {
+        const char c = text.at(i).toLatin1();
+        if (c != '(' && c != ')' && c != '[' && c != ']' && c != '{' && c != '}')
+            continue;
+        if (csoundCode && !CsoundLex::isCode(lex, i))
+            continue; // a bracket in a comment or a string is not code
+        info.character = c;
+        info.position = i;
+        data->insert(info);
+    }
+
+    // Emphasise the matched parenthesis pair last, so the mark wins over the
+    // colours the block rules applied. Its background is left untouched.
+    if (m_matchedParentheses[0] >= 0 || m_matchedParentheses[1] >= 0) {
+        const int blockStart = currentBlock().position();
+        const int blockEnd = blockStart + text.length();
+        for (int i = 0; i < 2; ++i) {
+            const int pos = m_matchedParentheses[i];
+            if (pos >= blockStart && pos < blockEnd)
+                setFormat(pos - blockStart, 1, matchedParenthesisFormat);
+        }
+    }
 }
 
 
@@ -1022,36 +1143,8 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1) + 1, labelFormat);
         }
 
-        // Multiline {{ ... }} strings
-        if (previousBlockState() == 2) {
-            int endIdx = line.indexOf("}}");
-            if (endIdx == -1) {
-                setFormat(0, line.length(), quotationFormat);
-                setCurrentBlockState(2);
-                return;
-            } else {
-                setFormat(0, endIdx + 2, quotationFormat);
-                setCurrentBlockState(0);  // string closed
-            }
-        }
-
-        int startIdx = line.indexOf("{{");
-        while (startIdx >= 0) {
-            int endIdx = line.indexOf("}}", startIdx + 2);
-            int stringLength;
-            if (endIdx == -1) {
-                setCurrentBlockState(2);
-                stringLength = line.length() - startIdx;
-            } else {
-                stringLength = endIdx - startIdx + 2;
-            }
-            setFormat(startIdx, stringLength, quotationFormat);
-
-            if (endIdx == -1)
-                break;
-            else
-                startIdx = line.indexOf("{{", endIdx + 2);
-        }
+        // Multiline {{ ... }} strings are handled by the lexical scan in
+        // highlightBlock(), which paints them after the code highlighting.
     } else {
         return;
     }

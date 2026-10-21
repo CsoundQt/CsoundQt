@@ -27,6 +27,7 @@
 #include "types.h"
 
 #include "highlighter.h"
+#include "sourcedefinitions.h"
 #include "texteditor.h"
 
 #include <QGuiApplication>
@@ -83,9 +84,24 @@ static bool hasOpenQuote(const QString &textBeforeCursor)
            hasUnmatched(textBeforeCursor, QLatin1Char('\''));
 }
 
+// The arguments of an opcode without the parentheses around them. The menu
+// that lists the opcodes has too little space for them.
+static QString withoutParentheses(const QString &args)
+{
+    const QString text = args.trimmed();
+    if (text.startsWith(QLatin1Char('(')) && text.endsWith(QLatin1Char(')')))
+        return text.mid(1, text.length() - 2).trimmed();
+    return text;
+}
+
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	BaseView(parent,opcodeTree)
 {
+	// The bracket matcher paints through this view's highlighter and belongs to
+	// the document the highlighter is attached to (set again in setViewMode()).
+	m_bracketMatcher.setHighlighter(&m_highlighter);
+	m_bracketMatcher.setDocument(m_highlighter.document());
+
 	m_autoComplete = true;
 
 	m_hoverWidget = new HoverWidget(m_mainEditor);
@@ -489,6 +505,12 @@ void DocumentView::setAutoComplete(bool autoComplete, int delay)
         m_autoCompleteDelay = delay;
 }
 
+void DocumentView::setAutoCompleteMenuWidth(int width)
+{
+    if (width > 0)
+        m_autoCompleteMenuWidth = width;
+}
+
 void DocumentView::setAutoParameterMode(bool autoParameterMode)
 {
 	m_autoParameterMode = autoParameterMode;
@@ -502,6 +524,9 @@ void DocumentView::setViewMode(int mode)
 	m_viewMode = mode;
 	setFullText(fullText); // Update text for new mode
 	hideAllEditors();
+
+	// The documents are swapped below: drop the bracket mark from the old one.
+	m_bracketMatcher.clear();
 
 	// TODO implement modes properly
 	switch (m_viewMode) {
@@ -540,6 +565,9 @@ void DocumentView::setViewMode(int mode)
 
 
 	}
+
+	// The highlighter follows the document, so the matcher has to follow too.
+	m_bracketMatcher.setDocument(m_highlighter.document());
 }
 
 QString DocumentView::getSelectedText(int section)
@@ -787,29 +815,10 @@ void DocumentView::syntaxCheck()
 		selections = m_findSelections; // keep find highlights, if any
 	editor->setExtraSelections(selections);
 
-	TextBlockData *data = static_cast<TextBlockData *>(editor->textCursor().block().userData());
-
-	if (data) {
-		QVector<ParenthesisInfo *> infos = data->parentheses();
-
-		int pos = editor->textCursor().block().position();
-		for (int i = 0; i < infos.size(); ++i) {
-			ParenthesisInfo *info = infos.at(i);
-
-			int curPos = editor->textCursor().position() - editor->textCursor().block().position();
-			if (info->position == curPos && info->character == '(') {
-				if (matchLeftParenthesis(editor->textCursor().block(), i + 1, 0))
-					createParenthesisSelection(pos + info->position, true); // found, mark as pair
-				else
-					createParenthesisSelection(pos + info->position, false); // no pair, mark as single
-			} else if (info->position == curPos - 1 && info->character == ')') {
-				if (matchRightParenthesis(editor->textCursor().block(), i - 1, 0))
-					createParenthesisSelection(pos + info->position, true);
-				else
-					createParenthesisSelection(pos + info->position, false);
-			}
-		}
-	}
+	// Mark the bracket next to the cursor and its partner. Painting is done by
+	// the syntax highlighter (see BracketMatcher), not by an extra selection:
+	// extra selections cannot change the font weight.
+	m_bracketMatcher.updateForCursor(editor->textCursor());
 
 	// syntax check
 	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
@@ -833,96 +842,6 @@ void DocumentView::syntaxCheck()
 	// click): the opcode syntax is already shown in the status bar. The hover
 	// is still used explicitly by parameter mode (showHoverText()).
 	hideHoverText();
-}
-
-// parentheses matching functions -------------
-
-bool DocumentView::matchLeftParenthesis(QTextBlock currentBlock, int i, int numLeftParentheses)
-{
-	TextBlockData *data = static_cast<TextBlockData *>(currentBlock.userData());
-	QVector<ParenthesisInfo *> infos = data->parentheses();
-
-	int docPos = currentBlock.position();
-	for (; i < infos.size(); ++i) {
-		ParenthesisInfo *info = infos.at(i);
-
-		if (info->character == '(') {
-			++numLeftParentheses;
-			continue;
-		}
-
-		if (info->character == ')' && numLeftParentheses == 0) {
-			createParenthesisSelection(docPos + info->position);
-			return true;
-		} else
-			--numLeftParentheses;
-	}
-
-	currentBlock = currentBlock.next();
-	if (currentBlock.isValid())
-		return matchLeftParenthesis(currentBlock, 0, numLeftParentheses);
-
-	return false;
-}
-
-
-bool DocumentView::matchRightParenthesis(QTextBlock currentBlock, int index, int numRightParentheses)
-{
-	TextBlockData *data = static_cast<TextBlockData *>(currentBlock.userData());
-	QVector<ParenthesisInfo *> parentheses = data->parentheses();
-
-	// Match in same line?
-	int docPos = currentBlock.position();
-	for (int j=index; j>=0; --j ) {
-		ParenthesisInfo *info = parentheses.at(j);
-		if (info->character == ')') {
-			++numRightParentheses;
-			continue;
-		}
-		if (info->character == '(' && numRightParentheses == 0) {
-			createParenthesisSelection(docPos + info->position);
-			return true;
-		} else
-			--numRightParentheses;
-	}
-
-	// No match yet? Then try previous block
-	currentBlock = currentBlock.previous();
-	if (currentBlock.isValid()) {
-		// Recalculate correct index first
-		TextBlockData *data = static_cast<TextBlockData *>( currentBlock.userData() );
-		QVector<ParenthesisInfo *> infos = data->parentheses();
-
-		return matchRightParenthesis(currentBlock, infos.size()-1, numRightParentheses);
-	}
-
-	// No match at all
-	return false;
-}
-
-void DocumentView::createParenthesisSelection(int pos, bool paired)
-{
-	//TODO: get editor from parameters
-	QTextEdit * editor = (!m_currentEditor) ? m_mainEditor : m_currentEditor ; // if currentEditor not set, use mainEditor
-
-	QList<QTextEdit::ExtraSelection> selections = editor->extraSelections();
-
-	QTextEdit::ExtraSelection selection;
-	QTextCharFormat format = selection.format;
-    auto palette = qApp->palette();
-    auto bgcolor = (paired) ? palette.highlight() : palette.midlight();
-    // format.setBackground( (paired) ? Qt::lightGray: Qt::magenta); // if single parenthesis, mark with magenta
-    format.setBackground(bgcolor);
-	selection.format = format;
-
-	QTextCursor cursor = editor->textCursor();
-	cursor.setPosition(pos);
-	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-	selection.cursor = cursor;
-
-	selections.append(selection);
-
-	editor->setExtraSelections(selections);
 }
 
 
@@ -1053,6 +972,10 @@ void DocumentView::autoCompleteAtCursor() {
             }
         }
         if (opcodedefs.size() > 0 && !allEqual) {
+            // The width of the menu is configurable: the entries are as wide
+            // as the setting says, in characters.
+            const int menuWidth = qMax(14, m_autoCompleteMenuWidth);
+            const int argsWidth = menuWidth - 14;
             for(int i = 0; i < opcodedefs.size(); i++) {
                 QString opcodeName = opcodedefs[i].opcodeName;
                 QString text = opcodeName.size() < 14 ?
@@ -1060,12 +983,14 @@ void DocumentView::autoCompleteAtCursor() {
                            opcodeName + " ";
 
                 QString outArgs = opcodedefs[i].outArgs;
-                auto inArgs = opcodedefs[i].inArgs;
+                // The parentheses around the arguments are left out here, they
+                // take too much space in the menu.
+                auto inArgs = withoutParentheses(opcodedefs[i].inArgs);
                 if(!inArgs.isEmpty()) {
-                    text += inArgs.size()<=28 ? inArgs : inArgs.mid(0, 27)+"…";
+                    text += inArgs.size()<=argsWidth ? inArgs : inArgs.mid(0, argsWidth-1)+"…";
                 }
-                if(text.size() < 42) {
-                    text = text.leftJustified(42);
+                if(text.size() < menuWidth) {
+                    text = text.leftJustified(menuWidth);
                 }
                 if (!outArgs.isEmpty()) {
                     switch(outArgs[0].toLatin1()) {
@@ -1098,7 +1023,11 @@ void DocumentView::autoCompleteAtCursor() {
                         if (opcodedefs[i].inArgs.contains("(x)") ) {
                             syntaxText += "(x)"; // avoid other text like (with no rate restriction)
                         } else {
-                            syntaxText += " " + opcodedefs[i].inArgs.simplified();
+                            // The arguments keep their parentheses, but there
+                            // is no space between the name and them.
+                            const QString inArgs = opcodedefs[i].inArgs.simplified();
+                            syntaxText += inArgs.startsWith(QLatin1Char('(')) ? inArgs
+                                                                             : " " + inArgs;
                         }
                     }
                 }
@@ -1824,6 +1753,16 @@ void DocumentView::createContextMenu(QPoint pos)
 		menu->addSeparator();
 		menu->addAction(tr("Evaluate Selection"), this, SLOT(evaluate()));
 		menu->addAction(tr("Opcode Help"), this, SLOT(opcodeHelp()));
+		// The definition index lives in the document page, so the request is
+		// passed on instead of jumping here. The name under the mouse is
+		// used, not the one at the cursor: the user may right-click on a name
+		// without having put the cursor there first.
+		QAction *goToSource = menu->addAction(tr("Go to Source"));
+		connect(goToSource, &QAction::triggered, this, [this, pos]() {
+			const QTextCursor cursor = cursorAt(pos);
+			emit goToSourceRequested(SourceCursor::identifierAt(cursor),
+									 SourceCursor::isScheduleArgument(cursor));
+		});
 		menu->addAction(tr("Show/hide line numbers"), this, SLOT(toggleLineArea()));
 		menu->addSeparator();
 		QMenu *opcodeMenu = menu->addMenu("Opcodes");
@@ -1859,7 +1798,7 @@ void DocumentView::createContextMenu(QPoint pos)
 				action->setData(opcodeText);
 			}
 		}
-		menu->exec(m_mainEditor->mapToGlobal(pos));
+		menu->exec(m_mainEditor->viewport()->mapToGlobal(pos));
 		delete menu;
 	}
 	else { //  Split view
@@ -2476,7 +2415,7 @@ void DocumentView::jumpToLineInternal(int line, bool mark, bool focus)
     if(mark)
         markCurrentPosition();
 	// TODO implment for multiple views
-    TextEditor *editor = (m_viewMode < 2) ? (TextEditor *)m_mainEditor : m_orcEditor;
+    TextEditor *editor = currentLineEditor();
     editorJumpToLine(editor, line);
     editor->ensureCursorVisible();
     if (focus) {
@@ -2488,6 +2427,71 @@ void DocumentView::jumpToLineInternal(int line, bool mark, bool focus)
         editor->activateWindow();
         editor->setFocus(Qt::ActiveWindowFocusReason);
     }
+}
+
+TextEditor *DocumentView::currentLineEditor() const
+{
+    // The editor the line numbers of the document refer to: the whole
+    // document in the unified view, the orchestra in the split view.
+    return (m_viewMode < 2) ? (TextEditor *)m_mainEditor : m_orcEditor;
+}
+
+TextEditor *DocumentView::activeEditor() const
+{
+    // The editor the user is working in.
+    if (m_viewMode < 2)
+        return m_mainEditor;
+    QWidget *widget = const_cast<DocumentView *>(this)->focusWidget();
+    TextEditor *editor = qobject_cast<TextEditor *>(widget);
+    if (editor)
+        return editor;
+    return m_mainEditor;
+}
+
+QString DocumentView::identifierAtCursor() const
+{
+    TextEditor *editor = activeEditor();
+    if (!editor)
+        return QString();
+    return SourceCursor::identifierAt(editor->textCursor());
+}
+
+bool DocumentView::isScheduleArgumentAtCursor() const
+{
+    TextEditor *editor = activeEditor();
+    if (!editor)
+        return false;
+    return SourceCursor::isScheduleArgument(editor->textCursor());
+}
+
+QTextCursor DocumentView::cursorAt(const QPoint &pos) const
+{
+    // The position of a context menu request is in the coordinates of the
+    // editor's viewport, which is what cursorForPosition() takes. It must not
+    // be converted again: the line number area is a viewport margin, so
+    // subtracting it a second time would move the position into the text to
+    // the left of the one that was clicked.
+    return m_mainEditor->cursorAt(pos);
+}
+
+void DocumentView::jumpToDefinition(int line, int column)
+{
+    if (line < 1)
+        return;
+    jumpToLine(line);
+    // Leave the cursor on the name itself, so that the user sees where the
+    // definition is and can carry on editing from there.
+    TextEditor *editor = currentLineEditor();
+    QTextBlock block = editor->document()->findBlockByNumber(line - 1);
+    if (!block.isValid())
+        return;
+    const int position = block.position() + column;
+    if (column < 0 || position > block.position() + block.length() - 1)
+        return;
+    QTextCursor cursor(editor->document());
+    cursor.setPosition(position);
+    editor->setTextCursor(cursor);
+    editor->ensureCursorVisible();
 }
 
 void DocumentView::goBackToPreviousPosition() {
@@ -2518,7 +2522,10 @@ void DocumentView::opcodeFromMenu()
 void DocumentView::contextMenuEvent(QContextMenuEvent *event)
 {
 	qDebug() << "DocumentView::contextMenuEvent";
-	createContextMenu(event->globalPos());
+	// The position is given in the coordinates of the editor's viewport, so
+	// that the menu appears where the click was and the name under the mouse
+	// is found.
+	createContextMenu(m_mainEditor->viewport()->mapFromGlobal(event->globalPos()));
 }
 
 QString DocumentView::changeToChnget(QString text)

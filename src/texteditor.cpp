@@ -97,6 +97,13 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
     return;
 }
 
+QTextCursor TextEditor::cursorAt(const QPoint &pos) const
+{
+    // cursorForPosition() takes the position in the coordinates of the
+    // editor's viewport.
+    return cursorForPosition(pos);
+}
+
 void TextEditor::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::MiddleButton

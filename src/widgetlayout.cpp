@@ -1940,37 +1940,6 @@ QString WidgetLayout::getQml()
     return qml;
 }
 
-QString WidgetLayout::getCabbageWidgets()
-{
-    QString title = windowTitle();
-    QString text = "form caption(\"" + title  + "\"),";
-    //text += "size(" + QString::number(m_w+20) + "," + QString::number(m_h+20) +")\n"; // m_w and m_h not returning correct results always
-    int w = this->geometry().width();
-    int h = this->geometry().height();
-    text += QString(" size(%1,%2)\n").arg(w+20).arg(h+20);
-
-    int unsupported = 0;
-    widgetsMutex.lock();
-    QString unsupportedWidgets;
-    foreach(QuteWidget *widget, m_widgets) {
-        QString line = widget->getCabbageLine();
-        if (line != "") {
-            text += line + "\n";
-        }
-        else {
-            unsupported++;
-            unsupportedWidgets += widget->getWidgetType() + " ";
-        }
-    }
-    widgetsMutex.unlock();
-    qDebug() << "WidgetPanel:getCabbageWidgets()"<<unsupported<<"Unsupported widgets";
-    if (unsupported) {
-        QMessageBox::warning(this, tr("CsoundQt"), tr("Could not convert %1 widget(s):\n%2")
-                             .arg(unsupported).arg(unsupportedWidgets));
-    }
-    return text;
-}
-
 bool WidgetLayout::isModified()
 {
     return m_modified;

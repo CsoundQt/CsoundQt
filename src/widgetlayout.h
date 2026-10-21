@@ -105,7 +105,6 @@ public:
 	QString getPresetsText();
 	QString getSelectedWidgetsText();
 	QString getCsladspaLines();
-	QString getCabbageWidgets();
 	bool openMidiPort(int port);
 	void closeMidiPort();
 	QVector<QuteWidget *> getWidgets() {return m_widgets;}

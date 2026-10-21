@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -239,8 +240,8 @@ private:
 			" padding: 14px 18px;"
 			" font-size: 13px;"
 			"}"));
-		const int margin = 16;
-		const int MINWIDTH = 200;
+		const int margin = 12;
+		const int MINWIDTH = 160;
 		const int MAXWIDTH = 480;
 		const int available = qMax(MINWIDTH, top->width() - 2 * margin);
 		const int cap = qMin(MAXWIDTH, available);

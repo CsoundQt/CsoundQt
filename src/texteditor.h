@@ -57,6 +57,11 @@ public:
 	void setParameterMode(bool on) {m_parameterMode = on; setCursorWidth(on ? 8 : 1);}
 	bool getParameterMode() {return m_parameterMode;}
     int getLastKey() {return m_lastkey;}
+    // The cursor at the given position of the editor's viewport, which is
+    // what a context menu request gives. The position must not be converted
+    // again: the line number area is a viewport margin, so subtracting it a
+    // second time would point at the text to the left of the clicked one.
+    QTextCursor cursorAt(const QPoint &pos) const;
     // Paste tracking: set whenever text is inserted from the clipboard or
     // selection (Ctrl+V, context menu, DocumentView::paste(), middle-click,
     // drag-and-drop). DocumentView consumes it in textChanged() so the
