@@ -30,8 +30,16 @@
 #include "sourcedefinitions.h"
 #include "texteditor.h"
 
+#include <QFontDatabase>
 #include <QGuiApplication>
+#include <QListWidget>
+#include <QPainter>
 #include <QScreen>
+#include <QStyle>
+#include <QStyledItemDelegate>
+#include <QVBoxLayout>
+
+#include <algorithm>
 
 
 static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesizer", "CsOptions"};
@@ -511,6 +519,12 @@ void DocumentView::setAutoCompleteMenuWidth(int width)
         m_autoCompleteMenuWidth = width;
 }
 
+void DocumentView::setAutoCompleteMenuMaxLines(int lines)
+{
+    if (lines > 0)
+        m_autoCompleteMenuMaxLines = lines;
+}
+
 void DocumentView::setAutoParameterMode(bool autoParameterMode)
 {
 	m_autoParameterMode = autoParameterMode;
@@ -909,31 +923,30 @@ void DocumentView::autoCompleteAtCursor() {
     static const QRegularExpression rxCommandLineOption("\\s*-([+-])(\\w*)");
 
     bool showSyntaxMenu = false;
+    int completionWidth = qMax(14, m_autoCompleteMenuWidth);
     QSet<QString>menuWordsSeen;
     QRegularExpressionMatch rxmatch;
     if((rxmatch = rxCommandLineOption.match(line)).hasMatch()) {
-        syntaxMenu->clear();
+        syntaxMenu->clearCompletions();
         QString capt = rxmatch.captured(2);
         QStringList options = rxmatch.captured(1)=="-"? m_longOptions: m_longOptions2;
         for(const QString &option: options) {
             if(option.startsWith(capt)) {
-                QAction *a = syntaxMenu->addAction(option, this,
-                                                   SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
-                a->setData(option);
+                syntaxMenu->addCompletion(option, option, QString(), 0, this,
+                                          SLOT(insertAutoCompleteText()));
                 showSyntaxMenu = true;
             }
         }
     }
     else if (selectionCursor.position() > selectionCursor.anchor() && word.size() > 2 /* && !word.startsWith("\"") */ ) { // Only at the end of the word
-        syntaxMenu->clear();
+        syntaxMenu->clearCompletions();
         foreach(QString var, m_localVariables) {
             if (var.endsWith(',')) {
                 var.chop(1);
             }
             if (var.startsWith(word) && word != var) {
-                QAction *a = syntaxMenu->addAction(var, this,
-                                                   SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
-                a->setData(var);
+                syntaxMenu->addCompletion(var, var, QString(), 1, this,
+                                          SLOT(insertAutoCompleteText()));
                 showSyntaxMenu = true;
             }
         }
@@ -948,41 +961,56 @@ void DocumentView::autoCompleteAtCursor() {
         }
         if (opcodedefs.size() > 0 && !allEqual) {
             // The width of the menu is configurable: the entries are as wide
-            // as the setting says, in characters.
-            const int menuWidth = qMax(14, m_autoCompleteMenuWidth);
-            const int argsWidth = menuWidth - 14;
+            // as the setting says, in characters. The name column is as wide
+            // as the longest opcode name plus two spaces, so that the
+            // signatures line up.
+            int nameColumn = 0;
+            for (const Opcode &opcode : opcodedefs)
+                nameColumn = qMax(nameColumn, opcode.opcodeName.size());
+            nameColumn += 2;
+            const int typeColumn = 5; // " :pvs"
+            const int menuWidth = qMax(nameColumn + typeColumn + 4,
+                                       m_autoCompleteMenuWidth);
+            completionWidth = menuWidth;
             for(int i = 0; i < opcodedefs.size(); i++) {
                 QString opcodeName = opcodedefs[i].opcodeName;
-                QString text = opcodeName.size() < 14 ?
-                           opcodeName.leftJustified(14) :
-                           opcodeName + " ";
-
                 QString outArgs = opcodedefs[i].outArgs;
                 // The parentheses around the arguments are left out here, they
                 // take too much space in the menu.
                 auto inArgs = withoutParentheses(opcodedefs[i].inArgs);
-                if(!inArgs.isEmpty()) {
-                    text += inArgs.size()<=argsWidth ? inArgs : inArgs.mid(0, argsWidth-1)+"…";
-                }
-                if(text.size() < menuWidth) {
-                    text = text.leftJustified(menuWidth);
-                }
+                QString typeSuffix;
                 if (!outArgs.isEmpty()) {
                     switch(outArgs[0].toLatin1()) {
                     case 'a':
-                        text += " :a"; break;
+                        typeSuffix = " :a"; break;
                     case 'k':
-                        text += " :k"; break;
+                        typeSuffix = " :k"; break;
                     case 'i':
-                        text += " :i"; break;
+                        typeSuffix = " :i"; break;
                     case 'x':
-                        text += " :x"; break;
+                        typeSuffix = " :x"; break;
                     case 'S':
-                        text += " :S"; break;
+                        typeSuffix = " :S"; break;
                     case 'f':
-                        text += " :pvs"; break;
+                        typeSuffix = " :pvs"; break;
                     }
                 }
+                // Keep three fixed columns. The middle column is elided on its
+                // own, so the ellipsis stays in the arguments and never
+                // replaces the output type. An empty output column is simply
+                // left out, so it cannot cause an ellipsis at the line end.
+                const int argsWidth = qMax(0, menuWidth - nameColumn - typeColumn);
+                if (inArgs.size() > argsWidth && argsWidth > 0)
+                    inArgs = inArgs.left(argsWidth - 1) + "…";
+                else if (argsWidth == 0)
+                    inArgs.clear();
+
+                QString text = opcodeName.leftJustified(nameColumn)
+                        + inArgs.leftJustified(argsWidth);
+                if (!typeSuffix.isEmpty())
+                    text += typeSuffix.rightJustified(typeColumn);
+                else
+                    text = text.trimmed();
 
                 QString syntaxText;
                 if (useFunction && !opcodedefs[i].inArgs.isEmpty()) {
@@ -1006,13 +1034,11 @@ void DocumentView::autoCompleteAtCursor() {
                         }
                     }
                 }
-                auto a = syntaxMenu->addAction(text, this, SLOT(insertAutoCompleteText()));
-                a->setData(syntaxText);
-                a->setToolTip(syntaxText);
+                syntaxMenu->addCompletion(text, syntaxText, syntaxText, 0, this,
+                                          SLOT(insertAutoCompleteText()));
                 showSyntaxMenu = true;
                 menuWordsSeen.insert(opcodeName);
             }
-            syntaxMenu->addSeparator();
         }
         // check for autcompletion from ALL words in text editor
         auto allWords = getAllWords();
@@ -1028,8 +1054,8 @@ void DocumentView::autoCompleteAtCursor() {
                     theWord.startsWith(wordlow, Qt::CaseInsensitive) &&
                    !menuWordsSeen.contains(theWord)  &&
                     match.hasMatch()    ) {
-                auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
-                a->setData(theWord);
+                syntaxMenu->addCompletion(theWord, theWord, QString(), 2, this,
+                                          SLOT(insertAutoCompleteText()));
                 showSyntaxMenu = true;
                 menuWordsSeen.insert(theWord);
             }
@@ -1037,8 +1063,8 @@ void DocumentView::autoCompleteAtCursor() {
 
         for(const QString &tag: tagWords) {
             if(tag.startsWith(wordlow, Qt::CaseInsensitive) && word != tag) {
-                auto a = syntaxMenu->addAction(tag, this, SLOT(insertAutoCompleteText()));
-                a->setData(tag);
+                syntaxMenu->addCompletion(tag, tag, QString(), 3, this,
+                                          SLOT(insertAutoCompleteText()));
                 showSyntaxMenu = true;
             }
         }
@@ -1046,15 +1072,19 @@ void DocumentView::autoCompleteAtCursor() {
     else {
         destroySyntaxMenu();
     }
-    if(showSyntaxMenu && !syntaxMenu->actions().isEmpty()) {
-        const auto actions = syntaxMenu->actions();
-        syntaxMenu->setDefaultAction(actions[0]);
+    if (showSyntaxMenu) {
+        // Keep every match; the popup shows a bounded viewport instead of
+        // dropping suggestions. The list scrolls with the wheel and the
+        // arrow keys.
+        syntaxMenu->refreshCompletions(m_autoCompleteMenuMaxLines,
+                                       completionWidth);
+    }
+    if(showSyntaxMenu && syntaxMenu->hasCompletions()) {
 
         // Place the popup next to the cursor. Near the lower edge of the screen
         // flip it above the cursor so it does not cover what is being typed.
-        // If it cannot fit on either side, use the larger side and cap the
-        // height; the "menu-scrollable" stylesheet property then turns it into
-        // a scrolling menu instead of letting it run off-screen.
+        // If it cannot fit on either side, use the larger side and cap its
+        // height.
         const QRect cursorRect = editor->cursorRect();
         const QWidget *viewport = editor->viewport();
         // Leave a small gap so the menu does not sit right against the cursor.
@@ -1087,20 +1117,20 @@ void DocumentView::autoCompleteAtCursor() {
         const int height = qMin(preferred.height(), qMax(1, available));
         const int width = avail.isValid()
                 ? qMin(preferred.width(), avail.width()) : preferred.width();
-        // Constrain the height only when the menu really has to shrink.
-        // Setting a maximum equal to the natural height makes QMenu show
-        // scrolling arrows even though everything fits. The minimum is set too
-        // so QMenu keeps exactly the height we budget for (its scrollable mode
-        // would otherwise size itself to a fraction of the screen and leave a
-        // gap between the menu and the cursor). Reset both otherwise, since
-        // they persist between calls.
+        // Constrain the height only when the popup really has to shrink. The
+        // list inside it is what scrolls; the popup is sized to the visible
+        // window. Reset the limits otherwise, since they persist between calls.
         if (height < preferred.height()) {
+            syntaxMenu->setAvailableHeight(height);
             syntaxMenu->setMinimumHeight(height);
             syntaxMenu->setMaximumHeight(height);
         } else {
             syntaxMenu->setMinimumHeight(0);
             syntaxMenu->setMaximumHeight(QWIDGETSIZE_MAX);
         }
+        // Force the size of this invocation so a changed width setting is
+        // visible immediately, also while the popup is already open.
+        syntaxMenu->resize(width, height);
 
         int x = cursorBottomLeft.x();
         int y = above ? cursorTopLeft.y() - height : cursorBottomLeft.y();
@@ -2539,7 +2569,7 @@ QString DocumentView::changeToInvalue(QString text)
 
 void DocumentView::destroySyntaxMenu()
 {
-    syntaxMenu->clear();
+    syntaxMenu->clearCompletions();
 	syntaxMenu->hide();
     //  syntaxMenu = 0;
 }
@@ -2572,17 +2602,267 @@ void DocumentView::setTheme(const QString &theme)
         syntaxMenu->applyStyle();
 }
 
-MySyntaxMenu::MySyntaxMenu(QWidget * parent) :
-	QMenu(parent)
+namespace {
 
+constexpr int CompletionSeparatorRole = Qt::UserRole + 1;
+
+class CompletionSeparatorDelegate : public QStyledItemDelegate
 {
-    // The popup is a top-level window; without a translucent background the
-    // area outside the stylesheet's border-radius is painted opaque and the
-    // corners stay square. Drop the native shadow for the same reason.
+public:
+    using QStyledItemDelegate::QStyledItemDelegate;
+
+    QSize sizeHint(const QStyleOptionViewItem &option,
+                   const QModelIndex &index) const override
+    {
+        if (index.data(CompletionSeparatorRole).toBool())
+            return QSize(option.rect.width(), 5);
+        return QStyledItemDelegate::sizeHint(option, index);
+    }
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const override
+    {
+        if (!index.data(CompletionSeparatorRole).toBool()) {
+            QStyledItemDelegate::paint(painter, option, index);
+            return;
+        }
+
+        painter->save();
+        painter->setPen(QColor(COMPLETION_MENU_SEPARATOR));
+        const int y = option.rect.center().y();
+        painter->drawLine(option.rect.left() + 6, y, option.rect.right() - 6, y);
+        painter->restore();
+    }
+};
+
+} // namespace
+
+MySyntaxMenu::MySyntaxMenu(QWidget *parent) : QFrame(parent)
+{
+    // A frameless popup rather than a QMenu: the completion list is a normal
+    // widget, with its own scrolling, and no QMenu/QWidgetAction ownership or
+    // cached-layout rules get in the way.
+    setObjectName(QStringLiteral("completionPopup"));
+    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
-    setWindowFlag(Qt::NoDropShadowWindowHint, true);
+    setFocusPolicy(Qt::NoFocus);
+
+    auto *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(4, 4, 4, 4);
+    layout->setSpacing(0);
+
+    m_completionList = new QListWidget(this);
+    m_completionList->setFrameShape(QFrame::NoFrame);
+    m_completionList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_completionList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_completionList->setSelectionMode(QAbstractItemView::SingleSelection);
+    // Opcode rows carry their own ellipsis in the arguments column. Letting the
+    // view elide them again would replace the output type with "…".
+    m_completionList->setTextElideMode(Qt::ElideNone);
+    m_completionList->setFocusPolicy(Qt::StrongFocus);
+    m_completionList->setUniformItemSizes(false);
+    m_completionList->setWordWrap(false);
+    QFont completionFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    completionFont.setPixelSize(12);
+    m_completionList->setFont(completionFont);
+    m_completionList->setItemDelegate(new CompletionSeparatorDelegate(m_completionList));
+    m_completionList->installEventFilter(this);
+    layout->addWidget(m_completionList);
+    setFocusProxy(m_completionList);
+
+    connect(m_completionList, &QListWidget::itemClicked, this,
+            [this](QListWidgetItem *item) { activateItem(item, false); });
 
     applyStyle();
+}
+
+void MySyntaxMenu::showEvent(QShowEvent *event)
+{
+    QFrame::showEvent(event);
+    if (m_completionList->count() > 0) {
+        m_completionList->setCurrentRow(0);
+        m_completionList->setFocus(Qt::PopupFocusReason);
+    }
+}
+
+void MySyntaxMenu::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    // Draw inside the widget rectangle so the 1px border is not clipped.
+    const QRectF frameRect = QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5);
+    if (m_borderColor.alpha() > 0)
+        painter.setPen(QPen(m_borderColor, 1));
+    else
+        painter.setPen(Qt::NoPen);
+    painter.setBrush(m_backgroundColor);
+    painter.drawRoundedRect(frameRect, 8, 8);
+}
+
+QAction *MySyntaxMenu::addCompletion(const QString &text, const QVariant &data,
+                                     const QString &toolTip, int priority,
+                                     QObject *receiver, const char *slot)
+{
+    auto *action = new QAction(text, this);
+    action->setData(data);
+    if (!toolTip.isEmpty())
+        action->setToolTip(toolTip);
+    action->setProperty("autocompletePriority", priority);
+    if (receiver && slot)
+        connect(action, SIGNAL(triggered()), receiver, slot);
+    m_completionActions.append(action);
+    return action;
+}
+
+void MySyntaxMenu::clearCompletions()
+{
+    m_itemActions.clear();
+    m_completionList->clear();
+    qDeleteAll(m_completionActions);
+    m_completionActions.clear();
+    m_preferredListHeight = 0;
+    m_minimumRowHeight = 1;
+}
+
+bool MySyntaxMenu::hasCompletions() const
+{
+    return !m_completionActions.isEmpty();
+}
+
+void MySyntaxMenu::refreshCompletions(int maxVisibleLines, int widthCharacters)
+{
+    m_itemActions.clear();
+    m_completionList->clear();
+
+    std::stable_sort(m_completionActions.begin(), m_completionActions.end(),
+                     [](const QAction *a, const QAction *b) {
+        return a->property("autocompletePriority").toInt()
+                < b->property("autocompletePriority").toInt();
+    });
+
+    bool haveOpcode = false;
+    bool separatorAdded = false;
+    const int labelCharacters = qMax(14, widthCharacters);
+    const QFontMetrics metrics(m_completionList->font());
+    const int labelWidth = metrics.horizontalAdvance(
+                QString(labelCharacters, QLatin1Char('M')));
+    // The item delegate reserves a small horizontal margin on both sides. Add
+    // it to the item width, not to the text: otherwise a 42-character row is
+    // elided by a few pixels and its output type is replaced by "…".
+    const int textMargin = m_completionList->style()->pixelMetric(
+                QStyle::PM_FocusFrameHMargin, nullptr, m_completionList);
+    const int listWidth = labelWidth + 2 * textMargin;
+    const int rowHeight = metrics.height() + 2;
+    for (QAction *action : m_completionActions) {
+        const bool isOpcode = action->property("autocompletePriority").toInt() == 0;
+        if (!isOpcode && haveOpcode && !separatorAdded) {
+            auto *separator = new QListWidgetItem(m_completionList);
+            separator->setFlags(Qt::NoItemFlags);
+            separator->setData(CompletionSeparatorRole, true);
+            separator->setSizeHint(QSize(0, 5));
+            separatorAdded = true;
+        }
+
+        auto *item = new QListWidgetItem(m_completionList);
+        // Opcode rows are already laid out to fit; eliding them again would
+        // append a second ellipsis at the very end (after the type column).
+        // Only non-opcode completions need the generic elision.
+        const QString text = action->text();
+        item->setText(isOpcode || metrics.horizontalAdvance(text) <= labelWidth
+                      ? text
+                      : metrics.elidedText(text, Qt::ElideRight, labelWidth));
+        item->setToolTip(action->toolTip().isEmpty() ? action->text() : action->toolTip());
+        item->setSizeHint(QSize(listWidth, rowHeight));
+        m_itemActions.insert(item, action);
+        haveOpcode |= isOpcode;
+    }
+
+    if (m_completionList->count() == 0) {
+        m_completionList->setFixedSize(0, 0);
+        return;
+    }
+
+    const int rowCount = qMin(qMax(1, maxVisibleLines), m_completionList->count());
+    m_preferredListHeight = 0;
+    for (int row = 0; row < rowCount; ++row) {
+        const QListWidgetItem *item = m_completionList->item(row);
+        int height = item->sizeHint().height();
+        if (height <= 0)
+            height = rowHeight;
+        if (row == 0)
+            m_minimumRowHeight = height;
+        m_preferredListHeight += height;
+    }
+
+    m_completionList->setFixedSize(listWidth, m_preferredListHeight);
+    // The popup width follows the configured number of characters.
+    setFixedWidth(listWidth + 12);
+
+    for (int row = 0; row < m_completionList->count(); ++row) {
+        QListWidgetItem *item = m_completionList->item(row);
+        if (!(item->flags() & Qt::ItemIsEnabled))
+            continue;
+        m_completionList->setCurrentItem(item);
+        break;
+    }
+}
+
+void MySyntaxMenu::setAvailableHeight(int height)
+{
+    const int listHeight = qMax(m_minimumRowHeight,
+                                height - 12); // leave room for the menu frame/padding
+    m_completionList->setFixedHeight(qMin(m_preferredListHeight, listHeight));
+}
+
+void MySyntaxMenu::activateCurrent(bool complete)
+{
+    activateItem(m_completionList->currentItem(), complete);
+}
+
+void MySyntaxMenu::activateItem(QListWidgetItem *item, bool complete)
+{
+    QAction *action = m_itemActions.value(item, nullptr);
+    if (!action)
+        return;
+
+    insertComplete = complete;
+    close();
+    action->trigger();
+}
+
+bool MySyntaxMenu::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_completionList && event->type() == QEvent::KeyPress) {
+        auto *keyEvent = static_cast<QKeyEvent *>(event);
+        switch (keyEvent->key()) {
+        case Qt::Key_Escape:
+            close();
+            return true;
+        case Qt::Key_Tab:
+            activateCurrent(false);
+            return true;
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            activateCurrent(true);
+            return true;
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+        case Qt::Key_PageUp:
+        case Qt::Key_PageDown:
+        case Qt::Key_Home:
+        case Qt::Key_End:
+            insertComplete = false;
+            return false; // QListWidget handles navigation and scrolling
+        default:
+            close();
+            if (parent())
+                parent()->event(event); // let the editor handle the key
+            event->accept();
+            return true;
+        }
+    }
+    return QFrame::eventFilter(watched, event);
 }
 
 // The popup is light in both themes -- it has always been, and against the dark
@@ -2600,34 +2880,28 @@ void MySyntaxMenu::applyStyle()
 
     const QString background = dark ? QStringLiteral("#f8f8f8")
                                     : QStringLiteral(COMPLETION_MENU_BG_LIGHT);
-    const QString border = dark ? QString()
-                                : QStringLiteral("border: 1px solid " COMPLETION_MENU_BORDER_LIGHT "; ");
     // The selected item is a solid blue bar, so its text only has to be light.
     const QString selectedText = dark ? QStringLiteral("#f8f8f8") : background;
 
-    this->setStyleSheet(
-        "QMenu {"
-        "  background-color: " + background + "; "
-        "  color: #5050A0 !important; "
-        + border +
-        "  border-radius: 8px;        "
-        "  menu-scrollable: 1;        "
-        "  padding: 4px;"
-        "}   "
-        "QMenu::item {                "
-        "  font-family: monospace;    "
-        "  font-size: 12px;           "
-        "  padding-left: 4px;"
-        "  padding-top: 0px; "
-        "  padding-bottom: 0px;"
-        "  padding-right: 4px;"
+    // The popup frame is painted by hand in paintEvent(), so its rounded
+    // corners cannot be covered by the platform style's square background.
+    m_backgroundColor = QColor(background);
+    m_borderColor = dark ? QColor(Qt::transparent)
+                         : QColor(COMPLETION_MENU_BORDER_LIGHT);
+
+    m_completionList->setStyleSheet(
+        "QListWidget {"
+        "  background-color: " + background + ";"
+        "  color: #5050A0;"
+        "  border: none;"
+        "  padding: 0px;"
         "}"
-        "QMenu::item:selected {         "
-        "    color: " + selectedText + ";            "
-        "    background-color: #3daee9; "
+        "QListWidget::item {"
+        "  padding: 0px;"
         "}"
-        "QMenu::separator {"
-        "    background: " COMPLETION_MENU_SEPARATOR ";"
+        "QListWidget::item:selected {"
+        "  color: " + selectedText + ";"
+        "  background-color: #3daee9;"
         "}");
 
 }
@@ -2637,56 +2911,13 @@ MySyntaxMenu::~MySyntaxMenu()
 
 }
 
-void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
+void MySyntaxMenu::keyPressEvent(QKeyEvent *event)
 {
-	if (event->key() == Qt::Key_Escape) {
-		this->hide();
-	}
-	else if (event->key() == Qt::Key_Tab) {
-		QAction * a = activeAction();
-		insertComplete = false;
-		this->close();
-		if (a != 0) {
-			a->trigger();
-			return;
-		}
-		else {
-			Q_ASSERT(defaultAction() != NULL);
-			defaultAction()->trigger();
-			return;
-		}
-	} else if (event->key() == Qt::Key_Return) {
-		QAction * a = activeAction();
-		insertComplete = true;
-		this->close();
-		if (a != 0) {
-			a->trigger();
-			return;
-		}
-		else {
-			Q_ASSERT(defaultAction() != NULL);
-			defaultAction()->trigger();
-			return;
-		}
-    } else if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down) {
-        QMenu::keyPressEvent(event);
-        insertComplete = false;
-        return;
-    } else {
-		this->close();
-		// Forward the whole key event to the editor instead of inserting
-		// event->text() ourselves. event->text() is not guaranteed to be a
-		// printable ASCII character: on some platforms keys that produce no
-		// text (navigation, function and delete keys, dead keys, ...) carry
-		// non-ASCII or private-use characters. The editor knows which keys
-		// insert text and which move the cursor, so let it handle the event.
-		QObject *par = parent();
-		if (par)
-			par->event(event);
-		event->accept();
-	}
-    // insertComplete = false;
-    // QMenu::keyPressEvent(event);
+    // The list has focus and handles navigation. If it ignores a key (for
+    // example Down on the last row), Qt propagates the event to this parent,
+    // so do not send it back to the list: that would recurse until the stack
+    // overflows. Just let the key be ignored.
+    QFrame::keyPressEvent(event);
 }
 
 HoverWidget::HoverWidget(QWidget *parent) :
@@ -2700,4 +2931,3 @@ void HoverWidget::mousePressEvent(QMouseEvent *ev)
     (void) ev;
 	this->hide();
 }
-

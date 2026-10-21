@@ -33,14 +33,24 @@
 #include <QKeyEvent> // For syntax menu class
 #include <QPair>
 
-class MySyntaxMenu: public QMenu
+class QListWidget;
+class QListWidgetItem;
+
+class MySyntaxMenu: public QFrame
 {
 	Q_OBJECT
 public:
 	MySyntaxMenu(QWidget * parent);
 	~MySyntaxMenu();
 
-	bool insertComplete; // Whether to insert full text or only opcode name
+	bool insertComplete = false; // Whether to insert the full syntax or only the opcode name
+	QAction *addCompletion(const QString &text, const QVariant &data,
+	                       const QString &toolTip, int priority,
+	                       QObject *receiver, const char *slot);
+	void clearCompletions();
+	void refreshCompletions(int maxVisibleLines, int widthCharacters);
+	void setAvailableHeight(int height);
+	bool hasCompletions() const;
 
 	// (Re)apply the popup's style for the current application palette. Called
 	// by DocumentView::setTheme() so a theme switch does not leave the popup
@@ -49,11 +59,23 @@ public:
 	void applyStyle();
 
 protected:
-    virtual void keyPressEvent(QKeyEvent * event);
+    void keyPressEvent(QKeyEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
+	void activateCurrent(bool complete);
+	void activateItem(QListWidgetItem *item, bool complete);
+	QListWidget *m_completionList = nullptr;
+	QList<QAction *> m_completionActions;
+	QHash<QListWidgetItem *, QAction *> m_itemActions;
+	int m_preferredListHeight = 0;
+	int m_minimumRowHeight = 1;
 	bool m_styleApplied = false; // whether the sheet below was built at all
 	bool m_darkStyle = false;    // and for which palette it was built
+    QColor m_backgroundColor;
+    QColor m_borderColor;
 };
 
 class HoverWidget :
@@ -82,6 +104,7 @@ public:
 	void insertText(QString text, int section = -1);
     void setAutoComplete(bool autoComplete, int delay = 0);
     void setAutoCompleteMenuWidth(int width);
+    void setAutoCompleteMenuMaxLines(int lines);
 	void setAutoParameterMode(bool autoParameterMode);
 	void setViewMode(int mode);
 
@@ -230,6 +253,7 @@ private:
     int m_autoCompleteDelay = 150;
     // Width of the autocomplete menu, in characters of its entries.
     int m_autoCompleteMenuWidth = 42;
+    int m_autoCompleteMenuMaxLines = 20;
     QTimer* m_autoCompleteTimer = nullptr;
     bool m_autoParameterMode;
 	bool errorMarked;

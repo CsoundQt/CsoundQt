@@ -298,6 +298,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	autoCompleteCheckBox->setChecked(m_options->autoComplete);
     autoCompleteDelaySpinBox->setValue(m_options->autoCompleteDelay);
     autocompleteMenuWidthSpinBox->setValue(m_options->autocompleteMenuWidth);
+    autocompleteMenuMaxLinesSpinBox->setValue(m_options->autocompleteMenuMaxLines);
 
 	autoParameterModeCheckBox->setChecked(m_options->autoParameterMode);
 	widgetsCheckBox->setChecked(m_options->enableWidgets);
@@ -690,6 +691,7 @@ void ConfigDialog::apply()
 	m_options->autoComplete = autoCompleteCheckBox->isChecked();
     m_options->autoCompleteDelay = autoCompleteDelaySpinBox->value();
     m_options->autocompleteMenuWidth = autocompleteMenuWidthSpinBox->value();
+    m_options->autocompleteMenuMaxLines = autocompleteMenuMaxLinesSpinBox->value();
 	m_options->autoParameterMode = autoParameterModeCheckBox->isChecked();
 	m_options->enableWidgets = widgetsCheckBox->isChecked();
 	m_options->midiCcToCurrentPageOnly = midiCcToCurrentPageOnlyCheckBox->isChecked();

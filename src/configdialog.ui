@@ -1807,7 +1807,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="0" colspan="2">
+                <item row="6" column="0" colspan="2">
                  <layout class="QHBoxLayout" name="lineNumbersLayout">
                   <item>
                    <widget class="QCheckBox" name="lineNumbersCheckBox">
@@ -1840,8 +1840,8 @@
                   </item>
                  </layout>
                 </item>
-                <item row="4" column="0">
-                 <widget class="QCheckBox" name="highlightScoreCheckBox">
+                <item row="5" column="0">
+                  <widget class="QCheckBox" name="highlightScoreCheckBox">
                   <property name="toolTip">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apply syntax highlighting to the score. &lt;/p&gt;&lt;p&gt;In very long scores, deactivating syntax highlighting can reduce loading time significantly&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
@@ -1920,14 +1920,52 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0" colspan="2">
+                <item row="3" column="0">
+                 <widget class="QLabel" name="autocompleteMenuMaxLinesLabel">
+                  <property name="toolTip">
+                   <string>Maximum number of autocomplete menu rows. A final “N more…” row indicates hidden suggestions.</string>
+                  </property>
+                  <property name="text">
+                   <string>Maximum autocomplete menu lines</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QSpinBox" name="autocompleteMenuMaxLinesSpinBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Maximum number of autocomplete menu rows. A final “N more…” row indicates hidden suggestions.</string>
+                  </property>
+                  <property name="suffix">
+                   <string> lines</string>
+                  </property>
+                  <property name="minimum">
+                   <number>2</number>
+                  </property>
+                  <property name="maximum">
+                   <number>100</number>
+                  </property>
+                  <property name="singleStep">
+                   <number>1</number>
+                  </property>
+                  <property name="value">
+                   <number>20</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0" colspan="2">
                  <widget class="QCheckBox" name="autoParameterModeCheckBox">
                   <property name="text">
                    <string>Show signature after autocomplete</string>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="0" colspan="2">
+                <item row="7" column="0" colspan="2">
                  <widget class="QCheckBox" name="tabShortcutActiveCheckBox">
                   <property name="toolTip">
                    <string>Switch tabs using alt+[1-9] or control+[1-9] depending on the platform. Requires restart </string>
@@ -1940,7 +1978,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="7" column="0">
+                <item row="8" column="0">
                  <widget class="QCheckBox" name="tabCloseButtonCheckBox">
                   <property name="text">
                    <string>Show tab close button</string>

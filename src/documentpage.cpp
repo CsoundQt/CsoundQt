@@ -692,6 +692,11 @@ void DocumentPage::setAutoCompleteMenuWidth(int width)
     m_view->setAutoCompleteMenuWidth(width);
 }
 
+void DocumentPage::setAutoCompleteMenuMaxLines(int lines)
+{
+    m_view->setAutoCompleteMenuMaxLines(lines);
+}
+
 void DocumentPage::setAutoParameterMode(bool autoParameterMode)
 {
 	m_view->setAutoParameterMode(autoParameterMode);

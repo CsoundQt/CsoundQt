@@ -72,6 +72,9 @@ public:
     int autoCompleteDelay;
     // Width of the autocomplete menu, in characters of the entries it lists.
     int autocompleteMenuWidth;
+    // Maximum number of rows visible in the autocomplete popup; the rest of
+    // the list is reached by scrolling.
+    int autocompleteMenuMaxLines;
 	bool autoParameterMode;
     bool tabShortcutActive;
     bool tabShowCloseButton;

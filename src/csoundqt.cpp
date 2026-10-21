@@ -4420,6 +4420,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     p->setAutoComplete(m_options->autoComplete, m_options->autoCompleteDelay);
     p->setAutoCompleteMenuWidth(m_options->autocompleteMenuWidth);
+    p->setAutoCompleteMenuMaxLines(m_options->autocompleteMenuMaxLines);
     p->setAutoParameterMode(m_options->autoParameterMode);
     p->setWidgetEnabled(m_options->enableWidgets);
     p->showWidgetTooltips(m_options->showTooltips);
@@ -6722,6 +6723,7 @@ void CsoundQt::readSettings()
     m_options->autoComplete = settings.value("autoComplete", true).toBool();
     m_options->autoCompleteDelay = settings.value("autoCompleteDelay", 150).toInt();
     m_options->autocompleteMenuWidth = settings.value("autocompleteMenuWidth", 42).toInt();
+    m_options->autocompleteMenuMaxLines = settings.value("autocompleteMenuMaxLines", 20).toInt();
     m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();
     m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
     m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
@@ -6966,6 +6968,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("autoComplete", m_options->autoComplete);
     settings.setValue("autoCompleteDelay", m_options->autoCompleteDelay);
     settings.setValue("autocompleteMenuWidth", m_options->autocompleteMenuWidth);
+    settings.setValue("autocompleteMenuMaxLines", m_options->autocompleteMenuMaxLines);
     settings.setValue("autoParameterMode", m_options->autoParameterMode);
     settings.setValue("enableWidgets", m_options->enableWidgets);
     settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);

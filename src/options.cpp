@@ -71,6 +71,7 @@ Options::Options(ConfigLists *configlists) :
     // The width the autocomplete menu had before it became configurable: the
     // entries are 42 characters wide.
     autocompleteMenuWidth = 42;
+    autocompleteMenuMaxLines = 20;
 
     showWidgetsOnRun = true;
     showTooltips = false;

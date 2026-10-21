@@ -142,6 +142,7 @@ public:
 	//    void setOpcodeNameList(QStringList opcodeNameList);
     void setAutoComplete(bool autoComplete, int delay = 0);
     void setAutoCompleteMenuWidth(int width);
+    void setAutoCompleteMenuMaxLines(int lines);
 	void setAutoParameterMode(bool autoParameterMode);
 	QString getActiveSection();
 	QString getActiveText();
