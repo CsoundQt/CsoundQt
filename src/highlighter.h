@@ -159,7 +159,6 @@ protected:
 protected:
 	void highlightBlock(const QString &text);
 	void highlightCsoundBlock(const QString &text);
-	void highlightPythonBlock(const QString &text);
 	void highlightXmlBlock(const QString &text);
 	void highlightHtmlBlock(const QString &text);
     void highlightScore(const QString &text, int start, int end);
@@ -219,8 +218,7 @@ private:
     QSet<QString> deprecatedOpcodes;
 
 
-    QStringList pythonKeywords;  //Python
-	QTextCharFormat keywordFormat;
+    QTextCharFormat keywordFormat;
     QRegularExpression csoundOptionsRx, csoundOptionsRx2;
 
 	//     void setFirstRules();

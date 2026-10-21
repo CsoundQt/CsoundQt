@@ -264,65 +264,6 @@ void Inspector::parseText(const QString &text)
 
 }
 
-void Inspector::parsePythonText(const QString &text)
-{
-	//  qDebug() << "Inspector:parseText";
-	inspectorMutex.lock();
-	m_treeWidget->clear();
-	treeItem1 = 0;
-	treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Imports")));
-	treeItem1->setLine(-1);
-	treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Classes")));
-	treeItem2->setLine(-1);
-	treeItem3 = new TreeItem(m_treeWidget, QStringList(tr("Functions")));
-	treeItem3->setLine(-1);
-	treeItem4 = 0;
-	treeItem5 = 0;
-	TreeItem *currentParent = 0;
-    static const QRegularExpression newLineRegex("[\\n\\r]");
-    static const QRegularExpression defRegex("[\\s]+def ");
-    static const QRegularExpression importRegex("\\bimport\\b");
-    QStringList lines = text.split(newLineRegex);
-	for (int i = 0; i< lines.size(); i++) {
-		if (lines[i].trimmed().startsWith("class ")) {
-			QStringList columnslist(lines[i].simplified());
-			TreeItem *newItem = new TreeItem(treeItem2, columnslist);
-			currentParent = newItem;
-			m_treeWidget->expandItem(newItem);
-            QFont itemFont = newItem->font(0);
-            itemFont.setBold(true);
-            newItem->setFont(1, itemFont);
-			newItem->setLine(i + 1);
-		}
-        else if (lines[i].contains(defRegex)) {
-			QStringList columnslist(lines[i].simplified());
-			if (currentParent != 0) {
-				TreeItem *newItem = new TreeItem(currentParent, columnslist);
-				newItem->setLine(i + 1);
-			}
-		}
-        else if (lines[i].trimmed().contains(importRegex)) {
-			QStringList columnslist(lines[i].simplified());
-			TreeItem *newItem = new TreeItem(treeItem1, columnslist);
-			newItem->setLine(i + 1);
-		}
-		else if (lines[i].trimmed().startsWith("def ")) {
-			QStringList columnslist(lines[i].simplified());
-			TreeItem *newItem = new TreeItem(treeItem3, columnslist);
-			newItem->setLine(i + 1);
-		}
-		else if (lines[i].contains("##")) {
-			QStringList columnslist(lines[i].simplified());
-			TreeItem *newItem = new TreeItem(treeItem3, columnslist);
-            // newItem->setForeground (0, QBrush(Qt::darkGreen) );
-			newItem->setLine(i + 1);
-		}
-	}
-	m_treeWidget->expandItem(treeItem1);
-	m_treeWidget->expandItem(treeItem2);
-	m_treeWidget->expandItem(treeItem3);
-	inspectorMutex.unlock();
-}
 
 void Inspector::focusInEvent (QFocusEvent * event)
 {

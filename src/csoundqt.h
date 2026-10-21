@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -317,7 +318,6 @@ private slots:
     void updateCurrentPageTask();
     void markInspectorUpdate(); // Notification that inspector needs update
 	void setDefaultKeyboardShortcuts();
-	void showNoPythonQtWarning();
 	void showOrc(bool);
 	void showScore(bool);
 	void showOptions(bool);

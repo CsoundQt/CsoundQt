@@ -1064,7 +1064,7 @@ void CsoundQt::open()
     if (inspectorVisible && m_inspector->isFloating())
         m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
     fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), lastUsedDir ,
-                                              tr("Known Files (*.csd *.orc *.sco *.py *.inc *.udo *.html);;Csound Files (*.csd *.orc *.sco *.inc *.udo *.CSD *.ORC *.SCO *.INC *.UDO);;Python Files (*.py);;HTML files (*.html);;All Files (*)",
+                                              tr("Known Files (*.csd *.orc *.sco *.py *.inc *.udo *.html);;Csound Files (*.csd *.orc *.sco *.inc *.udo *.CSD *.ORC *.SCO *.INC *.UDO);;HTML files (*.html);;All Files (*)",
                                                  "Be careful to respect spacing parenthesis and usage of punctuation"));
     //	if (widgetsVisible) {
     //		if (!m_options->widgetsIndependent) {
@@ -1462,7 +1462,7 @@ QString CsoundQt::getSaveFileName()
                 this, tr("Save File As"), dir,
                 tr("Known Files (*.csd *.orc *.sco *.py *.udo *.html);;"
                    "Csound Files (*.csd *.orc *.sco *.udo *.inc *.CSD *.ORC"
-                   "*.SCO *.UDO *.INC);;Python Files (*.py);;"
+                   "*.SCO *.UDO *.INC);;"
                    "Html files (*.html);;All Files (*)",
                    "Be careful to respect spacing parenthesis and usage of punctuation"));
     if (widgetsVisible) {
@@ -4382,7 +4382,7 @@ void CsoundQt::applySettings()
     }
     setupEnvironment();
 
-    // set editorBgColor also for inspector, codepad and python console.
+    // set editorBgColor also for inspector, codepad
     // Maybe the latter should use the same color as console?
     // auto bgColor= m_options->editorBgColor.name();
     // m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
@@ -4900,10 +4900,6 @@ void CsoundQt::updateInspector()
     if (!documentPages[curPage]->getFileName().endsWith(".py")) {
         m_inspector->parseText(documentPages[curPage]->getBasicText());
     }
-    else {
-        m_inspector->parsePythonText(documentPages[curPage]->getBasicText());
-        // m_inspector->parsePythonText(documentPages[curPage]->getFullText());
-    }
     m_inspectorNeedsUpdate = false;
     QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateInspector()));
 }
@@ -5021,13 +5017,6 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     storeSettings();
 }
 
-void CsoundQt::showNoPythonQtWarning()
-{
-    QMessageBox::warning(this, tr("No PythonQt support"),
-                         tr("This version of CsoundQt has been compiled without PythonQt support.\n"
-                            "Extended Python features are not available"));
-    qDebug() << "CsoundQt::showNoPythonQtWarning()";
-}
 
 void CsoundQt::showOrc(bool show)
 {
@@ -5294,17 +5283,17 @@ void CsoundQt::createActions()
     connect(joinAct, SIGNAL(triggered()), this, SLOT(join()));
 
     evaluateAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Evaluate selection"), this);
-    evaluateAct->setStatusTip(tr("Evaluate selection in Python Console"));
+    evaluateAct->setStatusTip(tr("Evaluate selection"));
     evaluateAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(evaluateAct, SIGNAL(triggered()), this, SLOT(evaluate()));
 
     evaluateSectionAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Evaluate section"), this);
-    evaluateSectionAct->setStatusTip(tr("Evaluate current section in Python Console"));
+    evaluateSectionAct->setStatusTip(tr("Evaluate current section"));
     evaluateSectionAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(evaluateSectionAct, SIGNAL(triggered()), this, SLOT(evaluateSection()));
 
     scratchPadCsdModeAct = new QAction(tr("Code Pad in Csound Mode"), this);
-    scratchPadCsdModeAct->setStatusTip(tr("Toggle the mode for the scratch pad between python and csound"));
+    scratchPadCsdModeAct->setStatusTip(tr("Toggle the mode for the scratch pad"));
     scratchPadCsdModeAct->setShortcutContext(Qt::ApplicationShortcut);
     scratchPadCsdModeAct->setCheckable(true);
     connect(scratchPadCsdModeAct, SIGNAL(toggled(bool)), this, SLOT(setScratchPadMode(bool)));
@@ -6040,9 +6029,7 @@ void CsoundQt::connectActions()
     //          this, SLOT(setWidgetClipboard(QString)));
     connect(doc, SIGNAL(setCurrentAudioFile(QString)),
             this, SLOT(setCurrentAudioFile(QString)));
-    // connect(doc, SIGNAL(evaluatePythonSignal(QString)),
-    //         this, SLOT(evaluateString(QString)));
-
+    
     disconnect(showWidgetsAct, 0,0,0);
     connect(showWidgetsAct, &QAction::triggered, this, &CsoundQt::toggleWidgetsPanel);
     if (m_options->widgetsIndependent) {
@@ -7514,14 +7501,6 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     documentPages[curPage]->setFileName(fileName);
 
     connectActions();
-    //	connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
-    //	connect(documentPages[curPage], SIGNAL(modified()), this, SLOT(documentWasModified()));
-    //	//  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
-    //	//          this, SLOT(setWidgetClipboard(QString)));
-    //	connect(documentPages[curPage], SIGNAL(setCurrentAudioFile(QString)),
-    //			this, SLOT(setCurrentAudioFile(QString)));
-    //	connect(documentPages[curPage], SIGNAL(evaluatePythonSignal(QString)),
-    //			this, SLOT(evaluatePython(QString)));
     auto page = documentPages[curPage];
     page->loadTextString(text);
     if (m_options->widgetsIndependent) {
@@ -8208,8 +8187,6 @@ QVariant CsoundQt::getWidgetProperty(QString widgetid, QString property, int ind
     return value;
 }
 
-// TODO: check  it -  probably all the createX functions are not needed any more
-// after removing PythonQt support
 
 QString CsoundQt::createNewLabel(int x , int y , QString channel, int index)
 {

@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -54,8 +55,7 @@ public:
 	Inspector(QWidget *parent);
 	~Inspector();
 	void parseText(const QString &text);
-	void parsePythonText(const QString &text);
-    // Give keyboard focus to the inspector's tree, for the Focus Inspector
+	// Give keyboard focus to the inspector's tree, for the Focus Inspector
     // action. Showing/raising the dock itself is the caller's job.
     void focusTree();
     QStringList getParsedUDOs() { return m_opcodes; }

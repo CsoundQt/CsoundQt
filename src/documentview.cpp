@@ -707,32 +707,7 @@ QString DocumentView::getActiveSection()
 	// Will return all document if there are no ## boundaries (for any kind of file)
 	QString section;
 	if (m_viewMode < 2) {
-		if (m_mode == EDIT_PYTHON_MODE) {
-			QTextCursor cursor = m_mainEditor->textCursor();
-			m_oldCursorPosition = cursor.position(); // to move back there on next keypress
-			cursor.select(QTextCursor::LineUnderCursor);
-			bool sectionStart = cursor.selectedText().simplified().startsWith("##");
-            while (!sectionStart && !(cursor.anchor() == 0)) {
-				cursor.movePosition(QTextCursor::PreviousBlock);
-				cursor.select(QTextCursor::LineUnderCursor);
-				sectionStart = cursor.selectedText().simplified().startsWith("##");
-			}
-			int start = cursor.anchor();
-			cursor = m_mainEditor->textCursor();
-			cursor.movePosition(QTextCursor::NextBlock);
-			cursor.select(QTextCursor::LineUnderCursor);
-			bool sectionEnd = cursor.selectedText().simplified().startsWith("##");
-			while (!sectionEnd && !cursor.atEnd()) {
-				cursor.movePosition(QTextCursor::NextBlock);
-				cursor.select(QTextCursor::LineUnderCursor);
-				sectionEnd = cursor.selectedText().simplified().startsWith("##");
-			}
-			cursor.movePosition(QTextCursor::EndOfLine);
-			cursor.setPosition(start, QTextCursor::KeepAnchor);
-			m_mainEditor->setTextCursor(cursor);
-			section = cursor.selectedText();
-			section.replace(QChar(0x2029), QChar('\n'));
-		} else if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {
+		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {
 			QTextCursor cursor = m_mainEditor->textCursor();
 			m_oldCursorPosition = cursor.position(); // to move back there on next keypress
 			cursor.select(QTextCursor::LineUnderCursor);
@@ -1262,14 +1237,7 @@ void DocumentView::exitParameterMode()
 void DocumentView::indentNewLine()
 {
 	QTextCursor linecursor = m_mainEditor->textCursor();
-	if (m_mode == EDIT_PYTHON_MODE){
-		linecursor.movePosition(QTextCursor::PreviousCharacter);
-		linecursor.select(QTextCursor::LineUnderCursor);
-		QString line = linecursor.selectedText();
-		if (line.endsWith(":")) {
-			m_mainEditor->insertPlainText(indentString());
-		}
-	} else if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
 			   || m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
 		linecursor.movePosition(QTextCursor::PreviousBlock);
 		linecursor.select(QTextCursor::LineUnderCursor);
@@ -1997,9 +1965,6 @@ void DocumentView::comment()
 				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
 			commentChar = ";";
 		}
-		else if (m_mode == EDIT_PYTHON_MODE) { // Python Mode
-			commentChar = "#";
-		}
 		QTextCursor cursor = m_mainEditor->textCursor();
 		if (cursor.position() > cursor.anchor()) {
 			int temp = cursor.anchor();
@@ -2040,9 +2005,6 @@ void DocumentView::uncomment()
 				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
 			commentChar = ";";
 		}
-		else if (m_mode == EDIT_PYTHON_MODE) { // Python Mode
-			commentChar = "#";
-		}
 		QTextCursor cursor = m_mainEditor->textCursor();
 		if (cursor.position() > cursor.anchor()) {
 			int temp = cursor.anchor();
@@ -2074,11 +2036,11 @@ QString DocumentView::indentString() const
 {
 	// When the "use spaces" option is on, indent with the configured number
 	// of spaces. Otherwise keep the historical behaviour: a tab character,
-	// except in Python mode where four spaces were always used.
+	
 	if (m_mainEditor->tabUseSpaces()) {
 		return QString(m_mainEditor->tabSpaces(), QLatin1Char(' '));
 	}
-	return m_mode == EDIT_PYTHON_MODE ? QStringLiteral("    ") : QStringLiteral("\t");
+	return QStringLiteral("\t");
 }
 
 void DocumentView::indent()
@@ -2089,8 +2051,7 @@ void DocumentView::indent()
 		internalChange = true;
 		QString indentChar = "";
 		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
-				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE
-				|| m_mode == EDIT_PYTHON_MODE) {
+				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
 			indentChar = indentString();
 		}
 		if (indentChar.isEmpty()) {
@@ -2125,8 +2086,8 @@ void DocumentView::indent()
 
 // Removes one indentation step from the start of a single line. In spaces mode
 // that is a leading tab or up to tabSpaces leading spaces; otherwise it is a
-// leading tab (Csound modes), or a leading tab / four spaces (Python mode).
-static QString removeOneIndent(const QString &line, bool useSpaces, int tabSpaces, bool pythonMode)
+// leading tab (Csound modes), or a leading tab 
+static QString removeOneIndent(const QString &line, bool useSpaces, int tabSpaces)
 {
 	if (useSpaces) {
 		if (line.startsWith(QLatin1Char('\t'))) {
@@ -2142,9 +2103,6 @@ static QString removeOneIndent(const QString &line, bool useSpaces, int tabSpace
 	if (line.startsWith(QLatin1Char('\t'))) {
 		return line.mid(1);
 	}
-	if (pythonMode && line.startsWith(QStringLiteral("    "))) {
-		return line.mid(4);
-	}
 	return line;
 }
 
@@ -2156,16 +2114,14 @@ void DocumentView::unindent()
 		return;
 	}
 	if (!(m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
-			|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE
-			|| m_mode == EDIT_PYTHON_MODE)) {
+			|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE)) {
 		return;  // nothing is indented in this mode
 	}
 
 	internalChange = true;
 	const bool useSpaces = m_mainEditor->tabUseSpaces();
 	const int tabSpaces = m_mainEditor->tabSpaces();
-	const bool pythonMode = (m_mode == EDIT_PYTHON_MODE);
-
+	
 	QTextCursor cursor = m_mainEditor->textCursor();
 	const int anchor = cursor.anchor();
 	const int position = cursor.position();
@@ -2198,7 +2154,7 @@ void DocumentView::unindent()
 	QStringList newLines;
 	newLines.reserve(oldLines.size());
 	for (const QString &line : oldLines) {
-		newLines << removeOneIndent(line, useSpaces, tabSpaces, pythonMode);
+		newLines << removeOneIndent(line, useSpaces, tabSpaces);
 	}
 	const QString newText = newLines.join(QStringLiteral("\n"));
 	if (newText == oldText) {
@@ -2599,7 +2555,7 @@ void DocumentView::restoreCursorPosition()
 	if (m_oldCursorPosition>=0) {
 		qDebug()<<"Restoring cursor position to "<<m_oldCursorPosition;
 		QTextCursor cursor = m_mainEditor->textCursor();
-		cursor.setPosition(m_oldCursorPosition); // TODO: check also for pyuthonEditor
+		cursor.setPosition(m_oldCursorPosition); 
 		m_mainEditor->setTextCursor(cursor);
 		m_oldCursorPosition = -1;
 	}

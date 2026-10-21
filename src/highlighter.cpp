@@ -459,16 +459,6 @@ Highlighter::Highlighter(QTextDocument *parent)
     csoundOptionsRx2 = QRegularExpression("-+(rtaudio=|rtmidi=|jack_client=)");
 
 
-    // For Python
-    pythonKeywords << "and" << "or" << "not" << "is"
-                   << "global" << "with" << "from" << "import" << "as"
-                   << "if" << "else" << "elif"
-                   << "print" << "class" << "del" << "exec"
-                   << "for" << "in" << "while" << "continue" << "pass" << "break"
-                   << "def" << "return" << "lambda"
-                   << "yield" << "assert" << "try" << "except" << "finally" << "raise"
-                   << "True" << "False" << "None";
-
 	// for html
     /* not used at the moment as tags are highlighted
     htmlKeywords << "<\\ba\\b" << "<\\babbr\\b" << "<\\bacronym\\b" << "<\\baddress\\b"
@@ -686,7 +676,6 @@ void Highlighter::highlightBlock(const QString &text)
                 highlightCsoundBlock(text);
                 break;
             case 1:  // Python mode
-                highlightPythonBlock(text);
                 break;
             case 2:  // Xml mode
                 highlightXmlBlock(text);
@@ -1150,43 +1139,6 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     }
 }
 
-
-void Highlighter::highlightPythonBlock(const QString &text)
-{
-    //static const QRegularExpression expression("\\b\\w\\b");
-    //int index = text.indexOf(expression, 0);
-    for (int i = 0; i < pythonKeywords.size(); i++) {
-        QRegularExpression expression("\\b" + pythonKeywords[i] + "\\b");
-		int index = text.indexOf(expression);
-		while (index >= 0) {
-            // Qt6: Test this substitution and compare with Qt 5!!!
-            int length = expression.match(pythonKeywords[i]).capturedLength();// was: expression.matchedLength();
-			setFormat(index, length, keywordFormat);
-			index = text.indexOf(expression, index + length);
-		}
-	}
-    static const QRegularExpression strings("\"[^\"]*\"");
-    int index = text.indexOf(strings);
-	while (index >= 0) {
-        int length = strings.match(text).capturedLength();//strings.matchedLength();
-		setFormat(index, length, quotationFormat);
-		index = text.indexOf(strings, index + length);
-	}
-    static const QRegularExpression strings2("'[^'']*'");
-    index = text.indexOf(strings2);
-	while (index >= 0) {
-        int length = strings.match(text).capturedLength(); // strings.matchedLength();
-		setFormat(index, length, quotationFormat);
-		index = text.indexOf(strings, index + length);
-	}
-    static const QRegularExpression  expComment("#.*");
-    index = text.indexOf(expComment);
-	while (index >= 0) {
-        int length = expComment.match(text).capturedLength();//expComment.matchedLength();
-		setFormat(index, length, singleLineCommentFormat);
-		index = text.indexOf(expComment, index + length);
-	}
-}
 
 void Highlighter::highlightXmlBlock(const QString &/*text*/)
 {
