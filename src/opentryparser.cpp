@@ -66,11 +66,18 @@ void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
         while(!opcode.isNull()) {
             QDomElement desc = opcode.firstChildElement("desc");
             QString description = desc.text();
+            // An opcode the manual marks as deprecated, and the names it had
+            // before it was renamed.
+            const bool deprecated = (opcode.attribute("deprecated") == "true");
+            const QStringList aliases =
+                    opcode.attribute("aliases").split(',', Qt::SkipEmptyParts);
+            QList<Opcode> opcodesOfElement;
             QDomElement synop = opcode.firstChildElement("synopsis");
             while(!synop.isNull()) {
                 Opcode op;
                 op.desc = description;
                 op.isInstalled = true;
+                op.deprecated = deprecated;
                 QDomElement s = synop.toElement();
                 QDomNode node = s.firstChild();
                 QDomElement elem = node.toElement();
@@ -100,9 +107,24 @@ void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
                         && catName !="Utilities") {
                     addOpcode(op);
                     opcodesInCategoryList << op;
+                    opcodesOfElement << op;
 
                 }
                 synop = synop.nextSiblingElement("synopsis");
+            }
+            // The names the opcode had before it was renamed are known to the
+            // editor, so that older code still resolves, but they are not
+            // listed in the menu.
+            for (const QString &alias : aliases) {
+                const QString name = alias.trimmed();
+                if (name.isEmpty() || opcodeMap.contains(name))
+                    continue;
+                for (const Opcode &op : opcodesOfElement) {
+                    Opcode aliasOp = op;
+                    aliasOp.opcodeName = name;
+                    aliasOp.deprecated = true;
+                    addOpcode(aliasOp);
+                }
             }
             opcode = opcode.nextSiblingElement("opcode");
         }

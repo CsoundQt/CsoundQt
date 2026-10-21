@@ -1792,6 +1792,7 @@ void DocumentView::createContextMenu(QPoint pos)
 				opcodeText += opcode.opcodeName;
 				opcodeText += (!opcode.inArgs.isEmpty()
 							   && !opcode.inArgs.startsWith(" ")
+							   && !opcode.inArgs.startsWith("(")
 							   && !opcode.opcodeName.endsWith(" ") ?
 								   " " : "");
 				opcodeText += opcode.inArgs;

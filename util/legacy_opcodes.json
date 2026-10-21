@@ -1,0 +1,263 @@
+{
+  "#ifndef": [
+    "ifndef"
+  ],
+  "arduinoread": [
+    "arduinoRead"
+  ],
+  "arduinoreadf": [
+    "arduinoReadF"
+  ],
+  "arduinostart": [
+    "arduinoStart"
+  ],
+  "arduinostop": [
+    "arduinoStop"
+  ],
+  "atsadd": [
+    "ATSadd"
+  ],
+  "atsaddnz": [
+    "ATSaddnz"
+  ],
+  "atsbufread": [
+    "ATSbufread"
+  ],
+  "atscross": [
+    "ATScross"
+  ],
+  "atsinfo": [
+    "ATSinfo"
+  ],
+  "atsinterpread": [
+    "ATSinterpread"
+  ],
+  "atspartialtap": [
+    "ATSpartialtap"
+  ],
+  "atsread": [
+    "ATSread"
+  ],
+  "atsreadnz": [
+    "ATSreadnz"
+  ],
+  "atssinnoi": [
+    "ATSsinnoi"
+  ],
+  "chnS": [
+    "chn_S"
+  ],
+  "chna": [
+    "chn_a"
+  ],
+  "chnarray": [
+    "chn_array"
+  ],
+  "chnk": [
+    "chn_k"
+  ],
+  "cntcreate": [
+    "cntCreate"
+  ],
+  "cntcycles": [
+    "cntCycles"
+  ],
+  "cntdelete": [
+    "cntDelete"
+  ],
+  "cntdeletei": [
+    "cntDelete_i"
+  ],
+  "cntread": [
+    "cntRead"
+  ],
+  "cntreset": [
+    "cntReset"
+  ],
+  "cntstate": [
+    "cntState"
+  ],
+  "counti": [
+    "count_i"
+  ],
+  "diodeladder": [
+    "diode_ladder"
+  ],
+  "else": [
+    "#else"
+  ],
+  "eventi": [
+    "event_i"
+  ],
+  "genarrayi": [
+    "genarray_i"
+  ],
+  "k35hpf": [
+    "K35_hpf"
+  ],
+  "k35lpf": [
+    "K35_lpf"
+  ],
+  "loopge": [
+    "loop_ge"
+  ],
+  "loopgt": [
+    "loop_gt"
+  ],
+  "loople": [
+    "loop_le"
+  ],
+  "looplt": [
+    "loop_lt"
+  ],
+  "maparrayi": [
+    "maparray_i"
+  ],
+  "maxk": [
+    "max_k"
+  ],
+  "mixerclear": [
+    "MixerClear"
+  ],
+  "mixergetlevel": [
+    "MixerGetLevel"
+  ],
+  "mixerreceive": [
+    "MixerReceive"
+  ],
+  "mixersend": [
+    "MixerSend"
+  ],
+  "mixersetlevel": [
+    "MixerSetLevel"
+  ],
+  "mixersetleveli": [
+    "MixerSetLevel_i"
+  ],
+  "nchnlshw": [
+    "nchnls_hw"
+  ],
+  "oscbundle": [
+    "OSCbundle"
+  ],
+  "osccount": [
+    "OSCcount"
+  ],
+  "oscinit": [
+    "OSCinit"
+  ],
+  "oscinitm": [
+    "OSCinitM"
+  ],
+  "osclisten": [
+    "OSClisten"
+  ],
+  "oscraw": [
+    "OSCraw"
+  ],
+  "oscsend": [
+    "OSCsend"
+  ],
+  "printfi": [
+    "printf_i"
+  ],
+  "sclag": [
+    "sc_lag"
+  ],
+  "sclagud": [
+    "sc_lagud"
+  ],
+  "scorelinei": [
+    "scoreline_i"
+  ],
+  "scphasor": [
+    "sc_phasor"
+  ],
+  "serialbegin": [
+    "serialBegin"
+  ],
+  "serialend": [
+    "serialEnd"
+  ],
+  "serialflush": [
+    "serialFlush"
+  ],
+  "serialprint": [
+    "serialPrint"
+  ],
+  "serialread": [
+    "serialRead"
+  ],
+  "serialwrite": [
+    "serialWrite"
+  ],
+  "serialwritei": [
+    "serialWrite_i"
+  ],
+  "sliderkawai": [
+    "sliderKawai"
+  ],
+  "systemi": [
+    "system_i"
+  ],
+  "tabi": [
+    "tab_i"
+  ],
+  "tabwi": [
+    "tabw_i"
+  ],
+  "trimi": [
+    "trim_i"
+  ],
+  "turnoff2i": [
+    "turnoff2_i"
+  ],
+  "vaddi": [
+    "vadd_i"
+  ],
+  "vaddvi": [
+    "vaddv_i"
+  ],
+  "vcopyi": [
+    "vcopy_i"
+  ],
+  "vdivvi": [
+    "vdivv_i"
+  ],
+  "vexpi": [
+    "vexp_i"
+  ],
+  "vexpvi": [
+    "vexpv_i"
+  ],
+  "vmulti": [
+    "vmult_i"
+  ],
+  "vmultvi": [
+    "vmultv_i"
+  ],
+  "vpowi": [
+    "vpow_i"
+  ],
+  "vpowvi": [
+    "vpowv_i"
+  ],
+  "vsubvi": [
+    "vsubv_i"
+  ],
+  "zdf1pole": [
+    "zdf_1pole"
+  ],
+  "zdf1polemode": [
+    "zdf_1pole_mode"
+  ],
+  "zdf2pole": [
+    "zdf_2pole"
+  ],
+  "zdf2polemode": [
+    "zdf_2pole_mode"
+  ],
+  "zdfladder": [
+    "zdf_ladder"
+  ]
+}

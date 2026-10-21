@@ -139,6 +139,7 @@ public:
     QString desc;
     int isFlag;
     bool isInstalled;
+    bool deprecated = false;  // superseded name or opcode the manual marks as deprecated
 
     Opcode() = default;
     Opcode(QString name, QString outs="", QString ins="", bool installed=true): opcodeName(name), outArgs(outs), inArgs(ins), isInstalled(installed) {}
