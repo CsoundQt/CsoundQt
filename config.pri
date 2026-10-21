@@ -91,21 +91,29 @@ isEmpty(CSOUND_LIB) {
 }
 
 rtmidi {
-# check if RTMIDI is found in system
-unix:!macx {
-    exists("/usr/include/rtmidi")  {
-		RTMIDI_DIR = "/usr/include/rtmidi"
-		!no_messages:message(RtMidi found in /usr/include/rtmidi)
-        CONFIG -= rtmidi
-        CONFIG += system_rtmidi
+# Use the rtmidi submodule when it is present: the CMake build does the same,
+# so both builds link the same RtMidi. A system copy is only used when the
+# submodule is missing. An explicitly given RTMIDI_DIR always wins, e.g.
+#   qmake qcs.pro CONFIG+=rtmidi RTMIDI_DIR=/usr/include/rtmidi
+unix:!macx:isEmpty(RTMIDI_DIR) {
+    exists("rtmidi/RtMidi.h") {
+        RTMIDI_DIR = "rtmidi"
+        !no_messages:message(Using the rtmidi submodule in $$RTMIDI_DIR)
     }
-    exists("/usr/local/include/rtmidi")  {
-        RTMIDI_DIR = "/usr/local/include/rtmidi"
-        !no_messages:message(RtMidi found in /usr/local/include/rtmidi)
-        CONFIG -= rtmidi
-        CONFIG += system_rtmidi
+    !equals(RTMIDI_DIR, "rtmidi") {
+        exists("/usr/include/rtmidi")  {
+    		RTMIDI_DIR = "/usr/include/rtmidi"
+    		!no_messages:message(RtMidi found in /usr/include/rtmidi)
+            CONFIG -= rtmidi
+            CONFIG += system_rtmidi
+        }
+        exists("/usr/local/include/rtmidi")  {
+            RTMIDI_DIR = "/usr/local/include/rtmidi"
+            !no_messages:message(RtMidi found in /usr/local/include/rtmidi)
+            CONFIG -= rtmidi
+            CONFIG += system_rtmidi
+        }
     }
-
 }
 
 isEmpty(RTMIDI_DIR) {
