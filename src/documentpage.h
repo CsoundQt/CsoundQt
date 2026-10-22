@@ -163,8 +163,6 @@ public:
 	void showWidgetTooltips(bool visible);
 	void setKeyRepeatMode(bool keyRepeat);  // Also for console widget
 	void setOpenProperties(bool open);
-	void setFontOffset(double offset);
-	void setFontScaling(double offset);
     void setGraphUpdateRate(int rate);
 	//    void passWidgetClipboard(QString text);
 	// Console properties
@@ -175,6 +173,7 @@ public:
 	// Internal Options setters
 	void setConsoleBufferSize(int size);
 	void setWidgetEnabled(bool enabled);
+	void setHighlightWidgetsOnChannelHover(bool enabled);
 	virtual void registerButton(QuteButton *button);
 	void queueMidiIn(std::vector<unsigned char> *message);
     void queueVirtualMidiIn(std::vector<unsigned char> &message);

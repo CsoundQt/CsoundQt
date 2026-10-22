@@ -119,6 +119,12 @@ The source and binaries can be downloaded from:
 * **Widget properties explain themselves:** the *Show Properties* dialog now
   lists each addressable property with its value type and description, and the
   editor's property autocompletion shows the same information in the menu.
+* **Obsolete widget font adjustments were removed:** widget text now uses its
+  own `fontsize` directly; the old global font-scaling and font-offset settings
+  were only workarounds for platform font differences and are no longer needed.
+* **Saving widgets is no longer optional:** CSD files always include their
+  widget panel and presets. The one-off *Export without widgets* command remains
+  available when a plain Csound file is wanted.
 * **Crash recovery keeps the GUI:** the temporary copies written for playback
   now contain the complete CSD, including the `<bsbPanel>` widget layout and
   presets, so recovering a document no longer drops a modified GUI.

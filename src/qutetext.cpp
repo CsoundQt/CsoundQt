@@ -91,8 +91,6 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	// or loosen the gap per widget.
 	setProperty("CSQT_padding", 5);
 
-	m_fontScaling = 1.0;
-	m_fontOffset = 1.0;
 	m_type = "display";
 	m_typeid = QuteWidgetType::DISPLAY;
     m_precision = 3;
@@ -325,8 +323,7 @@ void QuteText::applyInternalProperties()
         borderCol = textColor;
     }
 
-    double scaledFontSize = property("CSQT_fontsize").toDouble() * m_fontScaling;
-    double fontSize = scaledFontSize + m_fontOffset;
+    double fontSize = property("CSQT_fontsize").toDouble();
 
     /*
 	while (totalHeight < fontSize + 1) {
@@ -366,18 +363,6 @@ void QuteText::applyInternalProperties()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-}
-
-void QuteText::setFontScaling(double scaling)
-{
-	m_fontScaling = scaling;
-	//  applyInternalProperties();
-}
-
-void QuteText::setFontOffset(double offset)
-{
-	m_fontOffset = offset;
-	//  applyInternalProperties();
 }
 
 QString QuteText::getWidgetType()
@@ -1058,7 +1043,7 @@ void QuteLineEdit::applyInternalProperties()
 		borderCol = textColor;
 	}
 
-	double fontSize = (property("CSQT_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
+	double fontSize = property("CSQT_fontsize").toDouble();
 
 #ifdef USEFONTPIXELSIZE
     m_widget->setStyleSheet("QLineEdit { font-family:\"" + property("CSQT_font").toString()
@@ -1500,7 +1485,7 @@ void QuteScrollNumber::applyInternalProperties()
 
 	int new_fontSize = 0;
 	int totalHeight = 0;
-	double fontSize = (property("CSQT_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
+	double fontSize = property("CSQT_fontsize").toDouble();
 
 	while (totalHeight < fontSize + 1) {
 		new_fontSize++;

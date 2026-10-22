@@ -288,8 +288,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	menusDepthSpinBox->setValue(m_options->menuDepth);
 	saveChangesCheckBox->setChecked(m_options->saveChanges);
 	rememberFileCheckBox->setChecked(m_options->rememberFile);
-	saveWidgetsCheckBox->setChecked(m_options->saveWidgets);
 	widgetsIndependentCheckBox->setChecked(m_options->widgetsIndependent);
+	highlightWidgetsOnChannelHoverCheckBox->setChecked(
+				m_options->highlightWidgetsOnChannelHover);
 	iconTextCheckBox->setChecked(m_options->iconText);
 	toolbarCheckBox->setChecked(m_options->showToolbar);
     lockToolbarCheckBox->setChecked(m_options->lockToolbar);
@@ -307,8 +308,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	showTooltipsCheckBox->setChecked(m_options->showTooltips);
     graphUpdateRateSpinBox->setValue(m_options->graphUpdateRate);
 	openPropertiesCheckBox->setChecked(m_options->openProperties);
-	fontScalingSpinBox->setValue(m_options->fontScaling);
-	fontOffsetSpinBox->setValue(m_options->fontOffset);
     tabShortcutActiveCheckBox->setChecked(m_options->tabShortcutActive);
     tabCloseButtonCheckBox->setChecked(m_options->tabShowCloseButton);
     highlightScoreCheckBox->setChecked(m_options->highlightScore);
@@ -681,8 +680,9 @@ void ConfigDialog::apply()
 	m_options->menuDepth = menusDepthSpinBox->value();
 	m_options->saveChanges = saveChangesCheckBox->isChecked();
 	m_options->widgetsIndependent = widgetsIndependentCheckBox->isChecked();
+	m_options->highlightWidgetsOnChannelHover =
+			highlightWidgetsOnChannelHoverCheckBox->isChecked();
 	m_options->rememberFile = rememberFileCheckBox->isChecked();
-	m_options->saveWidgets = saveWidgetsCheckBox->isChecked();
 	m_options->iconText = iconTextCheckBox->isChecked();
 	m_options->showToolbar = toolbarCheckBox->isChecked();
     m_options->lockToolbar = lockToolbarCheckBox->isChecked();
@@ -698,8 +698,6 @@ void ConfigDialog::apply()
 	m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
 	m_options->showTooltips = showTooltipsCheckBox->isChecked();
 	m_options->openProperties = openPropertiesCheckBox->isChecked();
-	m_options->fontScaling = fontScalingSpinBox->value();
-	m_options->fontOffset = fontOffsetSpinBox->value();
     m_options->graphUpdateRate = graphUpdateRateSpinBox->value();
 	m_options->debugPort = debugPortSpinBox->value();
     m_options->tabShortcutActive = tabShortcutActiveCheckBox->isChecked();

@@ -3322,6 +3322,7 @@ void CsoundQt::setEditorFullScreen(bool full)
     if (full) {
         checkFullScreen();
         m_preFullScreenState = this->saveState();
+        m_editorWasMaximized = isMaximized();
         QList<QDockWidget *> dockWidgets = findChildren<QDockWidget *>();
         foreach (QDockWidget *dockWidget, dockWidgets) {
             dockWidget->hide();
@@ -3331,7 +3332,13 @@ void CsoundQt::setEditorFullScreen(bool full)
     }
     else {
         this->restoreState(m_preFullScreenState);
-        this->showNormal(); // to restore titlebar etc
+        // Leave fullscreen first. Some window managers ignore a direct
+        // fullscreen -> maximized transition, which made the unmaximize
+        // action appear to do nothing.
+        this->showNormal();
+        if (m_editorWasMaximized)
+            this->showMaximized();
+        m_editorWasMaximized = false;
         m_fullScreenComponent = "";
     }
 }
@@ -4334,7 +4341,6 @@ void CsoundQt::applySettings()
     //  }
 
     // Display a summary of options on the status bar
-    currentOptions += (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
     QString playOptions = " (Audio:" + m_options->rtAudioModule + " ";
     playOptions += "MIDI:" +  m_options->rtMidiModule + ")";
     playOptions += " (" + (m_options->rtUseOptions ? tr("UseCsoundQtOptions"):
@@ -4427,13 +4433,12 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setAutoCompleteMenuMaxLines(m_options->autocompleteMenuMaxLines);
     p->setAutoParameterMode(m_options->autoParameterMode);
     p->setWidgetEnabled(m_options->enableWidgets);
+    p->setHighlightWidgetsOnChannelHover(m_options->highlightWidgetsOnChannelHover);
     p->showWidgetTooltips(m_options->showTooltips);
     p->setWidgetFrameColors(m_options->widgetFrameColorUnselected,
                             m_options->widgetFrameColorSelected);
     p->setKeyRepeatMode(m_options->keyRepeat);
     p->setOpenProperties(m_options->openProperties);
-    p->setFontOffset(m_options->fontOffset);
-    p->setFontScaling(m_options->fontScaling);
     p->setGraphUpdateRate(m_options->graphUpdateRate);
     p->setTextFont(QFont(m_options->font,
                          (int) m_options->fontPointSize));
@@ -6745,9 +6750,10 @@ void CsoundQt::readSettings()
     m_options->menuDepth = settings.value("menuDepth", 3).toInt();
     m_options->saveChanges = settings.value("savechanges", false).toBool();
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
-    m_options->saveWidgets = settings.value("savewidgets", true).toBool();
     m_options->midiCcToCurrentPageOnly = settings.value("midiCcToActivePageOnly", false).toBool();
     m_options->widgetsIndependent = settings.value("widgetsIndependent", false).toBool();
+    m_options->highlightWidgetsOnChannelHover =
+            settings.value("highlightWidgetsOnChannelHover", true).toBool();
     m_options->iconText = settings.value("iconText", false).toBool();
     m_options->showToolbar = settings.value("showToolbar", true).toBool();
     m_options->lockToolbar = settings.value("lockToolbar", false).toBool();
@@ -6762,8 +6768,6 @@ void CsoundQt::readSettings()
     m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
     m_options->showTooltips = settings.value("showTooltips", true).toBool();
     m_options->openProperties = settings.value("openProperties", true).toBool();
-    m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
-    m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
     m_options->graphUpdateRate = settings.value("graphUpdateRate", 30).toInt();
     lastFiles = settings.value("lastfiles", QStringList()).toStringList();
     lastTabIndex = settings.value("lasttabindex", "").toInt();
@@ -6990,9 +6994,10 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("menuDepth", m_options->menuDepth);
     settings.setValue("savechanges", m_options->saveChanges);
     settings.setValue("rememberfile", m_options->rememberFile);
-    settings.setValue("savewidgets", m_options->saveWidgets);
     settings.setValue("midiCcToActivePageOnly", m_options->midiCcToCurrentPageOnly);
     settings.setValue("widgetsIndependent", m_options->widgetsIndependent);
+    settings.setValue("highlightWidgetsOnChannelHover",
+                      m_options->highlightWidgetsOnChannelHover);
     settings.setValue("iconText", m_options->iconText);
     settings.setValue("showToolbar", m_options->showToolbar);
     settings.setValue("lockToolbar", m_options->lockToolbar);
@@ -7008,8 +7013,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("graphUpdateRate", m_options->graphUpdateRate);
     settings.setValue("showTooltips", m_options->showTooltips);
     settings.setValue("openProperties", m_options->openProperties);
-    settings.setValue("fontOffset", m_options->fontOffset);
-    settings.setValue("fontScaling", m_options->fontScaling);
     settings.setValue("debugPort", m_options->debugPort);
     settings.setValue("tabShortcutActive", m_options->tabShortcutActive);
     settings.setValue("tabShowCloseButton", m_options->tabShowCloseButton);
@@ -7607,7 +7610,7 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
             documentPages[curPage]->setWidgetLayoutOuterGeometry(QRect());
         }
     }
-    if (m_options->saveWidgets && saveWidgets)
+    if (saveWidgets)
         text = documentPages[curPage]->getFullText();
     else
         text = documentPages[curPage]->getBasicText();

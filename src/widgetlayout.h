@@ -140,8 +140,6 @@ public:
 	void setWidgetToolTip(QuteWidget *widget, bool show);
 	void setContained(bool contained);
 	void setCurrentPosition(QPoint pos); // To set the mouse position for new widgets
-	void setFontOffset(double offset);
-	void setFontScaling(double scaling);
 	void setWidgetsLocked(bool lock);
     void setUpdateRate(int rate) { m_updateRate = rate; }
 
@@ -440,7 +438,6 @@ private:
 	bool m_tooltips;  // Show widget tooltips
 	int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
 	int xOffset, yOffset;
-	double m_fontOffset, m_fontScaling;
     int m_updateRate;
 
 	// For the properties dialog - they store the configuration data for the widget panel

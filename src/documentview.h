@@ -143,6 +143,8 @@ public:
     // Named instruments and widget channels for the context-aware completions.
     void setInstrumentNames(const QStringList &names);
     void setWidgetChannels(const QStringList &channels);
+    // Whether hovering a channel literal in the editor outlines its widgets.
+    void setHighlightWidgetsOnChannelHover(bool enabled);
     // Read the current channel names directly from the widget layout. This
     // keeps completion up to date when a widget is renamed, without having to
     // mirror every widget change into this view.
@@ -322,6 +324,7 @@ private:
 	QStringList m_globalStringVariables;
 	QStringList m_instrumentNames;
 	QStringList m_widgetChannels;
+	bool m_highlightWidgetsOnChannelHover = true;
 	QString m_hoverChannel;
 	QString m_activeChannelHighlight;
 	std::function<QStringList()> m_widgetChannelsProvider;

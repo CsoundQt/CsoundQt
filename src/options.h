@@ -62,7 +62,6 @@ public:
 	bool saveChanges;
 	bool quitOnLastTabClosed; // exit instead of opening an empty document
 	bool rememberFile;
-	bool saveWidgets;
 	bool iconText;
 	bool showToolbar;
     bool lockToolbar;
@@ -85,8 +84,6 @@ public:
 	bool showTooltips;
     int graphUpdateRate;
 	bool openProperties;  // Open properties automatically when creating a widget
-	double fontScaling;
-	double fontOffset;
 	// Edit-mode widget frame border colours (Settings/Widgets). The unselected
 	// colour may carry an alpha; the selected one is opaque and also drives the
 	// resize handle colour.
@@ -96,6 +93,7 @@ public:
 	bool useAPI;
 	bool enableWidgets;
 	bool widgetsIndependent;  // Widget layouts in Separate Window (instead of Dock Widget)
+	bool highlightWidgetsOnChannelHover; // Outline widgets when hovering a channel literal
 	bool useInvalue; // If false use chnget
 	bool keyRepeat;
 	bool debugLiveEvents;

@@ -295,7 +295,7 @@ void QuteSpinBox::applyInternalProperties()
     w->setAlignment(align);
 	setTextColor(property("CSQT_color").value<QColor>());
 
-	double fontSize = (property("CSQT_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
+	double fontSize = property("CSQT_fontsize").toDouble();
 
     auto bgstr = property("CSQT_bgcolormode").toBool() ?
         QString("background-color:")+property("CSQT_bgcolor").value<QColor>().name()+";" :

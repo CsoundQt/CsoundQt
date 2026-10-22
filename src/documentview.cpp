@@ -1046,6 +1046,8 @@ void DocumentView::updateChannelHighlight()
 
 bool DocumentView::eventFilter(QObject *watched, QEvent *event)
 {
+	if (!m_highlightWidgetsOnChannelHover)
+		return QWidget::eventFilter(watched, event);
 	TextEditor *editor = qobject_cast<TextEditor *>(watched->parent());
 	if (editor && editor->viewport() == watched) {
 		if (event->type() == QEvent::MouseMove) {
@@ -3381,6 +3383,16 @@ void DocumentView::setInstrumentNames(const QStringList &names) {
 
 void DocumentView::setWidgetChannels(const QStringList &channels) {
     m_widgetChannels = channels;
+}
+
+void DocumentView::setHighlightWidgetsOnChannelHover(bool enabled) {
+	if (m_highlightWidgetsOnChannelHover == enabled)
+		return;
+	m_highlightWidgetsOnChannelHover = enabled;
+	if (!enabled && !m_hoverChannel.isEmpty()) {
+		m_hoverChannel.clear();
+		updateChannelHighlight();
+	}
 }
 
 void DocumentView::setWidgetChannelsProvider(

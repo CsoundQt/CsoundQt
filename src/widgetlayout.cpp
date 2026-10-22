@@ -867,8 +867,6 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         // Displays must stay mouse-interactive so they can show tooltips; labels
         // stay transparent for mouse events (and therefore have no tooltip).
         w->setTransparentForMouse(type == "BSBLabel");
-        w->setFontOffset(m_fontOffset);
-        w->setFontScaling(m_fontScaling);
         w->setType(type == "BSBLabel" ? "label" : "display");
         QDomElement ebg = element.firstChildElement("bgcolor");
         if (!ebg.isNull()) {
@@ -900,8 +898,6 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     }
     else if (type == "BSBScrollNumber") {
         QuteScrollNumber *w = new QuteScrollNumber(this);
-        w->setFontOffset(m_fontOffset);
-        w->setFontScaling(m_fontScaling);
         widget = static_cast<QuteWidget *>(w);
     }
     else if (type == "BSBButton") {
@@ -1565,34 +1561,6 @@ void WidgetLayout::setContained(bool contained)
 void WidgetLayout::setCurrentPosition(QPoint pos)
 {
     currentPosition = pos;
-}
-
-void WidgetLayout::setFontOffset(double offset)
-{
-    m_fontOffset = offset;
-    widgetsMutex.lock();
-    for (int i=0; i < m_widgets.size(); i++) {
-        if (m_widgets[i]->getWidgetTypeID() == QuteWidgetType::LABEL ||
-                m_widgets[i]->getWidgetTypeID() == QuteWidgetType::SCROLLNUMBER) {
-            static_cast<QuteText *>(m_widgets[i])->setFontOffset(offset);
-            m_widgets[i]->applyInternalProperties();
-        }
-    }
-    widgetsMutex.unlock();
-}
-
-void WidgetLayout::setFontScaling(double scaling)
-{
-    m_fontScaling = scaling;
-    widgetsMutex.lock();
-    for (int i=0; i < m_widgets.size(); i++) {
-        if (m_widgets[i]->getWidgetTypeID() == QuteWidgetType::LABEL ||
-                m_widgets[i]->getWidgetTypeID() == QuteWidgetType::SCROLLNUMBER) {
-            static_cast<QuteText *>(m_widgets[i])->setFontScaling(scaling);
-            m_widgets[i]->applyInternalProperties();
-        }
-    }
-    widgetsMutex.unlock();
 }
 
 void WidgetLayout::setWidgetsLocked(bool lock)
@@ -3852,8 +3820,6 @@ QString WidgetLayout::createText(int x, int y, int width, int height,
         widget->setTransparentForMouse(true);
     }
     widget->setProperty("CSQT_label", labelText);
-    widget->setFontOffset(m_fontOffset);
-    widget->setFontScaling(m_fontScaling);
     widget->applyInternalProperties();
     registerWidget(widget);
     return widget->getUuid();
@@ -3887,8 +3853,6 @@ QString WidgetLayout::createScrollNumber(int x, int y, int width, int height,
     widget->setProperty("CSQT_bgcolormode", bgMode);
     widget->setProperty("CSQT_bordermode", borderMode);
     widget->setProperty("CSQT_value", value);
-    widget->setFontOffset(m_fontOffset);
-    widget->setFontScaling(m_fontScaling);
     widget->applyInternalProperties();
     registerWidget(widget);
     return widget->getUuid();

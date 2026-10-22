@@ -789,20 +789,6 @@ void DocumentPage::setOpenProperties(bool open)
 	}
 }
 
-void DocumentPage::setFontOffset(double offset)
-{
-	foreach (WidgetLayout *wl, m_widgetLayouts) {
-		wl->setFontOffset(offset);
-	}
-}
-
-void DocumentPage::setFontScaling(double offset)
-{
-    foreach (WidgetLayout *wl, m_widgetLayouts) {
-		wl->setFontScaling(offset);
-	}
-}
-
 void DocumentPage::setGraphUpdateRate(int rate) {
     foreach (WidgetLayout *wl, m_widgetLayouts) {
         wl->setUpdateRate(rate);
@@ -1302,4 +1288,8 @@ void DocumentPage::insertOpcode() {
 
 void DocumentPage::highlightWidgetChannel() {
     m_view->highlightWidgetChannel();
+}
+
+void DocumentPage::setHighlightWidgetsOnChannelHover(bool enabled) {
+    m_view->setHighlightWidgetsOnChannelHover(enabled);
 }

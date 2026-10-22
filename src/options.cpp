@@ -60,7 +60,6 @@ Options::Options(ConfigLists *configlists) :
     saveChanges = false;
     quitOnLastTabClosed = false;
     rememberFile = true;
-    saveWidgets = true;
     // iconText = true;
     iconText = false;
     showToolbar = true;
@@ -76,13 +75,12 @@ Options::Options(ConfigLists *configlists) :
     showWidgetsOnRun = true;
     showTooltips = false;
     openProperties = true;  // Open properties automatically when creating a widget
-    fontScaling = 1.0;
-    fontOffset = 0.0;
     graphUpdateRate = 30;
 
     useAPI = true;
     enableWidgets = true;
     widgetsIndependent = false;  // Widget layouts in Separate Window (instead of Dock Widget)
+    highlightWidgetsOnChannelHover = true;
     keyRepeat = true;
     debugLiveEvents = false;
     consoleBufferSize = 1024;

@@ -608,6 +608,7 @@ private:
 #endif
     QByteArray m_preFullScreenState;
     QString m_fullScreenComponent;
+    bool m_editorWasMaximized = false; // main window state before editor full screen
     QDir m_rissetDataPath;
     bool m_rissetInitialized = false;
     bool m_rissetReady = false;

@@ -58,19 +58,12 @@ public:
     virtual QString getQml();
     QuteWidgetType getWidgetTypeID() override;
 	
-	// Configuraion (Not saved)
-	void setFontScaling(double scaling);
-	void setFontOffset(double offset);
-
 protected:
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();
 
 	QString m_type;  // can be "label", "display", "edit", "scroll". In old widget format can also be "display".
 	// TODO this shouldn't be used anymore with the new format, as the type is found by querying getWidgetType()
-
-	//Configuration options
-	double m_fontScaling, m_fontOffset;
 
     QTextEdit *text;
     // QPushButton *textColor;
