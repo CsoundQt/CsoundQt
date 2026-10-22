@@ -18,42 +18,42 @@ To find out more about the possibilities and usage of widgets, have a look into 
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 1
-0dbfs = 1
+0dbfs  = 1
 
-instr 1 
-; read checkboxes
-kRead invalue "read"
-kSound invalue "sound"
-kDance invalue "dance"
+instr 1
+  ; read checkboxes
+  kRead  = chnget("read")
+  kSound = chnget("sound")
+  kDance = chnget("dance")
 
 
-if kRead == 1 then
-	; Read Point values
-	kpoint_x invalue "point_x"
-	kpoint_y invalue "point_y"
-	printks "(x: %f, y: %f)%n", 0.2, kpoint_x, kpoint_y
-endif
+  if kRead == 1 then
+    ; Read Point values
+    kpoint_x = chnget("point_x")
+    kpoint_y = chnget("point_y")
+    printks "(x: %f, y: %f)%n", 0.2, kpoint_x, kpoint_y
+  endif
 
-if kSound == 1 then
-	; Sound Point
-	kpoint_x invalue "point_x"
-	kpoint_y invalue "point_y"
-	apoint_x interp  kpoint_x			; casts both k-signals ...
-	apoint_y interp  kpoint_y			; ... to audiorate
-	aOut oscili apoint_y, apoint_x*1000, 1
-	out aOut
-endif
+  if kSound == 1 then
+    ; Sound Point
+    kpoint_x = chnget("point_x")
+    kpoint_y = chnget("point_y")
+    apoint_x = interp(kpoint_x)  ; casts both k-signals ...
+    apoint_y = interp(kpoint_y)  ; ... to audiorate
+    aOut     = oscili(apoint_y, apoint_x*1000, 1)
+    out aOut
+  endif
 
-if kDance == 1 then
-	; Dance Point
-	knew_x randomh 0, 1, 15  ;change here for the
-	knew_y randomh 0, 1, 15  ;speed of the changes
-	outvalue "point_x", knew_x
-	outvalue "point_y", knew_y
-endif
+  if kDance == 1 then
+    ; Dance Point
+    knew_x = randomh(0, 1, 15)  ; change here for the
+    knew_y = randomh(0, 1, 15)  ; speed of the changes
+    chnset(knew_x, "point_x")
+    chnset(knew_y, "point_y")
+  endif
 endin
 
 
@@ -65,6 +65,8 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
+
+
 
 <bsbPanel>
  <label>Widgets</label>
@@ -87,7 +89,9 @@ e
   <width>318</width>
   <height>253</height>
   <uuid>{7b88d65c-1539-4552-8c37-0c566fb3c631}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -96,10 +100,11 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.92621702</xValue>
-  <yValue>0.36287013</yValue>
+  <xValue>0.53011989</xValue>
+  <yValue>0.71456583</yValue>
   <type>point</type>
   <pointsize>7</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
@@ -124,7 +129,9 @@ e
   <width>134</width>
   <height>30</height>
   <uuid>{5d76e7c2-5c54-4aa6-b637-344e10818acd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -133,7 +140,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -144,6 +152,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -155,7 +168,9 @@ e
   <width>135</width>
   <height>73</height>
   <uuid>{a61ce639-4796-4143-9d31-67e36f6ce9d5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -164,7 +179,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -175,6 +191,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -186,7 +207,9 @@ e
   <width>120</width>
   <height>70</height>
   <uuid>{85a10aea-c364-4c4e-a872-505d4d0c0776}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -195,7 +218,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -206,6 +230,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -217,7 +246,9 @@ e
   <width>161</width>
   <height>64</height>
   <uuid>{224f540f-525e-43d3-98b1-f5367dd76d89}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -226,7 +257,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -237,6 +269,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -248,7 +285,9 @@ e
   <width>183</width>
   <height>252</height>
   <uuid>{a75f9ef6-a277-4f6b-bcf7-4b3d0ddfc6fe}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -272,7 +311,9 @@ e
   <width>514</width>
   <height>39</height>
   <uuid>{5e3f1106-b2bd-4a74-98a1-2023743bda81}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -281,7 +322,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -292,20 +334,27 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
-  <x>173</x>
-  <y>32</y>
+  <x>175</x>
+  <y>30</y>
   <width>100</width>
   <height>30</height>
   <uuid>{b8851d94-4074-488b-95f4-9cfb9d01a4aa}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
@@ -317,6 +366,18 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>188</r>
+   <g>227</g>
+   <b>12</b>
+  </color>
+  <pressedColor>#00aa00</pressedColor>
+  <borderColor>#00a100</borderColor>
+  <textColor>#2d2d2d</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>read</objectName>
@@ -325,11 +386,13 @@ e
   <width>20</width>
   <height>20</height>
   <uuid>{15e01f48-48f0-4107-8a0d-ca8e9a9c2b5f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <selected>false</selected>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -341,11 +404,13 @@ e
   <width>20</width>
   <height>20</height>
   <uuid>{cfba4b21-f2fd-4235-bd00-2d1078632488}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <selected>false</selected>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -357,7 +422,9 @@ e
   <width>20</width>
   <height>20</height>
   <uuid>{281f87bc-d138-4dbf-b70e-fc8ca1ed78ab}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -368,12 +435,14 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Stop</objectName>
-  <x>328</x>
-  <y>32</y>
+  <x>280</x>
+  <y>30</y>
   <width>100</width>
   <height>30</height>
   <uuid>{1c1d134d-8d23-4f33-8eed-8205e3cabcda}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -387,6 +456,18 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>188</r>
+   <g>227</g>
+   <b>12</b>
+  </color>
+  <pressedColor>#00aa00</pressedColor>
+  <borderColor>#00a100</borderColor>
+  <textColor>#2d2d2d</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -3,10 +3,10 @@
 -m128
 </CsOptions>
 <CsInstruments>
-sr     = 44100
-ksmps  = 64
+sr = 44100
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
 /***** MIDI RECORDER *****/
 // Records MIDI note events
@@ -84,8 +84,8 @@ schedule(GetMidi, 0, -1)
 
 instr Record
 
-  RecPointer init 0
-  RecTime    init 0
+  RecPointer = init(0)
+  RecTime    = init(0)
   RecTime += 1/kr
   chnset(k(1), "rec-is-on")
   if lastcycle() == 1 then
@@ -132,10 +132,10 @@ instr Play
 
 endin
 
-instr MidiSound //change to anything you like
+instr MidiSound  // change to anything you like
 
   note:i  = p4
-  dB:k    = scale2(p5/127, -40, 0) //scale velocity to range of -40 to 0 dB
+  dB:k    = scale2(p5/127, -40, 0)  // scale velocity to range of -40 to 0 dB
   sound:a = poscil(ampdb(dB), mtof(note))+poscil(ampdb(dB)/10, mtof:k(note+randomi:k(23.85, 24.15, 10, 3)))
   outall(linenr:a(sound/2, .1, .1, .01))
 

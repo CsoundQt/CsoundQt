@@ -10,13 +10,13 @@ To make the Widgets-Panel visible, click the Widgets symbol in the menu or press
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 instr 1
-;Nothing here...
+  ; Nothing here...
 endin
 </CsInstruments>
 <CsScore>
@@ -25,16 +25,6 @@ endin
 </CsoundSynthesizer>
 ; written by Andres Cabrera
 
-
-
-
-
-
-
-
-
-
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -56,7 +46,9 @@ endin
   <width>210</width>
   <height>39</height>
   <uuid>{ee6146d0-64e9-4c42-98da-f5d144c2d06e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -65,7 +57,8 @@ endin
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>26</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>241</r>
    <g>241</g>
@@ -76,6 +69,11 @@ endin
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -87,7 +85,9 @@ endin
   <width>392</width>
   <height>75</height>
   <uuid>{7300709a-a337-4357-8292-f78e20b003b4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -96,7 +96,8 @@ endin
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>241</r>
    <g>241</g>
@@ -107,6 +108,11 @@ endin
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -118,7 +124,9 @@ endin
   <width>391</width>
   <height>140</height>
   <uuid>{62393637-5d87-4d05-978d-fa18be6cc92c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -127,7 +135,8 @@ endin
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>241</r>
    <g>241</g>
@@ -138,6 +147,11 @@ endin
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -149,7 +163,9 @@ endin
   <width>390</width>
   <height>120</height>
   <uuid>{b38cec05-f765-43a8-9353-ddc36f0b0abd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -158,7 +174,8 @@ endin
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>241</r>
    <g>241</g>
@@ -169,6 +186,11 @@ endin
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>

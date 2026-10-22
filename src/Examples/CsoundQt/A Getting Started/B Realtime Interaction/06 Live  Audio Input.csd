@@ -17,31 +17,33 @@ More information concerning realtime-audio can be found in the Csound-Manual: Us
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps =  32
+sr     = 44100
+ksmps  = 64
 nchnls = 1
-0dbfs = 1
+0dbfs  = 1
 
 instr 1
-aInput inch 1						; read audiohardware channel 1
-ifftsize = 1024						; set the buffersize for later fft-analysis
-iwtype = 1   						; hanning window
-fsig pvsanal   aInput, ifftsize, ifftsize/4, ifftsize, iwtype	; generate an fsig from the mono audio source
-gkFreq, gkAmp pvspitch fsig, 0.01			; pitch and amplitude analysis tool
-outvalue "pitch", gkFreq				; send pitch-values to Widget
-outvalue "amp", gkAmp					; send amplitude-values to Widget
+  aInput inch 1    ; read audiohardware channel 1
+  ifftsize = 1024  ; set the buffersize for later fft-analysis
+  iwtype   = 1     ; hanning window
+  ; generate an fsig from the mono audio source
+  fsig = pvsanal(aInput, ifftsize, ifftsize/4, ifftsize, iwtype)
+  gkFreq, gkAmp pvspitch fsig, 0.01  ; pitch and amplitude analysis tool
+  chnset(gkFreq, "pitch")            ; send pitch-values to Widget
+  chnset(gkAmp,  "amp")              ; send amplitude-values to Widget
 endin
 
 
 
 instr 2
-aSrc oscili gkAmp, gkFreq, 1			; instrument 1 used global k-variables, so they can be read-out here..
-kFeedback=0.6					; feedback-amount for the delay
-aDelay delayr 1						
-aWet	deltapi 0.2
-	delayw aSrc+(aWet*kFeedback)
-aOut = aSrc+(aWet*0.3)				; mixing the oscillator with the delay
-out aOut
+  ; instrument 1 used global k-variables, so they can be read-out here..
+  aSrc      = oscili(gkAmp, gkFreq, 1)
+  kFeedback = 0.6  ; feedback-amount for the delay
+  aDelay    = delayr(1)
+  aWet      = deltapi(0.2)
+  delayw aSrc+(aWet*kFeedback)
+  aOut = aSrc+(aWet*0.3)  ; mixing the oscillator with the delay
+  out aOut
 endin
 
 </CsInstruments>

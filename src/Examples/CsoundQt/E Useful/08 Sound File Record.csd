@@ -3,10 +3,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr     = 44100
-ksmps  = 32
+sr = 44100
+ksmps = 64
 nchnls = 2  ; change this in respect to your audio device
-0dbfs  = 1
+0dbfs = 1
 
 /*****Recording a soundfile*****/
 ; example for CsoundQt
@@ -19,10 +19,9 @@ nchnls = 2  ; change this in respect to your audio device
 /********UDOs for Signal Display*********/
 
 gi_db_range = 60  ; dB range to be displayed in the LED widget
-gi_hold     = 2   ; time (sec) to hold "red light" if signal is over maxmimum
+gi_hold = 2       ; time (sec) to hold "red light" if signal is over maxmimum
 
-opcode ShowLED_a, 0, Saki
-  Soutchan, asig, ktrig, idbrange xin
+opcode ShowLED_a(Soutchan:S, asig:a, ktrig:k, idbrange:i):()
   kdispval max_k asig, ktrig, 1
   kdb  = dbfsamp(kdispval)
   kval = (idbrange + kdb) / idbrange
@@ -31,12 +30,11 @@ opcode ShowLED_a, 0, Saki
   endif
 endop
 
-opcode ShowOver_a, 0, Saki
-  Soutchan, asig, ktrig, iholdtm xin
-  kon init 0
-  ktim times
-  kstart init 0
-  kend   init 0
+opcode ShowOver_a(Soutchan:S, asig:a, ktrig:k, iholdtm:i):()
+  kon = init(0)
+  ktim = times()
+  kstart = init(0)
+  kend = init(0)
   iholdtm = (iholdtm < .01 ? .01 : iholdtm)  ; avoiding too short hold times
   kmax max_k asig, ktrig, 1
   if kon == 0 && kmax > 1 && ktrig == 1 then
@@ -122,38 +120,38 @@ chn_k "in8over_post", 2
 
 instr 1  ; always on
 
-  gSfile     chnget "_Browse1"  ; output file name
-  krecord    chnget "record"
-  kstop      chnget "stop"
-  kchn1onoff chnget "chn1onoff"  ; 1=record this channel, 0=not
-  kchn2onoff chnget "chn2onoff"
-  kchn3onoff chnget "chn3onoff"
-  kchn4onoff chnget "chn4onoff"
-  kchn5onoff chnget "chn5onoff"
-  kchn6onoff chnget "chn6onoff"
-  kchn7onoff chnget "chn7onoff"
-  kchn8onoff chnget "chn8onoff"
-  kchn1      chnget "chn1"  ; which physical channel goes here
-  kchn2      chnget "chn2"
-  kchn3      chnget "chn3"
-  kchn4      chnget "chn4"
-  kchn5      chnget "chn5"
-  kchn6      chnget "chn6"
-  kchn7      chnget "chn7"
-  kchn8      chnget "chn8"
-  kfilfrmt   chnget "fileformat"  ; 0=wav, 1=aiff
+  gSfile = chnget("_Browse1")  ; output file name
+  krecord = chnget("record")
+  kstop = chnget("stop")
+  kchn1onoff = chnget("chn1onoff")  ; 1=record this channel, 0=not
+  kchn2onoff = chnget("chn2onoff")
+  kchn3onoff = chnget("chn3onoff")
+  kchn4onoff = chnget("chn4onoff")
+  kchn5onoff = chnget("chn5onoff")
+  kchn6onoff = chnget("chn6onoff")
+  kchn7onoff = chnget("chn7onoff")
+  kchn8onoff = chnget("chn8onoff")
+  kchn1 = chnget("chn1")  ; which physical channel goes here
+  kchn2 = chnget("chn2")
+  kchn3 = chnget("chn3")
+  kchn4 = chnget("chn4")
+  kchn5 = chnget("chn5")
+  kchn6 = chnget("chn6")
+  kchn7 = chnget("chn7")
+  kchn8 = chnget("chn8")
+  kfilfrmt = chnget("fileformat")  ; 0=wav, 1=aiff
   kfilfrmt = kfilfrmt + 1
-  kbitdepth chnget "bitdepth"  ; 0=16bit, 1=24bit, 2=32bit
-  kdbrange  chnget "dbrange"
-  kpeakhold chnget "peakhold"
-  kampdisp  chnget "ampdisp"          ; 0=dB, 1=raw
+  kbitdepth = chnget("bitdepth")  ; 0=16bit, 1=24bit, 2=32bit
+  kdbrange = chnget("dbrange")
+  kpeakhold = chnget("peakhold")
+  kampdisp = chnget("ampdisp")        ; 0=dB, 1=raw
   kampdisp = (kampdisp == 1 ? 0 : 1)  ; 1=dB, 0=raw
-  gkgain chnget "gain"
-  Sgain_disp sprintfk "%+.2f dB", gkgain
+  gkgain = chnget("gain")
+  Sgain_disp = sprintfk("%+.2f dB", gkgain)
   chnset Sgain_disp, "gain_disp"
 
   ; saying hello
-  ktimek timek
+  ktimek = timek()
   if ktimek == 1 then
     chnset "Waiting ...", "message"
     chnset "00", "hor"
@@ -166,14 +164,14 @@ instr 1  ; always on
   kformat = (kbitdepth == 0 ? kfilfrmt*10+2 : (kbitdepth == 1 ? kfilfrmt*10+8 : kfilfrmt*10+6))
 
   ; number of the instr which records
-  krecinstr init 0
+  krecinstr = init(0)
 
   ; how many channels are checked
   kchnsum = kchn1onoff + kchn2onoff + kchn3onoff + kchn4onoff + kchn5onoff + kchn6onoff + kchn7onoff + kchn8onoff
 
   ; calling the record instrument and stopping
-  krecstat init 0
-  krechanged changed krecord
+  krecstat   = init(0)
+  krechanged = changed(krecord)
   if krecord == 1 && krecstat == 0 then
     krecstat = 1
     chnset "Recording...", "message"
@@ -233,7 +231,7 @@ instr 1  ; always on
   endif
 
 
-  kTrigDisp metro 10  ; refresh rate of display
+  kTrigDisp = metro(10)  ; refresh rate of display
 
   ShowLED_a  "in1_pre", ain1pre, kTrigDisp, gi_db_range
   ShowLED_a  "in2_pre", ain2pre, kTrigDisp, gi_db_range
@@ -282,36 +280,36 @@ endin
 instr 101  ; records mono
   iformat = p4
   ; which channel is checked and what is its input channel number
-  ichnls = 1
-  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
-  iwrtpnt init 0
-  ipfld   init 5  ; first check p5
+  ichnls  = 1
+  itab    = ftgentmp(0, 0, -ichnls, -2, 0)  ; ftable for writing the result
+  iwrtpnt = init(0)
+  ipfld   = init(5)  ; first check p5
 check:
   if p(ipfld) == 1 then
     ipfldval = ipfld + 8
-    tabw_i p(ipfldval), iwrtpnt, itab
-    iwrtpnt = iwrtpnt + 1
+    tabw_i   = p((ipfldval), iwrtpnt, itab)
+    iwrtpnt  = iwrtpnt + 1
   endif
   ipfld = ipfld + 1
   if iwrtpnt < ichnls igoto check
 
   ; read the values from itab and write the soundfile
   inchn1 tab_i 0, itab
-  Smessage sprintf "Writing input channel %d to file %s", inchn1, gSfile
+  Smessage = sprintf("Writing input channel %d to file %s", inchn1, gSfile)
   chnset Smessage, "message2"
   a1 inch inchn1
   fout gSfile, iformat, a1*ampdbfs(gkgain)
 
   ; showing the clock
-  ktimout timeinsts
+  ktimout = timeinsts()
   ktimouthor = int(ktimout / 3600)
-  Shor sprintfk "%02d", ktimouthor
+  Shor = sprintfk("%02d", ktimouthor)
   ktimoutmin = int(ktimout / 60)
-  Smin sprintfk "%02d", ktimoutmin
+  Smin = sprintfk("%02d", ktimoutmin)
   ktimoutsec = ktimout % 60
-  Ssec sprintfk "%02d", ktimoutsec
+  Ssec = sprintfk("%02d", ktimoutsec)
   ktimoutms = frac(ktimout) * 1000
-  Sms sprintfk "%03d", ktimoutms
+  Sms = sprintfk("%03d", ktimoutms)
   chnset Shor, "hor"
   chnset Smin, "min"
   chnset Ssec, "sec"
@@ -321,15 +319,15 @@ endin
 instr 102  ; records stereo
   iformat = p4
   ; which channels are checked and what are their input channel numbers
-  ichnls = 2
-  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
-  iwrtpnt init 0
-  ipfld   init 5  ; first check p5
+  ichnls  = 2
+  itab    = ftgentmp(0, 0, -ichnls, -2, 0)  ; ftable for writing the result
+  iwrtpnt = init(0)
+  ipfld   = init(5)  ; first check p5
 check:
   if p(ipfld) == 1 then
     ipfldval = ipfld + 8
-    tabw_i p(ipfldval), iwrtpnt, itab
-    iwrtpnt = iwrtpnt + 1
+    tabw_i   = p((ipfldval), iwrtpnt, itab)
+    iwrtpnt  = iwrtpnt + 1
   endif
   ipfld = ipfld + 1
   if iwrtpnt < ichnls igoto check
@@ -337,22 +335,22 @@ check:
   ; read the values from itab and write the soundfile
   inchn1 tab_i 0, itab
   inchn2 tab_i 1, itab
-  Smessage sprintf "Writing input channels %d and %d to file %s", inchn1, inchn2, gSfile
+  Smessage = sprintf("Writing input channels %d and %d to file %s", inchn1, inchn2, gSfile)
   chnset Smessage, "message2"
   a1 inch inchn1
   a2 inch inchn2
   fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain)
 
   ; showing the clock
-  ktimout timeinsts
+  ktimout = timeinsts()
   ktimouthor = int(ktimout / 3600)
-  Shor sprintfk "%02d", ktimouthor
+  Shor = sprintfk("%02d", ktimouthor)
   ktimoutmin = int(ktimout / 60)
-  Smin sprintfk "%02d", ktimoutmin
+  Smin = sprintfk("%02d", ktimoutmin)
   ktimoutsec = ktimout % 60
-  Ssec sprintfk "%02d", ktimoutsec
+  Ssec = sprintfk("%02d", ktimoutsec)
   ktimoutms = frac(ktimout) * 1000
-  Sms sprintfk "%03d", ktimoutms
+  Sms = sprintfk("%03d", ktimoutms)
   chnset Shor, "hor"
   chnset Smin, "min"
   chnset Ssec, "sec"
@@ -362,15 +360,15 @@ endin
 instr 103  ; records 3 channels
   iformat = p4
   ; which channels are checked and what are their input channel numbers
-  ichnls = 3
-  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
-  iwrtpnt init 0
-  ipfld   init 5  ; first check p5
+  ichnls  = 3
+  itab    = ftgentmp(0, 0, -ichnls, -2, 0)  ; ftable for writing the result
+  iwrtpnt = init(0)
+  ipfld   = init(5)  ; first check p5
 check:
   if p(ipfld) == 1 then
     ipfldval = ipfld + 8
-    tabw_i p(ipfldval), iwrtpnt, itab
-    iwrtpnt = iwrtpnt + 1
+    tabw_i   = p((ipfldval), iwrtpnt, itab)
+    iwrtpnt  = iwrtpnt + 1
   endif
   ipfld = ipfld + 1
   if iwrtpnt < ichnls igoto check
@@ -379,7 +377,7 @@ check:
   inchn1 tab_i 0, itab
   inchn2 tab_i 1, itab
   inchn3 tab_i 2, itab
-  Smessage sprintf "Writing input channels %d, %d and %d to file %s", inchn1, inchn2, inchn3, gSfile
+  Smessage = sprintf("Writing input channels %d, %d and %d to file %s", inchn1, inchn2, inchn3, gSfile)
   chnset Smessage, "message2"
   a1 inch inchn1
   a2 inch inchn2
@@ -387,15 +385,15 @@ check:
   fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain)
 
   ; showing the clock
-  ktimout timeinsts
+  ktimout = timeinsts()
   ktimouthor = int(ktimout / 3600)
-  Shor sprintfk "%02d", ktimouthor
+  Shor = sprintfk("%02d", ktimouthor)
   ktimoutmin = int(ktimout / 60)
-  Smin sprintfk "%02d", ktimoutmin
+  Smin = sprintfk("%02d", ktimoutmin)
   ktimoutsec = ktimout % 60
-  Ssec sprintfk "%02d", ktimoutsec
+  Ssec = sprintfk("%02d", ktimoutsec)
   ktimoutms = frac(ktimout) * 1000
-  Sms sprintfk "%03d", ktimoutms
+  Sms = sprintfk("%03d", ktimoutms)
   chnset Shor, "hor"
   chnset Smin, "min"
   chnset Ssec, "sec"
@@ -405,15 +403,15 @@ endin
 instr 104  ; records 4 channels
   iformat = p4
   ; which channels are checked and what are their input channel numbers
-  ichnls = 4
-  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
-  iwrtpnt init 0
-  ipfld   init 5  ; first check p5
+  ichnls  = 4
+  itab    = ftgentmp(0, 0, -ichnls, -2, 0)  ; ftable for writing the result
+  iwrtpnt = init(0)
+  ipfld   = init(5)  ; first check p5
 check:
   if p(ipfld) == 1 then
     ipfldval = ipfld + 8
-    tabw_i p(ipfldval), iwrtpnt, itab
-    iwrtpnt = iwrtpnt + 1
+    tabw_i   = p((ipfldval), iwrtpnt, itab)
+    iwrtpnt  = iwrtpnt + 1
   endif
   ipfld = ipfld + 1
   if iwrtpnt < ichnls igoto check
@@ -423,7 +421,7 @@ check:
   inchn2 tab_i 1, itab
   inchn3 tab_i 2, itab
   inchn4 tab_i 3, itab
-  Smessage sprintf "Writing input channels %d, %d, %d and %d to file %s", inchn1, inchn2, inchn3, inchn4, gSfile
+  Smessage = sprintf("Writing input channels %d, %d, %d and %d to file %s", inchn1, inchn2, inchn3, inchn4, gSfile)
   chnset Smessage, "message2"
   a1 inch inchn1
   a2 inch inchn2
@@ -432,15 +430,15 @@ check:
   fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain)
 
   ; showing the clock
-  ktimout timeinsts
+  ktimout = timeinsts()
   ktimouthor = int(ktimout / 3600)
-  Shor sprintfk "%02d", ktimouthor
+  Shor = sprintfk("%02d", ktimouthor)
   ktimoutmin = int(ktimout / 60)
-  Smin sprintfk "%02d", ktimoutmin
+  Smin = sprintfk("%02d", ktimoutmin)
   ktimoutsec = ktimout % 60
-  Ssec sprintfk "%02d", ktimoutsec
+  Ssec = sprintfk("%02d", ktimoutsec)
   ktimoutms = frac(ktimout) * 1000
-  Sms sprintfk "%03d", ktimoutms
+  Sms = sprintfk("%03d", ktimoutms)
   chnset Shor, "hor"
   chnset Smin, "min"
   chnset Ssec, "sec"
@@ -450,15 +448,15 @@ endin
 instr 105  ; records 5 channels
   iformat = p4
   ; which channels are checked and what are their input channel numbers
-  ichnls = 5
-  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
-  iwrtpnt init 0
-  ipfld   init 5  ; first check p5
+  ichnls  = 5
+  itab    = ftgentmp(0, 0, -ichnls, -2, 0)  ; ftable for writing the result
+  iwrtpnt = init(0)
+  ipfld   = init(5)  ; first check p5
 check:
   if p(ipfld) == 1 then
     ipfldval = ipfld + 8
-    tabw_i p(ipfldval), iwrtpnt, itab
-    iwrtpnt = iwrtpnt + 1
+    tabw_i   = p((ipfldval), iwrtpnt, itab)
+    iwrtpnt  = iwrtpnt + 1
   endif
   ipfld = ipfld + 1
   if iwrtpnt < ichnls igoto check
@@ -469,8 +467,8 @@ check:
   inchn3 tab_i 2, itab
   inchn4 tab_i 3, itab
   inchn5 tab_i 4, itab
-  Smessage sprintf "Writing input channels %d, %d, %d, %d and %d to file %s", \
-    inchn1, inchn2, inchn3, inchn4, inchn5, gSfile
+  Smessage = sprintf("Writing input channels %d, %d, %d, %d and %d to file %s", \)
+  inchn1, inchn2, inchn3, inchn4, inchn5, gSfile
   chnset Smessage, "message2"
   a1 inch inchn1
   a2 inch inchn2
@@ -480,15 +478,15 @@ check:
   fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain)
 
   ; showing the clock
-  ktimout timeinsts
+  ktimout = timeinsts()
   ktimouthor = int(ktimout / 3600)
-  Shor sprintfk "%02d", ktimouthor
+  Shor = sprintfk("%02d", ktimouthor)
   ktimoutmin = int(ktimout / 60)
-  Smin sprintfk "%02d", ktimoutmin
+  Smin = sprintfk("%02d", ktimoutmin)
   ktimoutsec = ktimout % 60
-  Ssec sprintfk "%02d", ktimoutsec
+  Ssec = sprintfk("%02d", ktimoutsec)
   ktimoutms = frac(ktimout) * 1000
-  Sms sprintfk "%03d", ktimoutms
+  Sms = sprintfk("%03d", ktimoutms)
   chnset Shor, "hor"
   chnset Smin, "min"
   chnset Ssec, "sec"
@@ -498,15 +496,15 @@ endin
 instr 106  ; records 6 channels
   iformat = p4
   ; which channels are checked and what are their input channel numbers
-  ichnls = 6
-  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
-  iwrtpnt init 0
-  ipfld   init 5  ; first check p5
+  ichnls  = 6
+  itab    = ftgentmp(0, 0, -ichnls, -2, 0)  ; ftable for writing the result
+  iwrtpnt = init(0)
+  ipfld   = init(5)  ; first check p5
 check:
   if p(ipfld) == 1 then
     ipfldval = ipfld + 8
-    tabw_i p(ipfldval), iwrtpnt, itab
-    iwrtpnt = iwrtpnt + 1
+    tabw_i   = p((ipfldval), iwrtpnt, itab)
+    iwrtpnt  = iwrtpnt + 1
   endif
   ipfld = ipfld + 1
   if iwrtpnt < ichnls igoto check
@@ -518,8 +516,8 @@ check:
   inchn4 tab_i 3, itab
   inchn5 tab_i 4, itab
   inchn6 tab_i 5, itab
-  Smessage sprintf "Writing input channels %d, %d, %d, %d, %d and %d to file %s", \
-    inchn1, inchn2, inchn3, inchn4, inchn5, inchn6, gSfile
+  Smessage = sprintf("Writing input channels %d, %d, %d, %d, %d and %d to file %s", \)
+  inchn1, inchn2, inchn3, inchn4, inchn5, inchn6, gSfile
   chnset Smessage, "message2"
   a1 inch inchn1
   a2 inch inchn2
@@ -530,15 +528,15 @@ check:
   fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain)
 
   ; showing the clock
-  ktimout timeinsts
+  ktimout = timeinsts()
   ktimouthor = int(ktimout / 3600)
-  Shor sprintfk "%02d", ktimouthor
+  Shor = sprintfk("%02d", ktimouthor)
   ktimoutmin = int(ktimout / 60)
-  Smin sprintfk "%02d", ktimoutmin
+  Smin = sprintfk("%02d", ktimoutmin)
   ktimoutsec = ktimout % 60
-  Ssec sprintfk "%02d", ktimoutsec
+  Ssec = sprintfk("%02d", ktimoutsec)
   ktimoutms = frac(ktimout) * 1000
-  Sms sprintfk "%03d", ktimoutms
+  Sms = sprintfk("%03d", ktimoutms)
   chnset Shor, "hor"
   chnset Smin, "min"
   chnset Ssec, "sec"
@@ -548,15 +546,15 @@ endin
 instr 107  ; records 7 channels
   iformat = p4
   ; which channels are checked and what are their input channel numbers
-  ichnls = 7
-  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
-  iwrtpnt init 0
-  ipfld   init 5  ; first check p5
+  ichnls  = 7
+  itab    = ftgentmp(0, 0, -ichnls, -2, 0)  ; ftable for writing the result
+  iwrtpnt = init(0)
+  ipfld   = init(5)  ; first check p5
 check:
   if p(ipfld) == 1 then
     ipfldval = ipfld + 8
-    tabw_i p(ipfldval), iwrtpnt, itab
-    iwrtpnt = iwrtpnt + 1
+    tabw_i   = p((ipfldval), iwrtpnt, itab)
+    iwrtpnt  = iwrtpnt + 1
   endif
   ipfld = ipfld + 1
   if iwrtpnt < ichnls igoto check
@@ -569,8 +567,8 @@ check:
   inchn5 tab_i 4, itab
   inchn6 tab_i 5, itab
   inchn7 tab_i 6, itab
-  Smessage sprintf "Writing input channels %d, %d, %d, %d, %d, %d and %d to file %s", \
-    inchn1, inchn2, inchn3, inchn4, inchn5, inchn6, inchn7, gSfile
+  Smessage = sprintf("Writing input channels %d, %d, %d, %d, %d, %d and %d to file %s", \)
+  inchn1, inchn2, inchn3, inchn4, inchn5, inchn6, inchn7, gSfile
   chnset Smessage, "message2"
   a1 inch inchn1
   a2 inch inchn2
@@ -582,15 +580,15 @@ check:
   fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain), a7*ampdbfs(gkgain)
 
   ; showing the clock
-  ktimout timeinsts
+  ktimout = timeinsts()
   ktimouthor = int(ktimout / 3600)
-  Shor sprintfk "%02d", ktimouthor
+  Shor = sprintfk("%02d", ktimouthor)
   ktimoutmin = int(ktimout / 60)
-  Smin sprintfk "%02d", ktimoutmin
+  Smin = sprintfk("%02d", ktimoutmin)
   ktimoutsec = ktimout % 60
-  Ssec sprintfk "%02d", ktimoutsec
+  Ssec = sprintfk("%02d", ktimoutsec)
   ktimoutms = frac(ktimout) * 1000
-  Sms sprintfk "%03d", ktimoutms
+  Sms = sprintfk("%03d", ktimoutms)
   chnset Shor, "hor"
   chnset Smin, "min"
   chnset Ssec, "sec"
@@ -600,15 +598,15 @@ endin
 instr 108  ; records 8 channels
   iformat = p4
   ; which channels are checked and what are their input channel numbers
-  ichnls = 8
-  itab ftgentmp 0, 0, -ichnls, -2, 0  ; ftable for writing the result
-  iwrtpnt init 0
-  ipfld   init 5  ; first check p5
+  ichnls  = 8
+  itab    = ftgentmp(0, 0, -ichnls, -2, 0)  ; ftable for writing the result
+  iwrtpnt = init(0)
+  ipfld   = init(5)  ; first check p5
 check:
   if p(ipfld) == 1 then
     ipfldval = ipfld + 8
-    tabw_i p(ipfldval), iwrtpnt, itab
-    iwrtpnt = iwrtpnt + 1
+    tabw_i   = p((ipfldval), iwrtpnt, itab)
+    iwrtpnt  = iwrtpnt + 1
   endif
   ipfld = ipfld + 1
   if iwrtpnt < ichnls igoto check
@@ -622,8 +620,8 @@ check:
   inchn6 tab_i 5, itab
   inchn7 tab_i 6, itab
   inchn8 tab_i 7, itab
-  Smessage sprintf "Writing input channels %d, %d, %d, %d, %d, %d, %d and %d to file %s", \
-    inchn1, inchn2, inchn3, inchn4, inchn5, inchn6, inchn7, inchn8, gSfile
+  Smessage = sprintf("Writing input channels %d, %d, %d, %d, %d, %d, %d and %d to file %s", \)
+  inchn1, inchn2, inchn3, inchn4, inchn5, inchn6, inchn7, inchn8, gSfile
   chnset Smessage, "message2"
   a1 inch inchn1
   a2 inch inchn2
@@ -636,15 +634,15 @@ check:
   fout gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain), a7*ampdbfs(gkgain), a8*ampdbfs(gkgain)
 
   ; showing the clock
-  ktimout timeinsts
+  ktimout = timeinsts()
   ktimouthor = int(ktimout / 3600)
-  Shor sprintfk "%02d", ktimouthor
+  Shor = sprintfk("%02d", ktimouthor)
   ktimoutmin = int(ktimout / 60)
-  Smin sprintfk "%02d", ktimoutmin
+  Smin = sprintfk("%02d", ktimoutmin)
   ktimoutsec = ktimout % 60
-  Ssec sprintfk "%02d", ktimoutsec
+  Ssec = sprintfk("%02d", ktimoutsec)
   ktimoutms = frac(ktimout) * 1000
-  Sms sprintfk "%03d", ktimoutms
+  Sms = sprintfk("%03d", ktimoutms)
   chnset Shor, "hor"
   chnset Smin, "min"
   chnset Ssec, "sec"

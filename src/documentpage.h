@@ -74,6 +74,11 @@ public:
 	void showParametersInEditor();
     void setHighlightingTheme(QString theme);
     void setParsedUDOs(QStringList udos);
+    void setGlobalVariables(const QStringList &variables);
+    void setGlobalStringVariables(const QStringList &variables);
+    void setInstrumentNames(const QStringList &names);
+    QStringList getWidgetChannels();
+    void updateWidgetChannels();
     void enableScoreSyntaxHighlighting(bool status);
     virtual QString getFullText();
 	QString getSelectedText(int section = -1);

@@ -3,41 +3,53 @@
 This file explains the "Document Structure". If you press run, you won't hear anything!
 
 A Csound document is structured in four main sections. Each sections is opened with a <xyz> tag and closed with </xyz> tag. Every Csound file starts with a <CsoundSynthesizer> tag, and ends with </CsoundSynthesizer>, only text that is inbetween, will be compiled by Csound.
+
 */
 
-<CsoundSynthesizer> 	; START OF A CSOUND FILE
+<CsoundSynthesizer> 	
 
-<CsOptions> 		; OPTIONS
-; If you run Csound from CsoundQt, you can set options in the 'Preferences' menu more comfortably.
-; Read more details in the Csound Manual under: 1.Overview->The Csound Command->Comand-line Flags (by Category).
-</CsOptions> 		;close OPTIONS
+; START OF A CSOUND FILE
+
+<CsOptions> 		
+; OPTIONS
+; If you run Csound from CsoundQt, you can set options in the 'Preferences' 
+; menu more comfortably.
+</CsOptions> 		   ; close OPTIONS
 
 
-<CsInstruments> 		; INSTRUMENT SECTION
-; The instrumentheader section, specifies global options for instrument performance.
-sr = 44100 			; the samplerate for audiosignals is set to 44100 Hz (calculations per second)
-ksmps = 128 		; is the number of samples per control-block, -> ~345 Hz is the controlrate (sr/ksmps = controlrate HZ) 
+<CsInstruments> 	; INSTRUMENT SECTION
+
+; The instrument header section, specifies global 
+; options for instrument performance.
+
+sr     = 44100  ; the samplerate for audiosignals 
+ksmps  = 64  		; the number of samples per control-block
 nchnls = 2 			; the number of output channels is set to 2 (stereo)
-0dbfs = 1 			; the maximum output level before clipping (0dB FS) is set to 1, so the amplitude range is 0-1
+0dbfs  = 1 			; the max. output level (0dB FS), so the amplitude range is 0-1
 
 ; Now you can define your instruments
-instr 1 			; first instrument
-				; this is empty, so nothing will be played
+
+instr 1 			  ; first instrument
+  prints ">>> First instrument! \n"
 endin
 
-instr 2 			; second instrument
-				; this is also empty, so nothing will be played
+instr 2 			  ; second instrument
+	prints ">>> Second instrument \n"
 endin
-</CsInstruments> 		;ends the INSTUMENT SECTION
+</CsInstruments> 		  ; <------ end if INSTRUMENT SECTION
 
 
-<CsScore> 			; SCORE
-				; instruments will be triggered here but this is empty as well
-e
-</CsScore> 			; ends the SCORE
-</CsoundSynthesizer> 	; ending of CSOUND FILE
+<CsScore>
+i 1 0 0
+i 2 1 0
+
+</CsScore> 			      ; <------- end of SCORE
+</CsoundSynthesizer> 	; <------- end of CSOUND FILE
+
 this will not become compiled :-), so I don't need the comment sign
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -59,14 +71,19 @@ this will not become compiled :-), so I don't need the comment sign
   <width>80</width>
   <height>25</height>
   <uuid>{12de81e4-fac6-4001-b773-b19de1632c09}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>empty :-)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>0</r>
    <g>0</g>
@@ -77,6 +94,11 @@ this will not become compiled :-), so I don't need the comment sign
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>

@@ -1,4 +1,4 @@
-/*Getting started.. 1.3 Basic Elements: Opcodes
+/* Getting started.. 1.3 Basic Elements: Opcodes
 
 The fundamental building blocks of a Csound instrument is the opcode. 
 Each opcode can be seen as little program itself, that does a specific task. Opcodes get a bold-blue highlighting in the CsoundQt editor. In this example 'line', 'expon', 'oscil', 'outvalue' and 'outs', are the opcodes used.
@@ -17,35 +17,36 @@ output Opcode input1, input2
 */
 
 <CsoundSynthesizer>
-<CsOptions>
-</CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 instr 1
-kFreq line 100, 5, 1000 		; 'line' generates a linear ramp, from 100-1000 Hz, taking 5 seconds
-aOut  oscili 0.2, kFreq, 1	; an oscillator whose frequency is taken from the value produced by 'line'
-	outvalue "freqsweep", kFreq   ; show the value from 'line' in a widget
-     outs aOut, aOut			 ; send the oscillator's audio to the audio output
+  ; 'line' generates a linear ramp, from 100-1000 Hz, taking 5 seconds
+  kFreq line 100, 5, 1000
+  ; an oscillator whose frequency is taken from the value produced by 'line'
+  aOut oscili 0.2, kFreq, 1
+  outvalue "freqsweep", kFreq  ; show the value from 'line' in a widget
+  outs aOut, aOut              ; send the oscillator's audio to the audio output
 endin
 
 
 instr 2
-kFreq expon 100, 5, 1000 		; the 'expon' exponential curve is more useful when working with frequencies
-aOut  oscili 0.2, kFreq, 1
-	outvalue "freqsweep", kFreq
-	outs aOut, aOut
+  ; the 'expon' exponential curve is more useful when working with frequencies
+  kFreq expon 100, 5, 1000
+  aOut oscili 0.2, kFreq, 1
+  outvalue "freqsweep", kFreq
+  outs aOut, aOut
 endin
 
 </CsInstruments>
 <CsScore>
-f 1 0 1024 10 1 				; the basic sine waveform for the oscillator is generated here 
+f 1 0 1024 10 1      ; the basic sine waveform for the oscillator is generated here 
 i 1 0 5
-i 2 5 5					; the exponential curve goes more even through the octaves
+i 2 5 5					     ; the exponential curve goes more even through the octaves
 e
 </CsScore>
 </CsoundSynthesizer>
@@ -57,6 +58,8 @@ e
 
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -78,7 +81,9 @@ e
   <width>248</width>
   <height>71</height>
   <uuid>{8a703a13-1bbf-4338-8e0a-993e086a405e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -87,7 +92,8 @@ e
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -98,6 +104,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -109,16 +120,19 @@ e
   <width>144</width>
   <height>29</height>
   <uuid>{30e5e14c-4c4b-46a1-8584-d8d488ec61e9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>409.663</label>
+  <label>216.504</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>0</r>
    <g>0</g>
@@ -129,6 +143,11 @@ e
    <g>109</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -140,10 +159,13 @@ e
   <width>255</width>
   <height>150</height>
   <uuid>{3e0a7775-89a7-4f52-85ea-52e3ff2348b1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
+  <objectName2/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -160,7 +182,9 @@ e
   <width>254</width>
   <height>53</height>
   <uuid>{f47b80f1-e5e6-4020-9065-17df4bb3ed44}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -169,7 +193,8 @@ e
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -180,6 +205,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -191,12 +221,15 @@ e
   <width>251</width>
   <height>109</height>
   <uuid>{17cbc48e-c1f3-4cae-aabc-d738a68aa532}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <value>0</value>
   <objectName2/>
+  <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -218,7 +251,9 @@ e
   <width>251</width>
   <height>69</height>
   <uuid>{9e3bc813-428f-4648-b9cd-5084a7fbe634}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -227,7 +262,8 @@ e
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -238,6 +274,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

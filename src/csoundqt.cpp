@@ -2594,7 +2594,9 @@ QString CsoundQt::writePlaybackTempFile(DocumentPage *page,
     if (sourceFileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
         // Examples can contain a <CsFileB> section with embedded data. The
         // editor text cannot reproduce that, so copy the original file then.
-        const QString fullText = page->getView()->getFullText();
+        // Use the page text, not only the editor text: a modified widget
+        // layout lives in <bsbPanel> and must survive recovery as well.
+        const QString fullText = page->getFullText();
         if (!fullText.contains("<CsFileB")) {
             data = fullText.toUtf8();
         } else {
@@ -2608,7 +2610,9 @@ QString CsoundQt::writePlaybackTempFile(DocumentPage *page,
             data = original.readAll();
         }
     } else {
-        data = page->getBasicText().toUtf8();
+        // The recovery copy must contain the complete document, including
+        // widgets and presets; getBasicText() would drop a modified GUI.
+        data = page->getFullText().toUtf8();
     }
 
     if (file.write(data) != data.size()) {
@@ -4900,6 +4904,14 @@ void CsoundQt::updateInspector()
     }
     if (!documentPages[curPage]->getFileName().endsWith(".py")) {
         m_inspector->parseText(documentPages[curPage]->getBasicText());
+        documentPages[curPage]->setGlobalVariables(m_inspector->getGlobalVariables());
+        documentPages[curPage]->setGlobalStringVariables(
+                    m_inspector->getGlobalStringVariables());
+        documentPages[curPage]->setInstrumentNames(m_inspector->getInstrumentNames());
+    } else {
+        documentPages[curPage]->setGlobalVariables({});
+        documentPages[curPage]->setGlobalStringVariables({});
+        documentPages[curPage]->setInstrumentNames({});
     }
     m_inspectorNeedsUpdate = false;
     QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateInspector()));

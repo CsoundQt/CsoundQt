@@ -19,38 +19,43 @@ Macros are used, to define the send and receive ports, so you can change them at
 <CsOptions>
 </CsOptions>
 <CsInstruments>
-ksmps=32
+ksmps = 64
 
-#define IPADDRESS	# "localhost" #
-#define S_PORT 		# 47120 #
-#define R_PORT 		# 47120 #
+#define IPADDRESS # "localhost" #
+#define S_PORT # 47120 #
+#define R_PORT # 47120 #
 
-turnon 1000															; starts instrument 1000 immediately
-turnon 1001															; starts instrument 1001 immediately
-	
+turnon 1000  ; starts instrument 1000 immediately
+turnon 1001  ; starts instrument 1001 immediately
 
-instr	1000
-	kNumber 	invalue "sendNumber"										; receive data from the Widget
-	kSlider		invalue "sendSlider"	
-	Stext sprintf "%i", $S_PORT									
-	outvalue "sndPortNum", Stext											; show the macro defined send-port-number on the Widget 
-	OSCsend   kNumber+kSlider, $IPADDRESS, $S_PORT, "/CsoundQt", "ff", kNumber, kSlider			; send data to the IP-adress, and port, when slider or number change
+
+instr 1000
+  kNumber = chnget("sendNumber")  ; receive data from the Widget
+  kSlider = chnget("sendSlider")
+  Stext   = sprintf("%i", $S_PORT)
+  chnset(Stext, "sndPortNum")  ; show the macro defined send-port-number on the Widget
+  ; send data to the IP-adress, and port, when slider or number change
+  OSCsend kNumber+kSlider, $IPADDRESS, $S_PORT, "/CsoundQt", "ff", kNumber, kSlider
 endin
 
 
-instr 1001	
-	kNumRcv 	init 0
-	kSldRcv	init 0
-	Stext sprintf "%i", $R_PORT
-	outvalue "rcvPortNum", Stext											; show the macro defined receive-port-number on the Widget 
-	ihandle OSCinit $R_PORT ;												; start the listening process for OSC messages on the defined receive port
-	kAction  OSClisten	ihandle, "/CsoundQt", "ff", kNumRcv, kSldRcv						; you must define the kind of data to receive, in this case (ff) both are floating point numbers
-		if (kAction == 1) then												; if data is received, then...											
-			outvalue "rcvNumber", kNumRcv									; send the value to the channel, to update the Widgets right side
-			outvalue "rcvSlider", kSldRcv
-		endif														; ends the "if" part
+instr 1001
+  kNumRcv = init(0)
+  kSldRcv = init(0)
+  Stext   = sprintf("%i", $R_PORT)
+  chnset(Stext, "rcvPortNum")  ; show the macro defined receive-port-number on the Widget
+  ; ; start the listening process for OSC messages on the defined receive port
+  ihandle OSCinit $R_PORT
+  ; you must define the kind of data to receive, in this case (ff) both are floating point
+  ; numbers
+  kAction OSClisten ihandle, "/CsoundQt", "ff", kNumRcv, kSldRcv
+  if (kAction == 1) then  ; if data is received, then...
+    ; send the value to the channel, to update the Widgets right side
+    chnset(kNumRcv, "rcvNumber")
+    chnset(kSldRcv, "rcvSlider")
+  endif  ; ends the "if" part
 endin
-	
+
 
 </CsInstruments>
 <CsScore>

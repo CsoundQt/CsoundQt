@@ -182,17 +182,6 @@ You can also set a loop range for each panel, and loop each panel independently.
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 517 130 535 418
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
 <EventPanel name="Demo 1" tempo="60.00000000" loop="8.00000000" x="616" y="297" width="603" height="374" visible="false" loopStart="0" loopEnd="7">    
 i 1 0 1 440 0.2 0.3 1 
 i 1 0 1 880 0.2 0.3 1 

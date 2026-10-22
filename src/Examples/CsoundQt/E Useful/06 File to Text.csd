@@ -4,10 +4,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr     = 44100
-ksmps  = 1  ; necessary for this solution
+sr = 44100
+ksmps = 64  ; necessary for this solution
 nchnls = 1
-0dbfs  = 1
+0dbfs = 1
 
 ; By Andres Cabrera 2009
 ; and joachim heintz 2025 (version for csound 7)
@@ -25,16 +25,16 @@ instr Main
 
   ; Receive decimation value and type
   decimation:i = invalue("decimation")
-  type:i       = invalue("type")
+  type:i = invalue("type")
 
   ; Start and end
   start:i = invalue("start") / 1000
-  end:i   = invalue:i("end")/1000
-  end     = (end > infile_len) ? infile_len : end
-  p3      = end - start
+  end:i = invalue:i("end")/1000
+  end = (end > infile_len) ? infile_len : end
+  p3 = end - start
 
   ; Clear result display
-  outvalue("result", "")
+  chnset("", "result")
 
   ; Now do all in one k-cycle
   count_samples:k init 0
@@ -94,7 +94,7 @@ instr Main
   od
 
   // print result to widget
-  outvalue("result", sprintfk("Written %d values to %s%s!", print_counter, pwd(), outfile))
+  chnset(sprintfk("Written %d values to %s%s!", print_counter, pwd(), outfile), "result")
 
   // stop csound
   event("e", 0, 0)

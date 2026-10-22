@@ -9,21 +9,20 @@
 joachim heintz june 2010, aug 2025**/
 
 0dbfs = 1
-ksmps = 128  ; if you want to avoid that some samples without sound are added at the end
+ksmps = 64  ; if you want to avoid that some samples without sound are added at the end
 ; of the soundfile, use ksmps=1. but this will be slower for large files
 
-//returns number of Sel in Str
-opcode StrMems, i, SS
-  Str, Sel xin
+// returns number of Sel in Str
+opcode StrMems(Str:S, Sel:S):i
   iSumEls = 0
-  iLen strlen Str
+  iLen = strlen(Str)
   iIndx = 0
-  Sub strcpy Str
+  Sub = strcpy(Str)
   until iIndx == iLen do
-    iPos strindex Sub, Sel
+    iPos = strindex(Sub, Sel)
     if iPos > -1 then
       iSumEls = iSumEls+1
-      Sub strsub Sub, iPos+1
+      Sub = strsub(Sub, iPos+1)
       iIndx = iPos+1
     else
       iIndx = iLen
@@ -33,20 +32,19 @@ opcode StrMems, i, SS
 endop
 
 // converts _MBrowse output to array
-opcode Mbrowse2Array, S[], S
-  String xin
+opcode Mbrowse2Array(String:S):S[]
   // how many occurrences of | in String
   iNum = StrMems(String, "|")
   // create array for substrings
-  Sout[] init iNum+1
+  Sout[] = init(iNum+1)
   // go through
   istart = 0
   ipos   = 0
   indx   = 0
   while (ipos >= 0) do
-    Substring  = strsub(String, istart)
-    ipos       = strindex(Substring, "|")
-    Sname      = strsub(Substring, 0, ipos)
+    Substring = strsub(String, istart)
+    ipos = strindex(Substring, "|")
+    Sname = strsub(Substring, 0, ipos)
     Sout[indx] = Sname
     istart += ipos+1
     indx   += 1
@@ -87,14 +85,14 @@ endin
 
 instr ReadFile
 
-  indx           = p4
+  indx = p4
   Outarray[indx] = diskin:a(Infiles[indx])
 
 endin
 
 instr Collect
 
-  fout(chnget:S("_Browse"), 18, Outarray) // change 18 for other output format options
+  fout(chnget:S("_Browse"), 18, Outarray)  // change 18 for other output format options
   if release() == 1 then
     printks("File %s with %d channels written to disk!\n", 0, chnget:S("_Browse"), lenarray(Infiles))
   endif

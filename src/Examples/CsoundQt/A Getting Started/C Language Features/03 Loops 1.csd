@@ -19,41 +19,34 @@ See:
 Conditional Values (ControlConditional - Shift+F1)
 Program Flow Control (ControlPgmctl - Shift+F1)
 */
+
 <CsoundSynthesizer>
 <CsOptions>
 ;-n -m0
 </CsOptions>
 <CsInstruments>
 
+ksmps = 64
+
 
 instr 1
-; Lets write this in Csound-Language using the "if" statement:
-iIndex = 0							; Number of T-Shirts in the bag at the beginning
-	loop:							; any label
-	  prints "Take a  T-Shirt and put it in the bag! \n"
-	  iIndex =  iIndex+1				; Count..one more
-	  prints " Now we have %i T-Shirts in the bag..\n", iIndex
-	if (iIndex < 5) igoto loop			; goes back to the label "loop", if there are less then 5 T-Shirts
+  ; Csound 7 can do the counting for us. The end of the range is inclusive:
+  for idx in [1 ... 5] do
+    prints "Take a  T-Shirt and put it in the bag! \n"
+    prints " Now we have %i T-Shirts in the bag..\n", idx
+  od
 endin
 
 
 
 instr 2
-; There is another way to do exactly the same by using "loop_lt":
-iIndex = 0		 				; Number of T-Shirts in the bag at the beginning
-	loop:	  
-	  prints "Take a  T-Shirt and put it in the bag! \n"
-	  prints " Now we have %i T-Shirts in the bag..\n", iIndex+1 
-	loop_lt iIndex, 1, 5, loop 		; goes back to the label "loop", if there are less then 5 T-Shirts
-endin 
-/*
-The advantage of this method is, that you save typing one line, because loop_lt  is increasing the counter for you. But you can't see so easily which condition is checked. Is it x<5 or x>5 or x=5 ? Here is a list of different loop-types, and their behavior:
-
-loop_lt:  x < y
-loop_gt: x > y
-loop_ge: x >= y
-loop_le : x <= y
-*/
+  ; The same five iterations can start at zero. The range [0 ... 4]
+  ; also ends inclusively, so it has five elements.
+  for idx in [0 ... 4] do
+    prints "Take a  T-Shirt and put it in the bag! \n"
+    prints " Now we have %i T-Shirts in the bag..\n", idx+1
+  od
+endin
 
 </CsInstruments>
 <CsScore>
@@ -85,14 +78,19 @@ e
   <width>80</width>
   <height>25</height>
   <uuid>{8f2703e4-5434-4ee1-8ddd-dd5a2a139033}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Nothing here...</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -103,11 +101,15 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

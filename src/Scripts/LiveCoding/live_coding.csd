@@ -54,15 +54,4 @@ e 3600
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 874 225 98 28
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
 

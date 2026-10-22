@@ -7,6 +7,10 @@
 # everything after </CsoundSynthesizer> (widget panels etc.) is left
 # byte-for-byte identical.
 #
+# Replacements only touch Csound code. String literals, `;`/`//` comments,
+# `/* ... */` comments and `{{ ... }}` strings are protected, including
+# when they span several lines.
+#
 # Transformations applied to the code region:
 #   0. Structural indentation, inside <CsInstruments>/<CsScore> only: the
 #      level changes solely on flow-control keywords (instr/opcode/if/
@@ -19,6 +23,10 @@
 #      become a single space. Runs of spaces in code (outside string
 #      literals) collapse to one; `,`, `=`, `==`, `!=`, `<=`, `>=` get
 #      single surrounding spaces (`kast` arithmetic is left alone).
+#      Compound assignments such as `+=`, `*=` and `<<=` stay intact, and
+#      `=` inside command-line options such as `--myoption=foo` is preserved.
+#   1a. The stereo `outs` opcode is written as `out`:
+#       `outs a, b` and `outs(a, b)` become `out(a, b)`.
 #   2. Comments that are (almost) entirely UPPERCASE become sentence case:
 #      first letter (and first letter after `.`/`!`/`?`) uppercased, the rest
 #      lowercased. Known acronyms (MIDI, GUI, LFO, FLTK, N.B.) keep their
@@ -26,9 +34,12 @@
 #   3. Consecutive lines of the form `<variable> <opcode> ...` sharing the
 #      same opcode (second whitespace-separated token) get their variable
 #      column padded so the opcodes line up. Control keywords (instr, if,
-#      for, ...) never start a run.
-#   4. A trailing comment that would push its line past ~90 columns is moved
-#      above the code (wrapped to fit) instead.
+#      for, ...) never start a run. For assignment runs (`var = value`), the
+#      `=` is only aligned when the shortest and longest left sides differ
+#      by less than 4 characters.
+#   4. A trailing comment longer than 92 characters, or one that would push
+#      its line past ~90 columns, is moved above the code and wrapped to fit
+#      instead.
 #   5. Trailing `;` comments of consecutive commented code lines are aligned
 #      in one column. If alignment would push a line past ~90 columns, that
 #      comment is moved above instead (the ~90 limit wins over alignment).
@@ -38,16 +49,26 @@
 #      (`a1, a2 opcode ...`, recognizable by the comma) and unknown
 #      opcodes are left alone. Output arity comes from file-local
 #      `opcode Name, outtypes, ...` definitions first, then src/opcodes.xml.
-#   7. Opt-in (--ksmps N): set the orchestra header assignment to
+#   7. Opt-in (--chnget): replace `var invalue "channel"` with
+#      `var chnget "channel"` and `outvalue "channel", value` with
+#      `chnset value, "channel"`. With --new-syntax, the functional forms
+#      `var = chnget("channel")` and `chnset(value, "channel")` are used.
+#      `outvalue` lines whose channel contains `/` are left unchanged.
+#   8. Opt-in (--new-udos): rewrite old UDO declarations
+#      `opcode Name, outtypes, intypes` as
+#      `opcode Name(input:type, ...):outtypes` and remove their `xin` line.
+#   9. Opt-in (--ksmps N): set the orchestra header assignment to
 #      `ksmps = N`, adding it after the `sr` line when missing.
 #
 # The script is idempotent: re-running it on a formatted file changes
 # nothing.
 #
-# Usage: util/modernize_csd_code.py [--check] [--new-syntax]
-#                                    [--ksmps N] [path ...]
+# Usage: util/modernize_csd_code.py [--check] [--new-syntax] [--chnget]
+#                                    [--new-udos] [--ksmps N] [path ...]
 #   --check      report files that would change, modify nothing
 #   --new-syntax also rewrite single-output calls in functional syntax
+#   --chnget     replace invalue/outvalue with chnget/chnset
+#   --new-udos   rewrite old `opcode Name, outputs, inputs` declarations
 #   --ksmps N    set `ksmps = N` in the orchestra header
 #   path         file or directory to scan (default: McCurdy Collection)
 
@@ -63,7 +84,15 @@ DEFAULT_PATHS = [os.path.join(REPO_ROOT, "src", "Examples",
 OPCODES_XML = os.path.join(REPO_ROOT, "src", "opcodes.xml")
 
 LINE_LIMIT = 90
+# Do not line up `=` when the left-hand sides are too different in length.
+ASSIGN_ALIGN_MAX_GAP = 3
+# A trailing comment longer than this is moved above its code line. It is
+# wrapped there if it does not fit in the line limit.
+COMMENT_MOVE_LIMIT = 92
 ACRONYMS = ["MIDI", "GUI", "LFO", "FLTK"]
+
+# Double-quoted string literal, including escaped quotes.
+STRING_SPLIT_RE = re.compile(r'("(?:\\.|[^"\\])*")')
 
 # First tokens that never count as `<variable>` for rule 4.
 SKIP_FIRST = {"instr", "endin", "opcode", "endop", "if", "then", "else",
@@ -85,13 +114,13 @@ LABEL_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\s*:(?=\s|$)")
 
 def code_words(code):
     """Word tokens of code, ignoring double-quoted string literals."""
-    chunks = re.split(r'("[^"]*")', code)
+    chunks = STRING_SPLIT_RE.split(code)
     return re.findall(r"[A-Za-z_][A-Za-z0-9_]*", " ".join(chunks[0::2]))
 
 
 def nonstring_code(code):
     """Code with double-quoted string literals removed (for `=` checks)."""
-    return "".join(re.split(r'("[^"]*")', code)[0::2])
+    return "".join(STRING_SPLIT_RE.split(code)[0::2])
 
 
 def load_opcode_arities(path):
@@ -124,6 +153,14 @@ def load_opcode_arities(path):
                 if child.tail:
                     target.append(child.tail)
         before_text, after_text = "".join(before), "".join(after)
+        # An output slot is one value when it is a single name (optionally
+        # typed and/or an array), with or without the trailing `=`. This also
+        # covers old-style synopses such as "ares =", which used to be
+        # mistaken for a multi-output call.
+        single_output_re = re.compile(
+            r"[A-Za-z_][A-Za-z0-9_]*"
+            r"(?::[A-Za-z_][A-Za-z0-9_]*(?:\[\])?)?"
+            r"(?:\[\])?")
         outs = set()
         if before_text.strip() == "":
             outs.add(1 if after_text.lstrip().startswith("(") else 0)
@@ -132,8 +169,10 @@ def load_opcode_arities(path):
                 alt = alt.strip()
                 if alt == "":
                     outs.add(0)
-                elif re.fullmatch(r"[A-Za-z]+\[\]", alt) \
-                        or re.fullmatch(r"[A-Za-z]+", alt):
+                    continue
+                if alt.endswith("="):
+                    alt = alt[:-1].strip()
+                if single_output_re.fullmatch(alt):
                     outs.add(1)
                 else:
                     outs.add("multi")
@@ -185,6 +224,240 @@ def strip_outer_parens(args):
     return text
 
 
+OUTS_RE = re.compile(r"^outs(?=\s|\()(.*)$", re.S)
+
+
+def replace_outs_code(code):
+    """Rule 1a: write the stereo `outs` opcode as `out`.
+
+    Both the statement form (`outs a, b`) and the functional form
+    (`outs(a, b)`) become `out(a, b)`. The rest of the line is preserved.
+    """
+    match = OUTS_RE.match(code)
+    if not match:
+        return None
+    args = match.group(1).strip()
+    if not args:
+        return None
+    if args.startswith("(") and args.endswith(")"):
+        return "out" + args
+    return "out(%s)" % args
+
+
+def split_first_argument(text):
+    """Split at the first comma outside strings and nested brackets."""
+    depth = 0
+    in_string = False
+    escaped = False
+    for pos, char in enumerate(text):
+        if in_string:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                in_string = False
+            continue
+        if char == '"':
+            in_string = True
+        elif char in "([{":
+            depth += 1
+        elif char in ")]}":
+            depth -= 1
+        elif char == "," and depth == 0:
+            return text[:pos].strip(), text[pos + 1:].strip()
+    return text.strip(), None
+
+
+INVALUE_RE = re.compile(
+    r"^([A-Za-z_][A-Za-z0-9_]*(?:\[\])*)\s+invalue\s+"
+    r'("(?:[^"\\]|\\.)*")$')
+OUTVALUE_RE = re.compile(r"^outvalue\b(.*)$", re.S)
+QUOTED_STRING_RE = re.compile(r'^"((?:[^"\\]|\\.)*)"$')
+
+
+def replace_chnget_code(code, new_syntax):
+    """Rule 7: replace invalue/outvalue with chnget/chnset."""
+    match = INVALUE_RE.match(code)
+    if match:
+        var = match.group(1)
+        channel = match.group(2)
+        if new_syntax:
+            return "%s = chnget(%s)" % (var, channel)
+        return "%s chnget %s" % (var, channel)
+
+    match = OUTVALUE_RE.match(code)
+    if not match:
+        return None
+    args = match.group(1).strip()
+    if not args:
+        return None
+    if args.startswith("(") and args.endswith(")"):
+        args = args[1:-1].strip()
+    channel_literal, value = split_first_argument(args)
+    if value is None:
+        return None
+    channel_match = QUOTED_STRING_RE.match(channel_literal)
+    if not channel_match:
+        return None
+    channel = channel_match.group(1)
+    # A channel with a slash addresses a widget property, which chnset does
+    # not handle the same way as outvalue.
+    if "/" in channel:
+        return None
+    if new_syntax:
+        return "chnset(%s, %s)" % (value, channel_literal)
+    return "chnset %s, %s" % (value, channel_literal)
+
+
+TYPE_CHARS = set("akiSpfxbwBOo")
+
+
+def parse_type_text(text):
+    """Parse an old UDO type string such as `kk`, `a`, `i[]`."""
+    text = text.strip().replace(" ", "")
+    if text in ("", "0"):
+        return []
+    types = []
+    pos = 0
+    while pos < len(text):
+        char = text[pos]
+        if char not in TYPE_CHARS:
+            return None
+        type_name = char
+        pos += 1
+        if text[pos:pos + 2] == "[]":
+            type_name += "[]"
+            pos += 2
+        types.append(type_name)
+    return types
+
+
+def type_from_name(name):
+    """Infer a classic Csound type from a variable name, if possible."""
+    suffix = ""
+    base = name
+    if base.endswith("[]"):
+        base = base[:-2]
+        suffix = "[]"
+    if not base:
+        return None
+    if base[0] == "g" and len(base) > 1 and base[1] in TYPE_CHARS:
+        return base[1] + suffix
+    if base[0] in TYPE_CHARS:
+        return base[0] + suffix
+    return None
+
+
+def parse_xin_variables(text):
+    """Return [(name, explicit_type_or_None)] from an `... xin` body."""
+    variables = []
+    for token in text.split(","):
+        token = token.strip()
+        if not token:
+            continue
+        explicit_type = None
+        if ":" in token:
+            name, type_text = token.split(":", 1)
+            types = parse_type_text(type_text)
+            if types is None or len(types) != 1:
+                return None
+            explicit_type = types[0]
+        else:
+            name = token
+        name = name.strip()
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*(?:\[\])*", name):
+            return None
+        variables.append((name, explicit_type))
+    return variables
+
+
+OLD_UDO_RE = re.compile(
+    r"^opcode\s+([A-Za-z_][A-Za-z0-9_]*)\s*,\s*([^,]*?)\s*,\s*(.*)$")
+XIN_RE = re.compile(r"^(.*?)\bxin\b\s*$", re.S)
+
+
+def new_udo_code(records, index):
+    """Convert one old UDO definition to the Csound 7 signature form.
+
+    Return (new_opcode_code, xin_record_index), or (None, None) when the
+    declaration is not an old-style UDO that can be converted safely.
+    """
+    record = records[index]
+    match = OLD_UDO_RE.match(record["code"])
+    if not match:
+        return None, None
+    name = match.group(1)
+    out_types = parse_type_text(match.group(2))
+    in_types = parse_type_text(match.group(3))
+    if out_types is None or in_types is None:
+        return None, None
+
+    xin_index = None
+    xin_variables = []
+    for pos in range(index + 1, len(records)):
+        candidate = records[pos]
+        if candidate.get("protected") or candidate["tag"] is not None:
+            continue
+        code = candidate["code"]
+        if not code:
+            continue
+        if re.match(r"^(endop|opcode|instr)\b", code):
+            break
+        xin_match = XIN_RE.match(code)
+        if xin_match:
+            parsed = parse_xin_variables(xin_match.group(1))
+            if parsed is None:
+                return None, None
+            xin_index = pos
+            xin_variables = parsed
+            break
+
+    names = [item[0] for item in xin_variables]
+    explicit_types = [item[1] for item in xin_variables]
+
+    if names:
+        if len(in_types) != len(names):
+            # Be liberal with the commonly mistaken `name, inputs, output`
+            # order: if the input side matches the xin variables, use it.
+            if len(out_types) == len(names) and len(in_types) == 1:
+                in_types, out_types = out_types, in_types
+            elif len(in_types) == 1:
+                in_types = in_types * len(names)
+            elif not in_types:
+                inferred = [type_from_name(n) for n in names]
+                if any(t is None for t in inferred):
+                    return None, None
+                in_types = inferred
+            else:
+                return None, None
+        input_types = []
+        for pos, name_ in enumerate(names):
+            if explicit_types[pos] is not None:
+                input_types.append(explicit_types[pos])
+            elif pos < len(in_types):
+                input_types.append(in_types[pos])
+            else:
+                inferred = type_from_name(name_)
+                if inferred is None:
+                    return None, None
+                input_types.append(inferred)
+    else:
+        if in_types:
+            return None, None
+        input_types = []
+
+    inputs = ", ".join("%s:%s" % (name_, type_)
+                       for name_, type_ in zip(names, input_types))
+    if not out_types:
+        outputs = "()"
+    elif len(out_types) == 1:
+        outputs = out_types[0]
+    else:
+        outputs = "(" + ", ".join(out_types) + ")"
+    return "opcode %s(%s):%s" % (name, inputs, outputs), xin_index
+
+
 def new_syntax_code(code, udo_arities, opcode_arities):
     """Rewrite `kval opcode p1, p2` as `kval = opcode(p1, p2)`.
 
@@ -229,7 +502,7 @@ def reindent(records):
     level = 0
     extra = 0
     for record in records:
-        if record["tag"] is not None:
+        if record["tag"] is not None or record.get("protected"):
             continue
         if not record["code"] and not record["comment"]:
             record["indent"] = ""
@@ -290,17 +563,85 @@ TAG_LINE_RE = re.compile(r"\s*<[^>]+>\s*$")
 
 
 def split_comment(line):
-    """Split line at the first `;` outside double quotes.
+    """Split line at the first `;` or `//` outside double quotes.
 
-    Return (code, comment) where comment is None when there is no `;`.
+    Return (code, comment, marker) where comment is None when there is no
+    comment. Block comments and multiline strings are handled by the
+    caller's state.
     """
     in_string = False
+    escaped = False
     for pos, char in enumerate(line):
+        if in_string:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                in_string = False
+            continue
         if char == '"':
-            in_string = not in_string
-        elif char == ";" and not in_string:
-            return line[:pos], line[pos + 1:]
-    return line, None
+            in_string = True
+        elif char == ";":
+            return line[:pos], line[pos + 1:], ";"
+        elif char == "/" and pos + 1 < len(line) \
+                and line[pos + 1] == "/":
+            return line[:pos], line[pos + 2:], "//"
+    return line, None, None
+
+
+def scan_multiline(text, state):
+    """Track `/* ... */` comments and `{{ ... }}` strings.
+
+    Return (new_state, found). `found` is true when the line contains a
+    marker, so the caller can leave the whole line untouched.
+    """
+    found = state is not None
+    in_string = False
+    escaped = False
+    pos = 0
+    while pos < len(text):
+        if state == "comment":
+            end = text.find("*/", pos)
+            if end < 0:
+                return "comment", True
+            pos = end + 2
+            state = None
+            continue
+        if state == "string":
+            end = text.find("}}", pos)
+            if end < 0:
+                return "string", True
+            pos = end + 2
+            state = None
+            continue
+
+        char = text[pos]
+        if in_string:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                in_string = False
+            pos += 1
+            continue
+        if char == '"':
+            in_string = True
+            pos += 1
+            continue
+        if text.startswith("/*", pos):
+            state = "comment"
+            found = True
+            pos += 2
+            continue
+        if text.startswith("{{", pos):
+            state = "string"
+            found = True
+            pos += 2
+            continue
+        pos += 1
+    return state, found
 
 
 def sentence_case(text):
@@ -335,36 +676,60 @@ def is_mostly_upper(text):
 
 
 def normalize_code_segment(segment):
+    # Keep `=` inside command-line options such as --myoption=foo intact.
+    # They are tokens starting with one or two dashes.
+    option_marker = "\x01"
+    segment = re.sub(
+        r"(?<!\S)(--?[^\s]+)",
+        lambda match: match.group(1).replace("=", option_marker),
+        segment)
+
     segment = re.sub(r",\s*", ", ", segment)
+    # Compound assignments are single operators: do not turn `+=` into `+ =`.
+    segment = re.sub(
+        r"\s*(<<=|>>=|\*\*=|&&=|\|\|=|\+=|-=|\*=|/=|%=|&=|\|=|\^=)\s*",
+        r" \1 ",
+        segment)
     segment = re.sub(r"\s*==\s*", " == ", segment)
     segment = re.sub(r"\s*!=\s*", " != ", segment)
-    segment = re.sub(r"\s*<=\s*", " <= ", segment)
-    segment = re.sub(r"\s*>=\s*", " >= ", segment)
-    segment = re.sub(r"(?<![=!<>])\s*=\s*(?!=)", " = ", segment)
-    return re.sub(r" +", " ", segment).strip()
+    segment = re.sub(r"(?<![<>=!])\s*<=\s*", " <= ", segment)
+    segment = re.sub(r"(?<![<>=!])\s*>=\s*", " >= ", segment)
+    segment = re.sub(r"(?<![=!<>+\-*/%&|^~])\s*=\s*(?!=)",
+                     " = ", segment)
+    return re.sub(r" +", " ", segment).replace(
+        option_marker, "=").strip()
 
 
 def normalize_code(code):
-    """Collapse whitespace runs outside string literals to one space."""
-    parts = re.split(r'("[^"]*")', code)
-    for pos in range(0, len(parts), 2):
-        parts[pos] = normalize_code_segment(parts[pos])
-    joined = " ".join(part for part in parts if part != "")
-    joined = re.sub(r" +", " ", joined).strip()
-    joined = re.sub(r"\s+,", ",", joined)
-    joined = re.sub(r"\(\s+", "(", joined)
-    joined = re.sub(r"\s+\)", ")", joined)
-    return joined
+    """Collapse whitespace runs outside string literals to one space.
+
+    String literals are temporarily hidden behind placeholders so no rule can
+    change their contents (including runs of spaces or punctuation).
+    """
+    strings = []
+
+    def hide_string(match):
+        strings.append(match.group(0))
+        return "\x02%d\x03" % (len(strings) - 1)
+
+    masked = STRING_SPLIT_RE.sub(hide_string, code)
+    masked = normalize_code_segment(masked)
+    masked = re.sub(r"\s+,", ",", masked)
+    masked = re.sub(r"\(\s+", "(", masked)
+    masked = re.sub(r"\s+\)", ")", masked)
+    for index, string in enumerate(strings):
+        masked = masked.replace("\x02%d\x03" % index, string)
+    return masked.strip()
 
 
 def tokens_outside_strings(code):
-    chunks = re.split(r'("[^"]*")', code)
+    chunks = STRING_SPLIT_RE.split(code)
     return " ".join(chunks[0::2]).split()
 
 
-def wrap_comment(comment, indent):
-    """Wrap comment into `indent + '; ' + words` lines within LINE_LIMIT."""
-    width = LINE_LIMIT - len(indent) - 2
+def wrap_comment(comment, indent, marker=";"):
+    """Wrap comment into `indent + '<marker> ' + words` lines."""
+    width = LINE_LIMIT - len(indent) - len(marker) - 1
     chunks = []
     current = ""
     for word in comment.split():
@@ -376,24 +741,42 @@ def wrap_comment(comment, indent):
             chunks.append(current)
             current = word
     chunks.append(current)
-    return [{"indent": indent, "code": "", "comment": chunk, "tag": None}
+    return [{"indent": indent, "code": "", "comment": chunk, "tag": None,
+             "comment_marker": marker, "protected": False, "raw": None}
             for chunk in chunks]
 
 
 def parse_region(lines):
     records = []
+    multiline_state = None
     for line in lines:
+        if multiline_state is not None:
+            records.append({"indent": "", "code": "", "comment": None,
+                            "tag": None, "comment_marker": None,
+                            "protected": True, "raw": line})
+            multiline_state, _ = scan_multiline(line, multiline_state)
+            continue
         if TAG_LINE_RE.match(line):
             records.append({"indent": "", "code": "", "comment": None,
-                            "tag": line.rstrip()})
+                            "tag": line.rstrip(), "comment_marker": None,
+                            "protected": False, "raw": None})
             continue
         indent = re.match(r"^[ \t]*", line).group(0).replace("\t", "  ")
         rest = line[len(re.match(r"^[ \t]*", line).group(0)):].replace(
             "\t", " ")
-        code, comment = split_comment(rest)
+        code, comment, comment_marker = split_comment(rest)
+        next_state, multiline_marker = scan_multiline(code, None)
+        if multiline_marker or next_state is not None:
+            records.append({"indent": "", "code": "", "comment": None,
+                            "tag": None, "comment_marker": None,
+                            "protected": True, "raw": line})
+            multiline_state = next_state
+            continue
         comment = comment.strip() if comment is not None else None
         record = {"indent": indent, "code": normalize_code(code),
-                  "comment": comment if comment else None, "tag": None}
+                  "comment": comment if comment else None, "tag": None,
+                  "comment_marker": comment_marker if comment else None,
+                  "protected": False, "raw": None}
         if record["comment"] and is_mostly_upper(record["comment"]):
             record["comment"] = sentence_case(record["comment"])
         records.append(record)
@@ -401,7 +784,8 @@ def parse_region(lines):
 
 
 def align_key(record):
-    if record["tag"] is not None or not record["code"]:
+    if record.get("protected") or record["tag"] is not None \
+            or not record["code"]:
         return None
     words = tokens_outside_strings(record["code"])
     if len(words) < 2 or words[0] in SKIP_FIRST:
@@ -423,7 +807,8 @@ def apply_ksmps(records, value):
     replaced = False
     found_sr = None
     for pos, record in enumerate(records):
-        if record["tag"] is not None or not record["code"]:
+        if record.get("protected") or record["tag"] is not None \
+                or not record["code"]:
             continue
         if KSAMPS_RE.match(record["code"]):
             record["code"] = "ksmps = %d" % value
@@ -436,7 +821,8 @@ def apply_ksmps(records, value):
     indent = records[anchor]["indent"] if anchor >= 0 else ""
     records.insert(anchor + 1, {"indent": indent,
                                 "code": "ksmps = %d" % value,
-                                "comment": None, "tag": None})
+                                "comment": None, "tag": None,
+                                "protected": False, "raw": None})
 
 
 def align_variable_columns(records):
@@ -452,13 +838,17 @@ def align_variable_columns(records):
                and align_key(records[end + 1]) == key):
             end += 1
         if end > pos:
-            width = max(len(tokens_outside_strings(records[m]["code"])[0])
-                        for m in range(pos, end + 1))
-            for m in range(pos, end + 1):
-                first = tokens_outside_strings(records[m]["code"])[0]
-                rest = records[m]["code"][
-                    records[m]["code"].find(first) + len(first):].lstrip()
-                records[m]["code"] = first.ljust(width) + " " + rest
+            lengths = [len(tokens_outside_strings(records[m]["code"])[0])
+                       for m in range(pos, end + 1)]
+            width = max(lengths)
+            # Assignment alignment is only a convenience: do not stretch it
+            # over left-hand sides of very different lengths.
+            if key != "=" or width - min(lengths) <= ASSIGN_ALIGN_MAX_GAP:
+                for m in range(pos, end + 1):
+                    first = tokens_outside_strings(records[m]["code"])[0]
+                    rest = records[m]["code"][
+                        records[m]["code"].find(first) + len(first):].lstrip()
+                    records[m]["code"] = first.ljust(width) + " " + rest
         pos = end + 1
 
 
@@ -490,8 +880,9 @@ def rendered_length(record):
     # Measured with alignment padding intact: this is the length the line
     # will actually be rendered with, so alignment-induced overflow also
     # triggers rule 4 (the ~90 limit wins over alignment).
+    marker = record.get("comment_marker") or ";"
     return len(record["indent"] + record["code"]
-                + "  ; " + record["comment"])
+                + "  " + marker + " " + record["comment"])
 
 
 def move_overlong_comments(records):
@@ -502,20 +893,28 @@ def move_overlong_comments(records):
     moved = False
     output = []
     for record in records:
-        if record["tag"] is not None:
+        if record.get("protected") or record["tag"] is not None:
             output.append(record)
             continue
         if record["code"] and record["comment"] \
-                and rendered_length(record) > LINE_LIMIT:
+                and (len(record["comment"]) > COMMENT_MOVE_LIMIT
+                     or rendered_length(record) > LINE_LIMIT):
             code = record["code"].rstrip()
-            output.extend(wrap_comment(record["comment"], record["indent"]))
+            marker = record.get("comment_marker") or ";"
+            output.extend(wrap_comment(record["comment"], record["indent"],
+                                       marker))
             output.append({"indent": record["indent"], "code": code,
-                           "comment": None, "tag": None})
+                           "comment": None, "tag": None,
+                           "comment_marker": None, "protected": False,
+                           "raw": None})
             moved = True
         elif not record["code"] and record["comment"] \
-                and len(record["indent"] + "; " + record["comment"]) \
-                > LINE_LIMIT:
-            output.extend(wrap_comment(record["comment"], record["indent"]))
+                and len(record["indent"]
+                        + (record.get("comment_marker") or ";") + " "
+                        + record["comment"]) > LINE_LIMIT:
+            marker = record.get("comment_marker") or ";"
+            output.extend(wrap_comment(record["comment"], record["indent"],
+                                       marker))
             moved = True
         else:
             output.append(record)
@@ -524,21 +923,25 @@ def move_overlong_comments(records):
 
 
 def build_line(record):
+    if record.get("protected"):
+        return record["raw"]
     if record["tag"] is not None:
         return record["tag"]
+    marker = record.get("comment_marker") or ";"
     if record["code"] and record["comment"]:
         # NOTE: code is *not* rstripped here: align_trailing_comments
-        # pads it with the spaces that put `;` in a shared column.
+        # pads it with the spaces that put the comment in a shared column.
         return (record["indent"] + record["code"]
-                + "  ; " + record["comment"]).rstrip()
+                + "  " + marker + " " + record["comment"]).rstrip()
     if record["code"]:
         return (record["indent"] + record["code"]).rstrip()
     if record["comment"]:
-        return (record["indent"] + "; " + record["comment"]).rstrip()
+        return (record["indent"] + marker + " " + record["comment"]).rstrip()
     return ""
 
 
-def fix_once(text, new_syntax=False, opcode_arities=None, ksmps=None):
+def fix_once(text, new_syntax=False, opcode_arities=None, ksmps=None,
+             chnget=False, new_udos=False):
     """A single modernization pass over the <CsInstruments> body.
 
     Everything outside <CsInstruments>...</CsInstruments> -- header prose,
@@ -556,14 +959,46 @@ def fix_once(text, new_syntax=False, opcode_arities=None, ksmps=None):
     reindent(records)
     if ksmps is not None:
         apply_ksmps(records, ksmps)
+    for record in records:
+        if not record.get("protected") and record["tag"] is None \
+                and record["code"]:
+            converted = replace_outs_code(record["code"])
+            if converted is not None:
+                record["code"] = converted
+    if chnget:
+        for record in records:
+            if not record.get("protected") and record["tag"] is None \
+                    and record["code"]:
+                converted = replace_chnget_code(record["code"], new_syntax)
+                if converted is not None:
+                    record["code"] = converted
     if new_syntax:
         udo_arities = collect_udo_arities(text)
         for record in records:
-            if record["tag"] is None and record["code"]:
+            if not record.get("protected") and record["tag"] is None \
+                    and record["code"]:
                 converted = new_syntax_code(record["code"], udo_arities,
                                             opcode_arities)
                 if converted is not None:
                     record["code"] = converted
+    if new_udos:
+        for pos, record in enumerate(records):
+            if record.get("protected") or record["tag"] is not None \
+                    or not record["code"]:
+                continue
+            converted, xin_index = new_udo_code(records, pos)
+            if converted is not None:
+                record["code"] = converted
+                if xin_index is not None:
+                    xin_record = records[xin_index]
+                    if xin_record.get("comment"):
+                        # Keep a comment that was attached to the removed
+                        # `xin` line instead of silently dropping it.
+                        xin_record["code"] = ""
+                    else:
+                        xin_record["remove"] = True
+        records[:] = [record for record in records
+                      if not record.get("remove")]
     move_overlong_comments(records)
     align_variable_columns(records)
     for _ in range(10):
@@ -581,7 +1016,8 @@ def fix_once(text, new_syntax=False, opcode_arities=None, ksmps=None):
     return "\n".join(lines[:start + 1] + new_body + lines[stop:])
 
 
-def fix_text(text, new_syntax=False, opcode_arities=None, ksmps=None):
+def fix_text(text, new_syntax=False, opcode_arities=None, ksmps=None,
+             chnget=False, new_udos=False):
     """Return the modernized file text (only the code region changes).
 
     Passes run until a fixpoint: moving a long comment above its line can
@@ -590,7 +1026,8 @@ def fix_text(text, new_syntax=False, opcode_arities=None, ksmps=None):
     """
     for _ in range(10):
         fixed = fix_once(text, new_syntax=new_syntax,
-                         opcode_arities=opcode_arities, ksmps=ksmps)
+                         opcode_arities=opcode_arities, ksmps=ksmps,
+                         chnget=chnget, new_udos=new_udos)
         if fixed == text:
             return fixed
         text = fixed
@@ -618,6 +1055,10 @@ def main():
     parser.add_argument("--new-syntax", action="store_true",
                         help="also rewrite single-output calls "
                              "kval opcode ... as kval = opcode(...)")
+    parser.add_argument("--chnget", action="store_true",
+                        help="replace invalue/outvalue with chnget/chnset")
+    parser.add_argument("--new-udos", action="store_true",
+                        help="rewrite old UDO declarations in Csound 7 form")
     parser.add_argument("--ksmps", type=int, default=None, metavar="N",
                         help="set `ksmps = N` in the orchestra header")
     parser.add_argument("paths", nargs="*", default=None,
@@ -646,7 +1087,8 @@ def main():
             text = handle.read()
         scanned += 1
         fixed = fix_text(text, new_syntax=args.new_syntax,
-                         opcode_arities=opcode_arities, ksmps=args.ksmps)
+                         opcode_arities=opcode_arities, ksmps=args.ksmps,
+                         chnget=args.chnget, new_udos=args.new_udos)
         if fixed == text:
             continue
         changed += 1

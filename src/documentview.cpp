@@ -70,6 +70,90 @@ static QTextDocument::FindFlags smartCaseFlags(const QString &query)
 // (open) quote on the current line, e.g. Sfile = "foo<cursor>. The
 // autocomplete menu must never be triggered there. A quote escaped with a
 // backslash (\") does not count; a double backslash (\\) does not escape.
+// Position of the unmatched double quote in the text before the cursor, or
+// -1. Escaped quotes do not count.
+static int openDoubleQuoteIndex(const QString &text)
+{
+    int open = -1;
+    bool inString = false;
+    for (int i = 0; i < text.size(); ++i) {
+        if (text[i] != QLatin1Char('"'))
+            continue;
+        int backslashes = 0;
+        for (int j = i - 1; j >= 0 && text[j] == QLatin1Char('\\'); --j)
+            ++backslashes;
+        if (backslashes % 2 != 0)
+            continue;
+        inString = !inString;
+        open = inString ? i : -1;
+    }
+    return inString ? open : -1;
+}
+
+// A completion after schedule(), chnget() or chnset() has a fixed set of
+// candidates, so it must bypass the normal identifier/opcode completion.
+struct CompletionContext
+{
+    enum Kind { None, Schedule, Channel };
+    Kind kind = None;
+    bool quoted = false;
+    QString prefix;
+    int prefixStart = -1; // relative to the start of the line
+};
+
+static CompletionContext completionContext(const QString &textBeforeCursor)
+{
+    CompletionContext context;
+    const int quote = openDoubleQuoteIndex(textBeforeCursor);
+    if (quote >= 0) {
+        const QString beforeQuote = textBeforeCursor.left(quote);
+        static const QRegularExpression scheduleQuotedRx(
+                    QStringLiteral("\\b(schedulek?)"
+                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
+                                   "\\s*(?:\\(\\s*)?$"));
+        static const QRegularExpression chngetQuotedRx(
+                    QStringLiteral("\\bchnget"
+                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
+                                   "\\s*(?:\\(\\s*)?$"));
+        static const QRegularExpression chnsetLegacyQuotedRx(
+                    QStringLiteral("\\bchnset"
+                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
+                                   "\\s+[^,]+,\\s*$"));
+        static const QRegularExpression chnsetFunctionQuotedRx(
+                    QStringLiteral("\\bchnset"
+                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
+                                   "\\s*\\([^,]*,\\s*$"));
+
+        if (scheduleQuotedRx.match(beforeQuote).hasMatch()) {
+            context.kind = CompletionContext::Schedule;
+        } else if (chngetQuotedRx.match(beforeQuote).hasMatch()
+                   || chnsetLegacyQuotedRx.match(beforeQuote).hasMatch()
+                   || chnsetFunctionQuotedRx.match(beforeQuote).hasMatch()) {
+            context.kind = CompletionContext::Channel;
+        }
+        if (context.kind != CompletionContext::None) {
+            context.quoted = true;
+            context.prefixStart = quote + 1;
+            context.prefix = textBeforeCursor.mid(context.prefixStart);
+            return context;
+        }
+    }
+
+    // Legacy schedule syntax or a function call, with an unquoted name.
+    static const QRegularExpression scheduleRx(
+                QStringLiteral("\\b(schedulek?)"
+                               "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
+                               "(?:\\s+|\\s*\\(\\s*)"
+                               "([A-Za-z_][A-Za-z0-9_]*)$"));
+    const auto match = scheduleRx.match(textBeforeCursor);
+    if (match.hasMatch()) {
+        context.kind = CompletionContext::Schedule;
+        context.prefix = match.captured(2);
+        context.prefixStart = match.capturedStart(2);
+    }
+    return context;
+}
+
 static bool hasOpenQuote(const QString &textBeforeCursor)
 {
     auto hasUnmatched = [](const QString &text, QChar quote) {
@@ -834,22 +918,208 @@ void DocumentView::syntaxCheck()
 }
 
 
-const QStringList DocumentView::getAllWords() {
-    // All words are parsed at max. each 4 seconds
-    const int minMsecsFromLastParsing = 4000;
-    auto now = QTime::currentTime();
-    int msecs = m_lastWordsUpdate.msecsTo(now);
-    if(m_allWords.isEmpty() || msecs > minMsecsFromLastParsing) {
-        QDEBUG << "Updating all words, time since last update: " << msecs << "msecs";
-        TextEditor *editor = m_mainEditor;
-        QString wholeText = editor->toPlainText();
-        static const QRegularExpression wordBoundary("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;:^@") + "\\s]");
-        auto allWords = wholeText.split(wordBoundary, SKIP_EMPTY_PARTS);
-        allWords.removeDuplicates();
-        m_lastWordsUpdate = now;
-        m_allWords = allWords;
+QString DocumentView::currentScopeText() const
+{
+    TextEditor *editor = m_mainEditor;
+    if (!editor)
+        return {};
+
+    // Find the instrument/opcode block that contains the cursor. Only names
+    // from this block may be suggested: a variable defined in another
+    // instrument is not visible here.
+    static const QRegularExpression blockStartRx(
+                QStringLiteral("^\\s*(instr|opcode)\\b"));
+    static const QRegularExpression blockEndRx(
+                QStringLiteral("^\\s*(endin|endop)\\b"));
+
+    const QTextBlock cursorBlock = editor->textCursor().block();
+    QTextBlock blockStart;
+    QString endKeyword;
+    for (QTextBlock block = cursorBlock; block.isValid(); block = block.previous()) {
+        const QString line = block.text().trimmed();
+        if (line.startsWith(QLatin1Char(';')) || line.startsWith(QLatin1String("//")))
+            continue;
+        // A closing line before the opening line means the cursor is between
+        // two blocks, not inside either of them.
+        if (blockEndRx.match(line).hasMatch())
+            return {};
+        const QRegularExpressionMatch match = blockStartRx.match(line);
+        if (match.hasMatch()) {
+            blockStart = block;
+            endKeyword = match.captured(1) == QLatin1String("instr")
+                    ? QStringLiteral("endin") : QStringLiteral("endop");
+            break;
+        }
     }
-    return m_allWords;
+    if (!blockStart.isValid())
+        return {}; // not inside an instrument or opcode
+
+    QTextBlock blockEnd;
+    for (QTextBlock block = cursorBlock; block.isValid(); block = block.next()) {
+        if (block.text().trimmed().startsWith(endKeyword)) {
+            blockEnd = block;
+            break;
+        }
+    }
+    if (!blockEnd.isValid())
+        blockEnd = editor->document()->lastBlock();
+
+    QString scopeText;
+    for (QTextBlock block = blockStart; block.isValid(); block = block.next()) {
+        QString line = block.text();
+        // Ignore the rest of a line after a comment; semicolons inside string
+        // literals are rare in variable names and do not matter here.
+        const int semicolon = line.indexOf(QLatin1Char(';'));
+        const int slashes = line.indexOf(QLatin1String("//"));
+        int comment = -1;
+        if (semicolon >= 0 && slashes >= 0)
+            comment = qMin(semicolon, slashes);
+        else
+            comment = qMax(semicolon, slashes);
+        if (comment >= 0)
+            line.truncate(comment);
+        scopeText += line;
+        scopeText += QLatin1Char('\n');
+        if (block == blockEnd)
+            break;
+    }
+    return scopeText;
+}
+
+QStringList DocumentView::getCurrentScopeWords() const
+{
+    const QString scopeText = currentScopeText();
+    if (scopeText.isEmpty())
+        return {};
+
+    // Names with an explicit type suffix take precedence over the classic
+    // prefix convention: "gkfoo:a" is a local audio variable, while "gkfoo"
+    // without a suffix is a global control variable.
+    static const QRegularExpression localAnnotationRx(
+                QStringLiteral("(?<!@)\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
+                               ":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+    static const QRegularExpression globalAnnotationRx(
+                QStringLiteral("\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
+                               "@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+    static const QRegularExpression globalSuffixRx(
+                QStringLiteral("@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+    static const QRegularExpression localSuffixRx(
+                QStringLiteral(":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+    static const QRegularExpression identifierRx(
+                QStringLiteral("\\b([A-Za-z_][A-Za-z0-9_]*)\\b"));
+    // Language words which have a variable-like spelling but are not names.
+    static const QSet<QString> keywords = {
+        QStringLiteral("include"), QStringLiteral("endinclude"),
+        QStringLiteral("opcode"), QStringLiteral("instr"),
+        QStringLiteral("endin"), QStringLiteral("endop")
+    };
+
+    QSet<QString> explicitGlobals;
+    for (auto it = globalAnnotationRx.globalMatch(scopeText); it.hasNext(); )
+        explicitGlobals.insert(it.next().captured(1));
+
+    QSet<QString> explicitLocals;
+    for (auto it = localAnnotationRx.globalMatch(scopeText); it.hasNext(); )
+        explicitLocals.insert(it.next().captured(1));
+
+    const auto typeCharacter = [](QChar c) {
+        static const QString types = QStringLiteral("akiSpfxbw");
+        return types.contains(c);
+    };
+
+    // Remove the type annotations before looking for identifiers, so the type
+    // letter itself ("a" in "dry@global:a") is not mistaken for a variable.
+    QString identifiersText = scopeText;
+    identifiersText.remove(globalSuffixRx);
+    identifiersText.remove(localSuffixRx);
+
+    QSet<QString> seen;
+    for (auto it = identifierRx.globalMatch(identifiersText); it.hasNext(); ) {
+        const QString word = it.next().captured(1);
+        if (keywords.contains(word))
+            continue;
+        if (m_opcodeTree && m_opcodeTree->isOpcode(word))
+            continue;
+        if (explicitGlobals.contains(word))
+            continue; // offered from the global list instead
+        if (explicitLocals.contains(word)) {
+            seen.insert(word);
+            continue;
+        }
+        // No explicit suffix: the first character decides the type, with a
+        // leading g making it global.
+        if (word.size() > 1 && word.at(0) == QLatin1Char('g')
+                && typeCharacter(word.at(1)))
+            continue; // classic global
+        if (typeCharacter(word.at(0)))
+            seen.insert(word);
+    }
+
+    QStringList words = seen.values();
+    words.sort(Qt::CaseInsensitive);
+    return words;
+}
+
+QStringList DocumentView::getCurrentScopeStringVariables() const
+{
+    const QString scopeText = currentScopeText();
+    if (scopeText.isEmpty())
+        return {};
+
+    static const QRegularExpression localAnnotationRx(
+                QStringLiteral("(?<!@)\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
+                               ":\\s*([akiSpfxbw])\\b(?:\\s*\\[\\])?"));
+    static const QRegularExpression globalAnnotationRx(
+                QStringLiteral("\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
+                               "@global\\s*:\\s*([akiSpfxbw])\\b(?:\\s*\\[\\])?"));
+    static const QRegularExpression globalSuffixRx(
+                QStringLiteral("@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+    static const QRegularExpression localSuffixRx(
+                QStringLiteral(":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+    static const QRegularExpression identifierRx(
+                QStringLiteral("\\b([A-Za-z_][A-Za-z0-9_]*)\\b"));
+
+    QSet<QString> globalNames;
+    for (auto it = globalAnnotationRx.globalMatch(scopeText); it.hasNext(); )
+        globalNames.insert(it.next().captured(1));
+
+    QSet<QString> localStrings;
+    QSet<QString> localNonStrings;
+    for (auto it = localAnnotationRx.globalMatch(scopeText); it.hasNext(); ) {
+        const auto match = it.next();
+        if (match.captured(2) == QLatin1String("S"))
+            localStrings.insert(match.captured(1));
+        else
+            localNonStrings.insert(match.captured(1));
+    }
+
+    QString identifiersText = scopeText;
+    identifiersText.remove(globalSuffixRx);
+    identifiersText.remove(localSuffixRx);
+
+    QSet<QString> strings;
+    for (auto it = identifierRx.globalMatch(identifiersText); it.hasNext(); ) {
+        const QString word = it.next().captured(1);
+        if (m_opcodeTree && m_opcodeTree->isOpcode(word))
+            continue;
+        if (globalNames.contains(word))
+            continue; // global string variables come from the Inspector
+        if (localStrings.contains(word)) {
+            strings.insert(word);
+            continue;
+        }
+        if (localNonStrings.contains(word))
+            continue;
+        if (word.size() > 1 && word.at(0) == QLatin1Char('g')
+                && word.at(1) == QLatin1Char('S'))
+            continue; // classic global string variable
+        if (word.startsWith(QLatin1Char('S')))
+            strings.insert(word);
+    }
+
+    QStringList result = strings.values();
+    result.sort(Qt::CaseInsensitive);
+    return result;
 }
 
 
@@ -870,8 +1140,12 @@ void DocumentView::autoCompleteAtCursor() {
 
     QString textBeforeCursor = line.left(cursorPosInLine);
 
-    // Never complete inside a string literal or after an open quote.
-    if (hasOpenQuote(textBeforeCursor))
+    // Some constructs have a fixed candidate set (schedule, chnget, chnset).
+    // They are allowed to complete inside an open string as well.
+    const CompletionContext context = completionContext(textBeforeCursor);
+
+    // Never complete inside an arbitrary string literal or after an open quote.
+    if (context.kind == CompletionContext::None && hasOpenQuote(textBeforeCursor))
         return;
 
     textBeforeCursor = textBeforeCursor.remove(QRegularExpression("[\\)\\,\"'\\]\\}\\s]+$")); // remove delimiters
@@ -884,20 +1158,22 @@ void DocumentView::autoCompleteAtCursor() {
     if (match.hasMatch()) {
         word = match.captured(1);
         wordStartPosInLine = match.capturedStart(1);
-    } else {
+    } else if (context.kind == CompletionContext::None) {
         return; // No word found, exit
     }
 
-    if(word.size() < 3)
+    if (context.kind == CompletionContext::None && word.size() < 3)
         // only start completion after three characters
         return;
 
-    int wordStartPosInDoc = lineStartPos + wordStartPosInLine;
-    int wordEndPosInDoc = wordStartPosInDoc + word.length();
-
-    QTextCursor selectionCursor = editor->textCursor();
-    selectionCursor.setPosition(wordStartPosInDoc);
-    selectionCursor.setPosition(wordEndPosInDoc, QTextCursor::KeepAnchor);
+    QTextCursor selectionCursor;
+    if (match.hasMatch()) {
+        const int wordStartPosInDoc = lineStartPos + wordStartPosInLine;
+        const int wordEndPosInDoc = wordStartPosInDoc + word.length();
+        selectionCursor = editor->textCursor();
+        selectionCursor.setPosition(wordStartPosInDoc);
+        selectionCursor.setPosition(wordEndPosInDoc, QTextCursor::KeepAnchor);
+    }
 
     int lineCommentIndex;
 
@@ -926,7 +1202,59 @@ void DocumentView::autoCompleteAtCursor() {
     int completionWidth = qMax(14, m_autoCompleteMenuWidth);
     QSet<QString>menuWordsSeen;
     QRegularExpressionMatch rxmatch;
-    if((rxmatch = rxCommandLineOption.match(line)).hasMatch()) {
+
+    // Add one of the fixed candidates (instrument, channel or string variable)
+    // and remember the range to replace when it is accepted.
+    QSet<QString> contextSeen;
+    int contextMaxLength = 0;
+    const int contextReplaceStart = lineStartPos + context.prefixStart;
+    const int contextReplaceEnd = curIndex;
+    static const QRegularExpression simpleNameRx(
+                QStringLiteral("^[A-Za-z_][A-Za-z0-9_]*$"));
+    auto addContextCompletion = [&](const QString &name, bool quoteIfNeeded) {
+        if (name.isEmpty() || contextSeen.contains(name))
+            return;
+        if (!context.prefix.isEmpty()
+                && !name.startsWith(context.prefix, Qt::CaseInsensitive))
+            return;
+        QString insert = name;
+        if (!context.quoted && quoteIfNeeded
+                && !simpleNameRx.match(name).hasMatch()) {
+            insert = QLatin1Char('"') + name + QLatin1Char('"');
+        }
+        QAction *action = syntaxMenu->addCompletion(
+                    name, insert, name, 0, this, SLOT(insertAutoCompleteText()));
+        action->setProperty("autocompleteContext", true);
+        action->setProperty("autocompleteReplaceStart", contextReplaceStart);
+        action->setProperty("autocompleteReplaceEnd", contextReplaceEnd);
+        contextSeen.insert(name);
+        contextMaxLength = qMax(contextMaxLength, name.size());
+        showSyntaxMenu = true;
+    };
+
+    if (context.kind != CompletionContext::None) {
+        syntaxMenu->clearCompletions();
+        if (context.kind == CompletionContext::Schedule) {
+            for (const QString &instrument : m_instrumentNames)
+                addContextCompletion(instrument, true);
+            // A string variable is an expression, so it is only useful
+            // outside the quoted form; inside quotes we suggest names only.
+            if (!context.quoted) {
+                for (const QString &variable : getCurrentScopeStringVariables())
+                    addContextCompletion(variable, false);
+                for (const QString &variable : m_globalStringVariables)
+                    addContextCompletion(variable, false);
+            }
+        } else {
+            for (const QString &channel : widgetChannels())
+                addContextCompletion(channel, false);
+        }
+        if (!showSyntaxMenu)
+            destroySyntaxMenu();
+        else
+            completionWidth = qMax(completionWidth, contextMaxLength + 2);
+    }
+    else if((rxmatch = rxCommandLineOption.match(line)).hasMatch()) {
         syntaxMenu->clearCompletions();
         QString capt = rxmatch.captured(2);
         QStringList options = rxmatch.captured(1)=="-"? m_longOptions: m_longOptions2;
@@ -940,14 +1268,26 @@ void DocumentView::autoCompleteAtCursor() {
     }
     else if (selectionCursor.position() > selectionCursor.anchor() && word.size() > 2 /* && !word.startsWith("\"") */ ) { // Only at the end of the word
         syntaxMenu->clearCompletions();
-        foreach(QString var, m_localVariables) {
-            if (var.endsWith(',')) {
-                var.chop(1);
-            }
+        // Only variables used in the current instrument/opcode block. Do not
+        // scan the whole document: names from other instruments are not in
+        // scope here.
+        const QStringList scopeWords = getCurrentScopeWords();
+        for (const QString &var : scopeWords) {
             if (var.startsWith(word) && word != var) {
                 syntaxMenu->addCompletion(var, var, QString(), 1, this,
                                           SLOT(insertAutoCompleteText()));
                 showSyntaxMenu = true;
+                menuWordsSeen.insert(var);
+            }
+        }
+        // Global variables are visible from every instrument and opcode. The
+        // Inspector scans them from the whole document.
+        for (const QString &var : m_globalVariables) {
+            if (!menuWordsSeen.contains(var) && var.startsWith(word) && word != var) {
+                syntaxMenu->addCompletion(var, var, QString(), 1, this,
+                                          SLOT(insertAutoCompleteText()));
+                showSyntaxMenu = true;
+                menuWordsSeen.insert(var);
             }
         }
         // opcodes and parameters
@@ -1040,26 +1380,7 @@ void DocumentView::autoCompleteAtCursor() {
                 menuWordsSeen.insert(opcodeName);
             }
         }
-        // check for autcompletion from ALL words in text editor
-        auto allWords = getAllWords();
-        //QStringList menuWords;
         QString wordlow = word.toLower(); // this must be AFTER the word is corrected
-
-        // any word [was: variables ]
-        //QRegularExpression rxVariables("\\b(g)?[iakS][a-zA-Z0-9_]+"); // this only matches variable names
-        static const QRegularExpression rxAnyWord("\\b[A-Za-z][a-zA-Z0-9_]*\\b" ); // any word that starts with a letter
-        QRegularExpressionMatch match = rxAnyWord.match(word);
-        for(const QString &theWord: allWords) {
-            if (word != theWord &&
-                    theWord.startsWith(wordlow, Qt::CaseInsensitive) &&
-                   !menuWordsSeen.contains(theWord)  &&
-                    match.hasMatch()    ) {
-                syntaxMenu->addCompletion(theWord, theWord, QString(), 2, this,
-                                          SLOT(insertAutoCompleteText()));
-                showSyntaxMenu = true;
-                menuWordsSeen.insert(theWord);
-            }
-        }
 
         for(const QString &tag: tagWords) {
             if(tag.startsWith(wordlow, Qt::CaseInsensitive) && word != tag) {
@@ -1180,16 +1501,11 @@ void DocumentView::textChanged() {
         bool wasPaste = m_mainEditor->consumePaste();
         if (m_orcEditor && m_orcEditor->consumePaste())
             wasPaste = true;
-        // Never trigger inside a string literal or after an open quote.
-        bool insideQuotes = false;
-        {
-            QTextCursor cursor = m_mainEditor->textCursor();
-            insideQuotes = hasOpenQuote(cursor.block().text().left(cursor.positionInBlock()));
-        }
         auto key = m_mainEditor->getLastKey();
-        if(!wasPaste && !insideQuotes && key != Qt::Key_Backspace && key != Qt::Key_Delete && key != Qt::Key_Space && key != Qt::Key_Comma && key != Qt::Key_BraceLeft && key != Qt::Key_Colon) {
-            // Only perform autocomplete if the change was not generated by deleting
-            // Also pressing any word separator would never lead to autocomplete
+        if(!wasPaste && key != Qt::Key_Backspace && key != Qt::Key_Delete && key != Qt::Key_Space && key != Qt::Key_Comma && key != Qt::Key_BraceLeft && key != Qt::Key_Colon) {
+            // Only perform autocomplete if the change was not generated by deleting.
+            // autoCompleteAtCursor decides whether an open quote belongs to a
+            // context-aware completion (schedule/chnget/chnset) or not.
             auto autoCompleteTask = new QTimer(this);
             autoCompleteTask->setInterval(m_autoCompleteDelay);
             autoCompleteTask->setSingleShot(true);
@@ -1643,6 +1959,19 @@ void DocumentView::insertAutoCompleteText()
 		internalChange = true;
 		QAction *action = static_cast<QAction *>(QObject::sender());
 		bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
+
+		if (action->property("autocompleteContext").toBool()) {
+			const int start = action->property("autocompleteReplaceStart").toInt();
+			const int end = action->property("autocompleteReplaceEnd").toInt();
+			QTextCursor contextCursor = editor->textCursor();
+			if (start >= 0 && end >= start) {
+				contextCursor.setPosition(start);
+				contextCursor.setPosition(end, QTextCursor::KeepAnchor);
+				editor->setTextCursor(contextCursor);
+			}
+			editor->insertPlainText(action->data().toString());
+			return;
+		}
 
 		QTextCursor cursor = editor->textCursor();
 		cursor.select(QTextCursor::WordUnderCursor);
@@ -2593,6 +2922,31 @@ void DocumentView::restoreCursorPosition()
 
 void DocumentView::setParsedUDOs(QStringList udos) {
     m_highlighter.setUDOs(udos);
+}
+
+void DocumentView::setGlobalVariables(const QStringList &variables) {
+    m_globalVariables = variables;
+}
+
+void DocumentView::setGlobalStringVariables(const QStringList &variables) {
+    m_globalStringVariables = variables;
+}
+
+void DocumentView::setInstrumentNames(const QStringList &names) {
+    m_instrumentNames = names;
+}
+
+void DocumentView::setWidgetChannels(const QStringList &channels) {
+    m_widgetChannels = channels;
+}
+
+void DocumentView::setWidgetChannelsProvider(
+        const std::function<QStringList()> &provider) {
+    m_widgetChannelsProvider = provider;
+}
+
+QStringList DocumentView::widgetChannels() const {
+    return m_widgetChannelsProvider ? m_widgetChannelsProvider() : m_widgetChannels;
 }
 
 void DocumentView::setTheme(const QString &theme)

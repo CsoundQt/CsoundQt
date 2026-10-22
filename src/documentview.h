@@ -32,6 +32,7 @@
 
 #include <QKeyEvent> // For syntax menu class
 #include <QPair>
+#include <functional>
 
 class QListWidget;
 class QListWidgetItem;
@@ -134,10 +135,27 @@ public:
 
 
     void setParsedUDOs(QStringList udos);
+    // Global variables scanned by the Inspector (g-prefixed or Csound 7
+    // name@global:type); visible from every block.
+    void setGlobalVariables(const QStringList &variables);
+    void setGlobalStringVariables(const QStringList &variables);
+    // Named instruments and widget channels for the context-aware completions.
+    void setInstrumentNames(const QStringList &names);
+    void setWidgetChannels(const QStringList &channels);
+    // Read the current channel names directly from the widget layout. This
+    // keeps completion up to date when a widget is renamed, without having to
+    // mirror every widget change into this view.
+    void setWidgetChannelsProvider(const std::function<QStringList()> &provider);
+    QStringList widgetChannels() const;
     Highlighter* getHighlighter() { return &m_highlighter; }
     void gotoLineDialog();
     void markCurrentPosition();
-    const QStringList getAllWords();
+    // Variables visible in the instrument/opcode block that contains the
+    // cursor. Used by the autocomplete popup instead of all words in the
+    // document, which would suggest variables from unrelated blocks.
+    QStringList getCurrentScopeWords() const;
+    // String variables in the current block, for schedule() completion.
+    QStringList getCurrentScopeStringVariables() const;
 
 	// The Csound name at the cursor in the editor the user is working in, for
 	// the "Go to Source" action.
@@ -220,6 +238,8 @@ protected:
 private:
 	QString changeToChnget(QString text);
 	QString changeToInvalue(QString text);
+    // Text of the instrument/opcode block containing the cursor, or empty.
+    QString currentScopeText() const;
 
 	void ensureFindBar();
 	void ensureOpcodeInsertBar();
@@ -276,9 +296,12 @@ private:
 	QString m_findQuery;
 
 	QStringList m_localVariables;
+	// Global variables collected by the Inspector from the whole document.
 	QStringList m_globalVariables;
-    QTime m_lastWordsUpdate;
-    QStringList m_allWords;
+	QStringList m_globalStringVariables;
+	QStringList m_instrumentNames;
+	QStringList m_widgetChannels;
+	std::function<QStringList()> m_widgetChannelsProvider;
     int m_lastCursorPosition;
     QStringList m_longOptions = {
         "syntax-check-only", "control-rate=", "messagelevel=",

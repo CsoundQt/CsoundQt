@@ -12,18 +12,18 @@ You can set the channel on which widgets receive by right-clicking on the widget
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 instr 1
-kFreq invalue "freq" 	; userdefined channel: freq
-kAmp invalue "amp" 	; userdefined channel: amp
-kAmp port kAmp, .02 	; this smoothes the incoming slider values
-kFreq port kFreq, .02    ; smoothing is usually required to avoid 'zipper noise'
-aSine poscil3 kAmp, kFreq, 1
-outs aSine, aSine
+  kFreq invalue "freq"   ; userdefined channel: freq
+  kAmp  invalue "amp"    ; userdefined channel: amp
+  kAmp  port kAmp, .02   ; this smoothes the incoming slider values
+  kFreq port kFreq, .02  ; smoothing is usually required to avoid 'zipper noise'
+  aSine poscil3 kAmp, kFreq, 1
+  outs aSine, aSine
 endin
 
 </CsInstruments>

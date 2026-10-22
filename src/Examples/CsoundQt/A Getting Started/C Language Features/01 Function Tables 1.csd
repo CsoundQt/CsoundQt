@@ -31,15 +31,15 @@ see: (ScoreGenRef SHIFT+F1),(f SHIFT+F1)
 <CsInstruments>
 
 
-sr = 44100
-ksmps = 32
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 instr 1
-aEnv madsr 0.1, 0.1, 1, 0.3
-aWavetablePlayer oscili p4, cpspch(p5), p6
-outs aWavetablePlayer*aEnv, aWavetablePlayer*aEnv
+  aEnv = madsr(0.1, 0.1, 1, 0.3)
+  aWavetablePlayer = oscili(p4, cpspch(p5), p6)
+  out(aWavetablePlayer*aEnv, aWavetablePlayer*aEnv)
 endin
 
 </CsInstruments>
@@ -118,6 +118,9 @@ e
 */
 ; written by Alex Hofmann (Mar. 2010) - Incontri HMT-Hannover 
 
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -139,17 +142,27 @@ e
   <width>253</width>
   <height>115</height>
   <uuid>{2b94b9d8-9c17-4f6c-84f3-ceed3cb1f77f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>0</value>
   <objectName2/>
+  <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <modex>auto</modex>
   <modey>auto</modey>
+  <showSelector>true</showSelector>
+  <showGrid>true</showGrid>
+  <showTableInfo>true</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
@@ -159,9 +172,13 @@ e
   <width>258</width>
   <height>153</height>
   <uuid>{95ae72b5-8d91-48ee-9b31-9a558fa60d6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
+  <objectName2/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -169,6 +186,7 @@ e
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -177,14 +195,19 @@ e
   <width>254</width>
   <height>53</height>
   <uuid>{aff020c4-672c-4c00-8937-59ec577b32c5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>In this graph, one can see the result of the  generated F-Table values.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -195,9 +218,14 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -206,14 +234,19 @@ e
   <width>256</width>
   <height>26</height>
   <uuid>{8edf0582-7277-4f42-8228-0ba867eea2ca}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The output-waveform..</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -224,11 +257,15 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

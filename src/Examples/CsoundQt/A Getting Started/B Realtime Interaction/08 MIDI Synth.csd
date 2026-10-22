@@ -11,54 +11,71 @@ Instruments 101 (Feedback Delay) and 102 (Reverb) are global effects, which are 
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 32
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
-gaOut init 0.0						; a global audio variable is initialised, this can be seen as an "global audio Bus" (g.a.Bus), where audiodata can be send and read from, but first it is NULL
+; a global audio variable is initialised, this can be seen as an "global audio Bus"
+; (g.a.Bus), where audiodata can be send and read from, but first it is NULL
+gaOut = init(0.0)
 
-instr 1 						; Sawthooth Oscillator triggered with notes on MIDI CH: 1
-icps = p4
-iamp = p5/127						; MIDI received velocity (from 0-127), becomes devided by 127 -> amplitude-range is now 0-1 
-kFfreq invalue "filter_freq"
-kFfreq port kFfreq, 0.05
+instr 1  ; Sawthooth Oscillator triggered with notes on MIDI CH: 1
+  icps = p4
+  ; MIDI received velocity (from 0-127), becomes devided by 127 -> amplitude-range is now
+  ; 0-1
+  iamp   = p5/127
+  kFfreq = chnget("filter_freq")
+  kFfreq = port(kFfreq, 0.05)
 
-aSrc oscili iamp, icps, 1				; reads form f-table 1, containing a sawthooth waveform
-aFiltered moogvcf aSrc, kFfreq, 0.1			; the source signal becomes low pass filtered
-aEnv madsr 0.01, 0.1, 0.9, 0.01			; defining the envelope
-gaOut =  (aFiltered*aEnv) + gaOut 			; the signal becomes scaled by the envelope and is added to the "g.a.Bus" 
-							; that no information (from other sources, or simultaneous voices) which already exists on the global variable will be lost, itself needs to become added as well
+  ; reads form f-table 1, containing a sawthooth waveform
+  aSrc      = oscili(iamp, icps, 1)
+  aFiltered = moogvcf(aSrc, kFfreq, 0.1)   ; the source signal becomes low pass filtered
+  aEnv      = madsr(0.01, 0.1, 0.9, 0.01)  ; defining the envelope
+  ; the signal becomes scaled by the envelope and is added to the "g.a.Bus"
+  gaOut = (aFiltered*aEnv) + gaOut
+  ; that no information (from other sources, or simultaneous voices) which already exists
+  ; on the global variable will be lost, itself needs to become added as well
 endin
 
-instr 2 						; Sine Oscillator triggered with notes on MIDI CH: 2
-icps = p4
-iamp = p5/127
-aSrc oscili iamp, icps, 2				; this instrument reads from f-table 2, containing a sinus waveform
-aEnv madsr 0.01, 0.1, 0.9, 0.01			; defining the envelope
-gaOut = (aSrc*aEnv) + gaOut
+instr 2  ; Sine Oscillator triggered with notes on MIDI CH: 2
+  icps = p4
+  iamp = p5/127
+  ; this instrument reads from f-table 2, containing a sinus waveform
+  aSrc  = oscili(iamp, icps, 2)
+  aEnv  = madsr(0.01, 0.1, 0.9, 0.01)  ; defining the envelope
+  gaOut = (aSrc*aEnv) + gaOut
 endin
 
 
-instr 101					 ; Global Feedback Delay
-kDryWet invalue "d_w_delay"			; receive values from the Widget Panel
-kDelTime invalue "time_delay"
-kFeedback invalue "feedb_delay"
-aDelay delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
-aWet	deltapi kDelTime				; data at a flexible position is read from the delayline 
-	delayw gaOut+(aWet*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
-gaOut	= (1-kDryWet) * gaOut + (kDryWet * aWet)	; the amount of pure-signal and delayed-signal is mixed, and written to the "g.a.Bus"
+instr 101                          ; Global Feedback Delay
+  kDryWet   = chnget("d_w_delay")  ; receive values from the Widget Panel
+  kDelTime  = chnget("time_delay")
+  kFeedback = chnget("feedb_delay")
+  ; a delayline, with 1 second maximum delay-time is initialised
+  aDelay = delayr(1)
+  aWet   = deltapi(kDelTime)  ; data at a flexible position is read from the delayline
+  ; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal
+  ; (aWet) is also added, but scaled by kFeedback
+  delayw gaOut+(aWet*kFeedback)
+  ; the amount of pure-signal and delayed-signal is mixed, and written to the "g.a.Bus"
+  gaOut = (1-kDryWet) * gaOut + (kDryWet * aWet)
 endin
 
-instr 102					 			; Global Reverb
-kroomsize init 0.4						; fixed values for reverb-roomsize and damp, but you can add knobs or faders on the Widget Panel and invalue the data here...
-khfdamp init  0.8
-kDryWet invalue "d_w_reverb"
-aWetL, aWetR freeverb gaOut, gaOut, kroomsize, khfdamp		; the freeverb opcode works with stereo input, so we read twice the "g.a.Bus"
-aOutL	 = (1-kDryWet) * gaOut + (kDryWet * aWetL)			; the amount of pure-signal (g.a.Bus) and reverbed-signal for the left side is mixed, and written to a local variable
-aOutR	 = (1-kDryWet) * gaOut + (kDryWet * aWetR)
-outs aOutL, aOutR								; main output of the final signal
-gaOut = 0.0									; clear the global audio channel for the next k-loop
+instr 102  ; Global Reverb
+  ; fixed values for reverb-roomsize and damp, but you can add knobs or faders on the
+  ; Widget Panel and invalue the data here...
+  kroomsize = init(0.4)
+  khfdamp   = init(0.8)
+  kDryWet   = chnget("d_w_reverb")
+  ; the freeverb opcode works with stereo input, so we read twice the "g.a.Bus"
+  aWetL, aWetR freeverb gaOut, gaOut, kroomsize, khfdamp
+  ; the amount of pure-signal (g.a.Bus) and reverbed-signal for the left side is mixed,
+  ; and written to a local variable
+  aOutL = (1-kDryWet) * gaOut + (kDryWet * aWetL)
+  aOutR = (1-kDryWet) * gaOut + (kDryWet * aWetR)
+  out(aOutL, aOutR)  ; main output of the final signal
+  gaOut = 0.0        ; clear the global audio channel for the next k-loop
 endin
 
 

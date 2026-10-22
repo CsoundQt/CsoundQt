@@ -5,47 +5,47 @@
 </CsOptions>
 <CsInstruments>
 
-sr     = 44100
-ksmps  = 64
+sr = 44100
+ksmps = 64
 nchnls = 4
-0dbfs  = 1
-A4     = 442
+0dbfs = 1
+A4 = 442
 
 chn_k "peak", 1  ; Channel to get peak information from graph
 
-gi_fftSizes[] fillarray 2048, 4096, 8192, 16384
-gk_fftSize  init 4096
-gk_peakFreq init 0
-gk_peakGain init 0
+gi_fftSizes[] = fillarray(2048, 4096, 8192, 16384)
+gk_fftSize    = init(4096)
+gk_peakFreq   = init(0)
+gk_peakGain   = init(0)
 
-gi_refreshRates[] fillarray 10, 12, 15, 18, 20, 24, 30
-gk_refreshRate init 20
+gi_refreshRates[] = fillarray(10, 12, 15, 18, 20, 24, 30)
+gk_refreshRate    = init(20)
 
 
 instr PlayPeak
   ; play the detected peak frequency
-  kamp = ampdb(gk_peakGain)
-  apeak oscili kamp, sc_lag(gk_peakFreq, 0.1)
+  kamp  = ampdb(gk_peakGain)
+  apeak = oscili(kamp, sc_lag(gk_peakFreq, 0.1))
   apeak *= linsegr:a(0, 0.1, 1, 0.1, 0)
   outch 1, apeak
 endin
 
 instr Spectrum
-  k0              invalue "ch1"
-  k1              invalue "ch2"
-  k2              invalue "ch3"
-  k3              invalue "ch4"
-  kfftSizeIndex   invalue "fftsize"
-  kplayPeak       invalue "playpeak"
-  kfilterlow      invalue "filterlow"
-  kinGain         invalue "ingain"
-  gk_peakGain     invalue "peakgain"
-  krefreshRateIdx invalue "refreshrateidx"
+  k0 = chnget("ch1")
+  k1 = chnget("ch2")
+  k2 = chnget("ch3")
+  k3 = chnget("ch4")
+  kfftSizeIndex = chnget("fftsize")
+  kplayPeak = chnget("playpeak")
+  kfilterlow = chnget("filterlow")
+  kinGain = chnget("ingain")
+  gk_peakGain = chnget("peakgain")
+  krefreshRateIdx = chnget("refreshrateidx")
 
   ; We need to use chnget to receive the peak information
-  kpeak chnget "peak"
+  kpeak = chnget("peak")
   khasPeak = kpeak > 0 ? 1:0
-  gk_peakFreq samphold kpeak, khasPeak
+  gk_peakFreq = samphold(kpeak, khasPeak)
 
   if kplayPeak == 1 && changed(khasPeak) == 1 then
     if khasPeak == 1 then
@@ -55,19 +55,19 @@ instr Spectrum
     endif
   endif
 
-  kfftSize     = gi_fftSizes[kfftSizeIndex]
+  kfftSize = gi_fftSizes[kfftSizeIndex]
   krefreshRate = gi_refreshRates[krefreshRateIdx]
 
   if kfftSize != gk_fftSize || krefreshRate != gk_refreshRate then
-    gk_fftSize     = kfftSize
+    gk_fftSize = kfftSize
     gk_refreshRate = krefreshRate
     reinit dispReset
   endif
 
   a0 inch 1
   a1 inch 2
-  a2 init 0
-  a3 init 0
+  a2 = init(0)
+  a3 = init(0)
   a0 *= k0
   a1 *= k1
   if nchnls > 2 then
@@ -84,7 +84,7 @@ instr Spectrum
 
   ; filter low frequencies from spectrum
   if kfilterlow == 1 then
-    aspectrum pareq amix, 30, 0, 0.05, 1
+    aspectrum = pareq(amix, 30, 0, 0.05, 1)
   else
     aspectrum = amix
   endif

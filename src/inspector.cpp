@@ -79,6 +79,23 @@ void Inspector::parseText(const QString &text)
 {
     udosMap.clear();
     inspectorMutex.lock();
+    QSet<QString> globalVariables;
+    QSet<QString> globalStringVariables;
+    QSet<QString> explicitGlobals;
+    QSet<QString> explicitLocals;
+    QSet<QString> instrumentNames;
+    // Global variables are either g + a type character (the classic syntax)
+    // or names annotated with @global:<type> (Csound 7). An explicit type
+    // suffix takes precedence over the prefix: gkfoo:a is a local audio
+    // variable, not a global control variable.
+    static const QRegularExpression globalVariableRx(
+                QStringLiteral("\\b(g[akiSpfxbw][A-Za-z0-9_]*)\\b"));
+    static const QRegularExpression annotatedGlobalRx(
+                QStringLiteral("\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
+                               "@global\\s*:\\s*([akiSpfxbw])\\b(?:\\s*\\[\\])?"));
+    static const QRegularExpression annotatedLocalRx(
+                QStringLiteral("(?<!@)\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
+                               ":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
 
     // auto t1 = std::chrono::high_resolution_clock::now();
 
@@ -156,10 +173,60 @@ void Inspector::parseText(const QString &text)
                     QDEBUG << "Malformed orchestra, tag" << line << "is invalid";
                 break;
             }
+
+            QString codeLine = line;
+            const int semicolon = codeLine.indexOf(QLatin1Char(';'));
+            const int slashes = codeLine.indexOf(QLatin1String("//"));
+            const int comment = (semicolon >= 0 && slashes >= 0)
+                    ? qMin(semicolon, slashes) : qMax(semicolon, slashes);
+            if (comment >= 0)
+                codeLine.truncate(comment);
+            for (auto globalMatch = globalVariableRx.globalMatch(codeLine);
+                 globalMatch.hasNext(); ) {
+                const QString name = globalMatch.next().captured(1);
+                globalVariables.insert(name);
+                if (name.size() > 1 && name.at(1) == QLatin1Char('S'))
+                    globalStringVariables.insert(name);
+            }
+            for (auto globalMatch = annotatedGlobalRx.globalMatch(codeLine);
+                 globalMatch.hasNext(); ) {
+                const auto match = globalMatch.next();
+                const QString name = match.captured(1);
+                globalVariables.insert(name);
+                explicitGlobals.insert(name);
+                if (match.captured(2) == QLatin1String("S"))
+                    globalStringVariables.insert(name);
+            }
+            for (auto localMatch = annotatedLocalRx.globalMatch(codeLine);
+                 localMatch.hasNext(); ) {
+                explicitLocals.insert(localMatch.next().captured(1));
+            }
+
             if(currentOpcode == nullptr && currentInstrument == nullptr) {
                 // we are at instr 0
                 if (line.startsWith("instr")) {
                     auto instrline = line.mid(6).trimmed();
+                    // Keep the name for schedule() completion. Instrument names
+                    // may be quoted; quotes are not part of the name.
+                    QString instrName = instrline;
+                    const int semicolon = instrName.indexOf(QLatin1Char(';'));
+                    const int slashes = instrName.indexOf(QLatin1String("//"));
+                    const int commentPos = (semicolon >= 0 && slashes >= 0)
+                            ? qMin(semicolon, slashes) : qMax(semicolon, slashes);
+                    if (commentPos >= 0)
+                        instrName.truncate(commentPos);
+                    instrName = instrName.trimmed();
+                    if (instrName.startsWith(QLatin1Char('"'))) {
+                        const int close = instrName.indexOf(QLatin1Char('"'), 1);
+                        instrName = close > 0 ? instrName.mid(1, close - 1) : instrName.mid(1);
+                    } else {
+                        static const QRegularExpression nameRx(
+                                    QStringLiteral("^([^\\s(,;]+)"));
+                        const auto match = nameRx.match(instrName);
+                        instrName = match.hasMatch() ? match.captured(1) : QString();
+                    }
+                    if (!instrName.isEmpty() && !instrName.at(0).isDigit())
+                        instrumentNames.insert(instrName);
                     auto newItem = new TreeItem(treeItem3, QStringList(instrline));
                     newItem->setLine(i + 1);
                     currentInstrument = newItem;
@@ -258,6 +325,29 @@ void Inspector::parseText(const QString &text)
             instr->setExpanded(instrumentExpanded[instr->text(0)]);
         }
     }
+    m_globalVariables.clear();
+    for (const QString &name : globalVariables) {
+        // An explicit local type wins over the g prefix: gkfoo:a is local.
+        if (explicitLocals.contains(name) && !explicitGlobals.contains(name))
+            continue;
+        // A UDO can have a g-prefixed name too; it is not a variable.
+        if (!udosMap.contains(name))
+            m_globalVariables.append(name);
+    }
+    m_globalVariables.sort(Qt::CaseInsensitive);
+
+    m_globalStringVariables.clear();
+    for (const QString &name : globalStringVariables) {
+        if (explicitLocals.contains(name) && !explicitGlobals.contains(name))
+            continue;
+        if (!udosMap.contains(name))
+            m_globalStringVariables.append(name);
+    }
+    m_globalStringVariables.sort(Qt::CaseInsensitive);
+
+    m_instrumentNames = instrumentNames.values();
+    m_instrumentNames.sort(Qt::CaseInsensitive);
+
     // std::chrono::duration<double, std::milli> ms_double = std::chrono::high_resolution_clock::now() - t1;
     // qDebug() << "Inspector::parseText: "<< ms_double.count() << "ms\n";
     inspectorMutex.unlock();

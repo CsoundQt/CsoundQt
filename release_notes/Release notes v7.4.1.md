@@ -51,7 +51,17 @@ The source and binaries can be downloaded from:
 * **The autocomplete menu can be tuned:** Settings → Editor, next to
   *Autocomplete while typing*, lets users change its width and set a maximum
   number of visible rows. It defaults to 20; the full list remains available
-  by scrolling, with opcode suggestions shown first.
+  by scrolling, with opcode suggestions shown first. Local variable
+  suggestions are limited to the instrument or opcode that contains the
+  cursor, so names from other blocks are no longer offered. Global variables
+  are still suggested everywhere, using the names collected by the Inspector:
+  both the classic `g`-prefixed names and the Csound 7 `name@global:type`
+  syntax. An explicit type suffix wins over the prefix, so `gkfoo:a` is a
+  local audio variable while `gk_freq` is a global control variable.
+* **Context-aware completion:** the first argument of `schedule` offers
+  instrument names (quoted or unquoted) and string variables in scope. Inside
+  `chnget("…")`, `chnget "…"` and the channel argument of `chnset`, only the
+  channel names from the widget layout are offered.
 * **One tab size, in characters:** the Editor page had *Tab Width* (pixels)
   and *Spaces per Tab*, which were hard to relate. There is now a single *Tab
   Size*, the number of spaces a tab is displayed with and inserted as, as in
@@ -98,6 +108,15 @@ The source and binaries can be downloaded from:
 
 ### Fixes and improvements
 
+* **Crash recovery keeps the GUI:** the temporary copies written for playback
+  now contain the complete CSD, including the `<bsbPanel>` widget layout and
+  presets, so recovering a document no longer drops a modified GUI.
+* **Csound 7 syntax is highlighted:** UDO signatures such as
+  `opcode Route(asigs:a[], hwouts:k[]):()` colour typed parameters and return
+  types, and register the parameters as variables in the body. The `for … in …
+  do` loop, `switch`/`case`/`default`/`endsw` and `struct` forms are treated as
+  keywords. The opcode recognition also includes the newer built-ins such as
+  the `stm` family and `memplay`.
 * **The parenthesis mark no longer covers the text.** The bracket next to the
   cursor and its partner used to be marked with a background colour, which was
   very disturbing while typing. They are now bold and in a contrasting colour

@@ -22,25 +22,27 @@ p5 - frequency (Hz)
 <CsInstruments>
 
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 instr 1
-aSine poscil3 p4, p5 		; Here, a different oscillator type is used, which has more flexibility and higher precision.
-	outs aSine, aSine
+  ; Here, a different oscillator type is used, which has
+  ; more flexibility and higher precision.
+  aSine = poscil3(p4, p5)
+  out(aSine, aSine)
 endin
 
 </CsInstruments>
 
 <CsScore>
 ;ins start dur amp  freq  
-i 1  0     2   0.8  440		; loud
-i 1  3     2   0.1  554.365	; quiet
+i 1  0     2   0.8  440      ; loud
+i 1  3     2   0.1  554.365  ; quiet
 i 1  6     2   0.4  659.255	
 
-i 1  9     3   0.1  440  		; you can layer more instances of the same instrument easily
+i 1  9     3   0.1  440      ; you can layer more instances of the same instrument easily
 i 1  9.5   3.5 0.2  554.365
 i 1  10    3   0.1  659.255
 i 1  10.2  2.5 0.15 783.991
@@ -50,6 +52,10 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover
+
+
+
+
 
 
 
@@ -74,10 +80,13 @@ e
   <width>255</width>
   <height>150</height>
   <uuid>{d7080d2c-9587-414f-bd0d-3f9d6f393a49}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
+  <objectName2/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -85,7 +94,7 @@ e
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
-  <triggermode>NoTrigger</triggermode>
+  <triggermode>TriggerUp</triggermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -94,7 +103,9 @@ e
   <width>254</width>
   <height>53</height>
   <uuid>{ede4c1b4-2e64-4b98-98f8-f6179b09cb0f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -103,7 +114,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -114,6 +126,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -125,12 +142,15 @@ e
   <width>251</width>
   <height>109</height>
   <uuid>{1c65da94-898d-49f2-b94f-472fb9a72903}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <value>0</value>
   <objectName2/>
+  <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -152,7 +172,9 @@ e
   <width>251</width>
   <height>61</height>
   <uuid>{3c3dcb27-288d-4ae0-8022-28c33c7021c5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -161,7 +183,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -172,6 +195,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

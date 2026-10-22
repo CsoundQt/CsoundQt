@@ -15,13 +15,13 @@ The opcode 'massign' can be used, to make new connections between MIDI-Ch. and C
  --midi-key-cps=4 --midi-velocity-amp=5
 </CsOptions>
 <CsInstruments>
-ksmps = 32
-massign 0, 1								; assign all midi-channels to instr 1
+ksmps = 64
+massign 0, 1  ; assign all midi-channels to instr 1
 
 instr 1
-anote     oscils     p5, p4, 0
-kenv     madsr     0.01, 0.1, 0.9, 0.01					; defining the envelope
-out     anote * kenv							; scaling the source-signal with the envelope
+  anote = oscils(p5, p4, 0)
+  kenv  = madsr(0.01, 0.1, 0.9, 0.01)  ; defining the envelope
+  out anote * kenv                     ; scaling the source-signal with the envelope
 endin
 </CsInstruments>
 <CsScore>

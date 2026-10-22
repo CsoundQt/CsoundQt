@@ -1,6 +1,7 @@
 /* Getting Started .. Realtime Interaction: Widgets 2
 
-Make the Widgets-panel visible, by clicking the Widgets symbol in the toolbar or pressing Cmd+1 for Mac or Ctrl+1 for Windows and Linux.
+Make the Widgets-panel visible, by clicking the Widgets symbol 
+in the toolbar or pressing Cmd+1 for Mac or Ctrl+1 for Windows and Linux.
 
 */
 
@@ -9,15 +10,15 @@ Make the Widgets-panel visible, by clicking the Widgets symbol in the toolbar or
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 instr 1
-	kfreq invalue "freq" ; Quotes are needed here
-	asig oscil 0.1, kfreq, 1
-	outs asig, asig
+  kfreq = chnget("freq")
+  asig  = oscil(0.1, kfreq, 1)
+  out(asig, asig)
 endin
 </CsInstruments>
 <CsScore>
@@ -31,12 +32,6 @@ e
 
 
 
-
-
-
-
-
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -58,7 +53,9 @@ e
   <width>209</width>
   <height>38</height>
   <uuid>{19774345-2e9f-4969-bf1e-dcb12478dea6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -67,7 +64,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>26</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>241</r>
    <g>241</g>
@@ -78,6 +76,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -89,7 +92,9 @@ e
   <width>365</width>
   <height>93</height>
   <uuid>{61b4de03-c3bd-49a6-9e54-2f027c7d8b0d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -98,7 +103,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>241</r>
    <g>241</g>
@@ -109,6 +115,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -120,7 +131,9 @@ e
   <width>380</width>
   <height>220</height>
   <uuid>{ba0489e8-4f09-443d-bd82-4a57532c1e31}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -130,7 +143,8 @@ Now run Csound, and notice how the widget is controlling the frequency of the os
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>241</r>
    <g>241</g>
@@ -141,24 +155,31 @@ Now run Csound, and notice how the widget is controlling the frequency of the os
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
-  <objectName>slider</objectName>
+  <objectName>freq</objectName>
   <x>10</x>
   <y>160</y>
   <width>366</width>
   <height>21</height>
   <uuid>{2d44d97e-66cb-491f-bb9e-d9e6f20e16f5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>300.00000000</minimum>
   <maximum>1000.00000000</maximum>
-  <value>449.18032787</value>
+  <value>581.14754098</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -171,7 +192,9 @@ Now run Csound, and notice how the widget is controlling the frequency of the os
   <width>380</width>
   <height>51</height>
   <uuid>{56667bda-b29d-49dc-a2d0-560ec1aa5f6c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -180,7 +203,8 @@ Now run Csound, and notice how the widget is controlling the frequency of the os
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>241</r>
    <g>241</g>
@@ -191,6 +215,11 @@ Now run Csound, and notice how the widget is controlling the frequency of the os
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>

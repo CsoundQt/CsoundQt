@@ -48,6 +48,9 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 {
 	init(parent, opcodeTree);
 	m_view->showLineArea(true);
+	// The widget layout is the source of truth for chnget/chnset completion;
+	// read it on demand so a renamed channel is picked up immediately.
+	m_view->setWidgetChannelsProvider([this]() { return getWidgetChannels(); });
 	m_midiLearn = midiLearn;
     m_colorTheme = "";
     m_parseUdosNeeded = true;
@@ -106,6 +109,7 @@ int DocumentPage::setTextString(QString &text)
 	}
     // auto t0 = std::chrono::high_resolution_clock::now();
     parseAndRemoveWidgetText(text);
+    updateWidgetChannels();
     // auto t1 = std::chrono::high_resolution_clock::now();
     // auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
     // QDEBUG << "parseAndRemoveWidgetText:" << diff << "ms";
@@ -187,7 +191,8 @@ void DocumentPage::setWidgetsText(QString text)
 {
 	// TODO support multiple layouts
     qDebug() << "DocumentPage. calling loadXmlWidgets";
-	return m_widgetLayouts.at(0)->loadXmlWidgets(text);
+	m_widgetLayouts.at(0)->loadXmlWidgets(text);
+	updateWidgetChannels();
 }
 
 void DocumentPage::setPresetsText(QString text)
@@ -1162,6 +1167,41 @@ void DocumentPage::enableScoreSyntaxHighlighting(bool status) {
 
 void DocumentPage::setParsedUDOs(QStringList udos) {
     m_view->setParsedUDOs(udos);
+}
+
+void DocumentPage::setGlobalVariables(const QStringList &variables) {
+    m_view->setGlobalVariables(variables);
+}
+
+void DocumentPage::setGlobalStringVariables(const QStringList &variables) {
+    m_view->setGlobalStringVariables(variables);
+}
+
+void DocumentPage::setInstrumentNames(const QStringList &names) {
+    m_view->setInstrumentNames(names);
+}
+
+QStringList DocumentPage::getWidgetChannels() {
+    QStringList channels;
+    if (WidgetLayout *layout = getWidgetLayout()) {
+        for (QuteWidget *widget : layout->getWidgets()) {
+            if (!widget)
+                continue;
+            const QString channel = widget->getChannelName();
+            const QString channel2 = widget->getChannel2Name();
+            if (!channel.isEmpty())
+                channels.append(channel);
+            if (!channel2.isEmpty())
+                channels.append(channel2);
+        }
+    }
+    channels.removeDuplicates();
+    channels.sort(Qt::CaseInsensitive);
+    return channels;
+}
+
+void DocumentPage::updateWidgetChannels() {
+    m_view->setWidgetChannels(getWidgetChannels());
 }
 
 void DocumentPage::parseUdos(bool force) {

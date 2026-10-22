@@ -23,36 +23,39 @@ See: (OrchUDO SHIFT+F1), (opcode SHIFT+F1)
 <CsInstruments>
 
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
-; Feedback Delay which forces the instrument stay active as long as the delay plays
-opcode MyFeedbackDelay,a,akki		; a= one audio output / akki= one audioinput, two k-rate inputs, one i-rate	
-ain, kDryWet, kDelTime, iFeedback xin	; Inputs: Audio-In, DryWet-Mix(0-1), Delay-Time(sec), Feedback-Amount (0-0.95)
-iFeedback = (iFeedback > 0.95 ? 0.95 : iFeedback) ; limiting Feedback maximum to 0.95
-aDelay delayr 1					; a delayline, with 1 second maximum delay-time is initialised
-aWet	deltapi kDelTime				; data at a flexible position is read from the delayline 
-	delayw ain+(aWet*iFeedback)		
-xout (1-kDryWet) * ain + (kDryWet * aWet) ; the amount of pure-signal and delayed-signal
-iNumberOfDelays = (log(0.0004) / log(iFeedback)) ; number of repeats louder than 0.0004
-xtratim p7*iNumberOfDelays			; forces the instrument to wait for X Delays
+; Feedback Delay which forces the instrument stay active as long as the delay plays.
+; Csound 7 declares the inputs and the output type in the opcode signature.
+opcode MyFeedbackDelay(ain:a, kDryWet:k, kDelTime:k, iFeedback:i):a
+  iFeedback = (iFeedback > 0.95 ? 0.95 : iFeedback)  ; limiting Feedback maximum to 0.95
+  ; a delayline, with 1 second maximum delay-time is initialised
+  aDelay = delayr(1)
+  ; data at a flexible position is read from the delayline
+  aWet = deltapi(kDelTime)
+  delayw ain+ aWet*iFeedback
+  ; the amount of pure-signal and delayed-signal
+  xout (1-kDryWet) * ain + kDryWet*aWet
+  iNumberOfDelays = log(0.0004) / log(iFeedback)  ; num. repeats louder than 0.0004
+  ; forces the instrument to wait for X Delays
+  xtratim p7*iNumberOfDelays
 endop
 
 
-
-instr 1 						; Sine Instrument
-icps = p4
-iamp = p5
-aSrc oscili iamp, icps, 1
-aEnv madsr 0.01, 0.1, 0.0, 0.01		; percussive envelope
-aDelayed init 0.0
-kDryWet=p6
-kDelTime=p7
-iFeedback=p8
-aDelayed MyFeedbackDelay aSrc*aEnv, kDryWet, kDelTime, iFeedback
-outs aDelayed, aDelayed
+instr 1  ; Sine Instrument
+  icps = p4
+  iamp = p5
+  aSrc = oscili(iamp, icps, 1)
+  aEnv = madsr(0.01, 0.1, 0.0, 0.01)  ; percussive envelope
+  aDelayed = init(0.0)
+  kDryWet = p6
+  kDelTime = p7
+  iFeedback = p8
+  aDelayed MyFeedbackDelay aSrc*aEnv, kDryWet, kDelTime, iFeedback
+  out(aDelayed, aDelayed)
 endin
 </CsInstruments>
 
@@ -70,6 +73,18 @@ e
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Mar. 2010) - Incontri HMT-Hannover 
 
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="323" y="111" width="616" height="389" visible="true" loopStart="0" loopEnd="0">i 1 1 1 400 
+i 1 2 1 
+i 1 3 1 
+i 1 4 1 
+hi    
+hi    
+hi    
+hi    
+hi hi   
+hi hi   </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -91,9 +106,13 @@ e
   <width>266</width>
   <height>147</height>
   <uuid>{6886a8e1-368e-408c-b028-88d9716ca673}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
+  <objectName2/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -101,17 +120,8 @@ e
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="323" y="111" width="616" height="389" visible="true" loopStart="0" loopEnd="0">i 1 1 1 400 
-i 1 2 1 
-i 1 3 1 
-i 1 4 1 
-hi    
-hi    
-hi    
-hi    
-hi hi   
-hi hi   </EventPanel>

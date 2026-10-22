@@ -89,17 +89,6 @@ e
 </CsoundSynthesizer>
 
 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 329 376 406 285
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>

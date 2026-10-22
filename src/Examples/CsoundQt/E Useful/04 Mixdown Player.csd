@@ -9,10 +9,10 @@
 ; to M channels, with panning.
 ; If N=M, it's a 1:1 player.
 
-sr     = 44100
-ksmps  = 64
+sr = 44100
+ksmps = 64
 nchnls = 2  ; change here if your device has more channels
-0dbfs  = 1
+0dbfs = 1
 
 chn_S "_MBrowse", 1
 
@@ -24,29 +24,29 @@ opcode StrayGetEl, ii, Sijj
   ; ;Define the separators
   isep1 = (isepA == -1? 32 : isepA)
   isep2 = (isepA == -1&& isepB == -1? 9 : (isepB == -1 ? isep1 : isepB))
-  Sep1 sprintf "%c", isep1
-  Sep2 sprintf "%c", isep2
+  Sep1  = sprintf("%c", isep1)
+  Sep2  = sprintf("%c", isep2)
   ; ;Initialize some parameters
-  ilen strlen Stray
+  ilen = strlen(Stray)
   istartsel = -1  ; startindex for searched element
-  iendsel   = -1  ; endindex for searched element
-  iel       = 0   ; actual number of element while searching
-  iwarleer  = 1
-  indx      = 0
+  iendsel = -1    ; endindex for searched element
+  iel = 0         ; actual number of element while searching
+  iwarleer = 1
+  indx = 0
   if ilen == 0 igoto end  ; don't go into the loop if Stray is empty
 loop:
-  Snext strsub Stray, indx, indx+1  ; next sign
-  isep1p strcmp Snext, Sep1         ; returns 0 if  Snext is sep1
-  isep2p strcmp Snext, Sep2         ; 0 if  Snext is sep2
+  Snext  = strsub(Stray, indx, indx+1)  ; next sign
+  isep1p = strcmp(Snext, Sep1)          ; returns 0 if  Snext is sep1
+  isep2p = strcmp(Snext, Sep2)          ; 0 if  Snext is sep2
   ; ;Next sign is not sep1 nor sep2
   if isep1p != 0 && isep2p != 0 then
     if iwarleer == 1 then     ; first character after a separator
       if iel == ielindx then  ; if searched element index
         istartsel = indx      ; set it
         iwarleer  = 0
-      else                ; ifnot searched element index
-        iel      = iel+1  ; increase it
-        iwarleer = 0      ; log thatit's not a  separator
+      else            ; ifnot searched element index
+        iel = iel+1   ; increase it
+        iwarleer = 0  ; log thatit's not a  separator
       endif
     endif
     ; ;Next sign is sep1 or sep2
@@ -70,40 +70,39 @@ opcode StrayLen, i, Sjj
   ; ;Define the separators
   isep1 = (isepA == -1? 32 : isepA)
   isep2 = (isepA == -1&& isepB == -1? 9 : (isepB == -1 ? isep1 : isepB))
-  Sep1 sprintf "%c", isep1
-  Sep2 sprintf "%c", isep2
+  Sep1  = sprintf("%c", isep1)
+  Sep2  = sprintf("%c", isep2)
   ; ;Initialize some parameters
-  ilen strlen Stray
+  ilen    = strlen(Stray)
   icount  = 0  ; number of elements
   iwarsep = 1
   indx    = 0
   if ilen == 0 igoto end  ; don't go into the loop if String is empty
 loop:
-  Snext strsub Stray, indx, indx+1    ; next sign
-  isep1p strcmp Snext, Sep1           ; returns 0 if  Snext is sep1
-  isep2p strcmp Snext, Sep2           ; 0 if  Snext is sep2
-  if isep1p == 0 || isep2p == 0 then  ; if sep1 or sep2
-    iwarsep = 1                       ; tell the log  so
-  else                                ; if not
-    if iwarsep == 1 then              ; and has been sep1 or sep2 before
-      icount  = icount+ 1             ; increase counter
-      iwarsep = 0                     ; and tell you are ot sep1 nor sep2
+  Snext  = strsub(Stray, indx, indx+1)  ; next sign
+  isep1p = strcmp(Snext, Sep1)          ; returns 0 if  Snext is sep1
+  isep2p = strcmp(Snext, Sep2)          ; 0 if  Snext is sep2
+  if isep1p == 0 || isep2p == 0 then    ; if sep1 or sep2
+    iwarsep = 1                         ; tell the log  so
+  else                                  ; if not
+    if iwarsep == 1 then                ; and has been sep1 or sep2 before
+      icount  = icount+ 1               ; increase counter
+      iwarsep = 0                       ; and tell you are ot sep1 nor sep2
     endif
   endif
   loop_lt indx, 1, ilen, loop
 end: xout icount
 endop
 
-opcode MxdwnPlay, 0, Siiiiki
-  Stray, ilen, ichnls, ifirstchn, iel, kvol, iskip xin
+opcode MxdwnPlay(Stray:S, ilen:i, ichnls:i, ifirstchn:i, iel:i, kvol:k, iskip:i):()
   ipan    = iel* ((ichnls-1)/(ilen-1))
   ioutch1 = int(ipan)+ifirstchn
   ioutch2 = ioutch1+1
-  Soutch1 sprintf "outchn%d", ioutch1
-  Soutch2 sprintf "outchn%d", ioutch2
-  ipan2 = frac(ipan)
+  Soutch1 = sprintf("outchn%d", ioutch1)
+  Soutch2 = sprintf("outchn%d", ioutch2)
+  ipan2   = frac(ipan)
   ist, ien StrayGetEl Stray, iel, 124
-  Sel strsub Stray, ist, ien
+  Sel = strsub(Stray, ist, ien)
   asig soundin Sel, iskip
   iscale = ichnls/ ilen
   a1, a2 pan2 asig*iscale*kvol, ipan2
@@ -116,7 +115,7 @@ opcode MxdwnPlay, 0, Siiiiki
   endif
 endop
 
-opcode ShowLED_a, 0, Sakkk
+opcode ShowLED_a(Soutchan:S, asig:a, kdispfreq:k, kdb:k, kdbrange:k):()
   ; Shows an audio signal in an outvalue channel. You can choose to show the value in dB
   ; or in raw amplitudes.
   ; ;Input:
@@ -126,7 +125,6 @@ opcode ShowLED_a, 0, Sakkk
   ; kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
   ; kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything
   ; from a signal below -36 dB)
-  Soutchan, asig, kdispfreq, kdb, kdbrange xin
   kdispval max_k asig, kdispfreq, 1
   if kdb != 0 then
     kdb  = dbfsamp(kdispval)
@@ -138,19 +136,18 @@ opcode ShowLED_a, 0, Sakkk
 endop
 
 
-opcode ShowOver_a, 0, Sakk
+opcode ShowOver_a(Soutchan:S, asig:a, kdispfreq:k, khold:k):()
   ; Shows if the incoming audio signal was more than 1 and stays there for some time
   ; ;Input:
   ; Soutchan: string with the name of the outvalue channel
   ; asig: audio signal which is to displayed
   ; kdispfreq: refresh frequency (Hz)
   ; khold: time in seconds to "hold the red light"
-  Soutchan, asig, kdispfreq, khold xin
-  kon init 0
-  ktim times
-  kstart init 0
-  kend   init 0
-  khold = (khold< .01? .01 : khold)  ; avoiding too short hold times
+  kon    = init(0)
+  ktim   = times()
+  kstart = init(0)
+  kend   = init(0)
+  khold  = (khold< .01? .01 : khold)  ; avoiding too short hold times
   kmax max_k asig, kdispfreq, 1
   if kon == 0 && kmax > 1 then
     kstart = ktim
@@ -164,16 +161,15 @@ opcode ShowOver_a, 0, Sakk
   endif
 endop
 
-opcode CollectShowClear, 0, iiikiii
+opcode CollectShowClear(ichnls:i, ifirstout:i, icount:i, ktrigdisp:k, idboramp:i, idbrange:i, icliphold:i):()
   ; collect the audio channels, sends them to the display, and clears the global audio
   ; channel
-  ichnls, ifirstout, icount, ktrigdisp, idboramp, idbrange, icliphold xin
-  Soutchn sprintf "outchn%d", icount+ifirstout
-  Sdisp   sprintf "out%d", icount+1
-  Sover   sprintf "over%d", icount+1
-  Schn    sprintf "chn%d", icount+1
-  Schnval sprintf "%d", ifirstout+icount
-  acollect chnget Soutchn
+  Soutchn = sprintf("outchn%d", icount+ifirstout)
+  Sdisp = sprintf("out%d", icount+1)
+  Sover = sprintf("over%d", icount+1)
+  Schn = sprintf("chn%d", icount+1)
+  Schnval = sprintf("%d", ifirstout+icount)
+  acollect = chnget(Soutchn)
   outch ifirstout+icount, acollect
   ShowLED_a Sdisp, acollect, ktrigdisp, idboramp, idbrange
   ShowOver_a Sover, acollect, ktrigdisp, icliphold
@@ -186,39 +182,39 @@ endop
 
 instr 1
   ; input values
-  Stray chnget "_MBrowse"
+  Stray = chnget("_MBrowse")
   ist, ien StrayGetEl Stray, 0, 124  ; get duration from the first element
-  Sfirst strsub Stray, ist, ien
-  idur filelen Sfirst
-  ilen StrayLen Stray, 124
-  kchnls    invalue "numoutch"
-  kfirstout invalue "firstout"
-  kskip     invalue "skip"
-  kdb       invalue "db"
-  kvol      = ampdb(kdb)
-  ichnls    = i(kchnls)
+  Sfirst = strsub(Stray, ist, ien)
+  idur = filelen(Sfirst)
+  ilen = StrayLen(Stray, 124)
+  kchnls = chnget("numoutch")
+  kfirstout = chnget("firstout")
+  kskip = chnget("skip")
+  kdb = chnget("db")
+  kvol = ampdb(kdb)
+  ichnls = i(kchnls)
   ifirstout = i(kfirstout)
-  iskip     = i(kskip)
-  p3        = idur- iskip
+  iskip = i(kskip)
+  p3 = idur- iskip
 
   ; play as many channels as there are monofiles given, and pan to the output channels
   MxdwnPlay Stray, ilen, ichnls, ifirstout, 0, kvol, iskip
 
   ; ;display time
-  ktim timeinsts
+  ktim = timeinsts()
   kplaypos = iskip+ ktim
-  kposmin  = floor(kplaypos/60)
-  kpossec  = floor(kplaypos%60)
-  Smin sprintfk "%02d", kposmin
-  Ssec sprintfk "%02d", kpossec
-  outvalue "min", Smin
-  outvalue "sec", Ssec
+  kposmin = floor(kplaypos/60)
+  kpossec = floor(kplaypos%60)
+  Smin = sprintfk("%02d", kposmin)
+  Ssec = sprintfk("%02d", kpossec)
+  chnset(Smin, "min")
+  chnset(Ssec, "sec")
 
   ; ;collect and display mixdown audio signals
   idboramp  = 1  ; 0=raw amps, 1=db
   idbrange  = 48
   icliphold = 2
-  ktrigdisp metro 10
+  ktrigdisp = metro(10)
   CollectShowClear ichnls, ifirstout, 0, ktrigdisp, idboramp, idbrange, icliphold
 endin
 </CsInstruments>

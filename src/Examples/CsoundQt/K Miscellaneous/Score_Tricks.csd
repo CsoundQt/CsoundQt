@@ -44,17 +44,6 @@ i -2 ^+3 1  ;Turn off instr 2
 e
 </CsScore>
 </CsoundSynthesizer>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 457 242 286 426
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" name="" x="0" y="0" width="596" height="322"> 
 

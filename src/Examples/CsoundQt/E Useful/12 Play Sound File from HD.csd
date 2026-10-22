@@ -5,10 +5,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr     = 48000
-ksmps  = 32
+sr = 48000
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
 /*****Play sound file from harddisk with some features*****/
 ; written by joachim heintz, andres cabrera and victor lazzarini
@@ -42,10 +42,11 @@ instr Play
   dB:k   = chnget("db")
 
   file_duration:i = filelen(file)
-  file_sr:i       = filesr(file)
-  file_chns:i     = filenchnls(file)
+  file_sr:i = filesr(file)
+  file_chns:i = filenchnls(file)
 
-  // prevent more than one instances to be called (not necessary with latch button, see below)
+  // prevent more than one instances to be called (not necessary with latch button, see
+  // below)
   instances:i = active("Play")
   if (instances > 1) then
     turnoff2_i("Play", 1, 0)
@@ -87,16 +88,15 @@ instr Play
 
 endin
 
-//UDO for displaying an audio signal in widgets
+// UDO for displaying an audio signal in widgets
 ; see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
-opcode CsQtMeter, 0, SSak
-  S_chan_sig, S_chan_clip, aSig, kTrig xin
+opcode CsQtMeter(S_chan_sig:S, S_chan_clip:S, aSig:a, kTrig:k):()
   iDbRange = 60  ; shows 60 dB
   iHoldTim = 1   ; seconds to "hold the red light"
-  kOn    init 0
-  kTim   init 0
-  kStart init 0
-  kEnd   init 0
+  kOn = init(0)
+  kTim = init(0)
+  kStart = init(0)
+  kEnd = init(0)
   kMax max_k aSig, kTrig, 1
   if kTrig == 1 then
     chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
@@ -118,7 +118,7 @@ endop
 // back any number of channels if you change nchnls in the header)
 instr Monitor
 
-  aOut[]            = monitor()
+  aOut[] = monitor()
   display_trigger:k = metro(10)
   CsQtMeter( "outL", "outLclip", aOut[0], display_trigger)
   CsQtMeter( "outR", "outRclip", aOut[1], display_trigger)

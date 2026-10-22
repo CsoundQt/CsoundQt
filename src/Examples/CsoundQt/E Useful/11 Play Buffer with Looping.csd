@@ -4,10 +4,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr     = 44100
-ksmps  = 64
+sr = 44100
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
 /*****Playing a soundfile from a buffer for looping*****/
 ; written by joachim heintz and andrés cabrera
@@ -23,8 +23,8 @@ chn_k( "dB", 1)
 
 instr Copy_file_to_table
 
-  file:S                = chnget("_Browse")  ; GUI input
-  filelength@global:i   = filelen(file)
+  file:S = chnget("_Browse")  ; GUI input
+  filelength@global:i = filelen(file)
   filenumchnls@global:i = filenchnls(file)
   // make sure that file exists
   if (filevalid(file) == 1) then
@@ -39,9 +39,9 @@ schedule(Copy_file_to_table, 0, 0)
 instr Play
 
   loopstart:k = chnget:k("loop-start") * filelength
-  loopend:k   = chnget:k("loop-end") * filelength
-  speed:k     = chnget("speed")
-  amp:k       = ampdb(chnget:k("dB"))
+  loopend:k = chnget:k("loop-end") * filelength
+  speed:k = chnget("speed")
+  amp:k = ampdb(chnget:k("dB"))
   // as flooper2 expects start < end we care for it
   // and allow the user to do anything
   startl:k = (loopstart < loopend) ? loopstart : loopend

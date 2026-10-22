@@ -7,18 +7,18 @@ Keyboard Input
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 1
-0dbfs = 1
+0dbfs  = 1
 
 instr 1
-kres, kkeydown sensekey
-; You have to check whether a key has bee pressed
-; When no key is pressed kres is -1
-if kkeydown == 1 then 
-	outvalue "keyvalue", kres
-endif
+  kres, kkeydown sensekey
+  ; You have to check whether a key has bee pressed
+  ; When no key is pressed kres is -1
+  if kkeydown == 1 then
+    chnset(kres, "keyvalue")
+  endif
 endin
 
 </CsInstruments>

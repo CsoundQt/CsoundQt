@@ -28,33 +28,27 @@ More detailed information can be found here:
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 instr 2
-kFreq expon 100, 5, 1000 	; kFreq is used to carry the 'expon' output as k-type
-aOut  oscili 0.2, kFreq, 1 	; aOut carries the 'oscil' output as a-type 
-	outvalue "freqsweep", kFreq  ; k-type values can be displayed on widgets
-	outs aOut, aOut 			; a-type values can be played by the computers audio output
+  kFreq expon 100, 5, 1000     ; kFreq is used to carry the 'expon' output as k-type
+  aOut oscili 0.2, kFreq, 1    ; aOut carries the 'oscil' output as a-type
+  outvalue "freqsweep", kFreq  ; k-type values can be displayed on widgets
+  outs aOut, aOut              ; a-type values can be played by the computers audio output
 endin
 
 
 </CsInstruments>
 <CsScore>
 f 1 0 1024 10 1 			; this function table contains the sine information
-i 2 0 5 				; the instrument is called and plays for 5 seconds
+i 2 0 5 				      ; the instrument is called and plays for 5 seconds
 e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover 
-
-
-
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -76,7 +70,9 @@ e
   <width>144</width>
   <height>29</height>
   <uuid>{e0798988-168d-430b-a9b7-b8f2313ca7bf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -86,6 +82,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>0</r>
    <g>0</g>
@@ -96,6 +93,11 @@ e
    <g>109</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -107,10 +109,13 @@ e
   <width>255</width>
   <height>150</height>
   <uuid>{98a4c895-a461-408e-9ab2-543b97475130}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
+  <objectName2/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -127,7 +132,9 @@ e
   <width>248</width>
   <height>71</height>
   <uuid>{6b72ecb9-3089-4674-b08a-8adc73a46b3e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -136,7 +143,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -147,6 +155,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -158,7 +171,9 @@ e
   <width>254</width>
   <height>53</height>
   <uuid>{5f31db51-4df9-4b43-8f7d-340609938c13}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -167,7 +182,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -178,6 +194,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -189,12 +210,15 @@ e
   <width>251</width>
   <height>109</height>
   <uuid>{8ca94d8e-b7f1-42ea-8842-6971bea7aa46}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <value>0</value>
   <objectName2/>
+  <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -216,7 +240,9 @@ e
   <width>251</width>
   <height>61</height>
   <uuid>{78869346-10bb-48e9-91c8-84e4b7e3e2f1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -225,7 +251,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -236,6 +263,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -247,7 +279,9 @@ e
   <width>144</width>
   <height>29</height>
   <uuid>{2a0e9cca-d3b3-4fbc-8e24-374c23d39941}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -257,6 +291,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>0</r>
    <g>0</g>
@@ -267,6 +302,11 @@ e
    <g>109</g>
    <b>0</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -278,10 +318,13 @@ e
   <width>255</width>
   <height>150</height>
   <uuid>{a1a2b99b-4f02-465a-8725-e03da3c9c551}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
+  <objectName2/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -298,7 +341,9 @@ e
   <width>248</width>
   <height>71</height>
   <uuid>{17ce6c00-b473-4ea4-9bf4-44a0304a85a6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -307,7 +352,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -318,6 +364,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -329,7 +380,9 @@ e
   <width>254</width>
   <height>53</height>
   <uuid>{ee5ec7fb-9af7-44f6-b84e-3a7d91d19d68}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -338,7 +391,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -349,6 +403,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -360,7 +419,9 @@ e
   <width>251</width>
   <height>61</height>
   <uuid>{8ac76c90-0fcc-4387-a913-ee6318a09765}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -369,7 +430,8 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -380,6 +442,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

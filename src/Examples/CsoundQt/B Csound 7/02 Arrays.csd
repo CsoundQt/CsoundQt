@@ -10,7 +10,6 @@ ksmps = 64
 nchnls = 2
 0dbfs = 1
 
-chn_S("display-output",2)
 
 
 /* CSOUND 7 — What's new 2: ARRAYS
@@ -25,13 +24,13 @@ chn_S("display-output",2)
 instr Arr_1
 
   myarray:i[] = [1,2,3,5,8]
-  puts("Elements in myarray:",1)
+  prints("Elements in myarray:\n")
   show:S = "  "
   for el in myarray do
-    show = strcat(show,sprintf("%d ",el))
+    show = strcat(show, sprintf("%d ",el))
   od
   puts(show,1)
-  schedule(ShowArr_1,0,1)
+  schedule(ShowArr_1, 0, 1)
 
 endin
 
@@ -225,13 +224,15 @@ endin
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>263</x>
- <y>154</y>
- <width>1115</width>
- <height>833</height>
+ <x>0</x>
+ <y>0</y>
+ <width>825</width>
+ <height>660</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -241,12 +242,14 @@ endin
  </bgcolor>
  <bsbObject type="BSBButton" version="2">
   <objectName>button0</objectName>
-  <x>17</x>
-  <y>61</y>
-  <width>283</width>
-  <height>42</height>
+  <x>15</x>
+  <y>60</y>
+  <width>200</width>
+  <height>40</height>
   <uuid>{9c6b0259-6016-411d-b9c8-a14161cc2423}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -259,16 +262,30 @@ endin
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
-  <fontsize>16</fontsize>
+  <fontsize>13</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
+  </color>
+  <pressedColor>#e1e3e5</pressedColor>
+  <borderColor>#b3b3b3</borderColor>
+  <textColor>#31363b</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>display-output</objectName>
-  <x>304</x>
-  <y>61</y>
-  <width>753</width>
-  <height>703</height>
+  <x>225</x>
+  <y>60</y>
+  <width>600</width>
+  <height>600</height>
   <uuid>{dca2180d-3708-4a41-8865-eee375f49ef0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -293,9 +310,10 @@ returns:
     1 2 3 5 8</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Liberation Mono</font>
-  <fontsize>18</fontsize>
+  <font>JetBrains Mono</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
+  <padding>5</padding>
   <color>
    <r>0</r>
    <g>0</g>
@@ -306,18 +324,25 @@ returns:
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>190</r>
+   <g>190</g>
+   <b>190</b>
+  </bordercolor>
   <bordermode>true</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderradius>5</borderradius>
+  <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button0</objectName>
-  <x>17</x>
+  <x>15</x>
   <y>110</y>
-  <width>283</width>
-  <height>42</height>
+  <width>200</width>
+  <height>40</height>
   <uuid>{d0f0f4c4-8aae-4855-918c-eda974cc7d04}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -326,20 +351,34 @@ returns:
   <stringvalue/>
   <text>arr:S[] = [...]</text>
   <image>/</image>
-  <eventLine>i "Arr_2" 0 0</eventLine>
+  <eventLine>i "Arr_1" 0 0</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
-  <fontsize>16</fontsize>
+  <fontsize>13</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
+  </color>
+  <pressedColor>#e1e3e5</pressedColor>
+  <borderColor>#b3b3b3</borderColor>
+  <textColor>#31363b</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button0</objectName>
-  <x>17</x>
+  <x>15</x>
   <y>160</y>
-  <width>283</width>
-  <height>42</height>
+  <width>200</width>
+  <height>40</height>
   <uuid>{be92a551-06c7-48d7-884c-f6d975ab5ba1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -348,20 +387,34 @@ returns:
   <stringvalue/>
   <text>[] for k- and a-arrays</text>
   <image>/</image>
-  <eventLine>i "Arr_3" 0 10</eventLine>
+  <eventLine>i "Arr_1" 0 0</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
-  <fontsize>16</fontsize>
+  <fontsize>13</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
+  </color>
+  <pressedColor>#e1e3e5</pressedColor>
+  <borderColor>#b3b3b3</borderColor>
+  <textColor>#31363b</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button0</objectName>
-  <x>17</x>
+  <x>15</x>
   <y>210</y>
-  <width>283</width>
-  <height>42</height>
+  <width>200</width>
+  <height>40</height>
   <uuid>{0d48ac7b-aeef-4148-a6da-613ff90375a6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -370,20 +423,34 @@ returns:
   <stringvalue/>
   <text>short form for genarray</text>
   <image>/</image>
-  <eventLine>i "Arr_4" 0 0</eventLine>
+  <eventLine>i "Arr_1" 0 0</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
-  <fontsize>16</fontsize>
+  <fontsize>13</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
+  </color>
+  <pressedColor>#e1e3e5</pressedColor>
+  <borderColor>#b3b3b3</borderColor>
+  <textColor>#31363b</textColor>
+  <pressedTextColor/>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
   <y>14</y>
-  <width>1040</width>
+  <width>800</width>
   <height>38</height>
   <uuid>{321802e3-d5a0-407d-a4e1-df59e780d96b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -392,7 +459,8 @@ returns:
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -403,6 +471,11 @@ returns:
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

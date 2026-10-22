@@ -15,72 +15,81 @@ Instrument 102 adds the global feedback delay and the reverb, and finally zeros 
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 32
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
-gaOut init 0.0
-massign 1, 101		; assign all incoming midi from midi-chn 1 (= keyboard) to instr 101 (Sawthooth Oscillator)
+gaOut = init(0.0)
+; assign all incoming midi from midi-chn 1 (= keyboard) to instr 101 (Sawthooth
+; Oscillator)
+massign 1, 101
 
 
-instr 100; MIDI CONTROLLER RECEIVE INSTRUMENT
-; Get information for MIDI Channel and Controller Numbers from the Widget Panel
-	kMidiChn_slider invalue "#midichn_slider"							; receive midi channel for the sliders
-	kCtrlNo_filt_freq invalue "ctrl#filt_freq"							; receive controller number for filter frequency
-	kCtrlNo_DelTime invalue "ctrl#_time_delay"							; receive controller number for delay time
-	kCtrlNo_Feedback invalue "ctrl#_feedb_delay"						; receive controller number for delay time
-	kCtrlNo_d_w_delay invalue "ctrl#_d_w_delay"						; receive controller number for delay wet-dry-mix
-	kCtrlNo_d_w_reverb invalue "ctrl#_d_w_reverb"						; receive controller number for reverb wet-dry-mix
-; Receive Values from the MIDI Sliders as global k-Variables
-midivalues: ;begin of a possible reinit section
-	gkFilterCC1 ctrl7 i(kMidiChn_slider), i(kCtrlNo_filt_freq), 10, 5000				; read 7-bit MIDI CC data and map to a range between 10-5000 
-	gkDelTime ctrl7 i(kMidiChn_slider), i(kCtrlNo_DelTime), 0.05, 1
-	gkFeedback ctrl7 i(kMidiChn_slider), i(kCtrlNo_Feedback), 0.05, 1
-	gkDryWetDelay ctrl7 i(kMidiChn_slider), i(kCtrlNo_d_w_delay), 0, 1
-	gkDryWetReverb ctrl7 i(kMidiChn_slider), i(kCtrlNo_d_w_reverb), 0, 1
-rireturn; end of a possible reinit section
+instr 100  ; MIDI controller receive instrument
+  ; Get information for MIDI Channel and Controller Numbers from the Widget Panel
+  kMidiChn_slider = chnget("#midichn_slider")  ; receive midi channel for the sliders
+  ; receive controller number for filter frequency
+  kCtrlNo_filt_freq = chnget("ctrl#filt_freq")
+  ; receive controller number for delay time
+  kCtrlNo_DelTime = chnget("ctrl#_time_delay")
+  ; receive controller number for delay time
+  kCtrlNo_Feedback = chnget("ctrl#_feedb_delay")
+  ; receive controller number for delay wet-dry-mix
+  kCtrlNo_d_w_delay = chnget("ctrl#_d_w_delay")
+  ; receive controller number for reverb wet-dry-mix
+  kCtrlNo_d_w_reverb = chnget("ctrl#_d_w_reverb")
+  ; Receive Values from the MIDI Sliders as global k-Variables
+midivalues:  ; begin of a possible reinit section
+  ; read 7-bit MIDI CC data and map to a range between 10-5000
+  gkFilterCC1    = ctrl7(i(kMidiChn_slider), i(kCtrlNo_filt_freq), 10, 5000)
+  gkDelTime      = ctrl7(i(kMidiChn_slider), i(kCtrlNo_DelTime), 0.05, 1)
+  gkFeedback     = ctrl7(i(kMidiChn_slider), i(kCtrlNo_Feedback), 0.05, 1)
+  gkDryWetDelay  = ctrl7(i(kMidiChn_slider), i(kCtrlNo_d_w_delay), 0, 1)
+  gkDryWetReverb = ctrl7(i(kMidiChn_slider), i(kCtrlNo_d_w_reverb), 0, 1)
+  rireturn  ; end of a possible reinit section
 
-; Reinit the label "midivalues" only, when a MIDI Channel or any of the CC Number assignments  have changed
-kchanged changed kMidiChn_slider, kCtrlNo_filt_freq, kCtrlNo_DelTime, kCtrlNo_Feedback, kCtrlNo_d_w_delay, kCtrlNo_d_w_reverb
-	if kchanged == 1 then
-		reinit midivalues
-	endif
-; Send the MIDI-Values to the Widget Panel
-outvalue "filter_freq", gkFilterCC1
-outvalue "feedb_delay", gkFeedback
-outvalue "d_w_delay", gkDryWetDelay
-outvalue "time_delay", gkDelTime
-outvalue "d_w_reverb", gkDryWetReverb
+  ; Reinit the label "midivalues" only, when a MIDI Channel or any of the CC Number
+  ; assignments have changed
+  kchanged = changed(kMidiChn_slider, kCtrlNo_filt_freq, kCtrlNo_DelTime, kCtrlNo_Feedback, kCtrlNo_d_w_delay, kCtrlNo_d_w_reverb)
+  if kchanged == 1 then
+    reinit midivalues
+  endif
+  ; Send the MIDI-Values to the Widget Panel
+  chnset(gkFilterCC1,    "filter_freq")
+  chnset(gkFeedback,     "feedb_delay")
+  chnset(gkDryWetDelay,  "d_w_delay")
+  chnset(gkDelTime,      "time_delay")
+  chnset(gkDryWetReverb, "d_w_reverb")
 endin
 
-instr 101	; Sawthooth Oscillator triggered with notes on MIDI CH: 1
-icps = p4
-iamp = p5/127
-kFfreq port gkFilterCC1, 0.05
-aSrc oscili iamp, icps, 1
-aFiltered moogvcf aSrc, kFfreq, 0.1
-aEnv madsr 0.01, 0.1, 0.9, 0.01
-gaOut = gaOut + aFiltered*aEnv
+instr 101  ; Sawthooth Oscillator triggered with notes on MIDI CH: 1
+  icps      = p4
+  iamp      = p5/127
+  kFfreq    = port(gkFilterCC1, 0.05)
+  aSrc      = oscili(iamp, icps, 1)
+  aFiltered = moogvcf(aSrc, kFfreq, 0.1)
+  aEnv      = madsr(0.01, 0.1, 0.9, 0.01)
+  gaOut     = gaOut + aFiltered*aEnv
 endin
 
-instr 102; Global Feedback Delay and Reverb
-; DELAY Section
-kDelTime port gkDelTime, 0.05
-aDelTime = a(kDelTime)
-aDelay delayr 1
-aWet	deltapi aDelTime
-	delayw gaOut+(aWet*gkFeedback)
-gaOut		=	(1-gkDryWetDelay) * gaOut + (gkDryWetDelay * aWet)
+instr 102  ; Global Feedback Delay and Reverb
+  ; DELAY Section
+  kDelTime = port(gkDelTime, 0.05)
+  aDelTime = a(kDelTime)
+  aDelay   = delayr(1)
+  aWet     = deltapi(aDelTime)
+  delayw gaOut+(aWet*gkFeedback)
+  gaOut = (1-gkDryWetDelay) * gaOut + (gkDryWetDelay * aWet)
 
-; REVERB Section
-kroomsize init 0.4
-khfdamp init  0.8
-aWetL, aWetR freeverb gaOut, gaOut, kroomsize, khfdamp
-aOutL	= (1-gkDryWetReverb) * gaOut + (gkDryWetReverb * aWetL)
-aOutR	= (1-gkDryWetReverb) * gaOut + (gkDryWetReverb * aWetR)
-outs aOutL, aOutR
-gaOut = 0.0
+  ; REVERB Section
+  kroomsize = init(0.4)
+  khfdamp   = init(0.8)
+  aWetL, aWetR freeverb gaOut, gaOut, kroomsize, khfdamp
+  aOutL = (1-gkDryWetReverb) * gaOut + (gkDryWetReverb * aWetL)
+  aOutR = (1-gkDryWetReverb) * gaOut + (gkDryWetReverb * aWetR)
+  out(aOutL, aOutR)
+  gaOut = 0.0
 endin
 
 </CsInstruments>

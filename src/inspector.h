@@ -61,6 +61,14 @@ public:
     QStringList getParsedUDOs() { return m_opcodes; }
     QVector<Opcode*> getUdosVector() { return udosVector; }
     QHash<QString, Opcode>*getUdosMap() { return &udosMap; }
+    // Global variables found in the current document (g-prefixed or Csound 7
+    // name@global:type). A type suffix takes precedence over the prefix:
+    // gkfoo:a is local, not global. Globals are visible from every instrument
+    // and opcode, unlike the block-local variables.
+    QStringList getGlobalVariables() const { return m_globalVariables; }
+    QStringList getGlobalStringVariables() const { return m_globalStringVariables; }
+    // Names of the named instruments in the current document, for schedule().
+    QStringList getInstrumentNames() const { return m_instrumentNames; }
 
 
 protected:
@@ -81,6 +89,9 @@ private:
 	QMutex inspectorMutex;
     // QVector<QString> m_opcodes;
     QStringList m_opcodes;
+    QStringList m_globalVariables;
+    QStringList m_globalStringVariables;
+    QStringList m_instrumentNames;
     QRegularExpression opcodeRegexp;
     QRegularExpression rxOpcode;
     bool inspectLabels;

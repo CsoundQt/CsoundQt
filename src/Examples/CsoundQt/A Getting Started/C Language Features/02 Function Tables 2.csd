@@ -23,23 +23,25 @@ iaga..b - arguments used by the GEN ROUTINES to calculate the numbers
 <CsInstruments>
 
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
-giSine ftgen 1, 0, 4096, 10, 1		;a sinewave will be generated and stored into Table No. 1
-giAdd7Sine ftgen 2, 0, 4096, 10, 1, 1, 1, 1, 1, 1, 1, 1	;a sinewave and 6 harmonics
-giNoise ftgen 3, 0, 4096, 21, 1		; White Noise
-giMyNumbers ftgen	 0, 0, -3, -2, 1, 2, 3 ; [1, 2, 3] - becomes automatically table number 4
+; a sinewave will be generated and stored into Table No. 1
+giSine     = ftgen(1, 0, 4096, 10, 1)
+giAdd7Sine = ftgen(2, 0, 4096, 10, 1, 1, 1, 1, 1, 1, 1, 1)  ; a sinewave and 6 harmonics
+giNoise    = ftgen(3, 0, 4096, 21, 1)                       ; White Noise
+; [1, 2, 3] - becomes automatically table number 4
+giMyNumbers = ftgen(0, 0, -3, -2, 1, 2, 3)
 
 
 instr 1
-iLength = ftlen(giMyNumbers)
-iMyNumber tab_i (p2%(iLength)), giMyNumbers
-aEnv madsr 0.1, 0.1, 1, 0.3
-aWavetablePlayer oscili p4, cpspch(p5), (iMyNumber)
-outs aWavetablePlayer*aEnv, aWavetablePlayer*aEnv
+  iLength = ftlen(giMyNumbers)
+  iMyNumber tab_i (p2%(iLength)), giMyNumbers
+  aEnv             = madsr(0.1, 0.1, 1, 0.3)
+  aWavetablePlayer = oscili(p4, cpspch(p5), (iMyNumber))
+  out(aWavetablePlayer*aEnv, aWavetablePlayer*aEnv)
 endin
 
 </CsInstruments>

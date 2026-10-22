@@ -270,17 +270,6 @@ i1 0 3600
 </CsScore>
 </CsoundSynthesizer>
 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
 
 
 

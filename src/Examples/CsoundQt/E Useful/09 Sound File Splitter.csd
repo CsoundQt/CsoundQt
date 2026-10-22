@@ -10,17 +10,17 @@ joachim heintz june 2010**/
 0dbfs = 1
 ; if you want to avoid that some samples without sound are added at the end of the
 ; soundfile, use ksmps=1. but this will be slow for large files
-ksmps  = 128
+ksmps  = 64
 nchnls = 1
 
 
 instr 1
-  gSfile invalue "_Browse1"
-  ilen filelen gSfile
+  gSfile = chnget("_Browse1")
+  ilen   = filelen(gSfile)
   ; as time resolution in csound is bound to ksmps, one control period must be added to
   ; avoid omitting samples
   p3 = (ksmps == 1 ? ilen : ilen + ksmps/sr)
-  inchnls filenchnls gSfile
+  inchnls = filenchnls(gSfile)
   print inchnls
   if inchnls == 2 then
     event_i "i", 12, 0, p3
@@ -35,28 +35,28 @@ endin
 
 instr 12  ; split stereo file
   a1, a2 soundin gSfile
-  ibit filebit gSfile
+  ibit = filebit(gSfile)
   ibitform = (ibit == 24 ? 8 : (ibit == 32 ? 6 : 4))
-  iposp strrindex gSfile, "."
-  Spath strsub gSfile, 0, iposp  ; path without suffix
-  Suff  strsub gSfile, iposp     ; suffix
-  S1 sprintf "%s_1%s", Spath, Suff
-  S2 sprintf "%s_2%s", Spath, Suff
+  iposp = strrindex(gSfile, ".")
+  Spath = strsub(gSfile, 0, iposp)  ; path without suffix
+  Suff = strsub(gSfile, iposp)      ; suffix
+  S1 = sprintf("%s_1%s", Spath, Suff)
+  S2 = sprintf("%s_2%s", Spath, Suff)
   fout S1, ibitform, a1
   fout S2, ibitform, a2
 endin
 
 instr 14  ; split quadro file
   a1, a2, a3, a4 soundin gSfile
-  ibit filebit gSfile
+  ibit = filebit(gSfile)
   ibitform = (ibit == 24 ? 8 : (ibit == 32 ? 6 : 4))
-  iposp strrindex gSfile, "."
-  Spath strsub gSfile, 0, iposp  ; path without suffix
-  Suff  strsub gSfile, iposp     ; suffix
-  S1 sprintf "%s_1%s", Spath, Suff
-  S2 sprintf "%s_2%s", Spath, Suff
-  S3 sprintf "%s_3%s", Spath, Suff
-  S4 sprintf "%s_4%s", Spath, Suff
+  iposp = strrindex(gSfile, ".")
+  Spath = strsub(gSfile, 0, iposp)  ; path without suffix
+  Suff = strsub(gSfile, iposp)      ; suffix
+  S1 = sprintf("%s_1%s", Spath, Suff)
+  S2 = sprintf("%s_2%s", Spath, Suff)
+  S3 = sprintf("%s_3%s", Spath, Suff)
+  S4 = sprintf("%s_4%s", Spath, Suff)
   fout S1, ibitform, a1
   fout S2, ibitform, a2
   fout S3, ibitform, a3
@@ -65,19 +65,19 @@ endin
 
 instr 18  ; split octo file
   a1, a2, a3, a4, a5, a6, a7, a8 soundin gSfile
-  ibit filebit gSfile
+  ibit = filebit(gSfile)
   ibitform = (ibit == 24 ? 8 : (ibit == 32 ? 6 : 4))
-  iposp strrindex gSfile, "."
-  Spath strsub gSfile, 0, iposp  ; path without suffix
-  Suff  strsub gSfile, iposp     ; suffix
-  S1 sprintf "%s_1%s", Spath, Suff
-  S2 sprintf "%s_2%s", Spath, Suff
-  S3 sprintf "%s_3%s", Spath, Suff
-  S4 sprintf "%s_4%s", Spath, Suff
-  S5 sprintf "%s_5%s", Spath, Suff
-  S6 sprintf "%s_6%s", Spath, Suff
-  S7 sprintf "%s_7%s", Spath, Suff
-  S8 sprintf "%s_8%s", Spath, Suff
+  iposp = strrindex(gSfile, ".")
+  Spath = strsub(gSfile, 0, iposp)  ; path without suffix
+  Suff = strsub(gSfile, iposp)      ; suffix
+  S1 = sprintf("%s_1%s", Spath, Suff)
+  S2 = sprintf("%s_2%s", Spath, Suff)
+  S3 = sprintf("%s_3%s", Spath, Suff)
+  S4 = sprintf("%s_4%s", Spath, Suff)
+  S5 = sprintf("%s_5%s", Spath, Suff)
+  S6 = sprintf("%s_6%s", Spath, Suff)
+  S7 = sprintf("%s_7%s", Spath, Suff)
+  S8 = sprintf("%s_8%s", Spath, Suff)
   fout S1, ibitform, a1
   fout S2, ibitform, a2
   fout S3, ibitform, a3
@@ -91,10 +91,10 @@ endin
 ; splits any type of multichannel file. depends on ths system opcode, so it might only
 ; work on linux and osx
 instr 20
-  Sfil    = gSfile
+  Sfil = gSfile
   inchnls = p4
-  ilen    = p5
-  ibit filebit Sfil
+  ilen = p5
+  ibit = filebit(Sfil)
   ibitform = (ibit == 24 ? 8 : (ibit == 32 ? 6 : 4))
 
   ; format a .csd file
@@ -130,11 +130,11 @@ e
  </CsoundSynthesizer>
 		}}, Sfil, ksmps, inchnls, "%s_%d%s", Sfil, inchnls, ibitform, "</CsInstruments>", ilen
 
-;write the file and execute it
+  ; write the file and execute it
 Stask		sprintf	{{cat<<EOF>>/tmp/tmp.csd\n%s\nEOF
 				/usr/local/bin/csound /tmp/tmp.csd
 				rm /tmp/tmp.csd}}, Scsd1
-ires		system_i	1, Stask, 1
+  ires system_i 1, Stask, 1
 endin
 
 

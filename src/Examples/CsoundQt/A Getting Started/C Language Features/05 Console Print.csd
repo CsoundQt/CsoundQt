@@ -44,31 +44,33 @@ In the Csound Manual you will also find some information under: printks
 -m0
 </CsOptions>
 <CsInstruments>
+ksmps = 64
 
 instr 1
-print p4
+  print p4
 endin
 
 instr 2
-iNumber = 21.234512
-prints "Here is the number: %i \n", iNumber 	; print as integer and go to next line
-prints "Here is the number: %f \n", iNumber	; print as float value
-prints "Here is the number: %.3f \n", iNumber	; print with 3 digits after the point
-prints "Here is the number: %t %.3f \n", iNumber ;insert a tab
-prints "Here is the number: %t %.3f %t %.2f \n ", iNumber, iNumber ; insert to tabs print value, put a tab and again
+  iNumber = 21.234512
+  prints "number: %i \n", iNumber       ; print as integer, add new line
+  prints "number: %f \n", iNumber       ; print as float value
+  prints "number: %.3f \n", iNumber     ; print with 3 digits after the point
+  prints "number: %t %.3f \n", iNumber  ; insert a tab
+  ; insert to tabs print value, put a tab and again
+  prints "number: \t %.3f \t %.2f \n ", iNumber, iNumber
 endin
 
 instr 3
-kLine line 0, 2, 100
-printk 0.2, kLine
+  kLine = line(0, 2, 100)
+  printk 0.2, kLine
 endin
 
 
 instr 4
-Scity = "Hannover"
-iPopulation = 516000
-Sname sprintf "The name is : '%s' and has around %i inhabitants.", Scity, iPopulation
-puts Sname, 1
+  Scity = "Hannover"
+  iPopulation = 516000
+  Sname = sprintf("The name is: '%s' and has around %i inhabitants.", Scity, iPopulation)
+  puts Sname, 1
 endin
 
 </CsInstruments>
@@ -84,7 +86,6 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Mar. 2010) - Incontri HMT-Hannover 
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -106,9 +107,12 @@ e
   <width>576</width>
   <height>752</height>
   <uuid>{195541a2-8754-488f-9033-adadea125166}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Csound offers opcodes to print out values and strings to the console. This can be done by using one of the opcodes starting with the word "print".
 
 'print ' - displays values at i-rate. See instr 1.
@@ -148,9 +152,11 @@ Or see:
 http://en.wikipedia.org/wiki/Printf#printf_format_placeholders
 In the Csound Manual you find some information under: printks </label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -161,22 +167,15 @@ In the Csound Manual you find some information under: printks </label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 840 59 608 769
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

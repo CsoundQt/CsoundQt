@@ -12,11 +12,13 @@ To start it, press the RUN Button in the CsoundQt-toolbar, or choose "Control->R
 <CsOptions>
 </CsOptions>
 <CsInstruments>
-ksmps=32
+ksmps = 64
+0dbfs = 0
 ; This is a comment!
 ; Comments describe how things are done, and help to explain the code.
 ; They are shown in green in CsoundQt.
-; Anything after a semicolon will be ignored by Csound, so you can use it for human readable information.
+; Anything after a semicolon will be ignored by Csound, so you can use it for human
+; readable information.
 
 /*
 If you need more space than one line,
@@ -25,20 +27,27 @@ no
 problem, with those comment signs used here.
 */
 
-instr 123 					; instr starts an instrument block and refers it to a number. In this case, it is 123.
-							; You can put comments everywhere, they will not become compiled.
-	prints "Hello World!\n" 	     ; 'prints' will print a string to the Csound console.
-	aSin	oscils 0dbfs/4, 440, 0 	; the opcode 'oscils' here generates a 440 Hz sinetone signal at -12dB FS
-	out aSin				     ; here the signal is assigned to the computer audio output
+instr 123
+  ; instr starts an instrument block and refers it to a number.
+  ; In this case, it is 123.
+  ; You can put comments everywhere, they will not become compiled.
+  ; 'prints' will print a string to the Csound console.
+  prints "Hello World!\n"
+  ; the opcode 'oscils' here generates a 440 Hz sinetone signal at -12dB FS
+  aSin oscils 0dbfs/4, 440, 0
+  ; here the signal is assigned to the computer audio output
+  out aSin
 endin
 
 </CsInstruments>
 <CsScore>
 i 123 0 1 					; the instrument is called by its number (123) to be played
-e 							; e - ends the score
+e 							    ; e - ends the score
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover 
+
+
 
 
 <bsbPanel>
@@ -57,10 +66,10 @@ e 							; e - ends the score
  </bgcolor>
  <bsbObject type="BSBConsole" version="2">
   <objectName/>
-  <x>24</x>
-  <y>2</y>
-  <width>250</width>
-  <height>158</height>
+  <x>12</x>
+  <y>9</y>
+  <width>411</width>
+  <height>179</height>
   <uuid>{1802f52a-87e1-4b4e-8d07-4995b2f04435}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -83,10 +92,10 @@ e 							; e - ends the score
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>25</x>
-  <y>166</y>
-  <width>249</width>
-  <height>164</height>
+  <x>13</x>
+  <y>195</y>
+  <width>410</width>
+  <height>153</height>
   <uuid>{7f895e8a-7492-42e7-ac81-27023be7ff44}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -94,12 +103,11 @@ e 							; e - ends the score
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>This is a widget window. In this case, the Console Output is also visible here. More information about widgets can be found in the menu: Examples-> Widgets</label>
+  <label>This is a widget window. In this case, the Console Output is also visible here. More information about widgets can be found in the menu: Examples/Widgets</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
-  <fontsize>18</fontsize>
-  <precision>3</precision>
+  <fontsize>14</fontsize>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -117,7 +125,7 @@ e 							; e - ends the score
    <g>0</g>
    <b>0</b>
   </bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>

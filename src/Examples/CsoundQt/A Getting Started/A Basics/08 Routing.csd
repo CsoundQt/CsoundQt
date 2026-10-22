@@ -22,43 +22,43 @@ SAW -> LP -> Output
 <CsInstruments>
 
 
-sr = 44100
-ksmps = 128
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
-#define SAWFREQ #150# ;freq in Hz
+#define SAWFREQ #150#  ; freq in Hz
 /*
 The expression #define is used for textual replacement, also called macros.
-Here it is used to paste the same frequency-value (150) in every instrument. If you want to change the SAW frequency for all instruments at once, just change the #150# to the desired Hz. 
-Find out more about macro usage in the Csound Manual: 1. Overview->Syntax of the Orchestra->Macros
+Here it is used to paste the same frequency-value (150) in every instrument. If you want to change the SAW frequency for all instruments at once, just change the #150# to the desired Hz.
+Find = out(more about macro usage in the Csound Manual: 1. Overview->Syntax of the Orchestra->Macros)
 direct: OrchMacros (Shift+F1)
 */
 
 
 instr 1
-aSaw oscili 0.2, $SAWFREQ, 1 	;$-sign calls the defined macro
-outs aSaw, aSaw
+  aSaw = oscili(0.2, $SAWFREQ, 1)  ; $-sign calls the defined macro
+  out(aSaw, aSaw)
 endin
 
 instr 2
-aSaw oscili 0.2, $SAWFREQ, 1
-aFiltered lowpass2 aSaw, 200, 5
-outs aFiltered, aFiltered
+  aSaw      = oscili(0.2, $SAWFREQ, 1)
+  aFiltered = lowpass2(aSaw, 200, 5)
+  out(aFiltered, aFiltered)
 endin
 
 instr 3
-kSinLFO oscili 50, 3, 2
-aSaw oscili 0.2, $SAWFREQ+kSinLFO, 1
-aFiltered lowpass2 aSaw, 200, 5
-outs aFiltered, aFiltered
+  kSinLFO   = oscili(50, 3, 2)
+  aSaw      = oscili(0.2, $SAWFREQ+kSinLFO, 1)
+  aFiltered = lowpass2(aSaw, 200, 5)
+  out(aFiltered, aFiltered)
 endin
 
 instr 4
-kSinLFO oscili 50, 3, 2
-aSaw oscili 0.2, $SAWFREQ, 1
-aFiltered lowpass2 aSaw, 200+kSinLFO, 5
-outs aFiltered, aFiltered
+  kSinLFO   = oscili(50, 3, 2)
+  aSaw      = oscili(0.2, $SAWFREQ, 1)
+  aFiltered = lowpass2(aSaw, 200+kSinLFO, 5)
+  out(aFiltered, aFiltered)
 endin
 
 </CsInstruments>

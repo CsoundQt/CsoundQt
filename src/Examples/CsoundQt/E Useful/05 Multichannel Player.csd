@@ -3,10 +3,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr     = 44100
-ksmps  = 128
+sr = 44100
+ksmps = 64
 nchnls = 8
-0dbfs  = 1
+0dbfs = 1
 
 /*****multi channel soundfile player*****/
 ; example for CsoundQt
@@ -15,16 +15,16 @@ nchnls = 8
 ; please send bug reports and suggestions
 ; to jh at joachimheintz.de
 
-ga1 init 0
-ga2 init 0
-ga3 init 0
-ga4 init 0
-ga5 init 0
-ga6 init 0
-ga7 init 0
-ga8 init 0
+ga1 = init(0)
+ga2 = init(0)
+ga3 = init(0)
+ga4 = init(0)
+ga5 = init(0)
+ga6 = init(0)
+ga7 = init(0)
+ga8 = init(0)
 
-opcode ShowLED_a, 0, Sakkk
+opcode ShowLED_a(Soutchan:S, asig:a, kdispfreq:k, kdb:k, kdbrange:k):()
   ; Shows an audio signal in an outvalue channel. You can choose to show the value in dB
   ; or in raw amplitudes.
   ; ;Input:
@@ -34,7 +34,6 @@ opcode ShowLED_a, 0, Sakkk
   ; kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
   ; kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything
   ; from a signal below -36 dB)
-  Soutchan, asig, kdispfreq, kdb, kdbrange xin
   kdispval max_k asig, kdispfreq, 1
   if kdb != 0 then
     kdb  = dbfsamp(kdispval)
@@ -46,19 +45,18 @@ opcode ShowLED_a, 0, Sakkk
 endop
 
 
-opcode ShowOver_a, 0, Sakk
+opcode ShowOver_a(Soutchan:S, asig:a, kdispfreq:k, khold:k):()
   ; Shows if the incoming audio signal was more than 1 and stays there for some time
   ; ;Input:
   ; Soutchan: string with the name of the outvalue channel
   ; asig: audio signal which is to displayed
   ; kdispfreq: refresh frequency (Hz)
   ; khold: time in seconds to "hold the red light"
-  Soutchan, asig, kdispfreq, khold xin
-  kon init 0
-  ktim times
-  kstart init 0
-  kend   init 0
-  khold = (khold < .01 ? .01 : khold)  ; avoiding too short hold times
+  kon    = init(0)
+  ktim   = times()
+  kstart = init(0)
+  kend   = init(0)
+  khold  = (khold < .01 ? .01 : khold)  ; avoiding too short hold times
   kmax max_k asig, kdispfreq, 1
   if kon == 0 && kmax > 1 then
     kstart = ktim
@@ -75,55 +73,55 @@ endop
 
 instr 1
   ; ;gui input
-  gSfile invalue "_Browse1"
-  kskip  invalue "skiptime"
-  inchnls filenchnls gSfile
-  kdb invalue "db"
+  gSfile = chnget("_Browse1")
+  kskip = chnget("skiptime")
+  inchnls = filenchnls(gSfile)
+  kdb = chnget("db")
   gkamp = ampdb(kdb)
-  gkloop invalue "loop"
-  gkchn1 invalue "chn1"
-  gkchn2 invalue "chn2"
-  gkchn3 invalue "chn3"
-  gkchn4 invalue "chn4"
-  gkchn5 invalue "chn5"
-  gkchn6 invalue "chn6"
-  gkchn7 invalue "chn7"
-  gkchn8 invalue "chn8"
+  gkloop = chnget("loop")
+  gkchn1 = chnget("chn1")
+  gkchn2 = chnget("chn2")
+  gkchn3 = chnget("chn3")
+  gkchn4 = chnget("chn4")
+  gkchn5 = chnget("chn5")
+  gkchn6 = chnget("chn6")
+  gkchn7 = chnget("chn7")
+  gkchn8 = chnget("chn8")
 
   ; ;give a message about orc and file nchnls
   if inchnls > nchnls then
-    Swarn sprintf "WARNING! File channels = %d but output channels = %d!\n", inchnls, nchnls
+    Swarn = sprintf("WARNING! File channels = %d but output channels = %d!\n", inchnls, nchnls)
   else
-    Swarn sprintf "File channels = %d, output channels = %d.\n", inchnls, nchnls
+    Swarn = sprintf("File channels = %d, output channels = %d.\n", inchnls, nchnls)
   endif
 
   ; ;call instr 3-8 if file has at least 3 and not more than 8 channels
   if inchnls < 3 then
-    Swarn sprintf "NOT POSSIBLE!\nThe file '%s' has just %d channels!", gSfile, inchnls
-    outvalue "msg", Swarn
+    Swarn = sprintf("NOT POSSIBLE!\nThe file '%s' has just %d channels!", gSfile, inchnls)
+    chnset(Swarn, "msg")
     turnoff
   elseif inchnls > 8 then
-    Swarn sprintf "NOT POSSIBLE!\nThe file '%s' has more than 8 (= %d) channels!", gSfile, inchnls
-    outvalue "msg", Swarn
+    Swarn = sprintf("NOT POSSIBLE!\nThe file '%s' has more than 8 (= %d) channels!", gSfile, inchnls)
+    chnset(Swarn, "msg")
     turnoff
   else
-    event_i  "i", inchnls, 0, p3, i(kskip)
-    event_i  "i", 9, 0, p3, i(kskip), inchnls
-    outvalue "msg", Swarn
+    event_i "i", inchnls, 0, p3, i(kskip)
+    event_i "i", 9, 0, p3, i(kskip), inchnls
+    chnset(Swarn, "msg")
   endif
 
   ; ;give a warning if orc and file sr are not the same
-  ifilesr filesr gSfile
+  ifilesr = filesr(gSfile)
   if ifilesr != sr then
-    Swarn2 sprintf "WARNING! File sample rate = %d but orchestra sample rate = %d. If possible, change the sr value in the orchestra header. If not, the samplerate will be converted.", ifilesr, sr
-    Swarnout strcat Swarn, Swarn2
-    outvalue "msg", Swarnout
+    Swarn2   = sprintf("WARNING! File sample rate = %d but orchestra sample rate = %d. If possible, change the sr value in the orchestra header. If not, the samplerate will be converted.", ifilesr, sr)
+    Swarnout = strcat(Swarn, Swarn2)
+    chnset(Swarnout, "msg")
   endif
 
   ; ;give file length
-  ilen filelen gSfile
-  Slen sprintf "%.02d : %.02d ", ilen/60, ilen%60
-  outvalue "len", Slen
+  ilen = filelen(gSfile)
+  Slen = sprintf("%.02d : %.02d ", ilen/60, ilen%60)
+  chnset(Slen, "len")
 endin
 
 instr 3
@@ -190,11 +188,11 @@ instr 8
 endin
 
 instr 9  ; collect global audio signals and show them
-  iskip    = p4
+  iskip = p4
   iplayins = p5  ; number of playing instrument
-  ktrigdisp metro 10
-  idboramp  = 1  ; 0=raw amps, 1=db
-  idbrange  = 48
+  ktrigdisp = metro(10)
+  idboramp = 1  ; 0=raw amps, 1=db
+  idbrange = 48
   icliphold = 2
   ShowLED_a  "out1", ga1, ktrigdisp, idboramp, idbrange
   ShowOver_a "over1", ga1, ktrigdisp, icliphold
@@ -213,14 +211,14 @@ instr 9  ; collect global audio signals and show them
   ShowLED_a  "out8", ga8, ktrigdisp, idboramp, idbrange
   ShowOver_a "over8", ga8, ktrigdisp, icliphold
   ; ;display time
-  ktim timeinsts
+  ktim = timeinsts()
   kplaypos = iskip + ktim
-  kposmin  = floor(kplaypos/60)
-  kpossec  = floor(kplaypos%60)
-  Smin sprintfk "%02d", kposmin
-  Ssec sprintfk "%02d", kpossec
-  outvalue "min", Smin
-  outvalue "sec", Ssec
+  kposmin = floor(kplaypos/60)
+  kpossec = floor(kplaypos%60)
+  Smin = sprintfk("%02d", kposmin)
+  Ssec = sprintfk("%02d", kpossec)
+  chnset(Smin, "min")
+  chnset(Ssec, "sec")
 endin
 
 </CsInstruments>

@@ -55,8 +55,9 @@ static bool isStylePropertyExcluded(const QString &name)
 	if (name == "CSQT_enabled") {
 		return true;
 	}
-	// Behaviour, not appearance
-	if (name == "CSQT_locked") {
+	// Behaviour, not appearance. In particular, an event button's score line
+	// belongs to the button, not to its look.
+	if (name == "CSQT_locked" || name == "CSQT_eventLine") {
 		return true;
 	}
 	return false;

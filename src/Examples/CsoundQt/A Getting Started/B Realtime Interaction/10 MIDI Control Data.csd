@@ -19,56 +19,57 @@ By sending MIDI-Control-Data 01 on Channel 1 (CC 01 - with your keyboards modual
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 32
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
-massign 1, 101				; send notes on MIDI Ch.1 to instr 101
-gaOut init 0.0
+massign 1, 101  ; send notes on MIDI Ch.1 to instr 101
+gaOut = init(0.0)
 
-instr 100				; MIDI Controller Receive Instrument
-kFilterCC1 ctrl7 1, 1, 10, 5000		; read 7-bit MIDI CC data from Ch.1, CC1, and map to a range between 10-5000 
-printk2 kFilterCC1				; print the value to the console
-kChanged changed kFilterCC1		; check if new values are incoming
-if kChanged == 1 then			; so if, update the chanel..
-	outvalue "filter_freq", kFilterCC1	; send the value to the widgetpanel
-endif
+instr 100  ; MIDI Controller Receive Instrument
+  ; read 7-bit MIDI CC data from Ch.1, CC1, and map to a range between 10-5000
+  kFilterCC1 = ctrl7(1, 1, 10, 5000)
+  printk2 kFilterCC1                   ; print the value to the console
+  kChanged = changed(kFilterCC1)       ; check if new values are incoming
+  if kChanged == 1 then                ; so if, update the chanel..
+    chnset(kFilterCC1, "filter_freq")  ; send the value to the widgetpanel
+  endif
 endin
 
 
-instr 101  				; Sawthooth Oscillator triggered by notes on MIDI CH: 1
-icps = p4
-iamp = p5/127
-kFfreq invalue "filter_freq"
-kFfreq port kFfreq, 0.05
-aSrc oscili iamp, icps, 1
-aFiltered moogvcf aSrc, kFfreq, 0.1
-aEnv madsr 0.01, 0.1, 0.9, 0.01
-gaOut = gaOut + aFiltered*aEnv
+instr 101  ; Sawthooth Oscillator triggered by notes on MIDI CH: 1
+  icps      = p4
+  iamp      = p5/127
+  kFfreq    = chnget("filter_freq")
+  kFfreq    = port(kFfreq, 0.05)
+  aSrc      = oscili(iamp, icps, 1)
+  aFiltered = moogvcf(aSrc, kFfreq, 0.1)
+  aEnv      = madsr(0.01, 0.1, 0.9, 0.01)
+  gaOut     = gaOut + aFiltered*aEnv
 endin
 
-instr 102 				; Global Feedback Delay
-kDryWet invalue "d_w_delay"
-kDelTime invalue "time_delay"
-kFeedback invalue "feedb_delay"
-kDelTime port kDelTime, 0.05
-aDelTime = a(kDelTime)
-aDelay delayr 1
-aWet	deltapi aDelTime
-	delayw gaOut+(aWet*kFeedback)
-gaOut		=	(1-kDryWet) * gaOut + (kDryWet * aWet)
+instr 102  ; Global Feedback Delay
+  kDryWet   = chnget("d_w_delay")
+  kDelTime  = chnget("time_delay")
+  kFeedback = chnget("feedb_delay")
+  kDelTime  = port(kDelTime, 0.05)
+  aDelTime  = a(kDelTime)
+  aDelay    = delayr(1)
+  aWet      = deltapi(aDelTime)
+  delayw gaOut+(aWet*kFeedback)
+  gaOut = (1-kDryWet) * gaOut + (kDryWet * aWet)
 endin
 
-instr 103 				; Global Reverb
-kroomsize init 0.4
-khfdamp init  0.8
-kDryWet invalue "d_w_reverb"
-aWetL, aWetR freeverb gaOut, gaOut, kroomsize, khfdamp
-aOutL	= (1-kDryWet) * gaOut + (kDryWet * aWetL)
-aOutR	= (1-kDryWet) * gaOut + (kDryWet * aWetR)
-outs aOutL, aOutR
-gaOut = 0.0
+instr 103  ; Global Reverb
+  kroomsize = init(0.4)
+  khfdamp   = init(0.8)
+  kDryWet   = chnget("d_w_reverb")
+  aWetL, aWetR freeverb gaOut, gaOut, kroomsize, khfdamp
+  aOutL = (1-kDryWet) * gaOut + (kDryWet * aWetL)
+  aOutR = (1-kDryWet) * gaOut + (kDryWet * aWetR)
+  out(aOutL, aOutR)
+  gaOut = 0.0
 endin
 
 

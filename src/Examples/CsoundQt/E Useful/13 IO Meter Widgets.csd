@@ -10,13 +10,12 @@ You can copy and paste from here if you need input/output signal meter.
 -o dac
 </CsOptions>
 <CsInstruments>
-sr     = 44100
-ksmps  = 32
+sr = 44100
+ksmps = 64
 nchnls = 2  ; change to 8 if you have more inputs / outputs
-0dbfs  = 1
+0dbfs = 1
 
-opcode CsQtMeter, 0, SSak
-  S_chan_sig, S_chan_clip, aSig, kTrig xin
+opcode CsQtMeter(S_chan_sig:S, S_chan_clip:S, aSig:a, kTrig:k):()
   iDbRange = 60  ; shows 60 dB
   iHoldTim = 1   ; seconds to "hold the red light"
   kOn, kTim, kStart, kEnd init 0

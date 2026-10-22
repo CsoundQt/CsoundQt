@@ -395,14 +395,17 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "while" << "goto" << "igoto" << "kgoto"
                     << "do" << "od"
                     << "int" << "turnoff" << "xin" << "xout"
-                    << "passign"
+                    << "passign" << "schedule" << "schedulek"
+
                     // Csound 7 keywords
-                    << "create" << "delete" << "run" << "struct" << "for" << "global"
-                    << "InstrDef" << "Instr";
+                    << "create" << "delete" << "run" << "struct" << "endstruct"
+                    << "for" << "in" << "@global"
+                    << "oversample" << "undersample" << "setksmps" << "switch" << "case" << "default" << "endsw"
+                    << "InstrDef" << "Instr" << "OpcodeDef" << "Opcode";
 
     ioPatterns      << "in" << "ins" << "inch" << "out" << "outs" << "outch"
-                    << "outvalue" << "invalue" << "chnget" << "chngetk" << "chnset" << "chn_k"
-                    << "chn_a" << "chn_S" << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
+                    << "outvalue" << "invalue" << "chnget" << "chngetk" << "chnset"
+                    << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
                     << "OSCsend" << "OSClisten" << "OSCraw" << "OSCinit";
 
     // look here for checking if an opcode is deprecated: https://csound.com/docs/manual/DeprecatedTop.html
@@ -499,28 +502,6 @@ Highlighter::Highlighter(QTextDocument *parent)
                 << "<!\\bDOCTYPE\\b";
     */
 
-    javascriptKeywords
-        << "break" << "case" << "catch" << "class" << "const" << "continue"
-        << "debugger" << "default" << "delete" << "do" << "else" << "enum"
-        << "export" << "extends" << "false" << "finally" << "for" << "function"
-        << "if" << "import" << "in" << "instanceof" << "let" << "new"
-        << "null" << "return" << "super" << "switch" << "this" << "throw"
-        << "true" << "try" << "typeof" << "var" << "void" << "while"
-        << "with" << "yield"
-        // ES2015+ keywords
-        << "await" << "async" << "of"
-        // Common built-ins and objects
-        << "Array" << "Date" << "eval" << "function" << "hasOwnProperty"
-        << "Infinity" << "isFinite" << "isNaN" << "isPrototypeOf" << "length"
-        << "Math" << "NaN" << "name" << "Number" << "Object" << "prototype"
-        << "String" << "toString" << "undefined" << "valueOf"
-        // Global objects
-        << "console" << "console.log" << "console.warn" << "console.error"
-        << "window" << "document" << "alert" << "parseInt" << "parseFloat"
-        << "setTimeout" << "setInterval" << "Promise" << "RegExp" << "Error"
-        // Special values
-        << "undefined" << "null" << "true" << "false";
-
     QStringList jsOperators = { // not implemented at the moment
         "+", "-", "*", "/", "===", "==", "=", "++", "--", "&&", "||", "!", ">", "<", ">=", "<=", "!=", "!=="
     };
@@ -540,6 +521,32 @@ void Highlighter::setOpcodeNameList(QStringList list)
 {
 	m_opcodeList = list;
     m_opcodesSet = QSet<QString>(list.begin(), list.end());
+    // Opcodes added after src/opcodes.xml was generated. Keep the highlighter
+    // in step with the current Csound 7 built-ins until the XML is regenerated.
+    static const QSet<QString> extraBuiltinOpcodes = {
+        QStringLiteral("B"), QStringLiteral("b"),
+        QStringLiteral("cingoto"), QStringLiteral("cnkgoto"),
+        QStringLiteral("convle"), QStringLiteral("declare"),
+        QStringLiteral("memplay"), QStringLiteral("opcode"),
+        QStringLiteral("oscilx"), QStringLiteral("pvslock"),
+        QStringLiteral("sense"),
+        QStringLiteral("stmaddcondedge"), QStringLiteral("stmaddedge"),
+        QStringLiteral("stmaddnode"), QStringLiteral("stmadvance"),
+        QStringLiteral("stmcall"), QStringLiteral("stmcompile"),
+        QStringLiteral("stmcreate"), QStringLiteral("stmcurrent"),
+        QStringLiteral("stmcurrentid"), QStringLiteral("stmdelete"),
+        QStringLiteral("stmedgecount"), QStringLiteral("stmentry"),
+        QStringLiteral("stmevent"), QStringLiteral("stminstance"),
+        QStringLiteral("stmnext"), QStringLiteral("stmnodecount"),
+        QStringLiteral("stmnodeid"), QStringLiteral("stmnodename"),
+        QStringLiteral("stmnodetime"), QStringLiteral("stmonenter"),
+        QStringLiteral("stmonexit"), QStringLiteral("stmpause"),
+        QStringLiteral("stmrecall"), QStringLiteral("stmreset"),
+        QStringLiteral("stmresume"), QStringLiteral("stmtick"),
+        QStringLiteral("stmtime"),
+        QStringLiteral("trigExpseg"), QStringLiteral("trigLinseg")
+    };
+    m_opcodesSet.unite(extraBuiltinOpcodes);
 	//   setFirstRules();
 	setLastRules();
 }
@@ -592,7 +599,7 @@ QTextCharFormat Highlighter::formatForType(const QString &typeStr) const
     if(t == "b" || t == "B") return booleanFormat;
     if(t == "Complex") return complexFormat;
     if(t == "InstrDef" || t == "Instr") return nameFormat;
-    if(t == "Opcode") return opcodeFormat;
+    if(t == "OpcodeDef" || t == "Opcode") return opcodeFormat;
     if(m_userTypeNames.contains(t)) return nameFormat;
     return defaultFormat;
 }
@@ -609,7 +616,7 @@ void Highlighter::registerTypedVar(const QString &name, const QString &typeStr)
     else if(t == "b" || t == "B")         m_bVariables.insert(name);
     else if(t == "Complex")               m_complexVariables.insert(name);
     else if(t == "InstrDef" || t == "Instr") m_instrDefVariables.insert(name);
-    else if(t == "Opcode")                m_opcodeVariables.insert(name);
+    else if(t == "OpcodeDef" || t == "Opcode") m_opcodeVariables.insert(name);
     else if(m_userTypeNames.contains(t))  m_structVariables.insert(name);
 }
 
@@ -656,6 +663,20 @@ void Highlighter::highlightBlock(const QString &text)
         }
     }
 
+    // Highlight only code, not the contents of strings. The lexer also reports
+    // an unterminated quote as a string that runs to the end of the line, so
+    // "chnget \"fftsize" does not colour fftsize as an fsig variable.
+    QString codeText = text;
+    const auto maskRanges = [&codeText](const QVector<QPair<int, int>> &ranges) {
+        for (const QPair<int, int> &range : ranges) {
+            const int end = qMin(range.second, codeText.size());
+            for (int i = qMax(0, range.first); i < end; ++i)
+                codeText[i] = QLatin1Char(' ');
+        }
+    };
+    maskRanges(lex.strings);
+    maskRanges(lex.multilineStrings);
+
     // The theme only decides whether the block is decorated; the mark below is
     // painted in any case.
     if(m_theme != "none") {
@@ -673,7 +694,8 @@ void Highlighter::highlightBlock(const QString &text)
         if (!insideMultilineString) {
             switch (m_mode) { // mode is set by the file type
             case 0:  // Csound mode
-                highlightCsoundBlock(text);
+                highlightCsoundBlock(codeText);
+
                 break;
             case 1:  // Python mode
                 break;
@@ -681,13 +703,13 @@ void Highlighter::highlightBlock(const QString &text)
                 highlightXmlBlock(text);
                 break;
             case 3:  // Orc
-                highlightCsoundBlock(text);
+                highlightCsoundBlock(codeText);
                 break;
             case 4:  // Sco
-                highlightCsoundBlock(text);
+                highlightCsoundBlock(codeText);
                 break;
             case 5:  // Inc
-                highlightCsoundBlock(text); // maybe anything not python or xml should be higlighter as csound?
+                highlightCsoundBlock(codeText); // maybe anything not python or xml should be higlighter as csound?
                 break;
             case 6:  // Html
                 highlightHtmlBlock(text);
@@ -695,8 +717,13 @@ void Highlighter::highlightBlock(const QString &text)
             }
         }
 
-        // The {{ ... }} strings are painted after the code highlighting, so
-        // that their contents keep the colour of a string.
+        // The quoted strings are painted after the code highlighting, so that
+        // the contents keep the colour of a string. This includes a string
+        // whose closing quote has not been typed yet.
+        for (const QPair<int, int> &range : lex.strings) {
+            setFormat(range.first, range.second - range.first, quotationFormat);
+        }
+        // The {{ ... }} strings are painted the same way.
         for (const QPair<int, int> &range : lex.multilineStrings) {
             setFormat(range.first, range.second - range.first, quotationFormat);
         }
@@ -899,6 +926,52 @@ void Highlighter::highlightCsoundBlock(const QString &line)
                 instrName.toInt(&isNumber);
                 if(!isNumber)
                     m_namedInstruments.insert(instrName);
+            }
+            else {
+                // Csound 7 UDO signature:
+                //   opcode Route(asigs:a[], hwouts:k[]):()
+                // The old form "opcode Name, ..." has no parentheses and is
+                // left to the normal word highlighting.
+                static const QRegularExpression udoSignatureRx(
+                            QStringLiteral("^\\s*opcode\\s+[A-Za-z_]\\w*\\s*"
+                                           "\\(([^)]*)\\)\\s*"
+                                           "(?::\\s*(?:\\(([^)]*)\\)|"
+                                           "([A-Za-z_]\\w*(?:\\[\\])?)))?"));
+                const auto signature = udoSignatureRx.match(text);
+                if (signature.hasMatch()) {
+                    static const QRegularExpression typedParamRx(
+                                QStringLiteral("([A-Za-z_]\\w*)\\s*:\\s*"
+                                               "([A-Za-z_]\\w*(?:\\[\\])?)"));
+                    const int inputStart = signature.capturedStart(1);
+                    for (auto it = typedParamRx.globalMatch(signature.captured(1));
+                         it.hasNext(); ) {
+                        const auto param = it.next();
+                        const QString name = param.captured(1);
+                        const QString type = param.captured(2);
+                        setFormat(inputStart + param.capturedStart(1),
+                                  name.size(), formatForType(type));
+                        setFormat(inputStart + param.capturedStart(2),
+                                  type.size(), keywordFormat);
+                        registerTypedVar(name, type);
+                    }
+                    if (signature.capturedLength(2) > 0) {
+                        // Output types in parentheses: :(a, k)
+                        static const QRegularExpression typeRx(
+                                    QStringLiteral("[A-Za-z_]\\w*(?:\\[\\])?"));
+                        const int outputStart = signature.capturedStart(2);
+                        for (auto it = typeRx.globalMatch(signature.captured(2));
+                             it.hasNext(); ) {
+                            const auto type = it.next();
+                            setFormat(outputStart + type.capturedStart(),
+                                      type.capturedLength(), keywordFormat);
+                        }
+                    }
+                    else if (signature.capturedLength(3) > 0) {
+                        // Single output type: :a
+                        setFormat(signature.capturedStart(3),
+                                  signature.capturedLength(3), keywordFormat);
+                    }
+                }
             }
             return;
         }
@@ -1191,18 +1264,6 @@ void Highlighter::highlightHtmlBlock(const QString &text)
         highlightCsoundBlock(text);
         return;
     }
-
-
-    for (int i=0; i<javascriptKeywords.size(); i++) {
-        QRegularExpression expression("\\b" + javascriptKeywords[i] + "\\b");
-        int index = text.indexOf(expression);
-        while (index >= 0) {
-            int length =  expression.match(text).capturedLength(); //expression.matchedLength();
-            setFormat(index, length, jsKeywordFormat); // TODO javascriptformat
-            index = text.indexOf(expression, index + length);
-        }
-    }
-
 
     static const QRegularExpression tagRx("<[^>]+>");
     int index = text.indexOf(tagRx);
