@@ -145,6 +145,12 @@ public:
 	void setWidgetsLocked(bool lock);
     void setUpdateRate(int rate) { m_updateRate = rate; }
 
+	// Experimental channel probe: outline every widget whose channel (or
+	// secondary channel) matches. The outline is temporary and is removed by
+	// clearChannelHighlights(), Escape, a mouse click, or moving away from it.
+	void highlightChannel(const QString &channel);
+	void clearChannelHighlights();
+
 	// Properties
 	bool getOpenProperties() { return m_openProperties; }
 	void setOpenProperties(bool open) {m_openProperties = open; }
@@ -397,9 +403,14 @@ protected:
 	virtual void keyReleaseEvent(QKeyEvent *event);
 	virtual bool focusNextPrevChild(bool next) override;
 	virtual void contextMenuEvent(QContextMenuEvent *event);
+	virtual bool eventFilter(QObject *watched, QEvent *event) override;
     virtual void closeEvent(QCloseEvent *event);
 	QRubberBand *selectionFrame;
 	int startx, starty;
+	QList<QFrame *> m_channelHighlightFrames;
+	QString m_channelHighlightChannel;
+	bool m_channelHighlightActive = false;
+	bool m_channelHighlightMouseInside = false;
 
 private:
 

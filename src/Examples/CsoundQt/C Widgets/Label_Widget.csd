@@ -4,12 +4,12 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
 instr 1
-;Nothing here...
+  ; Nothing here...
 endin
 
 </CsInstruments>

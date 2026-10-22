@@ -4,16 +4,16 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
 instr 1
-	kfreq invalue "freq"
-	kamp invalue "amp"
-	asig oscil 1, kfreq, -1
-	asig *= interp(lag(kamp, 0.1))
-	outs asig, asig
+  kfreq = chnget("freq")
+  kamp  = chnget("amp")
+  asig  = oscil(1, kfreq, -1)
+  asig *= interp(lag(kamp, 0.1))
+  out(asig, asig)
 endin
 
 </CsInstruments>

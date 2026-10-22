@@ -8,24 +8,24 @@
 ; written by joachim heintz
 ; feb 2010 / oct 2012
 
-sr     = 44100
-ksmps  = 128
+sr = 44100
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
 massign 0, 2  ; assigns all incoming MIDI to instr  2
 
-opcode SinesToSSTI, i, pooo
+opcode SinesToSSTI(iwf:p, inparts:o, itabsiz:o, ifno:o):i
   ; produces the waveforms saw (iwf=1, which is also the default), square (iwf=2),
   ; triangle (3), impulse (4) by the addition of inparts sinusoides (default = 10) and
   ; returns the result in a function table of itabsiz length (must be a power-of-2 or a
   ; power-of-2 plus 1, the default is 1024 points) with number ifno (default = 0 which
   ; means the number is given automatically)
-  iwf, inparts, itabsiz, ifno xin
   inparts = (inparts == 0 ? 10 : inparts)
   itabsiz = (itabsiz == 0 ? 1024 : itabsiz)
-  iftemp ftgen 0, 0, -(inparts * 3), -2, 0  ; temp ftab for writing the str-pna-phas vals
-  indx = 1
+  ; temp ftab for writing the str-pna-phas vals
+  iftemp = ftgen(0, 0, -(inparts * 3), -2, 0)
+  indx   = 1
 loop:
   if iwf == 1 then  ; saw = 1, -1/2, 1/3, -1/4, ... as strength of partials
     ; writes strength of partial
@@ -48,12 +48,12 @@ loop:
 
   loop_le indx, 1, inparts, loop
 
-  iftout ftgen ifno, 0, itabsiz, 34, iftemp, inparts, 1  ; write table  with GEN34
-  ftfree iftemp, 0                                       ; remove  iftemp
+  iftout = ftgen(ifno, 0, itabsiz, 34, iftemp, inparts, 1)  ; write table  with GEN34
+  ftfree iftemp, 0                                          ; remove  iftemp
   xout iftout
 endop
 
-opcode ShowLED_a, 0, Sakkk
+opcode ShowLED_a(Soutchan:S, asig:a, kdispfreq:k, kdb:k, kdbrange:k):()
   ; Shows an audio signal in an outvalue channel. You can choose to show the value in dB
   ; or in raw amplitudes.
   ; ;Input:
@@ -63,7 +63,6 @@ opcode ShowLED_a, 0, Sakkk
   ; kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
   ; kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything
   ; from a signal below -36 dB)
-  Soutchan, asig, kdispfreq, kdb, kdbrange xin
   kdispval max_k asig, kdispfreq, 1
   if kdb != 0 then
     kdb  = dbfsamp(kdispval)
@@ -74,19 +73,18 @@ opcode ShowLED_a, 0, Sakkk
   outvalue Soutchan, kval
 endop
 
-opcode ShowOver_a, 0, Sakk
+opcode ShowOver_a(Soutchan:S, asig:a, kdispfreq:k, khold:k):()
   ; Shows if the incoming audio signal was more than 1 and stays there for some time
   ; ;Input:
   ; Soutchan: string with the name of the outvalue channel
   ; asig: audio signal which is to displayed
   ; kdispfreq: refresh frequency (Hz)
   ; khold: time in seconds to "hold the red light"
-  Soutchan, asig, kdispfreq, khold xin
-  kon init 0
-  ktim times
-  kstart init 0
-  kend   init 0
-  khold = (khold < .01 ? .01 : khold)  ; avoiding too short hold times
+  kon    = init(0)
+  ktim   = times()
+  kstart = init(0)
+  kend   = init(0)
+  khold  = (khold < .01 ? .01 : khold)  ; avoiding too short hold times
   kmax max_k asig, kdispfreq, 1
   if kon == 0 && kmax > 1 then
     kstart = ktim
@@ -104,18 +102,18 @@ endop
 instr 1          ; ;Receive GUI input and generate waveforms
   iftlen = 4097  ; length of a  function table  with the shape of a  waveform
   ; Generate sine waveform
-  giftsin ftgen 1, 0, iftlen, 10, 1
+  giftsin = ftgen(1, 0, iftlen, 10, 1)
   ; Receive number of partials for saw, square, triangle an impulse
-  knp_saw invalue "np_saw"
-  knp_squ invalue "np_squ"
-  knp_tri invalue "np_tri"
-  knp_imp invalue "np_imp"
+  knp_saw = chnget("np_saw")
+  knp_squ = chnget("np_squ")
+  knp_tri = chnget("np_tri")
+  knp_imp = chnget("np_imp")
 
   ; Look if an of this values has changed
-  knewsaw changed knp_saw
-  knewsqu changed knp_squ
-  knewtri changed knp_tri
-  knewimp changed knp_imp
+  knewsaw = changed(knp_saw)
+  knewsqu = changed(knp_squ)
+  knewtri = changed(knp_tri)
+  knewimp = changed(knp_imp)
 
   ; If yes go again to the "new" block and recalculate the waveforms
   if knewsaw == 1 then
@@ -134,68 +132,68 @@ instr 1          ; ;Receive GUI input and generate waveforms
   ; partials
 newsaw:
   inp_saw = i(knp_saw)
-  giftsaw SinesToSSTI 1, inp_saw, iftlen, 2
+  giftsaw = SinesToSSTI(1, inp_saw, iftlen, 2)
   event_i "i", "ShowTables", 0, 1
   rireturn
 newsqu:
   inp_squ = i(knp_squ)
-  giftsqu SinesToSSTI 2, inp_squ, iftlen, 3
+  giftsqu = SinesToSSTI(2, inp_squ, iftlen, 3)
   event_i "i", "ShowTables", 0, 1
   rireturn
 newtri:
   inp_tri = i(knp_tri)
-  gifttri SinesToSSTI 3, inp_tri, iftlen, 4
+  gifttri = SinesToSSTI(3, inp_tri, iftlen, 4)
   event_i "i", "ShowTables", 0, 1
   rireturn
 newimp:
   inp_imp = i(knp_imp)
-  giftimp SinesToSSTI 4, inp_imp, iftlen, 5
+  giftimp = SinesToSSTI(4, inp_imp, iftlen, 5)
   event_i "i", "ShowTables", 0, 1
   rireturn
 
   ; Receive relative amplitudes, and master volume from the GUI
-  gkamp_sin invalue "amp_sin"
-  gkamp_saw invalue "amp_saw"
-  gkamp_squ invalue "amp_squ"
-  gkamp_tri invalue "amp_tri"
-  gkamp_imp invalue "amp_imp"
-  gk_vol    invalue "vol"  ; master volume
+  gkamp_sin = chnget("amp_sin")
+  gkamp_saw = chnget("amp_saw")
+  gkamp_squ = chnget("amp_squ")
+  gkamp_tri = chnget("amp_tri")
+  gkamp_imp = chnget("amp_imp")
+  gk_vol    = chnget("vol")  ; master volume
   ; Smooth ampltude changes
-  gkamp_sin port gkamp_sin, .1
-  gkamp_saw port gkamp_saw, .1
-  gkamp_squ port gkamp_squ, .1
-  gkamp_tri port gkamp_tri, .1
-  gkamp_imp port gkamp_imp, .1
-  gk_vol    port gk_vol, .1
+  gkamp_sin = port(gkamp_sin, .1)
+  gkamp_saw = port(gkamp_saw, .1)
+  gkamp_squ = port(gkamp_squ, .1)
+  gkamp_tri = port(gkamp_tri, .1)
+  gkamp_imp = port(gkamp_imp, .1)
+  gk_vol    = port(gk_vol, .1)
 endin
 
 instr 2  ; ;Play one note
   ; Generate the five audio signals
-  asin poscil p5, p4, giftsin
-  asaw poscil p5, p4, giftsaw
-  asqu poscil p5, p4, giftsqu
-  atri poscil p5, p4, gifttri
-  aimp poscil p5, p4, giftimp
+  asin = poscil(p5, p4, giftsin)
+  asaw = poscil(p5, p4, giftsaw)
+  asqu = poscil(p5, p4, giftsqu)
+  atri = poscil(p5, p4, gifttri)
+  aimp = poscil(p5, p4, giftimp)
   ; Mix them, apply a simple envelope and send the mix out
-  amix sum asin*gkamp_sin, asaw*gkamp_saw, asqu*gkamp_squ, atri*gkamp_tri, aimp*gkamp_imp
-  kenv linsegr 0, .1, 1, p3-.1, 1, .1, 0  ; simple envelope
-  aenv = amix*kenv*gk_vol                 ; apply alo master volume
-  outs aenv, aenv
+  amix = sum(asin*gkamp_sin, asaw*gkamp_saw, asqu*gkamp_squ, atri*gkamp_tri, aimp*gkamp_imp)
+  kenv = linsegr(0, .1, 1, p3-.1, 1, .1, 0)  ; simple envelope
+  aenv = amix*kenv*gk_vol                    ; apply alo master volume
+  out(aenv, aenv)
 endin
 
 instr 3  ; Show the sum of all single notes to see clipping
   aL, aR monitor
-  kTrigDisp metro 10
+  kTrigDisp = metro(10)
   ShowLED_a  "out", aL, kTrigDisp, 1, 50
   ShowOver_a "outover", aL, kTrigDisp, 1
 endin
 
 instr ShowTables
-  outvalue "sine", -1
-  outvalue "saw", -2
-  outvalue "square", -3
-  outvalue "triangle", -4
-  outvalue "impulse", -5
+  chnset(-1, "sine")
+  chnset(-2, "saw")
+  chnset(-3, "square")
+  chnset(-4, "triangle")
+  chnset(-5, "impulse")
   turnoff
 endin
 

@@ -8,10 +8,10 @@
 ; example for CsoundQt
 ; joachim heintz mar 2011
 
-sr     = 44100
-ksmps  = 128
+sr = 44100
+ksmps = 64
 nchnls = 1
-0dbfs  = 1
+0dbfs = 1
 
 ; ============================================================================;
 ; ============================================================================;
@@ -24,11 +24,11 @@ giovlap  = gifftsiz / 4  ; overlap
 giwinsiz = gifftsiz * 2  ; window size
 giwintyp = 1             ; von hann window
 
-giamps    ftgen 0, 0, gifftsiz/2+1, 2, 0  ; table for bin amps
-giampcpy  ftgen 0, 0, gifftsiz/2+1, 2, 0  ; needed for the TabIndxNMax_k opcode
-gifreqs   ftgen 0, 0, gifftsiz/2+1, 2, 0  ; table for bin freqs
-gimaxindc ftgen 0, 0, gifftsiz/2+1, 2, 0  ; indices for temporal maxima of giamps
-gisine    ftgen 0, 0, 2^10, 10, 1
+giamps    = ftgen(0, 0, gifftsiz/2+1, 2, 0)  ; table for bin amps
+giampcpy  = ftgen(0, 0, gifftsiz/2+1, 2, 0)  ; needed for the TabIndxNMax_k opcode
+gifreqs   = ftgen(0, 0, gifftsiz/2+1, 2, 0)  ; table for bin freqs
+gimaxindc = ftgen(0, 0, gifftsiz/2+1, 2, 0)  ; indices for temporal maxima of giamps
+gisine    = ftgen(0, 0, 2^10, 10, 1)
 massign 0, 10  ; send all midi key events to instr 10
 
 chn_S "_MBrowse", 1  ; declare string channel
@@ -49,29 +49,29 @@ opcode StrayGetEl, ii, Sijj
   ; Define the separators
   isep1 = (isepA == -1 ? 32 : isepA)
   isep2 = (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-  Sep1 sprintf "%c", isep1
-  Sep2 sprintf "%c", isep2
+  Sep1  = sprintf("%c", isep1)
+  Sep2  = sprintf("%c", isep2)
   ; Initialize some parameters
-  ilen strlen Stray
+  ilen = strlen(Stray)
   istartsel = -1  ; startindex for searched element
-  iendsel   = -1  ; endindex for searched element
-  iel       = 0   ; actual number of element while searching
-  iwarleer  = 1
-  indx      = 0
+  iendsel = -1    ; endindex for searched element
+  iel = 0         ; actual number of element while searching
+  iwarleer = 1
+  indx = 0
   if ilen == 0 igoto end  ; don't go into the loop if Stray is empty
 loop:
-  Snext strsub Stray, indx, indx+1  ; next sign
-  isep1p strcmp Snext, Sep1         ; returns 0 if Snext is sep1
-  isep2p strcmp Snext, Sep2         ; 0 if Snext is sep2
+  Snext  = strsub(Stray, indx, indx+1)  ; next sign
+  isep1p = strcmp(Snext, Sep1)          ; returns 0 if Snext is sep1
+  isep2p = strcmp(Snext, Sep2)          ; 0 if Snext is sep2
   ; Next sign is not sep1 nor sep2
   if isep1p != 0 && isep2p != 0 then
     if iwarleer == 1 then     ; first character after a separator
       if iel == ielindx then  ; if searched element index
         istartsel = indx      ; set it
         iwarleer  = 0
-      else                ; if not searched element index
-        iel      = iel+1  ; increase it
-        iwarleer = 0      ; log that it's not a separator
+      else            ; if not searched element index
+        iel = iel+1   ; increase it
+        iwarleer = 0  ; log that it's not a separator
       endif
     endif
     ; Next sign is sep1 or sep2
@@ -95,24 +95,24 @@ opcode StrayLen, i, Sjj
   ; Define the separators
   isep1 = (isepA == -1 ? 32 : isepA)
   isep2 = (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-  Sep1 sprintf "%c", isep1
-  Sep2 sprintf "%c", isep2
+  Sep1  = sprintf("%c", isep1)
+  Sep2  = sprintf("%c", isep2)
   ; Initialize some parameters
-  ilen strlen Stray
+  ilen    = strlen(Stray)
   icount  = 0  ; number of elements
   iwarsep = 1
   indx    = 0
   if ilen == 0 igoto end  ; don't go into the loop if String is empty
 loop:
-  Snext strsub Stray, indx, indx+1    ; next sign
-  isep1p strcmp Snext, Sep1           ; returns 0 if Snext is sep1
-  isep2p strcmp Snext, Sep2           ; 0 if Snext is sep2
-  if isep1p == 0 || isep2p == 0 then  ; if sep1 or sep2
-    iwarsep = 1                       ; tell the log so
-  else                                ; if not
-    if iwarsep == 1 then              ; and has been sep1 or sep2 before
-      icount  = icount + 1            ; increase counter
-      iwarsep = 0                     ; and tell you are ot sep1 nor sep2
+  Snext  = strsub(Stray, indx, indx+1)  ; next sign
+  isep1p = strcmp(Snext, Sep1)          ; returns 0 if Snext is sep1
+  isep2p = strcmp(Snext, Sep2)          ; 0 if Snext is sep2
+  if isep1p == 0 || isep2p == 0 then    ; if sep1 or sep2
+    iwarsep = 1                         ; tell the log so
+  else                                  ; if not
+    if iwarsep == 1 then                ; and has been sep1 or sep2 before
+      icount  = icount + 1              ; increase counter
+      iwarsep = 0                       ; and tell you are ot sep1 nor sep2
     endif
   endif
   loop_lt indx, 1, ilen, loop
@@ -122,26 +122,24 @@ endop
 
 ; Opcodes for table operations
 
-opcode TabMinVal_k, k, ii
-  ift, iftlen xin
-  kminval tab 0, ift
-  kndx = 1
+opcode TabMinVal_k(ift:i, iftlen:i):k
+  kminval = tab(0, ift)
+  kndx    = 1
 loop:
-  kval tab kndx, ift
+  kval    = tab(kndx, ift)
   kmaxval = (kval < kminval ? kval : kminval)
   loop_lt kndx, 1, iftlen, loop
   xout kminval
 endop
 
-opcode TabMaxValIndx_k, kk, iikk
+opcode TabMaxValIndx_k(ift:i, iftlen:i, kstrt:k, kshft:k):(k, k)
   ; returns the maximum value of a function table and its index
   ; ftable, length, startindex, how many values to shift for the next value
-  ift, iftlen, kstrt, kshft xin
-  kndx        = kstrt
+  kndx = kstrt
   kresultindx = kstrt
-  kresultval tab kstrt, ift  ; first value in the table as comparision
+  kresultval = tab(kstrt, ift)  ; first value in the table as comparision
 loop:
-  kval tab kndx, ift
+  kval = tab(kndx, ift)
   if kval > kresultval then
     kresultindx = kndx
     kresultval  = kval
@@ -150,13 +148,12 @@ loop:
   xout kresultval, kresultindx
 endop
 
-opcode TabIndxNMax_k, 0, iiiik
+opcode TabIndxNMax_k(iftsrc:i, isrclen:i, iftcpy:i, iftdest:i, khowmany:k):()
   ; returns the indices of the first khowmany largest values in iftsrc and writes them in
   ; iftdest
   ; bin 0 is omitted (shift value in TabMaxValIndx_k)
-  iftsrc, isrclen, iftcpy, iftdest, khowmany xin
-  tablecopy iftcpy, iftsrc          ; leave iftsrc (= amp table) untouched
-  kmin TabMinVal_k iftcpy, isrclen  ; smallest value in iftsrc
+  tablecopy iftcpy, iftsrc             ; leave iftsrc (= amp table) untouched
+  kmin = TabMinVal_k(iftcpy, isrclen)  ; smallest value in iftsrc
   kwritindx = 0
 loop:
   kval, kndx TabMaxValIndx_k iftcpy, isrclen, 1, 1  ; gets index for maximum
@@ -168,24 +165,22 @@ endop
 
 ; Miscellaneous
 
-opcode BufPlay1, a, ii
-  ifn, iskip xin
+opcode BufPlay1(ifn:i, iskip:i):a
   icps = 1 / (ftlen(ifn) / ftsr(ifn))
   iphs = iskip / (ftlen(ifn) / ftsr(ifn))
-  asig poscil3 1, icps, ifn, iphs
+  asig = poscil3(1, icps, ifn, iphs)
   xout asig
 endop
 
-opcode Stayed, k, kk
+opcode Stayed(kin:k, ksec:k):k
   ; outputs 1 if kin has not changed since ksec seconds, otherwise outputs 0
-  kin, ksec xin
-  kout init 0
-  knumk = ksec * kr  ; number of control cycles for ksec
-  kinit  init 1
-  kcount init 0
+  kout   = init(0)
+  knumk  = ksec * kr  ; number of control cycles for ksec
+  kinit  = init(1)
+  kcount = init(0)
   if kinit == 1 then  ; just once, at the beginning
     kprevious = kin
-    kinit     = 0
+    kinit = 0
   endif
   if kin == kprevious then
     kcount = kcount + 1
@@ -201,7 +196,7 @@ opcode Stayed, k, kk
   xout kout
 endop
 
-opcode ShowLED_a, 0, Sakkk
+opcode ShowLED_a(Soutchan:S, asig:a, kdispfreq:k, kdb:k, kdbrange:k):()
   ; Shows an audio signal in an outvalue channel. You can choose to show the value in dB
   ; or in raw amplitudes.
   ; Soutchan: string with the name of the outvalue channel
@@ -210,7 +205,6 @@ opcode ShowLED_a, 0, Sakkk
   ; kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
   ; kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything
   ; from a signal below -36 dB)
-  Soutchan, asig, kdispfreq, kdb, kdbrange xin
   kdispval max_k asig, kdispfreq, 1
   if kdb != 0 then
     kdb  = dbfsamp(kdispval)
@@ -221,18 +215,17 @@ opcode ShowLED_a, 0, Sakkk
   outvalue Soutchan, kval
 endop
 
-opcode ShowOver_a, 0, Sakk
+opcode ShowOver_a(Soutchan:S, asig:a, kdispfreq:k, khold:k):()
   ; Shows if the incoming audio signal was more than 1 and stays there for some time
   ; Soutchan: string with the name of the outvalue channel
   ; asig: audio signal which is to displayed
   ; kdispfreq: refresh frequency (Hz)
   ; khold: time in seconds to "hold the red light"
-  Soutchan, asig, kdispfreq, khold xin
-  kon init 0
-  ktim times
-  kstart init 0
-  kend   init 0
-  khold = (khold < .01 ? .01 : khold)  ; avoiding too short hold times
+  kon    = init(0)
+  ktim   = times()
+  kstart = init(0)
+  kend   = init(0)
+  khold  = (khold < .01 ? .01 : khold)  ; avoiding too short hold times
   kmax max_k asig/0dbfs, kdispfreq, 1
   if kon == 0 && kmax > 1 then
     kstart = ktim
@@ -262,74 +255,74 @@ instr 1       ; always on
   ; ============================================================================;
 
   ; Input to be analyzed
-  Sfiles chnget "_MBrowse"   ; selection of sound files
-  kinch    invalue "inch"    ; number of live input channel
-  kgain    invalue "gain"    ; live input gain (dB)
-  kselsamp invalue "sample"  ; 1 = select sample input
-  gksampnr invalue "sampnr"  ; 1, 2, ... for selecting a sample from the sf bank
-  keysel   invalue "keysel"  ; 1=enable selection of sample by computer number keys
-  ksellive invalue "live"    ; 1 = select live input
-  kdolive  invalue "dolive"  ; when button pressed, live input to be analyzed
+  Sfiles   = chnget("_MBrowse")  ; selection of sound files
+  kinch    = chnget("inch")      ; number of live input channel
+  kgain    = chnget("gain")      ; live input gain (dB)
+  kselsamp = chnget("sample")    ; 1 = select sample input
+  gksampnr = chnget("sampnr")    ; 1, 2, ... for selecting a sample from the sf bank
+  keysel   = chnget("keysel")    ; 1=enable selection of sample by computer number keys
+  ksellive = chnget("live")      ; 1 = select live input
+  kdolive  = chnget("dolive")    ; when button pressed, live input to be analyzed
 
   ; Analysis parameters
-  kpos      invalue "pos"          ; position in buffer (0-1)
-  kfast     invalue "fast"         ; how fast to react to position changes (sec)
-  kpartsana invalue "numpartsana"  ; number of strongest partials to analyze
-  kmanpos   invalue "manpos"       ; manually selected position
-  krandpos  invalue "randpos"      ; random position selected
-  krndpos1  invalue "rndpos1"      ; lower limit for random pointer (0-1)
-  krndpos2  invalue "rndpos2"      ; upper limit for random pointer (0-1)
-  khopmove  invalue "hopmove"      ; hop move selected
-  khopmvsiz invalue "hopmovsiz"    ; size of hopping in fractions of the table
+  kpos = chnget("pos")               ; position in buffer (0-1)
+  kfast = chnget("fast")             ; how fast to react to position changes (sec)
+  kpartsana = chnget("numpartsana")  ; number of strongest partials to analyze
+  kmanpos = chnget("manpos")         ; manually selected position
+  krandpos = chnget("randpos")       ; random position selected
+  krndpos1 = chnget("rndpos1")       ; lower limit for random pointer (0-1)
+  krndpos2 = chnget("rndpos2")       ; upper limit for random pointer (0-1)
+  khopmove = chnget("hopmove")       ; hop move selected
+  khopmvsiz = chnget("hopmovsiz")    ; size of hopping in fractions of the table
 
   ; Playback parameters
-  gkvol     invalue "vol"         ; overall volume (dB)
-  gkmaxdur  invalue "maxdur"      ; maximum duration of a note in seconds
-  gkhowmany invalue "numpartspl"  ; how many partials to be played back
-  gkshiftpl invalue "shiftpl"     ; number of strongest partials to skip for playback
-  gkrefpch  invalue "refpch"      ; midi note number for playing at original pitch
+  gkvol = chnget("vol")             ; overall volume (dB)
+  gkmaxdur = chnget("maxdur")       ; maximum duration of a note in seconds
+  gkhowmany = chnget("numpartspl")  ; how many partials to be played back
+  gkshiftpl = chnget("shiftpl")     ; number of strongest partials to skip for playback
+  gkrefpch = chnget("refpch")       ; midi note number for playing at original pitch
   ; how many cents to transpose for adjacent semitones on the midi keyboard
-  gkstcent  invalue "stcent"
-  gkrndfqdv invalue "rndfqdv"   ; maximal partial random frequency deviation (cent)
-  gkrdampdv invalue "rndampdv"  ; maximal partial random amplitude deviation (dB)
-  gkrddurdv invalue "rnddurdv"  ; maximal partial random duration deviation (%)
-  gkatt     invalue "att"       ; attack time (sec)
-  gkdec     invalue "dec"       ; decay time (sec)
-  gksus     invalue "sus"       ; sustain level (0-1)
-  gkrel     invalue "rel"       ; release time (sec)
+  gkstcent = chnget("stcent")
+  gkrndfqdv = chnget("rndfqdv")   ; maximal partial random frequency deviation (cent)
+  gkrdampdv = chnget("rndampdv")  ; maximal partial random amplitude deviation (dB)
+  gkrddurdv = chnget("rnddurdv")  ; maximal partial random duration deviation (%)
+  gkatt = chnget("att")           ; attack time (sec)
+  gkdec = chnget("dec")           ; decay time (sec)
+  gksus = chnget("sus")           ; sustain level (0-1)
+  gkrel = chnget("rel")           ; release time (sec)
 
   ; Print and export
-  kprint  invalue "print"     ; 1 = print current values
-  kexp1   invalue "exp1"      ; export printout
-  gSfexp1 invalue "_Browse1"  ; file for printout export
-  kexp2   invalue "exp2"      ; export amp-freq
-  gSfexp2 invalue "_Browse2"  ; file for amp-freq export
-  kexp3   invalue "exp3"      ; export as tables with multipliers
-  gSfexp3 invalue "_Browse3"  ; file for table multiplier export
+  kprint  = chnget("print")     ; 1 = print current values
+  kexp1   = chnget("exp1")      ; export printout
+  gSfexp1 = chnget("_Browse1")  ; file for printout export
+  kexp2   = chnget("exp2")      ; export amp-freq
+  gSfexp2 = chnget("_Browse2")  ; file for amp-freq export
+  kexp3   = chnget("exp3")      ; export as tables with multipliers
+  gSfexp3 = chnget("_Browse3")  ; file for table multiplier export
 
   ; Regulating the switch between certain buttons
   ; analysis source
-  ksllivnew changed ksellive
-  kslsmpnew changed kselsamp
+  ksllivnew = changed(ksellive)
+  kslsmpnew = changed(kselsamp)
   if kslsmpnew == 1 && kselsamp == 1 then
-    outvalue "live", 0
+    chnset(0, "live")
   elseif ksllivnew == 1 && ksellive == 1 then
-    outvalue "sample", 0
+    chnset(0, "sample")
   endif
   ; pointer method
-  kmnposnew changed kmanpos
-  krdposnew changed krandpos
-  khopmvnew changed khopmove
+  kmnposnew = changed(kmanpos)
+  krdposnew = changed(krandpos)
+  khopmvnew = changed(khopmove)
   if kmnposnew == 1 && kmanpos == 1 then
-    outvalue "randpos", 0
-    outvalue "hopmove", 0
+    chnset(0, "randpos")
+    chnset(0, "hopmove")
   elseif krdposnew == 1 && krandpos == 1 then
-    outvalue "manpos", 0
-    outvalue "hopmove", 0
+    chnset(0, "manpos")
+    chnset(0, "hopmove")
     knewrdpos = 1
   elseif khopmvnew == 1 && khopmove == 1 then
-    outvalue "manpos", 0
-    outvalue "randpos", 0
+    chnset(0, "manpos")
+    chnset(0, "randpos")
     knewhpmv = 1
   endif
 
@@ -339,14 +332,14 @@ instr 1       ; always on
   if kst == 144 then
     ; calculate new random position if selected
     if krandpos == 1 then
-      kpos random krndpos1, krndpos2
-      outvalue "pos", kpos
+      kpos = random(krndpos1, krndpos2)
+      chnset(kpos, "pos")
       knewrdpos = 1
       ; calculate new hop position if selected
     elseif khopmove == 1 then
       kpos = frac(kpos+khopmvsiz)
       kpos = (kpos < 0 ? 1-kpos : kpos)
-      outvalue "pos", kpos
+      chnset(kpos, "pos")
       knewhpmv = 1
     endif
   endif
@@ -354,7 +347,7 @@ instr 1       ; always on
   ; Enable computer keys for switching
   if keysel == 1 then
     key, k0 sensekey
-    keychange changed key
+    keychange = changed(key)
     if keychange == 1 && k0 == 1 then  ; new key down
       if key > 47 && key < 58 then     ; number keys 0-9
         event "i", 3, 0, .1, key
@@ -374,9 +367,9 @@ instr 1       ; always on
 
   iftdatlen = ftlen(giamps)     ; length of amp/freq tables
   iftmaxlen = ftlen(gimaxindc)  ; length of maxima table
-  kwritten init 0               ; 1 = having written new values in giamps/gifreqs
-  kwritliv init 0               ; write the fft-analysis of the live signal ...
-  kwritsmp init 0               ; ... or of the selected sample position to the tables
+  kwritten  = init(0)           ; 1 = having written new values in giamps/gifreqs
+  kwritliv  = init(0)           ; write the fft-analysis of the live signal ...
+  kwritsmp  = init(0)           ; ... or of the selected sample position to the tables
 
 
   ; ============================================================================;
@@ -384,37 +377,37 @@ instr 1       ; always on
   ; ============================================================================;
 
   ; Loading the selected files in function tables 1, 2, ... And storing sf lengths
-  inumfils StrayLen Sfiles, 124           ; how many files (separated by '|') to load
-  giftsflns ftgen 0, 0, -inumfils, -2, 0  ; empty table for sound file lenghths
+  inumfils = StrayLen(Sfiles, 124)           ; how many files (separated by '|') to load
+  giftsflns = ftgen(0, 0, -inumfils, -2, 0)  ; empty table for sound file lenghths
   iload = 0
 load:
   ist, ien StrayGetEl Sfiles, iload, 124
-  Sfil strsub Sfiles, ist, ien
-  inoth ftgen iload+1, 0, 0, 1, Sfil, 0, 0, 1  ; storing sf data in table 1, 2, ...
-  ilen filelen Sfil
+  Sfil  = strsub(Sfiles, ist, ien)
+  inoth = ftgen(iload+1, 0, 0, 1, Sfil, 0, 0, 1)  ; storing sf data in table 1, 2, ...
+  ilen  = filelen(Sfil)
   tabw_i ilen, iload, giftsflns  ; storing sf lenghts in table giftsflns
   loop_lt iload, 1, inumfils, load
 
   ; Calculating and showing the position of the pointer
   kthissamp = (gksampnr > inumfils ? inumfils : gksampnr)
-  kfilen tab kthissamp-1, giftsflns
-  kpossec = kpos * kfilen  ; position in sec
-  outvalue "position", kpossec
+  kfilen    = tab(kthissamp-1, giftsflns)
+  kpossec   = kpos * kfilen  ; position in sec
+  chnset(kpossec, "position")
 
   ; Showing whenever a new sample has been selected
 newfile:
   itable = i(kthissamp)
   ist, ien StrayGetEl Sfiles, itable-1, 124
-  Sfil strsub Sfiles, ist, ien
-  ilslash strrindex Sfil, "/"
-  Sname strsub Sfil, ilslash+1
-  Showname sprintf "File selected:\n'%s'", Sname
+  Sfil = strsub(Sfiles, ist, ien)
+  ilslash = strrindex(Sfil, "/")
+  Sname = strsub(Sfil, ilslash+1)
+  Showname = sprintf("File selected:\n'%s'", Sname)
   rireturn
-  knewtable changed kthissamp
+  knewtable = changed(kthissamp)
   if knewtable == 1 then
     reinit newfile
-    outvalue "showname", Showname
-    outvalue "showtab", -kthissamp
+    chnset(Showname,   "showname")
+    chnset(-kthissamp, "showtab")
   endif
 
 
@@ -424,8 +417,8 @@ newfile:
   ; ============================================================================;
 
   ain inch kinch
-  ain = ain*ampdb(kgain)
-  kdisp metro 10
+  ain   = ain*ampdb(kgain)
+  kdisp = metro(10)
   ShowLED_a  "livein", ain, kdisp, 1, 50
   ShowOver_a "livein_over", ain, kdisp, 1
 
@@ -436,14 +429,14 @@ newfile:
   ; ============================================================================;
 
   ; Streaming the fft live signal
-  flive pvsanal ain, gifftsiz, giovlap, giwinsiz, giwintyp
+  flive = pvsanal(ain, gifftsiz, giovlap, giwinsiz, giwintyp)
   ; Streaming the fft signal from the selected sample whenever a new position is given
-  knewpos changed kpos, kthissamp, kslsmpnew, kmnposnew, krdposnew, khopmvnew
+  knewpos = changed(kpos, kthissamp, kslsmpnew, kmnposnew, krdposnew, khopmvnew)
   if knewpos == 1 then
     reinit readsampnew
   endif
 readsampnew:
-  fsamp pvstanal 0, 1, 1, kthissamp, 0, 0, i(kpossec), gifftsiz, giovlap, 0
+  fsamp = pvstanal(0, 1, 1, kthissamp, 0, 0, i(kpossec), gifftsiz, giovlap, 0)
   rireturn
 
 
@@ -454,7 +447,7 @@ readsampnew:
 
   ; Set kwritliv=1 in the k-cycle the "dolive" button has been pressed
   if ksellive == 1 then  ; live source must be selected
-    klivenew changed kdolive
+    klivenew = changed(kdolive)
     if klivenew == 1 && kdolive == 1 then
       kwritliv = 1
     endif
@@ -464,8 +457,8 @@ readsampnew:
   elseif kselsamp == 1 then  ; sample source selected
     ; manual position
     if kmanpos == 1 then
-      kpstayed Stayed kpos, kfast  ; returns 1 if pos has not changed for kfast seconds
-      knewpos changed kpstayed
+      kpstayed = Stayed(kpos, kfast)  ; returns 1 if pos has not changed for kfast seconds
+      knewpos  = changed(kpstayed)
       if (knewpos == 1 && kpstayed == 1) || knewtable == 1 || kslsmpnew == 1 then
         kwritsmp = 1
       endif
@@ -485,12 +478,12 @@ readsampnew:
   ; ============================================================================;
 
   ; Initialize counters
-  ksmpcnt init 0
-  klivcnt init 0
+  ksmpcnt = init(0)
+  klivcnt = init(0)
 
   ; Live input selected
   if kwritliv == 1 then
-    kwritten pvsftw flive, giamps, gifreqs
+    kwritten = pvsftw(flive, giamps, gifreqs)
     if kwritten == 1 then
       klivcnt = klivcnt + 1
       printks " New live values written! (%d)\n", 0, klivcnt
@@ -499,7 +492,7 @@ readsampnew:
 
     ; Sound file input selected
   elseif kwritsmp == 1 then
-    kwritten pvsftw fsamp, giamps, gifreqs
+    kwritten = pvsftw(fsamp, giamps, gifreqs)
     if kwritten == 1 then
       ksmpcnt = ksmpcnt + 1
       printks " New sample values written (%d)!\n", 0, ksmpcnt
@@ -528,23 +521,23 @@ readsampnew:
     if kprint == 1 && kwritten == 1 then
       kprntndx = 0
       if kselsamp == 1 then
-        Sprint sprintfk "File '%s' at position %f seconds:\n", Sname, kpossec
+        Sprint = sprintfk("File '%s' at position %f seconds:\n", Sname, kpossec)
       elseif ksellive == 1 then
-        Sprint sprintfk "%s\n", "Live input:"
+        Sprint = sprintfk("%s\n", "Live input:")
       else
         Sprint = ""
       endif
 printout:
-      ktabindx tab kprntndx, gimaxindc
-      kamp     tab ktabindx, giamps
-      kfreq    tab ktabindx, gifreqs
-      Snew sprintfk "%s%.2d) amp = %f, freq = %f, bin = %d\n", Sprint, kprntndx+1, kamp, kfreq, ktabindx
-      Sprint strcpyk Snew
+      ktabindx = tab(kprntndx, gimaxindc)
+      kamp = tab(ktabindx, giamps)
+      kfreq = tab(ktabindx, gifreqs)
+      Snew = sprintfk("%s%.2d) amp = %f, freq = %f, bin = %d\n", Sprint, kprntndx+1, kamp, kfreq, ktabindx)
+      Sprint = strcpyk(Snew)
       loop_lt kprntndx, 1, kpartsana, printout
-      outvalue "values", Sprint
-      gSexpt1 strcpyk Sprint
+      chnset(Sprint, "values")
+      gSexpt1 = strcpyk(Sprint)
     else
-      outvalue "values", ""
+      chnset("", "values")
     endif
   endif
 
@@ -554,9 +547,9 @@ printout:
   ; Export values if desired                          ;
   ; ============================================================================;
 
-  kexp1new changed kexp1
-  kexp2new changed kexp2
-  kexp3new changed kexp3
+  kexp1new = changed(kexp1)
+  kexp2new = changed(kexp2)
+  kexp3new = changed(kexp3)
 
   ; Export in the same format as in the widget panel
   if kexp1new == 1 && kexp1 == 1 then
@@ -566,45 +559,45 @@ printout:
   elseif kexp2new == 1 && kexp2 == 1 then
     kexpt2ndx = 0
     if kselsamp == 1 then
-      gSexpt2 sprintfk "Amp-Freq values for file '%s' at position %f seconds:\n", Sname, kpossec
+      gSexpt2 = sprintfk("Amp-Freq values for file '%s' at position %f seconds:\n", Sname, kpossec)
     elseif ksellive == 1 then
-      gSexpt2 sprintfk "%s\n", "Amp-Freq values for live input:"
+      gSexpt2 = sprintfk("%s\n", "Amp-Freq values for live input:")
     endif
 expt2:
-    ktabindx tab kexpt2ndx, gimaxindc
-    kamp     tab ktabindx, giamps
-    kfreq    tab ktabindx, gifreqs
-    Snew sprintfk "%s%f %f\n", gSexpt2, kamp, kfreq
-    gSexpt2 strcpyk Snew
+    ktabindx = tab(kexpt2ndx, gimaxindc)
+    kamp = tab(ktabindx, giamps)
+    kfreq = tab(ktabindx, gifreqs)
+    Snew = sprintfk("%s%f %f\n", gSexpt2, kamp, kfreq)
+    gSexpt2 = strcpyk(Snew)
     loop_lt kexpt2ndx, 1, kpartsana, expt2
     event "i", 7, 0, .1
 
     ; Export as multipliers in function tables
   elseif kexp3new == 1 && kexp3 == 1 then
-    kexpt3cnt init 0  ; counter
+    kexpt3cnt = init(0)  ; counter
     kexpt3cnt = kexpt3cnt+1
     ; get reference frequency for frequency multiplier = 1
-    ktabindx tab 0, gimaxindc
-    kfreq0   tab ktabindx, gifreqs  ; frequency corresponding to strongest amplitude
+    ktabindx = tab(0, gimaxindc)
+    kfreq0   = tab(ktabindx, gifreqs)  ; frequency corresponding to strongest amplitude
     if kselsamp == 1 then
-      Sexpt3 sprintfk "Amp-Freq multiplier for file '%s' at position %f seconds.\nPitch at frequency multiplier 1 was %f Hz.\n", Sname, kpossec, kfreq0
+      Sexpt3 = sprintfk("Amp-Freq multiplier for file '%s' at position %f seconds.\nPitch at frequency multiplier 1 was %f Hz.\n", Sname, kpossec, kfreq0)
     elseif ksellive == 1 then
-      Sexpt3 sprintfk "Amp-Freq multiplier for live input.\nPitch at frequency multiplier 1 was %f Hz.\n", kfreq0
+      Sexpt3 = sprintfk("Amp-Freq multiplier for live input.\nPitch at frequency multiplier 1 was %f Hz.\n", kfreq0)
     endif
-    Samptab  sprintfk "giAmp%d ftgen 0, 0, -%d, -2", kexpt3cnt, kpartsana
-    Sfreqtab sprintfk "giFreq%d ftgen 0, 0, -%d, -2", kexpt3cnt, kpartsana
+    Samptab   = sprintfk("giAmp%d ftgen 0, 0, -%d, -2", kexpt3cnt, kpartsana)
+    Sfreqtab  = sprintfk("giFreq%d ftgen 0, 0, -%d, -2", kexpt3cnt, kpartsana)
     kexpt3ndx = 0
 expt3:
-    ktabindx tab kexpt3ndx, gimaxindc
-    kamp     tab ktabindx, giamps
-    kfreq    tab ktabindx, gifreqs
+    ktabindx = tab(kexpt3ndx, gimaxindc)
+    kamp = tab(ktabindx, giamps)
+    kfreq = tab(ktabindx, gifreqs)
     kfmult = kfreq/kfreq0
-    Snewamp  sprintfk "%s, %f", Samptab, kamp
-    Snewfreq sprintfk "%s, %f", Sfreqtab, kfmult
-    Samptab  strcpyk Snewamp
-    Sfreqtab strcpyk Snewfreq
+    Snewamp = sprintfk("%s, %f", Samptab, kamp)
+    Snewfreq = sprintfk("%s, %f", Sfreqtab, kfmult)
+    Samptab = strcpyk(Snewamp)
+    Sfreqtab = strcpyk(Snewfreq)
     loop_lt kexpt3ndx, 1, kpartsana, expt3
-    gSexpt3 sprintfk "%s%s\n%s\n\n", Sexpt3, Samptab, Sfreqtab
+    gSexpt3 = sprintfk("%s%s\n%s\n\n", Sexpt3, Samptab, Sfreqtab)
     event "i", 8, 0, .1
   endif
 
@@ -621,8 +614,8 @@ endin
 instr 2
   itab = i(gksampnr)            ; number of ftable (1, 2, ...)
   idur tab_i itab-1, giftsflns  ; get length of sample
-  p3 = idur
-  aout poscil3 1, 1/p3, itab
+  p3   = idur
+  aout = poscil3(1, 1/p3, itab)
   out aout*ampdb(gkvol)
 endin
 
@@ -635,14 +628,14 @@ endin
 ; Make live snapshot and change the sample number
 instr 3
   ikey = p4  ; 48-57
-  kcyc timeinstk
+  kcyc = timeinstk()
   if ikey == 48 then
-    outvalue "dolive", 1
+    chnset(1, "dolive")
   else
-    outvalue "sampnr", ikey-48
+    chnset(ikey-48, "sampnr")
   endif
   if kcyc == 2 then
-    outvalue "dolive", 0
+    chnset(0, "dolive")
     turnoff
   endif
 endin
@@ -651,11 +644,11 @@ endin
 instr 4
   ikey = p4
   if ikey == 112 then  ; p = manual pointer
-    outvalue "manpos", 1
+    chnset(1, "manpos")
   elseif ikey == 114 then  ; r = random pointer
-    outvalue "randpos", 1
+    chnset(1, "randpos")
   elseif ikey == 104 then  ; h = hop move
-    outvalue "hopmove", 1
+    chnset(1, "hopmove")
   endif
   turnoff
 endin
@@ -664,9 +657,9 @@ endin
 instr 5
   ikey = p4
   if ikey == 115 then  ; s = sample as input
-    outvalue "sample", 1
+    chnset(1, "sample")
   elseif ikey == 108 then  ; l = live input
-    outvalue "live", 1
+    chnset(1, "live")
   endif
   turnoff
 endin
@@ -724,21 +717,21 @@ instr 10
   ; Receiving basic values                           ;
   ; ============================================================================;
 
-  inote     = p4                 ; midi note number
-  imidamp   = p5                 ; midi velocity (0-1)
-  insnum    = 100 + (inote/100)  ; fractional number to differentiate keys
-  irefpch   = i(gkrefpch)
-  istcent   = i(gkstcent)  ; cent difference for each semitone
-  icentdif  = (inote-irefpch) * istcent
-  ihowmany  = i(gkhowmany)
-  ishift    = i(gkshiftpl)
-  imax      = i(gkthsnman)  ; number of partials analyzed
-  ihowmany  = (ihowmany+ishift > imax ? imax-ishift : ihowmany)
-  imaxdur   = i(gkmaxdur)   ; maximum duration for one note (sec)
+  inote = p4                  ; midi note number
+  imidamp = p5                ; midi velocity (0-1)
+  insnum = 100 + (inote/100)  ; fractional number to differentiate keys
+  irefpch = i(gkrefpch)
+  istcent = i(gkstcent)  ; cent difference for each semitone
+  icentdif = (inote-irefpch) * istcent
+  ihowmany = i(gkhowmany)
+  ishift = i(gkshiftpl)
+  imax = i(gkthsnman)  ; number of partials analyzed
+  ihowmany = (ihowmany+ishift > imax ? imax-ishift : ihowmany)
+  imaxdur = i(gkmaxdur)     ; maximum duration for one note (sec)
   irndampdv = i(gkrdampdv)  ; max amp deviation (dB)
-  irndfqdv  = i(gkrndfqdv)  ; max freq deviation (cent)
+  irndfqdv = i(gkrndfqdv)   ; max freq deviation (cent)
   irnddurdv = i(gkrddurdv)  ; max dur deviation (%)
-  ivol      = i(gkvol)      ; overall volume (dB)
+  ivol = i(gkvol)           ; overall volume (dB)
   ; duration of each note (without random deviations)
   idur = i(gkmaxdur)
   idur = (idur < 0.1) ? 0.1 : idur  ; make sure there will not be zero duration
@@ -769,19 +762,19 @@ loop2:
   ; Amplitudes
   ; get index for ordered amps from gimaxindc
   itabindx tab_i indx, gimaxindc
-  iptamp   tab_i itabindx, giamps                  ; get 1., 2., etc strongest amps
-  iptamp = iptamp * imidamp                        ; following midi velocity
-  iptdbvar rnd31 irndampdv, 0                      ; dB deviation
-  iptamp = ampdb(ivol) * iptamp * ampdb(iptdbvar)  ; resulting amp
+  iptamp   tab_i itabindx, giamps                    ; get 1., 2., etc strongest amps
+  iptamp   = iptamp * imidamp                        ; following midi velocity
+  iptdbvar = rnd31(irndampdv, 0)                     ; dB deviation
+  iptamp   = ampdb(ivol) * iptamp * ampdb(iptdbvar)  ; resulting amp
   ; Frequencies
-  iptfq tab_i itabindx, gifreqs   ; get related freq to selected amp
-  iptfq = cent(icentdif) * iptfq  ; transposed depending on key pressed
-  iptfqvar rnd31 irndfqdv, 0      ; cent deviation
-  iptfq = iptfq * cent(iptfqvar)
+  iptfq tab_i itabindx, gifreqs      ; get related freq to selected amp
+  iptfq    = cent(icentdif) * iptfq  ; transposed depending on key pressed
+  iptfqvar = rnd31(irndfqdv, 0)      ; cent deviation
+  iptfq    = iptfq * cent(iptfqvar)
   ; Durations
   ; percent of duration deviation (100=twice,-100=half as long)
-  iptdurvar rnd31 irnddurdv, 0
-  iptdur = idur * 2^(iptdurvar/100)
+  iptdurvar = rnd31(irnddurdv, 0)
+  iptdur    = idur * 2^(iptdurvar/100)
   event_i "i", insnum, 0, iptdur, iptamp, iptfq, iampsum  ; call instr 100.nn
   loop_lt indx, 1, ihowmany+ishift, loop2
 
@@ -791,7 +784,7 @@ loop2:
   ; Stopping the instances of the subinstrument if MIDI-key has been raised   ;
   ; ============================================================================;
 
-  krel release
+  krel = release()
   if krel == 1 then
     turnoff2 insnum, 4, 1
   endif
@@ -814,8 +807,8 @@ instr 100
   irel    = i(gkrel)
 
   ; Play a sine with adsr envelope
-  apart poscil iamp, ifreq, gisine
-  aenv madsr iatt, idec, isus, irel
+  apart = poscil(iamp, ifreq, gisine)
+  aenv  = madsr(iatt, idec, isus, irel)
   out apart*aenv/iampsum
 endin
 
@@ -826,8 +819,8 @@ endin
 ; ============================================================================;
 
 instr 999
-  ktrigdisp metro 10
-  aout monitor
+  ktrigdisp = metro(10)
+  aout = monitor()
   ShowLED_a  "out", aout, ktrigdisp, 1, 48
   ShowOver_a "out_over", aout, ktrigdisp, 2
 endin

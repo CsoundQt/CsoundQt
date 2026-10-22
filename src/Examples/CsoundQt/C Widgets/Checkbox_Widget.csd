@@ -4,40 +4,40 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
 instr 1
-	khipass invalue "hipass"
-	klowpass invalue "lowpass"
-	kbandpass invalue "bandpass"
-	asig noise 1, 0
-	if (khipass == 1) then
-		asig atone asig, 3000
-		asig atone asig, 3000
-		asig atone asig, 3000
-	endif
-	if (klowpass == 1) then
-		asig tone asig, 8000
-		asig tone asig, 8000
-		asig tone asig, 8000
-	endif
-	dispfft asig*20, 1/18, 1024
-	outs asig*0.1, asig*0.1
+  khipass = chnget("hipass")
+  klowpass = chnget("lowpass")
+  kbandpass = chnget("bandpass")
+  asig = noise(1, 0)
+  if (khipass == 1) then
+    asig = atone(asig, 3000)
+    asig = atone(asig, 3000)
+    asig = atone(asig, 3000)
+  endif
+  if (klowpass == 1) then
+    asig = tone(asig, 8000)
+    asig = tone(asig, 8000)
+    asig = tone(asig, 8000)
+  endif
+  dispfft asig*20, 1/18, 1024
+  out(asig*0.1, asig*0.1)
 endin
 
-instr 2 ; set checkbox values
-	kstate init 0
-	ktrig metro 1
-	if (ktrig == 1) then
-		kstate = (kstate == 0 ? 1 : 0)
-	endif
-	kenable invalue "enable"
-	if (kenable == 1) then
-		outvalue "checkbox", kstate
-		kenable = 0
-	endif
+instr 2  ; set checkbox values
+  kstate = init(0)
+  ktrig  = metro(1)
+  if (ktrig == 1) then
+    kstate = (kstate == 0 ? 1 : 0)
+  endif
+  kenable = chnget("enable")
+  if (kenable == 1) then
+    chnset(kstate, "checkbox")
+    kenable = 0
+  endif
 endin
 
 </CsInstruments>

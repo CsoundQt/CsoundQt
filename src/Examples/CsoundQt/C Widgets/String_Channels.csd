@@ -4,35 +4,35 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
-instr 1 ; Schedule triggering of the instruments
-	event_i "i", 2, 0, 1
-	event_i "i", 3, 2, 1
-	event_i "i", 4, 4, 1
+instr 1  ; Schedule triggering of the instruments
+  event_i "i", 2, 0, 1
+  event_i "i", 3, 2, 1
+  event_i "i", 4, 4, 1
 endin
 
 instr 2
-	outvalue "text", "hello"
-	turnoff
+  chnset("hello", "text")
+  turnoff
 endin
 
 instr 3
-	outvalue "text", "world!"
-	turnoff
+  chnset("world!", "text")
+  turnoff
 endin
 
 instr 4
-	outvalue "text", ""
-	turnoff
+  chnset("", "text")
+  turnoff
 endin
 
 instr 5
-	Stext invalue "newtext"
-	outvalue "newtext2", Stext
-	turnoff
+  Stext = chnget("newtext")
+  chnset(Stext, "newtext2")
+  turnoff
 endin
 
 </CsInstruments>

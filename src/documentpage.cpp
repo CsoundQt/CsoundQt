@@ -39,6 +39,8 @@
 #include "qutebutton.h"
 #include "notification.h"
 
+#include <QDir>
+#include <QFileInfo>
 #include <QMessageBox>
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
@@ -51,6 +53,24 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 	// The widget layout is the source of truth for chnget/chnset completion;
 	// read it on demand so a renamed channel is picked up immediately.
 	m_view->setWidgetChannelsProvider([this]() { return getWidgetChannels(); });
+	m_view->setWidgetPropertiesProvider([this](const QString &channelOrName) {
+		return getWidgetProperties(channelOrName);
+	});
+	m_view->setDocumentDirectoryProvider([this]() {
+		if (fileName.isEmpty() || fileName.startsWith(QLatin1String(":/")))
+			return QDir::currentPath();
+		return QFileInfo(fileName).absolutePath();
+	});
+	connect(m_view, &DocumentView::channelHighlightRequested,
+	        this, [this](const QString &channel) {
+		WidgetLayout *layout = getWidgetLayout();
+		if (!layout)
+			return;
+		if (channel.isEmpty())
+			layout->clearChannelHighlights();
+		else
+			layout->highlightChannel(channel);
+	});
 	m_midiLearn = midiLearn;
     m_colorTheme = "";
     m_parseUdosNeeded = true;
@@ -1200,6 +1220,29 @@ QStringList DocumentPage::getWidgetChannels() {
     return channels;
 }
 
+QList<WidgetPropertyInfo> DocumentPage::getWidgetProperties(
+        const QString &channelOrName) {
+    if (channelOrName.isEmpty())
+        return {};
+    if (WidgetLayout *layout = getWidgetLayout()) {
+        for (QuteWidget *widget : layout->getWidgets()) {
+            if (!widget)
+                continue;
+            if (widget->getChannelName().compare(channelOrName,
+                                                  Qt::CaseInsensitive) == 0
+                    || widget->getChannel2Name().compare(channelOrName,
+                                                         Qt::CaseInsensitive) == 0
+                    || widget->getWidgetName().compare(channelOrName,
+                                                       Qt::CaseInsensitive) == 0) {
+                // If several widgets share a channel, the first one visible
+                // in the layout is the one whose properties are offered.
+                return widget->getPropertyInfo();
+            }
+        }
+    }
+    return {};
+}
+
 void DocumentPage::updateWidgetChannels() {
     m_view->setWidgetChannels(getWidgetChannels());
 }
@@ -1255,4 +1298,8 @@ void DocumentPage::autocomplete() {
 
 void DocumentPage::insertOpcode() {
     m_view->showOpcodeInsertBar();
+}
+
+void DocumentPage::highlightWidgetChannel() {
+    m_view->highlightWidgetChannel();
 }

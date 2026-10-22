@@ -58,83 +58,83 @@
 ; globals
 ; -------------------------------------------------------------------------
 
-sr     = 44100
-ksmps  = 128
+sr = 44100
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
 ; -------------------------------------------------------------------------
 ; global channels
 ; -------------------------------------------------------------------------
 
-gaL init 0
-gaR init 0
+gaL = init(0)
+gaR = init(0)
 
 ; -------------------------------------------------------------------------
 ; waveform tables
 ; -------------------------------------------------------------------------
 
-giTblSz init 1048576
+giTblSz = init(1048576)
 
 ; pure sine wave
-giFn1 ftgen 1, 0, giTblSz, 10, 1
+giFn1 = ftgen(1, 0, giTblSz, 10, 1)
 
 
 ; sawtooth wave  all partials (through 17) at a strength of 1/harmonic#
-giFn2 ftgen 2, 0, giTblSz, 10, 1, .5, .3333, .25, .2, .1667, .1428, .125, .111, .1, .0909, .0833, .077, .0714, .0667, .0625, .0588
+giFn2 = ftgen(2, 0, giTblSz, 10, 1, .5, .3333, .25, .2, .1667, .1428, .125, .111, .1, .0909, .0833, .077, .0714, .0667, .0625, .0588)
 
 ; first 13 partials, strength = 1/n + 1/(n-1)
-giFn3 ftgen 3, 0, giTblSz, 10, 1, 1.5, .8333, .58, .45, .367, .31, .268, .236, .211, .1909, .1742, .1603
+giFn3 = ftgen(3, 0, giTblSz, 10, 1, 1.5, .8333, .58, .45, .367, .31, .268, .236, .211, .1909, .1742, .1603)
 
 
 ; square wave  odd partials (through 19) at a strength of 1/harmonic#
-giFn4 ftgen 4, 0, giTblSz, 9, 1, 1, 0, 3, .3333, 0, 5, .2, 0, 7, .1428, 0, 9, .111, 0, 11, .0909, 0, 13, .077, 0, 15, .0667, 0, 17, .0588, 0, 19, .0526, 0
+giFn4 = ftgen(4, 0, giTblSz, 9, 1, 1, 0, 3, .3333, 0, 5, .2, 0, 7, .1428, 0, 9, .111, 0, 11, .0909, 0, 13, .077, 0, 15, .0667, 0, 17, .0588, 0, 19, .0526, 0)
 
 ; odd partials to 19, strength = 1/n, where n is ordinal to the odd set
-giFn5 ftgen 5, 0, giTblSz, 9, 1, 1, 0, 3, .5, 0, 5, .3333, 0, 7, .25, 0, 9, .2, 0, 11, .1667, 0, 13, .1429, 0, 15, .125, 0, 17, .1111, 0, 19, .1, 0
+giFn5 = ftgen(5, 0, giTblSz, 9, 1, 1, 0, 3, .5, 0, 5, .3333, 0, 7, .25, 0, 9, .2, 0, 11, .1667, 0, 13, .1429, 0, 15, .125, 0, 17, .1111, 0, 19, .1, 0)
 
 
 ; prime partials to 23, strength = 1/n
-giFn6 ftgen 6, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .2, 0, 7, .143, 0, 11, .0909, 0, 13, .077, 0, 17, .0588, 0, 19, .0526, 0, 23, .0435, 0, 27, .037, 0
+giFn6 = ftgen(6, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .2, 0, 7, .143, 0, 11, .0909, 0, 13, .077, 0, 17, .0588, 0, 19, .0526, 0, 23, .0435, 0, 27, .037, 0)
 
 ; primes to 23, strength = 1/n, where n is ordinal to the prime set
-giFn7 ftgen 7, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .25, 0, 7, .20, 0, 11, .1667, 0, 13, .1429, 0, 17, .125, 0, 19, .1111, 0, 23, .1, 0, 27, .0909, 0
+giFn7 = ftgen(7, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .25, 0, 7, .20, 0, 11, .1667, 0, 13, .1429, 0, 17, .125, 0, 19, .1111, 0, 23, .1, 0, 27, .0909, 0)
 
 
 ; partials in the Fibonacci series to 89, strength = 1/n
-giFn8 ftgen 8, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .2, 0, 8, .125, 0, 13, .0769, 0, 21, .0476, 0, 34, .0294, 0, 55, .0182, 0, 89, .0112, 0, 144, .0069, 0
+giFn8 = ftgen(8, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .2, 0, 8, .125, 0, 13, .0769, 0, 21, .0476, 0, 34, .0294, 0, 55, .0182, 0, 89, .0112, 0, 144, .0069, 0)
 
 ; fibs to 89, strength = 1/n, where n is ordinal to the fib set
-giFn9 ftgen 9, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .25, 0, 8, .2, 0, 13, .1667, 0, 21, .1429, 0, 34, .125, 0, 55, .1111, 0, 89, .1, 0, 144, .0909, 0
+giFn9 = ftgen(9, 0, giTblSz, 9, 1, 1, 0, 2, .5, 0, 3, .3333, 0, 5, .25, 0, 8, .2, 0, 13, .1667, 0, 21, .1429, 0, 34, .125, 0, 55, .1111, 0, 89, .1, 0, 144, .0909, 0)
 
 
 ; David First's "asymptotic sawtooth wave"
-giFn10 ftgen 10, 0, giTblSz, 9, 1, 1, 0, 1.732050807568877, .5773502691896259, 0, 2.449489742783178, .408248290463863, 0, 3.162277660168379, .3162277660168379, 0, 3.872983346207417, .2581988897471611, 0, 4.58257569495584, .2182178902359924, 0, 5.291502622129182, .1889822365046136, 0, 6, .1666666666666667, 0, 6.70820393249937, .1490711984999859, 0, 7.416198487095663, .1348399724926484, 0, 8.124038404635961, .1230914909793327, 0, 9.539392014169456, .1048284836721918, 0, 10.2469507659596, .0975900072948533, 0, 10.95445115010332, .0912870929175277, 0, 11.6619037896906, .0857492925712544, 0
+giFn10 = ftgen(10, 0, giTblSz, 9, 1, 1, 0, 1.732050807568877, .5773502691896259, 0, 2.449489742783178, .408248290463863, 0, 3.162277660168379, .3162277660168379, 0, 3.872983346207417, .2581988897471611, 0, 4.58257569495584, .2182178902359924, 0, 5.291502622129182, .1889822365046136, 0, 6, .1666666666666667, 0, 6.70820393249937, .1490711984999859, 0, 7.416198487095663, .1348399724926484, 0, 8.124038404635961, .1230914909793327, 0, 9.539392014169456, .1048284836721918, 0, 10.2469507659596, .0975900072948533, 0, 10.95445115010332, .0912870929175277, 0, 11.6619037896906, .0857492925712544, 0)
 
 ; -------------------------------------------------------------------------
 ; basic offset value for Risset effect
 ; -------------------------------------------------------------------------
 
-giofs init .01
+giofs = init(.01)
 
 ; -------------------------------------------------------------------------
 ; multipler for binaural beat level
 ; -------------------------------------------------------------------------
 
-gibblvl init 4
+gibblvl = init(4)
 
 ; -------------------------------------------------------------------------
 ; FFT size for pvsanal
 ; -------------------------------------------------------------------------
 
-gifftsz init 2048
+gifftsz = init(2048)
 
 ; -------------------------------------------------------------------------
 ; initialize globals for values from UI
 ; -------------------------------------------------------------------------
 
-gktbl  init 1
-gkbase init 440
+gktbl  = init(1)
+gkbase = init(440)
 
 ; ---------------------------------------------------------------------------
 ; orchestra macros
@@ -147,8 +147,7 @@ gkbase init 440
 ; panner
 ; ---------------------------------------------------------------------------------------
 
-opcode pan_equal_power, aa, ak
-  ain, kpan xin
+opcode pan_equal_power(ain:a, kpan:k):(a, a)
   kangl = 1.57079633 * (kpan + 0.5)
   xout ain * sin(kangl), ain * cos(kangl)
 endop
@@ -157,9 +156,8 @@ endop
 ; make binaural beats
 ; ---------------------------------------------------------------------------
 
-opcode binauralize, aa, akk
+opcode binauralize(ain:a, kcent:k, kdiff:k):(a, a)
 
-  ain, kcent, kdiff xin
 
   ; determine pitches
   kp1   = kcent + (kdiff/2)
@@ -168,15 +166,15 @@ opcode binauralize, aa, akk
   krat2 = kp2 / kcent
 
   ; take it apart
-  fsig pvsanal ain, gifftsz, gifftsz/4, gifftsz, 1
+  fsig = pvsanal(ain, gifftsz, gifftsz/4, gifftsz, 1)
 
   ; create derived streams
-  fbinL pvscale fsig, krat1, 1
-  fbinR pvscale fsig, krat2, 1
+  fbinL = pvscale(fsig, krat1, 1)
+  fbinR = pvscale(fsig, krat2, 1)
 
   ; put it back together
-  abinL pvsynth fbinL
-  abinR pvsynth fbinR
+  abinL = pvsynth(fbinL)
+  abinR = pvsynth(fbinR)
 
   ; send it out
   xout abinL, abinR
@@ -196,30 +194,30 @@ instr 3  ; oscillators
 
   kgoto kpass
   ; Send this value only in the init pass
-  Sdsp_c sprintf "disp_on_c%d", itone
+  Sdsp_c = sprintf("disp_on_c%d", itone)
   outvalue Sdsp_c, 1
 kpass:
 
   ; which tone is being played?
   if (itone == 1) then
-    knum  invalue "n_1"
-    kden  invalue "d_1"
-    k8ve1 invalue "8ve_1"
+    knum  = chnget("n_1")
+    kden  = chnget("d_1")
+    k8ve1 = chnget("8ve_1")
     kbase = $BOCT.(gkbase'k8ve1)
   elseif (itone == 2) then
-    knum  invalue "n_2"
-    kden  invalue "d_2"
-    k8ve2 invalue "8ve_2"
+    knum  = chnget("n_2")
+    kden  = chnget("d_2")
+    k8ve2 = chnget("8ve_2")
     kbase = $BOCT.(gkbase'k8ve2)
   elseif (itone == 3) then
-    knum  invalue "n_3"
-    kden  invalue "d_3"
-    k8ve3 invalue "8ve_3"
+    knum  = chnget("n_3")
+    kden  = chnget("d_3")
+    k8ve3 = chnget("8ve_3")
     kbase = $BOCT.(gkbase'k8ve3)
   elseif (itone == 4) then
-    knum  invalue "n_4"
-    kden  invalue "d_4"
-    k8ve4 invalue "8ve_4"
+    knum  = chnget("n_4")
+    kden  = chnget("d_4")
+    k8ve4 = chnget("8ve_4")
     kbase = $BOCT.(gkbase'k8ve4)
   endif
 
@@ -228,7 +226,7 @@ kpass:
   kfreq = kbase*kfrac
 
   ; set up Risset effect
-  koff invalue "risset_offset"
+  koff  = chnget("risset_offset")
   koff0 = ((kden*2)/knum)*koff  ; inversely proportional to ratio
   koff1 = koff0                 ; oscillator offset for arpeggio
   koff2 = 2*koff                ; .
@@ -236,32 +234,32 @@ kpass:
   koff4 = 4*koff                ; .
 
   ; ; envelope
-  kenv linenr iamp, 2, 3, 0.01  ; env needs release segment for turnoff2
+  kenv = linenr(iamp, 2, 3, 0.01)  ; env needs release segment for turnoff2
 
   ; generate primary tone
-  a1 poscil3 kenv, kfreq, itbl
+  a1 = poscil3(kenv, kfreq, itbl)
 
   ; generate Risset tones
-  a2 poscil3 kenv, kfreq+koff1, itbl  ; nine oscillators with the same envelope
-  a3 poscil3 kenv, kfreq+koff2, itbl  ; and waveform, but slightly different
-  a4 poscil3 kenv, kfreq+koff3, itbl  ; frequencies, create harmonic arpeggio
-  a5 poscil3 kenv, kfreq+koff4, itbl
-  a6 poscil3 kenv, kfreq-koff1, itbl
-  a7 poscil3 kenv, kfreq-koff2, itbl
-  a8 poscil3 kenv, kfreq-koff3, itbl
-  a9 poscil3 kenv, kfreq-koff4, itbl
+  a2 = poscil3(kenv, kfreq+koff1, itbl)  ; nine oscillators with the same envelope
+  a3 = poscil3(kenv, kfreq+koff2, itbl)  ; and waveform, but slightly different
+  a4 = poscil3(kenv, kfreq+koff3, itbl)  ; frequencies, create harmonic arpeggio
+  a5 = poscil3(kenv, kfreq+koff4, itbl)
+  a6 = poscil3(kenv, kfreq-koff1, itbl)
+  a7 = poscil3(kenv, kfreq-koff2, itbl)
+  a8 = poscil3(kenv, kfreq-koff3, itbl)
+  a9 = poscil3(kenv, kfreq-koff4, itbl)
 
   ; create simple output (just the primary oscillator)
   a1L, a1R pan_equal_power a1, ipan
 
   ; ; create Risset output
-  krismix invalue "risset_mix"
-  aout sum a2, a3, a4, a5, a6, a7, a8, a9
+  krismix = chnget("risset_mix")
+  aout    = sum(a2, a3, a4, a5, a6, a7, a8, a9)
   a2L, a2R pan_equal_power aout*krismix, ipan
 
   ; ; create binaural beating output
-  kbbmix  invalue "bb_mix"
-  kbbrate invalue "bb_rate"
+  kbbmix  = chnget("bb_mix")
+  kbbrate = chnget("bb_rate")
   a3L, a3R binauralize a1*(kbbmix*gibblvl), kfreq, kbbrate
 
   ; combine and send to global output channels
@@ -278,7 +276,7 @@ instr 4
 
   itone = p4
 
-  Sdsp_c sprintf "disp_on_c%d", itone
+  Sdsp_c = sprintf("disp_on_c%d", itone)
   outvalue Sdsp_c, 0
 
   if (itone == 1) then
@@ -304,10 +302,10 @@ instr 5
   turnoff2 3.2, 4, 1
   turnoff2 3.3, 4, 1
   turnoff2 3.4, 4, 1
-  outvalue "disp_on_c1", 0
-  outvalue "disp_on_c2", 0
-  outvalue "disp_on_c3", 0
-  outvalue "disp_on_c4", 0
+  chnset(0, "disp_on_c1")
+  chnset(0, "disp_on_c2")
+  chnset(0, "disp_on_c3")
+  chnset(0, "disp_on_c4")
   exitnow
 
 endin
@@ -319,10 +317,10 @@ endin
 instr 98
 
   ; base pitch
-  knotes invalue "cb_use_notes"
+  knotes = chnget("cb_use_notes")
   if (knotes == 0) then
     ; tuning by cycles per second
-    kbase0 invalue "base_freq"
+    kbase0 = chnget("base_freq")
     koct   = octcps(kbase0)
     kpch   = pchoct(koct)
     kpch_i = int(kpch)
@@ -331,15 +329,15 @@ instr 98
     ; outvalue "base_pch_frac", kpch_f
   else
     ; tuning by pitch-class
-    kpch_i invalue "base_pch_int"
-    kpch_f invalue "base_pch_frac"
+    kpch_i = chnget("base_pch_int")
+    kpch_f = chnget("base_pch_frac")
     kbase0 = cpspch(kpch_i+(kpch_f/100))
-    outvalue "base_freq", kbase0
+    chnset(kbase0, "base_freq")
   endif
   gkbase = kbase0
 
   ; waveform
-  ktbl invalue "menu_waveform"
+  ktbl  = chnget("menu_waveform")
   gktbl = ktbl+1
 
 endin
@@ -349,14 +347,14 @@ endin
 
 instr 99
 
-  kfb invalue "reverb_feedback"
-  outvalue "feedback_display", kfb
-  kwet invalue "reverb_level"
+  kfb = chnget("reverb_feedback")
+  chnset(kfb, "feedback_display")
+  kwet = chnget("reverb_level")
 
   aL, aR reverbsc gaL, gaR, kfb, p4, sr/1.5, p5, 0
   aoutL = (gaL * kwet) + (aL * (1 - kwet))
   aoutR = (gaR * kwet) + (aR * (1 - kwet))
-  outs gaL+aoutL, gaR+aoutR
+  out(gaL+aoutL, gaR+aoutR)
   gaL = 0
   gaR = 0
 

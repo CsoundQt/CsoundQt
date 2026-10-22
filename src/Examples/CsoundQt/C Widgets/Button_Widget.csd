@@ -4,20 +4,20 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
-instr 1 ;turned on by button event
-	asig oscils 0.1, 440, 0
-	outs asig, asig
+instr 1  ; turned on by button event
+  asig = oscils(0.1, 440, 0)
+  out(asig, asig)
 endin
 
 
-instr 2  ;turned on in the score
-	kvalue invalue "value"  ;changes between 0 and 1000
-	asig oscil 0.1, kvalue, 1
-	outs asig,asig
+instr 2                     ; turned on in the score
+  kvalue = chnget("value")  ; changes between 0 and 1000
+  asig   = oscil(0.1, kvalue, 1)
+  out(asig, asig)
 endin
 
 </CsInstruments>

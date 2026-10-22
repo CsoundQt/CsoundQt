@@ -29,6 +29,7 @@
 
 #include "baseview.h"
 #include "bracketmatcher.h"
+#include "widgetpropertyinfo.h"
 
 #include <QKeyEvent> // For syntax menu class
 #include <QPair>
@@ -147,6 +148,13 @@ public:
     // mirror every widget change into this view.
     void setWidgetChannelsProvider(const std::function<QStringList()> &provider);
     QStringList widgetChannels() const;
+    // Properties addressable as "<channel>/<property>" for a widget.
+    void setWidgetPropertiesProvider(
+            const std::function<QList<WidgetPropertyInfo>(const QString &)> &provider);
+    QList<WidgetPropertyInfo> widgetProperties(const QString &channelOrName) const;
+    // Directory used to resolve relative paths in completion popups.
+    void setDocumentDirectoryProvider(const std::function<QString()> &provider);
+    QString documentDirectory() const;
     Highlighter* getHighlighter() { return &m_highlighter; }
     void gotoLineDialog();
     void markCurrentPosition();
@@ -156,6 +164,9 @@ public:
     QStringList getCurrentScopeWords() const;
     // String variables in the current block, for schedule() completion.
     QStringList getCurrentScopeStringVariables() const;
+    // Literal channel of the chnget/chnset/invalue/outvalue nearest to the
+    // cursor, or empty when it is a variable or expression.
+    QString channelAtCursor() const;
 
 	// The Csound name at the cursor in the editor the user is working in, for
 	// the "Go to Source" action.
@@ -180,6 +191,11 @@ public slots:
 	void exitParameterMode();
 	void indentNewLine();
 	void findReplace();
+	// Experimental: outline the widgets that use the channel at the cursor.
+	void highlightWidgetChannel();
+	// Update the transient outline when the text cursor moves onto/off a
+	// channel literal.
+	void updateChannelHighlightFromCursor();
 	void getToIn(); // chnget/chnset to invalue/outvalue
 	void inToGet(); // invalue/outvalue to chnget/chnset
 	void insertAutoCompleteText();
@@ -234,10 +250,15 @@ public slots:
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent *event);
+	virtual bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
 	QString changeToChnget(QString text);
 	QString changeToInvalue(QString text);
+	// Channel literal containing the active text cursor, if any.
+	QString channelAtTextCursor() const;
+	// Reconcile hover/cursor sources and ask the page to update the outline.
+	void updateChannelHighlight();
     // Text of the instrument/opcode block containing the cursor, or empty.
     QString currentScopeText() const;
 
@@ -301,7 +322,11 @@ private:
 	QStringList m_globalStringVariables;
 	QStringList m_instrumentNames;
 	QStringList m_widgetChannels;
+	QString m_hoverChannel;
+	QString m_activeChannelHighlight;
 	std::function<QStringList()> m_widgetChannelsProvider;
+	std::function<QList<WidgetPropertyInfo>(const QString &)> m_widgetPropertiesProvider;
+	std::function<QString()> m_documentDirectoryProvider;
     int m_lastCursorPosition;
     QStringList m_longOptions = {
         "syntax-check-only", "control-rate=", "messagelevel=",
@@ -344,6 +369,9 @@ signals:
     // Request a jump to the definition of a name. The flag tells whether the
     // name is the first argument of a schedule() or schedulek() call.
     void goToSourceRequested(const QString &name, bool isScheduleArgument);
+    // Ask the page to outline widgets using this channel. Empty clears any
+    // existing outline.
+    void channelHighlightRequested(const QString &channel);
 
 };
 

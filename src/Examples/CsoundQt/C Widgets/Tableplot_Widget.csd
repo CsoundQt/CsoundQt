@@ -24,42 +24,42 @@ via "@set tablenumber" and it can be updated via "@update"
 */
 
 ; Create two empty tables
-gi1 ftgen 0, 0, 1024, 2, 0
-gi2 ftgen 0, 0,  512, 2, 0  
+gi1 = ftgen(0, 0, 1024, 2, 0)
+gi2 = ftgen(0, 0, 512, 2, 0)
 
-chn_k "plot1", "w" 
+chn_k "plot1", "w"
 chn_k "plot2", "w"
 
 instr 10
-	ktab1 init gi1
-	ktab2 init gi2
-	
-	; switch tables every five seconds
-	if metro(1/2) == 1 then
-		ktab1, ktab2 = ktab2, ktab1
-	endif
-	
-	; Modify the tables
-	ilen = ftlen(gi1)
-	
-	; We fill a table with an aplitude varying sine wave at k-rate
-	kamp = linlin(oscil:k(1, 0.1), 1, 8, -1, 1)
-	kval oscil kamp, 15
-	kidx = timeinstk() % ilen
-	tablew kval, kidx, gi1
-	
-	; The second table is filled with realtime audio input
-	aidx phasor sr/ftlen(gi2)
-	tablew inch(1)*2, aidx, gi2, 1 
-	
-	; Update rate of the plots. NB: the widget update rate in
-	; CsoundQt is limited to 30 fps, so any update faster than
-	; than will have no effect
-	ktrig metro 30
-	
-	chnset ktrig == 1 ? -1 : ktab1, "plot1"
-	chnset ktrig == 1 ? -1 : ktab2, "plot2"
-	
+  ktab1 = init(gi1)
+  ktab2 = init(gi2)
+
+  ; switch tables every five seconds
+  if metro(1/2) == 1 then
+    ktab1, ktab2 = ktab2, ktab1
+  endif
+
+  ; Modify the tables
+  ilen = ftlen(gi1)
+
+  ; We fill a table with an aplitude varying sine wave at k-rate
+  kamp = linlin(oscil:k(1, 0.1), 1, 8, -1, 1)
+  kval = oscil(kamp, 15)
+  kidx = timeinstk() % ilen
+  tablew kval, kidx, gi1
+
+  ; The second table is filled with realtime audio input
+  aidx = phasor(sr/ftlen(gi2))
+  tablew inch(1)*2, aidx, gi2, 1
+
+  ; Update rate of the plots. NB: the widget update rate in
+  ; CsoundQt is limited to 30 fps, so any update faster than
+  ; than will have no effect
+  ktrig = metro(30)
+
+  chnset ktrig == 1 ? -1 : ktab1, "plot1"
+  chnset ktrig == 1 ? -1 : ktab2, "plot2"
+
 endin
 
 schedule 10, 0, 100

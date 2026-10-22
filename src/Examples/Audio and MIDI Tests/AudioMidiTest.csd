@@ -1,316 +1,316 @@
 <CsoundSynthesizer>
 <CsInstruments>
-ksmps = 128
-A4 = 442
+ksmps = 64
+A4    = 442
 
 massign 0, 0
 
-gaSpectrumOut init 0
-gkSpectrumFFTSize init 4096
+gaSpectrumOut = init(0)
+gkSpectrumFFTSize = init(4096)
 
 giFFTSizes[] = [2048, 4096, 8192]
 
 
 instr AudioTest
-	; kon1, kon2, kon3, kon4, kon5,kon6, kon7, kon8 init 0
-	ksignalFreq init A4
-	ilevelExp = 0.33
-	iuiRefreshRate = 24
-	irange = 48
-	iminAmp = ampdb(-60)
-	imeterUpLag   = 0.01
-	imeterDownLag = 0.1
-	kdb init -999999
-		
-	kSpectrumSelect init 1
-	
-	;; ----- UI input -----
-	ktrig metro iuiRefreshRate
-	ksignal       chnget "signaltype"
-	kfftSizeIndex chnget "fftsize"
-	kfftSize = giFFTSizes[kfftSizeIndex]
-	if kfftSize != gkSpectrumFFTSize then
-		gkSpectrumFFTSize = kfftSize
-		reinit resetFFT
-	endif
-	
-	kdb = chnget("leveldb")
-	; kdb = int(linlin(kleveldelta^ilevelExp, -60, 0, 0, 1))
-	kamp = ampdb(kdb)
-	ksignalOn = kamp > iminAmp ? 1 : 0
-	
-	if ksignalOn == 0 kgoto skipOutput
-	
-	if ktrig == 1 then
-		kon1 chnget "on1"
-		kon2 chnget "on2"
-		kon3 chnget "on3"
-		kon4 chnget "on4"
-		kon5 chnget "on5"
-		kon6 chnget "on6"
-		kon7 chnget "on7"
-		kon8 chnget "on8"
-		kSpectrumSelect chnget "spmenu"
-		ksignalFreq chnget "signalfreq"
-	endif
-	
-	;; Output
-	
-	if ksignal == 0 then
-		asig noise 1, 0
-	elseif ksignal == 1 then
-		asig pinker
-	elseif ksignal == 2 then
-		asig oscili 1, ksignalFreq
-	elseif ksignal == 3 then
-		asig vco2 1, ksignalFreq
-	endif
-	
-	asig *= interp(lag(kamp, 0.1))
-	; output to graph
-	display asig, ksmps/sr*2
-	
-	iswitchlag = 0.3
-	
-	aout1 = asig*interp(lag(kon1, iswitchlag))
-	koutamp1 max_k aout1, ktrig, 1
-	outch 1, aout1
-	
-	aout2 = asig*interp(lag(kon2, iswitchlag))
-	koutamp2 max_k aout2, ktrig, 1
-	outch 2, aout2
-	
-	if nchnls <= 2 goto skipOutput
-	
-	aout3 = asig*interp(lag(kon3, iswitchlag))
-	koutamp3 max_k aout3, ktrig, 1
-	outch 3, aout3
-	
-	aout4 = asig*interp(lag(kon4, iswitchlag))
-	koutamp4 max_k aout4, ktrig, 1
-	outch 4, aout4
-	
-	if nchnls <= 4 goto skipOutput
-	
-	aout5 = asig*interp(lag(kon5, iswitchlag))
-	koutamp5 max_k aout5, ktrig, 1
-	outch 5, aout5
-	
-	aout6 = asig*interp(lag(kon6, iswitchlag))
-	koutamp6 max_k aout6, ktrig, 1
-	outch 6, aout6
-	
-	if nchnls <= 6 goto skipOutput
-	
-	aout7 = asig*interp(lag(kon7, iswitchlag))
-	koutamp7 max_k aout7, ktrig, 1
-	outch 7, aout7
-	
-	aout8 = asig*interp(lag(kon8, iswitchlag))
-	koutamp8 max_k aout8, ktrig, 1
-	outch 8, aout8
-	
-	
-	
+  ; kon1, kon2, kon3, kon4, kon5,kon6, kon7, kon8 init 0
+  ksignalFreq = init(A4)
+  ilevelExp = 0.33
+  iuiRefreshRate = 24
+  irange = 48
+  iminAmp = ampdb(-60)
+  imeterUpLag = 0.01
+  imeterDownLag = 0.1
+  kdb = init(-999999)
+
+  kSpectrumSelect = init(1)
+
+  ; ; ----- UI input -----
+  ktrig = metro(iuiRefreshRate)
+  ksignal = chnget("signaltype")
+  kfftSizeIndex = chnget("fftsize")
+  kfftSize = giFFTSizes[kfftSizeIndex]
+  if kfftSize != gkSpectrumFFTSize then
+    gkSpectrumFFTSize = kfftSize
+    reinit resetFFT
+  endif
+
+  kdb = chnget("leveldb")
+  ; kdb = int(linlin(kleveldelta^ilevelExp, -60, 0, 0, 1))
+  kamp = ampdb(kdb)
+  ksignalOn = kamp > iminAmp ? 1 : 0
+
+  if ksignalOn == 0 kgoto skipOutput
+
+  if ktrig == 1 then
+    kon1 = chnget("on1")
+    kon2 = chnget("on2")
+    kon3 = chnget("on3")
+    kon4 = chnget("on4")
+    kon5 = chnget("on5")
+    kon6 = chnget("on6")
+    kon7 = chnget("on7")
+    kon8 = chnget("on8")
+    kSpectrumSelect = chnget("spmenu")
+    ksignalFreq = chnget("signalfreq")
+  endif
+
+  ; ; Output
+
+  if ksignal == 0 then
+    asig = noise(1, 0)
+  elseif ksignal == 1 then
+    asig = pinker()
+  elseif ksignal == 2 then
+    asig = oscili(1, ksignalFreq)
+  elseif ksignal == 3 then
+    asig = vco2(1, ksignalFreq)
+  endif
+
+  asig *= interp(lag(kamp, 0.1))
+  ; output to graph
+  display asig, ksmps/sr*2
+
+  iswitchlag = 0.3
+
+  aout1 = asig*interp(lag(kon1, iswitchlag))
+  koutamp1 max_k aout1, ktrig, 1
+  outch 1, aout1
+
+  aout2 = asig*interp(lag(kon2, iswitchlag))
+  koutamp2 max_k aout2, ktrig, 1
+  outch 2, aout2
+
+  if nchnls <= 2 goto skipOutput
+
+  aout3 = asig*interp(lag(kon3, iswitchlag))
+  koutamp3 max_k aout3, ktrig, 1
+  outch 3, aout3
+
+  aout4 = asig*interp(lag(kon4, iswitchlag))
+  koutamp4 max_k aout4, ktrig, 1
+  outch 4, aout4
+
+  if nchnls <= 4 goto skipOutput
+
+  aout5 = asig*interp(lag(kon5, iswitchlag))
+  koutamp5 max_k aout5, ktrig, 1
+  outch 5, aout5
+
+  aout6 = asig*interp(lag(kon6, iswitchlag))
+  koutamp6 max_k aout6, ktrig, 1
+  outch 6, aout6
+
+  if nchnls <= 6 goto skipOutput
+
+  aout7 = asig*interp(lag(kon7, iswitchlag))
+  koutamp7 max_k aout7, ktrig, 1
+  outch 7, aout7
+
+  aout8 = asig*interp(lag(kon8, iswitchlag))
+  koutamp8 max_k aout8, ktrig, 1
+  outch 8, aout8
+
+
+
 skipOutput:
 
-	;; Audio Input
-		
-	imin = ampdbfs(-irange)
-	
-	
-	kamp1 max_k inch(1), ktrig, 1
-	kamp1 lagud kamp1, imeterUpLag, imeterDownLag
-	
-	kamp2 max_k inch(2), ktrig, 1
-	kamp2 lagud kamp2, imeterUpLag, imeterDownLag
-	
-	kamp3 max_k inch(3), ktrig, 1
-	kamp3 lagud kamp3, imeterUpLag, imeterDownLag
-	
-	kamp4 max_k inch(4), ktrig, 1
-	kamp4 lagud kamp4, imeterUpLag, imeterDownLag
-	
-	kamp5 max_k inch(5), ktrig, 1
-	kamp5 lagud kamp5, imeterUpLag, imeterDownLag
-	
-	kamp6 max_k inch(6), ktrig, 1
-	kamp6 lagud kamp6, imeterUpLag, imeterDownLag
-	
-	kamp7 max_k inch(7), ktrig, 1
-	kamp7 lagud kamp7, imeterUpLag, imeterDownLag
+  ; ; Audio Input
 
-	kamp8 max_k inch(8), ktrig, 1
-	kamp8 lagud kamp8, imeterUpLag, imeterDownLag
-	
-	if ktrig == 0 kgoto skipDisplay
-	chnset dbamp(kamp1), "in1" 	
-	chnset linlin(dbamp(koutamp1), 0, 1, -irange, 0), "vu1" 
-	chnset dbamp(kamp2), "in2" 
-	chnset linlin(dbamp(koutamp2), 0, 1, -irange, 0), "vu2" 
-	if nchnls <= 2 goto skipDisplay
-	
-	chnset dbfsamp(kamp3), "in3" 
-	chnset linlin(dbamp(koutamp3), 0, 1, -irange, 0), "vu3" 
-	chnset dbamp(kamp4), "in4" 
-	chnset linlin(dbamp(koutamp4), 0, 1, -irange, 0), "vu4" 
-	if nchnls <= 4 goto skipDisplay
-	
-	chnset dbamp(kamp5), "in5" 
-	chnset linlin(dbamp(koutamp5), 0, 1, -irange, 0), "vu5" 
-	chnset dbamp(kamp6), "in6" 
-	chnset linlin(dbamp(koutamp6), 0, 1, -irange, 0), "vu6" 
-	if nchnls <= 6 goto skipDisplay
-	
-	chnset dbamp(kamp7), "in7" 
-	chnset linlin(dbamp(koutamp7), 0, 1, -irange, 0), "vu7" 
-	chnset dbamp(kamp8), "in8" 
-	chnset linlin(dbamp(koutamp8), 0, 1, -irange, 0), "vu8" 
-	
+  imin = ampdbfs(-irange)
+
+
+  kamp1 max_k inch(1), ktrig, 1
+  kamp1 = lagud(kamp1, imeterUpLag, imeterDownLag)
+
+  kamp2 max_k inch(2), ktrig, 1
+  kamp2 = lagud(kamp2, imeterUpLag, imeterDownLag)
+
+  kamp3 max_k inch(3), ktrig, 1
+  kamp3 = lagud(kamp3, imeterUpLag, imeterDownLag)
+
+  kamp4 max_k inch(4), ktrig, 1
+  kamp4 = lagud(kamp4, imeterUpLag, imeterDownLag)
+
+  kamp5 max_k inch(5), ktrig, 1
+  kamp5 = lagud(kamp5, imeterUpLag, imeterDownLag)
+
+  kamp6 max_k inch(6), ktrig, 1
+  kamp6 = lagud(kamp6, imeterUpLag, imeterDownLag)
+
+  kamp7 max_k inch(7), ktrig, 1
+  kamp7 = lagud(kamp7, imeterUpLag, imeterDownLag)
+
+  kamp8 max_k inch(8), ktrig, 1
+  kamp8 = lagud(kamp8, imeterUpLag, imeterDownLag)
+
+  if ktrig == 0 kgoto skipDisplay
+  chnset dbamp(kamp1), "in1"
+  chnset linlin(dbamp(koutamp1), 0, 1, -irange, 0), "vu1"
+  chnset dbamp(kamp2), "in2"
+  chnset linlin(dbamp(koutamp2), 0, 1, -irange, 0), "vu2"
+  if nchnls <= 2 goto skipDisplay
+
+  chnset dbfsamp(kamp3), "in3"
+  chnset linlin(dbamp(koutamp3), 0, 1, -irange, 0), "vu3"
+  chnset dbamp(kamp4), "in4"
+  chnset linlin(dbamp(koutamp4), 0, 1, -irange, 0), "vu4"
+  if nchnls <= 4 goto skipDisplay
+
+  chnset dbamp(kamp5), "in5"
+  chnset linlin(dbamp(koutamp5), 0, 1, -irange, 0), "vu5"
+  chnset dbamp(kamp6), "in6"
+  chnset linlin(dbamp(koutamp6), 0, 1, -irange, 0), "vu6"
+  if nchnls <= 6 goto skipDisplay
+
+  chnset dbamp(kamp7), "in7"
+  chnset linlin(dbamp(koutamp7), 0, 1, -irange, 0), "vu7"
+  chnset dbamp(kamp8), "in8"
+  chnset linlin(dbamp(koutamp8), 0, 1, -irange, 0), "vu8"
+
 skipDisplay:
-	
-	; update text display at slower rate
-	ktrig2 metro iuiRefreshRate*0.33
 
-	if ktrig2 == 1 then
-		chnset round(dbfsamp(kamp1)), "indb1"
-		chnset round(dbfsamp(kamp2)), "indb2"
-		chnset round(dbfsamp(kamp3)), "indb3"
-		chnset round(dbfsamp(kamp4)), "indb4"
-		chnset round(dbfsamp(kamp5)), "indb5"
-		chnset round(dbfsamp(kamp6)), "indb6"
-		chnset round(dbfsamp(kamp7)), "indb7"
-		chnset round(dbfsamp(kamp8)), "indb8"
-	endif
-	
-	if kSpectrumSelect == 0 then
-		aSpectrumOut = 0
-	else
-		aSpectrumOut inch kSpectrumSelect
-		; low shelf
-		aSpectrumOut pareq aSpectrumOut, 30, 0, 0.1, 1
-	endif
-	; without denorming the cpu usage shoots to 100% in some cases
-	denorm aSpectrumOut
-	
-	; gaSpectrumOut += aSpectrumOut
+  ; update text display at slower rate
+  ktrig2 = metro(iuiRefreshRate*0.33)
+
+  if ktrig2 == 1 then
+    chnset round(dbfsamp(kamp1)), "indb1"
+    chnset round(dbfsamp(kamp2)), "indb2"
+    chnset round(dbfsamp(kamp3)), "indb3"
+    chnset round(dbfsamp(kamp4)), "indb4"
+    chnset round(dbfsamp(kamp5)), "indb5"
+    chnset round(dbfsamp(kamp6)), "indb6"
+    chnset round(dbfsamp(kamp7)), "indb7"
+    chnset round(dbfsamp(kamp8)), "indb8"
+  endif
+
+  if kSpectrumSelect == 0 then
+    aSpectrumOut = 0
+  else
+    aSpectrumOut inch kSpectrumSelect
+    ; low shelf
+    aSpectrumOut = pareq(aSpectrumOut, 30, 0, 0.1, 1)
+  endif
+  ; without denorming the cpu usage shoots to 100% in some cases
+  denorm aSpectrumOut
+
+  ; gaSpectrumOut += aSpectrumOut
 resetFFT:
-	prints "fft size: %d \n", i(gkSpectrumFFTSize)
-	dispfft aSpectrumOut, 0.04, i(gkSpectrumFFTSize), 1
-	
+  prints "fft size: %d \n", i(gkSpectrumFFTSize)
+  dispfft aSpectrumOut, 0.04, i(gkSpectrumFFTSize), 1
+
 endin
 
 instr led
-	Schan = p4
-	chnset 1, Schan
-	if lastcycle() == 1 then
-	  kOut = 0
-		chnset kOut, Schan	
-	endif
+  Schan = p4
+  chnset 1, Schan
+  if lastcycle() == 1 then
+    kOut = 0
+    chnset kOut, Schan
+  endif
 endin
 
 
 instr MidiNote  ; midi note input
-   ichn = p4
-   ikey = p5
-   ivel = p6
-	chnset 1, "notein"
-	schedule "led", 0, 0.1, "notein"
-	if timeinstk() == 1 then
-		Smsg sprintf "Note %d, vel=%d, chan=%d", ikey, ivel, ichn
-		chnset  Smsg, "display"
-	endif
-	
-	iamp = ampdb(ivel/127 * 48 - 48)
-	aenv linsegr 0, 0.05, 1, 0.05, 0
-	aout oscili iamp*aenv, mtof(ikey)
-	outch 1, aout
-	
+  ichn = p4
+  ikey = p5
+  ivel = p6
+  chnset 1, "notein"
+  schedule "led", 0, 0.1, "notein"
+  if timeinstk() == 1 then
+    Smsg = sprintf("Note %d, vel=%d, chan=%d", ikey, ivel, ichn)
+    chnset Smsg, "display"
+  endif
+
+  iamp = ampdb(ivel/127 * 48 - 48)
+  aenv = linsegr(0, 0.05, 1, 0.05, 0)
+  aout = oscili(iamp*aenv, mtof(ikey))
+  outch 1, aout
+
 endin
 
 instr MidiCC
-	ichan = p4
-	icc = p5
-	ival = p6
-	schedule "led", 0, 0.1, "ccin"
-	Smsg sprintf "CC %d: %d (chan=%d)", icc, ival, ichan
-	if eventcycles() == 0 then
-		chnset Smsg, "displaycc"
-	endif
-	
+  ichan = p4
+  icc   = p5
+  ival  = p6
+  schedule "led", 0, 0.1, "ccin"
+  Smsg = sprintf("CC %d: %d (chan=%d)", icc, ival, ichan)
+  if eventcycles() == 0 then
+    chnset Smsg, "displaycc"
+  endif
+
 endin
 
 instr 3
-	; generate midi note
-	noteondur 1, 60, 100, p3
+  ; generate midi note
+  noteondur 1, 60, 100, p3
 endin
 
 instr MidiIn
-	iMidiNote = nstrnum("MidiNote")
-	kstatus init 0
-	kstatus, kchan, kdata1, kdata2 midiin
-	if kstatus == 144 && kdata1 > 0 then
-		schedulek iMidiNote + kdata1/1000, 0, -1, kchan, kdata1, kdata2
-	elseif kstatus == 128 || (kstatus == 144 && kdata1 == 0) then
-		turnoff2 iMidiNote+kdata1/1000, 4, 1
-	elseif kstatus == 176 then
-		schedulek "MidiCC", 0, 0.1, kchan, kdata1, kdata2
-	endif
+  iMidiNote = nstrnum("MidiNote")
+  kstatus   = init(0)
+  kstatus, kchan, kdata1, kdata2 midiin
+  if kstatus == 144 && kdata1 > 0 then
+    schedulek iMidiNote + kdata1/1000, 0, -1, kchan, kdata1, kdata2
+  elseif kstatus == 128 || (kstatus == 144 && kdata1 == 0) then
+    turnoff2 iMidiNote+kdata1/1000, 4, 1
+  elseif kstatus == 176 then
+    schedulek "MidiCC", 0, 0.1, kchan, kdata1, kdata2
+  endif
 endin
 
 instr Setup
-	chnset 0, "graph-index"
-	chnset 1, "spectrum-index"
-	chnset "...", "display"
-	chnset "...", "displaycc"
-	chnset 0, "notein"
-	chnset 0, "ccin"
-	
-	chnset 0, "vu1"
-	chnset 0, "vu2"
-	chnset 0, "vu3"
-	chnset 0, "vu4"
-	chnset 0, "vu5"
-	chnset 0, "vu6"
-	chnset 0, "vu7"
-	chnset 0, "vu8"
-	
-	chnset -120, "in1"
-	chnset -120, "in2"
-	chnset -120, "in3"
-	chnset -120, "in4"
-	chnset -120, "in5"
-	chnset -120, "in6"
-	chnset -120, "in7"
-	chnset -120, "in8"
-	
-	chnset 0, "indb1"
-	chnset 0, "indb2"
-	chnset 0, "indb3"
-	chnset 0, "indb4"
-	chnset 0, "indb5"
-	chnset 0, "indb6"
-	chnset 0, "indb7"
-	chnset 0, "indb8"
-	
-	
-	chnset sprintf("%d", sr), "samplerate"
-	chnset sprintf("%d", nchnls), "nchnls"
-	
-	for i0 in [1 ... nchnls] do
-	  outvalue sprintf("on%d/enabled", i0), 1
-	  outvalue sprintf("vu%d/enabled", i0), 1
-	  outvalue sprintf("in%d/enabled", i0), 1
-	  outvalue sprintf("indb%d/enabled", i0), 1
-	od
-	
-	for i0 in [nchnls+1 ... 8] do
-	  outvalue sprintf("on%d/enabled", i0), 0
-	  outvalue sprintf("vu%d/enabled", i0), 0
-	  outvalue sprintf("in%d/enabled", i0), 0
-	  outvalue sprintf("indb%d/enabled", i0), 0
-	od
-	turnoff
+  chnset 0, "graph-index"
+  chnset 1, "spectrum-index"
+  chnset "...", "display"
+  chnset "...", "displaycc"
+  chnset 0, "notein"
+  chnset 0, "ccin"
+
+  chnset 0, "vu1"
+  chnset 0, "vu2"
+  chnset 0, "vu3"
+  chnset 0, "vu4"
+  chnset 0, "vu5"
+  chnset 0, "vu6"
+  chnset 0, "vu7"
+  chnset 0, "vu8"
+
+  chnset -120, "in1"
+  chnset -120, "in2"
+  chnset -120, "in3"
+  chnset -120, "in4"
+  chnset -120, "in5"
+  chnset -120, "in6"
+  chnset -120, "in7"
+  chnset -120, "in8"
+
+  chnset 0, "indb1"
+  chnset 0, "indb2"
+  chnset 0, "indb3"
+  chnset 0, "indb4"
+  chnset 0, "indb5"
+  chnset 0, "indb6"
+  chnset 0, "indb7"
+  chnset 0, "indb8"
+
+
+  chnset sprintf("%d", sr), "samplerate"
+  chnset sprintf("%d", nchnls), "nchnls"
+
+  for i0 in [1 ... nchnls] do
+    outvalue sprintf("on%d/enabled", i0), 1
+    outvalue sprintf("vu%d/enabled", i0), 1
+    outvalue sprintf("in%d/enabled", i0), 1
+    outvalue sprintf("indb%d/enabled", i0), 1
+  od
+
+  for i0 in [nchnls+1 ... 8] do
+    outvalue sprintf("on%d/enabled", i0), 0
+    outvalue sprintf("vu%d/enabled", i0), 0
+    outvalue sprintf("in%d/enabled", i0), 0
+    outvalue sprintf("indb%d/enabled", i0), 0
+  od
+  turnoff
 endin
 
 </CsInstruments>

@@ -4,75 +4,75 @@
 <CsInstruments>
 
 /*****INPUT TEST*****/
-;example for CsoundQt
-;written by joachim heintz
-;jan 2009 / aug 2025
+; example for CsoundQt
+; written by joachim heintz
+; jan 2009 / aug 2025
 
 sr = 44100
-ksmps = 128
-nchnls = 24 ; change here if your input device has more channels
+ksmps = 64
+nchnls = 24  ; change here if your input device has more channels
 0dbfs = 1
 
-//UDO for displaying an audio signal in widgets
-opcode CsQtMeter, k, SSak ;see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
- S_chan_sig, S_chan__clip, aSig, kTrig	xin
- iDbRange = 60 ;shows 60 dB
- iHoldTim = 1 ;seconds to "hold the red light"
- kOn init 0
- kTim init 0
- kStart init 0
- kEnd init 0
- kMax max_k aSig, kTrig, 1
- if kTrig == 1 then
-  chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
-  if kOn == 0 && kMax > 1 then
-   kTim = 0
-   kEnd = iHoldTim
-   chnset k(1), S_chan__clip
-   kOn = 1
+// UDO for displaying an audio signal in widgets
+; see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
+opcode CsQtMeter(S_chan_sig:S, S_chan__clip:S, aSig:a, kTrig:k):k
+  iDbRange = 60  ; shows 60 dB
+  iHoldTim = 1   ; seconds to "hold the red light"
+  kOn = init(0)
+  kTim = init(0)
+  kStart = init(0)
+  kEnd = init(0)
+  kMax max_k aSig, kTrig, 1
+  if kTrig == 1 then
+    chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
+    if kOn == 0 && kMax > 1 then
+      kTim = 0
+      kEnd = iHoldTim
+      chnset k(1), S_chan__clip
+      kOn = 1
+    endif
+    if kOn == 1 && kTim > kEnd then
+      chnset k(0), S_chan__clip
+      kOn = 0
+    endif
   endif
-  if kOn == 1 && kTim > kEnd then
-   chnset k(0), S_chan__clip
-   kOn =	0
-  endif
- endif
- kTim += ksmps/sr
- xout kMax
+  kTim += ksmps/sr
+  xout kMax
 endop
 
 // declare channels and call one instr for each channel
 indx = 0
 while indx < nchnls do
   indx += 1
-  chn_k sprintf("in%d",indx),2
-  chn_k sprintf("in%d_clip",indx),2
-  chn_k sprintf("db%d",indx),2
-  schedule "Channel",0,99999,indx
+  chn_k = sprintf(("in%d", indx), 2)
+  chn_k = sprintf(("in%d_clip", indx), 2)
+  chn_k = sprintf(("db%d", indx), 2)
+  schedule "Channel", 0, 99999, indx
 od
-chn_k "inchsel",1
-chn_k "insel",2
-chn_k "insel_clip",2
-chn_k "dbsel",2
+chn_k "inchsel", 1
+chn_k "insel", 2
+chn_k "insel_clip", 2
+chn_k "dbsel", 2
 
 instr SelectedChannel
-  kChan chnget "inchsel"
+  kChan = chnget("inchsel")
   aIn inch kChan
-  gkTrigDisp metro 10
-  kMax CsQtMeter "insel", "insel_clip", aIn, gkTrigDisp
+  gkTrigDisp = metro(10)
+  kMax = CsQtMeter("insel", "insel_clip", aIn, gkTrigDisp)
   kDb = dbamp(kMax)
-  chnset kDb,"dbsel"
+  chnset kDb, "dbsel"
 endin
-schedule("SelectedChannel",0,-1)
+schedule("SelectedChannel", 0, -1)
 
-instr Channel //displays the signals of one channel
+instr Channel  // displays the signals of one channel
   iChn = p4
   aIn inch iChn
-  Sig sprintf "in%d",iChn
-  Sig_clip sprintf "in%d_clip",iChn
-  SdB sprintf "db%d",iChn
-  kMax CsQtMeter Sig, Sig_clip, aIn, gkTrigDisp
+  Sig = sprintf("in%d", iChn)
+  Sig_clip = sprintf("in%d_clip", iChn)
+  SdB = sprintf("db%d", iChn)
+  kMax = CsQtMeter(Sig, Sig_clip, aIn, gkTrigDisp)
   kDb = dbamp(kMax)
-  chnset kDb,SdB
+  chnset kDb, SdB
 endin
 
 </CsInstruments>

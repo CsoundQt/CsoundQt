@@ -67,6 +67,7 @@ private:
 	void buildUi();
 	void applyPalette();
 	void reposition();
+	void cycleFocus(bool forward);
 
 	QTextEdit *m_editor = nullptr;
 	QLineEdit *m_findEdit = nullptr;
@@ -77,6 +78,7 @@ private:
 	QToolButton *m_closeButton = nullptr;
 	QPushButton *m_replaceButton = nullptr;
 	QPushButton *m_replaceAllButton = nullptr;
+	QList<QWidget *> m_focusOrder;
 };
 
 #endif // FINDBAR_H

@@ -13,14 +13,15 @@ By Tarmo Johannes trmjhnns@gmail.com 2013/2016
 </CsOptions>
 <CsInstruments>
 
-sr     = 44100
-ksmps  = 32
+sr = 44100
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
 chn_k "preset", 3
 
-giTest filelen "circularstring-128"  ; to check if it is found, otherwise will crash scanu
+; to check if it is found, otherwise will crash scanu
+giTest = filelen("circularstring-128")
 
 ; OR: check table lenght of 30
 
@@ -28,8 +29,8 @@ giTest filelen "circularstring-128"  ; to check if it is found, otherwise will c
 ; presets: every preset consist of 5 parameters: fninit, scanning rate, fnmass, fncentr,
 ; fn_scanning_trajectory (all of then are table numbers, expect scanning rate)
 
-giPresets ftgen 0, 0, 256, -2, \
-  18, 0.03, 22, 40, 71, \  ; preset no 1 for instr preset_call, index 0 in table
+giPresets = ftgen(0, 0, 256, -2, \)
+18, 0.03, 22, 40, 71, \  ; preset no 1 for instr preset_call, index 0 in table
   10, 0.02, 20, 40, 70, \
   16, 0.01, 21, 40, 71, \
   12, 0.2, 21, 40, 72, \
@@ -64,7 +65,7 @@ giPresets ftgen 0, 0, 256, -2, \
 ; helping instrument to enable to change preset by midi CC 1
 alwayson "midireader"  ; comment out, if you don't use MIDI control
 instr midireader
-  kvalue ctrl7 1, 1, 1, 30
+  kvalue = ctrl7(1, 1, 1, 30)
   kvalue = int(kvalue)
   if (changed(kvalue) == 1) then
     ; printk2 kvalue
@@ -112,7 +113,7 @@ instr preset_call, 1
   ; event_i "i","sound",0,p3,iamp,ip1,ip2,ip3,ip4,ip5,ifreq, ifileindex
   ; subinstr to be able to play from MIDI
   ascanned subinstr "sound", iamp, ip1, ip2, ip3, ip4, ip5, ifreq, ifileindex
-  outs    ascanned, ascanned
+  out(ascanned, ascanned)
   dispfft ascanned, 0.1, 1024  ; , 0, 0
 endin
 
@@ -139,10 +140,10 @@ instr sound
   kcentr = .1
   ; you can make the sound to grow -small positive values (!avoid exploding)- or dampen (
   ; use small negative values)
-  kdamp    = -0.001
-  ileft    = 0.1  ; did not make so much difference for me
-  iright   = 0.5
-  kpos     = 0
+  kdamp = -0.001
+  ileft = 0.1  ; did not make so much difference for me
+  iright = 0.5
+  kpos = 0
   kstrngth = 0
 
   idisp = 0
@@ -157,17 +158,17 @@ instr sound
 
   scanu iinit, irate, ifnvel, ifnmass, ifnstif, ifncentr, ifndamp, kmass, kstif, kcentr, kdamp, ileft, iright, kpos, kstrngth, ain, idisp, id
 
-  kenv madsr 0.1, 0.1, 0.8, 0.5
-  a1 scans iamp*kenv, ifreq, itraj, id
+  kenv = madsr(0.1, 0.1, 0.8, 0.5)
+  a1   = scans(iamp*kenv, ifreq, itraj, id)
 
   ifileindex = p11
   if (ifileindex>0) then
-    Sfilename sprintf "sounds/soundin.%d", ifileindex
+    Sfilename = sprintf("sounds/soundin.%d", ifileindex)
     fout Sfilename, 4, a1
   endif
 
 
-  outs a1, a1
+  out(a1, a1)
 endin
 
 

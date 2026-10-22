@@ -4,15 +4,15 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
 instr 1
-kamp invalue "amp"
-kfreq invalue "freq"
-aout oscil kamp/ 10, kfreq, 1
-outs aout, aout
+  kamp  = chnget("amp")
+  kfreq = chnget("freq")
+  aout  = oscil(kamp/ 10, kfreq, 1)
+  out(aout, aout)
 endin
 
 </CsInstruments>

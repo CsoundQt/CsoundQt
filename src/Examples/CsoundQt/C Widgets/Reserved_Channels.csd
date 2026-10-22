@@ -4,22 +4,22 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
-instr 1  ;random frequencies
-	kcount init 0
-	kfreq  randomh  80, 1000, 4
-	aout oscil 0.2, kfreq, 1
-	outs aout, aout
+instr 1  ; random frequencies
+  kcount = init(0)
+  kfreq  = randomh(80, 1000, 4)
+  aout   = oscil(0.2, kfreq, 1)
+  out(aout, aout)
 
-	ktrig metro 1, 0.99999
-	Stime sprintfk "%i", kcount
-	outvalue "counter", Stime
-	if ktrig = 1 then
-		kcount = kcount + 1
-	endif
+  ktrig = metro(1, 0.99999)
+  Stime = sprintfk("%i", kcount)
+  chnset(Stime, "counter")
+  if ktrig = 1 then
+    kcount = kcount + 1
+  endif
 endin
 
 </CsInstruments>

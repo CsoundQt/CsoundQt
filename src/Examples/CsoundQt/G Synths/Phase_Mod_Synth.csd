@@ -7,326 +7,326 @@
 ; Make sure CsOptions are not ignored in the preferences,
 ; Otherwise Realtime MIDI input will not work.
 
-sr     = 44100
-ksmps  = 256
+sr = 44100
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
 
 instr 1
   ; icps cpsmidi
   icps = p4
 
-  kop7amp   chnget "op7amp"
-  kop7ratio chnget "op7ratio"
+  kop7amp   = chnget("op7amp")
+  kop7ratio = chnget("op7ratio")
 
-  kop7att chnget "op7att"
-  kop7dec chnget "op7dec"
-  kop7sus chnget "op7sus"
-  kop7rel chnget "op7rel"
+  kop7att = chnget("op7att")
+  kop7dec = chnget("op7dec")
+  kop7sus = chnget("op7sus")
+  kop7rel = chnget("op7rel")
 
-  kop6amp   chnget "op6amp"
-  kop6ratio chnget "op6ratio"
+  kop6amp   = chnget("op6amp")
+  kop6ratio = chnget("op6ratio")
 
-  kop6att chnget "op6att"
-  kop6dec chnget "op6dec"
-  kop6sus chnget "op6sus"
-  kop6rel chnget "op6rel"
+  kop6att = chnget("op6att")
+  kop6dec = chnget("op6dec")
+  kop6sus = chnget("op6sus")
+  kop6rel = chnget("op6rel")
 
-  kop5amp   chnget "op5amp"
-  kop5ratio chnget "op5ratio"
+  kop5amp   = chnget("op5amp")
+  kop5ratio = chnget("op5ratio")
 
-  kop5att chnget "op5att"
-  kop5dec chnget "op5dec"
-  kop5sus chnget "op5sus"
-  kop5rel chnget "op5rel"
+  kop5att = chnget("op5att")
+  kop5dec = chnget("op5dec")
+  kop5sus = chnget("op5sus")
+  kop5rel = chnget("op5rel")
 
-  kop4amp   chnget "op4amp"
-  kop4ratio chnget "op4ratio"
+  kop4amp   = chnget("op4amp")
+  kop4ratio = chnget("op4ratio")
 
-  kop4att chnget "op4att"
-  kop4dec chnget "op4dec"
-  kop4sus chnget "op4sus"
-  kop4rel chnget "op4rel"
+  kop4att = chnget("op4att")
+  kop4dec = chnget("op4dec")
+  kop4sus = chnget("op4sus")
+  kop4rel = chnget("op4rel")
 
-  kop3amp   chnget "op3amp"
-  kop3ratio chnget "op3ratio"
+  kop3amp   = chnget("op3amp")
+  kop3ratio = chnget("op3ratio")
 
-  kop3att chnget "op3att"
-  kop3dec chnget "op3dec"
-  kop3sus chnget "op3sus"
-  kop3rel chnget "op3rel"
+  kop3att = chnget("op3att")
+  kop3dec = chnget("op3dec")
+  kop3sus = chnget("op3sus")
+  kop3rel = chnget("op3rel")
 
-  kop2amp   chnget "op2amp"
-  kop2ratio chnget "op2ratio"
+  kop2amp   = chnget("op2amp")
+  kop2ratio = chnget("op2ratio")
 
-  kop2att chnget "op2att"
-  kop2dec chnget "op2dec"
-  kop2sus chnget "op2sus"
-  kop2rel chnget "op2rel"
+  kop2att = chnget("op2att")
+  kop2dec = chnget("op2dec")
+  kop2sus = chnget("op2sus")
+  kop2rel = chnget("op2rel")
 
-  kop1amp   chnget "op1amp"
-  kop1ratio chnget "op1ratio"
+  kop1amp   = chnget("op1amp")
+  kop1ratio = chnget("op1ratio")
 
-  kop1att chnget "op1att"
-  kop1dec chnget "op1dec"
-  kop1sus chnget "op1sus"
-  kop1rel chnget "op1rel"
+  kop1att = chnget("op1att")
+  kop1dec = chnget("op1dec")
+  kop1sus = chnget("op1sus")
+  kop1rel = chnget("op1rel")
 
-  kfb1 chnget "fb1"
-  aop6 init 0
+  kfb1 = chnget("fb1")
+  aop6 = init(0)
 
-  afase7 phasor icps*kop7ratio
-  aop7 table3 afase7+ (kfb1*aop6), 1, 1, 0, 1
-  aenv7 madsr i(kop7att), i(kop7dec), i(kop7sus), i(kop7rel)
+  afase7 = phasor(icps*kop7ratio)
+  aop7   = table3(afase7+ (kfb1*aop6), 1, 1, 0, 1)
+  aenv7  = madsr(i(kop7att), i(kop7dec), i(kop7sus), i(kop7rel))
 
-  afase6 phasor icps*kop6ratio
-  aop6 table3 afase6+(aop7*kop7amp*aenv7), 1, 1, 0, 1
-  aenv6 madsr i(kop6att), i(kop6dec), i(kop6sus), i(kop6rel)
+  afase6 = phasor(icps*kop6ratio)
+  aop6   = table3(afase6+(aop7*kop7amp*aenv7), 1, 1, 0, 1)
+  aenv6  = madsr(i(kop6att), i(kop6dec), i(kop6sus), i(kop6rel))
 
-  afase5 phasor icps*kop5ratio
-  aop5 table3 afase5, 1, 1, 0, 1
-  aenv5 madsr i(kop5att), i(kop5dec), i(kop5sus), i(kop5rel)
+  afase5 = phasor(icps*kop5ratio)
+  aop5   = table3(afase5, 1, 1, 0, 1)
+  aenv5  = madsr(i(kop5att), i(kop5dec), i(kop5sus), i(kop5rel))
 
-  afase4 phasor icps*kop4ratio
-  aop4 table3 afase4+(aop5*kop5amp*aenv5), 1, 1, 0, 1
-  aenv4 madsr i(kop4att), i(kop4dec), i(kop4sus), i(kop4rel)
+  afase4 = phasor(icps*kop4ratio)
+  aop4   = table3(afase4+(aop5*kop5amp*aenv5), 1, 1, 0, 1)
+  aenv4  = madsr(i(kop4att), i(kop4dec), i(kop4sus), i(kop4rel))
 
-  afase3 phasor icps*kop3ratio
-  aop3 table3 afase3, 1, 1, 0, 1
-  aenv3 madsr i(kop3att), i(kop3dec), i(kop3sus), i(kop3rel)
+  afase3 = phasor(icps*kop3ratio)
+  aop3   = table3(afase3, 1, 1, 0, 1)
+  aenv3  = madsr(i(kop3att), i(kop3dec), i(kop3sus), i(kop3rel))
 
-  afase2 phasor icps*kop2ratio
-  aop2 table3 afase2+(aop3*kop3amp*aenv3), 1, 1, 0, 1
-  aenv2 madsr i(kop2att), i(kop2dec), i(kop2sus), i(kop2rel)
+  afase2 = phasor(icps*kop2ratio)
+  aop2   = table3(afase2+(aop3*kop3amp*aenv3), 1, 1, 0, 1)
+  aenv2  = madsr(i(kop2att), i(kop2dec), i(kop2sus), i(kop2rel))
 
-  afase1 phasor icps*kop1ratio
-  aop1 table3 afase1+(aop2*kop2amp*aenv2)+(aop4*kop4amp*aenv4), 1, 1, 0, 1
-  aenv1 madsr i(kop1att), i(kop1dec), i(kop1sus), i(kop1rel)
+  afase1 = phasor(icps*kop1ratio)
+  aop1   = table3(afase1+(aop2*kop2amp*aenv2)+(aop4*kop4amp*aenv4), 1, 1, 0, 1)
+  aenv1  = madsr(i(kop1att), i(kop1dec), i(kop1sus), i(kop1rel))
 
-  outs (aop1*kop1amp*aenv1) + (aop6*kop6amp*aenv6), (aop1*kop1amp*aenv1) + (aop6*kop6amp*aenv6)
+  out(aop1*kop1amp*aenv1) + (aop6*kop6amp*aenv6), (aop1*kop1amp*aenv1) + (aop6*kop6amp*aenv6)
 endin
 
 instr 99  ; randomize harmonic
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op7amp"
-  krand random -6, 6
+  krand = random(-6, 6)
   krand = int(krand)
   krand = (krand < 0 ? 1/krand : krand)
   krand = (krand == 0 ? 1 : abs(krand))
   chnset krand, "op7ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op7att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op7dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op7sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op7rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op6amp"
-  krand random -6, 6
+  krand = random(-6, 6)
   krand = int(krand)
   krand = (krand < 0 ? 1/krand : krand)
   krand = (krand == 0 ? 1 : abs(krand))
   chnset krand, "op6ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op6att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op6dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op6sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op6rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op5amp"
-  krand random -6, 6
+  krand = random(-6, 6)
   krand = int(krand)
   krand = (krand < 0 ? 1/krand : krand)
   krand = (krand == 0 ? 1 : abs(krand))
   chnset krand, "op5ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op5att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op5dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op5sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op5rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op4amp"
-  krand random -6, 6
+  krand = random(-6, 6)
   krand = int(krand)
   krand = (krand < 0 ? 1/krand : krand)
   krand = (krand == 0 ? 1 : abs(krand))
   chnset krand, "op4ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op4att"
   chnset krand, "op4dec"
   chnset krand, "op4sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op4rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op3amp"
-  krand random -6, 6
+  krand = random(-6, 6)
   krand = int(krand)
   krand = (krand < 0 ? 1/krand : krand)
   krand = (krand == 0 ? 1 : abs(krand))
   chnset krand, "op3ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op3att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op3dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op3sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op3rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op2amp"
-  krand random -6, 6
+  krand = random(-6, 6)
   krand = int(krand)
   krand = (krand < 0 ? 1/krand : krand)
   krand = (krand == 0 ? 1 : abs(krand))
   chnset krand, "op2ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op2att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op2dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op2sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op2rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op1amp"
-  krand random -6, 6
+  krand = random(-6, 6)
   krand = int(krand)
   krand = (krand < 0 ? 1/krand : krand)
   krand = (krand == 0 ? 1 : abs(krand))
   chnset krand, "op1ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op1att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op1dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op1sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op1rel"
-  krand random 0, 0.05
+  krand = random(0, 0.05)
   chnset krand, "fb1"
 
   turnoff
 endin
 
 instr 100  ; randomize
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op7amp"
-  krand random 0.1, 6
+  krand = random(0.1, 6)
   chnset krand, "op7ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op7att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op7dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op7sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op7rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op6amp"
-  krand random 0.1, 6
+  krand = random(0.1, 6)
   chnset krand, "op6ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op6att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op6dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op6sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op6rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op5amp"
-  krand random 0.1, 6
+  krand = random(0.1, 6)
   chnset krand, "op5ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op5att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op5dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op5sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op5rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op4amp"
-  krand random 0.1, 6
+  krand = random(0.1, 6)
   chnset krand, "op4ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op4att"
   chnset krand, "op4dec"
   chnset krand, "op4sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op4rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op3amp"
-  krand random -6, 6
+  krand = random(-6, 6)
   chnset krand, "op3ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op3att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op3dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op3sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op3rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op2amp"
-  krand random 0.1, 6
+  krand = random(0.1, 6)
   chnset krand, "op2ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op2att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op2dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op2sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op2rel"
 
-  krand random 0, 1
+  krand = random(0, 1)
   chnset krand, "op1amp"
-  krand random 0.1, 6
+  krand = random(0.1, 6)
   chnset krand, "op1ratio"
 
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op1att"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op1dec"
-  krand random 0.01, 1
+  krand = random(0.01, 1)
   chnset krand, "op1sus"
-  krand random 0.01, 2
+  krand = random(0.01, 2)
   chnset krand, "op1rel"
-  krand random 0, 0.1
+  krand = random(0, 0.1)
   chnset krand, "fb1"
 
   turnoff

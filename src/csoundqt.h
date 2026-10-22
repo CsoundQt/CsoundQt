@@ -330,6 +330,7 @@ private slots:
 	void toggleParameterMode();
     void autocomplete();
     void insertOpcode();
+    void highlightWidgetChannel();
 //	void showParametersInEditor();
 	void onNewConnection(); // when new client is connecting to localServer
 	void onReadyRead(); // when message comes in
@@ -485,6 +486,7 @@ private:
 	QAction *scratchPadCsdModeAct;
 	QAction *getToInAct;
 	QAction *inToGetAct;
+	QAction *highlightWidgetChannelAct;
 	QAction *midiControlAct;
     QAction *qmlAct;
     QAction *findAct;

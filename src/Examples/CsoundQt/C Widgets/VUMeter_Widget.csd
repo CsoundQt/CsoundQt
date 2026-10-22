@@ -5,7 +5,7 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
@@ -13,22 +13,22 @@ nchnls = 2
 ; follow the dB value written to their channel.
 
 instr 1
-    ; vertical meter, range -90 .. 0 dB
-    kph1   phasor 0.20
-    kdbv   = -90 + 90 * (0.5 + 0.5 * sin(2 * 3.14159265 * kph1))
-    chnset kdbv, "vudb_vert"
+  ; vertical meter, range -90 .. 0 dB
+  kph1 = phasor(0.20)
+  kdbv = -90 + 90 * (0.5 + 0.5 * sin(2 * 3.14159265 * kph1))
+  chnset kdbv, "vudb_vert"
 
-    ; horizontal meter, range -90 .. +6 dB
-    kph2   phasor 0.55
-    kdbh   = -90 + 100 * (0.5 + 0.5 * sin(2 * 3.14159265 * kph2))
-    chnset kdbh, "vudb_horiz"
-    
-    asig diskin2 "../../SourceMaterials/ClassicalGuitar.wav", 1, 0, 200
-    kgain = chnget("gain")
-    kdb = dbamp(rms(asig)) + kgain
-    chnset lagud(kdb, 0.01, 0.5), "vudb2"
-    chnset lagud(kdb, 0, 200), "vudb2_cursor"
-    out asig
+  ; horizontal meter, range -90 .. +6 dB
+  kph2 = phasor(0.55)
+  kdbh = -90 + 100 * (0.5 + 0.5 * sin(2 * 3.14159265 * kph2))
+  chnset kdbh, "vudb_horiz"
+
+  asig  = diskin2("../../SourceMaterials/ClassicalGuitar.wav", 1, 0, 200)
+  kgain = chnget("gain")
+  kdb   = dbamp(rms(asig)) + kgain
+  chnset lagud(kdb, 0.01, 0.5), "vudb2"
+  chnset lagud(kdb, 0, 200), "vudb2_cursor"
+  out asig
 endin
 
 </CsInstruments>

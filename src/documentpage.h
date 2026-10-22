@@ -33,6 +33,7 @@
 #include <vector>
 #include "basedocument.h"
 #include "sourcedefinitions.h"
+#include "widgetpropertyinfo.h"
 
 class OpEntryParser;
 class DocumentView;
@@ -78,6 +79,7 @@ public:
     void setGlobalStringVariables(const QStringList &variables);
     void setInstrumentNames(const QStringList &names);
     QStringList getWidgetChannels();
+    QList<WidgetPropertyInfo> getWidgetProperties(const QString &channelOrName);
     void updateWidgetChannels();
     void enableScoreSyntaxHighlighting(bool status);
     virtual QString getFullText();
@@ -193,6 +195,8 @@ public:
     void goBackToPreviousPosition();
     void autocomplete();
     void insertOpcode();
+    // Experimental: outline widgets using the channel at the cursor.
+    void highlightWidgetChannel();
     // Jump to the definition of the name at the cursor (a user-defined
     // opcode, a scheduled instrument, a macro or a struct type).
     void goToSourceAtCursor();

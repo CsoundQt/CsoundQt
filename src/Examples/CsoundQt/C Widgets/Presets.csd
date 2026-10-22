@@ -2,6 +2,7 @@
 <CsOptions>
 </CsOptions>
 <CsInstruments>
+ksmps = 64
 ; Nothing here.... Just look at the widget panel!
 
 </CsInstruments>

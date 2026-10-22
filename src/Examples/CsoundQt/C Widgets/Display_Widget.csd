@@ -4,29 +4,29 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
-gibeats init 0
+gibeats = init(0)
 
 instr 1  ; Always on
-	ktime timeinsts
-	ktempo	invalue "tempo"
-	outvalue "time", ktime
+  ktime  = timeinsts()
+  ktempo = chnget("tempo")
+  chnset(ktime, "time")
 
-	kfreq = ktempo/60
-	ktrig metro kfreq
-	schedkwhen ktrig, 0.5, 1, 2, 0, 0.5
+  kfreq = ktempo/60
+  ktrig = metro(kfreq)
+  schedkwhen ktrig, 0.5, 1, 2, 0, 0.5
 endin
 
-instr 2 ; triggered once every second from instr 1
-	gibeats = gibeats + 1
-	ibar = int(gibeats/4)
-	ibeat = (gibeats % 4) + 1
-	Sloc sprintf "Bar:Beat - %i:%i", ibar, ibeat
-	outvalue "location", Sloc 
-	turnoff
+instr 2  ; triggered once every second from instr 1
+  gibeats = gibeats + 1
+  ibar    = int(gibeats/4)
+  ibeat   = (gibeats % 4) + 1
+  Sloc    = sprintf("Bar:Beat - %i:%i", ibar, ibeat)
+  chnset(Sloc, "location")
+  turnoff
 endin
 
 

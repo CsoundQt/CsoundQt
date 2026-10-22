@@ -4,33 +4,33 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
-instr 1 ; make sound
-	ktype invalue "type"
-	ktransp invalue "transp"
-	ktfactor tab ktransp, 1 ;map index to transposition factor
-	if (ktype == 0) then
-		axcite oscil 1, 1, 2
-		asig wgflute 0.1, 880*ktfactor, 0.32, 0.1, 0.1, 0.15, 5.925, 0.1, 2
-	elseif (ktype == 1) then
-		kenv xadsr 0.2, 0.2, 1, p3/2
-		asig vco2 kenv*0.1, 440*ktfactor
-	elseif (ktype == 2) then
-		asig shaker 0.5, 880*ktfactor, 64*ktfactor, 0.7, 3, 0
-	endif
-	outs asig*0.3, asig*0.3
+instr 1  ; make sound
+  ktype    = chnget("type")
+  ktransp  = chnget("transp")
+  ktfactor = tab(ktransp, 1)  ; map index to transposition factor
+  if (ktype == 0) then
+    axcite = oscil(1, 1, 2)
+    asig   = wgflute(0.1, 880*ktfactor, 0.32, 0.1, 0.1, 0.15, 5.925, 0.1, 2)
+  elseif (ktype == 1) then
+    kenv = xadsr(0.2, 0.2, 1, p3/2)
+    asig = vco2(kenv*0.1, 440*ktfactor)
+  elseif (ktype == 2) then
+    asig = shaker(0.5, 880*ktfactor, 64*ktfactor, 0.7, 3, 0)
+  endif
+  out(asig*0.3, asig*0.3)
 endin
 
-instr 2  ;randomize
-	itype = rnd(3)
-	itransp = rnd(3)
-	outvalue "type", int(itype)
-	outvalue "transp", int(itransp)
-	event "i", 1, 0, 2 
-	turnoff ;send values only once
+instr 2  ; randomize
+  itype   = rnd(3)
+  itransp = rnd(3)
+  chnset(int(itype),   "type")
+  chnset(int(itransp), "transp")
+  event "i", 1, 0, 2
+  turnoff  ; send values only once
 endin
 
 </CsInstruments>

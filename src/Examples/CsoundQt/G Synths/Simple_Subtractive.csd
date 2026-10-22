@@ -4,10 +4,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr     = 44100
-ksmps  = 128
+sr = 44100
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
 ; Make sure CsOptions are not ignored in the preferences,
 ; Otherwise Realtime MIDI input will not work.
@@ -17,25 +17,25 @@ gidectimemax = 2
 gireltimemax = 4
 
 instr 1  ; Subtractive synth
-  kosctype invalue "osctype"
+  kosctype = chnget("osctype")
 
-  kftype invalue "ftype"
-  kffreq invalue "ffreq"
-  kffreq portk kffreq, 0.02  ; smooth signal
-  kfres invalue "fres"
-  kfres portk kfres, 0.02  ; smooth signal
-  kfatt    invalue "fatt"
-  kfdec    invalue "fdec"
-  kfsus    invalue "fsus"
-  kfrel    invalue "frel"
-  kfenvamt invalue "fenvamt"
+  kftype   = chnget("ftype")
+  kffreq   = chnget("ffreq")
+  kffreq   = portk(kffreq, 0.02)  ; smooth signal
+  kfres    = chnget("fres")
+  kfres    = portk(kfres, 0.02)  ; smooth signal
+  kfatt    = chnget("fatt")
+  kfdec    = chnget("fdec")
+  kfsus    = chnget("fsus")
+  kfrel    = chnget("frel")
+  kfenvamt = chnget("fenvamt")
 
-  kaatt invalue "aatt"
-  kadec invalue "adec"
-  kasus invalue "asus"
-  karel invalue "arel"
+  kaatt = chnget("aatt")
+  kadec = chnget("adec")
+  kasus = chnget("asus")
+  karel = chnget("arel")
 
-  klvl invalue "lvl"
+  klvl = chnget("lvl")
 
   ifreq = p4        ; in cps
   iamp  = (p5/127)  ; MIDI velocity to linear amp
@@ -43,46 +43,46 @@ instr 1  ; Subtractive synth
   itype = i(kosctype)
 
   if (itype == 0) then
-    aosc oscil iamp, ifreq, 1
+    aosc = oscil(iamp, ifreq, 1)
   elseif (itype == 1) then
-    aosc oscil iamp, ifreq, 2
+    aosc = oscil(iamp, ifreq, 2)
   elseif (itype == 2) then
-    aosc vco2 iamp, ifreq
+    aosc = vco2(iamp, ifreq)
   elseif (itype == 3) then
-    aosc vco2 iamp, ifreq, 2, 0.5
+    aosc = vco2(iamp, ifreq, 2, 0.5)
   endif
 
-  kfenv madsr giatttimemax*i(kfatt), gidectimemax*i(kfdec), i(kfsus), gireltimemax*i(kfrel)
+  kfenv = madsr(giatttimemax*i(kfatt), gidectimemax*i(kfdec), i(kfsus), gireltimemax*i(kfrel))
   kfenv = (kfenv*kfenvamt) + 1
 
   if (kftype == 0) then
-    aosc moogladder aosc, kffreq*kfenv, kfres
+    aosc = moogladder(aosc, kffreq*kfenv, kfres)
   elseif (kftype == 1) then
-    aosc moogvcf2 aosc, kffreq*kfenv, kfres
+    aosc = moogvcf2(aosc, kffreq*kfenv, kfres)
   elseif (kftype == 2) then
-    aosc rezzy aosc, kffreq*kfenv, kfres*100
+    aosc = rezzy(aosc, kffreq*kfenv, kfres*100)
   elseif (kftype == 3) then
-    aosc lowresx aosc, kffreq*kfenv, kfres/3
+    aosc = lowresx(aosc, kffreq*kfenv, kfres/3)
   endif
 
-  aenv madsr giatttimemax*i(kaatt), gidectimemax*i(kadec), i(kasus), gireltimemax*i(karel)
+  aenv = madsr(giatttimemax*i(kaatt), gidectimemax*i(kadec), i(kasus), gireltimemax*i(karel))
 
-  outs aosc*aenv*klvl, aosc*aenv*klvl
+  out(aosc*aenv*klvl, aosc*aenv*klvl)
 endin
 
 instr 98  ; Play note
-  koscfreq invalue "oscfreq"
+  koscfreq = chnget("oscfreq")
   event "i", 1, 0, 3, i(koscfreq), 100
   turnoff
 endin
 
 instr 99  ; Always on
 
-  kcont    invalue "cont"
-  koscfreq invalue "oscfreq"
+  kcont    = chnget("cont")
+  koscfreq = chnget("oscfreq")
 
   if kcont == 1 then
-    ktrig metro 0.5
+    ktrig = metro(0.5)
     schedkwhen ktrig, 0.1, 10, 1, 0, 1, koscfreq, 100
   endif
 endin

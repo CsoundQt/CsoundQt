@@ -30,7 +30,7 @@ is told that the table is interleaved with 2 channels. Channels are drawn stacke
 but with a separate amplitude axis each. set Channels in the widget properties (or leave it at 0 to auto-detect with ftchnls()).
 */
 
-giWave ftgen 0, 0, 0, 1, "../../SourceMaterials/ClassicalGuitar.wav", 0, 0, 0
+giWave = ftgen(0, 0, 0, 1, "../../SourceMaterials/ClassicalGuitar.wav", 0, 0, 0)
 gk_playing = 0
 
 instr 1
@@ -50,43 +50,43 @@ instr 2
     if kplay == 0 then
       chnset k(1), "play"
       schedulek 10, 0, -1
-    else 
+    else
       chnset k(0), "play"
       turnoff2 10, 4, 1
     endif
   endif
-  
-  
+
+
 endin
 
 instr 10
   itab = chnget("waveTable")
-  
+
   kspeed = chnget("speed")
-  kamp = 1.0
-  
-  imod = 1 ; loop
+  kamp   = 1.0
+
+  imod = 1  ; loop
   iend = nsamp(itab) / ftsr(itab)
-  
-  
+
+
 _reset:
-  ipos chnget "waveCursor"
+  ipos = chnget("waveCursor")
   ilen = nsamp(giWave)
-  kpos init ipos
-  
-  asigs[] loscilx kamp, kspeed, itab, 4, 1, ipos, imod, ipos, iend
-  
-  kcursor chnget "waveCursor"
+  kpos = init(ipos)
+
+  asigs[] = loscilx(kamp, kspeed, itab, 4, 1, ipos, imod, ipos, iend)
+
+  kcursor = chnget("waveCursor")
   if abs(kcursor - kpos) > ksmps*kspeed*100 then
     reinit _reset
   endif
-  
+
   kpos += ksmps * kspeed
   if kpos > ilen then
     chnset k(0), "play"
     turnoff
   endif
-  
+
   if metro:k(30) == 1 then
     chnset kpos, "waveCursor"
   endif

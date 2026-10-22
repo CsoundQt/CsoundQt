@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -24,7 +25,9 @@
 #include "widgetlayout.h"
 #include "bundledfonts.h"
 
+#include <QHeaderView>
 #include <QPainter>
+#include <QTreeWidget>
 
 // Copied widget styles, keyed by widget type. A copied style holds all dynamic
 // "CSQT_*" properties except position, size, channel(s), text and identity, so
@@ -511,7 +514,7 @@ void QuteWidget::setWidgetName(const QString &name)
 	m_widgetName = name;
 }
 
-QStringList QuteWidget::getAvailableProperties()
+QStringList QuteWidget::getAvailableProperties() const
 {
 	// Only dynamic properties are addressable via setPropertyIfExists().
 	// The "CSQT_" prefix is internal; report the names as they are addressed
@@ -527,6 +530,140 @@ QStringList QuteWidget::getAvailableProperties()
 	}
 	properties.sort(Qt::CaseInsensitive);
 	return properties;
+}
+
+static QString humanizePropertyName(const QString &name)
+{
+    QString text;
+    for (int i = 0; i < name.size(); ++i) {
+        const QChar c = name.at(i);
+        if (i > 0 && c.isUpper() && !name.at(i - 1).isUpper())
+            text += QLatin1Char(' ');
+        text += c;
+    }
+    if (!text.isEmpty())
+        text[0] = text.at(0).toUpper();
+    return text;
+}
+
+QString QuteWidget::propertyType(const QString &name) const
+{
+    // A few properties are stored as strings even though their value is
+    // boolean or numeric; present the type the user should supply.
+    static const QHash<QString, QString> knownTypes = {
+        {QStringLiteral("x"), QStringLiteral("integer")},
+        {QStringLiteral("y"), QStringLiteral("integer")},
+        {QStringLiteral("width"), QStringLiteral("integer")},
+        {QStringLiteral("height"), QStringLiteral("integer")},
+        {QStringLiteral("fontsize"), QStringLiteral("number")},
+        {QStringLiteral("precision"), QStringLiteral("integer")},
+        {QStringLiteral("borderWidth"), QStringLiteral("integer")},
+        {QStringLiteral("borderRadius"), QStringLiteral("integer")},
+        {QStringLiteral("midichan"), QStringLiteral("integer")},
+        {QStringLiteral("midicc"), QStringLiteral("integer")},
+        {QStringLiteral("selectedIndex"), QStringLiteral("integer")},
+        {QStringLiteral("pressedValue"), QStringLiteral("number")},
+        {QStringLiteral("visible"), QStringLiteral("boolean")},
+        {QStringLiteral("enabled"), QStringLiteral("boolean")},
+        {QStringLiteral("locked"), QStringLiteral("boolean")},
+        {QStringLiteral("selected"), QStringLiteral("boolean")},
+        {QStringLiteral("latch"), QStringLiteral("boolean")},
+        {QStringLiteral("momentaryMidiButton"), QStringLiteral("boolean")},
+        {QStringLiteral("flatStyle"), QStringLiteral("boolean")},
+        {QStringLiteral("randomizable"), QStringLiteral("boolean")},
+        {QStringLiteral("randomizableMode"), QStringLiteral("integer")},
+        {QStringLiteral("randomizableGroup"), QStringLiteral("integer")},
+        {QStringLiteral("color"), QStringLiteral("color")},
+        {QStringLiteral("pressedColor"), QStringLiteral("color")},
+        {QStringLiteral("borderColor"), QStringLiteral("color")},
+        {QStringLiteral("textColor"), QStringLiteral("color")},
+        {QStringLiteral("pressedTextColor"), QStringLiteral("color")},
+        {QStringLiteral("bgcolor"), QStringLiteral("color")},
+        {QStringLiteral("cursorcolor"), QStringLiteral("color")},
+        {QStringLiteral("rulercolor"), QStringLiteral("color")}
+    };
+    if (knownTypes.contains(name))
+        return knownTypes.value(name);
+
+    const QByteArray key = QStringLiteral("CSQT_%1").arg(name).toLatin1();
+    QVariant value = property(key.constData());
+    if (!value.isValid()) {
+        const int index = metaObject()->indexOfProperty(name.toLatin1());
+        if (index >= 0)
+            value = metaObject()->property(index).read(this);
+    }
+    const QString type = QString::fromLatin1(value.typeName());
+    if (type == QLatin1String("QColor")) return QStringLiteral("color");
+    if (type == QLatin1String("QString")) return QStringLiteral("string");
+    if (type == QLatin1String("bool")) return QStringLiteral("boolean");
+    if (type == QLatin1String("int")) return QStringLiteral("integer");
+    if (type == QLatin1String("double") || type == QLatin1String("float"))
+        return QStringLiteral("number");
+    if (type.isEmpty()) return QStringLiteral("value");
+    return type;
+}
+
+QString QuteWidget::propertyDescription(const QString &name) const
+{
+    const QHash<QString, QString> specific = propertyDescriptions();
+    if (specific.contains(name))
+        return specific.value(name);
+
+    static const QHash<QString, QString> common = {
+        {QStringLiteral("x"), QStringLiteral("Horizontal position in pixels")},
+        {QStringLiteral("y"), QStringLiteral("vertical position in pixels")},
+        {QStringLiteral("width"), QStringLiteral("Width in pixels")},
+        {QStringLiteral("height"), QStringLiteral("Height in pixels")},
+        {QStringLiteral("visible"), QStringLiteral("Whether the widget is shown")},
+        {QStringLiteral("enabled"), QStringLiteral("Does the widget accept input/value updates?")},
+        {QStringLiteral("locked"), QStringLiteral("Prevent moving/resizing")},
+        {QStringLiteral("color"), QStringLiteral("Main colour of the widget")},
+        {QStringLiteral("bgcolor"), QStringLiteral("Background colour")},
+        {QStringLiteral("pressedColor"), QStringLiteral("Colour while a button is pressed")},
+        {QStringLiteral("borderColor"), QStringLiteral("Border colour")},
+        {QStringLiteral("textColor"), QStringLiteral("Text colour")},
+        {QStringLiteral("pressedTextColor"), QStringLiteral("Text colour while pressed")},
+        {QStringLiteral("font"), QStringLiteral("Font family")},
+        {QStringLiteral("fontsize"), QStringLiteral("Font size")},
+        {QStringLiteral("text"), QStringLiteral("Text displayed by the widget")},
+        {QStringLiteral("label"), QStringLiteral("Label displayed by the widget")},
+        {QStringLiteral("value"), QStringLiteral("Current numeric value")},
+        {QStringLiteral("description"), QStringLiteral("Description shown as a tooltip")},
+        {QStringLiteral("eventLine"), QStringLiteral("Score event triggered")},
+        {QStringLiteral("image"), QStringLiteral("Image file used by the widget")},
+        {QStringLiteral("mode"), QStringLiteral("Display or behaviour mode")},
+        {QStringLiteral("minimum"), QStringLiteral("Minimum value")},
+        {QStringLiteral("maximum"), QStringLiteral("Maximum value")},
+        {QStringLiteral("borderWidth"), QStringLiteral("Border width in pixels")},
+        {QStringLiteral("borderRadius"), QStringLiteral("Corner radius in pixels")},
+        {QStringLiteral("flatStyle"), QStringLiteral("Use a flat, platform-independent style")},
+        {QStringLiteral("latch"), QStringLiteral("Stays pressed until clicked again")},
+        {QStringLiteral("latched"), QStringLiteral("Current latched state")},
+        {QStringLiteral("momentaryMidiButton"), QStringLiteral("Latching behaviour for MIDI notes/buttons")},
+        {QStringLiteral("pressedValue"), QStringLiteral("Value reported while pressed")},
+        {QStringLiteral("stringvalue"), QStringLiteral("Current string value")},
+        {QStringLiteral("type"), QStringLiteral("Widget or button variant")},
+        {QStringLiteral("alignment"), QStringLiteral("Horizontal text alignment")},
+        {QStringLiteral("valignment"), QStringLiteral("Vertical text alignment")},
+        {QStringLiteral("padding"), QStringLiteral("Inner padding in pixels")},
+        {QStringLiteral("midicc"), QStringLiteral("MIDI controller number")},
+        {QStringLiteral("midichan"), QStringLiteral("MIDI channel")},
+        {QStringLiteral("findfft"), QStringLiteral("Variable name given to dispfft")},
+        {QStringLiteral("findaudio"), QStringLiteral("Variable name given to display opcode")},
+        {QStringLiteral("findtable"), QStringLiteral("Number of the function table to display")}
+    };
+    if (common.contains(name))
+        return common.value(name);
+    return humanizePropertyName(name);
+}
+
+QList<WidgetPropertyInfo> QuteWidget::getPropertyInfo() const
+{
+    QList<WidgetPropertyInfo> info;
+    for (const QString &name : getAvailableProperties()) {
+        info.append({name, propertyType(name), propertyDescription(name)});
+    }
+    return info;
 }
 
 bool QuteWidget::isTransitoryProperty(const QString &name) const
@@ -548,9 +685,23 @@ void QuteWidget::showAvailableProperties()
 	searchLineEdit->setClearButtonEnabled(true);
 	dialogLayout->addWidget(searchLineEdit);
 
-	QListWidget *propertiesList = new QListWidget(&propertiesDialog);
-	propertiesList->addItems(getAvailableProperties());
+	QTreeWidget *propertiesList = new QTreeWidget(&propertiesDialog);
+	propertiesList->setColumnCount(3);
+	propertiesList->setHeaderLabels({tr("Property"), tr("Type"),
+	                                 tr("Description")});
+	propertiesList->setRootIsDecorated(false);
+	propertiesList->setAlternatingRowColors(true);
 	propertiesList->setSelectionMode(QAbstractItemView::SingleSelection);
+	for (const WidgetPropertyInfo &info : getPropertyInfo()) {
+		auto *item = new QTreeWidgetItem(propertiesList);
+		item->setText(0, info.name);
+		item->setText(1, info.type);
+		item->setText(2, info.description);
+		item->setToolTip(2, info.description);
+	}
+	propertiesList->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+	propertiesList->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+	propertiesList->header()->setSectionResizeMode(2, QHeaderView::Stretch);
 	dialogLayout->addWidget(propertiesList);
 
 	QPushButton *closeButton = new QPushButton(tr("Close"), &propertiesDialog);
@@ -559,15 +710,18 @@ void QuteWidget::showAvailableProperties()
 
 	// Incremental filter: hide entries that do not contain the typed text
 	auto filterList = [propertiesList](const QString &filter) {
-		for (int i = 0; i < propertiesList->count(); i++) {
-			QListWidgetItem *item = propertiesList->item(i);
-			item->setHidden(!item->text().contains(filter, Qt::CaseInsensitive));
+		for (int i = 0; i < propertiesList->topLevelItemCount(); i++) {
+			QTreeWidgetItem *item = propertiesList->topLevelItem(i);
+			const bool match = item->text(0).contains(filter, Qt::CaseInsensitive)
+					|| item->text(1).contains(filter, Qt::CaseInsensitive)
+					|| item->text(2).contains(filter, Qt::CaseInsensitive);
+			item->setHidden(!match);
 		}
 	};
 	connect(searchLineEdit, &QLineEdit::textChanged, &propertiesDialog, filterList);
 	connect(closeButton, SIGNAL(released()), &propertiesDialog, SLOT(accept()));
 
-	propertiesDialog.resize(320, 400);
+	propertiesDialog.resize(560, 420);
 	propertiesDialog.exec();
 }
 

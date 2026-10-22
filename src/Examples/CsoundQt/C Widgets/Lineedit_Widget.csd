@@ -4,33 +4,33 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
 instr 1
 
-	Sin invalue "instring"
-	outvalue "display", Sin
+  Sin = chnget("instring")
+  chnset(Sin, "display")
 
-	Sline invalue "lineedit"
-	klevel invalue "level"
-	kdur invalue "dur"
-	kcomp strcmpk Sline, "-"
-	; trigger notes only when line is not empty
-	ktrig = (kcomp != 0? 1: 0)
-	kchr strchark Sline, 1
-	schedkwhen ktrig, 0.05, 10, 2, 0, kdur, kchr, klevel
-	outvalue "lineedit", "-" ;empty line edit widget
+  Sline  = chnget("lineedit")
+  klevel = chnget("level")
+  kdur   = chnget("dur")
+  kcomp  = strcmpk(Sline, "-")
+  ; trigger notes only when line is not empty
+  ktrig = (kcomp != 0? 1: 0)
+  kchr  = strchark(Sline, 1)
+  schedkwhen ktrig, 0.05, 10, 2, 0, kdur, kchr, klevel
+  chnset("-", "lineedit")  ; empty line edit widget
 endin
 
 instr 2
-	idur = p3
-	ilevel = p5
-	icps = 440 * 2^((p4 - 100)/12)
-	aout oscils ilevel, icps, 0
-	aenv adsr 0.2*idur, 0.2*idur, 0.7, 0.3*idur
-	outs aout*aenv, aout*aenv
+  idur   = p3
+  ilevel = p5
+  icps   = 440 * 2^((p4 - 100)/12)
+  aout   = oscils(ilevel, icps, 0)
+  aenv   = adsr(0.2*idur, 0.2*idur, 0.7, 0.3*idur)
+  out(aout*aenv, aout*aenv)
 endin
 
 </CsInstruments>

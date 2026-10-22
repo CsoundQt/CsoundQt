@@ -33,6 +33,7 @@ class QPainter;
 //#define USE_WIDGET_MUTEX
 
 #include "csoundengine.h"
+#include "widgetpropertyinfo.h"
 
 enum QuteWidgetType { UNKNOWN=0, SPINBOX=1, LINEEDIT, CHECKBOX, SLIDER, KNOB, SCROLLNUMBER,
                       BUTTON, DROPDOWN, CONTROLLER, GRAPH, SCOPE, CONSOLE,
@@ -83,7 +84,12 @@ public:
 	void setUuid(const QString &uuid);
 	QString getWidgetName();
 	void setWidgetName(const QString &name);
-	QStringList getAvailableProperties(); // Widget attributes that can be addressed via "<channel>/<property>"
+	QStringList getAvailableProperties() const; // Widget attributes that can be addressed via "<channel>/<property>"
+	// Name, value type and human-readable description of every addressable
+	// property. Used by the properties dialog and editor autocompletion.
+	QList<WidgetPropertyInfo> getPropertyInfo() const;
+	QString propertyType(const QString &name) const;
+	QString propertyDescription(const QString &name) const;
 	// Dynamic properties that are accepted via "<channel>/<property>" but are
 	// transitory: they work like methods taking a single argument. Their value is
 	// applied immediately and is never saved to or restored from the widget XML.
@@ -183,6 +189,11 @@ protected:
 	QReadWriteLock widgetLock;
 #endif
 	QString xmlText;
+
+	// Widgets can override this to add descriptions specific to their
+	// properties. The base class supplies the common ones and a readable
+	// fallback derived from the property name.
+	virtual QHash<QString, QString> propertyDescriptions() const { return {}; }
 
 	virtual void contextMenuEvent(QContextMenuEvent *event);
 	virtual bool eventFilter(QObject *obj, QEvent *event) override;

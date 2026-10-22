@@ -10,77 +10,77 @@
 
 </CsOptions>
 <CsInstruments>
-sr     = 44100
-ksmps  = 128
+sr = 44100
+ksmps = 64
 nchnls = 2
 
 massign 0, 2  ; all midi to instrument 2
 
-instr 1                                 ; gui
-  gkndxatt    invalue "Index1_Attack"   ; init .002
-  gkndxdec    invalue "Index1_Decay"    ; init 5
-  gkndxslev   invalue "Index1_Sustain"  ; init 0
-  gkndxrel    invalue "Index1_Release"  ; init .1
-  gkndxatt2   invalue "Index2_Attack"   ; init .002
-  gkndxdec2   invalue "Index2_Decay"    ; init 5
-  gkndxslev2  invalue "Index2_Sustain"  ; init 0
-  gkndxrel2   invalue "Index2_Release"  ; init .1
-  gkampatt    invalue "Amp_Attack"      ; init .002
-  gkampdec    invalue "Amp_Decay"       ; init 6
-  gkampslev   invalue "Amp_Sustain"     ; init 0
-  gkamprel    invalue "Amp_Release"     ; init .1
-  gkcutoff    invalue "Filter_Cutoff"   ; init 6000
-  gkreson     invalue "Filter_Reso"     ; init 1
-  gkpan       invalue "Pan"             ; init .5
-  gkchorus    invalue "Chorus"          ; init .333
-  gkvol       invalue "Volume"          ; init 1
-  gkmodratio  invalue "Mod_ratio1"      ; init 1
-  gkmodratio2 invalue "Mod_ratio2"      ; init 2
-  gkindex     invalue "Mod_index1"      ; init 3
-  gkindex2    invalue "Mod_index2"      ; init 2
+instr 1                                  ; gui
+  gkndxatt = chnget("Index1_Attack")     ; init .002
+  gkndxdec = chnget("Index1_Decay")      ; init 5
+  gkndxslev = chnget("Index1_Sustain")   ; init 0
+  gkndxrel = chnget("Index1_Release")    ; init .1
+  gkndxatt2 = chnget("Index2_Attack")    ; init .002
+  gkndxdec2 = chnget("Index2_Decay")     ; init 5
+  gkndxslev2 = chnget("Index2_Sustain")  ; init 0
+  gkndxrel2 = chnget("Index2_Release")   ; init .1
+  gkampatt = chnget("Amp_Attack")        ; init .002
+  gkampdec = chnget("Amp_Decay")         ; init 6
+  gkampslev = chnget("Amp_Sustain")      ; init 0
+  gkamprel = chnget("Amp_Release")       ; init .1
+  gkcutoff = chnget("Filter_Cutoff")     ; init 6000
+  gkreson = chnget("Filter_Reso")        ; init 1
+  gkpan = chnget("Pan")                  ; init .5
+  gkchorus = chnget("Chorus")            ; init .333
+  gkvol = chnget("Volume")               ; init 1
+  gkmodratio = chnget("Mod_ratio1")      ; init 1
+  gkmodratio2 = chnget("Mod_ratio2")     ; init 2
+  gkindex = chnget("Mod_index1")         ; init 3
+  gkindex2 = chnget("Mod_index2")        ; init 2
 endin
 
 instr 2  ; Fm (pm)
-  icps cpsmidi
-  iamp ampmidi 1
+  icps = cpsmidi()
+  iamp = ampmidi(1)
 
   i1div2pi = 0.1592
   ipanR    = i(gkpan)
   ipanL    = 1-ipanR
 
-  kvol      = 20000*gkvol
-  kpeakdev  = iamp * gkindex * i1div2pi
+  kvol = 20000*gkvol
+  kpeakdev = iamp * gkindex * i1div2pi
   kpeakdev2 = iamp * gkindex2 * i1div2pi
 
   ; Envelopes
-  kndxenv  madsr i(gkndxatt), i(gkndxdec), i(gkndxslev) + .0000001, i(gkndxrel)
-  kndxenv2 madsr i(gkndxatt2), i(gkndxdec2), i(gkndxslev2) + .0000001, i(gkndxrel2)
-  kampenv  madsr i(gkampatt), i(gkampdec), i(gkampslev) + .0000001, i(gkamprel)
+  kndxenv  = madsr(i(gkndxatt), i(gkndxdec), i(gkndxslev) + .0000001, i(gkndxrel))
+  kndxenv2 = madsr(i(gkndxatt2), i(gkndxdec2), i(gkndxslev2) + .0000001, i(gkndxrel2))
+  kampenv  = madsr(i(gkampatt), i(gkampdec), i(gkampslev) + .0000001, i(gkamprel))
 
   ; Stereo "chorus" enrichment using jitter
-  kjitL jitter i(gkchorus)*3, 2, 5.3
-  kjitR jitter i(gkchorus)*3, 1.5, 5
+  kjitL = jitter(i(gkchorus)*3, 2, 5.3)
+  kjitR = jitter(i(gkchorus)*3, 1.5, 5)
 
   ; Modulators
-  aModulator  oscil kpeakdev * kndxenv, icps * gkmodratio, 1
-  aModulator2 oscil kpeakdev2 * kndxenv2, icps * gkmodratio2, 1
-  aCarrierL phasor icps + kjitL
-  aCarrierR phasor icps + kjitR
-  aCarrierL table aCarrierL + aModulator + aModulator2, 1, 1, 0, 1
-  aCarrierR table aCarrierR + aModulator + aModulator2, 1, 1, 0, 1
+  aModulator = oscil(kpeakdev * kndxenv, icps * gkmodratio, 1)
+  aModulator2 = oscil(kpeakdev2 * kndxenv2, icps * gkmodratio2, 1)
+  aCarrierL = phasor(icps + kjitL)
+  aCarrierR = phasor(icps + kjitR)
+  aCarrierL = table(aCarrierL + aModulator + aModulator2, 1, 1, 0, 1)
+  aCarrierR = table(aCarrierR + aModulator + aModulator2, 1, 1, 0, 1)
   aSigL = aCarrierL * iamp * kampenv
   aSigR = aCarrierR * iamp * kampenv
 
-  aFilterL bqrez aSigL, gkcutoff, gkreson
-  aFilterR bqrez aSigR, gkcutoff, gkreson
-  aFilterL balance aFilterL, aSigL
-  aFilterR balance aFilterR, aSigR
-  outs aFilterL * kvol * ipanL, aFilterR * kvol * ipanR
+  aFilterL = bqrez(aSigL, gkcutoff, gkreson)
+  aFilterR = bqrez(aSigR, gkcutoff, gkreson)
+  aFilterL = balance(aFilterL, aSigL)
+  aFilterR = balance(aFilterR, aSigR)
+  out(aFilterL * kvol * ipanL, aFilterR * kvol * ipanR)
 endin
 
 
-instr 3                          ; init
-  outvalue "_SetPresetIndex", 0  ; call preset 0
+instr 3                         ; init
+  chnset(0, "_SetPresetIndex")  ; call preset 0
 endin
 </CsInstruments>
 <CsScore>

@@ -7,12 +7,12 @@
 ; Formant synthesizer with glottal parameters
 ; Andreas Bergsland, 2009
 ; ************************************************************
-sr     = 44100
-ksmps  = 16
+sr = 44100
+ksmps = 64
 nchnls = 2
 
 
-giSine ftgen 0, 0, 1024, 10, 1
+giSine = ftgen(0, 0, 1024, 10, 1)
 
 ; *****************************************************
 ; Trigger instrument
@@ -22,12 +22,12 @@ massign 1, 2
 
 instr 1
   ; Get value for global source
-  kOpenQ  invalue "OQ"
-  kSpeedQ invalue "SQ"
+  kOpenQ  = chnget("OQ")
+  kSpeedQ = chnget("SQ")
   ; On value
-  kon invalue "on"
+  kon = chnget("on")
   ; Trigger play instrument
-  konchanged changed kon
+  konchanged = changed(kon)
   ktrig = kon * konchanged  ; only turn on when it's 1 and its just changed to 1
   schedkwhen ktrig, 0, 2, 10, 0, 100, kOpenQ, kSpeedQ
 
@@ -41,27 +41,27 @@ instr 1
     turnoff2 10, 2, 0
   endif
 
-  kspectrum invalue "spectrum"
-  kchanged changed kspectrum
+  kspectrum = chnget("spectrum")
+  kchanged  = changed(kspectrum)
   if (kchanged == 1 || (konchanged == 1 && kon == 0) \
     || kstatus == 144) then
   if (kspectrum == 1) then
-    outvalue "graph", 2
+    chnset(2, "graph")
   else
-    outvalue "graph", -102
+    chnset(-102, "graph")
   endif
 endif
 endin
 
 instr 2  ; MIDI trigger
   ; turn off sound from button
-  outvalue "on", 0
+  chnset(0, "on")
   turnoff2 10, 1, 0
 
-  icps cpsmidi
-  outvalue "f0", icps
-  kOpenQ  invalue "OQ"
-  kSpeedQ invalue "SQ"
+  icps = cpsmidi()
+  chnset(icps, "f0")
+  kOpenQ  = chnget("OQ")
+  kSpeedQ = chnget("SQ")
   schedkwhen 1, 0, 2, 10, 0, 100, kOpenQ, kSpeedQ
   turnoff
 endin
@@ -71,14 +71,14 @@ endin
 instr 10
 
   ; Get formant parameters
-  kcutoff1 invalue "Cutoff1"
-  kreson1  invalue "Reson1"
-  kcutoff2 invalue "Cutoff2"
-  kreson2  invalue "Reson2"
-  kcutoff3 invalue "Cutoff3"
-  kreson3  invalue "Reson3"
-  kcutoff4 invalue "Cutoff4"
-  kreson4  invalue "Reson4"
+  kcutoff1 = chnget("Cutoff1")
+  kreson1  = chnget("Reson1")
+  kcutoff2 = chnget("Cutoff2")
+  kreson2  = chnget("Reson2")
+  kcutoff3 = chnget("Cutoff3")
+  kreson3  = chnget("Reson3")
+  kcutoff4 = chnget("Cutoff4")
+  kreson4  = chnget("Reson4")
 
   iflen = 4096
 
@@ -88,11 +88,11 @@ instr 10
   ; linseg
   iSQ = p5 * 12/14
 
-  iOpen  = iOpenQ * iflen
+  iOpen = iOpenQ * iflen
   iClose = iflen - iOpen
-  ip     = iOpen/26  ; Calculate duration for segments in the open phase
-  iO     = ip * iSQ  ; Apply speed quotient for opening
-  iC     = ip / iSQ  ; and closing phase
+  ip = iOpen/26  ; Calculate duration for segments in the open phase
+  iO = ip * iSQ  ; Apply speed quotient for opening
+  iC = ip / iSQ  ; and closing phase
 
   iOp = 14*iO  ; Scale so that values fits the open phase
   iCl = 12*iC
@@ -132,12 +132,12 @@ instr 10
   i26 = 0  ; t4
 
   ; Make ftable for glottal waveform
-  isource ftgen 102, 0, iflen, 7, i0, iO, i1, iO, i2, iO, i3, iO, i4, iO, i5, iO, i6, iO, i7, iO, i8, \
-    iO, i9, iO, i10, iO, i11, iO, i12, iO, i13, iO, i14, iC, i15, iC, i16, iC, i17, \
+  isource = ftgen(102, 0, iflen, 7, i0, iO, i1, iO, i2, iO, i3, iO, i4, iO, i5, iO, i6, iO, i7, iO, i8, \)
+  iO, i9, iO, i10, iO, i11, iO, i12, iO, i13, iO, i14, iC, i15, iC, i16, iC, i17, \
     iC, i18, iC, i19, iC, i20, iC, i21, iC, i22, iC, i23, iC, i24, iC, i25, iC, i26, iClose, 0
 
-  kf0 invalue "f0"
-  kamp linen 4000, .2, p3, .35
+  kf0  = chnget("f0")
+  kamp = linen(4000, .2, p3, .35)
 
 
   ; ***************************************************************
@@ -145,12 +145,12 @@ instr 10
   kcpsMin = 8
   kcpsMax = 20
   kjitamp = .025
-  kjit1 jspline kjitamp, kcpsMin, kcpsMax
+  kjit1   = jspline(kjitamp, kcpsMin, kcpsMax)
 
   kjitamp = .027
   kcpsMin = 2
   kcpsMax = 20
-  kjit2 jitter 2.7, 2, 20
+  kjit2   = jitter(2.7, 2, 20)
 
   ktotamp = .027
   kamp1   = .2
@@ -159,70 +159,70 @@ instr 10
   kcps2   = 4.5
   kamp3   = .3
   kcps3   = 15.5
-  kjit3 jitter2 ktotamp, kamp1, kcps1, kamp2, kcps2, kamp3, kcps3
+  kjit3   = jitter2(ktotamp, kamp1, kcps1, kamp2, kcps2, kamp3, kcps3)
 
-  kjitOn invalue "JitOn"
-  kjit = kjit3 * kjitOn
+  kjitOn = chnget("JitOn")
+  kjit   = kjit3 * kjitOn
 
   ; ***************************************************************
   ; Vibrato
 
-  kvibamp expseg 0.001, p3*.3, 1.5, p3*.7, 2.5
+  kvibamp  = expseg(0.001, p3*.3, 1.5, p3*.7, 2.5)
   ivibfrek = 5.6
-  kvibrand randh .1, ivibfrek
+  kvibrand = randh(.1, ivibfrek)
   kvibfrek = ivibfrek + kvibrand
 
-  kvibOn invalue "Vib"
-  kvib oscil kvibamp * kvibOn, kvibfrek, giSine
+  kvibOn = chnget("Vib")
+  kvib   = oscil(kvibamp * kvibOn, kvibfrek, giSine)
 
 
 
   ; ***************************************************************
   ; Shimmer
 
-  kShimOn invalue "ShimOn"
+  kShimOn  = chnget("ShimOn")
   iavgshim = (ampdb(0.39)/ampdb(0))-1
   print iavgshim
   kshimamp = kamp * iavgshim * kShimOn
   kcpsMin  = 8
   kcpsMAx  = 20
-  kshim jspline kshimamp, kcpsMin, kcpsMax
+  kshim    = jspline(kshimamp, kcpsMin, kcpsMax)
   ; *****************************************************************
 
   ; *****************************************************************
   ; Overshoot
 
-  kOShoot invalue "OShoot"
-  if0     = i(kf0)
+  kOShoot = chnget("OShoot")
+  if0 = i(kf0)
   iOShoot = i(kOShoot)
   iamount = .08 * if0 * iOShoot
 
-  kOShoot linseg iamount, .06, 0, p3-.05, 0
+  kOShoot = linseg(iamount, .06, 0, p3-.05, 0)
   ; ******************************************************************
 
   ; *****************************************************************
   ; Make source sound
 
   ; Noise
-  kNoise invalue "Noise"
-  anoise rand kamp * kNoise
-  anoise butbp anoise, 4500, 4000
+  kNoise = chnget("Noise")
+  anoise = rand(kamp * kNoise)
+  anoise = butbp(anoise, 4500, 4000)
 
   ; Glottal pulses
-  avoiced oscili kamp + kshim, kf0 + (kjit*kf0) + kvib + kOShoot, isource
+  avoiced = oscili(kamp + kshim, kf0 + (kjit*kf0) + kvib + kOShoot, isource)
 
   alyd = avoiced + anoise
   ; ******************************************************************
   ; FORMANT FILTERS - reson with double filtering
 
-  aform1 reson alyd, kcutoff1, kreson1 * kcutoff1 / 100
-  aform1 reson aform1, kcutoff1, kreson1 * kcutoff1 / 100
-  aform2 reson alyd, kcutoff2, kreson2 * kcutoff2 / 100
-  aform2 reson aform2, kcutoff2, kreson2 * kcutoff2 / 100
-  aform3 reson alyd, kcutoff3, kreson3 * kcutoff3 / 100
-  aform3 reson aform3, kcutoff3, kreson3 * kcutoff3 / 100
-  aform4 reson alyd, kcutoff4, kreson4 * kcutoff4 / 100
-  aform4 reson aform4, kcutoff4, kreson4 * kcutoff4 / 100
+  aform1 = reson(alyd, kcutoff1, kreson1 * kcutoff1 / 100)
+  aform1 = reson(aform1, kcutoff1, kreson1 * kcutoff1 / 100)
+  aform2 = reson(alyd, kcutoff2, kreson2 * kcutoff2 / 100)
+  aform2 = reson(aform2, kcutoff2, kreson2 * kcutoff2 / 100)
+  aform3 = reson(alyd, kcutoff3, kreson3 * kcutoff3 / 100)
+  aform3 = reson(aform3, kcutoff3, kreson3 * kcutoff3 / 100)
+  aform4 = reson(alyd, kcutoff4, kreson4 * kcutoff4 / 100)
+  aform4 = reson(aform4, kcutoff4, kreson4 * kcutoff4 / 100)
 
   ; add formant jitter (experimental)
   kcutoff1 = kcutoff1 + kcutoff1*kjit3*.3
@@ -236,29 +236,29 @@ instr 10
   ; aform1 reson   aform2, kcutoff1, kreson1 * kcutoff1 / 100
 
   ; balance
-  abal1 balance aform1, alyd
-  abal2 balance aform2, alyd
-  abal3 balance aform3, alyd
-  abal4 balance aform4, alyd
+  abal1 = balance(aform1, alyd)
+  abal2 = balance(aform2, alyd)
+  abal3 = balance(aform3, alyd)
+  abal4 = balance(aform4, alyd)
 
   ; get formant amps
-  kFamp1 invalue "FormAmp1"
-  kFamp2 invalue "FormAmp2"
-  kFamp3 invalue "FormAmp3"
-  kFamp4 invalue "FormAmp4"
+  kFamp1 = chnget("FormAmp1")
+  kFamp2 = chnget("FormAmp2")
+  kFamp3 = chnget("FormAmp3")
+  kFamp4 = chnget("FormAmp4")
 
 
   ; Mix
   afilt = abal1 * kFamp1 +abal2 * kFamp2 +abal3 * kFamp3 + abal4*kFamp4
 
   ; Master Volume
-  kMasterVol invalue "Vol"
+  kMasterVol = chnget("Vol")
   aout = afilt * kMasterVol
 
   ; View spectrum
   dispfft afilt, 1, 2048, .05, 0
 
-  outs aout, aout
+  out(aout, aout)
 
 endin
 

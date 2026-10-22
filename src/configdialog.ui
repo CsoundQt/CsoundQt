@@ -84,7 +84,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -1293,64 +1293,7 @@
            <string>General</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_3">
-           <item row="1" column="1">
-            <widget class="QGroupBox" name="groupBox_9">
-             <property name="title">
-              <string>Record button</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_9">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_12">
-                <item>
-                 <widget class="QLabel" name="label_21">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Format of the generated sound file when recording via the recording button in CsoundQT. &lt;span style=&quot; font-weight:600;&quot;&gt;This is NOT the same as offline rendering. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Record sample format</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="sampleFormatComboBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>100</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Format of the generated sound file when recording via the recording button in CsoundQT. &lt;span style=&quot; font-weight:600;&quot;&gt;This is NOT the same as offline rendering. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>16 Bit Int</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>24 Bit Int</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>32 bit float</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="0" column="0">
+           <item row="1" column="0">
             <widget class="QGroupBox" name="groupBox_8">
              <property name="title">
               <string>Run Utilities using:</string>
@@ -1380,20 +1323,114 @@
              </layout>
             </widget>
            </item>
-           <item row="10" column="0">
-            <spacer name="verticalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
+           <item row="4" column="0" rowspan="2">
+            <widget class="QGroupBox" name="groupBox_14">
+             <property name="title">
+              <string>Performance tweaks</string>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <item>
+                 <widget class="QCheckBox" name="noMessagesCheckBox">
+                  <property name="text">
+                   <string>No messages to consoles</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="noBufferCheckBox">
+                  <property name="text">
+                   <string>Disable recording and scopes</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="noEventsCheckBox">
+                  <property name="text">
+                   <string>Disable realtime score events</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_22">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>4</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
            </item>
-           <item row="3" column="0" colspan="2">
+           <item row="1" column="1">
+            <widget class="QGroupBox" name="groupBox_13">
+             <property name="title">
+              <string>Interface language (Requires restart)</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <widget class="QComboBox" name="languageComboBox">
+                <property name="maximumSize">
+                 <size>
+                  <width>234</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="8" column="0" colspan="2">
+            <layout class="QVBoxLayout" name="Misc">
+             <item>
+              <widget class="QCheckBox" name="keyRepeatCheckBox">
+               <property name="text">
+                <string>Allow key repeats for sensekey</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="debugLiveEventsCheckBox">
+               <property name="text">
+                <string>Debug mode for Live Event Sheet</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="simultaneousCheckBox">
+               <property name="toolTip">
+                <string>Simultaneous play may cause problems under certain audio backends</string>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LayoutDirection::LeftToRight</enum>
+               </property>
+               <property name="text">
+                <string>Allow simultaneous play</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="quitOnLastTabClosedCheckBox">
+               <property name="toolTip">
+                <string>Exit CsoundQt when the last document tab is closed instead of opening an empty document</string>
+               </property>
+               <property name="text">
+                <string>Quit when all tabs are closed</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="7" column="0" colspan="2">
             <widget class="QGroupBox" name="groupBox_6">
              <property name="title">
               <string>Console</string>
@@ -1401,41 +1438,45 @@
              <layout class="QGridLayout" name="gridLayout_4">
               <item row="0" column="0">
                <layout class="QGridLayout" name="consoleFontLayout">
-                <item row="1" column="4">
-                 <widget class="QPushButton" name="consoleBgColorPushButton">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_11">
-                  <property name="text">
-                   <string>Font</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_27">
-                  <property name="text">
-                   <string>Buffer size</string>
-                  </property>
-                 </widget>
-                </item>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>6</number>
+                </property>
                 <item row="0" column="4">
                  <widget class="QPushButton" name="consoleFontColorPushButton">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>2000</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1">
+                <item row="1" column="3">
+                 <widget class="QLabel" name="label_24">
+                  <property name="maximumSize">
+                   <size>
+                    <width>180</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Background Color</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
                  <widget class="QComboBox" name="consoleBufferComboBox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1466,10 +1507,79 @@
                   </item>
                  </widget>
                 </item>
-                <item row="1" column="3">
-                 <widget class="QLabel" name="label_24">
+                <item row="0" column="2">
+                 <spacer name="horizontalSpacer_18">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Policy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>10</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QFontComboBox" name="consoleFontComboBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>200</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>240</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_11">
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="text">
-                   <string>Background Color</string>
+                   <string>Font</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QLabel" name="label_23">
+                  <property name="text">
+                   <string>Font Color</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_27">
+                  <property name="text">
+                   <string>Buffer size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4">
+                 <widget class="QPushButton" name="consoleBgColorPushButton">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_15">
+                  <property name="text">
+                   <string>Size</string>
                   </property>
                  </widget>
                 </item>
@@ -1551,15 +1661,8 @@
                   </item>
                  </widget>
                 </item>
-                <item row="0" column="3">
-                 <widget class="QLabel" name="label_23">
-                  <property name="text">
-                   <string>Font Color</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="1" column="5">
-                 <spacer name="horizontalSpacer_18">
+                 <spacer name="horizontalSpacer_3">
                   <property name="orientation">
                    <enum>Qt::Orientation::Horizontal</enum>
                   </property>
@@ -1571,110 +1674,12 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_15">
-                  <property name="text">
-                   <string>Size</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1" colspan="2">
-                 <widget class="QFontComboBox" name="consoleFontComboBox"/>
-                </item>
                </layout>
               </item>
              </layout>
             </widget>
            </item>
-           <item row="4" column="0" colspan="2">
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <widget class="QCheckBox" name="keyRepeatCheckBox">
-               <property name="text">
-                <string>Allow key repeats for sensekey</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="debugLiveEventsCheckBox">
-               <property name="text">
-                <string>Debug mode for Live Event Sheet</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="simultaneousCheckBox">
-               <property name="toolTip">
-                <string>Simultaneous play may cause problems under certain audio backends</string>
-               </property>
-               <property name="layoutDirection">
-                <enum>Qt::LayoutDirection::LeftToRight</enum>
-               </property>
-               <property name="text">
-                <string>Allow simultaneous play</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="quitOnLastTabClosedCheckBox">
-               <property name="toolTip">
-                <string>Exit CsoundQt when the last document tab is closed instead of opening an empty document</string>
-               </property>
-               <property name="text">
-                <string>Quit when all tabs are closed</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="0" rowspan="2">
-            <widget class="QGroupBox" name="groupBox_14">
-             <property name="title">
-              <string>Performance tweaks</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_5">
-                <item>
-                 <widget class="QCheckBox" name="noMessagesCheckBox">
-                  <property name="text">
-                   <string>No messages to consoles</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="noBufferCheckBox">
-                  <property name="text">
-                   <string>Disable recording and scopes</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="noEventsCheckBox">
-                  <property name="text">
-                   <string>Disable realtime score events</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_22">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>4</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="7" column="0" rowspan="2" colspan="2">
+           <item row="11" column="0" rowspan="2" colspan="2">
             <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0,0">
              <property name="sizeConstraint">
               <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
@@ -1714,40 +1719,90 @@
              </item>
             </layout>
            </item>
-           <item row="0" column="1">
-            <widget class="QGroupBox" name="groupBox_13">
-             <property name="title">
-              <string>Interface language (Requires restart)</string>
+           <item row="14" column="0">
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_7">
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="4" column="1">
+            <widget class="QGroupBox" name="groupBox_9">
+             <property name="title">
+              <string>Record button</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
-               <widget class="QComboBox" name="languageComboBox">
-                <property name="maximumSize">
-                 <size>
-                  <width>234</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
+               <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <item>
+                 <widget class="QLabel" name="label_21">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Format of the generated sound file when recording via the recording button in CsoundQT. &lt;span style=&quot; font-weight:600;&quot;&gt;This is NOT the same as offline rendering. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Record sample format</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="sampleFormatComboBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>200</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Format of the generated sound file when recording via the recording button in CsoundQT. &lt;span style=&quot; font-weight:600;&quot;&gt;This is NOT the same as offline rendering. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>16 Bit Int</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>24 Bit Int</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>32 bit float</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item row="5" column="1">
             <widget class="QGroupBox" name="groupBox">
              <property name="title">
               <string>Theme</string>
              </property>
              <layout class="QGridLayout" name="themeLayout">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_31">
-                <property name="text">
-                 <string>Colour Theme</string>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="1">
                <widget class="QComboBox" name="themeComboBox">
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <item>
                  <property name="text">
                   <string>auto</string>
@@ -1779,6 +1834,13 @@
                 </property>
                </widget>
               </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_31">
+                <property name="text">
+                 <string>Colour Theme</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
@@ -1789,6 +1851,150 @@
            <string>Editor</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_9">
+           <item row="3" column="0">
+            <widget class="QGroupBox" name="groupBox_10">
+             <property name="title">
+              <string>Behavior</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_24">
+              <item row="10" column="1">
+               <widget class="QSpinBox" name="menusDepthSpinBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>80</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>80</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="toolbarCheckBox">
+                <property name="text">
+                 <string>Show Toolbars</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QSpinBox" name="toolbarIconSizeSpinBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>80</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>80</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="suffix">
+                 <string> px</string>
+                </property>
+                <property name="prefix">
+                 <string/>
+                </property>
+                <property name="minimum">
+                 <number>14</number>
+                </property>
+                <property name="maximum">
+                 <number>48</number>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QCheckBox" name="iconTextCheckBox">
+                <property name="text">
+                 <string>Show text for toolbar icons</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <spacer name="horizontalSpacer_15">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="toolbarIconSizeLabel">
+                <property name="text">
+                 <string>Toolbar Icon Size</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="3">
+               <widget class="QCheckBox" name="rememberFileCheckBox">
+                <property name="text">
+                 <string>Remember open files from previous session</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="0">
+               <widget class="QLabel" name="label_35">
+                <property name="text">
+                 <string>Favorites/Scripts menus max. depth</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="3">
+               <widget class="QCheckBox" name="autoJoinCheckBox">
+                <property name="text">
+                 <string>Automatically Join orc/sco files</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="3">
+               <widget class="QCheckBox" name="saveChangesCheckBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Save changes automatically on run</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="2">
+               <spacer name="horizontalSpacer_13">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="4" column="0">
+               <widget class="QCheckBox" name="lockToolbarCheckBox">
+                <property name="toolTip">
+                 <string>Lock the toolbars in place, remove handle</string>
+                </property>
+                <property name="text">
+                 <string>Lock Toolbars</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
            <item row="0" column="0">
             <widget class="QGroupBox" name="groupBox_5">
              <property name="title">
@@ -1797,6 +2003,9 @@
              <layout class="QGridLayout" name="gridLayout_17">
               <item row="0" column="1">
                <layout class="QFormLayout" name="formLayout">
+                <property name="labelAlignment">
+                 <set>Qt::AlignmentFlag::AlignLeading</set>
+                </property>
                 <property name="formAlignment">
                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
                 </property>
@@ -1807,46 +2016,13 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="0" colspan="2">
-                 <layout class="QHBoxLayout" name="lineNumbersLayout">
-                  <item>
-                   <widget class="QCheckBox" name="lineNumbersCheckBox">
-                    <property name="text">
-                     <string>Line Numbers</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QSpinBox" name="lineNumberContrastSpinBox">
-                    <property name="minimumSize">
-                     <size>
-                      <width>80</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Contrast of the line numbers against the gutter background (0 = invisible, 100 = full text colour)</string>
-                    </property>
-                    <property name="suffix">
-                     <string> %</string>
-                    </property>
-                    <property name="maximum">
-                     <number>100</number>
-                    </property>
-                    <property name="value">
-                     <number>50</number>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item row="5" column="0">
-                  <widget class="QCheckBox" name="highlightScoreCheckBox">
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="autoCompleteCheckBox">
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apply syntax highlighting to the score. &lt;/p&gt;&lt;p&gt;In very long scores, deactivating syntax highlighting can reduce loading time significantly&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If on, the autocompletion menu is shown after the given number of idle ms. Autocompletion can also be triggered manually from the menu &amp;quot;Edit/Autocomplete&amp;quot; or via the corresponding keyboard shortcut  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
-                   <string>Score syntax highlighting</string>
+                   <string>Autocomplete while typing</string>
                   </property>
                  </widget>
                 </item>
@@ -1856,6 +2032,12 @@
                    <size>
                     <width>80</width>
                     <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
                    </size>
                   </property>
                   <property name="toolTip">
@@ -1869,16 +2051,6 @@
                   </property>
                   <property name="singleStep">
                    <number>10</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="autoCompleteCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If on, the autocompletion menu is shown after the given number of idle ms. Autocompletion can also be triggered manually from the menu &amp;quot;Edit/Autocomplete&amp;quot; or via the corresponding keyboard shortcut  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Autocomplete while typing</string>
                   </property>
                  </widget>
                 </item>
@@ -1898,6 +2070,12 @@
                    <size>
                     <width>80</width>
                     <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
                    </size>
                   </property>
                   <property name="toolTip">
@@ -1926,7 +2104,7 @@
                    <string>Maximum number of autocomplete menu rows. A final “N more…” row indicates hidden suggestions.</string>
                   </property>
                   <property name="text">
-                   <string>Maximum autocomplete menu lines</string>
+                   <string>Max. autocomplete menu lines</string>
                   </property>
                  </widget>
                 </item>
@@ -1936,6 +2114,12 @@
                    <size>
                     <width>80</width>
                     <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
                    </size>
                   </property>
                   <property name="toolTip">
@@ -1962,6 +2146,57 @@
                  <widget class="QCheckBox" name="autoParameterModeCheckBox">
                   <property name="text">
                    <string>Show signature after autocomplete</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QCheckBox" name="highlightScoreCheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apply syntax highlighting to the score. &lt;/p&gt;&lt;p&gt;In very long scores, deactivating syntax highlighting can reduce loading time significantly&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Score syntax highlighting</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QCheckBox" name="lineNumbersCheckBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Line Numbers</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QSpinBox" name="lineNumberContrastSpinBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Contrast of the line numbers against the gutter background (0 = invisible, 100 = full text colour)</string>
+                  </property>
+                  <property name="suffix">
+                   <string> %</string>
+                  </property>
+                  <property name="maximum">
+                   <number>100</number>
+                  </property>
+                  <property name="value">
+                   <number>50</number>
                   </property>
                  </widget>
                 </item>
@@ -2129,59 +2364,24 @@
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1">
-                 <widget class="QWidget" name="editorThemeWidget" native="true">
-                  <layout class="QHBoxLayout" name="editorThemeLayout">
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QComboBox" name="editorThemeComboBox">
-                     <property name="toolTip">
-                      <string>Syntax highlighting theme of the editor. &quot;auto&quot; follows the application theme. User themes are loaded from the CsoundQt theme folder.</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="duplicateThemeButton">
-                     <property name="toolTip">
-                      <string>Create an editable copy of the selected theme in the user theme folder</string>
-                     </property>
-                     <property name="text">
-                      <string>Duplicate</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QPushButton" name="openThemesFolderButton">
+                <item row="6" column="0" colspan="2">
+                 <widget class="QCheckBox" name="tabUseSpacesCheckBox">
                   <property name="toolTip">
-                   <string>Open the folder where user editor themes are stored</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, pressing Tab inserts spaces instead of a tab character. The number of spaces is the &quot;Tab Size&quot; below, which is also the width used to display tab characters.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
-                   <string>Open Themes Folder</string>
+                   <string>Insert spaces instead of tabs</string>
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="0">
+                <item row="7" column="0">
                  <widget class="QLabel" name="tabSizeLabel">
                   <property name="text">
                    <string>Tab Size</string>
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="1">
+                <item row="7" column="1">
                  <widget class="QSpinBox" name="tabSizeSpinBox">
                   <property name="minimumSize">
                    <size>
@@ -2209,14 +2409,14 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="0">
+                <item row="8" column="0">
                  <widget class="QLabel" name="editorPaddingLabel">
                   <property name="text">
                    <string>Editor padding</string>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="1">
+                <item row="8" column="1">
                  <widget class="QSpinBox" name="editorPaddingSpinBox">
                   <property name="minimumSize">
                    <size>
@@ -2244,13 +2444,58 @@
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="0" colspan="2">
-                 <widget class="QCheckBox" name="tabUseSpacesCheckBox">
+                <item row="2" column="1">
+                 <layout class="QFormLayout" name="formLayout_3">
+                  <item row="0" column="0">
+                   <widget class="QComboBox" name="editorThemeComboBox">
+                    <property name="minimumSize">
+                     <size>
+                      <width>140</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>140</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Syntax highlighting theme of the editor. &quot;auto&quot; follows the application theme. User themes are loaded from the CsoundQt theme folder.</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QPushButton" name="duplicateThemeButton">
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Create an editable copy of the selected theme in the user theme folder</string>
+                    </property>
+                    <property name="text">
+                     <string>Duplicate</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QPushButton" name="openThemesFolderButton">
+                  <property name="maximumSize">
+                   <size>
+                    <width>140</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, pressing Tab inserts spaces instead of a tab character. The number of spaces is the &quot;Tab Size&quot; below, which is also the width used to display tab characters.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>Open the folder where user editor themes are stored</string>
                   </property>
                   <property name="text">
-                   <string>Insert spaces instead of tabs</string>
+                   <string>Open Themes Folder</string>
                   </property>
                  </widget>
                 </item>
@@ -2271,150 +2516,6 @@
               </size>
              </property>
             </spacer>
-           </item>
-           <item row="3" column="0">
-            <widget class="QGroupBox" name="groupBox_10">
-             <property name="title">
-              <string>Behavior</string>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_24">
-              <item row="10" column="1">
-               <widget class="QSpinBox" name="menusDepthSpinBox">
-                <property name="minimumSize">
-                 <size>
-                  <width>80</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>80</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QCheckBox" name="toolbarCheckBox">
-                <property name="text">
-                 <string>Show Toolbars</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="1">
-               <widget class="QSpinBox" name="toolbarIconSizeSpinBox">
-                <property name="minimumSize">
-                 <size>
-                  <width>80</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>80</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="suffix">
-                 <string> px</string>
-                </property>
-                <property name="prefix">
-                 <string/>
-                </property>
-                <property name="minimum">
-                 <number>14</number>
-                </property>
-                <property name="maximum">
-                 <number>48</number>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QCheckBox" name="iconTextCheckBox">
-                <property name="text">
-                 <string>Show text for toolbar icons</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="4">
-               <spacer name="horizontalSpacer_15">
-                <property name="orientation">
-                 <enum>Qt::Orientation::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="6" column="0">
-               <widget class="QLabel" name="toolbarIconSizeLabel">
-                <property name="text">
-                 <string>Toolbar Icon Size</string>
-                </property>
-               </widget>
-              </item>
-              <item row="10" column="3">
-               <widget class="QCheckBox" name="rememberFileCheckBox">
-                <property name="text">
-                 <string>Remember open files from previous session</string>
-                </property>
-               </widget>
-              </item>
-              <item row="10" column="0">
-               <widget class="QLabel" name="label_35">
-                <property name="text">
-                 <string>Favorites/Scripts menus max. depth</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="3">
-               <widget class="QCheckBox" name="autoJoinCheckBox">
-                <property name="text">
-                 <string>Automatically Join orc/sco files</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="3">
-               <widget class="QCheckBox" name="saveChangesCheckBox">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Save changes automatically on run</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="2">
-               <spacer name="horizontalSpacer_13">
-                <property name="orientation">
-                 <enum>Qt::Orientation::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="4" column="0">
-               <widget class="QCheckBox" name="lockToolbarCheckBox">
-                <property name="toolTip">
-                 <string>Lock the toolbars in place, remove handle</string>
-                </property>
-                <property name="text">
-                 <string>Lock Toolbars</string>
-                </property>
-                <property name="checked">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
            </item>
           </layout>
          </widget>
@@ -2459,6 +2560,9 @@
                <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
                  <widget class="QCheckBox" name="widgetsCheckBox">
+                  <property name="toolTip">
+                   <string>If unchecked, the engine skips widget channel setup and any interaction with csound</string>
+                  </property>
                   <property name="text">
                    <string>Enable Widgets</string>
                   </property>

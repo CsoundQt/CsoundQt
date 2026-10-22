@@ -283,6 +283,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 
 WidgetLayout::~WidgetLayout()
 {
+    clearChannelHighlights();
     disconnect(this, 0,0,0);
     layoutMutex.lock();
     closing = 1;
@@ -3300,6 +3301,92 @@ void WidgetLayout::widgetPropertyApplied(QuteWidget* widget, const QString &prop
             editWidgets[index]->refreshFrameAppearance();
         }
     }
+}
+
+void WidgetLayout::highlightChannel(const QString &channel)
+{
+	if (m_channelHighlightActive && m_channelHighlightChannel == channel)
+		return;
+	clearChannelHighlights();
+	if (channel.isEmpty())
+		return;
+
+	for (QuteWidget *widget : m_widgets) {
+		if (!widget)
+			continue;
+		if (widget->getChannelName() != channel
+				&& widget->getChannel2Name() != channel)
+			continue;
+
+		auto *frame = new QFrame(this);
+		frame->setObjectName(QStringLiteral("channelHighlight"));
+		frame->setAttribute(Qt::WA_TransparentForMouseEvents);
+		frame->setFocusPolicy(Qt::NoFocus);
+		frame->setStyleSheet(
+					"QFrame { background-color: rgba(255, 200, 40, 36);"
+					" border: 2px solid rgba(220, 150, 0, 230); }");
+		frame->setGeometry(widget->geometry());
+		frame->show();
+		frame->raise();
+		m_channelHighlightFrames.append(frame);
+	}
+	if (m_channelHighlightFrames.isEmpty())
+		return;
+
+	m_channelHighlightChannel = channel;
+	m_channelHighlightActive = true;
+	const QPoint cursor = QCursor::pos();
+	m_channelHighlightMouseInside = false;
+	for (QFrame *frame : m_channelHighlightFrames) {
+		if (frame->rect().contains(frame->mapFromGlobal(cursor))) {
+			m_channelHighlightMouseInside = true;
+			break;
+		}
+	}
+	qApp->installEventFilter(this);
+}
+
+void WidgetLayout::clearChannelHighlights()
+{
+	if (!m_channelHighlightActive && m_channelHighlightFrames.isEmpty())
+		return;
+	m_channelHighlightActive = false;
+	m_channelHighlightChannel.clear();
+	m_channelHighlightMouseInside = false;
+	if (qApp)
+		qApp->removeEventFilter(this);
+	while (!m_channelHighlightFrames.isEmpty())
+		delete m_channelHighlightFrames.takeLast();
+}
+
+bool WidgetLayout::eventFilter(QObject *watched, QEvent *event)
+{
+	if (m_channelHighlightActive) {
+		if (event->type() == QEvent::KeyPress) {
+			auto *keyEvent = static_cast<QKeyEvent *>(event);
+			if (keyEvent->key() == Qt::Key_Escape)
+				clearChannelHighlights();
+		} else if (event->type() == QEvent::MouseButtonPress) {
+			clearChannelHighlights();
+		} else if (event->type() == QEvent::MouseMove) {
+			auto *mouseEvent = static_cast<QMouseEvent *>(event);
+			const QPoint global = mouseEvent->globalPosition().toPoint();
+			bool inside = false;
+			for (QFrame *frame : m_channelHighlightFrames) {
+				if (frame->rect().contains(frame->mapFromGlobal(global))) {
+					inside = true;
+					break;
+				}
+			}
+			if (inside)
+				m_channelHighlightMouseInside = true;
+			else if (m_channelHighlightMouseInside)
+				clearChannelHighlights();
+		} else if (watched == this && event->type() == QEvent::Hide) {
+			clearChannelHighlights();
+		}
+	}
+	return QWidget::eventFilter(watched, event);
 }
 
 void WidgetLayout::mousePressEvent(QMouseEvent *event)

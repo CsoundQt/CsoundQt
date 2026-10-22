@@ -5,10 +5,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr     = 44100
-ksmps  = 128
+sr = 44100
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
 maxalloc 1, 1  ; Monophonic synth
 massign 0, 1
@@ -21,8 +21,8 @@ instr 1  ; Additive Synth
   endif
 skipinit:
 
-  kreset chnget "reset"
-  kresettrig changed kreset
+  kreset = chnget("reset")
+  kresettrig = changed(kreset)
 
   if kresettrig == 1 then
     if kreset == 1 then
@@ -30,34 +30,34 @@ skipinit:
     endif
   endif
 
-  kamp1  chnget "amp1"
-  kamp2  chnget "amp2"
-  kamp3  chnget "amp3"
-  kamp4  chnget "amp4"
-  kamp5  chnget "amp5"
-  kamp6  chnget "amp6"
-  kamp7  chnget "amp7"
-  kamp8  chnget "amp8"
-  kamp9  chnget "amp9"
-  kamp10 chnget "amp10"
-  kamp11 chnget "amp11"
-  kamp12 chnget "amp12"
+  kamp1  = chnget("amp1")
+  kamp2  = chnget("amp2")
+  kamp3  = chnget("amp3")
+  kamp4  = chnget("amp4")
+  kamp5  = chnget("amp5")
+  kamp6  = chnget("amp6")
+  kamp7  = chnget("amp7")
+  kamp8  = chnget("amp8")
+  kamp9  = chnget("amp9")
+  kamp10 = chnget("amp10")
+  kamp11 = chnget("amp11")
+  kamp12 = chnget("amp12")
 
-  kfactor1  chnget "fac1"
-  kfactor2  chnget "fac2"
-  kfactor3  chnget "fac3"
-  kfactor4  chnget "fac4"
-  kfactor5  chnget "fac5"
-  kfactor6  chnget "fac6"
-  kfactor7  chnget "fac7"
-  kfactor8  chnget "fac8"
-  kfactor9  chnget "fac9"
-  kfactor10 chnget "fac10"
-  kfactor11 chnget "fac11"
-  kfactor12 chnget "fac12"
+  kfactor1  = chnget("fac1")
+  kfactor2  = chnget("fac2")
+  kfactor3  = chnget("fac3")
+  kfactor4  = chnget("fac4")
+  kfactor5  = chnget("fac5")
+  kfactor6  = chnget("fac6")
+  kfactor7  = chnget("fac7")
+  kfactor8  = chnget("fac8")
+  kfactor9  = chnget("fac9")
+  kfactor10 = chnget("fac10")
+  kfactor11 = chnget("fac11")
+  kfactor12 = chnget("fac12")
 
-  kfreq chnget "freq"
-  kfreq portk kfreq, 0.02, i(kfreq)  ; Smooth frequency values
+  kfreq = chnget("freq")
+  kfreq = portk(kfreq, 0.02, i(kfreq))  ; Smooth frequency values
 
   kfreq1  = kfreq * kfactor1
   kfreq2  = kfreq * kfactor2
@@ -72,18 +72,18 @@ skipinit:
   kfreq11 = kfreq * kfactor11
   kfreq12 = kfreq * kfactor12
 
-  aosc1  poscil3 kamp1, kfreq1, 1, 0
-  aosc2  poscil3 kamp2, kfreq2, 1, 0
-  aosc3  poscil3 kamp3, kfreq3, 1, 0
-  aosc4  poscil3 kamp4, kfreq4, 1, 0
-  aosc5  poscil3 kamp5, kfreq5, 1, 0
-  aosc6  poscil3 kamp6, kfreq6, 1, 0
-  aosc7  poscil3 kamp7, kfreq7, 1, 0
-  aosc8  poscil3 kamp8, kfreq8, 1, 0
-  aosc9  poscil3 kamp9, kfreq9, 1, 0
-  aosc10 poscil3 kamp10, kfreq10, 1, 0
-  aosc11 poscil3 kamp11, kfreq11, 1, 0
-  aosc12 poscil3 kamp12, kfreq12, 1, 0
+  aosc1  = poscil3(kamp1, kfreq1, 1, 0)
+  aosc2  = poscil3(kamp2, kfreq2, 1, 0)
+  aosc3  = poscil3(kamp3, kfreq3, 1, 0)
+  aosc4  = poscil3(kamp4, kfreq4, 1, 0)
+  aosc5  = poscil3(kamp5, kfreq5, 1, 0)
+  aosc6  = poscil3(kamp6, kfreq6, 1, 0)
+  aosc7  = poscil3(kamp7, kfreq7, 1, 0)
+  aosc8  = poscil3(kamp8, kfreq8, 1, 0)
+  aosc9  = poscil3(kamp9, kfreq9, 1, 0)
+  aosc10 = poscil3(kamp10, kfreq10, 1, 0)
+  aosc11 = poscil3(kamp11, kfreq11, 1, 0)
+  aosc12 = poscil3(kamp12, kfreq12, 1, 0)
 
   chnset kfreq1, "freq1"
   chnset kfreq2, "freq2"
@@ -100,16 +100,16 @@ skipinit:
 
   asig = aosc1 + aosc2 + aosc3 + aosc4 + aosc5 + aosc6 + aosc7 + aosc8 + aosc9 + aosc10 + aosc11 + aosc12
 
-  klevel chnget "level"
-  outs asig*klevel, asig*klevel
+  klevel = chnget("level")
+  out(asig*klevel, asig*klevel)
 endin
 
 instr 99  ; Always on
-  krel init -1
-  krel  chnget "rel"
-  kfreq chnget "freq"
+  krel  = init(-1)
+  krel  = chnget("rel")
+  kfreq = chnget("freq")
 
-  ktrig changed krel
+  ktrig = changed(krel)
 
   if ktrig == 1 then
     if krel == 0 then

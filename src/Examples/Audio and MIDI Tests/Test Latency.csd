@@ -11,57 +11,57 @@ jan 2009 / jun 2018 / aug 2025 */
 
 sr = 44100
 ksmps = 64
-nchnls = 2 //increase for more IO channels
+nchnls = 2  // increase for more IO channels
 0dbfs = 1
 
-//UDO for displaying an audio signal in widgets
-opcode CsQtMeter, 0, SSak ;see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
- S_chan_sig, S_chan_over, aSig, kTrig	xin
- iDbRange = 60 ;shows 60 dB
- iHoldTim = 1 ;seconds to "hold the red light"
- kOn init 0
- kTim init 0
- kStart init 0
- kEnd init 0
- kMax max_k aSig, kTrig, 1
- if kTrig == 1 then
-  chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
-  if kOn == 0 && kMax > 1 then
-   kTim = 0
-   kEnd = iHoldTim
-   chnset k(1), S_chan_over
-   kOn = 1
+// UDO for displaying an audio signal in widgets
+; see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
+opcode CsQtMeter(S_chan_sig:S, S_chan_over:S, aSig:a, kTrig:k):()
+  iDbRange = 60  ; shows 60 dB
+  iHoldTim = 1   ; seconds to "hold the red light"
+  kOn = init(0)
+  kTim = init(0)
+  kStart = init(0)
+  kEnd = init(0)
+  kMax max_k aSig, kTrig, 1
+  if kTrig == 1 then
+    chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
+    if kOn == 0 && kMax > 1 then
+      kTim = 0
+      kEnd = iHoldTim
+      chnset k(1), S_chan_over
+      kOn = 1
+    endif
+    if kOn == 1 && kTim > kEnd then
+      chnset k(0), S_chan_over
+      kOn = 0
+    endif
   endif
-  if kOn == 1 && kTim > kEnd then
-   chnset k(0), S_chan_over
-   kOn =	0
-  endif
- endif
- kTim += ksmps/sr
+  kTim += ksmps/sr
 endop
 
 
-//declare software channels
-chn_k("input",1)
-chn_k("output",1)
-chn_k("in",2)
-chn_k("in-clip",2)
-chn_k("out",2)
-chn_k("out-clip",2)
+// declare software channels
+chn_k( "input", 1)
+chn_k( "output", 1)
+chn_k( "in", 2)
+chn_k( "in-clip", 2)
+chn_k( "out", 2)
+chn_k( "out-clip", 2)
 
 
 instr Latency
 
- kInChn chnget "input"
- kOutChn chnget "output"
- aIn = inch(kInChn)
- outch(kOutChn,aIn)
+  kInChn = chnget("input")
+  kOutChn = chnget("output")
+  aIn = inch(kInChn)
+  outch(kOutChn, aIn)
 
- kTrigDisp metro 10
- CsQtMeter "in", "in_clip", aIn, kTrigDisp
- 
+  kTrigDisp = metro(10)
+  CsQtMeter "in", "in_clip", aIn, kTrigDisp
+
 endin
-schedule("Latency",0,-1)
+schedule("Latency", 0, -1)
 
 
 

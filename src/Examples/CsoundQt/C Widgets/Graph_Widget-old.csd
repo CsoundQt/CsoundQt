@@ -4,26 +4,26 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
 instr 20
-	ktab invalue "tabnum" ; table number selected
-	kspectrum invalue "spectrum" ;spectrum checkbox
-	if (ktab>5 || ktab<1) then
-		ktab = 1 ; only allow existing tables
-	endif
-	asig oscilikt 0.2, 440, ktab
-	outs asig*0.1,asig*0.1
-	dispfft asig, 0.5, 1024 ;calculate spectrum
-	if (kspectrum == 1) then
-		ktab = -5 ;set to show graph index 5
-	endif
-	ktrig metro 2
-	if ktrig == 1 then 
-		outvalue "graph", -ktab ;show appropriate graph
-	endif
+  ktab = chnget("tabnum")         ; table number selected
+  kspectrum = chnget("spectrum")  ; spectrum checkbox
+  if (ktab>5 || ktab<1) then
+    ktab = 1  ; only allow existing tables
+  endif
+  asig = oscilikt(0.2, 440, ktab)
+  out(asig*0.1, asig*0.1)
+  dispfft asig, 0.5, 1024  ; calculate spectrum
+  if (kspectrum == 1) then
+    ktab = -5  ; set to show graph index 5
+  endif
+  ktrig = metro(2)
+  if ktrig == 1 then
+    chnset(-ktab, "graph")  ; show appropriate graph
+  endif
 endin
 
 </CsInstruments>

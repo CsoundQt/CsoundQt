@@ -79,246 +79,246 @@
 </CsOptions>
 <CsInstruments>
 
-sr     = 48000
-ksmps  = 64
+sr = 48000
+ksmps = 64
 nchnls = 2
 0dbfs = 32768
 
 maxalloc 1, 16  ; Adjust maxalloc according to your system
 massign 0, 10
 
-gafeedback init 0
-gisine ftgen 0, 0, 4096, 10, 1
+gafeedback = init(0)
+gisine = ftgen(0, 0, 4096, 10, 1)
 seed 0
 
 instr 1  ; GUI
-  ktrig metro 10
+  ktrig = metro(10)
 
   if (ktrig == 1) then
     ; Op1
-    gkatt1 invalue "OP1_A"
-    gkdec1 invalue "OP1_D"
-    gksus1 invalue "OP1_S"
-    gkrel1 invalue "OP1_R"
-    gklvl1 invalue "OP1_Lev"
-    gkrat1 invalue "OP1_Ratio"
-    gkinv1 invalue "OP1_Inv"
+    gkatt1 = chnget("OP1_A")
+    gkdec1 = chnget("OP1_D")
+    gksus1 = chnget("OP1_S")
+    gkrel1 = chnget("OP1_R")
+    gklvl1 = chnget("OP1_Lev")
+    gkrat1 = chnget("OP1_Ratio")
+    gkinv1 = chnget("OP1_Inv")
     ; Op2
-    gkatt2 invalue "OP2_A"
-    gkdec2 invalue "OP2_D"
-    gksus2 invalue "OP2_S"
-    gkrel2 invalue "OP2_R"
-    gklvl2 invalue "OP2_Lev"
-    gkrat2 invalue "OP2_Ratio"
-    gkinv2 invalue "OP2_Inv"
+    gkatt2 = chnget("OP2_A")
+    gkdec2 = chnget("OP2_D")
+    gksus2 = chnget("OP2_S")
+    gkrel2 = chnget("OP2_R")
+    gklvl2 = chnget("OP2_Lev")
+    gkrat2 = chnget("OP2_Ratio")
+    gkinv2 = chnget("OP2_Inv")
     ; Op3
-    gkatt3 invalue "OP3_A"
-    gkdec3 invalue "OP3_D"
-    gksus3 invalue "OP3_S"
-    gkrel3 invalue "OP3_R"
-    gklvl3 invalue "OP3_Lev"
-    gkrat3 invalue "OP3_Ratio"
-    gkinv3 invalue "OP3_Inv"
+    gkatt3 = chnget("OP3_A")
+    gkdec3 = chnget("OP3_D")
+    gksus3 = chnget("OP3_S")
+    gkrel3 = chnget("OP3_R")
+    gklvl3 = chnget("OP3_Lev")
+    gkrat3 = chnget("OP3_Ratio")
+    gkinv3 = chnget("OP3_Inv")
     ; Op4
-    gkatt4 invalue "OP4_A"
-    gkdec4 invalue "OP4_D"
-    gksus4 invalue "OP4_S"
-    gkrel4 invalue "OP4_R"
-    gklvl4 invalue "OP4_Lev"
-    gkrat4 invalue "OP4_Ratio"
-    gkinv4 invalue "OP4_Inv"
+    gkatt4 = chnget("OP4_A")
+    gkdec4 = chnget("OP4_D")
+    gksus4 = chnget("OP4_S")
+    gkrel4 = chnget("OP4_R")
+    gklvl4 = chnget("OP4_Lev")
+    gkrat4 = chnget("OP4_Ratio")
+    gkinv4 = chnget("OP4_Inv")
     ; Op5
-    gkatt5 invalue "OP5_A"
-    gkdec5 invalue "OP5_D"
-    gksus5 invalue "OP5_S"
-    gkrel5 invalue "OP5_R"
-    gklvl5 invalue "OP5_Lev"
-    gkrat5 invalue "OP5_Ratio"
-    gkinv5 invalue "OP5_Inv"
+    gkatt5 = chnget("OP5_A")
+    gkdec5 = chnget("OP5_D")
+    gksus5 = chnget("OP5_S")
+    gkrel5 = chnget("OP5_R")
+    gklvl5 = chnget("OP5_Lev")
+    gkrat5 = chnget("OP5_Ratio")
+    gkinv5 = chnget("OP5_Inv")
     ; Op6
-    gkatt6 invalue "OP6_A"
-    gkdec6 invalue "OP6_D"
-    gksus6 invalue "OP6_S"
-    gkrel6 invalue "OP6_R"
-    gklvl6 invalue "OP6_Lev"
-    gkrat6 invalue "OP6_Ratio"
-    gkinv6 invalue "OP6_Inv"
+    gkatt6 = chnget("OP6_A")
+    gkdec6 = chnget("OP6_D")
+    gksus6 = chnget("OP6_S")
+    gkrel6 = chnget("OP6_R")
+    gklvl6 = chnget("OP6_Lev")
+    gkrat6 = chnget("OP6_Ratio")
+    gkinv6 = chnget("OP6_Inv")
 
-    gkfeedback invalue "Feedback"
-    gkalgo     invalue "Algorithm"
-    gkalglock  invalue "Lock"
+    gkfeedback = chnget("Feedback")
+    gkalgo = chnget("Algorithm")
+    gkalglock = chnget("Lock")
   endif
 endin
 
 
 instr 2  ; Rand FX
-  irand random 0, 1
-  outvalue "OP1_Lev", irand
-  irand random 0, 1
-  outvalue "OP2_Lev", irand
-  irand random 0, 1
-  outvalue "OP3_Lev", irand
-  irand random 0, 1
-  outvalue "OP4_Lev", irand
-  irand random 0, 1
-  outvalue "OP5_Lev", irand
-  irand random 0, 1
-  outvalue "OP6_Lev", irand
-  irand random 0, 3
-  outvalue "OP1_Ratio", irand
-  irand random 0, 3
-  outvalue "OP2_Ratio", irand
-  irand random 0, 3
-  outvalue "OP3_Ratio", irand
-  irand random 0, 3
-  outvalue "OP4_Ratio", irand
-  irand random 0, 3
-  outvalue "OP5_Ratio", irand
-  irand random 0, 3
-  outvalue "OP6_Ratio", irand
-  irand random 0, 1
-  outvalue "OP1_A", irand
-  irand random 0, 1
-  outvalue "OP2_A", irand
-  irand random 0, 1
-  outvalue "OP3_A", irand
-  irand random 0, 1
-  outvalue "OP4_A", irand
-  irand random 0, 1
-  outvalue "OP5_A", irand
-  irand random 0, 1
-  outvalue "OP6_A", irand
-  irand random -0.5, 0
-  outvalue "OP1_D", irand
-  irand random 0, 0.5
-  outvalue "OP2_D", irand
-  irand random 0, 0.5
-  outvalue "OP3_D", irand
-  irand random 0, 0.5
-  outvalue "OP4_D", irand
-  irand random 0, 0.5
-  outvalue "OP5_D", irand
-  irand random 0, 0.5
-  outvalue "OP6_D", irand
-  irand random 0, 1
-  outvalue "OP1_S", irand
-  irand random 0, 1
-  outvalue "OP2_S", irand
-  irand random 0, 1
-  outvalue "OP3_S", irand
-  irand random 0, 1
-  outvalue "OP4_S", irand
-  irand random 0, 1
-  outvalue "OP5_S", irand
-  irand random 0, 1
-  outvalue "OP6_S", irand
-  irand random 0, 3
-  outvalue "OP1_R", irand
-  irand random 0, 3
-  outvalue "OP2_R", irand
-  irand random 0, 3
-  outvalue "OP3_R", irand
-  irand random 0, 3
-  outvalue "OP4_R", irand
-  irand random 0, 3
-  outvalue "OP5_R", irand
-  irand random 0, 3
-  outvalue "OP6_R", irand
+  irand = random(0, 1)
+  chnset(irand, "OP1_Lev")
+  irand = random(0, 1)
+  chnset(irand, "OP2_Lev")
+  irand = random(0, 1)
+  chnset(irand, "OP3_Lev")
+  irand = random(0, 1)
+  chnset(irand, "OP4_Lev")
+  irand = random(0, 1)
+  chnset(irand, "OP5_Lev")
+  irand = random(0, 1)
+  chnset(irand, "OP6_Lev")
+  irand = random(0, 3)
+  chnset(irand, "OP1_Ratio")
+  irand = random(0, 3)
+  chnset(irand, "OP2_Ratio")
+  irand = random(0, 3)
+  chnset(irand, "OP3_Ratio")
+  irand = random(0, 3)
+  chnset(irand, "OP4_Ratio")
+  irand = random(0, 3)
+  chnset(irand, "OP5_Ratio")
+  irand = random(0, 3)
+  chnset(irand, "OP6_Ratio")
+  irand = random(0, 1)
+  chnset(irand, "OP1_A")
+  irand = random(0, 1)
+  chnset(irand, "OP2_A")
+  irand = random(0, 1)
+  chnset(irand, "OP3_A")
+  irand = random(0, 1)
+  chnset(irand, "OP4_A")
+  irand = random(0, 1)
+  chnset(irand, "OP5_A")
+  irand = random(0, 1)
+  chnset(irand, "OP6_A")
+  irand = random(-0.5, 0)
+  chnset(irand, "OP1_D")
+  irand = random(0, 0.5)
+  chnset(irand, "OP2_D")
+  irand = random(0, 0.5)
+  chnset(irand, "OP3_D")
+  irand = random(0, 0.5)
+  chnset(irand, "OP4_D")
+  irand = random(0, 0.5)
+  chnset(irand, "OP5_D")
+  irand = random(0, 0.5)
+  chnset(irand, "OP6_D")
+  irand = random(0, 1)
+  chnset(irand, "OP1_S")
+  irand = random(0, 1)
+  chnset(irand, "OP2_S")
+  irand = random(0, 1)
+  chnset(irand, "OP3_S")
+  irand = random(0, 1)
+  chnset(irand, "OP4_S")
+  irand = random(0, 1)
+  chnset(irand, "OP5_S")
+  irand = random(0, 1)
+  chnset(irand, "OP6_S")
+  irand = random(0, 3)
+  chnset(irand, "OP1_R")
+  irand = random(0, 3)
+  chnset(irand, "OP2_R")
+  irand = random(0, 3)
+  chnset(irand, "OP3_R")
+  irand = random(0, 3)
+  chnset(irand, "OP4_R")
+  irand = random(0, 3)
+  chnset(irand, "OP5_R")
+  irand = random(0, 3)
+  chnset(irand, "OP6_R")
   if (i(gkalglock) == 0) then
-    irand random 1, 32
+    irand = random(1, 32)
     irand = int(irand)
-    outvalue "Algorithm", irand
+    chnset(irand, "Algorithm")
   endif
-  irand random 0, 1
-  outvalue "Feedback", irand
+  irand = random(0, 1)
+  chnset(irand, "Feedback")
 endin
 
 instr 3  ; Rand Mus
-  irand random 0, 1
-  outvalue "OP1_Lev", irand
-  irand random 0, 1
-  outvalue "OP2_Lev", irand
-  irand random 0, 1
-  outvalue "OP3_Lev", irand
-  irand random 0, 1
-  outvalue "OP4_Lev", irand
-  irand random 0, 1
-  outvalue "OP5_Lev", irand
-  irand random 0, 1
-  outvalue "OP6_Lev", irand
-  irand random 0, 11
+  irand = random(0, 1)
+  chnset(irand, "OP1_Lev")
+  irand = random(0, 1)
+  chnset(irand, "OP2_Lev")
+  irand = random(0, 1)
+  chnset(irand, "OP3_Lev")
+  irand = random(0, 1)
+  chnset(irand, "OP4_Lev")
+  irand = random(0, 1)
+  chnset(irand, "OP5_Lev")
+  irand = random(0, 1)
+  chnset(irand, "OP6_Lev")
+  irand = random(0, 11)
   irand = (int(irand)/2)+0.5
-  outvalue "OP1_Ratio", irand
-  irand random 0, 11
+  chnset(irand, "OP1_Ratio")
+  irand = random(0, 11)
   irand = (int(irand)/2)+0.5
-  outvalue "OP2_Ratio", irand
-  irand random 0, 11
+  chnset(irand, "OP2_Ratio")
+  irand = random(0, 11)
   irand = (int(irand)/2)+0.5
-  outvalue "OP3_Ratio", irand
-  irand random 0, 11
+  chnset(irand, "OP3_Ratio")
+  irand = random(0, 11)
   irand = (int(irand)/2)+0.5
-  outvalue "OP4_Ratio", irand
-  irand random 0, 11
+  chnset(irand, "OP4_Ratio")
+  irand = random(0, 11)
   irand = (int(irand)/2)+0.5
-  outvalue "OP5_Ratio", irand
-  irand random 0, 11
+  chnset(irand, "OP5_Ratio")
+  irand = random(0, 11)
   irand = (int(irand)/2)+0.5
-  outvalue "OP6_Ratio", irand
-  irand random 0, 1
-  outvalue "OP1_A", irand
-  irand random 0, 1
-  outvalue "OP2_A", irand
-  irand random 0, 1
-  outvalue "OP3_A", irand
-  irand random 0, 1
-  outvalue "OP4_A", irand
-  irand random 0, 1
-  outvalue "OP5_A", irand
-  irand random 0, 1
-  outvalue "OP6_A", irand
-  irand random 0, 0.5
-  outvalue "OP1_D", irand
-  irand random 0, 0.5
-  outvalue "OP2_D", irand
-  irand random 0, 0.5
-  outvalue "OP3_D", irand
-  irand random 0, 0.5
-  outvalue "OP4_D", irand
-  irand random 0, 0.5
-  outvalue "OP5_D", irand
-  irand random 0, 0.5
-  outvalue "OP6_D", irand
-  irand random 0, 1
-  outvalue "OP1_S", irand
-  irand random 0, 1
-  outvalue "OP2_S", irand
-  irand random 0, 1
-  outvalue "OP3_S", irand
-  irand random 0, 1
-  outvalue "OP4_S", irand
-  irand random 0, 1
-  outvalue "OP5_S", irand
-  irand random 0, 1
-  outvalue "OP6_S", irand
-  irand random 0, 3
-  outvalue "OP1_R", irand
-  irand random 0, 3
-  outvalue "OP2_R", irand
-  irand random 0, 3
-  outvalue "OP3_R", irand
-  irand random 0, 3
-  outvalue "OP4_R", irand
-  irand random 0, 3
-  outvalue "OP5_R", irand
-  irand random 0, 3
-  outvalue "OP6_R", irand
+  chnset(irand, "OP6_Ratio")
+  irand = random(0, 1)
+  chnset(irand, "OP1_A")
+  irand = random(0, 1)
+  chnset(irand, "OP2_A")
+  irand = random(0, 1)
+  chnset(irand, "OP3_A")
+  irand = random(0, 1)
+  chnset(irand, "OP4_A")
+  irand = random(0, 1)
+  chnset(irand, "OP5_A")
+  irand = random(0, 1)
+  chnset(irand, "OP6_A")
+  irand = random(0, 0.5)
+  chnset(irand, "OP1_D")
+  irand = random(0, 0.5)
+  chnset(irand, "OP2_D")
+  irand = random(0, 0.5)
+  chnset(irand, "OP3_D")
+  irand = random(0, 0.5)
+  chnset(irand, "OP4_D")
+  irand = random(0, 0.5)
+  chnset(irand, "OP5_D")
+  irand = random(0, 0.5)
+  chnset(irand, "OP6_D")
+  irand = random(0, 1)
+  chnset(irand, "OP1_S")
+  irand = random(0, 1)
+  chnset(irand, "OP2_S")
+  irand = random(0, 1)
+  chnset(irand, "OP3_S")
+  irand = random(0, 1)
+  chnset(irand, "OP4_S")
+  irand = random(0, 1)
+  chnset(irand, "OP5_S")
+  irand = random(0, 1)
+  chnset(irand, "OP6_S")
+  irand = random(0, 3)
+  chnset(irand, "OP1_R")
+  irand = random(0, 3)
+  chnset(irand, "OP2_R")
+  irand = random(0, 3)
+  chnset(irand, "OP3_R")
+  irand = random(0, 3)
+  chnset(irand, "OP4_R")
+  irand = random(0, 3)
+  chnset(irand, "OP5_R")
+  irand = random(0, 3)
+  chnset(irand, "OP6_R")
   if (i(gkalglock) == 0) then
-    irand random 1, 32
+    irand = random(1, 32)
     irand = int(irand)
-    outvalue "Algorithm", irand
+    chnset(irand, "Algorithm")
   endif
-  irand random 0, 0.5
-  outvalue "Feedback", irand
+  irand = random(0, 0.5)
+  chnset(irand, "Feedback")
 endin
 
 instr 4  ; Rand more harm
@@ -328,327 +328,327 @@ instr 4  ; Rand more harm
   print irat
   print inewrat
 
-  outvalue "OP1_Ratio", inewrat
+  chnset(inewrat, "OP1_Ratio")
   irat    = i(gkrat2)
   inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
-  outvalue "OP2_Ratio", inewrat
+  chnset(inewrat, "OP2_Ratio")
   irat    = i(gkrat3)
   inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
-  outvalue "OP3_Ratio", inewrat
+  chnset(inewrat, "OP3_Ratio")
   irat    = i(gkrat4)
   inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
-  outvalue "OP4_Ratio", inewrat
+  chnset(inewrat, "OP4_Ratio")
   irat    = i(gkrat5)
   inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
-  outvalue "OP5_Ratio", inewrat
+  chnset(inewrat, "OP5_Ratio")
   irat    = i(gkrat6)
   inewrat = ((irat*4) + (int((irat*2)+0.5) /2))/5
-  outvalue "OP6_Ratio", inewrat
+  chnset(inewrat, "OP6_Ratio")
 endin
 
 instr 5  ; Rand less harm
-  irat = i(gkrat1)
-  irand random -0.02, 0.02
-  inew = irat + irand
-  outvalue "OP1_Ratio", inew
-  irat = i(gkrat2)
-  irand random -0.02, 0.02
-  inew = irat + irand
-  outvalue "OP2_Ratio", inew
-  irat = i(gkrat3)
-  irand random -0.02, 0.02
-  inew = irat + irand
-  outvalue "OP3_Ratio", inew
-  irat = i(gkrat4)
-  irand random -0.02, 0.02
-  inew = irat + irand
-  outvalue "OP4_Ratio", inew
-  irat = i(gkrat5)
-  irand random -0.02, 0.02
-  inew = irat + irand
-  outvalue "OP5_Ratio", inew
-  irat = i(gkrat6)
-  irand random -0.02, 0.02
-  inew = irat + irand
-  outvalue "OP6_Ratio", inew
+  irat  = i(gkrat1)
+  irand = random(-0.02, 0.02)
+  inew  = irat + irand
+  chnset(inew, "OP1_Ratio")
+  irat  = i(gkrat2)
+  irand = random(-0.02, 0.02)
+  inew  = irat + irand
+  chnset(inew, "OP2_Ratio")
+  irat  = i(gkrat3)
+  irand = random(-0.02, 0.02)
+  inew  = irat + irand
+  chnset(inew, "OP3_Ratio")
+  irat  = i(gkrat4)
+  irand = random(-0.02, 0.02)
+  inew  = irat + irand
+  chnset(inew, "OP4_Ratio")
+  irat  = i(gkrat5)
+  irand = random(-0.02, 0.02)
+  inew  = irat + irand
+  chnset(inew, "OP5_Ratio")
+  irat  = i(gkrat6)
+  irand = random(-0.02, 0.02)
+  inew  = irat + irand
+  chnset(inew, "OP6_Ratio")
 endin
 
 instr 6  ; Attackify
   ival = i(gkatt1)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP1_A", ival
+  chnset(ival, "OP1_A")
   ival = i(gkatt2)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP2_A", ival
+  chnset(ival, "OP2_A")
   ival = i(gkatt3)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP3_A", ival
+  chnset(ival, "OP3_A")
   ival = i(gkatt4)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP4_A", ival
+  chnset(ival, "OP4_A")
   ival = i(gkatt5)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP5_A", ival
+  chnset(ival, "OP5_A")
   ival = i(gkatt6)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP6_A", ival
+  chnset(ival, "OP6_A")
   ival = i(gkdec1)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP1_D", ival
+  chnset(ival, "OP1_D")
   ival = i(gkdec2)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP2_D", ival
+  chnset(ival, "OP2_D")
   ival = i(gkdec3)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP3_D", ival
+  chnset(ival, "OP3_D")
   ival = i(gkdec4)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP4_D", ival
+  chnset(ival, "OP4_D")
   ival = i(gkdec5)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP5_D", ival
+  chnset(ival, "OP5_D")
   ival = i(gkdec6)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP6_D", ival
+  chnset(ival, "OP6_D")
   ival = i(gksus1)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP1_S", ival
+  chnset(ival, "OP1_S")
   ival = i(gksus2)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP2_S", ival
+  chnset(ival, "OP2_S")
   ival = i(gksus3)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP3_S", ival
+  chnset(ival, "OP3_S")
   ival = i(gksus4)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP4_S", ival
+  chnset(ival, "OP4_S")
   ival = i(gksus5)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP5_S", ival
+  chnset(ival, "OP5_S")
   ival = i(gksus6)
   ival = (ival>0.01?ival-0.01:ival)
-  outvalue "OP6_S", ival
+  chnset(ival, "OP6_S")
 endin
 
 instr 7  ; Padify
   ival = i(gkatt1)
   ival = (ival<0.99?ival+0.01:ival)
-  outvalue "OP1_A", ival
+  chnset(ival, "OP1_A")
   ival = i(gkatt2)
   ival = (ival<0.99?ival+0.01:ival)
-  outvalue "OP2_A", ival
+  chnset(ival, "OP2_A")
   ival = i(gkatt3)
   ival = (ival<0.99?ival+0.01:ival)
-  outvalue "OP3_A", ival
+  chnset(ival, "OP3_A")
   ival = i(gkatt4)
   ival = (ival<0.99?ival+0.01:ival)
-  outvalue "OP4_A", ival
+  chnset(ival, "OP4_A")
   ival = i(gkatt5)
   ival = (ival<0.99?ival+0.01:ival)
-  outvalue "OP5_A", ival
+  chnset(ival, "OP5_A")
   ival = i(gkatt6)
   ival = (ival<0.99?ival+0.01:ival)
-  outvalue "OP6_A", ival
+  chnset(ival, "OP6_A")
   ival = i(gkdec1)
   ival = (ival<0.495?ival+0.005:ival)
-  outvalue "OP1_D", ival
+  chnset(ival, "OP1_D")
   ival = i(gkdec2)
   ival = (ival<0.495?ival+0.005:ival)
-  outvalue "OP2_D", ival
+  chnset(ival, "OP2_D")
   ival = i(gkdec3)
   ival = (ival<0.495?ival+0.005:ival)
-  outvalue "OP3_D", ival
+  chnset(ival, "OP3_D")
   ival = i(gkdec4)
   ival = (ival<0.495?ival+0.005:ival)
-  outvalue "OP4_D", ival
+  chnset(ival, "OP4_D")
   ival = i(gkdec5)
   ival = (ival<0.495?ival+0.005:ival)
-  outvalue "OP5_D", ival
+  chnset(ival, "OP5_D")
   ival = i(gkdec6)
   ival = (ival<0.495?ival+0.005:ival)
-  outvalue "OP6_D", ival
+  chnset(ival, "OP6_D")
 endin
 
 instr 8  ; Switch +
   ival = i(gklvl5)
-  outvalue "OP6_Lev", ival
+  chnset(ival, "OP6_Lev")
   ival = i(gklvl4)
-  outvalue "OP5_Lev", ival
+  chnset(ival, "OP5_Lev")
   ival = i(gklvl3)
-  outvalue "OP4_Lev", ival
+  chnset(ival, "OP4_Lev")
   ival = i(gklvl2)
-  outvalue "OP3_Lev", ival
+  chnset(ival, "OP3_Lev")
   ival = i(gklvl1)
-  outvalue "OP2_Lev", ival
+  chnset(ival, "OP2_Lev")
   ival = i(gklvl6)
-  outvalue "OP1_Lev", ival
+  chnset(ival, "OP1_Lev")
   ival = i(gkrat5)
-  outvalue "OP6_Ratio", ival
+  chnset(ival, "OP6_Ratio")
   ival = i(gkrat4)
-  outvalue "OP5_Ratio", ival
+  chnset(ival, "OP5_Ratio")
   ival = i(gkrat3)
-  outvalue "OP4_Ratio", ival
+  chnset(ival, "OP4_Ratio")
   ival = i(gkrat2)
-  outvalue "OP3_Ratio", ival
+  chnset(ival, "OP3_Ratio")
   ival = i(gkrat1)
-  outvalue "OP2_Ratio", ival
+  chnset(ival, "OP2_Ratio")
   ival = i(gkrat6)
-  outvalue "OP1_Ratio", ival
+  chnset(ival, "OP1_Ratio")
   ival = i(gkinv5)
-  outvalue "OP6_Inv", ival
+  chnset(ival, "OP6_Inv")
   ival = i(gkinv4)
-  outvalue "OP5_Inv", ival
+  chnset(ival, "OP5_Inv")
   ival = i(gkinv3)
-  outvalue "OP4_Inv", ival
+  chnset(ival, "OP4_Inv")
   ival = i(gkinv2)
-  outvalue "OP3_Inv", ival
+  chnset(ival, "OP3_Inv")
   ival = i(gkinv1)
-  outvalue "OP2_Inv", ival
+  chnset(ival, "OP2_Inv")
   ival = i(gkinv6)
-  outvalue "OP1_Inv", ival
+  chnset(ival, "OP1_Inv")
   ival = i(gkatt5)
-  outvalue "OP6_A", ival
+  chnset(ival, "OP6_A")
   ival = i(gkatt4)
-  outvalue "OP5_A", ival
+  chnset(ival, "OP5_A")
   ival = i(gkatt3)
-  outvalue "OP4_A", ival
+  chnset(ival, "OP4_A")
   ival = i(gkatt2)
-  outvalue "OP3_A", ival
+  chnset(ival, "OP3_A")
   ival = i(gkatt1)
-  outvalue "OP2_A", ival
+  chnset(ival, "OP2_A")
   ival = i(gkatt6)
-  outvalue "OP1_A", ival
+  chnset(ival, "OP1_A")
   ival = i(gkdec5)
-  outvalue "OP6_D", ival
+  chnset(ival, "OP6_D")
   ival = i(gkdec4)
-  outvalue "OP5_D", ival
+  chnset(ival, "OP5_D")
   ival = i(gkdec3)
-  outvalue "OP4_D", ival
+  chnset(ival, "OP4_D")
   ival = i(gkdec2)
-  outvalue "OP3_D", ival
+  chnset(ival, "OP3_D")
   ival = i(gkdec1)
-  outvalue "OP2_D", ival
+  chnset(ival, "OP2_D")
   ival = i(gkdec6)
-  outvalue "OP1_D", ival
+  chnset(ival, "OP1_D")
   ival = i(gksus5)
-  outvalue "OP6_S", ival
+  chnset(ival, "OP6_S")
   ival = i(gksus4)
-  outvalue "OP5_S", ival
+  chnset(ival, "OP5_S")
   ival = i(gksus3)
-  outvalue "OP4_S", ival
+  chnset(ival, "OP4_S")
   ival = i(gksus2)
-  outvalue "OP3_S", ival
+  chnset(ival, "OP3_S")
   ival = i(gksus1)
-  outvalue "OP2_S", ival
+  chnset(ival, "OP2_S")
   ival = i(gksus6)
-  outvalue "OP1_S", ival
+  chnset(ival, "OP1_S")
   ival = i(gkrel5)
-  outvalue "OP6_R", ival
+  chnset(ival, "OP6_R")
   ival = i(gkrel4)
-  outvalue "OP5_R", ival
+  chnset(ival, "OP5_R")
   ival = i(gkrel3)
-  outvalue "OP4_R", ival
+  chnset(ival, "OP4_R")
   ival = i(gkrel2)
-  outvalue "OP3_R", ival
+  chnset(ival, "OP3_R")
   ival = i(gkrel1)
-  outvalue "OP2_R", ival
+  chnset(ival, "OP2_R")
   ival = i(gkrel6)
-  outvalue "OP1_R", ival
+  chnset(ival, "OP1_R")
 endin
 
 instr 9  ; Switch -
   ival = i(gklvl2)
-  outvalue "OP1_Lev", ival
+  chnset(ival, "OP1_Lev")
   ival = i(gklvl3)
-  outvalue "OP2_Lev", ival
+  chnset(ival, "OP2_Lev")
   ival = i(gklvl4)
-  outvalue "OP3_Lev", ival
+  chnset(ival, "OP3_Lev")
   ival = i(gklvl5)
-  outvalue "OP4_Lev", ival
+  chnset(ival, "OP4_Lev")
   ival = i(gklvl6)
-  outvalue "OP5_Lev", ival
+  chnset(ival, "OP5_Lev")
   ival = i(gklvl1)
-  outvalue "OP6_Lev", ival
+  chnset(ival, "OP6_Lev")
   ival = i(gkrat2)
-  outvalue "OP1_Ratio", ival
+  chnset(ival, "OP1_Ratio")
   ival = i(gkrat3)
-  outvalue "OP2_Ratio", ival
+  chnset(ival, "OP2_Ratio")
   ival = i(gkrat4)
-  outvalue "OP3_Ratio", ival
+  chnset(ival, "OP3_Ratio")
   ival = i(gkrat5)
-  outvalue "OP4_Ratio", ival
+  chnset(ival, "OP4_Ratio")
   ival = i(gkrat6)
-  outvalue "OP5_Ratio", ival
+  chnset(ival, "OP5_Ratio")
   ival = i(gkrat1)
-  outvalue "OP6_Ratio", ival
+  chnset(ival, "OP6_Ratio")
   ival = i(gkinv2)
-  outvalue "OP1_Inv", ival
+  chnset(ival, "OP1_Inv")
   ival = i(gkinv3)
-  outvalue "OP2_Inv", ival
+  chnset(ival, "OP2_Inv")
   ival = i(gkinv4)
-  outvalue "OP3_Inv", ival
+  chnset(ival, "OP3_Inv")
   ival = i(gkinv5)
-  outvalue "OP4_Inv", ival
+  chnset(ival, "OP4_Inv")
   ival = i(gkinv6)
-  outvalue "OP5_Inv", ival
+  chnset(ival, "OP5_Inv")
   ival = i(gkinv1)
-  outvalue "OP6_Inv", ival
+  chnset(ival, "OP6_Inv")
   ival = i(gkatt2)
-  outvalue "OP1_A", ival
+  chnset(ival, "OP1_A")
   ival = i(gkatt3)
-  outvalue "OP2_A", ival
+  chnset(ival, "OP2_A")
   ival = i(gkatt4)
-  outvalue "OP3_A", ival
+  chnset(ival, "OP3_A")
   ival = i(gkatt5)
-  outvalue "OP4_A", ival
+  chnset(ival, "OP4_A")
   ival = i(gkatt6)
-  outvalue "OP5_A", ival
+  chnset(ival, "OP5_A")
   ival = i(gkatt1)
-  outvalue "OP6_A", ival
+  chnset(ival, "OP6_A")
   ival = i(gkdec2)
-  outvalue "OP1_D", ival
+  chnset(ival, "OP1_D")
   ival = i(gkdec3)
-  outvalue "OP2_D", ival
+  chnset(ival, "OP2_D")
   ival = i(gkdec4)
-  outvalue "OP3_D", ival
+  chnset(ival, "OP3_D")
   ival = i(gkdec5)
-  outvalue "OP4_D", ival
+  chnset(ival, "OP4_D")
   ival = i(gkdec6)
-  outvalue "OP5_D", ival
+  chnset(ival, "OP5_D")
   ival = i(gkdec1)
-  outvalue "OP6_D", ival
+  chnset(ival, "OP6_D")
   ival = i(gksus2)
-  outvalue "OP1_S", ival
+  chnset(ival, "OP1_S")
   ival = i(gksus3)
-  outvalue "OP2_S", ival
+  chnset(ival, "OP2_S")
   ival = i(gksus4)
-  outvalue "OP3_S", ival
+  chnset(ival, "OP3_S")
   ival = i(gksus5)
-  outvalue "OP4_S", ival
+  chnset(ival, "OP4_S")
   ival = i(gksus6)
-  outvalue "OP5_S", ival
+  chnset(ival, "OP5_S")
   ival = i(gksus1)
-  outvalue "OP6_S", ival
+  chnset(ival, "OP6_S")
   ival = i(gkrel2)
-  outvalue "OP1_R", ival
+  chnset(ival, "OP1_R")
   ival = i(gkrel3)
-  outvalue "OP2_R", ival
+  chnset(ival, "OP2_R")
   ival = i(gkrel4)
-  outvalue "OP3_R", ival
+  chnset(ival, "OP3_R")
   ival = i(gkrel5)
-  outvalue "OP4_R", ival
+  chnset(ival, "OP4_R")
   ival = i(gkrel6)
-  outvalue "OP5_R", ival
+  chnset(ival, "OP5_R")
   ival = i(gkrel1)
-  outvalue "OP6_R", ival
+  chnset(ival, "OP6_R")
 endin
 
 instr 10  ; FM synth
 
   midinoteoncps p4, p5
 
-  icps   init p4
-  iveloc init ((p5/127)*11000)+4000
+  icps   = init(p4)
+  iveloc = init(((p5/127)*11000)+4000)
 
   mididefault i(gkalgo), p6
   mididefault i(gkfeedback), p7
@@ -659,8 +659,8 @@ instr 10  ; FM synth
   mididefault i(gkrat1), p12
   mididefault i(gklvl1), p13
 
-  acps1 init icps*-p12
-  ifn1  init gisine
+  acps1 = init(icps*-p12)
+  ifn1  = init(gisine)
 
   mididefault i(gkatt2), p14
   mididefault i(gkdec2), p15
@@ -669,8 +669,8 @@ instr 10  ; FM synth
   mididefault i(gkrat2), p18
   mididefault i(gklvl2), p19
 
-  acps2 init icps*-p18
-  ifn2  init gisine
+  acps2 = init(icps*-p18)
+  ifn2  = init(gisine)
 
   mididefault i(gkatt3), p20
   mididefault i(gkdec3), p21
@@ -679,8 +679,8 @@ instr 10  ; FM synth
   mididefault i(gkrat3), p24
   mididefault i(gklvl3), p25
 
-  acps3 init icps*-p24
-  ifn3  init gisine
+  acps3 = init(icps*-p24)
+  ifn3  = init(gisine)
 
   mididefault i(gkatt4), p26
   mididefault i(gkdec4), p27
@@ -689,8 +689,8 @@ instr 10  ; FM synth
   mididefault i(gkrat4), p30
   mididefault i(gklvl4), p31
 
-  acps4 init icps*-p30
-  ifn4  init gisine
+  acps4 = init(icps*-p30)
+  ifn4  = init(gisine)
 
   mididefault i(gkatt5), p32
   mididefault i(gkdec5), p33
@@ -699,8 +699,8 @@ instr 10  ; FM synth
   mididefault i(gkrat5), p36
   mididefault i(gklvl5), p37
 
-  acps5 init icps*-p36
-  ifn5  init gisine
+  acps5 = init(icps*-p36)
+  ifn5  = init(gisine)
 
   mididefault i(gkatt6), p38
   mididefault i(gkdec6), p39
@@ -709,10 +709,10 @@ instr 10  ; FM synth
   mididefault i(gkrat6), p42
   mididefault i(gklvl6), p43
 
-  acps6 init icps*-p42
-  ifn6  init gisine
+  acps6 = init(icps*-p42)
+  ifn6  = init(gisine)
 
-  kamp init iveloc
+  kamp = init(iveloc)
 
   ialgo = p6
 
@@ -724,10 +724,10 @@ instr 10  ; FM synth
     afrq6 = acps6 + (gafeedback*acps6)  ; feedback
   endif
 
-  aphs6 phasor afrq6
-  aop6 tablei aphs6, ifn6, 1
-  aenv6 mxadsr p38, p39, p40, p41
-  aop6 = aop6 * aenv6
+  aphs6 = phasor(afrq6)
+  aop6  = tablei(aphs6, ifn6, 1)
+  aenv6 = mxadsr(p38, p39, p40, p41)
+  aop6  = aop6 * aenv6
 
   ; Check if op6 feeds the feedback loop
   if (ialgo == 2)||(ialgo == 8)||(ialgo == 9)||(ialgo == 10)|| (ialgo == 12)||(ialgo == 15)||(ialgo == 15)||(ialgo == 18)|| (ialgo == 20)||(ialgo == 21)||(ialgo == 27)||(ialgo == 28)|| (ialgo == 30) goto nofb6
@@ -752,10 +752,10 @@ nofb6:
     afrq5 = acps5 + (aop6*acps5)  ; modulated by op6
   endif
 
-  aphs5 phasor afrq5
-  aop5 tablei aphs5, ifn5, 1
-  aenv5 mxadsr p32, p33, p34, p35
-  aop5 = aop5 * aenv5
+  aphs5 = phasor(afrq5)
+  aop5  = tablei(aphs5, ifn5, 1)
+  aenv5 = mxadsr(p32, p33, p34, p35)
+  aop5  = aop5 * aenv5
 
   ; Check if op5 feeds the feedback loop
   if (ialgo == 6)||(ialgo == 28)||(ialgo == 30) then
@@ -782,10 +782,10 @@ nofb6:
     afrq4 = acps4  ; no modulation
   endif
 
-  aphs4 phasor afrq4
-  aop4 tablei aphs4, ifn4, 1
-  aenv4 mxadsr p26, p27, p28, p29
-  aop4 = aop4 * aenv4
+  aphs4 = phasor(afrq4)
+  aop4  = tablei(aphs4, ifn4, 1)
+  aenv4 = mxadsr(p26, p27, p28, p29)
+  aop4  = aop4 * aenv4
 
   ; Check if op4 feeds the feedback loop
   if (ialgo == 4) then
@@ -819,10 +819,10 @@ nofb6:
     afrq3 = acps3  ; no modulation
   endif
 
-  aphs3 phasor afrq3
-  aop3 tablei aphs3, ifn3, 1
-  aenv3 mxadsr p20, p21, p22, p23
-  aop3 = aop3 * aenv3
+  aphs3 = phasor(afrq3)
+  aop3  = tablei(aphs3, ifn3, 1)
+  aenv3 = mxadsr(p20, p21, p22, p23)
+  aop3  = aop3 * aenv3
 
   ; Check if op4 feeds the feedback loop
   if (ialgo == 10)||(ialgo == 18)||(ialgo == 20)||(ialgo == 21)|| (ialgo == 27) then
@@ -847,10 +847,10 @@ nofb6:
     afrq2 = acps2  ; no modulation
   endif
 
-  aphs2 phasor afrq2
-  aop2 tablei aphs2, ifn2, 1
-  aenv2 mxadsr p14, p15, p16, p17
-  aop2 = aop2 * aenv2
+  aphs2 = phasor(afrq2)
+  aop2  = tablei(aphs2, ifn2, 1)
+  aenv2 = mxadsr(p14, p15, p16, p17)
+  aop2  = aop2 * aenv2
 
   ; Check if op4 feeds the feedback loop
   if (ialgo == 2)||(ialgo == 9)||(ialgo == 12)||(ialgo == 15)|| (ialgo == 17) then
@@ -881,10 +881,10 @@ nofb6:
     afrq1 = acps1 + (aop2*acps1)  ; modulated by op2
   endif
 
-  aphs1 phasor afrq1
-  aop1 tablei aphs1, ifn1, 1
-  aenv1 mxadsr p8, p9, p10, p11
-  aop1 = aop1 * aenv1
+  aphs1 = phasor(afrq1)
+  aop1  = tablei(aphs1, ifn1, 1)
+  aenv1 = mxadsr(p8, p9, p10, p11)
+  aop1  = aop1 * aenv1
 
   ; op1 never modulates
   aop1 = aop1 * -p13 * kamp
@@ -955,7 +955,7 @@ nofb6:
   elseif (ialgo == 32) then
     aout = aop1 + aop2 + aop3 + aop4 + aop5 + aop6
   endif
-  outs aout, aout
+  out(aout, aout)
 endin
 
 instr 12  ; Keyboard input
@@ -989,20 +989,20 @@ instr 12  ; Keyboard input
 endin
 
 instr 13  ; Keyboard Algo change
-  kalgo wrap p4, 1, 32
-  outvalue "Algorithm", kalgo
+  kalgo = wrap(p4, 1, 32)
+  chnset(kalgo, "Algorithm")
 endin
 
 instr 17  ; Print i line
-  ialgo     = i(gkalgo)
+  ialgo = i(gkalgo)
   ifeedback = i(gkfeedback)
-  iatt1     = i(gkatt1)
-  idec1     = i(gkdec1)
-  isus1     = i(gksus1)
-  irel1     = i(gkrel1)
-  ilvl1     = i(gklvl1)
-  irat1     = i(gkrat1)
-  iinv1     = i(gkinv1)
+  iatt1 = i(gkatt1)
+  idec1 = i(gkdec1)
+  isus1 = i(gksus1)
+  irel1 = i(gkrel1)
+  ilvl1 = i(gklvl1)
+  irat1 = i(gkrat1)
+  iinv1 = i(gkinv1)
 
   iatt2 = i(gkatt2)
   idec2 = i(gkdec2)
@@ -1044,12 +1044,12 @@ instr 17  ; Print i line
   irat6 = i(gkrat6)
   iinv6 = i(gkinv6)
 
-  kdur invalue "mididur"
-  idur = i(kdur)
-  knote invalue "midinote"
-  inote = i(knote)
-  ifreq = 440.0 * 2 ^ ((inote - 69)/12)
-  kveloc invalue "midiveloc"
+  kdur   = chnget("mididur")
+  idur   = i(kdur)
+  knote  = chnget("midinote")
+  inote  = i(knote)
+  ifreq  = 440.0 * 2 ^ ((inote - 69)/12)
+  kveloc = chnget("midiveloc")
   iveloc = i(kveloc)
 
   prints "i 10 0 %f %f %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %i %i %i %i %i \n", \
@@ -1064,15 +1064,15 @@ instr 17  ; Print i line
 endin
 
 instr 18  ; Play note
-  ialgo     = i(gkalgo)
+  ialgo = i(gkalgo)
   ifeedback = i(gkfeedback)
-  iatt1     = i(gkatt1)
-  idec1     = i(gkdec1)
-  isus1     = i(gksus1)
-  irel1     = i(gkrel1)
-  ilvl1     = i(gklvl1)
-  irat1     = i(gkrat1)
-  iinv1     = i(gkinv1)
+  iatt1 = i(gkatt1)
+  idec1 = i(gkdec1)
+  isus1 = i(gksus1)
+  irel1 = i(gkrel1)
+  ilvl1 = i(gklvl1)
+  irat1 = i(gkrat1)
+  iinv1 = i(gkinv1)
 
   iatt2 = i(gkatt2)
   idec2 = i(gkdec2)
@@ -1114,26 +1114,26 @@ instr 18  ; Play note
   irat6 = i(gkrat6)
   iinv6 = i(gkinv6)
 
-  kdur invalue "mididur"
-  idur = i(kdur)
-  knote invalue "midinote"
-  inote = i(knote)
-  ifreq = 440.0 * 2 ^ ((inote - 69)/12)
-  kveloc invalue "midiveloc"
+  kdur   = chnget("mididur")
+  idur   = i(kdur)
+  knote  = chnget("midinote")
+  inote  = i(knote)
+  ifreq  = 440.0 * 2 ^ ((inote - 69)/12)
+  kveloc = chnget("midiveloc")
   iveloc = i(kveloc)
 
-  Sevent1 sprintf "i 10 0 %f %f %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ", \
-    idur, ifreq, iveloc, ialgo, ifeedback, \
+  Sevent1 = sprintf("i 10 0 %f %f %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ", \)
+  idur, ifreq, iveloc, ialgo, ifeedback, \
     iatt1, idec1, isus1, irel1, irat1, ilvl1, \
     iatt2, idec2, isus2, irel2, irat2, ilvl2, \
     iatt3, idec3, isus3, irel3, irat3, ilvl3, \
     iatt4, idec4, isus4, irel4, irat4, ilvl4
 
-  Sevent2 sprintf "%f %f %f %f %f %f %f %f %f %f %f %f %i %i %i %i %i %i \n", \
-    iatt5, idec5, isus5, irel5, irat5, ilvl5, \
+  Sevent2 = sprintf("%f %f %f %f %f %f %f %f %f %f %f %f %i %i %i %i %i %i \n", \)
+  iatt5, idec5, isus5, irel5, irat5, ilvl5, \
     iatt6, idec6, isus6, irel6, irat6, ilvl6, \
     iinv1, iinv2, iinv3, iinv4, iinv5, iinv6
-  Sevent strcat Sevent1, Sevent2
+  Sevent = strcat(Sevent1, Sevent2)
   scoreline_i Sevent
 endin
 </CsInstruments>

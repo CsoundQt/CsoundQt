@@ -45,6 +45,10 @@ FindBar::FindBar(QTextEdit *editor)
 	// the editor font. Use the normal UI font instead.
 	setFont(QApplication::font());
 	buildUi();
+	m_focusOrder = {m_findEdit, m_prevButton, m_nextButton, m_closeButton,
+	                m_replaceEdit, m_replaceButton, m_replaceAllButton};
+	for (QWidget *widget : m_focusOrder)
+		widget->installEventFilter(this);
 	applyPalette();
 
 	if (m_editor) {
@@ -66,7 +70,6 @@ void FindBar::buildUi()
 	m_findEdit = new QLineEdit(this);
 	m_findEdit->setPlaceholderText(tr("Find (Enter next, Shift+Enter previous, Esc close)"));
 	m_findEdit->setMinimumWidth(120);
-	m_findEdit->installEventFilter(this);
 	findRow->addWidget(m_findEdit, 1);
 
 	m_prevButton = new QToolButton(this);
@@ -99,7 +102,6 @@ void FindBar::buildUi()
 	m_replaceEdit = new QLineEdit(this);
 	m_replaceEdit->setPlaceholderText(tr("Replace with"));
 	m_replaceEdit->setMinimumWidth(120);
-	m_replaceEdit->installEventFilter(this);
 	replaceRow->addWidget(m_replaceEdit, 1);
 
 	m_replaceButton = new QPushButton(tr("Replace"), this);
@@ -149,6 +151,24 @@ void FindBar::focusFind()
 	m_findEdit->selectAll();
 }
 
+void FindBar::cycleFocus(bool forward)
+{
+	const int count = m_focusOrder.size();
+	if (count == 0)
+		return;
+	int index = m_focusOrder.indexOf(QApplication::focusWidget());
+	if (index < 0)
+		index = forward ? -1 : 0;
+	for (int step = 1; step <= count; ++step) {
+		const int next = (index + (forward ? step : -step) + count) % count;
+		QWidget *widget = m_focusOrder.at(next);
+		if (widget->isVisible() && widget->isEnabled()) {
+			widget->setFocus(Qt::TabFocusReason);
+			return;
+		}
+	}
+}
+
 void FindBar::setStatus(const QString &text)
 {
 	m_statusLabel->setText(text);
@@ -182,6 +202,17 @@ bool FindBar::eventFilter(QObject *watched, QEvent *event)
 
 	if (event->type() == QEvent::KeyPress) {
 		auto *ke = static_cast<QKeyEvent *>(event);
+		QWidget *watchedWidget = qobject_cast<QWidget *>(watched);
+		if (m_focusOrder.contains(watchedWidget)
+				&& (ke->key() == Qt::Key_Tab
+					|| ke->key() == Qt::Key_Backtab)) {
+			// Keep Tab inside the find/replace panel instead of letting it
+			// move focus back to the editor.
+			const bool forward = ke->key() != Qt::Key_Backtab
+					&& !(ke->modifiers() & Qt::ShiftModifier);
+			cycleFocus(forward);
+			return true;
+		}
 		if (watched == m_findEdit || watched == m_replaceEdit) {
 			if (ke->key() == Qt::Key_Escape) {
 				emit closed();

@@ -30,6 +30,8 @@
 #include "sourcedefinitions.h"
 #include "texteditor.h"
 
+#include <QDir>
+#include <QFileInfo>
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QListWidget>
@@ -40,6 +42,7 @@
 #include <QVBoxLayout>
 
 #include <algorithm>
+#include <climits>
 
 
 static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesizer", "CsOptions"};
@@ -90,11 +93,27 @@ static int openDoubleQuoteIndex(const QString &text)
     return inString ? open : -1;
 }
 
-// A completion after schedule(), chnget() or chnset() has a fixed set of
-// candidates, so it must bypass the normal identifier/opcode completion.
+static bool isSoundFile(const QFileInfo &file)
+{
+    static const QSet<QString> suffixes = {
+        QStringLiteral("wav"), QStringLiteral("wave"), QStringLiteral("aif"),
+        QStringLiteral("aiff"), QStringLiteral("aifc"), QStringLiteral("au"),
+        QStringLiteral("avr"), QStringLiteral("caf"), QStringLiteral("flac"),
+        QStringLiteral("htk"), QStringLiteral("ircam"), QStringLiteral("mat"),
+        QStringLiteral("mpc2k"), QStringLiteral("nist"), QStringLiteral("pau"),
+        QStringLiteral("raw"), QStringLiteral("sf"), QStringLiteral("svx"),
+        QStringLiteral("voc"), QStringLiteral("w64"), QStringLiteral("wavex"),
+        QStringLiteral("rf64"), QStringLiteral("ogg"), QStringLiteral("oga"),
+        QStringLiteral("mp3"), QStringLiteral("opus"), QStringLiteral("m4a")
+    };
+    return suffixes.contains(file.suffix().toLower());
+}
+
+// A completion after schedule(), chnget(), chnset() or diskin2() has a fixed
+// set of candidates, so it must bypass the normal identifier/opcode completion.
 struct CompletionContext
 {
-    enum Kind { None, Schedule, Channel };
+    enum Kind { None, Schedule, Channel, Path, Property };
     Kind kind = None;
     bool quoted = false;
     QString prefix;
@@ -123,13 +142,39 @@ static CompletionContext completionContext(const QString &textBeforeCursor)
                     QStringLiteral("\\bchnset"
                                    "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
                                    "\\s*\\([^,]*,\\s*$"));
-
+        static const QRegularExpression outvalueQuotedRx(
+                    QStringLiteral("\\boutvalue"
+                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
+                                   "\\s*(?:\\(\\s*)?$"));
+        static const QRegularExpression invalueQuotedRx(
+                    QStringLiteral("\\binvalue"
+                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
+                                   "\\s*(?:\\(\\s*)?$"));
         if (scheduleQuotedRx.match(beforeQuote).hasMatch()) {
             context.kind = CompletionContext::Schedule;
         } else if (chngetQuotedRx.match(beforeQuote).hasMatch()
                    || chnsetLegacyQuotedRx.match(beforeQuote).hasMatch()
-                   || chnsetFunctionQuotedRx.match(beforeQuote).hasMatch()) {
+                   || chnsetFunctionQuotedRx.match(beforeQuote).hasMatch()
+                   || invalueQuotedRx.match(beforeQuote).hasMatch()) {
             context.kind = CompletionContext::Channel;
+        } else if (outvalueQuotedRx.match(beforeQuote).hasMatch()) {
+            // The first outvalue argument is a widget channel. Once a '/'
+            // has been typed it is an addressable widget property instead.
+            // This deliberately takes precedence over path completion.
+            const QString prefix = textBeforeCursor.mid(quote + 1);
+            context.kind = prefix.contains(QLatin1Char('/'))
+                    ? CompletionContext::Property
+                    : CompletionContext::Channel;
+        } else {
+            // A path-like string is useful in any opcode argument, not only
+            // in diskin2. Absolute paths are included as well.
+            const QString prefix = textBeforeCursor.mid(quote + 1);
+            if (prefix.startsWith(QLatin1String("./"))
+                    || prefix.startsWith(QLatin1String("../"))
+                    || prefix.startsWith(QLatin1Char('/'))
+                    || prefix.startsWith(QLatin1String("~/"))) {
+                context.kind = CompletionContext::Path;
+            }
         }
         if (context.kind != CompletionContext::None) {
             context.quoted = true;
@@ -184,6 +229,217 @@ static QString withoutParentheses(const QString &args)
     if (text.startsWith(QLatin1Char('(')) && text.endsWith(QLatin1Char(')')))
         return text.mid(1, text.length() - 2).trimmed();
     return text;
+}
+
+// A small tokenizer for one line of Csound code. It only needs to distinguish
+// the pieces that matter for finding a literal channel argument: identifiers,
+// string constants, commas and parentheses. Comments end the line.
+struct CsoundLineToken
+{
+    enum Kind { Identifier, String, Comma, LeftParen, RightParen, Other };
+    Kind kind = Other;
+    QString text;
+    int start = 0;
+    int end = 0;
+    bool closed = false; // true for a properly terminated string
+};
+
+static QList<CsoundLineToken> tokenizeCsoundLine(const QString &line,
+                                                  int *commentStart = nullptr)
+{
+    QList<CsoundLineToken> tokens;
+    if (commentStart)
+        *commentStart = -1;
+    int i = 0;
+    while (i < line.size()) {
+        const QChar c = line.at(i);
+        if (c.isSpace()) {
+            ++i;
+            continue;
+        }
+        if (c == QLatin1Char(';')
+                || (c == QLatin1Char('/') && i + 1 < line.size()
+                    && line.at(i + 1) == QLatin1Char('/'))) {
+            if (commentStart)
+                *commentStart = i;
+            break;
+        }
+        if (c == QLatin1Char('"')) {
+            const int start = i++;
+            QString text;
+            bool escaped = false;
+            bool closed = false;
+            while (i < line.size()) {
+                const QChar ch = line.at(i);
+                if (escaped) {
+                    text += ch;
+                    escaped = false;
+                    ++i;
+                    continue;
+                }
+                if (ch == QLatin1Char('\\')) {
+                    escaped = true;
+                    ++i;
+                    continue;
+                }
+                if (ch == QLatin1Char('"')) {
+                    closed = true;
+                    ++i;
+                    break;
+                }
+                text += ch;
+                ++i;
+            }
+            tokens.append({CsoundLineToken::String, text, start, i, closed});
+            continue;
+        }
+        if (c.isLetter() || c == QLatin1Char('_')) {
+            const int start = i;
+            while (i < line.size()
+                   && (line.at(i).isLetterOrNumber()
+                       || line.at(i) == QLatin1Char('_')))
+                ++i;
+            tokens.append({CsoundLineToken::Identifier,
+                           line.mid(start, i - start), start, i, false});
+            continue;
+        }
+        CsoundLineToken::Kind kind = CsoundLineToken::Other;
+        if (c == QLatin1Char(','))
+            kind = CsoundLineToken::Comma;
+        else if (c == QLatin1Char('('))
+            kind = CsoundLineToken::LeftParen;
+        else if (c == QLatin1Char(')'))
+            kind = CsoundLineToken::RightParen;
+        tokens.append({kind, QString(c), i, i + 1, false});
+        ++i;
+    }
+    return tokens;
+}
+
+// Return a literal channel from the chnget/chnset/invalue/outvalue nearest to
+// the cursor on this line. Variables and expressions are deliberately rejected;
+// only a single complete string constant counts.
+static QString widgetChannelAt(const QString &line, int cursorPos,
+                               bool requireInsideString = false)
+{
+    int commentStart = -1;
+    const QList<CsoundLineToken> tokens = tokenizeCsoundLine(line, &commentStart);
+    if (commentStart >= 0 && cursorPos >= commentStart)
+        return {};
+
+    static const QSet<QString> channelOpcodes = {
+        QStringLiteral("chnget"), QStringLiteral("chnset"),
+        QStringLiteral("invalue"), QStringLiteral("outvalue")
+    };
+
+    int opcodeIndex = -1;
+    int bestDistance = INT_MAX;
+    for (int i = 0; i < tokens.size(); ++i) {
+        const CsoundLineToken &token = tokens.at(i);
+        if (token.kind != CsoundLineToken::Identifier
+                || !channelOpcodes.contains(token.text))
+            continue;
+        int distance = 0;
+        if (cursorPos < token.start)
+            distance = token.start - cursorPos;
+        else if (cursorPos > token.end)
+            distance = cursorPos - token.end;
+        if (distance < bestDistance) {
+            bestDistance = distance;
+            opcodeIndex = i;
+        }
+    }
+    if (opcodeIndex < 0)
+        return {};
+
+    const QString &opcode = tokens.at(opcodeIndex).text;
+    const int channelIndex = (opcode == QLatin1String("chnset")) ? 1 : 0;
+    int i = opcodeIndex + 1;
+    // Optional Csound 7 type annotation, e.g. chnget:k "channel".
+    if (i + 1 < tokens.size()
+            && tokens.at(i).kind == CsoundLineToken::Other
+            && tokens.at(i).text == QLatin1String(":")
+            && tokens.at(i + 1).kind == CsoundLineToken::Identifier) {
+        i += 2;
+    }
+
+    QList<QList<CsoundLineToken>> arguments;
+    QList<CsoundLineToken> current;
+    const bool functional = (i < tokens.size()
+                             && tokens.at(i).kind == CsoundLineToken::LeftParen);
+    int depth = 1;
+    if (functional)
+        ++i;
+    // Legacy syntax can have nested calls in the value argument, e.g.
+    // chnset linlin(dbamp(kout), 0, 1, -range, 0), "vu1". Split only on
+    // commas outside those nested parentheses.
+    int legacyDepth = 0;
+    for (; i < tokens.size(); ++i) {
+        const CsoundLineToken &token = tokens.at(i);
+        if (functional) {
+            if (token.kind == CsoundLineToken::LeftParen) {
+                ++depth;
+                current.append(token);
+            } else if (token.kind == CsoundLineToken::RightParen) {
+                --depth;
+                if (depth == 0) {
+                    if (!current.isEmpty())
+                        arguments.append(current);
+                    break;
+                }
+                current.append(token);
+            } else if (depth == 1 && token.kind == CsoundLineToken::Comma) {
+                arguments.append(current);
+                current.clear();
+            } else {
+                current.append(token);
+            }
+            continue;
+        }
+
+        if (token.kind == CsoundLineToken::LeftParen) {
+            ++legacyDepth;
+            current.append(token);
+        } else if (token.kind == CsoundLineToken::RightParen) {
+            if (legacyDepth > 0)
+                --legacyDepth;
+            current.append(token);
+        } else if (legacyDepth == 0
+                   && token.kind == CsoundLineToken::Comma) {
+            arguments.append(current);
+            current.clear();
+        } else if (legacyDepth == 0
+                   && token.kind == CsoundLineToken::Identifier
+                   && channelOpcodes.contains(token.text)) {
+            // Stop at a second opcode on the same line, so two calls such as
+            // `chnget "a" + chnget "b"` do not merge their argument lists.
+            break;
+        } else if (legacyDepth == 0 && token.kind == CsoundLineToken::Other
+                   && !current.isEmpty()
+                   && current.constLast().kind == CsoundLineToken::String
+                   && arguments.size() == channelIndex) {
+            // A channel argument is a single literal. Stop before trailing
+            // expression tokens when the caller wrote e.g. chnget "a" + x.
+            break;
+        } else {
+            current.append(token);
+        }
+    }
+    if (!current.isEmpty())
+        arguments.append(current);
+
+    if (channelIndex >= arguments.size())
+        return {};
+    const QList<CsoundLineToken> &channelArg = arguments.at(channelIndex);
+    if (channelArg.size() != 1)
+        return {};
+    const CsoundLineToken &channel = channelArg.first();
+    if (channel.kind != CsoundLineToken::String || !channel.closed)
+        return {};
+    if (requireInsideString
+            && (cursorPos <= channel.start || cursorPos >= channel.end))
+        return {};
+    return channel.text;
 }
 
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
@@ -274,6 +530,15 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	setViewMode(1);
 	setViewMode(0);  // To force a change
 	setAcceptDrops(true);
+
+	// The channel probe also works while only navigating the text: hovering a
+	// quoted channel with the mouse, or placing the text cursor inside it.
+	for (TextEditor *editor : findChildren<TextEditor *>()) {
+		editor->viewport()->setMouseTracking(true);
+		editor->viewport()->installEventFilter(this);
+		connect(editor, &QTextEdit::cursorPositionChanged,
+				this, &DocumentView::updateChannelHighlightFromCursor);
+	}
 
 	m_oldCursorPosition = -1; // 0 or positive, if cursor needs to be moved there
     markCurrentPosition();
@@ -741,6 +1006,69 @@ int DocumentView::currentLineNumber()
 	return line;
 }
 
+QString DocumentView::channelAtCursor() const
+{
+	TextEditor *editor = activeEditor();
+	if (!editor)
+		return {};
+	const QTextCursor cursor = editor->textCursor();
+	return widgetChannelAt(cursor.block().text(), cursor.positionInBlock());
+}
+
+QString DocumentView::channelAtTextCursor() const
+{
+	TextEditor *editor = activeEditor();
+	if (!editor)
+		return {};
+	const QTextCursor cursor = editor->textCursor();
+	return widgetChannelAt(cursor.block().text(), cursor.positionInBlock(),
+	                       true);
+}
+
+void DocumentView::updateChannelHighlightFromCursor()
+{
+	updateChannelHighlight();
+}
+
+void DocumentView::updateChannelHighlight()
+{
+	QString target = m_hoverChannel;
+	if (target.isEmpty())
+		target = channelAtTextCursor();
+	// Repeated events for the same channel are harmless: the widget layout
+	// keeps an existing outline instead of rebuilding it. Always re-send a
+	// non-empty channel so hovering works again after Esc/click cleared it.
+	if (target.isEmpty() && m_activeChannelHighlight.isEmpty())
+		return;
+	m_activeChannelHighlight = target;
+	emit channelHighlightRequested(target);
+}
+
+bool DocumentView::eventFilter(QObject *watched, QEvent *event)
+{
+	TextEditor *editor = qobject_cast<TextEditor *>(watched->parent());
+	if (editor && editor->viewport() == watched) {
+		if (event->type() == QEvent::MouseMove) {
+			auto *mouseEvent = static_cast<QMouseEvent *>(event);
+			const QTextCursor cursor = editor->cursorAt(
+						mouseEvent->position().toPoint());
+			const QString channel = widgetChannelAt(
+						cursor.block().text(), cursor.positionInBlock(),
+						true);
+			if (channel != m_hoverChannel) {
+				m_hoverChannel = channel;
+				updateChannelHighlight();
+			}
+		} else if (event->type() == QEvent::Leave) {
+			if (!m_hoverChannel.isEmpty()) {
+				m_hoverChannel.clear();
+				updateChannelHighlight();
+			}
+		}
+	}
+	return QWidget::eventFilter(watched, event);
+}
+
 QString DocumentView::lineUnderCursor() {
     if(m_viewMode >= 2) {
         QDEBUG << "Not implemented";
@@ -1129,14 +1457,12 @@ void DocumentView::autoCompleteAtCursor() {
     QTextCursor cursor = editor->textCursor();
     int curIndex = cursor.position();
 
-    // Get the text of the current line up to cursor
-    QTextCursor lineCursor = editor->textCursor();
-    lineCursor.select(QTextCursor::LineUnderCursor);
-    QString line = lineCursor.selectedText();
-
-    // Get cursor position relative to line
-    int lineStartPos = lineCursor.selectionStart();
-    int cursorPosInLine = curIndex - lineStartPos;
+    // Use the logical block, not the visual line: a long path may wrap and
+    // would otherwise be cut before the cursor.
+    const QTextBlock block = cursor.block();
+    QString line = block.text();
+    const int lineStartPos = block.position();
+    const int cursorPosInLine = cursor.positionInBlock();
 
     QString textBeforeCursor = line.left(cursorPosInLine);
 
@@ -1178,11 +1504,11 @@ void DocumentView::autoCompleteAtCursor() {
     int lineCommentIndex;
 
     if((lineCommentIndex = line.indexOf(";")) >= 0) {
-        if(lineCursor.position() - line.length() + lineCommentIndex < curIndex)
+        if(lineStartPos + lineCommentIndex < curIndex)
             return;
     }
     if((lineCommentIndex = line.indexOf("//")) >= 0) {
-        if(lineCursor.position() - line.length() + lineCommentIndex < curIndex)
+        if(lineStartPos + lineCommentIndex < curIndex)
             return;
     }
 
@@ -1244,6 +1570,114 @@ void DocumentView::autoCompleteAtCursor() {
                     addContextCompletion(variable, false);
                 for (const QString &variable : m_globalStringVariables)
                     addContextCompletion(variable, false);
+            }
+        } else if (context.kind == CompletionContext::Property) {
+            const QString prefix = context.prefix;
+            const int slash = prefix.indexOf(QLatin1Char('/'));
+            const QString channel = prefix.left(slash);
+            const QString propertyPrefix = prefix.mid(slash + 1);
+            const auto shortType = [](QString type) {
+                if (type == QLatin1String("integer")) return QStringLiteral("int");
+                if (type == QLatin1String("string")) return QStringLiteral("str");
+                if (type == QLatin1String("boolean")) return QStringLiteral("bool");
+                return type;
+            };
+            QList<WidgetPropertyInfo> matching;
+            int nameWidth = 0;
+            int typeWidth = 0;
+            for (const WidgetPropertyInfo &property : widgetProperties(channel)) {
+                if (!propertyPrefix.isEmpty()
+                        && !property.name.startsWith(propertyPrefix,
+                                                     Qt::CaseInsensitive)) {
+                    continue;
+                }
+                matching.append(property);
+                nameWidth = qMax(nameWidth, property.name.size());
+                typeWidth = qMax(typeWidth, shortType(property.type).size());
+            }
+            // Keep the same three-column shape as the opcode menu: property,
+            // type and description, separated by two spaces.
+            nameWidth += 2;
+            typeWidth += 2;
+            for (const WidgetPropertyInfo &property : matching) {
+                const QString insert = channel + QLatin1Char('/') + property.name;
+                if (contextSeen.contains(insert))
+                    continue;
+                const QString type = shortType(property.type);
+                QString toolTip = property.type;
+                if (!property.description.isEmpty()) {
+                    if (!toolTip.isEmpty())
+                        toolTip += QStringLiteral(" — ");
+                    toolTip += property.description;
+                }
+                QString display = property.name.leftJustified(nameWidth)
+                        + type.leftJustified(typeWidth)
+                        + property.description;
+                QAction *action = syntaxMenu->addCompletion(
+                            display, insert,
+                            toolTip.isEmpty() ? insert : toolTip,
+                            0, this, SLOT(insertAutoCompleteText()));
+                action->setProperty("autocompleteContext", true);
+                action->setProperty("autocompleteReplaceStart",
+                                    contextReplaceStart);
+                action->setProperty("autocompleteReplaceEnd",
+                                    contextReplaceEnd);
+                contextSeen.insert(insert);
+                contextMaxLength = qMax(contextMaxLength, display.size());
+                showSyntaxMenu = true;
+            }
+        } else if (context.kind == CompletionContext::Path) {
+            const QString prefix = context.prefix;
+            const int slash = prefix.lastIndexOf(QLatin1Char('/'));
+            const QString directoryPrefix = slash >= 0
+                    ? prefix.left(slash + 1) : QString();
+            const QString filePrefix = slash >= 0
+                    ? prefix.mid(slash + 1) : prefix;
+
+            QString lookup = directoryPrefix;
+            if (lookup.startsWith(QLatin1String("~/")))
+                lookup = QDir::homePath() + lookup.mid(1);
+            else if (lookup.isEmpty())
+                lookup = documentDirectory();
+            else if (!QDir::isAbsolutePath(lookup))
+                lookup = QDir(documentDirectory()).absoluteFilePath(lookup);
+
+            QDir directory(lookup);
+            if (directory.exists()) {
+                const QFileInfoList entries = directory.entryInfoList(
+                            QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot,
+                            QDir::DirsFirst | QDir::Name);
+                for (const QFileInfo &entry : entries) {
+                    if (!entry.isDir() && !isSoundFile(entry))
+                        continue;
+                    if (!filePrefix.isEmpty()
+                            && !entry.fileName().startsWith(
+                                filePrefix, Qt::CaseInsensitive)) {
+                        continue;
+                    }
+                    QString insert = directoryPrefix + entry.fileName();
+                    QString display = entry.fileName();
+                    if (entry.isDir()) {
+                        // Keep the directory open so the next path segment can
+                        // be completed as well: ~/Lib/sound/...
+                        insert += QLatin1Char('/');
+                        display += QLatin1Char('/');
+                    }
+                    if (contextSeen.contains(insert))
+                        continue;
+                    QAction *action = syntaxMenu->addCompletion(
+                                display, insert, entry.absoluteFilePath(),
+                                0, this, SLOT(insertAutoCompleteText()));
+                    action->setProperty("autocompleteContext", true);
+                    action->setProperty("autocompleteReplaceStart",
+                                        contextReplaceStart);
+                    action->setProperty("autocompleteReplaceEnd",
+                                        contextReplaceEnd);
+                    contextSeen.insert(insert);
+                    contextMaxLength = qMax(contextMaxLength,
+                                            display.size());
+                    showSyntaxMenu = true;
+                }
             }
         } else {
             for (const QString &channel : widgetChannels())
@@ -1914,6 +2348,15 @@ void DocumentView::gotoLineDialog()
     lineSpinBox->setFocus();
     lineSpinBox->selectAll();
     dialog->show();
+}
+
+void DocumentView::highlightWidgetChannel()
+{
+	const QString channel = channelAtCursor();
+	// An empty channel also clears a previous outline when the shortcut is
+	// pressed on a line that does not contain a literal channel.
+	m_activeChannelHighlight = channel;
+	emit channelHighlightRequested(channel);
 }
 
 void DocumentView::getToIn()
@@ -2947,6 +3390,31 @@ void DocumentView::setWidgetChannelsProvider(
 
 QStringList DocumentView::widgetChannels() const {
     return m_widgetChannelsProvider ? m_widgetChannelsProvider() : m_widgetChannels;
+}
+
+void DocumentView::setWidgetPropertiesProvider(
+        const std::function<QList<WidgetPropertyInfo>(const QString &)> &provider) {
+    m_widgetPropertiesProvider = provider;
+}
+
+QList<WidgetPropertyInfo> DocumentView::widgetProperties(
+        const QString &channelOrName) const {
+    return m_widgetPropertiesProvider
+            ? m_widgetPropertiesProvider(channelOrName)
+            : QList<WidgetPropertyInfo>();
+}
+
+void DocumentView::setDocumentDirectoryProvider(
+        const std::function<QString()> &provider) {
+    m_documentDirectoryProvider = provider;
+}
+
+QString DocumentView::documentDirectory() const {
+    QString directory = m_documentDirectoryProvider
+            ? m_documentDirectoryProvider() : QString();
+    if (directory.isEmpty())
+        directory = QDir::currentPath();
+    return directory;
 }
 
 void DocumentView::setTheme(const QString &theme)

@@ -53,56 +53,56 @@ ksmps = 64
 nchnls = 2
 0dbfs = 1
 
-gisin1 ftgen 0, 0, 1024, 10, 1
-gisin2 ftgen 0, 0, 1024, 10, 1, 0.5, 0.333
-gisin3 ftgen 0, 0, 1024, 10, 1, 0, 0.333, 0, 0.25, 0, 0.166
-gisqr  ftgen 0, 0, 1024, 7, 1, 512, 1, 0, -1, 512, -1
-gisaw  ftgen 0, 0, 1024, 7, 1, 1024, -1
+gisin1 = ftgen(0, 0, 1024, 10, 1)
+gisin2 = ftgen(0, 0, 1024, 10, 1, 0.5, 0.333)
+gisin3 = ftgen(0, 0, 1024, 10, 1, 0, 0.333, 0, 0.25, 0, 0.166)
+gisqr  = ftgen(0, 0, 1024, 7, 1, 512, 1, 0, -1, 512, -1)
+gisaw  = ftgen(0, 0, 1024, 7, 1, 1024, -1)
 
 instr Oscil
 
-	itables[] fillarray gisin1, gisin2, gisin3, gisqr, gisaw 
-	kindex init -1
-	kindex invalue "tabindex"
-	kindex = limit:k(kindex, 0, lenarray(itables)-1)
-	ktab = itables[kindex]
-	kfreq invalue "freq"
-	asig oscilikt 0.2, kfreq, ktab
-	asig *= 0.1
-	outch 1, asig, 2, asig
-	
-	dispfft asig, 0.05, 4096
-	
-	adisp = asig*5
-	display adisp, 0.01
-	
-	if timeinstk() == 1 || changed(kindex) == 1 then
-		; A numeric value sent to the graph widget sets it to display the graph 
-		; at that index. In this case, the graph is only enabled for tables,
-		; so that the index corresponds to the index of the itables array:
-		; outvalue "graph1", kindex
-		; The table number can be selected directly with the findtable method:
-		outvalue "graph1/findtable", ktab
-		; ... or as a negative number sent on the graph's channel:
-		; outvalue "graph1", -ktab
-		outvalue "plot1", ktab
-	endif
-	
+  itables[] = fillarray(gisin1, gisin2, gisin3, gisqr, gisaw)
+  kindex = init(-1)
+  kindex = chnget("tabindex")
+  kindex = limit:k(kindex, 0, lenarray(itables)-1)
+  ktab = itables[kindex]
+  kfreq = chnget("freq")
+  asig = oscilikt(0.2, kfreq, ktab)
+  asig *= 0.1
+  outch 1, asig, 2, asig
+
+  dispfft asig, 0.05, 4096
+
+  adisp = asig*5
+  display adisp, 0.01
+
+  if timeinstk() == 1 || changed(kindex) == 1 then
+    ; A numeric value sent to the graph widget sets it to display the graph
+    ; at that index. In this case, the graph is only enabled for tables,
+    ; so that the index corresponds to the index of the itables array:
+    ; outvalue "graph1", kindex
+    ; The table number can be selected directly with the findtable method:
+    outvalue "graph1/findtable", ktab
+    ; ... or as a negative number sent on the graph's channel:
+    ; outvalue "graph1", -ktab
+    chnset(ktab, "plot1")
+  endif
+
 endin
 
 instr SetupGraphs
-	; The desired graph is selected with methods:
-	
-	outvalue "graph2/findfft", "asig"
-	outvalue "graph3/findaudio", "adisp"
-	
-	; A spectrum graph (graph2) can be frozen and its detected peak sent
-	; to a named channel:
-	; outvalue "graph2/freeze", 1        ; 1 = freeze, 0 = unfreeze
-	; outvalue "graph2/peakchannel", "peak"
-	
-	; outvalue "plot1", gisin1
-	turnoff
+  ; The desired graph is selected with methods:
+
+  outvalue "graph2/findfft", "asig"
+  outvalue "graph3/findaudio", "adisp"
+
+  ; A spectrum graph (graph2) can be frozen and its detected peak sent
+  ; to a named channel:
+  ; outvalue "graph2/freeze", 1        ; 1 = freeze, 0 = unfreeze
+  ; outvalue "graph2/peakchannel", "peak"
+
+  ; outvalue "plot1", gisin1
+  turnoff
 endin
 
 ; If started too early, the table display will fail

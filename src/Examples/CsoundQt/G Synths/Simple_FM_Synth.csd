@@ -4,10 +4,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr     = 44100
-ksmps  = 128
+sr = 44100
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
 ; Make sure CsOptions are not ignored in the preferences,
 ; Otherwise Realtime MIDI input will not work.
@@ -16,40 +16,40 @@ instr 1  ; Simple two operator FM synth
 
   ifreq = p4  ; From p4 in the score or cps from MIDI note
 
-  kmodfactor invalue "modfactor"
-  kmodindex  invalue "modindex"
+  kmodfactor = chnget("modfactor")
+  kmodindex  = chnget("modindex")
   ; Mod envelope
-  kmodatt invalue "modatt"
-  kmoddec invalue "moddec"
-  kmodsus invalue "modsus"
-  kmodrel invalue "modrel"
-  amodenv madsr i(kmodatt), i(kmoddec), i(kmodsus), i(kmodrel)
+  kmodatt = chnget("modatt")
+  kmoddec = chnget("moddec")
+  kmodsus = chnget("modsus")
+  kmodrel = chnget("modrel")
+  amodenv = madsr(i(kmodatt), i(kmoddec), i(kmodsus), i(kmodrel))
 
   kmodfreq = kmodfactor*ifreq
   ; Index = Am * fc/fm
   kmodamp = kmodindex*kmodfactor*ifreq
   ; Modulator 2
-  amod poscil amodenv*kmodamp, kmodfreq, 1
+  amod = poscil(amodenv*kmodamp, kmodfreq, 1)
 
   ; Carrier amp envelope
-  kaatt invalue "aatt"
-  kadec invalue "adec"
-  kasus invalue "asus"
-  karel invalue "arel"
-  aenv madsr i(kaatt), i(kadec), i(kasus), i(karel)
+  kaatt = chnget("aatt")
+  kadec = chnget("adec")
+  kasus = chnget("asus")
+  karel = chnget("arel")
+  aenv  = madsr(i(kaatt), i(kadec), i(kasus), i(karel))
 
   ; Carrier
-  aout poscil aenv, ifreq+amod, 1
+  aout = poscil(aenv, ifreq+amod, 1)
 
   ; Output
-  klevel invalue "level"
-  outvalue "index", kmodindex
+  klevel = chnget("level")
+  chnset(kmodindex, "index")
 
-  outs aout*klevel, aout*klevel
+  out(aout*klevel, aout*klevel)
 endin
 
 instr 98  ; Trigger instrument from button
-  kfreq invalue "freq"
+  kfreq = chnget("freq")
   event "i", 1, 0, p3, kfreq
   turnoff
 endin
@@ -58,9 +58,9 @@ instr 99  ; Always on instrument
   ; This instrument updates the modulator's frequencies
   ; which depend on the base frequency and the freq.
   ; factors.
-  kfreq      invalue "freq"
-  kmodfactor invalue "modfactor"
-  outvalue "mod1freq", kfreq*kmodfactor
+  kfreq = chnget("freq")
+  kmodfactor = chnget("modfactor")
+  chnset(kfreq*kmodfactor, "mod1freq")
 
   ; Display spectrum
   aoutl, aoutr monitor
@@ -68,8 +68,8 @@ instr 99  ; Always on instrument
 
   ; Turn on or off according to checkbox
 
-  kon invalue "on"
-  ktrig changed kon
+  kon   = chnget("on")
+  ktrig = changed(kon)
 
   if ktrig == 1 then
     if kon == 1 then

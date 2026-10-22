@@ -4,23 +4,23 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 A4 = 442
 
 
-instr 1 ; always on
-	kmidi invalue "midi"
-	ka invalue "a"
-	kb invalue "b"
-	
-	if changed(kmidi, ka, kb) == 1 then
-		khertz = mtof(kmidi)
-		outvalue "hertz", sprintfk("%.1f Hz.", khertz)
-		outvalue "c", sprintfk("is %.3f", ka*kb)
-	endif
-	
+instr 1  ; always on
+  kmidi = chnget("midi")
+  ka    = chnget("a")
+  kb    = chnget("b")
+
+  if changed(kmidi, ka, kb) == 1 then
+    khertz = mtof(kmidi)
+    chnset(sprintfk( "%.1f Hz.", khertz), "hertz")
+    chnset(sprintfk( "is %.3f", ka*kb), "c")
+  endif
+
 endin
 
 </CsInstruments>

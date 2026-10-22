@@ -4945,6 +4945,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     joinAct->setShortcut(tr(""));
     inToGetAct->setShortcut(tr(""));
     getToInAct->setShortcut(tr(""));
+    highlightWidgetChannelAct->setShortcut(tr("Ctrl+Shift+H"));
     midiControlAct->setShortcut(tr(""));
     findAct->setShortcut(tr("Ctrl+F"));
     findAgainAct->setShortcut(tr("Ctrl+G"));
@@ -5086,6 +5087,13 @@ void CsoundQt::insertOpcode()
 {
     DocumentPage* page = documentPages[curPage];
     page->insertOpcode();
+}
+
+void CsoundQt::highlightWidgetChannel()
+{
+    DocumentPage *page = getCurrentDocumentPage();
+    if (page)
+        page->highlightWidgetChannel();
 }
 
 #ifdef CSQT_DEBUGGER
@@ -5320,6 +5328,18 @@ void CsoundQt::createActions()
     getToInAct->setStatusTip(tr("Convert chnget/chnset to invalue/outvalue"));
     getToInAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(getToInAct, SIGNAL(triggered()), this, SLOT(getToIn()));
+
+    // Experimental channel probe. It deliberately has no menu entry yet, but
+    // it is registered with the global actions so it appears in Edit/Keyboard
+    // Shortcuts and can be rebound there.
+    highlightWidgetChannelAct = new QAction(tr("Highlight Widgets for Channel"), this);
+    highlightWidgetChannelAct->setStatusTip(tr("Outline widgets using the literal channel at the cursor"));
+    highlightWidgetChannelAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(highlightWidgetChannelAct, &QAction::triggered,
+            this, &CsoundQt::highlightWidgetChannel);
+    // The action has no menu entry yet, but it must be attached to the window
+    // for its shortcut to be active.
+    addAction(highlightWidgetChannelAct);
 
     midiControlAct = new QAction(tr("Insert MidiControl instrument"), this);
     midiControlAct->setStatusTip(tr("Generate instrument according to MIDI bindings of widgets"));
@@ -5902,6 +5922,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(joinAct);
     m_keyActions.append(inToGetAct);
     m_keyActions.append(getToInAct);
+    m_keyActions.append(highlightWidgetChannelAct);
     m_keyActions.append(findAct);
     m_keyActions.append(findAgainAct);
     m_keyActions.append(findPreviousAct);

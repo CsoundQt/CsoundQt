@@ -8,13 +8,13 @@
 ; GUI and some additions by Josep M Comajuncosas, July 2001
 ; CsoundQt version by Andres Cabrera 2010
 
-sr     = 44100
-ksmps  = 128
+sr = 44100
+ksmps = 64
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
-gasig2 init 0  ; global variable to send pulse waves to ensemble section
-ga2    init 0  ; global variable to send output of ensemble to reverb
+gasig2 = init(0)  ; global variable to send pulse waves to ensemble section
+ga2    = init(0)  ; global variable to send output of ensemble to reverb
 
 
 instr 1  ; Used to generate simple sawtooth-like waveforms
@@ -24,8 +24,8 @@ instr 1  ; Used to generate simple sawtooth-like waveforms
   iharms = (sr*.4) / ifreq  ; Limits number of harmonics in bandlimited
   ; pulse waveform
 
-  asig gbuzz 1, ifreq, iharms, 1, .9, 2
-  kenv madsr 1, 0, 1, 1.5
+  asig = gbuzz(1, ifreq, iharms, 1, .9, 2)
+  kenv = madsr(1, 0, 1, 1.5)
 
   aout = kenv * asig * .45
   ; The output of instr 19 is sent to the "ensemble" chorusing
@@ -40,16 +40,16 @@ instr 22  ; Ensemble section. Takes static sawtooth waves,
   ; output. The phase shifter follows the output
   ; of the ensemble.
 
-  kVcf1     invalue "Vcf1"
-  kVcf2     invalue "Vcf2"
-  kLfoWave  invalue "LfoWave"
-  kLfoDepth invalue "LfoDepth"
-  kLfoFreq  invalue "LfoFreq"
-  kPhFreq   invalue "PhFreq"
-  kPhFdbk   invalue "PhFdbk"
-  kPhQ      invalue "PhQ"
-  kPhStages invalue "PhStages"
-  kPhSep    invalue "PhSep"
+  kVcf1 = chnget("Vcf1")
+  kVcf2 = chnget("Vcf2")
+  kLfoWave = chnget("LfoWave")
+  kLfoDepth = chnget("LfoDepth")
+  kLfoFreq = chnget("LfoFreq")
+  kPhFreq = chnget("PhFreq")
+  kPhFdbk = chnget("PhFdbk")
+  kPhQ = chnget("PhQ")
+  kPhStages = chnget("PhStages")
+  kPhSep = chnget("PhSep")
 
   ivib = p4 * .00025  ; Determines amount of pitch change/vibrato/
   ; chorusing. A value of 1 gives moderately thick
@@ -57,13 +57,13 @@ instr 22  ; Ensemble section. Takes static sawtooth waves,
   ; according to taste.
 
   ; Lfos
-  ktimea oscil 4, 0.33, 1
-  ktimeb oscil 4, 0.33, 1, .333
-  ktimec oscil 4, 0.33, 1, .667
+  ktimea = oscil(4, 0.33, 1)
+  ktimeb = oscil(4, 0.33, 1, .333)
+  ktimec = oscil(4, 0.33, 1, .667)
 
-  ktimed oscil 1, 5.5, 1
-  ktimee oscil 1, 5.5, 1, .333
-  ktimef oscil 1, 5.5, 1, .667
+  ktimed = oscil(1, 5.5, 1)
+  ktimee = oscil(1, 5.5, 1, .333)
+  ktimef = oscil(1, 5.5, 1, .667)
 
 
   ktime1 = (ktimea + ktimed) * ivib
@@ -71,26 +71,26 @@ instr 22  ; Ensemble section. Takes static sawtooth waves,
   ktime3 = (ktimec + ktimef) * ivib
 
   ; Chorus
-  adummy delayr .030
-  asig1 deltap3 ktime1 + .012
-  asig2 deltap3 ktime2 + .012
-  asig3 deltap3 ktime3 + .012
+  adummy = delayr(.030)
+  asig1  = deltap3(ktime1 + .012)
+  asig2  = deltap3(ktime2 + .012)
+  asig3  = deltap3(ktime3 + .012)
   delayw gasig2
 
   aVcfIn = (asig1 + asig2 + asig3) * .01
   ; Vcf
-  klow limit 1-kVcf2, 0, 1
-  kband mirror kVcf2, 0, 1
-  khigh limit kVcf2-1, 0, 1
+  klow  = limit(1-kVcf2, 0, 1)
+  kband = mirror(kVcf2, 0, 1)
+  khigh = limit(kVcf2-1, 0, 1)
 
   alow, ahigh, aband svfilter aVcfIn, kVcf1, 10
-  aPhaserIn mac klow, alow, kband, aband, khigh, ahigh
+  aPhaserIn = mac(klow, alow, kband, aband, khigh, ahigh)
 
-  outs aband, aband
+  out(aband, aband)
   ; Lfo
 lfo:
   ilfowave = 10+i(kLfoWave)
-  klfofrq oscil kLfoDepth, kLfoFreq, ilfowave, -1
+  klfofrq  = oscil(kLfoDepth, kLfoFreq, ilfowave, -1)
   rigoto end
   ; rireturn
   igoto skip0
@@ -99,13 +99,13 @@ lfo:
 
 skip0:
   kmod = kPhFreq*(1+klfofrq)
-  kmod limit kmod, 20, sr/4
+  kmod = limit(kmod, 20, sr/4)
 
   ; Phaser
 phaser:
   istages = i(kPhStages)
 
-  aphs phaser2 aPhaserIn, kmod, kPhQ, istages, 2, kPhSep, kPhFdbk
+  aphs  = phaser2(aPhaserIn, kmod, kPhQ, istages, 2, kPhSep, kPhFdbk)
   aout2 = (aPhaserIn + aphs) * .5
 
   rireturn
@@ -126,15 +126,15 @@ instr 99  ; Simple implementation of Feedback Delay Network (FDN)
   ; reverb, as described by John Stautner and Miller
   ; Puckette, "Designing Multi-Channel Reverberators,"
 
-  kRevWet   invalue "RevWet"
-  kRevSize  invalue "RevSize"
-  kRevColor invalue "RevColor"
+  kRevWet   = chnget("RevWet")
+  kRevSize  = chnget("RevSize")
+  kRevColor = chnget("RevColor")
 
-  atap multitap ga2, 0.00043, 0.0215, 0.00268, 0.0298, 0.00485, 0.0572, 0.00595, 0.0708, 0.00741, 0.0797, 0.0142, 0.134, 0.0217, 0.181, 0.0272, 0.192, 0.0379, 0.346, 0.0841, 0.504
+  atap = multitap(ga2, 0.00043, 0.0215, 0.00268, 0.0298, 0.00485, 0.0572, 0.00595, 0.0708, 0.00741, 0.0797, 0.0142, 0.134, 0.0217, 0.181, 0.0272, 0.192, 0.0379, 0.346, 0.0841, 0.504)
 
   aRvb_FreeL, aRvb_FreeR freeverb ga2, ga2, kRevSize, kRevColor
 
-  outs aRvb_FreeL*kRevWet + ga2*(1-kRevWet), aRvb_FreeR*kRevWet + ga2*(1-kRevWet)
+  out(aRvb_FreeL*kRevWet + ga2*(1-kRevWet), aRvb_FreeR*kRevWet + ga2*(1-kRevWet))
 
   ga2 = 0
 

@@ -4,7 +4,7 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 
@@ -16,11 +16,11 @@ chn_k "x", "w"
 chn_k "y", "w"
 
 instr 1
-  kfreq invalue "freq"
-  kamp invalue "amp"
-  kx oscil 0.4*kamp, kfreq*2, 1
-  ky oscil 0.4*kamp, kfreq*2, 1, 0.25
-  
+  kfreq = chnget("freq")
+  kamp  = chnget("amp")
+  kx    = oscil(0.4*kamp, kfreq*2, 1)
+  ky    = oscil(0.4*kamp, kfreq*2, 1, 0.25)
+
   ; update the gui
   if metro(30) == 1 then
     chnset kx+0.5, "x"

@@ -62,6 +62,11 @@ The source and binaries can be downloaded from:
   instrument names (quoted or unquoted) and string variables in scope. Inside
   `chnget("…")`, `chnget "…"` and the channel argument of `chnset`, only the
   channel names from the widget layout are offered.
+* **Channel hover outlines its widgets:** hovering over a quoted channel in
+  `chnget`, `chnset`, `invalue` or `outvalue` outlines every widget using that
+  channel, and the same happens when the text cursor is placed inside the
+  literal. Ctrl+Shift+H performs the same lookup for the channel on the
+  current line.
 * **One tab size, in characters:** the Editor page had *Tab Width* (pixels)
   and *Spaces per Tab*, which were hard to relate. There is now a single *Tab
   Size*, the number of spaces a tab is displayed with and inserted as, as in
@@ -108,6 +113,12 @@ The source and binaries can be downloaded from:
 
 ### Fixes and improvements
 
+* **Find/replace stays in its bar:** Tab and Shift+Tab now cycle through the
+  find/replace controls instead of moving focus back to the editor. The unused
+  separate find/replace dialog was removed.
+* **Widget properties explain themselves:** the *Show Properties* dialog now
+  lists each addressable property with its value type and description, and the
+  editor's property autocompletion shows the same information in the menu.
 * **Crash recovery keeps the GUI:** the temporary copies written for playback
   now contain the complete CSD, including the `<bsbPanel>` widget layout and
   presets, so recovering a document no longer drops a modified GUI.

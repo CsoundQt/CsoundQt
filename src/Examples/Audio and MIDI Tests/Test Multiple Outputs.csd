@@ -14,173 +14,173 @@ ksmps = 64
 nchnls = 24
 0dbfs = 1
 
-//UDO for displaying an audio signal in widgets
-opcode CsQtMeter, 0, SSak ;see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
- S_chan_sig, S_chan_over, aSig, kTrig	xin
- iDbRange = 60 ;shows 60 dB
- iHoldTim = 1 ;seconds to "hold the red light"
- kOn init 0
- kTim init 0
- kStart init 0
- kEnd init 0
- kMax max_k aSig, kTrig, 1
- if kTrig == 1 then
-  chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
-  if kOn == 0 && kMax > 1 then
-   kTim = 0
-   kEnd = iHoldTim
-   chnset k(1), S_chan_over
-   kOn = 1
+// UDO for displaying an audio signal in widgets
+; see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
+opcode CsQtMeter(S_chan_sig:S, S_chan_over:S, aSig:a, kTrig:k):()
+  iDbRange = 60  ; shows 60 dB
+  iHoldTim = 1   ; seconds to "hold the red light"
+  kOn = init(0)
+  kTim = init(0)
+  kStart = init(0)
+  kEnd = init(0)
+  kMax max_k aSig, kTrig, 1
+  if kTrig == 1 then
+    chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
+    if kOn == 0 && kMax > 1 then
+      kTim = 0
+      kEnd = iHoldTim
+      chnset k(1), S_chan_over
+      kOn = 1
+    endif
+    if kOn == 1 && kTim > kEnd then
+      chnset k(0), S_chan_over
+      kOn = 0
+    endif
   endif
-  if kOn == 1 && kTim > kEnd then
-   chnset k(0), S_chan_over
-   kOn =	0
-  endif
- endif
- kTim += ksmps/sr
+  kTim += ksmps/sr
 endop
 
 // declare display channels and call one instr for each channel
 indx = 0
 while indx < nchnls do
-  chn_k sprintf("out%d",indx+1),2
-  chn_k sprintf("out%dover",indx+1),2
-  schedule "DisplayOneChannel",1/kr,99999,indx
+  chn_k = sprintf(("out%d", indx+1), 2)
+  chn_k = sprintf(("out%dover", indx+1), 2)
+  schedule "DisplayOneChannel", 1/kr, 99999, indx
   indx += 1
 od
 // other software channels
-chn_k("signal",1)
-chn_k("chnA",1)
-chn_k("chnZ",1)
-chn_k("vol",1)
-chn_k("sigdur",1)
-chn_k("pausdur",1)
-chn_k("all",1)
+chn_k( "signal", 1)
+chn_k( "chnA", 1)
+chn_k( "chnZ", 1)
+chn_k( "vol", 1)
+chn_k( "sigdur", 1)
+chn_k( "pausdur", 1)
+chn_k( "all", 1)
 
 
 instr Control
 
-  ;GUI input
-  gkSel = chnget:k("signal") //0-4 for the selected signals2 
-  kChnA = chnget:k("chnA") //first channel to be tested 
+  ; GUI input
+  gkSel = chnget:k("signal")  // 0-4 for the selected signals2
+  kChnA = chnget:k("chnA")    // first channel to be tested
   iChnA = chnget:i("chnA")
-  kChnZ = chnget:k("chnZ") //last channel to be tested 
-  gkVol = chnget:k("vol") //volume in  dB 
-  kSigDur = chnget:k("sigdur") //duration of the test signal 
-  kPausDur = chnget:k("pausdur");duration of the pause 
-  kAll = chnget:k("all") //1 =  send to all available channels 
+  kChnZ = chnget:k("chnZ")        // last channel to be tested
+  gkVol = chnget:k("vol")         // volume in  dB
+  kSigDur = chnget:k("sigdur")    // duration of the test signal
+  kPausDur = chnget:k("pausdur")  ; duration of the pause
+  kAll = chnget:k("all")          // 1 =  send to all available channels
 
-  kChn init iChnA
-  kThisTime init 0
-  kSound init 1
-  kPaus init 0
-  kWasAll init 0
-  
-  //test signal to all channels as constant sound
+  kChn = init(iChnA)
+  kThisTime = init(0)
+  kSound = init(1)
+  kPaus = init(0)
+  kWasAll = init(0)
+
+  // test signal to all channels as constant sound
   if kAll == 1 then
-    
-    //if this is the first run ...
+
+    // if this is the first run ...
     if kWasAll == 0 then
-    
-      //... avoid duplicating an already running signal in one channel
-      turnoff2("PlayOneChannel",0,0)
-      
-      //... then call all selected channels
+
+      // ... avoid duplicating an already running signal in one channel
+      turnoff2("PlayOneChannel", 0, 0)
+
+      // ... then call all selected channels
       kIndx = kChnA
       while kIndx <= kChnZ do
-        schedulek("PlayOneChannel",0,99999,kIndx)
+        schedulek("PlayOneChannel", 0, 99999, kIndx)
         kIndx += 1
       od
-      
+
     endif
 
     kWasAll = 1
-  
-  //test signal circulating with pauses in between
+
+    // test signal circulating with pauses in between
   else
-  
-    //turn off the signal to all channels if it runs
+
+    // turn off the signal to all channels if it runs
     if kWasAll == 1 then
-      turnoff2("PlayOneChannel",0,0)
+      turnoff2("PlayOneChannel", 0, 0)
       kWasAll = 0
     endif
-  
-    //perform the circulation
+
+    // perform the circulation
     if kThisTime <= 0 then
-  
+
       if kSound == 1 then
-    
-        schedulek("PlayOneChannel",0,kSigDur,kChn)
+
+        schedulek("PlayOneChannel", 0, kSigDur, kChn)
         kSound = 0
         kPaus = 1
         kThisTime = kPausDur
         kChn += 1
         kChn = kChn > kChnZ ? kChnA : kChn
-    
+
       else
-    
+
         kSound = 1
         kPaus = 0
-        kThisTime = kSigDur   
-    
+        kThisTime = kSigDur
+
       endif
-  
+
     endif
-    
+
   endif
-  
-  //clock counts backwards in every k-cycle
+
+  // clock counts backwards in every k-cycle
   kThisTime -= 1/kr
 
 endin
-schedule("Control",0,-1)
+schedule("Control", 0, -1)
 
 
 instr PlayOneChannel
 
   iChan = p4
 
-  if gkSel == 0 then  //white noise
-    asig = rnd31:a(ampdbfs(gkVol),0)
-  elseif gkSel == 1 then  //pink noise
+  if gkSel == 0 then  // white noise
+    asig = rnd31:a(ampdbfs(gkVol), 0)
+  elseif gkSel == 1 then  // pink noise
     asig = pinkish(ampdbfs(gkVol))
-  elseif gkSel == 2 then  //10 KHz
-    asig  = oscili:a(ampdbfs(gkVol),10000)
-    asig  = linen:a(asig,.005,p3,.005)
-  elseif gkSel == 3 then  //1 kHz
-    asig  = oscili:a(ampdbfs(gkVol),1000)
-    asig  = linen:a(asig,.005,p3,.005)
-  else                    //100Hz 
-    asig = oscili:a(ampdbfs(gkVol),100)
-    asig = linen:a(asig,.005,p3,.005) 
- endif
- 
- outch(iChan,asig)
+  elseif gkSel == 2 then  // 10 Khz
+    asig = oscili:a(ampdbfs(gkVol), 10000)
+    asig = linen:a(asig, .005, p3, .005)
+  elseif gkSel == 3 then  // 1 kHz
+    asig = oscili:a(ampdbfs(gkVol), 1000)
+    asig = linen:a(asig, .005, p3, .005)
+  else  // 100Hz
+    asig = oscili:a(ampdbfs(gkVol), 100)
+    asig = linen:a(asig, .005, p3, .005)
+  endif
+
+  outch(iChan, asig)
 
 endin
 
 instr Display
 
-  gkTrigDisp = metro(10) //refresh rate for the LED's 
-  gaOut[] monitor 
-  
-;  //create as many instances for single display as there are channels
-;  indx = 0
-;  while indx < nchnls do
-;    schedule("DisplayOneChannel",0,99999,indx)
-;    indx += 1
-;  od
+  gkTrigDisp = metro(10)  // refresh rate for the LED's
+  gaOut[]    = monitor()
+
+  ; //create as many instances for single display as there are channels
+  ; indx = 0
+  ; while indx < nchnls do
+  ; schedule("DisplayOneChannel",0,99999,indx)
+  ; indx += 1
+  ; od
 
 endin
-schedule("Display",0,-1)
+schedule("Display", 0, -1)
 
 instr DisplayOneChannel
 
   indx = p4
   iOutChn = indx+1
-  Sout = sprintf("out%d",iOutChn)
-  Soutover = sprintf("out%dover",iOutChn)
-  CsQtMeter(Sout,Soutover,gaOut[indx],gkTrigDisp) 
+  Sout = sprintf("out%d", iOutChn)
+  Soutover = sprintf("out%dover", iOutChn)
+  CsQtMeter(Sout, Soutover, gaOut[indx], gkTrigDisp)
 
 endin
 

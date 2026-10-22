@@ -6,7 +6,6 @@ RESOURCES += "src/application.qrc" \
 
 FORMS = "src/about.ui" \
     "src/configdialog.ui" \
-    "src/findreplace.ui" \
     "src/keyboardshortcuts.ui" \
     "src/keyselector.ui" \
     "src/utilitiesdialog.ui" \
@@ -38,8 +37,8 @@ HEADERS = "src/about.h" \
     "src/documentview.h" \
     "src/externallauncher.h" \
     "src/eventsheet.h" \
-    "src/findreplace.h" \
     "src/findbar.h" \
+    "src/widgetpropertyinfo.h" \
     "src/framewidget.h" \
     "src/bracketmatcher.h" \
     "src/sourcedefinitions.h" \
@@ -108,7 +107,6 @@ SOURCES = "src/about.cpp" \
     "src/documentview.cpp" \
     "src/externallauncher.cpp" \
     "src/eventsheet.cpp" \
-    "src/findreplace.cpp" \
     "src/findbar.cpp" \
     "src/framewidget.cpp" \
     "src/bracketmatcher.cpp" \

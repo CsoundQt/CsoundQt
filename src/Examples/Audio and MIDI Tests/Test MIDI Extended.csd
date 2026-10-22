@@ -4,78 +4,78 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2
 0dbfs = 1
 ; Based on manual example by schwaheed
 
-massign         0, 0  ; disable triggering of notes
-pgmassign       0, 0
+massign   0, 0  ; disable triggering of notes
+pgmassign 0, 0
 
-instr 1  ;Generate MIDI note
-	ktime timeinsts
-	noteon 1, 60, 100
-	if (ktime > p3/2) then
-		reinit endnote
-		turnoff
-	endif
-	goto end
+instr 1  ; Generate MIDI note
+  ktime = timeinsts()
+  noteon 1, 60, 100
+  if (ktime > p3/2) then
+    reinit endnote
+    turnoff
+  endif
+  goto end
 endnote:
-	noteoff 1, 60, 100
+  noteoff 1, 60, 100
 end:
 endin
 
-instr   130
+instr 130
 
-knotelength    init    0
-knoteontime    init    0
+  knotelength = init(0)
+  knoteontime = init(0)
 
-kstatus, kchan, kdata1, kdata2                  midiin
+  kstatus, kchan, kdata1, kdata2 midiin
 
-if (kstatus == 128) then
-	knoteofftime    times
-	knotelength = (knoteofftime - knoteontime)*1000
-	Stext sprintfk "Note Off: chan = %d note#  = %d velocity = %d length = %d", kchan, kdata1,kdata2, knotelength
-	outvalue "note", Stext
+  if (kstatus == 128) then
+    knoteofftime = times()
+    knotelength = (knoteofftime - knoteontime)*1000
+    Stext = sprintfk("Note Off: chan = %d note#  = %d velocity = %d length = %d", kchan, kdata1, kdata2, knotelength)
+    chnset(Stext, "note")
 
-elseif (kstatus == 144) then
-	if (kdata2 == 0) then
-		knoteofftime    times
-		knotelength = (knoteofftime - knoteontime)*1000
-printk2 knotelength
-		Stext sprintfk "Note On: chan = %d note#  = %d velocity = %d length = %d", kchan, kdata1, kdata2, knotelength
-	else
-		Stext sprintfk "Note On: chan = %d note#  = %d velocity = %d", kchan, kdata1, kdata2
-		knoteontime    times
-	endif
-	outvalue "note", Stext
+  elseif (kstatus == 144) then
+    if (kdata2 == 0) then
+      knoteofftime = times()
+      knotelength  = (knoteofftime - knoteontime)*1000
+      printk2 knotelength
+      Stext = sprintfk("Note On: chan = %d note#  = %d velocity = %d length = %d", kchan, kdata1, kdata2, knotelength)
+    else
+      Stext = sprintfk("Note On: chan = %d note#  = %d velocity = %d", kchan, kdata1, kdata2)
+      knoteontime = times()
+    endif
+    chnset(Stext, "note")
 
-elseif (kstatus == 160) then
-	printks "kstatus= %d, kchan = %d, \\tkdata1 = %d, kdata2 = %d \\tPolyphonic Aftertouch\\n", 0, kstatus, kchan, kdata1, kdata2
+  elseif (kstatus == 160) then
+    printks "kstatus= %d, kchan = %d, \\tkdata1 = %d, kdata2 = %d \\tPolyphonic Aftertouch\\n", 0, kstatus, kchan, kdata1, kdata2
 
-elseif (kstatus == 176) then
-	Stext sprintfk "%d",  kdata1
-	outvalue "cc", Stext
-	Stext sprintfk "%d",  kdata2
-	outvalue "ccvalue", Stext
-	Stext sprintfk "%d",  kchan
-	outvalue "channel", Stext
+  elseif (kstatus == 176) then
+    Stext = sprintfk("%d", kdata1)
+    chnset(Stext, "cc")
+    Stext = sprintfk("%d", kdata2)
+    chnset(Stext, "ccvalue")
+    Stext = sprintfk("%d", kchan)
+    chnset(Stext, "channel")
 
-elseif (kstatus == 192) then
-	printks "kstatus= %d, kchan = %d, \\tkdata1 = %d, kdata2 = %d \\tProgram Change\\n", 0, kstatus, kchan, kdata1, kdata2
+  elseif (kstatus == 192) then
+    printks "kstatus= %d, kchan = %d, \\tkdata1 = %d, kdata2 = %d \\tProgram Change\\n", 0, kstatus, kchan, kdata1, kdata2
 
-elseif (kstatus == 208) then
-	printks  "kstatus= %d, kchan = %d, \\tkdata1 = %d, kdata2 = %d \\tChannel Aftertouch\\n", 0, kstatus, kchan, kdata1, kdata2
+  elseif (kstatus == 208) then
+    printks "kstatus= %d, kchan = %d, \\tkdata1 = %d, kdata2 = %d \\tChannel Aftertouch\\n", 0, kstatus, kchan, kdata1, kdata2
 
-elseif (kstatus == 224) then
-	printks "kstatus= %d, kchan = %d, \\t ( data1 , kdata2 ) = ( %d, %d )\\tPitch Bend\\n", 0, kstatus, kchan, kdata1, kdata2
-endif
+  elseif (kstatus == 224) then
+    printks "kstatus= %d, kchan = %d, \\t ( data1 , kdata2 ) = ( %d, %d )\\tPitch Bend\\n", 0, kstatus, kchan, kdata1, kdata2
+  endif
 
-kcontinuous invalue "continuous"
-if (kcontinuous == 1) then
-	ktrigger metro 1
-	schedkwhen  ktrigger, 0.2, 2, 1, 0, 0.5
-endif
+  kcontinuous = chnget("continuous")
+  if (kcontinuous == 1) then
+    ktrigger = metro(1)
+    schedkwhen ktrigger, 0.2, 2, 1, 0, 0.5
+  endif
 
 endin
 
