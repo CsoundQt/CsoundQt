@@ -27,6 +27,7 @@
 #include <QColor>
 
 #include "csoundoptions.h"
+#include "channelhighlightmode.h"
 
 class Options: public CsoundOptions{
 public:
@@ -93,7 +94,8 @@ public:
 	bool useAPI;
 	bool enableWidgets;
 	bool widgetsIndependent;  // Widget layouts in Separate Window (instead of Dock Widget)
-	bool highlightWidgetsOnChannelHover; // Outline widgets when hovering a channel literal
+	ChannelHighlightMode channelHighlightMode = ChannelHighlightMode::CursorOnly;
+	ChannelReferenceHighlightMode channelReferenceHighlightMode = ChannelReferenceHighlightMode::Always;
 	bool useInvalue; // If false use chnget
 	bool keyRepeat;
 	bool debugLiveEvents;

@@ -21,6 +21,7 @@
 */
 
 #include "documentview.h"
+#include "channeltext.h"
 #include "findbar.h"
 #include "opcodeinsertbar.h"
 #include "opentryparser.h"
@@ -42,7 +43,6 @@
 #include <QVBoxLayout>
 
 #include <algorithm>
-#include <climits>
 
 
 static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesizer", "CsOptions"};
@@ -229,217 +229,6 @@ static QString withoutParentheses(const QString &args)
     if (text.startsWith(QLatin1Char('(')) && text.endsWith(QLatin1Char(')')))
         return text.mid(1, text.length() - 2).trimmed();
     return text;
-}
-
-// A small tokenizer for one line of Csound code. It only needs to distinguish
-// the pieces that matter for finding a literal channel argument: identifiers,
-// string constants, commas and parentheses. Comments end the line.
-struct CsoundLineToken
-{
-    enum Kind { Identifier, String, Comma, LeftParen, RightParen, Other };
-    Kind kind = Other;
-    QString text;
-    int start = 0;
-    int end = 0;
-    bool closed = false; // true for a properly terminated string
-};
-
-static QList<CsoundLineToken> tokenizeCsoundLine(const QString &line,
-                                                  int *commentStart = nullptr)
-{
-    QList<CsoundLineToken> tokens;
-    if (commentStart)
-        *commentStart = -1;
-    int i = 0;
-    while (i < line.size()) {
-        const QChar c = line.at(i);
-        if (c.isSpace()) {
-            ++i;
-            continue;
-        }
-        if (c == QLatin1Char(';')
-                || (c == QLatin1Char('/') && i + 1 < line.size()
-                    && line.at(i + 1) == QLatin1Char('/'))) {
-            if (commentStart)
-                *commentStart = i;
-            break;
-        }
-        if (c == QLatin1Char('"')) {
-            const int start = i++;
-            QString text;
-            bool escaped = false;
-            bool closed = false;
-            while (i < line.size()) {
-                const QChar ch = line.at(i);
-                if (escaped) {
-                    text += ch;
-                    escaped = false;
-                    ++i;
-                    continue;
-                }
-                if (ch == QLatin1Char('\\')) {
-                    escaped = true;
-                    ++i;
-                    continue;
-                }
-                if (ch == QLatin1Char('"')) {
-                    closed = true;
-                    ++i;
-                    break;
-                }
-                text += ch;
-                ++i;
-            }
-            tokens.append({CsoundLineToken::String, text, start, i, closed});
-            continue;
-        }
-        if (c.isLetter() || c == QLatin1Char('_')) {
-            const int start = i;
-            while (i < line.size()
-                   && (line.at(i).isLetterOrNumber()
-                       || line.at(i) == QLatin1Char('_')))
-                ++i;
-            tokens.append({CsoundLineToken::Identifier,
-                           line.mid(start, i - start), start, i, false});
-            continue;
-        }
-        CsoundLineToken::Kind kind = CsoundLineToken::Other;
-        if (c == QLatin1Char(','))
-            kind = CsoundLineToken::Comma;
-        else if (c == QLatin1Char('('))
-            kind = CsoundLineToken::LeftParen;
-        else if (c == QLatin1Char(')'))
-            kind = CsoundLineToken::RightParen;
-        tokens.append({kind, QString(c), i, i + 1, false});
-        ++i;
-    }
-    return tokens;
-}
-
-// Return a literal channel from the chnget/chnset/invalue/outvalue nearest to
-// the cursor on this line. Variables and expressions are deliberately rejected;
-// only a single complete string constant counts.
-static QString widgetChannelAt(const QString &line, int cursorPos,
-                               bool requireInsideString = false)
-{
-    int commentStart = -1;
-    const QList<CsoundLineToken> tokens = tokenizeCsoundLine(line, &commentStart);
-    if (commentStart >= 0 && cursorPos >= commentStart)
-        return {};
-
-    static const QSet<QString> channelOpcodes = {
-        QStringLiteral("chnget"), QStringLiteral("chnset"),
-        QStringLiteral("invalue"), QStringLiteral("outvalue")
-    };
-
-    int opcodeIndex = -1;
-    int bestDistance = INT_MAX;
-    for (int i = 0; i < tokens.size(); ++i) {
-        const CsoundLineToken &token = tokens.at(i);
-        if (token.kind != CsoundLineToken::Identifier
-                || !channelOpcodes.contains(token.text))
-            continue;
-        int distance = 0;
-        if (cursorPos < token.start)
-            distance = token.start - cursorPos;
-        else if (cursorPos > token.end)
-            distance = cursorPos - token.end;
-        if (distance < bestDistance) {
-            bestDistance = distance;
-            opcodeIndex = i;
-        }
-    }
-    if (opcodeIndex < 0)
-        return {};
-
-    const QString &opcode = tokens.at(opcodeIndex).text;
-    const int channelIndex = (opcode == QLatin1String("chnset")) ? 1 : 0;
-    int i = opcodeIndex + 1;
-    // Optional Csound 7 type annotation, e.g. chnget:k "channel".
-    if (i + 1 < tokens.size()
-            && tokens.at(i).kind == CsoundLineToken::Other
-            && tokens.at(i).text == QLatin1String(":")
-            && tokens.at(i + 1).kind == CsoundLineToken::Identifier) {
-        i += 2;
-    }
-
-    QList<QList<CsoundLineToken>> arguments;
-    QList<CsoundLineToken> current;
-    const bool functional = (i < tokens.size()
-                             && tokens.at(i).kind == CsoundLineToken::LeftParen);
-    int depth = 1;
-    if (functional)
-        ++i;
-    // Legacy syntax can have nested calls in the value argument, e.g.
-    // chnset linlin(dbamp(kout), 0, 1, -range, 0), "vu1". Split only on
-    // commas outside those nested parentheses.
-    int legacyDepth = 0;
-    for (; i < tokens.size(); ++i) {
-        const CsoundLineToken &token = tokens.at(i);
-        if (functional) {
-            if (token.kind == CsoundLineToken::LeftParen) {
-                ++depth;
-                current.append(token);
-            } else if (token.kind == CsoundLineToken::RightParen) {
-                --depth;
-                if (depth == 0) {
-                    if (!current.isEmpty())
-                        arguments.append(current);
-                    break;
-                }
-                current.append(token);
-            } else if (depth == 1 && token.kind == CsoundLineToken::Comma) {
-                arguments.append(current);
-                current.clear();
-            } else {
-                current.append(token);
-            }
-            continue;
-        }
-
-        if (token.kind == CsoundLineToken::LeftParen) {
-            ++legacyDepth;
-            current.append(token);
-        } else if (token.kind == CsoundLineToken::RightParen) {
-            if (legacyDepth > 0)
-                --legacyDepth;
-            current.append(token);
-        } else if (legacyDepth == 0
-                   && token.kind == CsoundLineToken::Comma) {
-            arguments.append(current);
-            current.clear();
-        } else if (legacyDepth == 0
-                   && token.kind == CsoundLineToken::Identifier
-                   && channelOpcodes.contains(token.text)) {
-            // Stop at a second opcode on the same line, so two calls such as
-            // `chnget "a" + chnget "b"` do not merge their argument lists.
-            break;
-        } else if (legacyDepth == 0 && token.kind == CsoundLineToken::Other
-                   && !current.isEmpty()
-                   && current.constLast().kind == CsoundLineToken::String
-                   && arguments.size() == channelIndex) {
-            // A channel argument is a single literal. Stop before trailing
-            // expression tokens when the caller wrote e.g. chnget "a" + x.
-            break;
-        } else {
-            current.append(token);
-        }
-    }
-    if (!current.isEmpty())
-        arguments.append(current);
-
-    if (channelIndex >= arguments.size())
-        return {};
-    const QList<CsoundLineToken> &channelArg = arguments.at(channelIndex);
-    if (channelArg.size() != 1)
-        return {};
-    const CsoundLineToken &channel = channelArg.first();
-    if (channel.kind != CsoundLineToken::String || !channel.closed)
-        return {};
-    if (requireInsideString
-            && (cursorPos <= channel.start || cursorPos >= channel.end))
-        return {};
-    return channel.text;
 }
 
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
@@ -1012,29 +801,91 @@ QString DocumentView::channelAtCursor() const
 	if (!editor)
 		return {};
 	const QTextCursor cursor = editor->textCursor();
-	return widgetChannelAt(cursor.block().text(), cursor.positionInBlock());
+	return findChannelLiteral(cursor.block().text(),
+	                          cursor.positionInBlock()).channel;
 }
 
-QString DocumentView::channelAtTextCursor() const
+QString DocumentView::channelAtCursorPosition(const QTextCursor &cursor)
+{
+	const QTextBlock block = cursor.block();
+	const int position = cursor.positionInBlock();
+	const int revision = block.revision();
+	if (!m_cachedChannel.isEmpty()
+			&& m_cachedChannelBlock == block
+			&& m_cachedBlockRevision == revision
+			&& position > m_cachedChannelStart
+			&& position < m_cachedChannelEnd) {
+		return m_cachedChannel;
+	}
+
+	// Keep a per-document index of lines that contain a channel opcode.
+	// Unchanged lines without one can be skipped without tokenizing them
+	// again; any edit changes the document revision and invalidates the index.
+	QTextDocument *document = cursor.document();
+	const int documentRevision = document ? document->revision() : -1;
+	if (document != m_channelLineCacheDocument
+			|| documentRevision != m_channelLineCacheRevision) {
+		m_channelLineCache.clear();
+		m_channelLineCacheDocument = document;
+		m_channelLineCacheRevision = documentRevision;
+	}
+	const int blockNumber = block.blockNumber();
+	const auto lineIt = m_channelLineCache.constFind(blockNumber);
+	if (lineIt != m_channelLineCache.constEnd() && !lineIt.value())
+		return {};
+
+	const ChannelTextResult result = findChannelLiteral(
+				block.text(), position, true);
+	m_channelLineCache.insert(blockNumber, result.hasChannelReference);
+	if (result.channel.isEmpty()) {
+		m_cachedChannel.clear();
+		m_cachedChannelBlock = QTextBlock();
+		m_cachedBlockRevision = -1;
+		m_cachedChannelStart = -1;
+		m_cachedChannelEnd = -1;
+		return {};
+	}
+	m_cachedChannel = result.channel;
+	m_cachedChannelBlock = block;
+	m_cachedBlockRevision = revision;
+	m_cachedChannelStart = result.start;
+	m_cachedChannelEnd = result.end;
+	return m_cachedChannel;
+}
+
+QString DocumentView::channelAtTextCursor()
 {
 	TextEditor *editor = activeEditor();
 	if (!editor)
 		return {};
-	const QTextCursor cursor = editor->textCursor();
-	return widgetChannelAt(cursor.block().text(), cursor.positionInBlock(),
-	                       true);
+	return channelAtCursorPosition(editor->textCursor());
 }
 
 void DocumentView::updateChannelHighlightFromCursor()
 {
+	if (m_channelHighlightMode == ChannelHighlightMode::Never
+			|| m_channelHighlightMode == ChannelHighlightMode::MouseOnly)
+		return;
+	m_channelHighlightSource = ChannelHighlightSource::Cursor;
 	updateChannelHighlight();
 }
 
 void DocumentView::updateChannelHighlight()
 {
-	QString target = m_hoverChannel;
-	if (target.isEmpty())
+	QString target;
+	if (m_channelHighlightMode == ChannelHighlightMode::CursorOnly) {
 		target = channelAtTextCursor();
+	} else if (m_channelHighlightMode == ChannelHighlightMode::MouseOnly) {
+		target = m_hoverChannel;
+	} else if (m_channelHighlightMode == ChannelHighlightMode::Full) {
+		// In Full mode only the source that most recently moved may trigger
+		// a highlight. In particular, when the mouse leaves a channel the
+		// cursor must not take over until it has actually moved again.
+		if (m_channelHighlightSource == ChannelHighlightSource::Cursor)
+			target = channelAtTextCursor();
+		else if (m_channelHighlightSource == ChannelHighlightSource::Mouse)
+			target = m_hoverChannel;
+	}
 	// Repeated events for the same channel are harmless: the widget layout
 	// keeps an existing outline instead of rebuilding it. Always re-send a
 	// non-empty channel so hovering works again after Esc/click cleared it.
@@ -1044,9 +895,116 @@ void DocumentView::updateChannelHighlight()
 	emit channelHighlightRequested(target);
 }
 
+QList<QTextEdit::ExtraSelection> DocumentView::extraSelectionsFor(
+		TextEditor *editor) const
+{
+	QList<QTextEdit::ExtraSelection> selections;
+	if (editor == m_mainEditor)
+		selections = m_findSelections;
+	if (editor == m_widgetChannelEditor)
+		selections.append(m_widgetChannelSelections);
+	return selections;
+}
+
+void DocumentView::clearWidgetChannelHighlights()
+{
+	m_widgetChannelSelections.clear();
+	TextEditor *editor = m_widgetChannelEditor;
+	m_widgetChannelEditor = nullptr;
+	if (editor)
+		editor->setExtraSelections(extraSelectionsFor(editor));
+}
+
+void DocumentView::highlightWidgetChannels(const QStringList &channels,
+                                           bool jumpToFirstReference)
+{
+	clearWidgetChannelHighlights();
+	if (channels.isEmpty())
+		return;
+	TextEditor *editor = currentLineEditor();
+	if (!editor)
+		return;
+
+	QStringList uniqueChannels;
+	for (const QString &channel : channels) {
+		if (!channel.isEmpty() && !uniqueChannels.contains(channel))
+			uniqueChannels.append(channel);
+	}
+	if (uniqueChannels.isEmpty())
+		return;
+
+	QTextDocument *document = editor->document();
+	QSet<int> markedBlocks;
+	int firstReferenceBlock = -1;
+	int firstReferencePosition = -1;
+	for (QTextBlock block = document->begin(); block.isValid(); block = block.next()) {
+		const QString line = block.text();
+		bool matches = false;
+		int matchPosition = -1;
+		for (const QString &channel : uniqueChannels) {
+			// Also accept the widget-property form "<channel>/<property>"
+			// used by outvalue, without matching a longer channel name.
+			const QString prefix = QLatin1Char('"') + channel;
+			int from = 0;
+			while ((from = line.indexOf(prefix, from)) >= 0) {
+				const int next = from + prefix.size();
+				if (next >= line.size()
+						|| (line.at(next) != QLatin1Char('"')
+							&& line.at(next) != QLatin1Char('/'))) {
+					from = next;
+					continue;
+				}
+				const ChannelTextResult result = findChannelLiteral(
+							line, from + 1, false);
+				if (result.channel == channel
+						|| result.channel.startsWith(channel + QLatin1Char('/'))) {
+					matches = true;
+					matchPosition = from;
+					break;
+				}
+				from = next;
+			}
+			if (matches)
+				break;
+		}
+		if (matches) {
+			markedBlocks.insert(block.blockNumber());
+			if (firstReferenceBlock < 0 && matchPosition >= 0) {
+				firstReferenceBlock = block.blockNumber();
+				firstReferencePosition = block.position() + matchPosition + 1;
+			}
+		}
+	}
+
+	QTextCharFormat format;
+	format.setBackground(QColor(255, 200, 40, 80));
+	format.setProperty(QTextFormat::FullWidthSelection, true);
+	for (int blockNumber : markedBlocks) {
+		const QTextBlock block = document->findBlockByNumber(blockNumber);
+		if (!block.isValid())
+			continue;
+		QTextEdit::ExtraSelection selection;
+		selection.cursor = QTextCursor(block);
+		selection.cursor.select(QTextCursor::LineUnderCursor);
+		selection.format = format;
+		m_widgetChannelSelections.append(selection);
+	}
+	if (m_widgetChannelSelections.isEmpty())
+		return;
+	m_widgetChannelEditor = editor;
+	editor->setExtraSelections(extraSelectionsFor(editor));
+	if (jumpToFirstReference && firstReferencePosition >= 0) {
+		QTextCursor cursor(document);
+		cursor.setPosition(firstReferencePosition);
+		editor->setTextCursor(cursor);
+		editor->ensureCursorVisible();
+	}
+}
+
 bool DocumentView::eventFilter(QObject *watched, QEvent *event)
 {
-	if (!m_highlightWidgetsOnChannelHover)
+	if (m_channelHighlightMode != ChannelHighlightMode::Full
+			&& m_channelHighlightMode != ChannelHighlightMode::MouseOnly)
 		return QWidget::eventFilter(watched, event);
 	TextEditor *editor = qobject_cast<TextEditor *>(watched->parent());
 	if (editor && editor->viewport() == watched) {
@@ -1054,16 +1012,19 @@ bool DocumentView::eventFilter(QObject *watched, QEvent *event)
 			auto *mouseEvent = static_cast<QMouseEvent *>(event);
 			const QTextCursor cursor = editor->cursorAt(
 						mouseEvent->position().toPoint());
-			const QString channel = widgetChannelAt(
-						cursor.block().text(), cursor.positionInBlock(),
-						true);
-			if (channel != m_hoverChannel) {
+			const QString channel = channelAtCursorPosition(cursor);
+			const bool sourceChanged = m_channelHighlightSource
+					!= ChannelHighlightSource::Mouse;
+			m_channelHighlightSource = ChannelHighlightSource::Mouse;
+			if (sourceChanged || channel != m_hoverChannel) {
 				m_hoverChannel = channel;
 				updateChannelHighlight();
 			}
 		} else if (event->type() == QEvent::Leave) {
-			if (!m_hoverChannel.isEmpty()) {
+			if (!m_hoverChannel.isEmpty()
+					|| m_channelHighlightSource == ChannelHighlightSource::Mouse) {
 				m_hoverChannel.clear();
+				m_channelHighlightSource = ChannelHighlightSource::None;
 				updateChannelHighlight();
 			}
 		}
@@ -1213,10 +1174,8 @@ void DocumentView::syntaxCheck()
 	// matchparenthesis. Code by Geir Vatterkar see https://doc.qt.io/archives/qq/QtQuarterly31.pdf
 	// some corrections by Heinz van Saanen http://qt-apps.org/content/show.php/CLedit?content=125532 ; comments: http://www.qtcentre.org/archive/index.php/t-31084.html
 
-	QList<QTextEdit::ExtraSelection> selections;
-	if (editor == m_mainEditor)
-		selections = m_findSelections; // keep find highlights, if any
-	editor->setExtraSelections(selections);
+	// Keep find highlights and the experimental widget-channel line marks.
+	editor->setExtraSelections(extraSelectionsFor(editor));
 
 	// Mark the bracket next to the cursor and its partner. Painting is done by
 	// the syntax highlighter (see BracketMatcher), not by an extra selection:
@@ -1960,6 +1919,11 @@ void DocumentView::textChanged() {
 void DocumentView::escapePressed()
 {
 	// TODO implment for multiple views
+	emit editorEscapePressed();
+	if (!m_widgetChannelSelections.isEmpty()) {
+		clearWidgetChannelHighlights();
+		return;
+	}
 	if (m_opcodeInsertBar && m_opcodeInsertBar->isVisible()) {
 		m_opcodeInsertBar->hideBar();
 		return;
@@ -2357,6 +2321,7 @@ void DocumentView::highlightWidgetChannel()
 	const QString channel = channelAtCursor();
 	// An empty channel also clears a previous outline when the shortcut is
 	// pressed on a line that does not contain a literal channel.
+	m_channelHighlightSource = ChannelHighlightSource::None;
 	m_activeChannelHighlight = channel;
 	emit channelHighlightRequested(channel);
 }
@@ -3385,13 +3350,20 @@ void DocumentView::setWidgetChannels(const QStringList &channels) {
     m_widgetChannels = channels;
 }
 
-void DocumentView::setHighlightWidgetsOnChannelHover(bool enabled) {
-	if (m_highlightWidgetsOnChannelHover == enabled)
+void DocumentView::setChannelHighlightMode(ChannelHighlightMode mode) {
+	if (m_channelHighlightMode == mode)
 		return;
-	m_highlightWidgetsOnChannelHover = enabled;
-	if (!enabled && !m_hoverChannel.isEmpty()) {
+	m_channelHighlightMode = mode;
+	m_channelHighlightSource = ChannelHighlightSource::None;
+	if (mode != ChannelHighlightMode::Full
+			&& mode != ChannelHighlightMode::MouseOnly)
 		m_hoverChannel.clear();
-		updateChannelHighlight();
+	if (mode == ChannelHighlightMode::Never
+			|| mode == ChannelHighlightMode::MouseOnly) {
+		m_activeChannelHighlight.clear();
+		emit channelHighlightRequested(QString());
+	} else {
+		updateChannelHighlightFromCursor();
 	}
 }
 

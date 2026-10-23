@@ -331,6 +331,7 @@ private slots:
     void autocomplete();
     void insertOpcode();
     void highlightWidgetChannel();
+    void highlightSelectedWidgetChannels();
 //	void showParametersInEditor();
 	void onNewConnection(); // when new client is connecting to localServer
 	void onReadyRead(); // when message comes in
@@ -487,6 +488,7 @@ private:
 	QAction *getToInAct;
 	QAction *inToGetAct;
 	QAction *highlightWidgetChannelAct;
+	QAction *highlightWidgetChannelsAct;
 	QAction *midiControlAct;
     QAction *qmlAct;
     QAction *findAct;

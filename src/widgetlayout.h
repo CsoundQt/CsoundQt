@@ -110,6 +110,11 @@ public:
 	QVector<QuteWidget *> getWidgets() {return m_widgets;}
 	// Widgets currently selected in the editor (empty when not editing)
 	QList<QuteWidget *> getSelectedWidgets();
+	bool isEditMode() const { return m_editMode; }
+	QuteWidget *getHoveredWidget() const { return m_hoveredWidget; }
+	// Ask the document to mark editor lines for this widget (or the current
+	// selection when widget is nullptr).
+	void highlightWidgetChannels(QuteWidget *widget = nullptr);
 
 	// Data to/from widgets
 	void setValue(QString channelName, double value);
@@ -402,6 +407,8 @@ protected:
 	virtual bool focusNextPrevChild(bool next) override;
 	virtual void contextMenuEvent(QContextMenuEvent *event);
 	virtual bool eventFilter(QObject *watched, QEvent *event) override;
+	void setHoveredWidget(QuteWidget *widget);
+	QuteWidget *hoveredWidgetFor(QObject *watched) const;
     virtual void closeEvent(QCloseEvent *event);
 	QRubberBand *selectionFrame;
 	int startx, starty;
@@ -439,6 +446,7 @@ private:
 	int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
 	int xOffset, yOffset;
     int m_updateRate;
+	QuteWidget *m_hoveredWidget = nullptr;
 
 	// For the properties dialog - they store the configuration data for the widget panel
 	QPoint currentPosition;  //TODO use proper variables instead of storing data in the widgets...
@@ -608,6 +616,10 @@ signals:
 	void showMidiLearn(QuteWidget *);
 	void logMessage(const QString &message, int role); // User facing message from a widget, forwarded to the Csound console (role: MessageRole)
     void windowStatus(bool);
+	void widgetHovered(QuteWidget *widget);
+	void widgetChannelsHighlightRequested(const QStringList &channels);
+	void editingEscapePressed();
+	void editModeChanged(bool active);
 	//    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
 };
 

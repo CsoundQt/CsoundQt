@@ -32,6 +32,7 @@
 #include <QDockWidget>
 #include <vector>
 #include "basedocument.h"
+#include "channelhighlightmode.h"
 #include "sourcedefinitions.h"
 #include "widgetpropertyinfo.h"
 
@@ -173,7 +174,13 @@ public:
 	// Internal Options setters
 	void setConsoleBufferSize(int size);
 	void setWidgetEnabled(bool enabled);
-	void setHighlightWidgetsOnChannelHover(bool enabled);
+	void setChannelHighlightMode(ChannelHighlightMode mode);
+	void setChannelReferenceHighlightMode(ChannelReferenceHighlightMode mode);
+	// Experimental: mark editor lines that reference the selected widget.
+	void highlightSelectedWidgetChannels();
+	void updateWidgetChannelLineHighlights();
+	void togglePinnedWidgetChannelHighlights(const QStringList &channels);
+	void clearWidgetChannelHighlights();
 	virtual void registerButton(QuteButton *button);
 	void queueMidiIn(std::vector<unsigned char> *message);
     void queueVirtualMidiIn(std::vector<unsigned char> &message);
@@ -256,6 +263,9 @@ private:
     QString m_colorTheme;
     QStringList m_parsedUdos;
     bool m_parseUdosNeeded;
+	ChannelReferenceHighlightMode m_channelReferenceHighlightMode = ChannelReferenceHighlightMode::Always;
+	bool m_widgetChannelHighlightPinned = false;
+	QStringList m_pinnedWidgetChannels;
     // The names defined in the document (user-defined opcodes, named
     // instruments, macros and struct types), used by "Go to Source".
     SourceDefinitions m_definitions;

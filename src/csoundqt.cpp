@@ -4433,7 +4433,8 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setAutoCompleteMenuMaxLines(m_options->autocompleteMenuMaxLines);
     p->setAutoParameterMode(m_options->autoParameterMode);
     p->setWidgetEnabled(m_options->enableWidgets);
-    p->setHighlightWidgetsOnChannelHover(m_options->highlightWidgetsOnChannelHover);
+    p->setChannelHighlightMode(m_options->channelHighlightMode);
+    p->setChannelReferenceHighlightMode(m_options->channelReferenceHighlightMode);
     p->showWidgetTooltips(m_options->showTooltips);
     p->setWidgetFrameColors(m_options->widgetFrameColorUnselected,
                             m_options->widgetFrameColorSelected);
@@ -4951,6 +4952,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     inToGetAct->setShortcut(tr(""));
     getToInAct->setShortcut(tr(""));
     highlightWidgetChannelAct->setShortcut(tr("Ctrl+Shift+H"));
+    highlightWidgetChannelsAct->setShortcut(tr("Ctrl+Shift+J"));
     midiControlAct->setShortcut(tr(""));
     findAct->setShortcut(tr("Ctrl+F"));
     findAgainAct->setShortcut(tr("Ctrl+G"));
@@ -5099,6 +5101,13 @@ void CsoundQt::highlightWidgetChannel()
     DocumentPage *page = getCurrentDocumentPage();
     if (page)
         page->highlightWidgetChannel();
+}
+
+void CsoundQt::highlightSelectedWidgetChannels()
+{
+    DocumentPage *page = getCurrentDocumentPage();
+    if (page)
+        page->highlightSelectedWidgetChannels();
 }
 
 #ifdef CSQT_DEBUGGER
@@ -5345,6 +5354,15 @@ void CsoundQt::createActions()
     // The action has no menu entry yet, but it must be attached to the window
     // for its shortcut to be active.
     addAction(highlightWidgetChannelAct);
+
+    // Experimental: mark lines referring to the single selected widget.
+    highlightWidgetChannelsAct = new QAction(tr("Highlight Selected Widget Channels"), this);
+    highlightWidgetChannelsAct->setStatusTip(
+                tr("Mark editor lines that read or write the selected widget's channels"));
+    highlightWidgetChannelsAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(highlightWidgetChannelsAct, &QAction::triggered,
+            this, &CsoundQt::highlightSelectedWidgetChannels);
+    addAction(highlightWidgetChannelsAct);
 
     midiControlAct = new QAction(tr("Insert MidiControl instrument"), this);
     midiControlAct->setStatusTip(tr("Generate instrument according to MIDI bindings of widgets"));
@@ -5928,6 +5946,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(inToGetAct);
     m_keyActions.append(getToInAct);
     m_keyActions.append(highlightWidgetChannelAct);
+    m_keyActions.append(highlightWidgetChannelsAct);
     m_keyActions.append(findAct);
     m_keyActions.append(findAgainAct);
     m_keyActions.append(findPreviousAct);
@@ -6752,8 +6771,27 @@ void CsoundQt::readSettings()
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
     m_options->midiCcToCurrentPageOnly = settings.value("midiCcToActivePageOnly", false).toBool();
     m_options->widgetsIndependent = settings.value("widgetsIndependent", false).toBool();
-    m_options->highlightWidgetsOnChannelHover =
-            settings.value("highlightWidgetsOnChannelHover", true).toBool();
+    // Migrate the old boolean: false meant "cursor only" because cursor
+    // highlighting was already always on when the hover option was unchecked.
+    const QVariant oldHover = settings.value("highlightWidgetsOnChannelHover");
+    const int defaultMode = oldHover.isValid()
+            ? (oldHover.toBool() ? int(ChannelHighlightMode::Full)
+                                 : int(ChannelHighlightMode::CursorOnly))
+            : int(ChannelHighlightMode::CursorOnly);
+    const int mode = settings.value("channelHighlightMode", defaultMode).toInt();
+    m_options->channelHighlightMode = static_cast<ChannelHighlightMode>(
+                qBound(0, mode, int(ChannelHighlightMode::MouseOnly)));
+    const QVariant oldReferences = settings.value("highlightChannelReferences");
+    const int defaultReferenceMode = oldReferences.isValid()
+            ? (oldReferences.toBool()
+               ? int(ChannelReferenceHighlightMode::Always)
+               : int(ChannelReferenceHighlightMode::Never))
+            : int(ChannelReferenceHighlightMode::Always);
+    const int referenceMode = settings.value("channelReferenceHighlightMode",
+                                             defaultReferenceMode).toInt();
+    m_options->channelReferenceHighlightMode =
+            static_cast<ChannelReferenceHighlightMode>(
+                qBound(0, referenceMode, int(ChannelReferenceHighlightMode::Always)));
     m_options->iconText = settings.value("iconText", false).toBool();
     m_options->showToolbar = settings.value("showToolbar", true).toBool();
     m_options->lockToolbar = settings.value("lockToolbar", false).toBool();
@@ -6996,8 +7034,10 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("rememberfile", m_options->rememberFile);
     settings.setValue("midiCcToActivePageOnly", m_options->midiCcToCurrentPageOnly);
     settings.setValue("widgetsIndependent", m_options->widgetsIndependent);
-    settings.setValue("highlightWidgetsOnChannelHover",
-                      m_options->highlightWidgetsOnChannelHover);
+    settings.setValue("channelHighlightMode",
+                      int(m_options->channelHighlightMode));
+    settings.setValue("channelReferenceHighlightMode",
+                      int(m_options->channelReferenceHighlightMode));
     settings.setValue("iconText", m_options->iconText);
     settings.setValue("showToolbar", m_options->showToolbar);
     settings.setValue("lockToolbar", m_options->lockToolbar);

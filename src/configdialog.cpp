@@ -46,6 +46,48 @@ typedef QPair<QString, QString> QStringPair;
 #include "RtMidi.h"
 #endif
 
+static int channelHighlightIndex(ChannelHighlightMode mode)
+{
+	switch (mode) {
+	case ChannelHighlightMode::Never: return 0;
+	case ChannelHighlightMode::CursorOnly: return 1;
+	case ChannelHighlightMode::MouseOnly: return 2;
+	case ChannelHighlightMode::Full: return 3;
+	}
+	return 3;
+}
+
+static ChannelHighlightMode channelHighlightModeFromIndex(int index)
+{
+	switch (index) {
+	case 0: return ChannelHighlightMode::Never;
+	case 1: return ChannelHighlightMode::CursorOnly;
+	case 2: return ChannelHighlightMode::MouseOnly;
+	case 3: return ChannelHighlightMode::Full;
+	}
+	return ChannelHighlightMode::CursorOnly;
+}
+
+static int channelReferenceHighlightIndex(ChannelReferenceHighlightMode mode)
+{
+	switch (mode) {
+	case ChannelReferenceHighlightMode::Never: return 0;
+	case ChannelReferenceHighlightMode::EditMode: return 1;
+	case ChannelReferenceHighlightMode::Always: return 2;
+	}
+	return 2;
+}
+
+static ChannelReferenceHighlightMode channelReferenceHighlightModeFromIndex(int index)
+{
+	switch (index) {
+	case 0: return ChannelReferenceHighlightMode::Never;
+	case 1: return ChannelReferenceHighlightMode::EditMode;
+	case 2: return ChannelReferenceHighlightMode::Always;
+	}
+	return ChannelReferenceHighlightMode::Always;
+}
+
 ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *configlists)
 	: QDialog(parent), m_parent(parent), m_options(options), m_configlists(configlists)
 {
@@ -289,8 +331,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	saveChangesCheckBox->setChecked(m_options->saveChanges);
 	rememberFileCheckBox->setChecked(m_options->rememberFile);
 	widgetsIndependentCheckBox->setChecked(m_options->widgetsIndependent);
-	highlightWidgetsOnChannelHoverCheckBox->setChecked(
-				m_options->highlightWidgetsOnChannelHover);
+	channelHighlightModeComboBox->setCurrentIndex(
+				channelHighlightIndex(m_options->channelHighlightMode));
+	channelReferenceHighlightModeComboBox->setCurrentIndex(
+				channelReferenceHighlightIndex(m_options->channelReferenceHighlightMode));
 	iconTextCheckBox->setChecked(m_options->iconText);
 	toolbarCheckBox->setChecked(m_options->showToolbar);
     lockToolbarCheckBox->setChecked(m_options->lockToolbar);
@@ -680,8 +724,11 @@ void ConfigDialog::apply()
 	m_options->menuDepth = menusDepthSpinBox->value();
 	m_options->saveChanges = saveChangesCheckBox->isChecked();
 	m_options->widgetsIndependent = widgetsIndependentCheckBox->isChecked();
-	m_options->highlightWidgetsOnChannelHover =
-			highlightWidgetsOnChannelHoverCheckBox->isChecked();
+	m_options->channelHighlightMode =
+			channelHighlightModeFromIndex(channelHighlightModeComboBox->currentIndex());
+	m_options->channelReferenceHighlightMode =
+			channelReferenceHighlightModeFromIndex(
+				channelReferenceHighlightModeComboBox->currentIndex());
 	m_options->rememberFile = rememberFileCheckBox->isChecked();
 	m_options->iconText = iconTextCheckBox->isChecked();
 	m_options->showToolbar = toolbarCheckBox->isChecked();

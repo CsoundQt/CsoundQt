@@ -41,6 +41,8 @@ HEADERS = "src/about.h" \
     "src/widgetpropertyinfo.h" \
     "src/framewidget.h" \
     "src/bracketmatcher.h" \
+    "src/channeltext.h" \
+    "src/channelhighlightmode.h" \
     "src/sourcedefinitions.h" \
     "src/highlighter.h" \
     "src/inspector.h" \
@@ -110,6 +112,7 @@ SOURCES = "src/about.cpp" \
     "src/findbar.cpp" \
     "src/framewidget.cpp" \
     "src/bracketmatcher.cpp" \
+    "src/channeltext.cpp" \
     "src/sourcedefinitions.cpp" \
     "src/highlighter.cpp" \
     "src/inspector.cpp" \

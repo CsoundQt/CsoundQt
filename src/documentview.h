@@ -30,6 +30,7 @@
 #include "baseview.h"
 #include "bracketmatcher.h"
 #include "widgetpropertyinfo.h"
+#include "channelhighlightmode.h"
 
 #include <QKeyEvent> // For syntax menu class
 #include <QPair>
@@ -143,8 +144,12 @@ public:
     // Named instruments and widget channels for the context-aware completions.
     void setInstrumentNames(const QStringList &names);
     void setWidgetChannels(const QStringList &channels);
-    // Whether hovering a channel literal in the editor outlines its widgets.
-    void setHighlightWidgetsOnChannelHover(bool enabled);
+    // How channel literals in the editor outline their widgets.
+    void setChannelHighlightMode(ChannelHighlightMode mode);
+    // Experimental: mark all lines that reference any of these widget channels.
+    void highlightWidgetChannels(const QStringList &channels,
+                                 bool jumpToFirstReference = false);
+    void clearWidgetChannelHighlights();
     // Read the current channel names directly from the widget layout. This
     // keeps completion up to date when a widget is renamed, without having to
     // mirror every widget change into this view.
@@ -258,9 +263,15 @@ private:
 	QString changeToChnget(QString text);
 	QString changeToInvalue(QString text);
 	// Channel literal containing the active text cursor, if any.
-	QString channelAtTextCursor() const;
+	QString channelAtTextCursor();
+	// Same for an arbitrary cursor, with a last-span cache to avoid
+	// re-tokenizing the line on every mouse move inside one channel name.
+	QString channelAtCursorPosition(const QTextCursor &cursor);
 	// Reconcile hover/cursor sources and ask the page to update the outline.
 	void updateChannelHighlight();
+	// Extra editor selections shared by syntaxCheck() and the find bar.
+	QList<QTextEdit::ExtraSelection> extraSelectionsFor(
+			TextEditor *editor) const;
     // Text of the instrument/opcode block containing the cursor, or empty.
     QString currentScopeText() const;
 
@@ -314,6 +325,8 @@ private:
 	FindBar *m_findBar = nullptr;
 	OpcodeInsertBar *m_opcodeInsertBar = nullptr;
 	QList<QTextEdit::ExtraSelection> m_findSelections;
+	QList<QTextEdit::ExtraSelection> m_widgetChannelSelections;
+	TextEditor *m_widgetChannelEditor = nullptr;
 	QVector<QPair<int, int>> m_findMatches;
 	int m_findCurrent = -1;
 	QString m_findQuery;
@@ -324,9 +337,21 @@ private:
 	QStringList m_globalStringVariables;
 	QStringList m_instrumentNames;
 	QStringList m_widgetChannels;
-	bool m_highlightWidgetsOnChannelHover = true;
+	ChannelHighlightMode m_channelHighlightMode = ChannelHighlightMode::CursorOnly;
+	enum class ChannelHighlightSource { None, Cursor, Mouse };
+	ChannelHighlightSource m_channelHighlightSource = ChannelHighlightSource::None;
 	QString m_hoverChannel;
 	QString m_activeChannelHighlight;
+	QString m_cachedChannel;
+	QTextBlock m_cachedChannelBlock;
+	int m_cachedBlockRevision = -1;
+	int m_cachedChannelStart = -1;
+	int m_cachedChannelEnd = -1;
+	// Per-document cache of "line contains a channel opcode", keyed by block
+	// number. Cleared whenever the document revision changes.
+	QHash<int, bool> m_channelLineCache;
+	QTextDocument *m_channelLineCacheDocument = nullptr;
+	int m_channelLineCacheRevision = -1;
 	std::function<QStringList()> m_widgetChannelsProvider;
 	std::function<QList<WidgetPropertyInfo>(const QString &)> m_widgetPropertiesProvider;
 	std::function<QString()> m_documentDirectoryProvider;
@@ -375,6 +400,9 @@ signals:
     // Ask the page to outline widgets using this channel. Empty clears any
     // existing outline.
     void channelHighlightRequested(const QString &channel);
+    // The user pressed Escape in the editor; pages use this to clear their
+    // pinned widget-channel highlight state as well as the extra selections.
+    void editorEscapePressed();
 
 };
 

@@ -80,7 +80,6 @@ Options::Options(ConfigLists *configlists) :
     useAPI = true;
     enableWidgets = true;
     widgetsIndependent = false;  // Widget layouts in Separate Window (instead of Dock Widget)
-    highlightWidgetsOnChannelHover = true;
     keyRepeat = true;
     debugLiveEvents = false;
     consoleBufferSize = 1024;

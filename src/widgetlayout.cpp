@@ -50,6 +50,14 @@
 #include "csoundqt.h" // For passing the actions from button reserved channels
 
 
+static void installHoverFilter(QObject *filter, QWidget *root)
+{
+    root->installEventFilter(filter);
+    const QList<QWidget *> children = root->findChildren<QWidget *>();
+    for (QWidget *child : children)
+        child->installEventFilter(filter);
+}
+
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
     selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
@@ -1216,6 +1224,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
     connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
             this, SLOT(newValue(QPair<QString,QString>)));
     m_widgets.append(widget);
+    installHoverFilter(this, widget);
     channelNameToWidgets.clear();
     if (!widget->getWidgetName().isEmpty()) {
         m_widgetNameToWidget.insert(widget->getWidgetName(), widget);
@@ -3082,8 +3091,11 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
         int quant = (event->modifiers() & Qt::AltModifier) ? 1 : 5;
         switch(key) {
         case Qt::Key_Escape:
-            // Escape clears the selection while editing the panel.
+            // Escape clears the selection and any widget-derived line
+            // highlights while editing the panel.
+            setHoveredWidget(nullptr);
             this->deselectAll();
+            emit editingEscapePressed();
             event->accept();
             return;
         case Qt::Key_Return:
@@ -3271,6 +3283,50 @@ void WidgetLayout::widgetPropertyApplied(QuteWidget* widget, const QString &prop
     }
 }
 
+void WidgetLayout::setHoveredWidget(QuteWidget *widget)
+{
+	if (m_hoveredWidget == widget)
+		return;
+	m_hoveredWidget = widget;
+	emit widgetHovered(widget);
+}
+
+QuteWidget *WidgetLayout::hoveredWidgetFor(QObject *watched) const
+{
+	QWidget *widget = qobject_cast<QWidget *>(watched);
+	while (widget) {
+		if (auto *quteWidget = qobject_cast<QuteWidget *>(widget))
+			return quteWidget;
+		if (auto *frame = qobject_cast<FrameWidget *>(widget))
+			return frame->getWidget();
+		widget = widget->parentWidget();
+	}
+	return nullptr;
+}
+
+void WidgetLayout::highlightWidgetChannels(QuteWidget *widget)
+{
+	QStringList channels;
+	auto addWidget = [&channels](QuteWidget *w) {
+		if (!w)
+			return;
+		if (!w->getChannelName().isEmpty())
+			channels.append(w->getChannelName());
+		if (!w->getChannel2Name().isEmpty())
+			channels.append(w->getChannel2Name());
+	};
+	if (widget) {
+		addWidget(widget);
+	} else if (m_hoveredWidget) {
+		addWidget(m_hoveredWidget);
+	} else {
+		for (QuteWidget *selected : getSelectedWidgets())
+			addWidget(selected);
+	}
+	channels.removeDuplicates();
+	emit widgetChannelsHighlightRequested(channels);
+}
+
 void WidgetLayout::highlightChannel(const QString &channel)
 {
 	if (m_channelHighlightActive && m_channelHighlightChannel == channel)
@@ -3279,11 +3335,29 @@ void WidgetLayout::highlightChannel(const QString &channel)
 	if (channel.isEmpty())
 		return;
 
-	for (QuteWidget *widget : m_widgets) {
+	// The layout already maintains a channel -> widgets map for value
+	// distribution. Reuse it here instead of scanning every widget on each
+	// hover change. Entries are cleared when widgets are added or removed.
+	QList<QuteWidget *> widgets;
+	{
+		QMutexLocker locker(&widgetsMutex);
+		auto it = channelNameToWidgets.constFind(channel);
+		if (it != channelNameToWidgets.constEnd()) {
+			widgets = it.value();
+		} else {
+			for (QuteWidget *widget : m_widgets) {
+				if (widget
+						&& (widget->getChannelName() == channel
+							|| widget->getChannel2Name() == channel)) {
+					widgets.append(widget);
+				}
+			}
+			channelNameToWidgets.insert(channel, widgets);
+		}
+	}
+
+	for (QuteWidget *widget : widgets) {
 		if (!widget)
-			continue;
-		if (widget->getChannelName() != channel
-				&& widget->getChannel2Name() != channel)
 			continue;
 
 		auto *frame = new QFrame(this);
@@ -3329,6 +3403,19 @@ void WidgetLayout::clearChannelHighlights()
 
 bool WidgetLayout::eventFilter(QObject *watched, QEvent *event)
 {
+	if (event->type() == QEvent::Enter || event->type() == QEvent::Leave) {
+		QuteWidget *widget = hoveredWidgetFor(watched);
+		if (widget) {
+			if (event->type() == QEvent::Enter) {
+				setHoveredWidget(widget);
+			} else if (widget == m_hoveredWidget) {
+				const QRect widgetRect(widget->mapToGlobal(QPoint(0, 0)),
+				                       widget->size());
+				if (!widgetRect.contains(QCursor::pos()))
+					setHoveredWidget(nullptr);
+			}
+		}
+	}
 	if (m_channelHighlightActive) {
 		if (event->type() == QEvent::KeyPress) {
 			auto *keyEvent = static_cast<QKeyEvent *>(event);
@@ -4597,6 +4684,8 @@ void WidgetLayout::setEditMode(bool active)
     if (!m_enableEdit) {
         return;
     }
+    const bool changed = m_editMode != active;
+    setHoveredWidget(nullptr);
     if (active) {
         widgetsMutex.lock();
         foreach (FrameWidget *frame, editWidgets) {
@@ -4618,6 +4707,8 @@ void WidgetLayout::setEditMode(bool active)
         widgetsMutex.unlock();
     }
     m_editMode = active;
+    if (changed)
+        emit editModeChanged(active);
     // These shortcuts are only meaningful while editing; disabling them outside
     // edit mode keeps Page Up/Down free for scrolling the panel.
     sendToFrontAct->setEnabled(active);
@@ -4643,6 +4734,7 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
     QPalette palette = QPalette(QColor(Qt::red),QColor(Qt::red));
     palette.setColor(QPalette::WindowText, QColor(Qt::red));
     frame->setWidget(widget);
+    installHoverFilter(this, frame);
     // The constructor runs before the widget is bound, so apply the frame style
     // now that the locked flag is known (dotted frame for locked widgets).
     frame->refreshFrameAppearance();
@@ -4758,6 +4850,8 @@ void WidgetLayout::applyHistoryGeometry(const QHash<QString, QRect> &geometry)
 
 void WidgetLayout::deleteWidget(QuteWidget *widget)
 {
+    if (m_hoveredWidget == widget)
+        setHoveredWidget(nullptr);
     widgetsMutex.lock();
     int index = m_widgets.indexOf(widget);
     if (index < 0) {

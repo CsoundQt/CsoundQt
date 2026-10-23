@@ -71,6 +71,8 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 		else
 			layout->highlightChannel(channel);
 	});
+	connect(m_view, &DocumentView::editorEscapePressed,
+	        this, &DocumentPage::clearWidgetChannelHighlights);
 	m_midiLearn = midiLearn;
     m_colorTheme = "";
     m_parseUdosNeeded = true;
@@ -80,6 +82,18 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
                 this, SLOT(passSelectedWidget(QuteWidget*)));
         connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)),
                 this, SLOT(passUnselectedWidget(QuteWidget*)));
+        connect(wl, &WidgetLayout::widgetSelectedSignal,
+                this, [this](QuteWidget *) { updateWidgetChannelLineHighlights(); });
+        connect(wl, &WidgetLayout::widgetUnselectedSignal,
+                this, [this](QuteWidget *) { updateWidgetChannelLineHighlights(); });
+        connect(wl, &WidgetLayout::widgetHovered,
+                this, [this](QuteWidget *) { updateWidgetChannelLineHighlights(); });
+        connect(wl, &WidgetLayout::widgetChannelsHighlightRequested,
+                this, &DocumentPage::togglePinnedWidgetChannelHighlights);
+        connect(wl, &WidgetLayout::editingEscapePressed,
+                this, &DocumentPage::clearWidgetChannelHighlights);
+        connect(wl, &WidgetLayout::editModeChanged,
+                this, [this](bool) { updateWidgetChannelLineHighlights(); });
 		connect(wl,SIGNAL(showMidiLearn(QuteWidget*)),this, SLOT(showMidiLearn(QuteWidget*)));
 	}
 }
@@ -1290,6 +1304,88 @@ void DocumentPage::highlightWidgetChannel() {
     m_view->highlightWidgetChannel();
 }
 
-void DocumentPage::setHighlightWidgetsOnChannelHover(bool enabled) {
-    m_view->setHighlightWidgetsOnChannelHover(enabled);
+void DocumentPage::setChannelHighlightMode(ChannelHighlightMode mode) {
+    m_view->setChannelHighlightMode(mode);
+}
+
+void DocumentPage::setChannelReferenceHighlightMode(ChannelReferenceHighlightMode mode) {
+    if (m_channelReferenceHighlightMode == mode)
+        return;
+    m_channelReferenceHighlightMode = mode;
+    if (!m_widgetChannelHighlightPinned)
+        updateWidgetChannelLineHighlights();
+}
+
+void DocumentPage::highlightSelectedWidgetChannels() {
+    WidgetLayout *layout = getWidgetLayout();
+    if (!layout)
+        return;
+    const QList<QuteWidget *> selected = layout->getSelectedWidgets();
+    if (selected.size() != 1)
+        return;
+    QStringList channels;
+    const QString channel = selected.first()->getChannelName();
+    const QString channel2 = selected.first()->getChannel2Name();
+    if (!channel.isEmpty())
+        channels.append(channel);
+    if (!channel2.isEmpty())
+        channels.append(channel2);
+    togglePinnedWidgetChannelHighlights(channels);
+}
+
+void DocumentPage::togglePinnedWidgetChannelHighlights(const QStringList &channels) {
+    QStringList unique = channels;
+    unique.removeAll(QString());
+    unique.removeDuplicates();
+    if (m_widgetChannelHighlightPinned && unique == m_pinnedWidgetChannels) {
+        clearWidgetChannelHighlights();
+        return;
+    }
+    m_pinnedWidgetChannels = unique;
+    m_widgetChannelHighlightPinned = !unique.isEmpty();
+    if (unique.isEmpty())
+        m_view->clearWidgetChannelHighlights();
+    else
+        m_view->highlightWidgetChannels(unique, true);
+}
+
+void DocumentPage::clearWidgetChannelHighlights() {
+    m_widgetChannelHighlightPinned = false;
+    m_pinnedWidgetChannels.clear();
+    m_view->clearWidgetChannelHighlights();
+}
+
+void DocumentPage::updateWidgetChannelLineHighlights() {
+    if (m_widgetChannelHighlightPinned)
+        return;
+    WidgetLayout *layout = getWidgetLayout();
+    if (!layout) {
+        m_view->clearWidgetChannelHighlights();
+        return;
+    }
+    if (m_channelReferenceHighlightMode == ChannelReferenceHighlightMode::Never
+            || (m_channelReferenceHighlightMode
+                == ChannelReferenceHighlightMode::EditMode
+                && !layout->isEditMode())) {
+        m_view->clearWidgetChannelHighlights();
+        return;
+    }
+    QuteWidget *hovered = layout->getHoveredWidget();
+    QList<QuteWidget *> widgets;
+    if (hovered)
+        widgets.append(hovered);
+    else
+        widgets = layout->getSelectedWidgets();
+
+    QStringList channels;
+    for (QuteWidget *widget : widgets) {
+        if (!widget)
+            continue;
+        if (!widget->getChannelName().isEmpty())
+            channels.append(widget->getChannelName());
+        if (!widget->getChannel2Name().isEmpty())
+            channels.append(widget->getChannel2Name());
+    }
+    channels.removeDuplicates();
+    m_view->highlightWidgetChannels(channels);
 }
