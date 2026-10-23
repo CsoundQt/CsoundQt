@@ -29,6 +29,7 @@
 #include <QSet>
 #include <QTextCharFormat>
 #include <QStringList>
+#include <QStringView>
 #include <QRegularExpression>
 
 #include <QTextDocument>
@@ -85,10 +86,22 @@ struct Line
 	// State at the end of the line: 0 none, 1 inside a /* */ comment,
 	// 2 inside a {{ }} string.
 	int endState = 0;
+
+	// Clears the ranges while keeping their capacity. The highlighter reuses
+	// one Line for every block to avoid allocating the range vectors again.
+	void clear()
+	{
+		comments.clear();
+		strings.clear();
+		multilineStrings.clear();
+		endState = 0;
+	}
 };
 
 // Scans one line. startState is the state at the end of the previous line.
 Line scan(const QString &line, int startState);
+// Same, but fills an existing Line and reuses its vector capacity.
+void scanInto(const QString &line, int startState, Line &info);
 
 // True when the position is not part of a comment or a string.
 inline bool isCode(const Line &info, int position)
@@ -120,7 +133,7 @@ class Highlighter : public QSyntaxHighlighter
 public:
 	Highlighter(QTextDocument *parent = 0);
 	~Highlighter();
-	void setOpcodeNameList(QStringList list);
+	void setOpcodeNameList(const QStringList& list);
     void setDisabledOpcodes(QStringList list);
 	void setColorVariables(bool color);
 	void setMode(int mode);
@@ -157,7 +170,7 @@ protected:
 
 protected:
 	void highlightBlock(const QString &text);
-	void highlightCsoundBlock(const QString &text);
+	void highlightCsoundBlock(const QString &text, bool paintStrings = true);
 	void highlightXmlBlock(const QString &text);
 	void highlightHtmlBlock(const QString &text);
     void highlightScore(const QString &text, int start, int end);
@@ -342,6 +355,7 @@ private:
 	QTextCharFormat m_formats[LastConstruct + 1];
 
     QSet<QString> m_parsedUDOs;
+    CsoundLex::Line m_lexScratch;
     CsdSection m_sectionType;
 
     // Csound 7: explicitly typed variable sets
@@ -356,9 +370,9 @@ private:
     QSet<QString> m_namedInstruments;
 
     void clearTypedVars();
-    QTextCharFormat formatForType(const QString &typeStr) const;
-    void registerTypedVar(const QString &name, const QString &typeStr);
-    void registerGlobalTypedVar(const QString &name, const QString &typeStr);
+    QTextCharFormat formatForType(QStringView typeStr) const;
+    void registerTypedVar(QStringView name, QStringView typeStr);
+    void registerGlobalTypedVar(QStringView name, QStringView typeStr);
 };
 
 #endif

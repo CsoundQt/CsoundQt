@@ -25,13 +25,25 @@
 #include "editorthemes.h"
 // #include "types.h"
 
+#include <QLatin1StringView>
 #include <QRegularExpression>
+#include <QStringView>
+
+#include <algorithm>
 
 
 TextBlockData::TextBlockData() = default;
 
 void TextBlockData::insert(const BracketInfo &info)
 {
+    // highlightBlock() discovers brackets left to right, so the common case
+    // is an append. Keep the search for any callers that insert out of order.
+    if (m_brackets.isEmpty()
+            || info.position > m_brackets.constLast().position) {
+        m_brackets.append(info);
+        return;
+    }
+
 	int i = 0;
     while (i < m_brackets.size() && info.position > m_brackets.at(i).position)
 		++i;
@@ -42,9 +54,9 @@ void TextBlockData::insert(const BracketInfo &info)
 
 namespace CsoundLex {
 
-Line scan(const QString &line, int startState)
+void scanInto(const QString &line, int startState, Line &info)
 {
-	Line info;
+	info.clear();
 	const int length = line.length();
 	int pos = 0;
 
@@ -54,7 +66,7 @@ Line scan(const QString &line, int startState)
 		if (end < 0) {
 			info.comments.append({0, length});
 			info.endState = 1;
-			return info;
+			return;
 		}
 		info.comments.append({0, end + 2});
 		pos = end + 2;
@@ -63,7 +75,7 @@ Line scan(const QString &line, int startState)
 		if (end < 0) {
 			info.multilineStrings.append({0, length});
 			info.endState = 2;
-			return info;
+			return;
 		}
 		info.multilineStrings.append({0, end + 2});
 		pos = end + 2;
@@ -89,7 +101,7 @@ Line scan(const QString &line, int startState)
 				if (end < 0) {
 					info.comments.append({pos, length});
 					info.endState = 1;
-					return info; // the comment goes on in the next line
+					return; // the comment goes on in the next line
 				}
 				info.comments.append({pos, end + 2});
 				pos = end + 2;
@@ -97,12 +109,12 @@ Line scan(const QString &line, int startState)
 			}
 			if (next == QLatin1Char('/')) {
 				info.comments.append({pos, length});
-				return info; // the comment goes to the end of the line
+				return; // the comment goes to the end of the line
 			}
 			++pos;
 		} else if (c == QLatin1Char(';')) {
 			info.comments.append({pos, length});
-			return info; // the comment goes to the end of the line
+			return; // the comment goes to the end of the line
 		} else if (c == QLatin1Char('{') && pos + 1 < length
 				   && line.at(pos + 1) == QLatin1Char('{')) {
 			// A {{ ... }} string, which may span lines.
@@ -110,7 +122,7 @@ Line scan(const QString &line, int startState)
 			if (end < 0) {
 				info.multilineStrings.append({pos, length});
 				info.endState = 2;
-				return info; // the string goes on in the next line
+				return; // the string goes on in the next line
 			}
 			info.multilineStrings.append({pos, end + 2});
 			pos = end + 2;
@@ -118,11 +130,57 @@ Line scan(const QString &line, int startState)
 			++pos;
 		}
 	}
+}
 
+Line scan(const QString &line, int startState)
+{
+	Line info;
+	scanInto(line, startState, info);
 	return info;
 }
 
 } // namespace CsoundLex
+
+namespace {
+
+// These expressions are used for every highlighted line. Keep them compiled
+// once for the lifetime of the process instead of guarding a function-local
+// static on every call.
+const QRegularExpression csdtagRx(
+        QStringLiteral("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>"));
+const QRegularExpression defineRx(
+        QStringLiteral("^\\s*#define\\s+[_\\w\\ \\t]*#.*#"));
+const QRegularExpression instOpcodeRx(
+        QStringLiteral("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b"));
+// A label is an identifier followed by ':' and then whitespace/end-of-line.
+// The lookahead keeps the match ending at the colon so trailing whitespace
+// (e.g. before a comment) is not highlighted, and it prevents mistaking a
+// Csound 7 typed variable definition ("name:type") for a label.
+const QRegularExpression labelRx(
+        QStringLiteral("^\\s*([a-zA-Z]\\w*):(?=\\s|$)"));
+const QRegularExpression udoSignatureRx(
+        QStringLiteral("^\\s*opcode\\s+[A-Za-z_]\\w*\\s*"
+                       "\\(([^)]*)\\)\\s*"
+                       "(?::\\s*(?:\\(([^)]*)\\)|"
+                       "([A-Za-z_]\\w*(?:\\[\\])?)))?"));
+const QRegularExpression typedParamRx(
+        QStringLiteral("([A-Za-z_]\\w*)\\s*:\\s*"
+                       "([A-Za-z_]\\w*(?:\\[\\])?)"));
+const QRegularExpression typeRx(
+        QStringLiteral("[A-Za-z_]\\w*(?:\\[\\])?"));
+const QRegularExpression structRx(
+        QStringLiteral("^\\s*\\bstruct\\b\\s+(\\w+)\\b"));
+const QRegularExpression globalRx(
+        QStringLiteral("(\\w+)@global:(\\w+(?:\\[\\])?)"));
+const QRegularExpression expressionRx(
+        QStringLiteral("\\b[\\w:]+\\b"));
+
+const QSet<QString> builtinTypes = {
+    u"i"_s, u"k"_s, u"a"_s, u"S"_s, u"f"_s, u"b"_s, u"B"_s,
+    u"Complex"_s, u"InstrDef"_s, u"Instr"_s, u"Opcode"_s,
+};
+
+} // namespace
 
 QColor saturateColor(QColor color, int percent) {
     int sat = color.saturation();
@@ -442,7 +500,7 @@ Highlighter::~Highlighter()
 {
 }
 
-void Highlighter::setOpcodeNameList(QStringList list)
+void Highlighter::setOpcodeNameList(const QStringList &list)
 {
 	m_opcodeList = list;
     m_opcodesSet = QSet<QString>(list.begin(), list.end());
@@ -512,50 +570,63 @@ void Highlighter::clearTypedVars()
     m_namedInstruments.clear();
 }
 
-QTextCharFormat Highlighter::formatForType(const QString &typeStr) const
+QTextCharFormat Highlighter::formatForType(QStringView typeStr) const
 {
-    QString t = typeStr;
-    t.remove("[]");
-    if(t == "i") return irateFormat;
-    if(t == "k") return krateFormat;
-    if(t == "a") return arateFormat;
-    if(t == "S") return stringVarFormat;
-    if(t == "f") return fsigFormat;
-    if(t == "b" || t == "B") return booleanFormat;
-    if(t == "Complex") return complexFormat;
-    if(t == "InstrDef" || t == "Instr") return nameFormat;
-    if(t == "OpcodeDef" || t == "Opcode") return opcodeFormat;
-    if(m_userTypeNames.contains(t)) return nameFormat;
+    if (typeStr.endsWith(QLatin1StringView("[]")))
+        typeStr.chop(2);
+    if (typeStr.compare(QLatin1StringView("i")) == 0) return irateFormat;
+    if (typeStr.compare(QLatin1StringView("k")) == 0) return krateFormat;
+    if (typeStr.compare(QLatin1StringView("a")) == 0) return arateFormat;
+    if (typeStr.compare(QLatin1StringView("S")) == 0) return stringVarFormat;
+    if (typeStr.compare(QLatin1StringView("f")) == 0) return fsigFormat;
+    if (typeStr.compare(QLatin1StringView("b")) == 0
+            || typeStr.compare(QLatin1StringView("B")) == 0) return booleanFormat;
+    if (typeStr.compare(QLatin1StringView("Complex")) == 0) return complexFormat;
+    if (typeStr.compare(QLatin1StringView("InstrDef")) == 0
+            || typeStr.compare(QLatin1StringView("Instr")) == 0) return nameFormat;
+    if (typeStr.compare(QLatin1StringView("OpcodeDef")) == 0
+            || typeStr.compare(QLatin1StringView("Opcode")) == 0) return opcodeFormat;
+    if (m_userTypeNames.contains(typeStr.toString())) return nameFormat;
     return defaultFormat;
 }
 
-void Highlighter::registerTypedVar(const QString &name, const QString &typeStr)
+void Highlighter::registerTypedVar(QStringView name, QStringView typeStr)
 {
-    QString t = typeStr;
-    t.remove("[]");
-    if(t == "i")                          m_iVariables.insert(name);
-    else if(t == "k")                     m_kVariables.insert(name);
-    else if(t == "a")                     m_aVariables.insert(name);
-    else if(t == "S")                     m_SVariables.insert(name);
-    else if(t == "f")                     m_fVariables.insert(name);
-    else if(t == "b" || t == "B")         m_bVariables.insert(name);
-    else if(t == "Complex")               m_complexVariables.insert(name);
-    else if(t == "InstrDef" || t == "Instr") m_instrDefVariables.insert(name);
-    else if(t == "OpcodeDef" || t == "Opcode") m_opcodeVariables.insert(name);
-    else if(m_userTypeNames.contains(t))  m_structVariables.insert(name);
+    if (typeStr.endsWith(QLatin1StringView("[]")))
+        typeStr.chop(2);
+    QSet<QString> *target = nullptr;
+    if (typeStr.compare(QLatin1StringView("i")) == 0) target = &m_iVariables;
+    else if (typeStr.compare(QLatin1StringView("k")) == 0) target = &m_kVariables;
+    else if (typeStr.compare(QLatin1StringView("a")) == 0) target = &m_aVariables;
+    else if (typeStr.compare(QLatin1StringView("S")) == 0) target = &m_SVariables;
+    else if (typeStr.compare(QLatin1StringView("f")) == 0) target = &m_fVariables;
+    else if (typeStr.compare(QLatin1StringView("b")) == 0
+             || typeStr.compare(QLatin1StringView("B")) == 0) target = &m_bVariables;
+    else if (typeStr.compare(QLatin1StringView("Complex")) == 0) target = &m_complexVariables;
+    else if (typeStr.compare(QLatin1StringView("InstrDef")) == 0
+             || typeStr.compare(QLatin1StringView("Instr")) == 0) target = &m_instrDefVariables;
+    else if (typeStr.compare(QLatin1StringView("OpcodeDef")) == 0
+             || typeStr.compare(QLatin1StringView("Opcode")) == 0) target = &m_opcodeVariables;
+    else if (m_userTypeNames.contains(typeStr.toString())) target = &m_structVariables;
+    if (target)
+        target->insert(name.toString());
 }
 
-void Highlighter::registerGlobalTypedVar(const QString &name, const QString &typeStr)
+void Highlighter::registerGlobalTypedVar(QStringView name, QStringView typeStr)
 {
-    QString t = typeStr;
-    t.remove("[]");
-    if(t == "i")       m_giVariables.insert(name);
-    else if(t == "k") m_gkVariables.insert(name);
-    else if(t == "a") m_gaVariables.insert(name);
-    else if(t == "S") m_gSVariables.insert(name);
-    else if(t == "f") m_gfVariables.insert(name);
-    // Other global types fall back to the regular sets
-    else               registerTypedVar(name, typeStr);
+    if (typeStr.endsWith(QLatin1StringView("[]")))
+        typeStr.chop(2);
+    QSet<QString> *target = nullptr;
+    if (typeStr.compare(QLatin1StringView("i")) == 0) target = &m_giVariables;
+    else if (typeStr.compare(QLatin1StringView("k")) == 0) target = &m_gkVariables;
+    else if (typeStr.compare(QLatin1StringView("a")) == 0) target = &m_gaVariables;
+    else if (typeStr.compare(QLatin1StringView("S")) == 0) target = &m_gSVariables;
+    else if (typeStr.compare(QLatin1StringView("f")) == 0) target = &m_gfVariables;
+    if (target)
+        target->insert(name.toString());
+    else
+        // Other global types fall back to the regular sets.
+        registerTypedVar(name, typeStr);
 }
 
 void Highlighter::highlightBlock(const QString &text)
@@ -573,10 +644,12 @@ void Highlighter::highlightBlock(const QString &text)
     // comments, strings and {{ }} strings, and it provides the state that the
     // next line continues from. Only Csound code is scanned; the other
     // languages keep their brackets as they are.
-    CsoundLex::Line lex;
+    CsoundLex::Line &lex = m_lexScratch;
     const bool csoundCode = (m_mode == 0 || m_mode == 3 || m_mode == 4 || m_mode == 5);
     if (csoundCode)
-        lex = CsoundLex::scan(text, previousBlockState());
+        CsoundLex::scanInto(text, previousBlockState(), lex);
+    else
+        lex.clear();
 
     // A line that lies inside a {{ ... }} string is not code: the code
     // highlighting is skipped for it, so that its contents stay plain.
@@ -591,16 +664,29 @@ void Highlighter::highlightBlock(const QString &text)
     // Highlight only code, not the contents of strings. The lexer also reports
     // an unterminated quote as a string that runs to the end of the line, so
     // "chnget \"fftsize" does not colour fftsize as an fsig variable.
-    QString codeText = text;
-    const auto maskRanges = [&codeText](const QVector<QPair<int, int>> &ranges) {
+    const auto maskRanges = [](QString &codeText,
+                               const QVector<QPair<int, int>> &ranges) {
+        const int size = codeText.size();
+        if (size == 0 || ranges.isEmpty())
+            return;
+        QChar *chars = codeText.data();
         for (const QPair<int, int> &range : ranges) {
-            const int end = qMin(range.second, codeText.size());
-            for (int i = qMax(0, range.first); i < end; ++i)
-                codeText[i] = QLatin1Char(' ');
+            const int start = qMax(0, range.first);
+            const int end = qMin(range.second, size);
+            if (start < end)
+                std::fill(chars + start, chars + end, QChar(u' '));
         }
     };
-    maskRanges(lex.strings);
-    maskRanges(lex.multilineStrings);
+
+    QString maskedText;
+    const QString *highlightText = &text;
+    if (m_theme != "none" && !insideMultilineString
+            && (!lex.strings.isEmpty() || !lex.multilineStrings.isEmpty())) {
+        maskedText = text;
+        maskRanges(maskedText, lex.strings);
+        maskRanges(maskedText, lex.multilineStrings);
+        highlightText = &maskedText;
+    }
 
     // The theme only decides whether the block is decorated; the mark below is
     // painted in any case.
@@ -619,7 +705,7 @@ void Highlighter::highlightBlock(const QString &text)
         if (!insideMultilineString) {
             switch (m_mode) { // mode is set by the file type
             case 0:  // Csound mode
-                highlightCsoundBlock(codeText);
+                highlightCsoundBlock(*highlightText, false);
 
                 break;
             case 1:  // Python mode
@@ -628,13 +714,13 @@ void Highlighter::highlightBlock(const QString &text)
                 highlightXmlBlock(text);
                 break;
             case 3:  // Orc
-                highlightCsoundBlock(codeText);
+                highlightCsoundBlock(*highlightText, false);
                 break;
             case 4:  // Sco
-                highlightCsoundBlock(codeText);
+                highlightCsoundBlock(*highlightText, false);
                 break;
             case 5:  // Inc
-                highlightCsoundBlock(codeText); // maybe anything not python or xml should be higlighter as csound?
+                highlightCsoundBlock(*highlightText, false); // maybe anything not python or xml should be higlighter as csound?
                 break;
             case 6:  // Html
                 highlightHtmlBlock(text);
@@ -657,14 +743,41 @@ void Highlighter::highlightBlock(const QString &text)
     if (csoundCode)
         setCurrentBlockState(lex.endState);
 
+    const bool hasNonCode = !lex.comments.isEmpty()
+            || !lex.strings.isEmpty() || !lex.multilineStrings.isEmpty();
+    qsizetype commentRange = 0;
+    qsizetype stringRange = 0;
+    qsizetype multilineRange = 0;
+    const auto inRange = [](const QVector<QPair<int, int>> &ranges,
+                            qsizetype &index, int position) {
+        while (index < ranges.size() && ranges.at(index).second <= position)
+            ++index;
+        return index < ranges.size() && ranges.at(index).first <= position;
+    };
+    const auto isCodeAt = [&](int position) {
+        return !inRange(lex.comments, commentRange, position)
+                && !inRange(lex.strings, stringRange, position)
+                && !inRange(lex.multilineStrings, multilineRange, position);
+    };
+
+    const int textLength = text.length();
     BracketInfo info;
-    for (int i = 0; i < text.length(); ++i) {
-        const char c = text.at(i).toLatin1();
-        if (c != '(' && c != ')' && c != '[' && c != ']' && c != '{' && c != '}')
+    for (int i = 0; i < textLength; ++i) {
+        const QChar ch = text.at(i);
+        switch (ch.unicode()) {
+        case '(':
+        case ')':
+        case '[':
+        case ']':
+        case '{':
+        case '}':
+            break;
+        default:
             continue;
-        if (csoundCode && !CsoundLex::isCode(lex, i))
+        }
+        if (csoundCode && hasNonCode && !isCodeAt(i))
             continue; // a bracket in a comment or a string is not code
-        info.character = c;
+        info.character = ch.toLatin1();
         info.position = i;
         data->insert(info);
     }
@@ -708,23 +821,9 @@ void Highlighter::highlightScore(const QString &text, int start, int end) {
 }
 
 
-void Highlighter::highlightCsoundBlock(const QString &line)
+void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
 {
     QRegularExpressionMatch rxmatch;
-
-    // Constant patterns compiled once instead of on every line.
-    static const QRegularExpression csdtagRx("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>");
-    static const QRegularExpression defineRx("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
-    static const QRegularExpression instOpcodeRx("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b");
-    // Match two-character operators before their prefixes, otherwise "<"
-    // would consume the start of "<=" (and ">" the start of ">=").
-    static const QRegularExpression operatorsRx(R"(&&|==|\|\||<=|>=|!=|<|>|\\)");
-    static const QRegularExpression stringRx("\"[^\"]*\"");
-    // A label is an identifier followed by ':' and then whitespace/end-of-line.
-    // The lookahead keeps the match ending at the colon so trailing whitespace
-    // (e.g. before a comment) is not highlighted, and it prevents mistaking a
-    // Csound 7 typed variable definition ("name:type") for a label.
-    static const QRegularExpression labelRx("^\\s*([a-zA-Z]\\w*):(?=\\s|$)");
 
 	// text is processed one line at a time
     if(m_theme == "none")
@@ -737,6 +836,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
 
     int startIndex = 0;
     //int commentIndex = -1;
+    bool lineStartsInComment = previousBlockState() == 1;
     if(previousBlockState() != 1) {
         rxmatch = commentStartExpression.match(line, 0);
         startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
@@ -745,6 +845,8 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     QRegularExpressionMatch endMatch;
 
     while (startIndex >= 0 ) {
+        if (startIndex == 0)
+            lineStartsInComment = true;
         endMatch = commentEndExpression.match(line, startIndex);
         int endIndex = endMatch.hasMatch() ? endMatch.capturedStart() : -1;
         int commentLength;
@@ -777,25 +879,28 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     }
 
     int index = 0;
-    int length = 0;
 
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
 
-    rxmatch = csdtagRx.match(line);
-    if(rxmatch.hasMatch() ) {
-        if(rxmatch.captured(1) == "CsInstruments" ) {
-            blockdata->section = OrchestraSection;
-        } else if(rxmatch.captured(1) == "CsScore" ) {
-            blockdata->section = ScoreSection;
-        } else if(rxmatch.captured(1) == "CsOptions" )  {
-            blockdata->section = OptionsSection;
-        } else if(rxmatch.captured(1) == "html" )  {
-            blockdata->section = HtmlSection;
-        } else {
-            blockdata->section = UnknownSection;
+    const QStringView trimmedLine = QStringView(line).trimmed();
+    if (trimmedLine.startsWith(QLatin1Char('<'))) {
+        rxmatch = csdtagRx.match(line);
+        if(rxmatch.hasMatch() ) {
+            const QStringView tagName = rxmatch.capturedView(1);
+            if(tagName == QLatin1StringView("CsInstruments") ) {
+                blockdata->section = OrchestraSection;
+            } else if(tagName == QLatin1StringView("CsScore") ) {
+                blockdata->section = ScoreSection;
+            } else if(tagName == QLatin1StringView("CsOptions") )  {
+                blockdata->section = OptionsSection;
+            } else if(tagName == QLatin1StringView("html") )  {
+                blockdata->section = HtmlSection;
+            } else {
+                blockdata->section = UnknownSection;
+            }
+            setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), csdtagFormat);
+            return;
         }
-        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), csdtagFormat);
-        return;
     }
 
     if(blockdata->section == ScoreSection || m_sectionType == ScoreSection) {
@@ -807,97 +912,97 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         highlightHtmlBlock(line);
         return;
     } else if(blockdata->section == OptionsSection || m_sectionType == OptionsSection ) {
-        // Options are simple command-line tokens. Split them and check the
-        // option name (without its =value or :value part) against the known
-        // option set. This avoids compiling and running a regex for every
-        // line in the <CsOptions> section.
-        static const QRegularExpression whitespaceRx("\\s+");
-        const QStringList tokens = line.split(whitespaceRx, Qt::SkipEmptyParts);
-        int tokenPosition = 0;
-        for (const QString &token : tokens) {
-            const int tokenStart = line.indexOf(token, tokenPosition);
-            if (tokenStart < 0)
-                continue;
-            tokenPosition = tokenStart + token.size();
+        // Options are simple command-line tokens. Walk the line without
+        // splitting it into a QStringList and check the option name (without
+        // its =value or :value part) against the known option set.
+        const QStringView optionsLine(line);
+        for (qsizetype i = 0; i < optionsLine.size(); ) {
+            while (i < optionsLine.size() && optionsLine.at(i).isSpace())
+                ++i;
+            const qsizetype tokenStart = i;
+            while (i < optionsLine.size() && !optionsLine.at(i).isSpace())
+                ++i;
+            if (i == tokenStart)
+                break;
 
-            QString optionName = token;
-            int separator = optionName.indexOf(QLatin1Char('='));
-            const int colon = optionName.indexOf(QLatin1Char(':'));
+            const QStringView token = optionsLine.mid(tokenStart, i - tokenStart);
+            qsizetype separator = token.indexOf(QLatin1Char('='));
+            const qsizetype colon = token.indexOf(QLatin1Char(':'));
             if (colon >= 0 && (separator < 0 || colon < separator))
                 separator = colon;
-            if (separator >= 0)
-                optionName.truncate(separator);
+            const QStringView optionName = separator < 0 ? token
+                                                         : token.left(separator);
 
-            if (csoundOptions.contains(optionName))
-                setFormat(tokenStart, optionName.size(), csoundOptionFormat);
+            if (csoundOptions.contains(optionName.toString()))
+                setFormat(static_cast<int>(tokenStart),
+                          static_cast<int>(optionName.size()), csoundOptionFormat);
         }
         return;
     }
     else if(blockdata->section == OrchestraSection || m_sectionType == OrchestraSection) {
         //auto text = QStringRef(&line, 0, commentIndex);
-        auto text = QStringView(line).mid(0,commentIndex);
+        const QStringView text = QStringView(line).mid(0,commentIndex);
+        const QStringView codeText = text.trimmed();
 
-        if (format(0)==multiLineCommentFormat) {
+        if (lineStartsInComment) {
             return;
         }
 
         // define
-        rxmatch = defineRx.match(text);
-        if(rxmatch.hasMatch()) {
-            setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), macroDefineFormat);
-            return;
+        if (codeText.startsWith(QLatin1Char('#'))) {
+            rxmatch = defineRx.match(text);
+            if(rxmatch.hasMatch()) {
+                setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), macroDefineFormat);
+                return;
+            }
         }
 
-        rxmatch = instOpcodeRx.match(text);
+        if (codeText.startsWith(QLatin1StringView("instr"))
+                || codeText.startsWith(QLatin1StringView("opcode"))) {
+            rxmatch = instOpcodeRx.match(text);
+        } else {
+            rxmatch = QRegularExpressionMatch();
+        }
         if(rxmatch.hasMatch()) {
             //auto group = rxmatch.captured(2);
             setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1), instFormat);
             setFormat(rxmatch.capturedStart(2), rxmatch.capturedLength(2), nameFormat);
+            const QStringView declaration = rxmatch.capturedView(1);
             // Track non-numeric instrument names so they can be highlighted at call sites
-            if(rxmatch.captured(1) == "instr") {
-                const QString instrName = rxmatch.captured(2);
+            if(declaration == QLatin1StringView("instr")) {
+                const QStringView instrName = rxmatch.capturedView(2);
                 bool isNumber = false;
-                instrName.toInt(&isNumber);
+                static_cast<void>(instrName.toInt(&isNumber));
                 if(!isNumber)
-                    m_namedInstruments.insert(instrName);
+                    m_namedInstruments.insert(instrName.toString());
             }
             else {
                 // Csound 7 UDO signature:
                 //   opcode Route(asigs:a[], hwouts:k[]):()
                 // The old form "opcode Name, ..." has no parentheses and is
                 // left to the normal word highlighting.
-                static const QRegularExpression udoSignatureRx(
-                            QStringLiteral("^\\s*opcode\\s+[A-Za-z_]\\w*\\s*"
-                                           "\\(([^)]*)\\)\\s*"
-                                           "(?::\\s*(?:\\(([^)]*)\\)|"
-                                           "([A-Za-z_]\\w*(?:\\[\\])?)))?"));
                 const auto signature = udoSignatureRx.match(text);
                 if (signature.hasMatch()) {
-                    static const QRegularExpression typedParamRx(
-                                QStringLiteral("([A-Za-z_]\\w*)\\s*:\\s*"
-                                               "([A-Za-z_]\\w*(?:\\[\\])?)"));
                     const int inputStart = signature.capturedStart(1);
-                    for (auto it = typedParamRx.globalMatch(signature.captured(1));
+                    for (auto it = typedParamRx.globalMatch(signature.capturedView(1));
                          it.hasNext(); ) {
                         const auto param = it.next();
-                        const QString name = param.captured(1);
-                        const QString type = param.captured(2);
-                        setFormat(inputStart + param.capturedStart(1),
-                                  name.size(), formatForType(type));
-                        setFormat(inputStart + param.capturedStart(2),
-                                  type.size(), keywordFormat);
+                        const QStringView name = param.capturedView(1);
+                        const QStringView type = param.capturedView(2);
+                        setFormat(inputStart + static_cast<int>(param.capturedStart(1)),
+                                  static_cast<int>(name.size()), formatForType(type));
+                        setFormat(inputStart + static_cast<int>(param.capturedStart(2)),
+                                  static_cast<int>(type.size()), keywordFormat);
                         registerTypedVar(name, type);
                     }
                     if (signature.capturedLength(2) > 0) {
                         // Output types in parentheses: :(a, k)
-                        static const QRegularExpression typeRx(
-                                    QStringLiteral("[A-Za-z_]\\w*(?:\\[\\])?"));
                         const int outputStart = signature.capturedStart(2);
-                        for (auto it = typeRx.globalMatch(signature.captured(2));
+                        for (auto it = typeRx.globalMatch(signature.capturedView(2));
                              it.hasNext(); ) {
                             const auto type = it.next();
-                            setFormat(outputStart + type.capturedStart(),
-                                      type.capturedLength(), keywordFormat);
+                            setFormat(outputStart + static_cast<int>(type.capturedStart()),
+                                      static_cast<int>(type.capturedLength()), keywordFormat);
                         }
                     }
                     else if (signature.capturedLength(3) > 0) {
@@ -911,11 +1016,10 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         }
 
         // Csound 7: detect struct type definitions, e.g. "struct MyType val0:i, val1:i"
-        {
-            static const QRegularExpression structRx("^\\s*\\bstruct\\b\\s+(\\w+)\\b");
+        if (codeText.startsWith(QLatin1StringView("struct"))) {
             rxmatch = structRx.match(text);
             if(rxmatch.hasMatch() && rxmatch.capturedStart(1) < commentIndex) {
-                m_userTypeNames.insert(rxmatch.captured(1));
+                m_userTypeNames.insert(rxmatch.capturedView(1).toString());
                 setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1), nameFormat);
                 // 'struct' keyword will be formatted by the word loop via keywordLiterals
             }
@@ -923,215 +1027,245 @@ void Highlighter::highlightCsoundBlock(const QString &line)
 
         // Csound 7: detect @global typed variable definitions, e.g. "maxamp@global:i = 0dbfs / 5"
         // Register the var name in the global-rate sets so later uses get girateFormat etc.
-        {
-            static const QRegularExpression globalRx("(\\w+)@global:(\\w+(?:\\[\\])?)");
+        if (text.contains(QLatin1StringView("@global"))) {
             QRegularExpressionMatchIterator globalIt = globalRx.globalMatch(text);
             while(globalIt.hasNext()) {
                 auto m = globalIt.next();
                 if(m.capturedStart() < commentIndex) {
-                    registerGlobalTypedVar(m.captured(1), m.captured(2));
+                    registerGlobalTypedVar(m.capturedView(1), m.capturedView(2));
                 }
             }
         }
 
-        index = 0;
-        while((rxmatch=operatorsRx.match(text, index)).hasMatch()) {
-            length = rxmatch.capturedLength();
-            setFormat(rxmatch.capturedStart(), length, operatorFormat);
-            index = rxmatch.capturedEnd()+1;
+        // Scan operators directly. A regular expression for a handful of
+        // fixed symbols costs more than a single pass over the line.
+        const int textSize = static_cast<int>(text.size());
+        for (int i = 0; i < textSize; ++i) {
+            const QChar c = text.at(i);
+            int opLength = 0;
+            if (i + 1 < textSize) {
+                const QChar next = text.at(i + 1);
+                if ((c == QLatin1Char('&') && next == QLatin1Char('&'))
+                        || (c == QLatin1Char('|') && next == QLatin1Char('|'))
+                        || (c == QLatin1Char('=') && next == QLatin1Char('='))
+                        || (c == QLatin1Char('!') && next == QLatin1Char('='))
+                        || (c == QLatin1Char('<') && next == QLatin1Char('='))
+                        || (c == QLatin1Char('>') && next == QLatin1Char('=')))
+                    opLength = 2;
+            }
+            if (opLength == 0
+                    && (c == QLatin1Char('<') || c == QLatin1Char('>')
+                        || c == QLatin1Char('\\')))
+                opLength = 1;
+            if (opLength > 0) {
+                setFormat(i, opLength, operatorFormat);
+                // The previous regex scan continued at capturedEnd() + 1, so
+                // skip the character after the operator as well.
+                i += opLength;
+            }
         }
 
-        static const QRegularExpression expressionRx("\\b[\\w:]+\\b");
         index = 0;
         while((rxmatch = expressionRx.match(text, index)).hasMatch()) {
-            int wordStart = rxmatch.capturedStart();
-            int wordEnd = rxmatch.capturedEnd();
+            const int wordStart = static_cast<int>(rxmatch.capturedStart());
+            const int wordEnd = static_cast<int>(rxmatch.capturedEnd());
             index = wordEnd;
 
             if(wordStart > 0) {
-                auto prev = text.at(wordStart - 1);
-                if(prev == '$' || prev == '#') {
+                const QChar prev = text.at(wordStart - 1);
+                if(prev == QLatin1Char('$') || prev == QLatin1Char('#')) {
                     // check if macro name - replacement for regexp solution
-                    setFormat(wordStart-1, wordEnd - wordStart + 1, macroDefineFormat);
-                    index = wordEnd;
+                    setFormat(wordStart - 1, wordEnd - wordStart + 1, macroDefineFormat);
                     continue;
                 }
             }
-            wordEnd = (wordEnd > 0 ? wordEnd : text.size());
-            QString word = rxmatch.captured();
-            bool isPfield = word.size() > 1 && word.at(0) == QLatin1Char('p');
-            for (int i = 1; isPfield && i < word.size(); ++i) {
+
+            const QStringView word = rxmatch.capturedView();
+            const int wordLength = static_cast<int>(word.size());
+            bool isPfield = wordLength > 1 && word.at(0) == QLatin1Char('p');
+            for (int i = 1; isPfield && i < wordLength; ++i) {
                 if (!word.at(i).isDigit())
                     isPfield = false;
             }
             if(isPfield) {
-                setFormat(wordStart, wordEnd - wordStart, pfieldFormat);
+                setFormat(wordStart, wordLength, pfieldFormat);
+                continue;
             }
-            else if(instPatterns.contains(word)) {
-                setFormat(wordStart, wordEnd - wordStart, instFormat);
+
+            // QSet<QString> has no heterogeneous lookup; this is the one copy
+            // needed for the membership tests below.
+            const QString wordKey = word.toString();
+            if(instPatterns.contains(wordKey)) {
+                setFormat(wordStart, wordLength, instFormat);
                 break; // was: return. For any case, to go through lines after while loop
             }
-            else if(tagPatterns.contains(word) && wordStart > 0
+            else if(tagPatterns.contains(wordKey) && wordStart > 0
                     && (text.at(wordStart - 1) == QLatin1Char('<')
                         || (wordStart > 1 && text.at(wordStart - 2) == QLatin1Char('<')
                             && text.at(wordStart - 1) == QLatin1Char('/')))) {
                 const bool closing = text.at(wordStart - 1) == QLatin1Char('/');
                 setFormat(wordStart - (closing ? 2 : 1),
-                          wordEnd - wordStart + (closing ? 3 : 2),
+                          wordLength + (closing ? 3 : 2),
                           csdtagFormat);
             }
-            else if(headerPatterns.contains(word)) {
-                setFormat(wordStart, wordEnd - wordStart, headerFormat);
+            else if(headerPatterns.contains(wordKey)) {
+                setFormat(wordStart, wordLength, headerFormat);
             }
-            else if(keywordLiterals.contains(word)) {
-                setFormat(wordStart, wordEnd - wordStart, keywordFormat);
+            else if(keywordLiterals.contains(wordKey)) {
+                setFormat(wordStart, wordLength, keywordFormat);
             }
-            else if(ioPatterns.contains(word)) {
-                setFormat(wordStart, wordEnd - wordStart, ioFormat);
+            else if(ioPatterns.contains(wordKey)) {
+                setFormat(wordStart, wordLength, ioFormat);
             }
-            else if(word.at(word.size() - 1) != QLatin1Char(':')
+            else if(word.at(wordLength - 1) != QLatin1Char(':')
                     && word.indexOf(QLatin1Char(':')) >= 0) {
-                const int colon = word.indexOf(QLatin1Char(':'));
-                const int secondColon = word.indexOf(QLatin1Char(':'), colon + 1);
+                const int colon = static_cast<int>(word.indexOf(QLatin1Char(':')));
+                const int secondColon = static_cast<int>(
+                            word.indexOf(QLatin1Char(':'), colon + 1));
                 if (secondColon < 0) {
-                    const QString varName  = word.left(colon);
-                    const QString typeName = word.mid(colon + 1);
+                    const QStringView varName  = word.left(colon);
+                    const QStringView typeName = word.mid(colon + 1);
                     // "@global:type" annotation: the token is "global:type", preceded by '@'
-                    if(wordStart > 0 && text.at(wordStart - 1) == '@') {
+                    if(wordStart > 0 && text.at(wordStart - 1) == QLatin1Char('@')) {
                         // Highlight "@global:type" together as a keyword annotation
-                        setFormat(wordStart - 1, wordEnd - wordStart + 1, keywordFormat);
+                        setFormat(wordStart - 1, wordLength + 1, keywordFormat);
                     }
-                    else if(isOpcode(varName)) {
+                    else if(isOpcode(varName.toString())) {
                         // functional style opcode:type(...) — existing behaviour
-                        setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
+                        setFormat(wordStart, wordLength, opcodeFormat);
                     }
                     else {
                         // Csound 7: typed variable definition  varname:type
-                        static const QSet<QString> builtinTypes = {
-                            "i", "k", "a", "S", "f", "b", "B",
-                            "Complex", "InstrDef", "Instr", "Opcode"
-                        };
-                        QString typeBase = typeName;
-                        typeBase.remove("[]");
-                        if(builtinTypes.contains(typeBase) || m_userTypeNames.contains(typeBase)) {
+                        QStringView typeBase = typeName;
+                        if (typeBase.endsWith(QLatin1StringView("[]")))
+                            typeBase.chop(2);
+                        const QString typeKey = typeBase.toString();
+                        if(builtinTypes.contains(typeKey) || m_userTypeNames.contains(typeKey)) {
                             registerTypedVar(varName, typeName);
                             // varname portion — colour by its type
-                            setFormat(wordStart, varName.size(), formatForType(typeName));
+                            setFormat(wordStart, static_cast<int>(varName.size()),
+                                      formatForType(typeName));
                             // ":type" portion — highlight as keyword
-                            setFormat(wordStart + varName.size(),
-                                      wordEnd - wordStart - varName.size(),
+                            setFormat(wordStart + static_cast<int>(varName.size()),
+                                      wordLength - static_cast<int>(varName.size()),
                                       keywordFormat);
                         }
                     }
                 }
                 else {
-                    setFormat(wordStart, wordEnd - wordStart, errorFormat);
+                    setFormat(wordStart, wordLength, errorFormat);
                 }
             }
-            else if(m_parsedUDOs.contains(word)) {
-                setFormat(wordStart, wordEnd - wordStart, udoFormat);
+            else if(m_parsedUDOs.contains(wordKey)) {
+                setFormat(wordStart, wordLength, udoFormat);
             }
-            else if(deprecatedOpcodes.contains(word)) {
-                setFormat(wordStart, wordEnd - wordStart, deprecatedFormat);
+            else if(deprecatedOpcodes.contains(wordKey)) {
+                setFormat(wordStart, wordLength, deprecatedFormat);
             }
-            else if(isOpcode(word)) {
-                setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
+            else if(isOpcode(wordKey)) {
+                setFormat(wordStart, wordLength, opcodeFormat);
             }
-            else if(m_namedInstruments.contains(word)) {
-                setFormat(wordStart, wordEnd - wordStart, nameFormat);
+            else if(m_namedInstruments.contains(wordKey)) {
+                setFormat(wordStart, wordLength, nameFormat);
             }
             else if(colorVariables) {
                 QTextCharFormat variableFormat;
                 bool haveVariableFormat = false;
                 // @global:type sets — these take precedence over local typed sets
-                if(m_gaVariables.contains(word)) {
+                if(m_gaVariables.contains(wordKey)) {
                     variableFormat = garateFormat; haveVariableFormat = true;
                 }
-                else if(m_gkVariables.contains(word)) {
+                else if(m_gkVariables.contains(wordKey)) {
                     variableFormat = gkrateFormat; haveVariableFormat = true;
                 }
-                else if(m_giVariables.contains(word)) {
+                else if(m_giVariables.contains(wordKey)) {
                     variableFormat = girateFormat; haveVariableFormat = true;
                 }
-                else if(m_gSVariables.contains(word)) {
+                else if(m_gSVariables.contains(wordKey)) {
                     variableFormat = gstringVarFormat; haveVariableFormat = true;
                 }
-                else if(m_gfVariables.contains(word)) {
+                else if(m_gfVariables.contains(wordKey)) {
                     variableFormat = gfsigFormat; haveVariableFormat = true;
                 }
                 // Csound 7: check explicitly typed (local) variable sets
-                else if(m_aVariables.contains(word)) {
+                else if(m_aVariables.contains(wordKey)) {
                     variableFormat = arateFormat; haveVariableFormat = true;
                 }
-                else if(m_kVariables.contains(word)) {
+                else if(m_kVariables.contains(wordKey)) {
                     variableFormat = krateFormat; haveVariableFormat = true;
                 }
-                else if(m_iVariables.contains(word)) {
+                else if(m_iVariables.contains(wordKey)) {
                     variableFormat = irateFormat; haveVariableFormat = true;
                 }
-                else if(m_SVariables.contains(word)) {
+                else if(m_SVariables.contains(wordKey)) {
                     variableFormat = stringVarFormat; haveVariableFormat = true;
                 }
-                else if(m_fVariables.contains(word)) {
+                else if(m_fVariables.contains(wordKey)) {
                     variableFormat = fsigFormat; haveVariableFormat = true;
                 }
-                else if(m_bVariables.contains(word)) {
+                else if(m_bVariables.contains(wordKey)) {
                     variableFormat = booleanFormat; haveVariableFormat = true;
                 }
-                else if(m_complexVariables.contains(word)) {
+                else if(m_complexVariables.contains(wordKey)) {
                     variableFormat = complexFormat; haveVariableFormat = true;
                 }
-                else if(m_instrDefVariables.contains(word)) {
+                else if(m_instrDefVariables.contains(wordKey)) {
                     variableFormat = nameFormat; haveVariableFormat = true;
                 }
-                else if(m_opcodeVariables.contains(word)) {
+                else if(m_opcodeVariables.contains(wordKey)) {
                     variableFormat = opcodeFormat; haveVariableFormat = true;
                 }
-                else if(m_structVariables.contains(word)) {
+                else if(m_structVariables.contains(wordKey)) {
                     variableFormat = nameFormat; haveVariableFormat = true;
                 }
                 // Fall back to classic prefix-based detection
-                else if(word.startsWith('a')) {
+                else if(word.startsWith(QLatin1Char('a'))) {
                     variableFormat = arateFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith('k')) {
+                else if(word.startsWith(QLatin1Char('k'))) {
                     variableFormat = krateFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith('i')) {
+                else if(word.startsWith(QLatin1Char('i'))) {
                     variableFormat = irateFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith("ga")) {
+                else if(word.startsWith(QLatin1StringView("ga"))) {
                     variableFormat = garateFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith("gk")) {
+                else if(word.startsWith(QLatin1StringView("gk"))) {
                     variableFormat = gkrateFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith("gi")) {
+                else if(word.startsWith(QLatin1StringView("gi"))) {
                     variableFormat = girateFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith("S")) {
+                else if(word.startsWith(QLatin1Char('S'))) {
                     variableFormat = stringVarFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith("gS")) {
+                else if(word.startsWith(QLatin1StringView("gS"))) {
                     variableFormat = gstringVarFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith("f")) {
+                else if(word.startsWith(QLatin1Char('f'))) {
                     variableFormat = fsigFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith("gf")) {
+                else if(word.startsWith(QLatin1StringView("gf"))) {
                     variableFormat = gfsigFormat; haveVariableFormat = true;
                 }
                 if (haveVariableFormat)
-                    setFormat(wordStart, wordEnd - wordStart, variableFormat);
+                    setFormat(wordStart, wordLength, variableFormat);
             }
 
         }
 
-        // string
-        index = 0;
-        while ((rxmatch = stringRx.match(text, index)).hasMatch()) {
-            setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), quotationFormat);
-            index = rxmatch.capturedEnd();
+        // String ranges are normally painted by highlightBlock() from the
+        // lexical scan, after the code has been highlighted.
+        if (paintStrings) {
+            for (qsizetype quote = text.indexOf(QLatin1Char('"')); quote >= 0; ) {
+                const qsizetype end = text.indexOf(QLatin1Char('"'), quote + 1);
+                if (end < 0)
+                    break;
+                setFormat(static_cast<int>(quote), static_cast<int>(end - quote + 1),
+                          quotationFormat);
+                quote = text.indexOf(QLatin1Char('"'), end + 1);
+            }
         }
 
         //last rules  -- earlier for label, npw not used any more
@@ -1145,12 +1279,14 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         //     }
         // }
 
-        // label (separate)
-        rxmatch = labelRx.match(text);
-
-        if (rxmatch.hasMatch()) {
-            // Highlight "<label>:" only, not the leading indentation.
-            setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1) + 1, labelFormat);
+        // label (separate). Only lines with a colon can contain a label; skip
+        // the expression for the much more common lines without one.
+        if (text.indexOf(QLatin1Char(':')) >= 0) {
+            rxmatch = labelRx.match(text);
+            if (rxmatch.hasMatch()) {
+                // Highlight "<label>:" only, not the leading indentation.
+                setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1) + 1, labelFormat);
+            }
         }
 
         // Multiline {{ ... }} strings are handled by the lexical scan in
