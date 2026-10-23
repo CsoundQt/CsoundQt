@@ -277,6 +277,7 @@ private:
 
 	void ensureFindBar();
 	void ensureOpcodeInsertBar();
+	void cancelAutoCompleteOnCursorMove();
 	void collectFindMatches();
 	void updateFindHighlights(bool moveCursor);
 	void updateFindStatus();
@@ -309,6 +310,8 @@ private:
     int m_autoCompleteMenuWidth = 42;
     int m_autoCompleteMenuMaxLines = 20;
     QTimer* m_autoCompleteTimer = nullptr;
+    int m_autoCompleteCursorPosition = -1;
+    int m_autoCompleteCursorAnchor = -1;
     bool m_autoParameterMode;
 	bool errorMarked;
 	bool internalChange;  // to let popoup opcode completion know if text change was internal

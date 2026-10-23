@@ -326,6 +326,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 		editor->viewport()->installEventFilter(this);
 		connect(editor, &QTextEdit::cursorPositionChanged,
 				this, &DocumentView::updateChannelHighlightFromCursor);
+		connect(editor, &QTextEdit::cursorPositionChanged,
+				this, &DocumentView::cancelAutoCompleteOnCursorMove);
 	}
 
 	m_oldCursorPosition = -1; // 0 or positive, if cursor needs to be moved there
@@ -1923,6 +1925,9 @@ void DocumentView::textChanged() {
             autoCompleteTask->setInterval(m_autoCompleteDelay);
             autoCompleteTask->setSingleShot(true);
             connect(autoCompleteTask, &QTimer::timeout, this, &DocumentView::autoCompleteAtCursor);
+            const QTextCursor cursor = m_mainEditor->textCursor();
+            m_autoCompleteCursorPosition = cursor.position();
+            m_autoCompleteCursorAnchor = cursor.anchor();
             autoCompleteTask->start();
             m_autoCompleteTimer = autoCompleteTask;
         }
@@ -1932,6 +1937,26 @@ void DocumentView::textChanged() {
     if (m_findBar && m_findBar->isVisible() && !m_findQuery.isEmpty()) {
         refreshFindAfterEdit();
     }
+}
+
+void DocumentView::cancelAutoCompleteOnCursorMove()
+{
+    if (!m_autoCompleteTimer || !m_autoCompleteTimer->isActive())
+        return;
+
+    auto *editor = qobject_cast<TextEditor *>(sender());
+    if (!editor || editor != m_mainEditor) {
+        m_autoCompleteTimer->stop();
+        return;
+    }
+
+    const QTextCursor cursor = editor->textCursor();
+    // Typing also moves the caret. The textChanged handler records that new
+    // position when it schedules completion, so only a subsequent caret move
+    // cancels the pending popup.
+    if (cursor.position() != m_autoCompleteCursorPosition
+            || cursor.anchor() != m_autoCompleteCursorAnchor)
+        m_autoCompleteTimer->stop();
 }
 
 void DocumentView::escapePressed()
