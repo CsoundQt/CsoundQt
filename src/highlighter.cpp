@@ -743,7 +743,9 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     static const QRegularExpression csdtagRx("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>");
     static const QRegularExpression defineRx("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
     static const QRegularExpression instOpcodeRx("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b");
-    static const QRegularExpression operatorsRx(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
+    // Match two-character operators before their prefixes, otherwise "<"
+    // would consume the start of "<=" (and ">" the start of ">=").
+    static const QRegularExpression operatorsRx(R"(&&|==|\|\||<=|>=|!=|<|>|\\)");
     static const QRegularExpression stringRx("\"[^\"]*\"");
     // A label is an identifier followed by ':' and then whitespace/end-of-line.
     // The lookahead keeps the match ending at the colon so trailing whitespace
