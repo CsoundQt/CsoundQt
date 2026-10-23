@@ -13,14 +13,14 @@ giFFTSizes[] = [2048, 4096, 8192]
 
 instr AudioTest
   ; kon1, kon2, kon3, kon4, kon5,kon6, kon7, kon8 init 0
-  ksignalFreq = init(A4)
+  ksignalFreq init A4
   ilevelExp = 0.33
   iuiRefreshRate = 24
   irange = 48
-  iminAmp = ampdb(-60)
-  imeterUpLag = 0.01
-  imeterDownLag = 0.1
-  kdb = init(-999999)
+  iminAmp = db(-60)
+  imeterUpLag = 0.0
+  imeterDownLag = 0.08
+  kdb init -999999
 
   kSpectrumSelect = init(1)
 
@@ -35,12 +35,8 @@ instr AudioTest
   endif
 
   kdb = chnget("leveldb")
-  ; kdb = int(linlin(kleveldelta^ilevelExp, -60, 0, 0, 1))
   kamp = ampdb(kdb)
-  ksignalOn = kamp > iminAmp ? 1 : 0
-
-  if ksignalOn == 0 kgoto skipOutput
-
+  
   if ktrig == 1 then
     kon1 = chnget("on1")
     kon2 = chnget("on2")
@@ -73,41 +69,41 @@ instr AudioTest
   iswitchlag = 0.3
 
   aout1 = asig*interp(lag(kon1, iswitchlag))
-  koutamp1 max_k aout1, ktrig, 1
+  koutamp1 maxk aout1, ktrig, 1
   outch 1, aout1
 
   aout2 = asig*interp(lag(kon2, iswitchlag))
-  koutamp2 max_k aout2, ktrig, 1
+  koutamp2 maxk aout2, ktrig, 1
   outch 2, aout2
 
   if nchnls <= 2 goto skipOutput
 
   aout3 = asig*interp(lag(kon3, iswitchlag))
-  koutamp3 max_k aout3, ktrig, 1
+  koutamp3 maxk aout3, ktrig, 1
   outch 3, aout3
 
   aout4 = asig*interp(lag(kon4, iswitchlag))
-  koutamp4 max_k aout4, ktrig, 1
+  koutamp4 maxk aout4, ktrig, 1
   outch 4, aout4
 
   if nchnls <= 4 goto skipOutput
 
   aout5 = asig*interp(lag(kon5, iswitchlag))
-  koutamp5 max_k aout5, ktrig, 1
+  koutamp5 maxk aout5, ktrig, 1
   outch 5, aout5
 
   aout6 = asig*interp(lag(kon6, iswitchlag))
-  koutamp6 max_k aout6, ktrig, 1
+  koutamp6 maxk aout6, ktrig, 1
   outch 6, aout6
 
   if nchnls <= 6 goto skipOutput
 
   aout7 = asig*interp(lag(kon7, iswitchlag))
-  koutamp7 max_k aout7, ktrig, 1
+  koutamp7 maxk aout7, ktrig, 1
   outch 7, aout7
 
   aout8 = asig*interp(lag(kon8, iswitchlag))
-  koutamp8 max_k aout8, ktrig, 1
+  koutamp8 maxk aout8, ktrig, 1
   outch 8, aout8
 
 
@@ -116,31 +112,31 @@ skipOutput:
 
   ; ; Audio Input
 
-  imin = ampdbfs(-irange)
+  imin = db(-irange)
 
 
-  kamp1 max_k inch(1), ktrig, 1
+  kamp1 maxk inch(1), ktrig, 1
   kamp1 = lagud(kamp1, imeterUpLag, imeterDownLag)
 
-  kamp2 max_k inch(2), ktrig, 1
+  kamp2 maxk inch(2), ktrig, 1
   kamp2 = lagud(kamp2, imeterUpLag, imeterDownLag)
 
-  kamp3 max_k inch(3), ktrig, 1
+  kamp3 maxk inch(3), ktrig, 1
   kamp3 = lagud(kamp3, imeterUpLag, imeterDownLag)
 
-  kamp4 max_k inch(4), ktrig, 1
+  kamp4 maxk inch(4), ktrig, 1
   kamp4 = lagud(kamp4, imeterUpLag, imeterDownLag)
 
-  kamp5 max_k inch(5), ktrig, 1
+  kamp5 maxk inch(5), ktrig, 1
   kamp5 = lagud(kamp5, imeterUpLag, imeterDownLag)
 
-  kamp6 max_k inch(6), ktrig, 1
+  kamp6 maxk inch(6), ktrig, 1
   kamp6 = lagud(kamp6, imeterUpLag, imeterDownLag)
 
-  kamp7 max_k inch(7), ktrig, 1
+  kamp7 maxk inch(7), ktrig, 1
   kamp7 = lagud(kamp7, imeterUpLag, imeterDownLag)
 
-  kamp8 max_k inch(8), ktrig, 1
+  kamp8 maxk inch(8), ktrig, 1
   kamp8 = lagud(kamp8, imeterUpLag, imeterDownLag)
 
   if ktrig == 0 kgoto skipDisplay
@@ -150,7 +146,7 @@ skipOutput:
   chnset linlin(dbamp(koutamp2), 0, 1, -irange, 0), "vu2"
   if nchnls <= 2 goto skipDisplay
 
-  chnset dbfsamp(kamp3), "in3"
+  chnset dbamp(kamp3), "in3"
   chnset linlin(dbamp(koutamp3), 0, 1, -irange, 0), "vu3"
   chnset dbamp(kamp4), "in4"
   chnset linlin(dbamp(koutamp4), 0, 1, -irange, 0), "vu4"
@@ -173,14 +169,14 @@ skipDisplay:
   ktrig2 = metro(iuiRefreshRate*0.33)
 
   if ktrig2 == 1 then
-    chnset round(dbfsamp(kamp1)), "indb1"
-    chnset round(dbfsamp(kamp2)), "indb2"
-    chnset round(dbfsamp(kamp3)), "indb3"
-    chnset round(dbfsamp(kamp4)), "indb4"
-    chnset round(dbfsamp(kamp5)), "indb5"
-    chnset round(dbfsamp(kamp6)), "indb6"
-    chnset round(dbfsamp(kamp7)), "indb7"
-    chnset round(dbfsamp(kamp8)), "indb8"
+    chnset round(dbamp(kamp1)), "indb1"
+    chnset round(dbamp(kamp2)), "indb2"
+    chnset round(dbamp(kamp3)), "indb3"
+    chnset round(dbamp(kamp4)), "indb4"
+    chnset round(dbamp(kamp5)), "indb5"
+    chnset round(dbamp(kamp6)), "indb6"
+    chnset round(dbamp(kamp7)), "indb7"
+    chnset round(dbamp(kamp8)), "indb8"
   endif
 
   if kSpectrumSelect == 0 then
@@ -193,10 +189,9 @@ skipDisplay:
   ; without denorming the cpu usage shoots to 100% in some cases
   denorm aSpectrumOut
 
-  ; gaSpectrumOut += aSpectrumOut
 resetFFT:
   prints "fft size: %d \n", i(gkSpectrumFFTSize)
-  dispfft aSpectrumOut, 0.04, i(gkSpectrumFFTSize), 1
+  dispfft aSpectrumOut, 1/30, i(gkSpectrumFFTSize), 1
 
 endin
 
@@ -221,7 +216,7 @@ instr MidiNote  ; midi note input
     chnset Smsg, "display"
   endif
 
-  iamp = ampdb(ivel/127 * 48 - 48)
+  iamp = db(ivel/127 * 48 - 48)
   aenv = linsegr(0, 0.05, 1, 0.05, 0)
   aout = oscili(iamp*aenv, mtof(ikey))
   outch 1, aout
@@ -229,9 +224,7 @@ instr MidiNote  ; midi note input
 endin
 
 instr MidiCC
-  ichan = p4
-  icc   = p5
-  ival  = p6
+  ichan, icc, ival = p4, p5, p6
   schedule "led", 0, 0.1, "ccin"
   Smsg = sprintf("CC %d: %d (chan=%d)", icc, ival, ichan)
   if eventcycles() == 0 then
@@ -376,6 +369,12 @@ e
 
 
 
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -408,7 +407,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>true</locked>
   <color>
@@ -448,7 +446,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>true</locked>
   <color>
@@ -488,7 +485,6 @@ e
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -528,7 +524,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>true</locked>
   <color>
@@ -568,7 +563,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -722,7 +716,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -762,7 +755,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -802,7 +794,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -842,7 +833,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -882,7 +872,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -922,7 +911,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -962,7 +950,6 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -1005,7 +992,7 @@ e
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>24</fontsize>
   <flatStyle>true</flatStyle>
   <color>
@@ -1038,7 +1025,6 @@ e
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -1079,7 +1065,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-38.90450678</yValue>
+  <yValue>0.35518325</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <exponent>1.00000000</exponent>
@@ -1155,7 +1141,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-32.82672806</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -1650,7 +1636,6 @@ e
   <valignment>bottom</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -1760,7 +1745,6 @@ e
   <valignment>bottom</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -1950,7 +1934,6 @@ e
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -1990,7 +1973,6 @@ e
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -2123,7 +2105,6 @@ e
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -2204,7 +2185,6 @@ e
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -2277,7 +2257,6 @@ e
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
   <color>
@@ -2615,7 +2594,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-26</label>
+  <label>-12</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
@@ -2654,7 +2633,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-26</label>
+  <label>-15</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
