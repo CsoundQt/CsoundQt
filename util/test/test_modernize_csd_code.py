@@ -2,7 +2,7 @@ import importlib.util
 import unittest
 from pathlib import Path
 
-SCRIPT = Path(__file__).with_name("modernize_csd_code.py")
+SCRIPT = Path(__file__).parent.parent / "modernize_csd_code.py"
 spec = importlib.util.spec_from_file_location("modernize_csd_code", SCRIPT)
 modernize = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(modernize)

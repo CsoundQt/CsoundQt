@@ -2,14 +2,14 @@
 """Tests for the opcodes.xml generator (util/opcodeparser7.py).
 
 Run with:
-    python3 -m unittest discover -s util -p 'test_*.py'
+    python3 -m unittest discover -s util/test -p 'test_*.py'
 """
 
 import importlib.util
 import unittest
 from pathlib import Path
 
-SCRIPT = Path(__file__).with_name('opcodeparser7.py')
+SCRIPT = Path(__file__).parent.parent / 'opcodeparser7.py'
 spec = importlib.util.spec_from_file_location('opcodeparser7', SCRIPT)
 opcodeparser7 = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(opcodeparser7)
