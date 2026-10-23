@@ -884,6 +884,9 @@ void QuteWidget::popUpMenu(QPoint pos)
 	}
 
 	menu.addAction(propertiesAct);
+	QAction *highlightChannelsAct = menu.addAction(tr("Highlight Widget Channels"));
+	connect(highlightChannelsAct, &QAction::triggered, layout,
+	        [layout, this]() { layout->highlightWidgetChannels(this); });
 	if (!multipleSelected) {
 		menu.addAction(copyStyleAct);
 	}
@@ -907,13 +910,15 @@ void QuteWidget::popUpMenu(QPoint pos)
         else
             menu.addAction(action);
 	}
-
-	menu.addSeparator();
+	if (!actionList.isEmpty())
+		menu.addSeparator();
 
     layout->setCurrentPosition(layout->mapFromGlobal(pos));
 
-    menu.addAction(layout->storePresetAct);
-	menu.addAction(layout->newPresetAct);
+	if (layout->isEditMode()) {
+		menu.addAction(layout->storePresetAct);
+		menu.addAction(layout->newPresetAct);
+	}
 	menu.addAction(layout->recallPresetAct);
 
     menu.addSeparator();
@@ -1230,6 +1235,13 @@ QList<QAction *> QuteWidget::getParentActionList()
 	// A bit of a kludge... Must get the Widget Panel, which is the parent to the widget which
 	// holds the actual QuteWidgets
 	WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
+	if (layout == nullptr || !layout->isEditMode()
+			|| layout->getSelectedWidgets().isEmpty()) {
+		// Alignment, stacking, distribution and clipboard actions only make
+		// sense for an active edit-mode selection. Hide them outside edit
+		// mode rather than leaving a menu full of no-ops.
+		return actionList;
+	}
     actionList.append(layout->alignLeftAct);
 	actionList.append(layout->alignRightAct);
 	actionList.append(layout->alignTopAct);

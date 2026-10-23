@@ -155,7 +155,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     pasteAct = new QAction(tr("Paste"), this);
     //  pasteAct->setShortcut(tr("Ctrl+V"));
     connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
-    duplicateAct = new QAction(tr("Duplicate Selected"), this);
+    duplicateAct = new QAction(tr("Duplicate"), this);
     connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
     clearAct = new QAction(tr("Clear all widgets"), this);
     connect(clearAct, SIGNAL(triggered()), this, SLOT(clearWidgets()));
@@ -1946,33 +1946,61 @@ void WidgetLayout::addCreateWidgetActionsToMenu(QMenu &menu) {
 void WidgetLayout::createContextMenu(QContextMenuEvent *event)
 {
     QMenu menu;
-    QMenu newMenu(tr("New Widget", "New Widget submenu in widget layout popup"), &menu);
-    this->addCreateWidgetActionsToMenu(newMenu);
-    menu.addMenu(&newMenu);
-    menu.addSeparator(); // ------------------------------------------------------------
+    const bool editing = m_editMode;
+    const bool hasSelection = !getSelectedWidgets().isEmpty();
+    const bool hasWidgets = !m_widgets.isEmpty();
 
-    QMenu editMenu(tr("Edit", "Edit menu in widget layout right-click menu"), &menu);
-    editMenu.addAction(cutAct);
-    editMenu.addAction(copyAct);
-    editMenu.addAction(pasteAct);
-    editMenu.addAction(selectAllAct);
-    // Shortcut from the duplicate action is not working from some reason...
-    //  menu.addAction(duplicateAct);
-    editMenu.addAction(clearAct);
-    menu.addMenu(&editMenu);
+    // Creating and editing widgets is only meaningful in edit mode. Keeping
+    // these actions out of the run-mode menu also prevents shortcuts and
+    // actions from appearing to be available when they would do nothing.
+    if (editing) {
+        QMenu newMenu(tr("New Widget", "New Widget submenu in widget layout popup"), &menu);
+        this->addCreateWidgetActionsToMenu(newMenu);
+        menu.addMenu(&newMenu);
+        menu.addSeparator();
 
-    menu.addSeparator(); // ------------------------------------------------------------
+        QMenu editMenu(tr("Edit", "Edit menu in widget layout right-click menu"), &menu);
+        cutAct->setEnabled(hasSelection);
+        copyAct->setEnabled(hasSelection);
+        selectAllAct->setEnabled(hasWidgets);
+        clearAct->setEnabled(hasWidgets);
+        editMenu.addAction(cutAct);
+        editMenu.addAction(copyAct);
+        editMenu.addAction(pasteAct);
+        editMenu.addAction(selectAllAct);
+        // Shortcut from the duplicate action is not working from some reason...
+        //  menu.addAction(duplicateAct);
+        editMenu.addAction(clearAct);
+        menu.addMenu(&editMenu);
+        menu.addSeparator();
+    }
 
+    // Always available: mark the editor lines that refer to the widget under
+    // the mouse, or to the current selection when there is no hover.
+    QAction *highlightChannelsAct = menu.addAction(tr("Highlight Widget Channels"));
+    connect(highlightChannelsAct, &QAction::triggered,
+            this, [this]() { highlightWidgetChannels(nullptr); });
+    menu.addSeparator();
+
+    // Presets are also useful while the instrument is running; creating or
+    // updating them is an edit-time operation.
     QMenu presetMenu(tr("Presets", "Preset submenu in widget layout popup"), &menu);
-    presetMenu.addAction(storePresetAct);
+    storePresetAct->setEnabled(editing);
+    newPresetAct->setEnabled(editing);
+    recallPresetAct->setEnabled(!presets.isEmpty());
+    if (editing) {
+        presetMenu.addAction(storePresetAct);
+        presetMenu.addAction(newPresetAct);
+    }
     presetMenu.addAction(recallPresetAct);
-    presetMenu.addAction(newPresetAct);
     menu.addMenu(&presetMenu);
 
-    menu.addSeparator(); // ------------------------------------------------------------
-
-    menu.addAction(propertiesAct);
-    menu.addAction(reloadWidgetsAct);
+    if (editing) {
+        menu.addSeparator();
+        propertiesAct->setEnabled(hasSelection);
+        menu.addAction(propertiesAct);
+        menu.addAction(reloadWidgetsAct);
+    }
 
     // Offer Float/Dock when this layout is contained in a dock widget
     // (the dock title bar is hidden when docked, so this is the way to float it).
