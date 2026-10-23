@@ -94,7 +94,8 @@ void scanInto(const QString &line, int startState, Line &info)
 				info.strings.append({pos, end + 1});
 				pos = end + 1;
 			}
-		} else if (c == QLatin1Char('/') && pos + 1 < length) {
+		} else if (c == QLatin1Char('/')
+		&& pos + 1 < length) {
 			const QChar next = line.at(pos + 1);
 			if (next == QLatin1Char('*')) {
 				const int end = line.indexOf("*/", pos + 2);
@@ -418,32 +419,7 @@ Highlighter::Highlighter(QTextDocument *parent)
     m_sectionType = CsdSection::UnknownSection;
 
     // look here for checking if an opcode is deprecated: https://csound.com/docs/manual/DeprecatedTop.html
-    deprecatedOpcodes << "abetarand" << "abexprnd" << "acauchy" << "aexprand" << "agauss" << "agogobel"
-                      << "alinrand" << "apcauchy" << "apoisson" << "apow" << "array" << "atrirand"
-                      << "aunirand" << "aweibull"
-                      << "bformdec" << "bformenc"
-                      << "clock"
-                      << "fin"
-                      << "hrtfer"
-                      << "ibetarand" << "ibexprnd" << "icauchy" << "ictrl14" << "ictrl21" << "ictrl7"
-                      << "iexprand" << "igauss" << "ilinrand" << "imidic14" << "imidic21" << "imidic7"
-                      << "instimek" << "instimes" << "ioff" << "ion" << "iondur2" << "iondur" << "ioutat"
-                      << "ioutc14" << "ioutc" << "ioutpat" << "ioutpb" << "ioutpc" << "ipcauchy"
-                      << "ipoisson" << "ipow" << "is16b14" << "is32b14" << "islider16" << "islider32"
-                      << "islider64" << "islider8" << "itablecopy" << "itablegpw" << "itablemix"
-                      << "itablew" << "itrirand" << "iunirand" << "iweibull"
-                      << "kbetarand" << "kbexprnd" << "kcauchy" << "kdump2" << "kdump3" << "kdump4"
-                      << "kdump" << "kexprand" << "kfilter2" << "kgauss" << "klinrand" << "kon"
-                      << "koutat" << "koutc14" << "koutc" << "koutpat" << "koutpb" << "koutpc"
-                      << "kpcauchy" << "kpoisson" << "kpow" << "kread2" << "kread3" << "kread4"
-                      << "kread" << "ktableseg" << "ktrirand" << "kunirand" << "kweibull"
-                      << "peakk" << "pop" << "pop_f" << "ptable" << "ptablei" << "ptable3" << "ptablew"
-                      << "push" << "push_f"
-                      << "sc_lag" << "sc_lagud" << "sc_phasor" << "sc_trig"
-                      << "sndload" << "soundout" << "soundouts" << "stack"
-                      << "tb" << "tableiw"
-                      << "xscanmap" << "xscansmap" << "xscans" << "xscanu"
-                      ;
+    deprecatedOpcodes << "dbfsamp" << "ampdbfs" << "max_k";
 
     operatorPatterns << "&&" << "||";
 
