@@ -26,6 +26,7 @@
 #include <QSyntaxHighlighter>
 
 #include <QHash>
+#include <QSet>
 #include <QTextCharFormat>
 #include <QStringList>
 #include <QRegularExpression>
@@ -33,6 +34,8 @@
 #include <QTextDocument>
 
 #include <QRegularExpression>
+
+using namespace Qt::StringLiterals;
 
 namespace EditorThemes { struct Theme; struct FormatSpec; }
 
@@ -146,7 +149,7 @@ public:
 	QTextCharFormat formatFor(Construct construct) const
 	{ return m_formats[construct]; }
 
-    void setUDOs(QStringList udos);
+    void setUDOs(const QStringList &udos);
 
 protected:
 	enum State {
@@ -163,7 +166,7 @@ protected:
 	void highlightHtmlBlock(const QString &text);
     void highlightScore(const QString &text, int start, int end);
 	int findOpcode(QString opcodeName, int start = 0, int end = -1);
-    bool isOpcode(QString name);
+    bool isOpcode(const QString &name);
 
 private:
     // Theme handling: applyTheme() applies a complete definition (built-in or
@@ -210,16 +213,118 @@ private:
     QTextCharFormat csoundOptionFormat;
     QTextCharFormat defaultFormat;
 
-    QStringList tagPatterns, headerPatterns, instPatterns,
-                keywordLiterals, htmlKeywords, javascriptKeywords,
-                csoundOptions, ioPatterns; //Csound
+    QStringList htmlKeywords, javascriptKeywords; //Csound
+
+    const QSet<QString> instPatterns = {
+        u"instr"_s, u"endin"_s, u"opcode"_s, u"endop"_s,
+    };
+
+    const QSet<QString> headerPatterns = {
+        u"sr"_s, u"kr"_s, u"ksmps"_s, u"nchnls"_s, u"nchnls_i"_s,
+        u"0dbfs"_s, u"A4"_s, u"zakinit"_s, u"massign"_s,
+    };
+
+    const QSet<QString> ioPatterns = {
+        u"in"_s, u"ins"_s, u"inch"_s, u"out"_s, u"outs"_s, u"outch"_s,
+        u"outvalue"_s, u"invalue"_s, u"chnget"_s, u"chngetk"_s, u"chnset"_s,
+        u"zaw"_s, u"zar"_s, u"zkw"_s, u"zkr"_s, u"zawm"_s,
+        u"OSCsend"_s, u"OSClisten"_s, u"OSCraw"_s, u"OSCinit"_s,
+    };
+
+    const QSet<QString> csoundOptions = {
+        u"-+rtaudio"_s,
+        u"-+rtmidi"_s,
+        u"-+jack_client"_s,
+        u"--nodisplays"_s,
+        u"--nosound"_s,
+        u"--syntax-check-only"_s,
+        u"--control-rate"_s,
+        u"--messagelevel"_s,
+        u"--env"_s,
+        u"--dither"_s,
+        u"--sched"_s,
+        u"--omacro"_s,
+        u"--smacro"_s,
+        u"--verbose"_s,
+        u"--sample-accurate"_s,
+        u"--realtime"_s,
+        u"--nchnls"_s,
+        u"--nchnls_i"_s,
+        u"--sinesize"_s,
+        u"--daemon"_s,
+        u"--port"_s,
+        u"--use-system-sr"_s,
+        u"--ksmps"_s,
+        u"--midi-key-cps"_s,
+        u"--midi-velocity"_s,
+        u"--limiter"_s,
+        u"--udp-echo"_s,
+        u"--opcode-dir"_s,
+    };
+
+    const QSet<QString> tagPatterns = {
+        u"CsoundSynthesizer"_s,
+        u"MacOptions"_s,
+        u"csLADSPA"_s,
+        u"Cabbage"_s,
+        u"CsInstruments"_s,
+        u"CsOptions"_s,
+        u"CsScore"_s,
+        u"CsVersion"_s,
+        u"CsHtml5"_s,
+        u"CsFileB"_s,
+        u"CsLicense"_s, u"CsLincense"_s,
+    };
+
+    const QSet<QString> keywordLiterals = {
+        u"init"_s,
+        u"if"_s,
+        u"then"_s,
+        u"else"_s,
+        u"endif"_s,
+        u"elseif"_s,
+        u"while"_s,
+        u"goto"_s,
+        u"igoto"_s,
+        u"kgoto"_s,
+        u"do"_s,
+        u"od"_s,
+        u"int"_s,
+        u"turnoff"_s,
+        u"xin"_s,
+        u"xout"_s,
+        u"passign"_s,
+        u"schedule"_s,
+        u"schedulek"_s,
+
+        // Csound 7 keywords
+        u"create"_s,
+        u"delete"_s,
+        u"run"_s,
+        u"struct"_s,
+        u"endstruct"_s,
+        u"for"_s,
+        u"in"_s,
+        u"@global"_s,
+        u"oversample"_s,
+        u"undersample"_s,
+        u"setksmps"_s,
+        u"switch"_s,
+        u"case"_s,
+        u"default"_s,
+        u"endsw"_s,
+        u"InstrDef"_s,
+        u"Instr"_s,
+        u"OpcodeDef"_s,
+        u"Opcode"_s,
+    };
+
     QStringList operatorPatterns;
 
     QSet<QString> deprecatedOpcodes;
 
 
     QTextCharFormat keywordFormat;
-    QRegularExpression csoundOptionsRx, csoundOptionsRx2;
 
 	//     void setFirstRules();
 	void setLastRules();
@@ -244,7 +349,7 @@ private:
     QTextCharFormat jsKeywordFormat, htmlTagFormat, attrFormat, tagNameFormat;
 	QTextCharFormat m_formats[LastConstruct + 1];
 
-    QStringList m_parsedUDOs;
+    QSet<QString> m_parsedUDOs;
     CsdSection m_sectionType;
 
     // Csound 7: explicitly typed variable sets

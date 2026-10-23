@@ -375,39 +375,6 @@ Highlighter::Highlighter(QTextDocument *parent)
     m_scoreSyntaxHighlighting = true;
     m_sectionType = CsdSection::UnknownSection;
 
-    tagPatterns << "<CsoundSynthesizer>" << "</CsoundSynthesizer>"
-				<< "<CsInstruments>" << "</CsInstruments>"
-				<< "<CsOptions>" << "</CsOptions>"
-				<< "<CsScore>" << "</CsScore>"
-				<< "<CsVersion>" << "</CsVersion>"
-				<< "<MacOptions>" << "</MacOptions>"
-				<< "<csLADSPA>" << "</csLADSPA>"
-                << "<Cabbage>" << "</Cabbage>"
-				<< "<CsHtml5>" << "</CsHtml5>"
-                << "<CsFileB>" << "</CsFileB>"
-                << "<CsLicense>" << "</CsLincense>";
-
-    instPatterns << "instr" << "endin" << "opcode" << "endop";
-    headerPatterns << "sr" << "kr" << "ksmps" << "nchnls" << "nchnls_i" << "0dbfs" << "A4"
-                   << "zakinit" << "massign";
-
-    keywordLiterals << "init" << "if" << "then" << "else" << "endif" << "elseif"
-                    << "while" << "goto" << "igoto" << "kgoto"
-                    << "do" << "od"
-                    << "int" << "turnoff" << "xin" << "xout"
-                    << "passign" << "schedule" << "schedulek"
-
-                    // Csound 7 keywords
-                    << "create" << "delete" << "run" << "struct" << "endstruct"
-                    << "for" << "in" << "@global"
-                    << "oversample" << "undersample" << "setksmps" << "switch" << "case" << "default" << "endsw"
-                    << "InstrDef" << "Instr" << "OpcodeDef" << "Opcode";
-
-    ioPatterns      << "in" << "ins" << "inch" << "out" << "outs" << "outch"
-                    << "outvalue" << "invalue" << "chnget" << "chngetk" << "chnset"
-                    << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
-                    << "OSCsend" << "OSClisten" << "OSCraw" << "OSCinit";
-
     // look here for checking if an opcode is deprecated: https://csound.com/docs/manual/DeprecatedTop.html
     deprecatedOpcodes << "abetarand" << "abexprnd" << "acauchy" << "aexprand" << "agauss" << "agogobel"
                       << "alinrand" << "apcauchy" << "apoisson" << "apow" << "array" << "atrirand"
@@ -438,28 +405,6 @@ Highlighter::Highlighter(QTextDocument *parent)
 
     operatorPatterns << "&&" << "||";
 
-    csoundOptions << "-+rtaudio=" << "-+rtmidi=" << "--nodisplays" << "--nosound"
-                  << "--syntax-check-only" << "--control-rate=" << "--messagelevel="
-                  << "--env:" << "--dither" << "--sched" << "--omacro:"
-                  << "--smacro:" << "--verbose" << "--sample-accurate" << "--realtime"
-                  << "--nchnls=" << "--nchnls_i=" << "--sinesize" << "--daemon"
-                  << "--port=" << "--use-system-sr" << "--ksmps=" << "-+jack_client="
-                  << "--limiter" << "--udp-echo" << "--opcode-dir="
-                  ;
-
-    csoundOptionsRx = QRegularExpression(
-                        "-(-(env|nodisplays|nosound|control-rate|messagelevel="
-                        "|dither|sched|omacro:|smacro:|verbose|sample-accurate|"
-                        "realtime|nchnls|nchnls_i|sinesize=|daemon|port=|use-system-sr|"
-                        "ksmps|midi-key-cps=|midi-velocity=)|"
-                        "\\+(rtaudio=|rtmidi=|jack_client=))");
-    /*
-    csoundOptionsRx = QRegularExpression("--(env|nodisplays|nosound|control-rate|messagelevel=|"
-                              "dither|sched|omacro:|smacro:|verbose|sample-accurate|"
-                              "realtime|nchnls|nchnls_i|sinesize=|daemon|port=|"
-                              "use-system-sr|ksmps|midi-key-cps=|midi-velocity=)");
-    */
-    csoundOptionsRx2 = QRegularExpression("-+(rtaudio=|rtmidi=|jack_client=)");
 
 
 	// for html
@@ -502,10 +447,6 @@ Highlighter::Highlighter(QTextDocument *parent)
                 << "<!\\bDOCTYPE\\b";
     */
 
-    QStringList jsOperators = { // not implemented at the moment
-        "+", "-", "*", "/", "===", "==", "=", "++", "--", "&&", "||", "!", ">", "<", ">=", "<=", "!=", "!=="
-    };
-
     rxScoreLetter.setPattern("^\\s*(i|f|e|d|s)");
     rxQuotation.setPattern("\"[^\"]*\"");
 
@@ -524,27 +465,27 @@ void Highlighter::setOpcodeNameList(QStringList list)
     // Opcodes added after src/opcodes.xml was generated. Keep the highlighter
     // in step with the current Csound 7 built-ins until the XML is regenerated.
     static const QSet<QString> extraBuiltinOpcodes = {
-        QStringLiteral("B"), QStringLiteral("b"),
-        QStringLiteral("cingoto"), QStringLiteral("cnkgoto"),
-        QStringLiteral("convle"), QStringLiteral("declare"),
-        QStringLiteral("memplay"), QStringLiteral("opcode"),
-        QStringLiteral("oscilx"), QStringLiteral("pvslock"),
-        QStringLiteral("sense"),
-        QStringLiteral("stmaddcondedge"), QStringLiteral("stmaddedge"),
-        QStringLiteral("stmaddnode"), QStringLiteral("stmadvance"),
-        QStringLiteral("stmcall"), QStringLiteral("stmcompile"),
-        QStringLiteral("stmcreate"), QStringLiteral("stmcurrent"),
-        QStringLiteral("stmcurrentid"), QStringLiteral("stmdelete"),
-        QStringLiteral("stmedgecount"), QStringLiteral("stmentry"),
-        QStringLiteral("stmevent"), QStringLiteral("stminstance"),
-        QStringLiteral("stmnext"), QStringLiteral("stmnodecount"),
-        QStringLiteral("stmnodeid"), QStringLiteral("stmnodename"),
-        QStringLiteral("stmnodetime"), QStringLiteral("stmonenter"),
-        QStringLiteral("stmonexit"), QStringLiteral("stmpause"),
-        QStringLiteral("stmrecall"), QStringLiteral("stmreset"),
-        QStringLiteral("stmresume"), QStringLiteral("stmtick"),
-        QStringLiteral("stmtime"),
-        QStringLiteral("trigExpseg"), QStringLiteral("trigLinseg")
+        u"B"_s,       u"b"_s,
+        u"cingoto"_s,        u"cnkgoto"_s,
+        u"convle"_s,         u"declare"_s,
+        u"memplay"_s,        u"opcode"_s,
+        u"oscilx"_s,         u"pvslock"_s,
+        u"sense"_s,
+        u"stmaddcondedge"_s, u"stmaddedge"_s,
+        u"stmaddnode"_s,     u"stmadvance"_s,
+        u"stmcall"_s,        u"stmcompile"_s,
+        u"stmcreate"_s,      u"stmcurrent"_s,
+        u"stmcurrentid"_s,   u"stmdelete"_s,
+        u"stmedgecount"_s,   u"stmentry"_s,
+        u"stmevent"_s,       u"stminstance"_s,
+        u"stmnext"_s,        u"stmnodecount"_s,
+        u"stmnodeid"_s,      u"stmnodename"_s,
+        u"stmnodetime"_s,    u"stmonenter"_s,
+        u"stmonexit"_s,      u"stmpause"_s,
+        u"stmrecall"_s,      u"stmreset"_s,
+        u"stmresume"_s,      u"stmtick"_s,
+        u"stmtime"_s,
+        u"trigExpseg"_s,     u"trigLinseg"_s
     };
     m_opcodesSet.unite(extraBuiltinOpcodes);
 	//   setFirstRules();
@@ -891,11 +832,29 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         highlightHtmlBlock(line);
         return;
     } else if(blockdata->section == OptionsSection || m_sectionType == OptionsSection ) {
-        index = 0;
-        while((rxmatch = csoundOptionsRx.match(line, index)).hasMatch()) {
-            length = rxmatch.capturedLength();
-            setFormat(rxmatch.capturedStart(), length, csoundOptionFormat);
-            index += length;
+        // Options are simple command-line tokens. Split them and check the
+        // option name (without its =value or :value part) against the known
+        // option set. This avoids compiling and running a regex for every
+        // line in the <CsOptions> section.
+        static const QRegularExpression whitespaceRx("\\s+");
+        const QStringList tokens = line.split(whitespaceRx, Qt::SkipEmptyParts);
+        int tokenPosition = 0;
+        for (const QString &token : tokens) {
+            const int tokenStart = line.indexOf(token, tokenPosition);
+            if (tokenStart < 0)
+                continue;
+            tokenPosition = tokenStart + token.size();
+
+            QString optionName = token;
+            int separator = optionName.indexOf(QLatin1Char('='));
+            const int colon = optionName.indexOf(QLatin1Char(':'));
+            if (colon >= 0 && (separator < 0 || colon < separator))
+                separator = colon;
+            if (separator >= 0)
+                optionName.truncate(separator);
+
+            if (csoundOptions.contains(optionName))
+                setFormat(tokenStart, optionName.size(), csoundOptionFormat);
         }
         return;
     }
@@ -1008,7 +967,6 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         }
 
         static const QRegularExpression expressionRx("\\b[\\w:]+\\b");
-        static const QRegularExpression pfieldRx("\\bp[\\d]+\\b");
         index = 0;
         while((rxmatch = expressionRx.match(text, index)).hasMatch()) {
             int wordStart = rxmatch.capturedStart();
@@ -1026,16 +984,25 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             }
             wordEnd = (wordEnd > 0 ? wordEnd : text.size());
             QString word = rxmatch.captured();
-            if(pfieldRx.match(word).hasMatch()) {
+            bool isPfield = word.size() > 1 && word.at(0) == QLatin1Char('p');
+            for (int i = 1; isPfield && i < word.size(); ++i) {
+                if (!word.at(i).isDigit())
+                    isPfield = false;
+            }
+            if(isPfield) {
                 setFormat(wordStart, wordEnd - wordStart, pfieldFormat);
             }
             else if(instPatterns.contains(word)) {
                 setFormat(wordStart, wordEnd - wordStart, instFormat);
                 break; // was: return. For any case, to go through lines after while loop
             }
-            else if(tagPatterns.contains("<" + word + ">") && wordStart > 0) {
-                setFormat(wordStart - (text[wordStart - 1] == '/'? 2: 1),
-                          wordEnd - wordStart + (text[wordStart - 1] == '/'? 3: 2),
+            else if(tagPatterns.contains(word) && wordStart > 0
+                    && (text.at(wordStart - 1) == QLatin1Char('<')
+                        || (wordStart > 1 && text.at(wordStart - 2) == QLatin1Char('<')
+                            && text.at(wordStart - 1) == QLatin1Char('/')))) {
+                const bool closing = text.at(wordStart - 1) == QLatin1Char('/');
+                setFormat(wordStart - (closing ? 2 : 1),
+                          wordEnd - wordStart + (closing ? 3 : 2),
                           csdtagFormat);
             }
             else if(headerPatterns.contains(word)) {
@@ -1047,11 +1014,13 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             else if(ioPatterns.contains(word)) {
                 setFormat(wordStart, wordEnd - wordStart, ioFormat);
             }
-            else if(word[word.size()-1] != ':' && word.contains(":")) {
-                auto parts = word.split(":");
-                if (parts.size() == 2) {
-                    const QString &varName  = parts[0];
-                    const QString &typeName = parts[1];
+            else if(word.at(word.size() - 1) != QLatin1Char(':')
+                    && word.indexOf(QLatin1Char(':')) >= 0) {
+                const int colon = word.indexOf(QLatin1Char(':'));
+                const int secondColon = word.indexOf(QLatin1Char(':'), colon + 1);
+                if (secondColon < 0) {
+                    const QString varName  = word.left(colon);
+                    const QString typeName = word.mid(colon + 1);
                     // "@global:type" annotation: the token is "global:type", preceded by '@'
                     if(wordStart > 0 && text.at(wordStart - 1) == '@') {
                         // Highlight "@global:type" together as a keyword annotation
@@ -1097,84 +1066,88 @@ void Highlighter::highlightCsoundBlock(const QString &line)
                 setFormat(wordStart, wordEnd - wordStart, nameFormat);
             }
             else if(colorVariables) {
+                QTextCharFormat variableFormat;
+                bool haveVariableFormat = false;
                 // @global:type sets — these take precedence over local typed sets
                 if(m_gaVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, garateFormat);
+                    variableFormat = garateFormat; haveVariableFormat = true;
                 }
                 else if(m_gkVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, gkrateFormat);
+                    variableFormat = gkrateFormat; haveVariableFormat = true;
                 }
                 else if(m_giVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, girateFormat);
+                    variableFormat = girateFormat; haveVariableFormat = true;
                 }
                 else if(m_gSVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, gstringVarFormat);
+                    variableFormat = gstringVarFormat; haveVariableFormat = true;
                 }
                 else if(m_gfVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, gfsigFormat);
+                    variableFormat = gfsigFormat; haveVariableFormat = true;
                 }
                 // Csound 7: check explicitly typed (local) variable sets
                 else if(m_aVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, arateFormat);
+                    variableFormat = arateFormat; haveVariableFormat = true;
                 }
                 else if(m_kVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, krateFormat);
+                    variableFormat = krateFormat; haveVariableFormat = true;
                 }
                 else if(m_iVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, irateFormat);
+                    variableFormat = irateFormat; haveVariableFormat = true;
                 }
                 else if(m_SVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, stringVarFormat);
+                    variableFormat = stringVarFormat; haveVariableFormat = true;
                 }
                 else if(m_fVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, fsigFormat);
+                    variableFormat = fsigFormat; haveVariableFormat = true;
                 }
                 else if(m_bVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, booleanFormat);
+                    variableFormat = booleanFormat; haveVariableFormat = true;
                 }
                 else if(m_complexVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, complexFormat);
+                    variableFormat = complexFormat; haveVariableFormat = true;
                 }
                 else if(m_instrDefVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, nameFormat);
+                    variableFormat = nameFormat; haveVariableFormat = true;
                 }
                 else if(m_opcodeVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
+                    variableFormat = opcodeFormat; haveVariableFormat = true;
                 }
                 else if(m_structVariables.contains(word)) {
-                    setFormat(wordStart, wordEnd - wordStart, nameFormat);
+                    variableFormat = nameFormat; haveVariableFormat = true;
                 }
                 // Fall back to classic prefix-based detection
                 else if(word.startsWith('a')) {
-                    setFormat(wordStart, wordEnd - wordStart, arateFormat);
+                    variableFormat = arateFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith('k')) {
-                    setFormat(wordStart, wordEnd - wordStart, krateFormat);
+                    variableFormat = krateFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith('i')) {
-                    setFormat(wordStart, wordEnd - wordStart, irateFormat);
+                    variableFormat = irateFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith("ga")) {
-                    setFormat(wordStart, wordEnd - wordStart, garateFormat);
+                    variableFormat = garateFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith("gk")) {
-                    setFormat(wordStart, wordEnd - wordStart, gkrateFormat);
+                    variableFormat = gkrateFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith("gi")) {
-                    setFormat(wordStart, wordEnd - wordStart, girateFormat);
+                    variableFormat = girateFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith("S")) {
-                    setFormat(wordStart, wordEnd - wordStart, stringVarFormat);
+                    variableFormat = stringVarFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith("gS")) {
-                    setFormat(wordStart, wordEnd - wordStart, gstringVarFormat);
+                    variableFormat = gstringVarFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith("f")) {
-                    setFormat(wordStart, wordEnd - wordStart, fsigFormat);
+                    variableFormat = fsigFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith("gf")) {
-                    setFormat(wordStart, wordEnd - wordStart, gfsigFormat);
+                    variableFormat = gfsigFormat; haveVariableFormat = true;
                 }
+                if (haveVariableFormat)
+                    setFormat(wordStart, wordEnd - wordStart, variableFormat);
             }
 
         }
@@ -1385,7 +1358,7 @@ void Highlighter::setLastRules()
     // lastHighlightingRules.append(rule);
 }
 
-bool Highlighter::isOpcode(QString name) {
+bool Highlighter::isOpcode(const QString &name) {
     // Returns true if name is a known opcode
     return m_opcodesSet.contains(name);
 }
@@ -1409,7 +1382,7 @@ int Highlighter::findOpcode(QString opcodeName, int start, int end)
 	return -1;
 }
 
-void Highlighter::setUDOs(QStringList udos)
+void Highlighter::setUDOs(const QStringList &udos)
 {
-       m_parsedUDOs = udos;
+    m_parsedUDOs = QSet<QString>(udos.begin(), udos.end());
 }
