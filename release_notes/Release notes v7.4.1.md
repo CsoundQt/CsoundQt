@@ -62,11 +62,18 @@ The source and binaries can be downloaded from:
   instrument names (quoted or unquoted) and string variables in scope. Inside
   `chnget("…")`, `chnget "…"` and the channel argument of `chnset`, only the
   channel names from the widget layout are offered.
-* **Channel hover outlines its widgets:** hovering over a quoted channel in
+* **Channel highlighting has four modes:** hovering over a quoted channel in
   `chnget`, `chnset`, `invalue` or `outvalue` outlines every widget using that
   channel, and the same happens when the text cursor is placed inside the
-  literal. Ctrl+Shift+H performs the same lookup for the channel on the
-  current line.
+  literal. Settings → Widgets can set this to *Never* (only the explicit
+  Ctrl+Shift+H action), *Cursor only*, *Mouse only*, or *Full*. It defaults to
+  *Cursor only*.
+  Ctrl+Shift+H performs the same lookup for the channel on the current line in
+  all modes. A separate Settings → Widgets option marks editor lines that
+  reference a widget's channels: *Never*, *Edit Mode* (only while editing the
+  widget layout), or *Always*. The widget context menu and Ctrl+Shift+J pin
+  that marking until Esc or the same action is used again, and move the editor
+  view to the first reference without taking keyboard focus.
 * **One tab size, in characters:** the Editor page had *Tab Width* (pixels)
   and *Spaces per Tab*, which were hard to relate. There is now a single *Tab
   Size*, the number of spaces a tab is displayed with and inserted as, as in
@@ -122,6 +129,10 @@ The source and binaries can be downloaded from:
 * **Obsolete widget font adjustments were removed:** widget text now uses its
   own `fontsize` directly; the old global font-scaling and font-offset settings
   were only workarounds for platform font differences and are no longer needed.
+* **The widget panel context menu follows the mode:** creating and editing
+  widgets, cut/copy, properties and reload are only offered in edit mode, and
+  selection-dependent actions are disabled when nothing is selected. Presets
+  remain available while running, but creating or updating them is edit-only.
 * **Saving widgets is no longer optional:** CSD files always include their
   widget panel and presets. The one-off *Export without widgets* command remains
   available when a plain Csound file is wanted.
