@@ -43,6 +43,7 @@
 #include <QVBoxLayout>
 
 #include <algorithm>
+using namespace Qt::StringLiterals;
 
 
 static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesizer", "CsOptions"};
@@ -96,15 +97,15 @@ static int openDoubleQuoteIndex(const QString &text)
 static bool isSoundFile(const QFileInfo &file)
 {
     static const QSet<QString> suffixes = {
-        QStringLiteral("wav"), QStringLiteral("wave"), QStringLiteral("aif"),
-        QStringLiteral("aiff"), QStringLiteral("aifc"), QStringLiteral("au"),
-        QStringLiteral("avr"), QStringLiteral("caf"), QStringLiteral("flac"),
-        QStringLiteral("htk"), QStringLiteral("ircam"), QStringLiteral("mat"),
-        QStringLiteral("mpc2k"), QStringLiteral("nist"), QStringLiteral("pau"),
-        QStringLiteral("raw"), QStringLiteral("sf"), QStringLiteral("svx"),
-        QStringLiteral("voc"), QStringLiteral("w64"), QStringLiteral("wavex"),
-        QStringLiteral("rf64"), QStringLiteral("ogg"), QStringLiteral("oga"),
-        QStringLiteral("mp3"), QStringLiteral("opus"), QStringLiteral("m4a")
+        u"wav"_s,   u"wave"_s,  u"aif"_s,
+        u"aiff"_s,  u"aifc"_s,  u"au"_s,
+        u"avr"_s,   u"caf"_s,   u"flac"_s,
+        u"htk"_s,   u"ircam"_s, u"mat"_s,
+        u"mpc2k"_s, u"nist"_s,  u"pau"_s,
+        u"raw"_s,   u"sf"_s,    u"svx"_s,
+        u"voc"_s,   u"w64"_s,   u"wavex"_s,
+        u"rf64"_s,  u"ogg"_s,   u"oga"_s,
+        u"mp3"_s,   u"opus"_s,  u"m4a"_s
     };
     return suffixes.contains(file.suffix().toLower());
 }
@@ -127,29 +128,17 @@ static CompletionContext completionContext(const QString &textBeforeCursor)
     if (quote >= 0) {
         const QString beforeQuote = textBeforeCursor.left(quote);
         static const QRegularExpression scheduleQuotedRx(
-                    QStringLiteral("\\b(schedulek?)"
-                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
-                                   "\\s*(?:\\(\\s*)?$"));
+            uR"(\b(schedulek?)(?:\s*:\s*[akiSpfxbw]\b)?\s*(?:\(\s*)?$)"_s);
         static const QRegularExpression chngetQuotedRx(
-                    QStringLiteral("\\bchnget"
-                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
-                                   "\\s*(?:\\(\\s*)?$"));
+            uR"(\bchnget(?:\s*:\s*[akiSpfxbw]\b)?\s*(?:\(\s*)?$)"_s);
         static const QRegularExpression chnsetLegacyQuotedRx(
-                    QStringLiteral("\\bchnset"
-                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
-                                   "\\s+[^,]+,\\s*$"));
+            uR"(\bchnset(?:\s*:\s*[akiSpfxbw]\b)?\s+[^,]+,\s*$)"_s);
         static const QRegularExpression chnsetFunctionQuotedRx(
-                    QStringLiteral("\\bchnset"
-                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
-                                   "\\s*\\([^,]*,\\s*$"));
+            uR"(\bchnset(?:\s*:\s*[akiSpfxbw]\b)?\s*\([^,]*,\s*$)"_s);
         static const QRegularExpression outvalueQuotedRx(
-                    QStringLiteral("\\boutvalue"
-                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
-                                   "\\s*(?:\\(\\s*)?$"));
+            uR"(\boutvalue(?:\s*:\s*[akiSpfxbw]\b)?\s*(?:\(\s*)?$)"_s);
         static const QRegularExpression invalueQuotedRx(
-                    QStringLiteral("\\binvalue"
-                                   "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
-                                   "\\s*(?:\\(\\s*)?$"));
+            uR"(\binvalue(?:\s*:\s*[akiSpfxbw]\b)?\s*(?:\(\s*)?$)"_s);
         if (scheduleQuotedRx.match(beforeQuote).hasMatch()) {
             context.kind = CompletionContext::Schedule;
         } else if (chngetQuotedRx.match(beforeQuote).hasMatch()
@@ -169,10 +158,10 @@ static CompletionContext completionContext(const QString &textBeforeCursor)
             // A path-like string is useful in any opcode argument, not only
             // in diskin2. Absolute paths are included as well.
             const QString prefix = textBeforeCursor.mid(quote + 1);
-            if (prefix.startsWith(QLatin1String("./"))
-                    || prefix.startsWith(QLatin1String("../"))
+            if (prefix.startsWith("./"_L1)
+                    || prefix.startsWith("../"_L1)
                     || prefix.startsWith(QLatin1Char('/'))
-                    || prefix.startsWith(QLatin1String("~/"))) {
+                    || prefix.startsWith("~/"_L1)) {
                 context.kind = CompletionContext::Path;
             }
         }
@@ -186,10 +175,7 @@ static CompletionContext completionContext(const QString &textBeforeCursor)
 
     // Legacy schedule syntax or a function call, with an unquoted name.
     static const QRegularExpression scheduleRx(
-                QStringLiteral("\\b(schedulek?)"
-                               "(?:\\s*:\\s*[akiSpfxbw]\\b)?"
-                               "(?:\\s+|\\s*\\(\\s*)"
-                               "([A-Za-z_][A-Za-z0-9_]*)$"));
+        uR"(\b(schedulek?)(?:\s*:\s*[akiSpfxbw]\b)?(?:\s+|\s*\(\s*)([A-Za-z_][A-Za-z0-9_]*)$)"_s);
     const auto match = scheduleRx.match(textBeforeCursor);
     if (match.hasMatch()) {
         context.kind = CompletionContext::Schedule;
@@ -703,12 +689,6 @@ void DocumentView::setViewMode(int mode)
 		m_otherCsdEditor->setVisible(m_viewMode & 64);
 		m_widgetEditor->setVisible(m_viewMode & 128);
         auto defaultFormat = m_highlighter.getFormat("default");
-        // auto sheet =  QString("QTextEdit { color: %1; background-color: %2}")
-        //         .arg(defaultFormat.foreground().color().name())
-        //         .arg(defaultFormat.background().color().name());
-        // if(m_viewMode & 2) {
-        //     m_orcEditor->setStyleSheet(sheet);
-        // }
         if (m_viewMode & 2) {
             QPalette p = m_orcEditor->palette();
             p.setColor(QPalette::Base, defaultFormat.background().color());
@@ -1237,16 +1217,16 @@ QString DocumentView::currentScopeText() const
     // from this block may be suggested: a variable defined in another
     // instrument is not visible here.
     static const QRegularExpression blockStartRx(
-                QStringLiteral("^\\s*(instr|opcode)\\b"));
+                u"^\\s*(instr|opcode)\\b"_s);
     static const QRegularExpression blockEndRx(
-                QStringLiteral("^\\s*(endin|endop)\\b"));
+                u"^\\s*(endin|endop)\\b"_s);
 
     const QTextBlock cursorBlock = editor->textCursor().block();
     QTextBlock blockStart;
     QString endKeyword;
     for (QTextBlock block = cursorBlock; block.isValid(); block = block.previous()) {
         const QString line = block.text().trimmed();
-        if (line.startsWith(QLatin1Char(';')) || line.startsWith(QLatin1String("//")))
+        if (line.startsWith(QLatin1Char(';')) || line.startsWith("//"_L1))
             continue;
         // A closing line before the opening line means the cursor is between
         // two blocks, not inside either of them.
@@ -1255,8 +1235,8 @@ QString DocumentView::currentScopeText() const
         const QRegularExpressionMatch match = blockStartRx.match(line);
         if (match.hasMatch()) {
             blockStart = block;
-            endKeyword = match.captured(1) == QLatin1String("instr")
-                    ? QStringLiteral("endin") : QStringLiteral("endop");
+            endKeyword = match.captured(1) == "instr"_L1
+                    ? u"endin"_s : u"endop"_s;
             break;
         }
     }
@@ -1279,7 +1259,7 @@ QString DocumentView::currentScopeText() const
         // Ignore the rest of a line after a comment; semicolons inside string
         // literals are rare in variable names and do not matter here.
         const int semicolon = line.indexOf(QLatin1Char(';'));
-        const int slashes = line.indexOf(QLatin1String("//"));
+        const int slashes = line.indexOf("//"_L1);
         int comment = -1;
         if (semicolon >= 0 && slashes >= 0)
             comment = qMin(semicolon, slashes);
@@ -1305,22 +1285,22 @@ QStringList DocumentView::getCurrentScopeWords() const
     // prefix convention: "gkfoo:a" is a local audio variable, while "gkfoo"
     // without a suffix is a global control variable.
     static const QRegularExpression localAnnotationRx(
-                QStringLiteral("(?<!@)\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
-                               ":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+                u"(?<!@)\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
+                               u":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
     static const QRegularExpression globalAnnotationRx(
-                QStringLiteral("\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
-                               "@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+                u"\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
+                               u"@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
     static const QRegularExpression globalSuffixRx(
-                QStringLiteral("@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+                u"@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
     static const QRegularExpression localSuffixRx(
-                QStringLiteral(":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+                u":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
     static const QRegularExpression identifierRx(
-                QStringLiteral("\\b([A-Za-z_][A-Za-z0-9_]*)\\b"));
+                u"\\b([A-Za-z_][A-Za-z0-9_]*)\\b"_s);
     // Language words which have a variable-like spelling but are not names.
     static const QSet<QString> keywords = {
-        QStringLiteral("include"), QStringLiteral("endinclude"),
-        QStringLiteral("opcode"), QStringLiteral("instr"),
-        QStringLiteral("endin"), QStringLiteral("endop")
+        u"include"_s, u"endinclude"_s,
+        u"opcode"_s, u"instr"_s,
+        u"endin"_s, u"endop"_s
     };
 
     QSet<QString> explicitGlobals;
@@ -1332,7 +1312,7 @@ QStringList DocumentView::getCurrentScopeWords() const
         explicitLocals.insert(it.next().captured(1));
 
     const auto typeCharacter = [](QChar c) {
-        static const QString types = QStringLiteral("akiSpfxbw");
+        static const QString types = u"akiSpfxbw"_s;
         return types.contains(c);
     };
 
@@ -1376,17 +1356,17 @@ QStringList DocumentView::getCurrentScopeStringVariables() const
         return {};
 
     static const QRegularExpression localAnnotationRx(
-                QStringLiteral("(?<!@)\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
-                               ":\\s*([akiSpfxbw])\\b(?:\\s*\\[\\])?"));
+                u"(?<!@)\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
+                               u":\\s*([akiSpfxbw])\\b(?:\\s*\\[\\])?"_s);
     static const QRegularExpression globalAnnotationRx(
-                QStringLiteral("\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
-                               "@global\\s*:\\s*([akiSpfxbw])\\b(?:\\s*\\[\\])?"));
+                u"\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
+                               u"@global\\s*:\\s*([akiSpfxbw])\\b(?:\\s*\\[\\])?"_s);
     static const QRegularExpression globalSuffixRx(
-                QStringLiteral("@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+                u"@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
     static const QRegularExpression localSuffixRx(
-                QStringLiteral(":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
+                u":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
     static const QRegularExpression identifierRx(
-                QStringLiteral("\\b([A-Za-z_][A-Za-z0-9_]*)\\b"));
+                u"\\b([A-Za-z_][A-Za-z0-9_]*)\\b"_s);
 
     QSet<QString> globalNames;
     for (auto it = globalAnnotationRx.globalMatch(scopeText); it.hasNext(); )
@@ -1396,7 +1376,7 @@ QStringList DocumentView::getCurrentScopeStringVariables() const
     QSet<QString> localNonStrings;
     for (auto it = localAnnotationRx.globalMatch(scopeText); it.hasNext(); ) {
         const auto match = it.next();
-        if (match.captured(2) == QLatin1String("S"))
+        if (match.captured(2) == "S"_L1)
             localStrings.insert(match.captured(1));
         else
             localNonStrings.insert(match.captured(1));
@@ -1517,7 +1497,7 @@ void DocumentView::autoCompleteAtCursor() {
     const int contextReplaceStart = lineStartPos + context.prefixStart;
     const int contextReplaceEnd = curIndex;
     static const QRegularExpression simpleNameRx(
-                QStringLiteral("^[A-Za-z_][A-Za-z0-9_]*$"));
+                u"^[A-Za-z_][A-Za-z0-9_]*$"_s);
     auto addContextCompletion = [&](const QString &name, bool quoteIfNeeded) {
         if (name.isEmpty() || contextSeen.contains(name))
             return;
@@ -1558,9 +1538,9 @@ void DocumentView::autoCompleteAtCursor() {
             const QString channel = prefix.left(slash);
             const QString propertyPrefix = prefix.mid(slash + 1);
             const auto shortType = [](QString type) {
-                if (type == QLatin1String("integer")) return QStringLiteral("int");
-                if (type == QLatin1String("string")) return QStringLiteral("str");
-                if (type == QLatin1String("boolean")) return QStringLiteral("bool");
+                if (type == "integer"_L1) return u"int"_s;
+                if (type == "string"_L1) return u"str"_s;
+                if (type == "boolean"_L1) return u"bool"_s;
                 return type;
             };
             QList<WidgetPropertyInfo> matching;
@@ -1588,7 +1568,7 @@ void DocumentView::autoCompleteAtCursor() {
                 QString toolTip = property.type;
                 if (!property.description.isEmpty()) {
                     if (!toolTip.isEmpty())
-                        toolTip += QStringLiteral(" — ");
+                        toolTip += u" — "_s;
                     toolTip += property.description;
                 }
                 QString display = property.name.leftJustified(nameWidth)
@@ -1616,7 +1596,7 @@ void DocumentView::autoCompleteAtCursor() {
                     ? prefix.mid(slash + 1) : prefix;
 
             QString lookup = directoryPrefix;
-            if (lookup.startsWith(QLatin1String("~/")))
+            if (lookup.startsWith("~/"_L1))
                 lookup = QDir::homePath() + lookup.mid(1);
             else if (lookup.isEmpty())
                 lookup = documentDirectory();
@@ -2852,7 +2832,7 @@ QString DocumentView::indentString() const
 	if (m_mainEditor->tabUseSpaces()) {
 		return QString(m_mainEditor->tabSpaces(), QLatin1Char(' '));
 	}
-	return QStringLiteral("\t");
+	return u"\t"_s;
 }
 
 void DocumentView::indent()
@@ -2968,7 +2948,7 @@ void DocumentView::unindent()
 	for (const QString &line : oldLines) {
 		newLines << removeOneIndent(line, useSpaces, tabSpaces);
 	}
-	const QString newText = newLines.join(QStringLiteral("\n"));
+	const QString newText = newLines.join(u"\n"_s);
 	if (newText == oldText) {
 		return;  // the lines were not indented; nothing to do
 	}
@@ -3495,7 +3475,7 @@ MySyntaxMenu::MySyntaxMenu(QWidget *parent) : QFrame(parent)
     // A frameless popup rather than a QMenu: the completion list is a normal
     // widget, with its own scrolling, and no QMenu/QWidgetAction ownership or
     // cached-layout rules get in the way.
-    setObjectName(QStringLiteral("completionPopup"));
+    setObjectName(u"completionPopup"_s);
     setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setFocusPolicy(Qt::NoFocus);
@@ -3731,10 +3711,10 @@ void MySyntaxMenu::applyStyle()
     m_styleApplied = true;
     m_darkStyle = dark;
 
-    const QString background = dark ? QStringLiteral("#f8f8f8")
+    const QString background = dark ? u"#f8f8f8"_s
                                     : QStringLiteral(COMPLETION_MENU_BG_LIGHT);
     // The selected item is a solid blue bar, so its text only has to be light.
-    const QString selectedText = dark ? QStringLiteral("#f8f8f8") : background;
+    const QString selectedText = dark ? u"#f8f8f8"_s : background;
 
     // The popup frame is painted by hand in paintEvent(), so its rounded
     // corners cannot be covered by the platform style's square background.

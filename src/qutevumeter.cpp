@@ -36,6 +36,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
+using namespace Qt::StringLiterals;
 
 // ------------------------------------------------------ VUMeterWidget
 
@@ -68,7 +69,7 @@ QString VUMeterWidget::rulerLabelForDb(double db) const
 	const QString magnitude = (a == qRound(a)) ? QString::number(qRound(a))
 	                                            : QString::number(a, 'f', 1);
 	if (db > 0.0) {
-		return QStringLiteral("+") + magnitude;
+		return u"+"_s + magnitude;
 	}
 	return magnitude; // negative sign dropped, zero stays "0"
 }
@@ -267,7 +268,7 @@ void VUMeterWidget::paintEvent(QPaintEvent * /*event*/)
 		QVector<double> labelledPos;
 		// Minimum spacing between labels along the scale axis.
 		const double labelSpacing = vertical ? rulerFm.height()
-		                                     : rulerFm.horizontalAdvance(QStringLiteral("-000"));
+		                                     : rulerFm.horizontalAdvance(u"-000"_s);
 		auto tryLabel = [&](double db) {
 			const double t = tickPos(db);
 			for (double p : labelledPos) {
@@ -383,10 +384,10 @@ void VUMeterWidget::paintEvent(QPaintEvent * /*event*/)
 static VUMeterWidget::RulerMode rulerModeFromString(const QString &mode)
 {
 	const QString m = mode.trimmed().toLower();
-	if (m == QLatin1String("hide")) {
+	if (m == "hide"_L1) {
 		return VUMeterWidget::RulerHide;
 	}
-	if (m == QLatin1String("compact")) {
+	if (m == "compact"_L1) {
 		return VUMeterWidget::RulerCompact;
 	}
 	return VUMeterWidget::RulerFull;
@@ -585,9 +586,9 @@ void QuteVUMeter::createPropertiesDialog()
 	layout->addWidget(label, 4, 0, Qt::AlignRight | Qt::AlignVCenter);
 
 	rulerComboBox = new QComboBox(dialog);
-	rulerComboBox->addItem(tr("Hide"), QStringLiteral("hide"));
-	rulerComboBox->addItem(tr("Full"), QStringLiteral("full"));
-	rulerComboBox->addItem(tr("Compact"), QStringLiteral("compact"));
+	rulerComboBox->addItem(tr("Hide"), u"hide"_s);
+	rulerComboBox->addItem(tr("Full"), u"full"_s);
+	rulerComboBox->addItem(tr("Compact"), u"compact"_s);
 	{
 		const int modeIndex = rulerComboBox->findData(property("CSQT_rulermode").toString());
 		rulerComboBox->setCurrentIndex(modeIndex >= 0 ? modeIndex : 1);

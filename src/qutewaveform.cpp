@@ -30,6 +30,7 @@
 #include <QWheelEvent>
 #include <cmath>
 #include <cstring>
+using namespace Qt::StringLiterals;
 
 namespace {
 
@@ -253,9 +254,9 @@ void WaveformView::queryTableInfo()
 	CsoundPerformanceThread *pt = m_ud->perfThread;
 	if (pt != nullptr && pt->GetStatus() == 0) {
 		const QByteArray channelCode =
-				QStringLiteral("return(ftchnls(%1))").arg(m_tabnum).toLatin1();
+				u"return(ftchnls(%1))"_s.arg(m_tabnum).toLatin1();
 		const QByteArray sampleRateCode =
-				QStringLiteral("return(ftsr(%1))").arg(m_tabnum).toLatin1();
+				u"return(ftsr(%1))"_s.arg(m_tabnum).toLatin1();
 		m_tableInfoPending = true;
 		pt->EvalCode(channelCode.constData(), &WaveformView::channelQueryCallback, this);
 		pt->EvalCode(sampleRateCode.constData(), &WaveformView::sampleRateQueryCallback, this);
@@ -887,14 +888,14 @@ void QuteWaveform::setValue(QString s)
 	if (parts.isEmpty()) {
 		return;
 	}
-	if (parts[0] == QLatin1String("@set") && parts.size() == 2) {
+	if (parts[0] == "@set"_L1 && parts.size() == 2) {
 		setValue(parts[1].toDouble());
-	} else if (parts[0] == QLatin1String("@cursor") && parts.size() == 2) {
+	} else if (parts[0] == "@cursor"_L1 && parts.size() == 2) {
 		setValue2(parts[1].toDouble());
-	} else if (parts[0] == QLatin1String("@zoom") && parts.size() == 2) {
+	} else if (parts[0] == "@zoom"_L1 && parts.size() == 2) {
 		setProperty("CSQT_zoom", parts[1].toDouble());
 		applyProperty("CSQT_zoom");
-	} else if (parts[0] == QLatin1String("@update")) {
+	} else if (parts[0] == "@update"_L1) {
 		setValue(-1.0);
 	} else {
 		qWarning() << "Waveform: message not understood:" << s;

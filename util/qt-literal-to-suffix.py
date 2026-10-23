@@ -2,8 +2,8 @@
 """Replace Qt string wrappers with Qt's string-literal suffixes.
 
 Pass source files or directories. Directories are searched recursively for C++
-source/header files; build and VCS directories are skipped. Literal-only
-QStringLiteral and QLatin1String calls are converted. The required
+source/header files; build and VCS directories are skipped. Single-line,
+literal-only QStringLiteral and QLatin1String calls are converted. The required
 Qt::StringLiterals using-directive is added to changed files when absent. Use
 --dry-run to inspect the diff first.
 """
@@ -102,7 +102,7 @@ def string_token_end(text: str, start: int) -> int | None:
 def parse_literal_argument(
     text: str, open_paren: int, literal_prefix: str, suffix: str
 ) -> tuple[int, str] | None:
-    """Parse adjacent narrow string literals inside a call and suffix them."""
+    """Parse and suffix a single-line sequence of narrow string literals."""
     i = open_paren + 1
     literal_spans: list[tuple[int, int]] = []
     close_paren = -1
@@ -121,9 +121,15 @@ def parse_literal_argument(
         literal_spans.append((i, end))
         i = end
 
+    # Leave multiline arguments untouched, including raw strings and adjacent
+    # literals split over lines. These are harder to review in a bulk rewrite.
+    argument_source = text[open_paren + 1 : close_paren]
+    if "\n" in argument_source or "\r" in argument_source:
+        return None
+
     # Add any requested prefix to each literal and the suffix to the final one,
     # preserving comments and spacing between adjacent literal tokens.
-    argument = text[open_paren + 1 : close_paren]
+    argument = argument_source
     insertions: list[tuple[int, str]] = []
     if literal_prefix:
         for literal_start, _ in literal_spans:
@@ -290,7 +296,7 @@ def main() -> int:
             path.write_bytes(updated.encode("utf-8"))
             print(f"{path}: converted {count} string literal call(s)")
     if args.dry_run:
-        print(f"Would convert {total} QStringLiteral call(s) in {changed_files} file(s).")
+        print(f"Would convert {total} string literal call(s) in {changed_files} file(s).")
     return 0
 
 

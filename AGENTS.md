@@ -47,6 +47,11 @@
   document text via `CsoundOptions::textSetsDbfs()`), and the flag itself is
   added in `CsoundOptions::generateCmdLineFlagsList()`.
 
+## Qt string literals
+
+- If possible, use u"<str>"_s instead of QStringLiteral, and "<str>"_L1 instead of QLatin1String. 
+  Don't forget to add the corresponding namespace
+
 ## Working style
 
 - **Ask before guessing.** When something is ambiguous or you are missing

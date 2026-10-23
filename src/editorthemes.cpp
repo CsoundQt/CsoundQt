@@ -25,6 +25,7 @@
 #include <QStandardPaths>
 
 #include <algorithm>
+using namespace Qt::StringLiterals;
 
 namespace EditorThemes {
 
@@ -36,9 +37,9 @@ QStringList g_jsonNames; // shipped + user themes, sorted for display
 const QStringList &builtInThemeNames()
 {
     static const QStringList names = {
-        QStringLiteral("light"),
-        QStringLiteral("dark"),
-        QStringLiteral("light classic")
+        u"light"_s,
+        u"dark"_s,
+        u"light classic"_s
     };
     return names;
 }
@@ -78,133 +79,133 @@ FormatSpec makeSpec(const QColor &foreground = QColor(),
 Theme makeLightTheme()
 {
     Theme theme;
-    theme.name = QStringLiteral("light");
+    theme.name = u"light"_s;
     theme.source = Source::BuiltIn;
-    theme.defaultForeground = QColor(QStringLiteral("#030303"));
-    theme.defaultBackground = QColor(QStringLiteral("#F9F9F9"));
+    theme.defaultForeground = QColor(u"#030303"_s);
+    theme.defaultBackground = QColor(u"#F9F9F9"_s);
 
-    const QColor instanceColor(QStringLiteral("#82387B"));
-    const QColor keywordColor(QStringLiteral("#D64100"));
-    const QColor opcodeColor(QStringLiteral("#303F9F"));
-    const QColor commentColor(QStringLiteral("#8F8F7F"));
+    const QColor instanceColor(u"#82387B"_s);
+    const QColor keywordColor(u"#D64100"_s);
+    const QColor opcodeColor(u"#303F9F"_s);
+    const QColor commentColor(u"#8F8F7F"_s);
     QHash<QString, FormatSpec> &f = theme.formats;
-    f[QStringLiteral("inst")] = makeSpec(instanceColor, {}, QFont::Bold);
-    f[QStringLiteral("keyword")] = makeSpec(keywordColor, {}, QFont::Bold);
-    f[QStringLiteral("header")] = f[QStringLiteral("keyword")];
-    f[QStringLiteral("opcode")] = makeSpec(opcodeColor, {}, QFont::Bold);
-    f[QStringLiteral("deprecated")] = makeSpec(QColor(QStringLiteral("#880000")), {},
+    f[u"inst"_s] = makeSpec(instanceColor, {}, QFont::Bold);
+    f[u"keyword"_s] = makeSpec(keywordColor, {}, QFont::Bold);
+    f[u"header"_s] = f[u"keyword"_s];
+    f[u"opcode"_s] = makeSpec(opcodeColor, {}, QFont::Bold);
+    f[u"deprecated"_s] = makeSpec(QColor(u"#880000"_s), {},
                                                QFont::Normal, false, true);
-    f[QStringLiteral("singleLineComment")] = makeSpec(commentColor, {}, QFont::Normal, true);
-    f[QStringLiteral("importantComment")] =
-            makeSpec(commentColor.darker(150), QColor(QStringLiteral("#FFFFA0")));
-    f[QStringLiteral("macroDefine")] = makeSpec(QColor(QStringLiteral("#00695C")), {}, QFont::Bold);
-    f[QStringLiteral("pfield")] = makeSpec({}, {}, QFont::Bold);
-    f[QStringLiteral("krate")] = makeSpec(QColor(QStringLiteral("#10796C")));
-    f[QStringLiteral("irate")] = makeSpec(QColor(QStringLiteral("#546E7A")));
-    f[QStringLiteral("arate")] = makeSpec(QColor(QStringLiteral("#B71C1C")));
-    f[QStringLiteral("stringVar")] = makeSpec(QColor(Qt::darkYellow));
-    f[QStringLiteral("fsig")] = makeSpec(QColor(QStringLiteral("#AD1457")), {}, QFont::Bold);
-    f[QStringLiteral("boolean")] = makeSpec(QColor(QStringLiteral("#7B1FA2")));
-    f[QStringLiteral("complex")] = makeSpec(QColor(QStringLiteral("#6D4C41")));
-    f[QStringLiteral("label")] = makeSpec(QColor(205, 92, 92), {}, QFont::Bold, false, true);
-    f[QStringLiteral("name")] = makeSpec(QColor(QStringLiteral("#F50057")), {}, QFont::Bold);
-    f[QStringLiteral("quotation")] = makeSpec(QColor(QStringLiteral("#827717")));
-    f[QStringLiteral("multiLineComment")] = f[QStringLiteral("quotation")];
-    f[QStringLiteral("io")] = makeSpec(QColor(QStringLiteral("#8844BB")), {}, QFont::Bold);
-    f[QStringLiteral("udo")] = makeSpec(opcodeColor.darker(150), {}, QFont::Bold);
-    f[QStringLiteral("csdtag")] = makeSpec(instanceColor);
-    f[QStringLiteral("operator")] = makeSpec(instanceColor);
-    f[QStringLiteral("scoreLetter")] = makeSpec(opcodeColor, {}, QFont::Bold);
+    f[u"singleLineComment"_s] = makeSpec(commentColor, {}, QFont::Normal, true);
+    f[u"importantComment"_s] =
+            makeSpec(commentColor.darker(150), QColor(u"#FFFFA0"_s));
+    f[u"macroDefine"_s] = makeSpec(QColor(u"#00695C"_s), {}, QFont::Bold);
+    f[u"pfield"_s] = makeSpec({}, {}, QFont::Bold);
+    f[u"krate"_s] = makeSpec(QColor(u"#10796C"_s));
+    f[u"irate"_s] = makeSpec(QColor(u"#546E7A"_s));
+    f[u"arate"_s] = makeSpec(QColor(u"#B71C1C"_s));
+    f[u"stringVar"_s] = makeSpec(QColor(Qt::darkYellow));
+    f[u"fsig"_s] = makeSpec(QColor(u"#AD1457"_s), {}, QFont::Bold);
+    f[u"boolean"_s] = makeSpec(QColor(u"#7B1FA2"_s));
+    f[u"complex"_s] = makeSpec(QColor(u"#6D4C41"_s));
+    f[u"label"_s] = makeSpec(QColor(205, 92, 92), {}, QFont::Bold, false, true);
+    f[u"name"_s] = makeSpec(QColor(u"#F50057"_s), {}, QFont::Bold);
+    f[u"quotation"_s] = makeSpec(QColor(u"#827717"_s));
+    f[u"multiLineComment"_s] = f[u"quotation"_s];
+    f[u"io"_s] = makeSpec(QColor(u"#8844BB"_s), {}, QFont::Bold);
+    f[u"udo"_s] = makeSpec(opcodeColor.darker(150), {}, QFont::Bold);
+    f[u"csdtag"_s] = makeSpec(instanceColor);
+    f[u"operator"_s] = makeSpec(instanceColor);
+    f[u"scoreLetter"_s] = makeSpec(opcodeColor, {}, QFont::Bold);
     return theme;
 }
 
 Theme makeDarkTheme()
 {
     Theme theme;
-    theme.name = QStringLiteral("dark");
+    theme.name = u"dark"_s;
     theme.source = Source::BuiltIn;
     theme.dark = true;
-    theme.defaultForeground = QColor(QStringLiteral("#FBFBFB"));
-    theme.defaultBackground = QColor(QStringLiteral("#1e1e1e"));
+    theme.defaultForeground = QColor(u"#FBFBFB"_s);
+    theme.defaultBackground = QColor(u"#1e1e1e"_s);
 
-    const QColor instanceColor(QStringLiteral("#B268AB"));
-    const QColor keywordColor(QStringLiteral("#FFad66"));
-    const QColor opcodeColor(QStringLiteral("#4FC3F7"));
-    const QColor commentColor(QStringLiteral("#a49fb0"));
-    const QColor quotationColor(QStringLiteral("#c5b77d"));//(QStringLiteral("#91FF55"));
-    const QColor nameColor(QStringLiteral("#D298FB"));
+    const QColor instanceColor(u"#B268AB"_s);
+    const QColor keywordColor(u"#FFad66"_s);
+    const QColor opcodeColor(u"#4FC3F7"_s);
+    const QColor commentColor(u"#a49fb0"_s);
+    const QColor quotationColor(u"#c5b77d"_s);//(QStringLiteral("#91FF55"));
+    const QColor nameColor(u"#D298FB"_s);
     QHash<QString, FormatSpec> &f = theme.formats;
-    f[QStringLiteral("inst")] = makeSpec(instanceColor, {}, QFont::Bold);
-    f[QStringLiteral("keyword")] = makeSpec(keywordColor, {}, QFont::Bold);
-    f[QStringLiteral("header")] = f[QStringLiteral("keyword")];
-    f[QStringLiteral("opcode")] = makeSpec(opcodeColor, {}, QFont::Bold);
-    f[QStringLiteral("deprecated")] = makeSpec(saturateColor(opcodeColor, 50), {},
+    f[u"inst"_s] = makeSpec(instanceColor, {}, QFont::Bold);
+    f[u"keyword"_s] = makeSpec(keywordColor, {}, QFont::Bold);
+    f[u"header"_s] = f[u"keyword"_s];
+    f[u"opcode"_s] = makeSpec(opcodeColor, {}, QFont::Bold);
+    f[u"deprecated"_s] = makeSpec(saturateColor(opcodeColor, 50), {},
                                                QFont::Normal, false, true,
-                                               QColor(QStringLiteral("#880000")));
-    f[QStringLiteral("singleLineComment")] = makeSpec(commentColor, {}, QFont::Normal, true);
-    f[QStringLiteral("importantComment")] =
+                                               QColor(u"#880000"_s));
+    f[u"singleLineComment"_s] = makeSpec(commentColor, {}, QFont::Normal, true);
+    f[u"importantComment"_s] =
             makeSpec(commentColor.lighter(175), theme.defaultBackground.lighter(140));
-    f[QStringLiteral("macroDefine")] = makeSpec(QColor(QStringLiteral("#F06292")), {}, QFont::Bold);
-    f[QStringLiteral("pfield")] = makeSpec({}, {}, QFont::Bold);
-    f[QStringLiteral("krate")] = makeSpec(QColor(QStringLiteral("#87f0c8")));
-    f[QStringLiteral("irate")] = makeSpec(QColor(QStringLiteral("#d0caf0")));
-    f[QStringLiteral("arate")] = makeSpec(QColor(QStringLiteral("#ff6b81")));
-    f[QStringLiteral("fsig")] = makeSpec(QColor(QStringLiteral("#BD2467")), {}, QFont::Bold);
-    f[QStringLiteral("boolean")] = makeSpec(QColor(QStringLiteral("#D4E157")));
-    f[QStringLiteral("complex")] = makeSpec(QColor(QStringLiteral("#26A69A")));
-    f[QStringLiteral("label")] = makeSpec(instanceColor, {}, QFont::Bold, false, true);
-    f[QStringLiteral("name")] = makeSpec(nameColor, {}, QFont::Bold);
-    f[QStringLiteral("quotation")] = makeSpec(quotationColor);
-    f[QStringLiteral("stringVar")] = makeSpec(QColor(QStringLiteral("#e5aIf82")));// f[QStringLiteral("quotation")];
-    f[QStringLiteral("multiLineComment")] = f[QStringLiteral("singleLineComment")];
-    f[QStringLiteral("io")] = makeSpec(QColor(QStringLiteral("#FFD54F")), {}, QFont::Bold);
-    f[QStringLiteral("udo")] = makeSpec(opcodeColor);
-    f[QStringLiteral("csdtag")] = makeSpec(instanceColor);
-    f[QStringLiteral("operator")] = makeSpec(nameColor);
-    f[QStringLiteral("scoreLetter")] = makeSpec(opcodeColor, {}, QFont::Bold);
+    f[u"macroDefine"_s] = makeSpec(QColor(u"#F06292"_s), {}, QFont::Bold);
+    f[u"pfield"_s] = makeSpec({}, {}, QFont::Bold);
+    f[u"krate"_s] = makeSpec(QColor(u"#87f0c8"_s));
+    f[u"irate"_s] = makeSpec(QColor(u"#d0caf0"_s));
+    f[u"arate"_s] = makeSpec(QColor(u"#ff6b81"_s));
+    f[u"fsig"_s] = makeSpec(QColor(u"#BD2467"_s), {}, QFont::Bold);
+    f[u"boolean"_s] = makeSpec(QColor(u"#D4E157"_s));
+    f[u"complex"_s] = makeSpec(QColor(u"#26A69A"_s));
+    f[u"label"_s] = makeSpec(instanceColor, {}, QFont::Bold, false, true);
+    f[u"name"_s] = makeSpec(nameColor, {}, QFont::Bold);
+    f[u"quotation"_s] = makeSpec(quotationColor);
+    f[u"stringVar"_s] = makeSpec(QColor(u"#e5aIf82"_s));// f[QStringLiteral("quotation")];
+    f[u"multiLineComment"_s] = f[u"singleLineComment"_s];
+    f[u"io"_s] = makeSpec(QColor(u"#FFD54F"_s), {}, QFont::Bold);
+    f[u"udo"_s] = makeSpec(opcodeColor);
+    f[u"csdtag"_s] = makeSpec(instanceColor);
+    f[u"operator"_s] = makeSpec(nameColor);
+    f[u"scoreLetter"_s] = makeSpec(opcodeColor, {}, QFont::Bold);
     return theme;
 }
 
 Theme makeClassicTheme()
 {
     Theme theme;
-    theme.name = QStringLiteral("light classic");
+    theme.name = u"light classic"_s;
     theme.source = Source::BuiltIn;
     theme.defaultForeground = QColor(Qt::black);
     theme.defaultBackground = QColor(250, 250, 250);
 
-    const QColor brown(QStringLiteral("#A52A2A"));
-    const QColor purple(QStringLiteral("#800080"));
+    const QColor brown(u"#A52A2A"_s);
+    const QColor purple(u"#800080"_s);
     const QColor blue(Qt::blue);
-    const QColor green(QStringLiteral("green"));
-    const QColor darkCyan(QStringLiteral("darkCyan"));
+    const QColor green(u"green"_s);
+    const QColor darkCyan(u"darkCyan"_s);
     const QColor opcodeColor = blue;
     QHash<QString, FormatSpec> &f = theme.formats;
-    f[QStringLiteral("csdtag")] = makeSpec(brown, {}, QFont::Bold);
-    f[QStringLiteral("inst")] = makeSpec(purple, {}, QFont::Bold);
-    f[QStringLiteral("keyword")] = makeSpec(QColor(QStringLiteral("#E65100")), {}, QFont::Bold);
-    f[QStringLiteral("header")] = makeSpec(brown, {}, QFont::Bold);
-    f[QStringLiteral("opcode")] = makeSpec(opcodeColor, {}, QFont::Bold);
-    f[QStringLiteral("deprecated")] = f[QStringLiteral("opcode")];
-    f[QStringLiteral("singleLineComment")] = makeSpec(green, {}, QFont::Normal, true);
-    f[QStringLiteral("macroDefine")] = makeSpec(green, {}, QFont::Bold);
-    f[QStringLiteral("pfield")] = makeSpec({}, {}, QFont::Bold);
-    f[QStringLiteral("irate")] = makeSpec(darkCyan);
-    f[QStringLiteral("krate")] = makeSpec(darkCyan);
-    f[QStringLiteral("arate")] = makeSpec(darkCyan, {}, QFont::Bold);
-    f[QStringLiteral("stringVar")] = makeSpec(QColor(Qt::darkYellow), {}, QFont::Bold);
-    f[QStringLiteral("fsig")] = makeSpec(QColor(Qt::gray), {}, QFont::Bold);
-    f[QStringLiteral("boolean")] = makeSpec(QColor(QStringLiteral("#FF8C00")), {}, QFont::Bold);
-    f[QStringLiteral("complex")] = makeSpec(QColor(QStringLiteral("#008080")), {}, QFont::Bold);
-    f[QStringLiteral("label")] = makeSpec(QColor(205, 92, 92), {}, QFont::Bold);
-    f[QStringLiteral("name")] = makeSpec(QColor(QStringLiteral("#880E4F")), {}, QFont::Bold);
-    f[QStringLiteral("quotation")] = makeSpec(QColor(Qt::red));
-    f[QStringLiteral("multiLineComment")] = makeSpec(green);
-    f[QStringLiteral("io")] = f[QStringLiteral("opcode")];
-    f[QStringLiteral("udo")] = f[QStringLiteral("opcode")];
-    f[QStringLiteral("operator")] = makeSpec(Qt::black, QColor(250, 250, 250));
-    f[QStringLiteral("importantComment")] = f[QStringLiteral("singleLineComment")];
-    f[QStringLiteral("scoreLetter")] = f[QStringLiteral("opcode")];
+    f[u"csdtag"_s] = makeSpec(brown, {}, QFont::Bold);
+    f[u"inst"_s] = makeSpec(purple, {}, QFont::Bold);
+    f[u"keyword"_s] = makeSpec(QColor(u"#E65100"_s), {}, QFont::Bold);
+    f[u"header"_s] = makeSpec(brown, {}, QFont::Bold);
+    f[u"opcode"_s] = makeSpec(opcodeColor, {}, QFont::Bold);
+    f[u"deprecated"_s] = f[u"opcode"_s];
+    f[u"singleLineComment"_s] = makeSpec(green, {}, QFont::Normal, true);
+    f[u"macroDefine"_s] = makeSpec(green, {}, QFont::Bold);
+    f[u"pfield"_s] = makeSpec({}, {}, QFont::Bold);
+    f[u"irate"_s] = makeSpec(darkCyan);
+    f[u"krate"_s] = makeSpec(darkCyan);
+    f[u"arate"_s] = makeSpec(darkCyan, {}, QFont::Bold);
+    f[u"stringVar"_s] = makeSpec(QColor(Qt::darkYellow), {}, QFont::Bold);
+    f[u"fsig"_s] = makeSpec(QColor(Qt::gray), {}, QFont::Bold);
+    f[u"boolean"_s] = makeSpec(QColor(u"#FF8C00"_s), {}, QFont::Bold);
+    f[u"complex"_s] = makeSpec(QColor(u"#008080"_s), {}, QFont::Bold);
+    f[u"label"_s] = makeSpec(QColor(205, 92, 92), {}, QFont::Bold);
+    f[u"name"_s] = makeSpec(QColor(u"#880E4F"_s), {}, QFont::Bold);
+    f[u"quotation"_s] = makeSpec(QColor(Qt::red));
+    f[u"multiLineComment"_s] = makeSpec(green);
+    f[u"io"_s] = f[u"opcode"_s];
+    f[u"udo"_s] = f[u"opcode"_s];
+    f[u"operator"_s] = makeSpec(Qt::black, QColor(250, 250, 250));
+    f[u"importantComment"_s] = f[u"singleLineComment"_s];
+    f[u"scoreLetter"_s] = f[u"opcode"_s];
     return theme;
 }
 
@@ -212,7 +213,7 @@ Theme makeNoneTheme()
 {
     // Legacy, hidden: plain text without any highlighting.
     Theme theme;
-    theme.name = QStringLiteral("none");
+    theme.name = u"none"_s;
     theme.source = Source::BuiltIn;
     theme.defaultForeground = QColor(Qt::black);
     theme.defaultBackground = QColor(250, 250, 250);
@@ -280,7 +281,7 @@ bool parseFormat(const QJsonValue &value, const QString &themeName,
         return false;
     }
     const QJsonObject object = value.toObject();
-    const QString context = QStringLiteral("formats.%1.").arg(role);
+    const QString context = u"formats.%1."_s.arg(role);
 
     QColor color;
     bool present = false;
@@ -307,7 +308,7 @@ bool parseFormat(const QJsonValue &value, const QString &themeName,
 bool readDefaultColors(const QJsonObject &root, const QString &name,
                        const QString &path, QColor *foreground, QColor *background)
 {
-    const QJsonValue defaultValue = root.value(QStringLiteral("default"));
+    const QJsonValue defaultValue = root.value(u"default"_s);
     if (!defaultValue.isObject()) {
         qDebug() << "CsoundQt: ignoring theme" << path
                  << "- missing \"default\" object (foreground and background are required)";
@@ -332,8 +333,8 @@ bool readDefaultColors(const QJsonObject &root, const QString &name,
         return true;
     };
 
-    return readRequired(QStringLiteral("foreground"), foreground)
-            && readRequired(QStringLiteral("background"), background);
+    return readRequired(u"foreground"_s, foreground)
+            && readRequired(u"background"_s, background);
 }
 
 void loadFile(const QString &path, Source source)
@@ -357,14 +358,14 @@ void loadFile(const QString &path, Source source)
     }
     const QJsonObject root = document.object();
 
-    const QJsonValue nameValue = root.value(QStringLiteral("name"));
+    const QJsonValue nameValue = root.value(u"name"_s);
     if (!nameValue.isString() || nameValue.toString().trimmed().isEmpty()) {
         qDebug() << "CsoundQt: ignoring editor theme" << path
                  << "- missing required \"name\"";
         return;
     }
     const QString name = nameValue.toString().trimmed();
-    if (name == QLatin1String("auto")) {
+    if (name == "auto"_L1) {
         qDebug() << "CsoundQt: ignoring editor theme" << path
                  << "- \"auto\" is reserved for the application theme";
         return;
@@ -400,7 +401,7 @@ void loadFile(const QString &path, Source source)
     }
     theme.dark = theme.defaultForeground.lightness() > theme.defaultBackground.lightness();
 
-    const QJsonValue formatsValue = root.value(QStringLiteral("formats"));
+    const QJsonValue formatsValue = root.value(u"formats"_s);
     if (!formatsValue.isUndefined()) {
         if (!formatsValue.isObject()) {
             qDebug() << "CsoundQt: theme" << name
@@ -423,8 +424,8 @@ void loadFile(const QString &path, Source source)
 
 void scanResources()
 {
-    const QDir dir(QStringLiteral(":/syntax-themes"));
-    const QStringList files = dir.entryList(QStringList() << QStringLiteral("*.json"),
+    const QDir dir(u":/syntax-themes"_s);
+    const QStringList files = dir.entryList(QStringList() << u"*.json"_s,
                                             QDir::Files, QDir::Name);
     for (const QString &fileName : files)
         loadFile(dir.absoluteFilePath(fileName), Source::Shipped);
@@ -433,7 +434,7 @@ void scanResources()
 void scanUserThemes(const QString &dirPath)
 {
     const QDir dir(dirPath);
-    const QStringList files = dir.entryList(QStringList() << QStringLiteral("*.json"),
+    const QStringList files = dir.entryList(QStringList() << u"*.json"_s,
                                             QDir::Files, QDir::Name);
     for (const QString &fileName : files)
         loadFile(dir.absoluteFilePath(fileName), Source::User);
@@ -449,30 +450,30 @@ QJsonObject formatToJson(const FormatSpec &spec)
 {
     QJsonObject object;
     if (spec.foreground)
-        object.insert(QStringLiteral("foreground"), colorToString(*spec.foreground));
+        object.insert(u"foreground"_s, colorToString(*spec.foreground));
     if (spec.background)
-        object.insert(QStringLiteral("background"), colorToString(*spec.background));
+        object.insert(u"background"_s, colorToString(*spec.background));
     if (spec.underlineColor)
-        object.insert(QStringLiteral("underlineColor"), colorToString(*spec.underlineColor));
+        object.insert(u"underlineColor"_s, colorToString(*spec.underlineColor));
     if (spec.bold)
-        object.insert(QStringLiteral("bold"), *spec.bold);
+        object.insert(u"bold"_s, *spec.bold);
     if (spec.italic)
-        object.insert(QStringLiteral("italic"), *spec.italic);
+        object.insert(u"italic"_s, *spec.italic);
     if (spec.underline)
-        object.insert(QStringLiteral("underline"), *spec.underline);
+        object.insert(u"underline"_s, *spec.underline);
     if (spec.strikeout)
-        object.insert(QStringLiteral("strikeout"), *spec.strikeout);
+        object.insert(u"strikeout"_s, *spec.strikeout);
     return object;
 }
 
 QString sanitizedFileBase(const QString &name)
 {
     QString base = name;
-    base.replace(QRegularExpression(QStringLiteral("[^A-Za-z0-9._-]+")),
-                 QStringLiteral("-"));
-    base.remove(QRegularExpression(QStringLiteral("^-+|-+$")));
+    base.replace(QRegularExpression(u"[^A-Za-z0-9._-]+"_s),
+                 u"-"_s);
+    base.remove(QRegularExpression(u"^-+|-+$"_s));
     if (base.isEmpty())
-        base = QStringLiteral("theme");
+        base = u"theme"_s;
     return base;
 }
 
@@ -484,7 +485,7 @@ QString userThemeDir()
             QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     if (dataLocation.isEmpty())
         return QString();
-    return QDir(dataLocation).filePath(QStringLiteral("csoundqt/themes"));
+    return QDir(dataLocation).filePath(u"csoundqt/themes"_s);
 }
 
 void initialize()
@@ -526,7 +527,7 @@ QStringList builtInNames()
 
 bool isBuiltIn(const QString &name)
 {
-    if (name == QLatin1String("none")) // legacy, always hidden
+    if (name == "none"_L1) // legacy, always hidden
         return true;
     return builtInThemeNames().contains(name);
 }
@@ -567,17 +568,17 @@ QString duplicateTheme(const QString &name, QString *error)
     // "<name>-2", "<name>-3", ...
     QString newName;
     for (int number = 2; ; ++number) {
-        newName = QStringLiteral("%1-%2").arg(name).arg(number);
+        newName = u"%1-%2"_s.arg(name).arg(number);
         if (!exists(newName))
             break;
     }
 
     QJsonObject root;
-    root.insert(QStringLiteral("name"), newName);
+    root.insert(u"name"_s, newName);
     QJsonObject defaultObject;
-    defaultObject.insert(QStringLiteral("foreground"), colorToString(theme->defaultForeground));
-    defaultObject.insert(QStringLiteral("background"), colorToString(theme->defaultBackground));
-    root.insert(QStringLiteral("default"), defaultObject);
+    defaultObject.insert(u"foreground"_s, colorToString(theme->defaultForeground));
+    defaultObject.insert(u"background"_s, colorToString(theme->defaultBackground));
+    root.insert(u"default"_s, defaultObject);
 
     QJsonObject formats;
     for (auto it = theme->formats.constBegin(); it != theme->formats.constEnd(); ++it) {
@@ -586,12 +587,12 @@ QString duplicateTheme(const QString &name, QString *error)
             formats.insert(it.key(), object);
     }
     if (!formats.isEmpty())
-        root.insert(QStringLiteral("formats"), formats);
+        root.insert(u"formats"_s, formats);
 
     const QString base = sanitizedFileBase(newName);
-    QString path = QDir(dirPath).filePath(base + QStringLiteral(".json"));
+    QString path = QDir(dirPath).filePath(base + u".json"_s);
     for (int number = 2; QFileInfo::exists(path); ++number)
-        path = QDir(dirPath).filePath(QStringLiteral("%1-%2.json").arg(base).arg(number));
+        path = QDir(dirPath).filePath(u"%1-%2.json"_s.arg(base).arg(number));
 
     QSaveFile file(path);
     if (!file.open(QIODevice::WriteOnly)) {

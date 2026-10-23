@@ -38,6 +38,7 @@
 #include "debuglog.h"
 #include "editorthemes.h"
 #include "externallauncher.h"
+using namespace Qt::StringLiterals;
 
 
 typedef QPair<QString, QString> QStringPair;
@@ -280,7 +281,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     // fully palette-driven style; the remaining styles keep Qt's own order.
     QStringList styleKeys = availableWidgetStyleNames();
     for (int i = 0; i < styleKeys.size(); ++i) {
-        if (styleKeys.at(i).compare(QStringLiteral("Fusion"), Qt::CaseInsensitive) == 0) {
+        if (styleKeys.at(i).compare(u"Fusion"_s, Qt::CaseInsensitive) == 0) {
             styleKeys.move(i, 0);
             break;
         }
@@ -290,13 +291,13 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     bool haveFusion = false;
     for (int i = 0; i < widgetStyleComboBox->count(); ++i) {
         if (widgetStyleComboBox->itemData(i).toString()
-                .compare(QStringLiteral("Fusion"), Qt::CaseInsensitive) == 0) {
+                .compare(u"Fusion"_s, Qt::CaseInsensitive) == 0) {
             haveFusion = true;
             break;
         }
     }
     if (!haveFusion)
-        widgetStyleComboBox->addItem(QStringLiteral("Fusion"), QStringLiteral("Fusion"));
+        widgetStyleComboBox->addItem(u"Fusion"_s, u"Fusion"_s);
 
     // Select the configured style. When none is configured yet (or the
     // configured one is hidden), show the style that is actually in use (the
@@ -594,7 +595,7 @@ void ConfigDialog::populateEditorThemes()
 void ConfigDialog::duplicateEditorTheme()
 {
     const QString name = editorThemeComboBox->currentData().toString();
-    if (name.isEmpty() || name == QLatin1String("auto"))
+    if (name.isEmpty() || name == "auto"_L1)
         return;
 
     QString error;
@@ -635,7 +636,7 @@ void ConfigDialog::openThemesFolder()
     QDir().mkpath(dirPath);
     QString error;
     if (!ExternalLauncher::openFolder(dirPath, &error,
-                                      QStringLiteral("themes-folder"))) {
+                                      u"themes-folder"_s)) {
         QMessageBox::warning(this, tr("Open Themes Folder"),
                              error.isEmpty()
                              ? tr("Could not open the themes folder:\n%1").arg(dirPath)
