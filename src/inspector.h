@@ -65,15 +65,16 @@ public:
     // name@global:type). A type suffix takes precedence over the prefix:
     // gkfoo:a is local, not global. Globals are visible from every instrument
     // and opcode, unlike the block-local variables.
-    QStringList getGlobalVariables() const { return m_globalVariables; }
-    QStringList getGlobalStringVariables() const { return m_globalStringVariables; }
+    const QStringList &getGlobalVariables() const { return m_globalVariables; }
+    const QStringList &getGlobalStringVariables() const { return m_globalStringVariables; }
     // Names of the named instruments in the current document, for schedule().
-    QStringList getInstrumentNames() const { return m_instrumentNames; }
+    const QStringList &getInstrumentNames() const { return m_instrumentNames; }
 
 
 protected:
 	virtual void focusInEvent (QFocusEvent * event);
 	virtual void closeEvent(QCloseEvent * event);
+	virtual void showEvent (QShowEvent * event);
 	// Intercept Space (navigate like a click, keep focus) and Tab (always
 	// move focus to the editor) on the tree.
 	virtual bool eventFilter(QObject *obj, QEvent *event);
@@ -102,6 +103,8 @@ private:
     QRegularExpression xoutRx;
     QRegularExpression ftableRx1;
     QRegularExpression ftableRx2;
+    QString m_lastText;
+    bool m_treeDirty = true;
 
 
 private slots:

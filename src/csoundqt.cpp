@@ -113,7 +113,8 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 
 #define MAX_THREAD_COUNT 32 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
 
-#define INSPECTOR_UPDATE_PERIOD_MS 3000
+#define PAGE_TASK_UPDATE_PERIOD_MS 3000
+#define INSPECTOR_DEBOUNCE_MS 250
 
 
 CsoundQt::CsoundQt(QStringList fileNames)
@@ -133,6 +134,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QLocale::setDefault(QLocale::system());
     curPage = -1;
     m_options = new Options(&m_configlists);
+    m_inspectorUpdateTimer = new QTimer(this);
+    m_inspectorUpdateTimer->setSingleShot(true);
+    connect(m_inspectorUpdateTimer, &QTimer::timeout,
+            this, &CsoundQt::updateInspector);
 
     auto palette = qApp->palette();
     // the palette is dark (dark "theme") if the background is darker than the text
@@ -896,7 +901,7 @@ void CsoundQt::changePage(int index)
         updateHtmlView();
     }
 #endif
-    m_inspectorNeedsUpdate = true;
+    markInspectorUpdate();
 
     // set acceptsMidiCC for pages -  either all true, or only currrentPage true
     for (int i=0; i<documentPages.size(); i++ ) {
@@ -4894,39 +4899,41 @@ void CsoundQt::updateCurrentPageTask() {
     if ( !currentPage->getFileName().toLower().endsWith(".udo")  ) { // otherwise this marks an unedited .udo file as edited
         currentPage->parseUdos();
     }
-    QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateCurrentPageTask()));
+    QTimer::singleShot(PAGE_TASK_UPDATE_PERIOD_MS, this, SLOT(updateCurrentPageTask()));
 }
 
 
 void CsoundQt::updateInspector()
 {
-    if (m_closing  || curPage >= documentPages.size()) {
-        return;  // And don't call this again from the timer
+    if (m_closing || curPage < 0 || curPage >= documentPages.size()
+            || documentPages[curPage] == nullptr) {
+        return;
     }
-    Q_ASSERT(documentPages.size() > curPage);
-    if (!m_inspectorNeedsUpdate) {
-        QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateInspector()));
-        return; // Retrigger timer, but do no update
-    }
-    if (!documentPages[curPage]->getFileName().endsWith(".py")) {
-        m_inspector->parseText(documentPages[curPage]->getBasicText());
-        documentPages[curPage]->setGlobalVariables(m_inspector->getGlobalVariables());
-        documentPages[curPage]->setGlobalStringVariables(
-                    m_inspector->getGlobalStringVariables());
-        documentPages[curPage]->setInstrumentNames(m_inspector->getInstrumentNames());
+    if (!m_inspectorNeedsUpdate)
+        return;
+
+    DocumentPage *page = documentPages[curPage];
+    if (!page->getFileName().endsWith(".py")) {
+        m_inspector->parseText(page->getBasicText());
+        page->setGlobalVariables(m_inspector->getGlobalVariables());
+        page->setGlobalStringVariables(m_inspector->getGlobalStringVariables());
+        page->setInstrumentNames(m_inspector->getInstrumentNames());
     } else {
-        documentPages[curPage]->setGlobalVariables({});
-        documentPages[curPage]->setGlobalStringVariables({});
-        documentPages[curPage]->setInstrumentNames({});
+        page->setGlobalVariables({});
+        page->setGlobalStringVariables({});
+        page->setInstrumentNames({});
     }
     m_inspectorNeedsUpdate = false;
-    QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateInspector()));
 }
 
 void CsoundQt::markInspectorUpdate()
 {
     //  qDebug() << "CsoundQt::markInspectorUpdate()";
     m_inspectorNeedsUpdate = true;
+    // Coalesce bursts of editor changes. The inspector is cheap enough to
+    // update after a short pause, rather than waiting for a fixed 3 s poll.
+    if (m_inspectorUpdateTimer != nullptr)
+        m_inspectorUpdateTimer->start(INSPECTOR_DEBOUNCE_MS);
 }
 
 void CsoundQt::setDefaultKeyboardShortcuts()
