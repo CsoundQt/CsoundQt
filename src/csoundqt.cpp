@@ -4955,7 +4955,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     highlightWidgetChannelsAct->setShortcut(tr("Ctrl+Shift+J"));
     midiControlAct->setShortcut(tr(""));
     findAct->setShortcut(tr("Ctrl+F"));
-    findAgainAct->setShortcut(tr("Ctrl+G"));
+    findAgainAct->setShortcut(QKeySequence("F3"));
     findPreviousAct->setShortcut(QKeySequence("Shift+F3"));
     configureAct->setShortcut(tr("Ctrl+,"));
     editAct->setShortcut(tr("CTRL+E"));
@@ -5909,13 +5909,6 @@ void CsoundQt::createActions()
     connect(wrapLinesAct, &QAction::toggled, this, &CsoundQt::setWrapLines);
     addAction(wrapLinesAct);
 
-    // F3 is a fixed alternative for "Find next" (Shift+F3 is on findPreviousAct).
-    // It is a QShortcut rather than an action shortcut because the configurable
-    // shortcuts (restored from settings) would otherwise drop the extra key.
-    auto *findNextShortcut = new QShortcut(QKeySequence("F3"), this);
-    findNextShortcut->setContext(Qt::WindowShortcut);
-    connect(findNextShortcut, &QShortcut::activated, this, &CsoundQt::findString);
-
     // "Find again" / "Find previous" are no longer menu entries, but their
     // actions (and configurable shortcuts) must remain active, so register them
     // on the window.
@@ -6718,6 +6711,10 @@ void CsoundQt::readSettings()
             }
         }
     }
+    // Older versions stored Ctrl+G for Find again. Move that inherited default
+    // to F3; an explicitly different user binding is left untouched.
+    if (findAgainAct && findAgainAct->shortcut() == QKeySequence("Ctrl+G"))
+        findAgainAct->setShortcut(QKeySequence("F3"));
 
     settings.endGroup();
     settings.beginGroup("Options");

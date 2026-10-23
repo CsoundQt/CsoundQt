@@ -22,6 +22,7 @@
 #include "findbar.h"
 
 #include <QApplication>
+#include <QAbstractButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QIcon>
@@ -45,10 +46,18 @@ FindBar::FindBar(QTextEdit *editor)
 	// the editor font. Use the normal UI font instead.
 	setFont(QApplication::font());
 	buildUi();
-	m_focusOrder = {m_findEdit, m_prevButton, m_nextButton, m_closeButton,
-	                m_replaceEdit, m_replaceButton, m_replaceAllButton};
+	// Keep the two text fields adjacent in the cycle: Tab from the find field
+	// goes straight to replace, and Shift+Tab from replace goes back to find.
+	m_focusOrder = {m_findEdit, m_replaceEdit,
+	                m_replaceButton, m_replaceAllButton};
 	for (QWidget *widget : m_focusOrder)
 		widget->installEventFilter(this);
+	// Buttons that are not in the Tab cycle can still be clicked/focused and
+	// must activate on Enter.
+	for (QAbstractButton *button : findChildren<QAbstractButton *>()) {
+		if (!m_focusOrder.contains(button))
+			button->installEventFilter(this);
+	}
 	applyPalette();
 
 	if (m_editor) {
@@ -68,7 +77,7 @@ void FindBar::buildUi()
 	auto *findRow = new QHBoxLayout();
 	findRow->setSpacing(3);
 	m_findEdit = new QLineEdit(this);
-	m_findEdit->setPlaceholderText(tr("Find (Enter next, Shift+Enter previous, Esc close)"));
+	m_findEdit->setPlaceholderText(tr("Find"));
 	m_findEdit->setMinimumWidth(120);
 	findRow->addWidget(m_findEdit, 1);
 
@@ -219,12 +228,15 @@ bool FindBar::eventFilter(QObject *watched, QEvent *event)
 				return true;
 			}
 			if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter) {
-				if (watched == m_replaceEdit)
+				if (watched == m_replaceEdit) {
 					emit replaceRequested();
-				else if (ke->modifiers() & Qt::ShiftModifier)
-					emit findPreviousRequested();
-				else
+				} else {
+					// Enter in the find field performs one search and hands the
+					// editor back to the user. Further matches are reached with
+					// the configured Find next/previous shortcuts.
 					emit findNextRequested();
+					emit closed();
+				}
 				return true;
 			}
 			if (watched == m_findEdit) {
@@ -234,6 +246,16 @@ bool FindBar::eventFilter(QObject *watched, QEvent *event)
 				}
 				if (ke->key() == Qt::Key_Down) {
 					emit findNextRequested();
+					return true;
+				}
+			}
+		}
+		// Explicitly activate a focused button with Enter. This also avoids
+		// the dialog-default-button semantics taking over the key.
+		if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter) {
+			if (auto *button = qobject_cast<QAbstractButton *>(watchedWidget)) {
+				if (isAncestorOf(button)) {
+					button->click();
 					return true;
 				}
 			}

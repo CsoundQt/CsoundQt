@@ -121,8 +121,11 @@ The source and binaries can be downloaded from:
 ### Fixes and improvements
 
 * **Find/replace stays in its bar:** Tab and Shift+Tab now cycle through the
-  find/replace controls instead of moving focus back to the editor. The unused
-  separate find/replace dialog was removed.
+  find/replace controls instead of moving focus back to the editor. Enter in the
+  find field selects the next match and returns to the editor; Enter on a
+  find-bar button activates that button. Find next/previous use the configurable
+  F3 / Shift+F3 shortcuts, including with the bar hidden. The unused separate
+  find/replace dialog was removed.
 * **Widget properties explain themselves:** the *Show Properties* dialog now
   lists each addressable property with its value type and description, and the
   editor's property autocompletion shows the same information in the menu.
