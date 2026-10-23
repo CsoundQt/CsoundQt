@@ -29,26 +29,6 @@
 #include "editorthemes.h"
 #include "highlighter.h"
 
-// True when the block layout carries the bracket mark (bold + given colour) at
-// the given offset in the block. This is what QSyntaxHighlighter::setFormat()
-// ultimately applies, so it checks painting without rendering a widget.
-static bool hasMarkFormat(const QTextDocument &document, int position, const QColor &colour)
-{
-    const QTextLayout *layout = document.findBlock(position).layout();
-    if (!layout)
-        return false;
-    const int offset = position - document.findBlock(position).position();
-    const QVector<QTextLayout::FormatRange> formats = layout->formats();
-    for (const QTextLayout::FormatRange &range : formats) {
-        if (range.start <= offset && offset < range.start + range.length) {
-            if (range.format.fontWeight() == QFont::Bold
-                && range.format.foreground().color() == colour)
-                return true;
-        }
-    }
-    return false;
-}
-
 // The ranges of a scan as a readable string, e.g. "0-5;10-20".
 static QString formatRanges(const QVector<QPair<int, int>> &ranges)
 {
@@ -216,7 +196,6 @@ private slots:
 
         BracketMatcher matcher;
         matcher.setDocument(&document);
-        matcher.setHighlighter(&highlighter);
 
         QTextCursor cursor(&document);
         cursor.setPosition(0);
@@ -237,7 +216,6 @@ private slots:
 
         BracketMatcher matcher;
         matcher.setDocument(&document);
-        matcher.setHighlighter(&highlighter);
 
         QTextCursor cursor(&document);
         cursor.setPosition(0);
@@ -253,44 +231,6 @@ private slots:
 
         QCOMPARE(matcher.first(), -1);
         QCOMPARE(matcher.second(), -1);
-    }
-
-    // The mark is painted bold, with a contrasting colour that follows the
-    // theme's own foreground/background lightness, and without a background.
-    void paintsPairBold_data()
-    {
-        QTest::addColumn<QString>("theme");
-        QTest::addColumn<QColor>("expectedColour");
-
-        QTest::newRow("light") << "light" << QColor("#000000");
-        QTest::newRow("dark") << "dark" << QColor("#ffffff");
-        // Matching is a navigation aid: it must survive the plain-text theme.
-        QTest::newRow("none") << "none" << QColor("#000000");
-    }
-
-    void paintsPairBold()
-    {
-        QFETCH(QString, theme);
-        QFETCH(QColor, expectedColour);
-
-        QTextDocument document;
-        document.setPlainText(QStringLiteral("(a+b)"));
-
-        Highlighter highlighter(&document);
-        highlighter.setTheme(theme);
-
-        BracketMatcher matcher;
-        matcher.setDocument(&document);
-        matcher.setHighlighter(&highlighter);
-
-        QTextCursor cursor(&document);
-        cursor.setPosition(0);
-        matcher.updateForCursor(cursor);
-        QCOMPARE(matcher.first(), 0);
-        QCOMPARE(matcher.second(), 4);
-
-        QVERIFY2(hasMarkFormat(document, 0, expectedColour), "opening bracket not marked");
-        QVERIFY2(hasMarkFormat(document, 4, expectedColour), "closing bracket not marked");
     }
 
     // The lexical scan: which parts of a line are comments and which are
@@ -388,7 +328,6 @@ private:
 
         BracketMatcher matcher;
         matcher.setDocument(&document);
-        matcher.setHighlighter(&highlighter);
 
         QTextCursor cursor(&document);
         cursor.setPosition(cursorPosition);

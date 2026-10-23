@@ -26,14 +26,12 @@
 #include <QTextCursor>
 #include <QTextDocument>
 
-class Highlighter;
-
-// Finds the bracket that pairs with the one next to the cursor and asks the
-// syntax highlighter to emphasise both.
+// Finds the bracket that pairs with the one next to the cursor. DocumentView
+// reads first()/second() and applies the background extra selections.
 //
-// The matcher owns the document its positions belong to and the highlighter that
-// paints them, so a pair found in one document can never be marked in another
-// one. The kinds (), [] and {} are matched; a bracket of a different kind
+// The matcher owns the document its positions belong to, so a pair found in one
+// document can never be marked in another one. The kinds (), [] and {} are
+// matched; a bracket of a different kind
 // closing a bracket breaks the pair. Brackets inside comments and strings are
 // not part of the index, so they never match.
 class BracketMatcher
@@ -44,9 +42,6 @@ public:
     // The document whose blocks are searched. A null document disables matching.
     void setDocument(QTextDocument *document);
     QTextDocument *document() const { return m_document; }
-
-    // The highlighter that paints the mark. It has to be attached to document().
-    void setHighlighter(Highlighter *highlighter) { m_highlighter = highlighter; }
 
     // Recomputes the pair for the given cursor and updates the mark. A cursor
     // from another document just clears the mark.
@@ -68,7 +63,6 @@ private:
     void setPair(int first, int second);
 
     QTextDocument *m_document = nullptr;
-    Highlighter *m_highlighter = nullptr;
     int m_first = -1;
     int m_second = -1;
 };

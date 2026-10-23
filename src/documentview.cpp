@@ -234,9 +234,8 @@ static QString withoutParentheses(const QString &args)
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	BaseView(parent,opcodeTree)
 {
-	// The bracket matcher paints through this view's highlighter and belongs to
-	// the document the highlighter is attached to (set again in setViewMode()).
-	m_bracketMatcher.setHighlighter(&m_highlighter);
+	// The bracket matcher belongs to the document the highlighter is attached
+	// to (set again in setViewMode()).
 	m_bracketMatcher.setDocument(m_highlighter.document());
 
 	m_autoComplete = true;
@@ -903,6 +902,28 @@ QList<QTextEdit::ExtraSelection> DocumentView::extraSelectionsFor(
 		selections = m_findSelections;
 	if (editor == m_widgetChannelEditor)
 		selections.append(m_widgetChannelSelections);
+
+	if (editor->document() == m_bracketMatcher.document()
+			&& m_bracketMatcher.first() >= 0
+			&& m_bracketMatcher.second() >= 0) {
+		QColor background = editor->palette().color(QPalette::Highlight);
+		background.setAlpha(100);
+		QTextCharFormat format;
+		format.setBackground(background);
+		const int positions[] = { m_bracketMatcher.first(),
+		                          m_bracketMatcher.second() };
+		for (int position : positions) {
+			if (position < 0 || position >= editor->document()->characterCount())
+				continue;
+			QTextEdit::ExtraSelection selection;
+			selection.cursor = QTextCursor(editor->document());
+			selection.cursor.setPosition(position);
+			selection.cursor.movePosition(QTextCursor::NextCharacter,
+			                              QTextCursor::KeepAnchor);
+			selection.format = format;
+			selections.append(selection);
+		}
+	}
 	return selections;
 }
 
@@ -1174,13 +1195,10 @@ void DocumentView::syntaxCheck()
 	// matchparenthesis. Code by Geir Vatterkar see https://doc.qt.io/archives/qq/QtQuarterly31.pdf
 	// some corrections by Heinz van Saanen http://qt-apps.org/content/show.php/CLedit?content=125532 ; comments: http://www.qtcentre.org/archive/index.php/t-31084.html
 
-	// Keep find highlights and the experimental widget-channel line marks.
-	editor->setExtraSelections(extraSelectionsFor(editor));
-
-	// Mark the bracket next to the cursor and its partner. Painting is done by
-	// the syntax highlighter (see BracketMatcher), not by an extra selection:
-	// extra selections cannot change the font weight.
+	// Mark the bracket next to the cursor, then apply all extra selections:
+	// find results, widget-channel lines and the matched bracket pair.
 	m_bracketMatcher.updateForCursor(editor->textCursor());
+	editor->setExtraSelections(extraSelectionsFor(editor));
 
 	// syntax check
 	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
@@ -3404,6 +3422,10 @@ QString DocumentView::documentDirectory() const {
 void DocumentView::setTheme(const QString &theme)
 {
     BaseView::setTheme(theme);
+    // The bracket background follows the editor palette.
+    TextEditor *editor = currentLineEditor();
+    if (editor)
+        editor->setExtraSelections(extraSelectionsFor(editor));
     if (syntaxMenu)
         syntaxMenu->applyStyle();
 }

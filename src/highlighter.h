@@ -128,10 +128,6 @@ public:
         m_sectionType = sectionType;
     }
     void setTheme(const QString &theme);
-    // Marks the parenthesis pair at the given document positions (the one next
-    // to the cursor). The mark is drawn by the highlighter itself, because a
-    // QTextEdit extra selection cannot change the font weight. Pass -1 to clear.
-    void setMatchedParentheses(int first, int second);
     void enableScoreSyntaxHighlighting(bool status) {
         m_scoreSyntaxHighlighting = status;
     }
@@ -340,10 +336,6 @@ private:
 
     QString m_theme;
     bool m_themeSet = false;
-
-    // The pair currently marked next to the cursor (document positions).
-    int m_matchedParentheses[2] = { -1, -1 };
-    QTextCharFormat matchedParenthesisFormat;
 
 	// for html
     QTextCharFormat jsKeywordFormat, htmlTagFormat, attrFormat, tagNameFormat;

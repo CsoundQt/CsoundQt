@@ -171,30 +171,8 @@ int BracketMatcher::findPartner(const QTextBlock &block, int bracketIndex, bool 
 
 void BracketMatcher::setPair(int first, int second)
 {
-    if (first == m_first && second == m_second)
-        return;
-
-    const int previousFirst = m_first;
-    const int previousSecond = m_second;
     m_first = first;
     m_second = second;
-
-    if (!m_highlighter || !m_document)
-        return;
-    // Painting into a highlighter that belongs to another document would mark
-    // unrelated characters there.
-    if (m_highlighter->document() != m_document)
-        return;
-
-    m_highlighter->setMatchedParentheses(first, second);
-
-    // Re-highlight only the blocks whose mark changed; that also restores the
-    // normal syntax format over the previously marked pair.
-    const int positions[] = { previousFirst, previousSecond, first, second };
-    for (int pos : positions) {
-        if (pos >= 0 && pos < m_document->characterCount())
-            m_highlighter->rehighlightBlock(m_document->findBlock(pos));
-    }
 }
 
 void BracketMatcher::clear()

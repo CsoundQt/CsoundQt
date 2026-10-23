@@ -148,13 +148,11 @@ The source and binaries can be downloaded from:
   do` loop, `switch`/`case`/`default`/`endsw` and `struct` forms are treated as
   keywords. The opcode recognition also includes the newer built-ins such as
   the `stm` family and `memplay`.
-* **The parenthesis mark no longer covers the text.** The bracket next to the
-  cursor and its partner used to be marked with a background colour, which was
-  very disturbing while typing. They are now bold and in a contrasting colour
-  (white on a dark theme, black on a light one), chosen by the lightness of
-  the text and background colours of the theme; the background of the editor
-  is left alone. Brackets inside a string or a comment are not marked any
-  more, and the contents of a `{{ … }}` string are not highlighted as code.
+* **The bracket pair is background-highlighted again.** The bracket next to the
+  cursor and its partner are marked with a translucent background extra
+  selection, so their syntax colours and font weight stay unchanged. Brackets
+  inside a string or a comment are not marked, and the contents of a
+  `{{ … }}` string are not highlighted as code.
 * **The opcode list follows the new manual.** The manual is written in mkdocs
   now, so the list of the opcodes is generated from it again. The opcodes
   carry the names Csound 7 uses, and the names they had before are kept as
@@ -228,10 +226,11 @@ The source and binaries can be downloaded from:
 ## Developer-only changes
 
 * The parenthesis matching moved into a `BracketMatcher` component, which owns
-  the document, the marked pair and the scan that finds the partner. The scan
-  walks the blocks iteratively, so an unmatched bracket in a long file cannot
-  turn the number of blocks into stack depth, and a pair can never be marked
-  in a document it does not belong to.
+  the document, the matched positions and the scan that finds the partner. The
+  scan walks the blocks iteratively, so an unmatched bracket in a long file
+  cannot turn the number of blocks into stack depth, and a pair can never be
+  marked in a document it does not belong to. `DocumentView` paints the pair
+  as extra selections, independently of the syntax highlighter.
 * The highlighter records only the brackets that are code. A new lexical
   scanner, `CsoundLex`, knows the comments and the strings of a Csound line,
   including the `/* */` comments and the `{{ }}` strings that span lines, and
@@ -316,7 +315,7 @@ lost their title bars in favour of a Float/Dock entry in the context menu.
 **7.4.0 and 7.4.1 — the application around the panels.** The panels are
 toggled with one shortcut, the **editor theme is independent of the
 application theme** and can be written in JSON, the editor gets **Go to
-Source** and a **parenthesis mark that does not cover the text**, the help
+Source** and a **background parenthesis mark**, the help
 panel can be **zoomed**, playback always **runs what is in the editor** and
 can be recovered after a crash, the **opcode list follows the new manual**,
 and the application can be **logged from the GUI**. Along the way, the

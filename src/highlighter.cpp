@@ -165,15 +165,6 @@ void Highlighter::finishTheme()
     QColor color = saturateColor(headerFormat.foreground().color().lighter(150), 150);
     csoundOptionFormat.setForeground(color);
 
-    // The matched parenthesis pair is emphasised by weight and contrast only, so
-    // its background stays the editor's. White is used on dark themes and black
-    // on light ones, decided the same way as the theme itself: by comparing the
-    // lightness of the text and background colours.
-    const bool darkTheme = defaultFormat.foreground().color().lightness()
-            > defaultFormat.background().color().lightness();
-    matchedParenthesisFormat.setFontWeight(QFont::Bold);
-    matchedParenthesisFormat.setForeground(QColor(darkTheme ? "#ffffff" : "#000000"));
-
     // html
     htmlTagFormat = csdtagFormat;
     tagNameFormat = arateFormat;
@@ -223,7 +214,6 @@ void Highlighter::resetFormats()
     htmlTagFormat = QTextCharFormat();
     tagNameFormat = QTextCharFormat();
     attrFormat = QTextCharFormat();
-    matchedParenthesisFormat = QTextCharFormat();
 }
 
 QTextCharFormat *Highlighter::formatForName(const QString &name)
@@ -330,12 +320,6 @@ void Highlighter::setTheme(const QString &theme)
     m_themeSet = true;
     clearTypedVars();
     rehighlight();
-}
-
-void Highlighter::setMatchedParentheses(int first, int second)
-{
-    m_matchedParentheses[0] = first;
-    m_matchedParentheses[1] = second;
 }
 
 QTextCharFormat Highlighter::getFormat(QString tag) {
@@ -685,17 +669,6 @@ void Highlighter::highlightBlock(const QString &text)
         data->insert(info);
     }
 
-    // Emphasise the matched parenthesis pair last, so the mark wins over the
-    // colours the block rules applied. Its background is left untouched.
-    if (m_matchedParentheses[0] >= 0 || m_matchedParentheses[1] >= 0) {
-        const int blockStart = currentBlock().position();
-        const int blockEnd = blockStart + text.length();
-        for (int i = 0; i < 2; ++i) {
-            const int pos = m_matchedParentheses[i];
-            if (pos >= blockStart && pos < blockEnd)
-                setFormat(pos - blockStart, 1, matchedParenthesisFormat);
-        }
-    }
 }
 
 
