@@ -1,7 +1,10 @@
 <CsoundSynthesizer>
 <CsInstruments>
-ksmps = 64
-A4    = 442
+ksmps  = 64
+nchnls = 2
+A4     = 442
+0dbfs  = 1
+
 
 massign 0, 0
 
@@ -314,6 +317,8 @@ i "Setup"       0.02 -1
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -1065,7 +1070,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.35518325</yValue>
+  <yValue>0.41594178</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <exponent>1.00000000</exponent>
@@ -1107,7 +1112,7 @@ e
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>24</fontsize>
   <flatStyle>true</flatStyle>
   <color>
@@ -1141,7 +1146,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.41594178</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -1821,7 +1826,7 @@ e
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>0.42000000</exponent>
-  <value>-28.84818506</value>
+  <value>-25.93017618</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2594,7 +2599,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-12</label>
+  <label>-24</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
@@ -2633,7 +2638,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-15</label>
+  <label>-22</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
