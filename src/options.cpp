@@ -60,6 +60,7 @@ Options::Options(ConfigLists *configlists) :
     saveChanges = false;
     quitOnLastTabClosed = false;
     includeActiveFileInTitle = true;
+    focusToggledPanel = false;
     rememberFile = true;
     // iconText = true;
     iconText = false;

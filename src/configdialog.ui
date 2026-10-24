@@ -1443,6 +1443,16 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QCheckBox" name="focusToggledPanelCheckBox">
+               <property name="toolTip">
+                <string>When toggling a panel on, shift the focus to this panel</string>
+               </property>
+               <property name="text">
+                <string>Focus toggled panel</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
            <item row="1" column="1" rowspan="5">

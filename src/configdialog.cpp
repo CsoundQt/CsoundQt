@@ -468,6 +468,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	simultaneousCheckBox->setChecked(m_options->simultaneousRun);
 	quitOnLastTabClosedCheckBox->setChecked(m_options->quitOnLastTabClosed);
 	includeActiveFileInTitleCheckBox->setChecked(m_options->includeActiveFileInTitle);
+	focusToggledPanelCheckBox->setChecked(m_options->focusToggledPanel);
 
 	sampleFormatComboBox->setCurrentIndex(m_options->sampleFormat);
 	debugPortSpinBox->setValue(m_options->debugPort);
@@ -829,6 +830,7 @@ void ConfigDialog::apply()
 	m_options->simultaneousRun = simultaneousCheckBox->isChecked();
 	m_options->quitOnLastTabClosed = quitOnLastTabClosedCheckBox->isChecked();
 	m_options->includeActiveFileInTitle = includeActiveFileInTitleCheckBox->isChecked();
+	m_options->focusToggledPanel = focusToggledPanelCheckBox->isChecked();
 
 	m_options->sampleFormat = sampleFormatComboBox->currentIndex();
 

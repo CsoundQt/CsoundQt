@@ -2034,7 +2034,7 @@ void CsoundQt::toggleEditorPanel()
     const bool show = !documentTabs->isVisible();
     showEditor(show);
     showEditorAct->setChecked(show);
-    if (show) {
+    if (show && m_options->focusToggledPanel) {
         activateWindow();
         raise();
         if (DocumentPage *doc = getCurrentDocumentPage())
@@ -2062,7 +2062,15 @@ void CsoundQt::toggleWidgetsPanel()
         showWidgetsAct->setChecked(false);
         return;
     }
-    focusWidgets();
+    if (m_options->focusToggledPanel) {
+        focusWidgets();
+        return;
+    }
+    if (m_options->widgetsIndependent)
+        doc->showWidgets(true);
+    else
+        widgetPanel->showAndRaise(true);
+    showWidgetsAct->setChecked(true);
 }
 
 void CsoundQt::toggleHelpPanel()
@@ -2072,7 +2080,12 @@ void CsoundQt::toggleHelpPanel()
         showHelpAct->setChecked(false);
         return;
     }
-    focusHelp();
+    if (m_options->focusToggledPanel) {
+        focusHelp();
+        return;
+    }
+    helpPanel->setVisibleAndRaise(true);
+    showHelpAct->setChecked(true);
 }
 
 void CsoundQt::toggleInspectorPanel()
@@ -2082,7 +2095,13 @@ void CsoundQt::toggleInspectorPanel()
         showInspectorAct->setChecked(false);
         return;
     }
-    focusInspector();
+    if (m_options->focusToggledPanel) {
+        focusInspector();
+        return;
+    }
+    m_inspector->show();
+    m_inspector->raise();
+    showInspectorAct->setChecked(true);
 }
 
 void CsoundQt::toggleConsolePanel()
@@ -2094,9 +2113,11 @@ void CsoundQt::toggleConsolePanel()
     }
     m_console->show();
     m_console->raise();
-    m_console->activateWindow();
     showConsoleAct->setChecked(true);
-    m_console->focusText();
+    if (m_options->focusToggledPanel) {
+        m_console->activateWindow();
+        m_console->focusText();
+    }
 }
 
 void CsoundQt::ambiguosShortcut()
@@ -5142,9 +5163,9 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     renderAct->setShortcut(tr("Alt+F"));
     externalPlayerAct->setShortcut(tr(""));
     externalEditorAct->setShortcut(tr(""));
-    showEditorAct->setShortcut(tr("Ctrl+T, E"));
-    showWidgetsAct->setShortcut(tr("Ctrl+T, W"));
-    showHelpAct->setShortcut(tr("Ctrl+T, H"));
+    showEditorAct->setShortcut(tr("Ctrl+Shift+0"));
+    showWidgetsAct->setShortcut(tr("Ctrl+Shift+1"));
+    showHelpAct->setShortcut(tr("Ctrl+Shift+2"));
     focusEditorAct->setShortcut(tr("Ctrl+0"));
     focusWidgetsAct->setShortcut(tr("Ctrl+1"));
     focusHelpAct->setShortcut(tr("Ctrl+2"));
@@ -6972,6 +6993,7 @@ void CsoundQt::readSettings()
     m_options->simultaneousRun = settings.value("simultaneousRun", "").toBool();
     m_options->quitOnLastTabClosed = settings.value("quitOnLastTabClosed", false).toBool();
     m_options->includeActiveFileInTitle = settings.value("includeActiveFileInTitle", true).toBool();
+    m_options->focusToggledPanel = settings.value("focusToggledPanel", false).toBool();
     m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
     settings.endGroup();
     settings.beginGroup("Environment");
@@ -7206,6 +7228,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("simultaneousRun", m_options->simultaneousRun);
     settings.setValue("quitOnLastTabClosed", m_options->quitOnLastTabClosed);
     settings.setValue("includeActiveFileInTitle", m_options->includeActiveFileInTitle);
+    settings.setValue("focusToggledPanel", m_options->focusToggledPanel);
     settings.setValue("sampleFormat", m_options->sampleFormat);
     settings.setValue("checkSyntaxBeforeRun", m_options->checkSyntaxBeforeRun);
     settings.endGroup(); // Options/Run
