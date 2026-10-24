@@ -1951,15 +1951,15 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
     const bool hasSelection = !getSelectedWidgets().isEmpty();
     const bool hasWidgets = !m_widgets.isEmpty();
 
-    // Creating and editing widgets is only meaningful in edit mode. Keeping
-    // these actions out of the run-mode menu also prevents shortcuts and
-    // actions from appearing to be available when they would do nothing.
-    if (editing) {
-        QMenu newMenu(tr("New Widget", "New Widget submenu in widget layout popup"), &menu);
-        this->addCreateWidgetActionsToMenu(newMenu);
-        menu.addMenu(&newMenu);
-        menu.addSeparator();
+    // Creating a widget from the panel background is also how edit mode is
+    // entered in practice, so this submenu must always be available. The
+    // editing commands below only make sense in edit mode.
+    QMenu newMenu(tr("New Widget", "New Widget submenu in widget layout popup"), &menu);
+    this->addCreateWidgetActionsToMenu(newMenu);
+    menu.addMenu(&newMenu);
+    menu.addSeparator();
 
+    if (editing) {
         QMenu editMenu(tr("Edit", "Edit menu in widget layout right-click menu"), &menu);
         cutAct->setEnabled(hasSelection);
         copyAct->setEnabled(hasSelection);
