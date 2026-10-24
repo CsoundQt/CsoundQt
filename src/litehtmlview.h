@@ -77,10 +77,15 @@ public:
     bool canGoBack() const { return m_historyPos > 0; }
     bool canGoForward() const { return m_historyPos + 1 < m_history.size(); }
 
+    // Keyboard zoom: rebuild the page at the new zoom immediately.
     void zoomIn();
     void zoomOut();
     qreal zoomFactor() const { return m_zoomFactor; }
-    void setZoomFactor(qreal factor);
+    // Change the zoom. With immediate == false the existing rendering is only
+    // scaled and the full re-layout is deferred until the last request (used
+    // for Ctrl+wheel); with immediate == true the document is rebuilt at once
+    // (used for keyboard zoom, where one expensive rebuild is fine).
+    void setZoomFactor(qreal factor, bool immediate = false);
 
     // In-page find (hosted as an in-panel box inside the viewer).
     void setFindQuery(const QString &query);

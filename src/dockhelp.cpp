@@ -115,7 +115,9 @@ void DockHelp::setIconTheme(QString theme)
 
 void DockHelp::changeFontSize(int change)
 {
-    m_view->setZoomFactor(m_view->zoomFactor() + change * 0.1);
+    // Keyboard zoom (the application font-size actions): rebuild the page at
+    // the new zoom directly instead of showing a scaled preview first.
+    m_view->setZoomFactor(m_view->zoomFactor() + change * 0.1, true);
 }
 
 void DockHelp::addSearchRoot(const QString &rootPath, const QString &label)

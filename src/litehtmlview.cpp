@@ -41,8 +41,14 @@
 #include <limits>
 #include <functional>
 #include <memory>
+using namespace Qt::StringLiterals;
 
 using namespace litehtml;
+
+// Ctrl+wheel zoom shows the new scale immediately by magnifying the existing
+// rendering; the document is reflowed at the new font size once the gesture
+// stops. Keep this short: the deferred wait is pure latency for the user.
+static constexpr int ZOOM_COMMIT_DELAY_MS = 60;
 
 // ---------------------------------------------------------------------------
 // MkDocs article extraction + tab flattening (see LITEHTML_INTEGRATION_PLAN.md)
@@ -74,7 +80,7 @@ static int matchDiv(const QString &html, int start)
 
 static void flattenTabs(QString &art)
 {
-    QRegularExpression labelRe("<label[^>]*>([\\s\\S]*?)</label>");
+    QRegularExpression labelRe(uR"(<label[^>]*>([\s\S]*?)</label>)"_s);
     int                pos = 0;
     while ((pos = art.indexOf("<div class=\"tabbed-set", pos)) != -1)
     {
@@ -188,7 +194,7 @@ LiteHtmlView::LiteHtmlView(QWidget *parent)
     // last zoom request; until then the page is shown magnified.
     m_zoomCommitTimer = new QTimer(this);
     m_zoomCommitTimer->setSingleShot(true);
-    m_zoomCommitTimer->setInterval(140);
+    m_zoomCommitTimer->setInterval(ZOOM_COMMIT_DELAY_MS);
     connect(m_zoomCommitTimer, &QTimer::timeout, this, &LiteHtmlView::commitZoom);
 
     // In-panel find box (shown on Ctrl+F / the DockHelp find toggle).
@@ -348,7 +354,7 @@ void LiteHtmlView::navigateToHistory()
     doLoad(p, QString(), false);
 }
 
-void LiteHtmlView::setZoomFactor(qreal factor)
+void LiteHtmlView::setZoomFactor(qreal factor, bool immediate)
 {
     factor = qBound(0.5, factor, 4.0);
     if (qFuzzyCompare(factor, m_zoomFactor))
@@ -358,6 +364,19 @@ void LiteHtmlView::setZoomFactor(qreal factor)
     {
         // Nothing rendered yet: the next load will use the new factor.
         m_zoomFactor = m_renderedZoom = factor;
+        return;
+    }
+
+    m_zoomCommitTimer->stop();
+
+    if (immediate)
+    {
+        // A keyboard zoom is a single, deliberate request, so skip the cheap
+        // preview and rebuild the document at once. This re-parses the
+        // stylesheet and costs ~100 ms, which is acceptable once per key
+        // press but not per wheel notch.
+        m_zoomFactor = factor;
+        commitZoom();
         return;
     }
 
@@ -394,12 +413,12 @@ void LiteHtmlView::commitZoom()
 
 void LiteHtmlView::zoomIn()
 {
-    setZoomFactor(m_zoomFactor + 0.1);
+    setZoomFactor(m_zoomFactor + 0.1, true);
 }
 
 void LiteHtmlView::zoomOut()
 {
-    setZoomFactor(m_zoomFactor - 0.1);
+    setZoomFactor(m_zoomFactor - 0.1, true);
 }
 
 void LiteHtmlView::setFindQuery(const QString &query)
@@ -862,6 +881,12 @@ void LiteHtmlView::keyPressEvent(QKeyEvent *e)
 
 void LiteHtmlView::wheelEvent(QWheelEvent *e)
 {
+    // Trackpads report the end of a gesture explicitly. If a zoom is still
+    // waiting for the reflow timer, rebuild the page now instead of adding
+    // the timer delay after the user has already stopped.
+    if (e->phase() == Qt::ScrollEnd)
+        commitZoom();
+
     // Ctrl+wheel zooms the page instead of scrolling it.
     if (e->modifiers() & Qt::ControlModifier)
     {
@@ -869,8 +894,16 @@ void LiteHtmlView::wheelEvent(QWheelEvent *e)
         // mouse wheel still steps once per 120-unit notch.
         const int angle = e->angleDelta().y();
         m_zoomRemainder += (angle != 0) ? angle / 120.0 : e->pixelDelta().y() / 50.0;
-        while (m_zoomRemainder >= 1.0)  { zoomIn();  m_zoomRemainder -= 1.0; }
-        while (m_zoomRemainder <= -1.0) { zoomOut(); m_zoomRemainder += 1.0; }
+        while (m_zoomRemainder >= 1.0)
+        {
+            setZoomFactor(m_zoomFactor + 0.1);
+            m_zoomRemainder -= 1.0;
+        }
+        while (m_zoomRemainder <= -1.0)
+        {
+            setZoomFactor(m_zoomFactor - 0.1);
+            m_zoomRemainder += 1.0;
+        }
         m_wheelRemainder = 0;
         m_scrollVelocity = 0;
         m_flingTimer->stop();
