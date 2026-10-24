@@ -3,15 +3,15 @@
 -o dac
 </CsOptions>
 <CsInstruments>
-sr=44100
-ksmps=32
-nchnls=2
-0dbfs=1
+sr = 44100
+ksmps = 32
+nchnls = 2
+0dbfs = 1
 
 instr 1
-andx phasor 440
-a1 table andx*8192, 1
-outs a1*.2, a1*.2
+  andx = phasor(440)
+  a1   = table(andx*8192, 1)
+  out(a1*.2, a1*.2)
 endin
 </CsInstruments>
 <CsScore>

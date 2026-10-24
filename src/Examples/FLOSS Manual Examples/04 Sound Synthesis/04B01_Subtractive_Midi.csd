@@ -8,88 +8,88 @@ ksmps = 4
 nchnls = 2
 0dbfs = 1
 
-initc7 1,1,0.8                 ;set initial controller position
+initc7   1, 1, 0.8  ; set initial controller position
 prealloc 1, 10
 
-   instr 1
-iNum   notnum                  ;read in midi note number
-iCF    ctrl7        1,1,0.1,14 ;read in midi controller 1
+instr 1
+  iNum = notnum()              ; read in midi note number
+  iCF  = ctrl7(1, 1, 0.1, 14)  ; read in midi controller 1
 
-; set up default p-field values for midi activated notes
-       mididefault  iNum, p4   ;pitch (note number)
-       mididefault  0.3, p5    ;amplitude 1
-       mididefault  2, p6      ;type 1
-       mididefault  0.5, p7    ;pulse width 1
-       mididefault  0, p8      ;octave disp. 1
-       mididefault  0, p9      ;tuning disp. 1
-       mididefault  0.3, p10   ;amplitude 2
-       mididefault  1, p11     ;type 2
-       mididefault  0.5, p12   ;pulse width 2
-       mididefault  -1, p13    ;octave displacement 2
-       mididefault  20, p14    ;tuning disp. 2
-       mididefault  iCF, p15   ;filter cutoff freq
-       mididefault  0.01, p16  ;filter env. attack time
-       mididefault  1, p17     ;filter env. decay time
-       mididefault  0.01, p18  ;filter env. sustain level
-       mididefault  0.1, p19   ;filter release time
-       mididefault  0.3, p20   ;filter resonance
-       mididefault  0.01, p21  ;amp. env. attack
-       mididefault  0.1, p22   ;amp. env. decay.
-       mididefault  1, p23     ;amp. env. sustain
-       mididefault  0.01, p24  ;amp. env. release
+  ; set up default p-field values for midi activated notes
+  mididefault iNum, p4   ; pitch (note number)
+  mididefault 0.3, p5    ; amplitude 1
+  mididefault 2, p6      ; type 1
+  mididefault 0.5, p7    ; pulse width 1
+  mididefault 0, p8      ; octave disp. 1
+  mididefault 0, p9      ; tuning disp. 1
+  mididefault 0.3, p10   ; amplitude 2
+  mididefault 1, p11     ; type 2
+  mididefault 0.5, p12   ; pulse width 2
+  mididefault -1, p13    ; octave displacement 2
+  mididefault 20, p14    ; tuning disp. 2
+  mididefault iCF, p15   ; filter cutoff freq
+  mididefault 0.01, p16  ; filter env. attack time
+  mididefault 1, p17     ; filter env. decay time
+  mididefault 0.01, p18  ; filter env. sustain level
+  mididefault 0.1, p19   ; filter release time
+  mididefault 0.3, p20   ; filter resonance
+  mididefault 0.01, p21  ; amp. env. attack
+  mididefault 0.1, p22   ; amp. env. decay.
+  mididefault 1, p23     ; amp. env. sustain
+  mididefault 0.01, p24  ; amp. env. release
 
-; asign p-fields to variables
-iCPS   =            cpsmidinn(p4) ;convert from note number to cps
-kAmp1  =            p5
-iType1 =            p6
-kPW1   =            p7
-kOct1  =            octave(p8) ;convert from octave displacement to multiplier
-kTune1 =            cent(p9)   ;convert from cents displacement to multiplier
-kAmp2  =            p10
-iType2 =            p11
-kPW2   =            p12
-kOct2  =            octave(p13)
-kTune2 =            cent(p14)
-iCF    =            p15
-iFAtt  =            p16
-iFDec  =            p17
-iFSus  =            p18
-iFRel  =            p19
-kRes   =            p20
-iAAtt  =            p21
-iADec  =            p22
-iASus  =            p23
-iARel  =            p24
+  ; asign p-fields to variables
+  iCPS   = cpsmidinn(p4)  ; convert from note number to cps
+  kAmp1  = p5
+  iType1 = p6
+  kPW1   = p7
+  kOct1  = octave(p8)  ; convert from octave displacement to multiplier
+  kTune1 = cent(p9)    ; convert from cents displacement to multiplier
+  kAmp2  = p10
+  iType2 = p11
+  kPW2   = p12
+  kOct2  = octave(p13)
+  kTune2 = cent(p14)
+  iCF    = p15
+  iFAtt  = p16
+  iFDec  = p17
+  iFSus  = p18
+  iFRel  = p19
+  kRes   = p20
+  iAAtt  = p21
+  iADec  = p22
+  iASus  = p23
+  iARel  = p24
 
-;oscillator 1
-;if type is sawtooth or square...
-if iType1==1||iType1==2 then
- ;...derive vco2 'mode' from waveform type
- iMode1 = (iType1=1?0:2)
- aSig1  vco2   kAmp1,iCPS*kOct1*kTune1,iMode1,kPW1;VCO audio oscillator
-else                                   ;otherwise...
- aSig1  noise  kAmp1, 0.5              ;...generate white noise
-endif
+  ; oscillator 1
+  ; if type is sawtooth or square...
+  if iType1 == 1||iType1 == 2 then
+    ; ...derive vco2 'mode' from waveform type
+    iMode1 = (iType1 = 1?0:2)
+    aSig1  = vco2(kAmp1, iCPS*kOct1*kTune1, iMode1, kPW1)  ; VCO audio oscillator
+  else                                                     ; otherwise...
+    aSig1 = noise(kAmp1, 0.5)                              ; ...generate white noise
+  endif
 
-;oscillator 2 (identical in design to oscillator 1)
-if iType2==1||iType2==2 then
- iMode2  =  (iType2=1?0:2)
- aSig2  vco2   kAmp2,iCPS*kOct2*kTune2,iMode2,kPW2
-else
-  aSig2 noise  kAmp2,0.5
-endif
+  ; oscillator 2 (identical in design to oscillator 1)
+  if iType2 == 1||iType2 == 2 then
+    iMode2 = (iType2 = 1?0:2)
+    aSig2  = vco2(kAmp2, iCPS*kOct2*kTune2, iMode2, kPW2)
+  else
+    aSig2 = noise(kAmp2, 0.5)
+  endif
 
-;mix oscillators
-aMix       sum          aSig1,aSig2
-;lowpass filter
-kFiltEnv expsegr 0.0001,iFAtt,iCPS*iCF,iFDec,iCPS*iCF*iFSus,iFRel,0.0001
-aOut       moogladder   aMix, kFiltEnv, kRes
+  ; mix oscillators
+  aMix = sum(aSig1, aSig2)
+  ; lowpass filter
+  kFiltEnv = expsegr(0.0001, iFAtt, iCPS*iCF, iFDec, iCPS*iCF*iFSus, iFRel, 0.0001)
+  aOut = moogladder(aMix, kFiltEnv, kRes)
 
-;amplitude envelope
-aAmpEnv    expsegr      0.0001,iAAtt,1,iADec,iASus,iARel,0.0001
-aOut       =            aOut*aAmpEnv
-           outs         aOut,aOut
-  endin
+  ; amplitude envelope
+  aAmpEnv = expsegr(0.0001, iAAtt, 1, iADec, iASus, iARel, 0.0001)
+  aOut    = aOut*aAmpEnv
+  out(aOut, aOut)
+endin
 </CsInstruments>
 
 <CsScore>

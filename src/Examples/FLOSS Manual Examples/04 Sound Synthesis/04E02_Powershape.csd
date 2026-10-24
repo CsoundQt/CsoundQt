@@ -9,13 +9,13 @@ nchnls = 2
 0dbfs = 1
 
 instr Powershape
- iAmp = 0.2
- iFreq = 300
- aIn poscil iAmp, iFreq
- ifullscale = iAmp
- kShapeAmount linseg 1, 1.5, 1, .5, p4, 1.5, p4, .5, p5
- aOut powershape aIn, kShapeAmount, ifullscale
- out aOut, aOut
+  iAmp = 0.2
+  iFreq = 300
+  aIn = poscil(iAmp, iFreq)
+  ifullscale = iAmp
+  kShapeAmount = linseg(1, 1.5, 1, .5, p4, 1.5, p4, .5, p5)
+  aOut = powershape(aIn, kShapeAmount, ifullscale)
+  out aOut, aOut
 endin
 </CsInstruments>
 <CsScore>

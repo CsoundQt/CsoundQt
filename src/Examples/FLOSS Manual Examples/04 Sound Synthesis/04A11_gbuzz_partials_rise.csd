@@ -11,15 +11,15 @@ nchnls = 2
 0dbfs = 1
 
 ; a cosine wave
-gicos ftgen 0, 0, 2^10, 11, 1
+gicos = ftgen(0, 0, 2^10, 11, 1)
 
- instr 1
-knh  =     20
-klh  line  1, p3, 20
-kmul =     1
-asig gbuzz 1, 100, knh, klh, kmul, gicos
-     outs  asig, asig
- endin
+instr 1
+  knh  = 20
+  klh  = line(1, p3, 20)
+  kmul = 1
+  asig = gbuzz(1, 100, knh, klh, kmul, gicos)
+  out(asig, asig)
+endin
 
 </CsInstruments>
 

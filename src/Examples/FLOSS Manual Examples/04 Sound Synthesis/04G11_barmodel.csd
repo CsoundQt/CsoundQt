@@ -3,34 +3,34 @@
 -odac
 </CsOptions>
 <CsInstruments>
-sr     = 44100
-ksmps  = 32
+sr = 44100
+ksmps = 32
 nchnls = 2
-0dbfs  = 1
+0dbfs = 1
 
- instr   1
-; boundary conditions 1=fixed 2=pivot 3=free
-kbcL    =               1
-kbcR    =               1
-; stiffness
-iK      =               p4
-; high freq. loss (damping)
-ib      =               p5
-; scanning frequency
-kscan   rspline         p6,p7,0.2,0.8
-; time to reach 30db decay
-iT30    =               p3
-; strike position
-ipos    random          0,1
-; strike velocity
-ivel    =               1000
-; width of strike
-iwid    =               0.1156
-aSig    barmodel        kbcL,kbcR,iK,ib,kscan,iT30,ipos,ivel,iwid
-kPan    rspline         0.1,0.9,0.5,2
-aL,aR   pan2            aSig,kPan
-        outs             aL,aR
- endin
+instr 1
+  ; boundary conditions 1=fixed 2=pivot 3=free
+  kbcL = 1
+  kbcR = 1
+  ; stiffness
+  iK = p4
+  ; high freq. loss (damping)
+  ib = p5
+  ; scanning frequency
+  kscan = rspline(p6, p7, 0.2, 0.8)
+  ; time to reach 30db decay
+  iT30 = p3
+  ; strike position
+  ipos = random(0, 1)
+  ; strike velocity
+  ivel = 1000
+  ; width of strike
+  iwid = 0.1156
+  aSig = barmodel(kbcL, kbcR, iK, ib, kscan, iT30, ipos, ivel, iwid)
+  kPan = rspline(0.1, 0.9, 0.5, 2)
+  aL, aR pan2 aSig, kPan
+  out(aL, aR)
+endin
 
 </CsInstruments>
 

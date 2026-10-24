@@ -11,15 +11,15 @@ nchnls = 2
 0dbfs = 1
 
 ; a cosine wave
-gicos ftgen 0, 0, 2^10, 11, 1
+gicos = ftgen(0, 0, 2^10, 11, 1)
 
- instr 1
-knh  line  1, p3, 20  ; number of harmonics
-klh  =     1          ; lowest harmonic
-kmul =     1          ; amplitude coefficient multiplier
-asig gbuzz 1, 100, knh, klh, kmul, gicos
-     outs  asig, asig
- endin
+instr 1
+  knh  = line(1, p3, 20)  ; number of harmonics
+  klh  = 1                ; lowest harmonic
+  kmul = 1                ; amplitude coefficient multiplier
+  asig = gbuzz(1, 100, knh, klh, kmul, gicos)
+  out(asig, asig)
+endin
 
 </CsInstruments>
 

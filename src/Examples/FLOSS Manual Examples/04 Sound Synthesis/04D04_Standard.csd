@@ -11,39 +11,39 @@ nchnls = 2
 
 instr Standard
 
-//input
- iC = 400
- iR = p4 ;ratio
- iI = p5 ;index
- prints "Ratio = %.3f, Index = %.3f\n", iR, iI
+  // input
+  iC = 400
+  iR = p4  ; ratio
+  iI = p5  ; index
+  prints "Ratio = %.3f, Index = %.3f\n", iR, iI
 
- //transform
- iM = iC / iR
- iD = iI * iM
+  // transform
+  iM = iC / iR
+  iD = iI * iM
 
- //apply to standard model
- aModulator poscil iD, iM
- aCarrier poscil 0.3, iC + aModulator
- aOut linen aCarrier, .1, p3, 1
- out aOut, aOut
+  // apply to standard model
+  aModulator = poscil(iD, iM)
+  aCarrier = poscil(0.3, iC + aModulator)
+  aOut = linen(aCarrier, .1, p3, 1)
+  out aOut, aOut
 
 endin
 
 instr PlayMess
 
- kC randomi 300, 500, 1, 2, 400
- kR randomi 1, 2, 2, 3
- kI randomi 1, 5, randomi:k(3,10,1,3), 3
+  kC = randomi(300, 500, 1, 2, 400)
+  kR = randomi(1, 2, 2, 3)
+  kI = randomi(1, 5, randomi:k(3, 10, 1, 3), 3)
 
- //transform
- kM = kC / kR
- kD = kI * kM
+  // transform
+  kM = kC / kR
+  kD = kI * kM
 
- //apply to standard model
- aModulator poscil kD, kM
- aCarrier poscil ampdb(port:k(kI*5-30,.1)), kC + aModulator
- aOut linen aCarrier, .1, p3, p3/10
- out aOut, aOut
+  // apply to standard model
+  aModulator = poscil(kD, kM)
+  aCarrier = poscil(ampdb(port:k(kI*5-30, .1)), kC + aModulator)
+  aOut = linen(aCarrier, .1, p3, p3/10)
+  out aOut, aOut
 
 endin
 

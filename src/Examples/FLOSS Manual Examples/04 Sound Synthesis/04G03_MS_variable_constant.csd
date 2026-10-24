@@ -9,18 +9,18 @@ nchnls = 2
 0dbfs = 1
 
 instr MassSpring
- ;set ksmps=1 in this instrument
- setksmps 1
- ;initial values
- a0        init      0
- a1        init      0.05
- kc        randomi   .001, .05, 8, 3
- ;calculation of the next value
- a2        =         a1+(a1-a0) - kc*a1
-           outs      a0, a0
- ;actualize values for the next step
- a0        =         a1
- a1        =         a2
+  ; set ksmps=1 in this instrument
+  setksmps 1
+  ; initial values
+  a0 = init(0)
+  a1 = init(0.05)
+  kc = randomi(.001, .05, 8, 3)
+  ; calculation of the next value
+  a2 = a1+(a1-a0) - kc*a1
+  out(a0, a0)
+  ; actualize values for the next step
+  a0 = a1
+  a1 = a2
 endin
 </CsInstruments>
 <CsScore>

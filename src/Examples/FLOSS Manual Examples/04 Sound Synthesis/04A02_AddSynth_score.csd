@@ -8,19 +8,19 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-giSine    ftgen     0, 0, 2^10, 10, 1
+giSine = ftgen(0, 0, 2^10, 10, 1)
 
-    instr 1
-iBaseFreq =         cpspch(p4)
-iFreqMult =         p5 ;frequency multiplier
-iBaseAmp  =         ampdbfs(p6)
-iAmpMult  =         p7 ;amplitude multiplier
-iFreq     =         iBaseFreq * iFreqMult
-iAmp      =         iBaseAmp * iAmpMult
-kEnv      linen     iAmp, p3/4, p3, p3/4
-aOsc      poscil    kEnv, iFreq, giSine
-          outs      aOsc, aOsc
-    endin
+instr 1
+  iBaseFreq = cpspch(p4)
+  iFreqMult = p5  ; frequency multiplier
+  iBaseAmp = ampdbfs(p6)
+  iAmpMult = p7  ; amplitude multiplier
+  iFreq = iBaseFreq * iFreqMult
+  iAmp = iBaseAmp * iAmpMult
+  kEnv = linen(iAmp, p3/4, p3, p3/4)
+  aOsc = poscil(kEnv, iFreq, giSine)
+  out(aOsc, aOsc)
+endin
 
 </CsInstruments>
 <CsScore>

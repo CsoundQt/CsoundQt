@@ -10,13 +10,13 @@ nchnls = 2
 0dbfs = 1
 
 instr Ratio
- kRatio = p4
- kCarFreq = 400
- kModFreq = kCarFreq/kRatio
- aModulator poscil 500, kModFreq
- aCarrier poscil 0.3, kCarFreq + aModulator
- aOut linen aCarrier, .1, p3, 1
- out aOut, aOut
+  kRatio = p4
+  kCarFreq = 400
+  kModFreq = kCarFreq/kRatio
+  aModulator = poscil(500, kModFreq)
+  aCarrier = poscil(0.3, kCarFreq + aModulator)
+  aOut = linen(aCarrier, .1, p3, 1)
+  out aOut, aOut
 endin
 
 </CsInstruments>

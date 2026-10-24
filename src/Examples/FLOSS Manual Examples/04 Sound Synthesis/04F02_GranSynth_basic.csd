@@ -9,24 +9,24 @@ ksmps = 1
 nchnls = 1
 0dbfs = 1
 
-giSine  ftgen  0,0,4096,10,1
+giSine = ftgen(0, 0, 4096, 10, 1)
 
 instr 1
-  kRate  expon  p4,p3,p5   ; rate of grain generation
-  kTrig  metro  kRate      ; a trigger to generate grains
-  kDur   expon  p6,p3,p7   ; grain duration
-  kForm  expon  p8,p3,p9   ; formant (spectral centroid)
-   ;                      p1 p2 p3   p4
-  schedkwhen    kTrig,0,0,2, 0, kDur,kForm ;trigger a note(grain) in instr 2
-  ;print data to terminal every 1/2 second
-  printks "Rate:%5.2F  Dur:%5.2F  Formant:%5.2F%n", 0.5, kRate , kDur, kForm
+  kRate = expon(p4, p3, p5)  ; rate of grain generation
+  kTrig = metro(kRate)       ; a trigger to generate grains
+  kDur  = expon(p6, p3, p7)  ; grain duration
+  kForm = expon(p8, p3, p9)  ; formant (spectral centroid)
+  ; p1 p2 p3   p4
+  schedkwhen kTrig, 0, 0, 2, 0, kDur, kForm  ; trigger a note(grain) in instr 2
+  ; print data to terminal every 1/2 second
+  printks "Rate:%5.2F  Dur:%5.2F  Formant:%5.2F%n", 0.5, kRate, kDur, kForm
 endin
 
 instr 2
-  iForm =       p4
-  aEnv  linseg  0,0.005,0.2,p3-0.01,0.2,0.005,0
-  aSig  poscil  aEnv, iForm, giSine
-        out     aSig
+  iForm = p4
+  aEnv  = linseg(0, 0.005, 0.2, p3-0.01, 0.2, 0.005, 0)
+  aSig  = poscil(aEnv, iForm, giSine)
+  out aSig
 endin
 
 </CsInstruments>

@@ -10,32 +10,32 @@
 	
 */
 
-;example for CsoundQt
-;written by joachim heintz
-;jan 2010 / june 2011
-;please send bug reports and suggestions
-;to jh at joachimheintz.de
+; example for CsoundQt
+; written by joachim heintz
+; jan 2010 / june 2011
+; please send bug reports and suggestions
+; to jh at joachimheintz.de
 
 sr = 44100
 ksmps = 32
 nchnls = 1
 0dbfs = 1
 
-giWin1		ftgen		1, 0, 4096, 20, 1, 1		; Hamming
-giWin2		ftgen		2, 0, 4096, 20, 2, 1		; von Hann
-giWin3		ftgen		3, 0, 4096, 20, 3, 1		; Triangle (Bartlett)
-giWin4		ftgen		4, 0, 4096, 20, 4, 1		; Blackman (3-term)
-giWin5		ftgen		5, 0, 4096, 20, 5, 1		; Blackman-Harris (4-term)
-giWin6		ftgen		6, 0, 4096, 20, 6, 1		; Gauss
-giWin7		ftgen		7, 0, 4096, 20, 7, 1, 6		; Kaiser
-giWin8		ftgen		8, 0, 4096, 20, 8, 1		; Rectangle
-giWin9		ftgen		9, 0, 4096, 20, 9, 1		; Sync
-giLiveBuf	ftgen		0, 0, 16384, 2, 0			; buffer for writing and reading live input
-giDisttab	ftgen		0, 0, 32768, 7, 0, 32768, 1	; for kdistribution
-giCosine	ftgen		0, 0, 8193, 9, 1, 1, 90		; cosine
-giMaxGrLen	=		0.1					; maximaum grain length in seconds
+giWin1    ftgen 1, 0, 4096, 20, 1, 1         ; Hamming
+giWin2    ftgen 2, 0, 4096, 20, 2, 1         ; von Hann
+giWin3    ftgen 3, 0, 4096, 20, 3, 1         ; Triangle (Bartlett)
+giWin4    ftgen 4, 0, 4096, 20, 4, 1         ; Blackman (3-term)
+giWin5    ftgen 5, 0, 4096, 20, 5, 1         ; Blackman-Harris (4-term)
+giWin6    ftgen 6, 0, 4096, 20, 6, 1         ; Gauss
+giWin7    ftgen 7, 0, 4096, 20, 7, 1, 6      ; Kaiser
+giWin8    ftgen 8, 0, 4096, 20, 8, 1         ; Rectangle
+giWin9    ftgen 9, 0, 4096, 20, 9, 1         ; Sync
+giLiveBuf ftgen 0, 0, 16384, 2, 0            ; buffer for writing and reading live input
+giDisttab ftgen 0, 0, 32768, 7, 0, 32768, 1  ; for kdistribution
+giCosine  ftgen 0, 0, 8193, 9, 1, 1, 90      ; cosine
+giMaxGrLen = 0.1                             ; maximaum grain length in seconds
 
-  opcode PartikkelSimpB, a, iakkkkkkkiii
+opcode PartikkelSimpB(ifiltab:i, apnter:a, kgrainamp:k, kgrainrate:k, kgrainsize:k, kdist:k, kcent:k, kposrand:k, kcentrand:k, icosintab:i, idisttab:i, iwin:i):a
 /* Simplified Version of the partikkel opcode, with a time pointer input.
 ifiltab:	function table to read
 apnter:	pointer in the function table (0-1)
@@ -51,148 +51,152 @@ idisttab:	function table with distribution (e.g. giDisttab ftgen 0, 0, 32768, 7,
 iwin:		function table with window shape (e.g. giWin ftgen 0, 0, 4096, 20, 9, 1)
 */
 
-ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kdist, kcent, kposrand, kcentrand, icosintab, idisttab, iwin	xin
 
 /*amplitude*/
-kamp		= 		kgrainamp * 0dbfs
+  kamp = kgrainamp * 0dbfs
 /*transposition*/
-kcentrand	rand 		kcentrand; random transposition
-iorig		= 		1 / (ftlen(ifiltab)/sr); original pitch
-kwavfreq	= 		iorig * cent(kcent + kcentrand)	
+  kcentrand rand kcentrand            ; random transposition
+  iorig    = 1 / (ftlen(ifiltab)/sr)  ; original pitch
+  kwavfreq = iorig * cent(kcent + kcentrand)
 /*pointer*/
-kposrand	=		(kposrand/1000) * (sr/ftlen(ifiltab)); random offset converted from ms to phase (0-1)
-arndpos	linrand	kposrand; random offset in phase values
-asamplepos	=		apnter + arndpos 
+  ; random offset converted from ms to phase (0-1)
+  kposrand = (kposrand/1000) * (sr/ftlen(ifiltab))
+  arndpos linrand kposrand  ; random offset in phase values
+  asamplepos = apnter + arndpos
 /* other parameters */
-imax_grains	= 		1000; maximum number of grains per k-period
-async		=		0; no sync input
-awavfm		=		0; no audio input for fm
+  imax_grains = 1000  ; maximum number of grains per k-period
+  async = 0           ; no sync input
+  awavfm = 0          ; no audio input for fm
 
-aout		partikkel 	kgrainrate, kdist, idisttab, async, 1, iwin, \
-				-1, -1, 0, 0, kgrainsize, kamp, -1, \
-				kwavfreq, 0, -1, -1, awavfm, \
-				-1, -1, icosintab, kgrainrate, 1, \
-				1, -1, 0, ifiltab, ifiltab, ifiltab, ifiltab, \
-				-1, asamplepos, asamplepos, asamplepos, asamplepos, \
-				1, 1, 1, 1, imax_grains
-		xout		aout
-  endop
+  aout partikkel kgrainrate, kdist, idisttab, async, 1, iwin, \
+    -1, -1, 0, 0, kgrainsize, kamp, -1, \
+    kwavfreq, 0, -1, -1, awavfm, \
+    -1, -1, icosintab, kgrainrate, 1, \
+    1,  -1, 0, ifiltab, ifiltab, ifiltab, ifiltab, \
+    -1, asamplepos, asamplepos, asamplepos, asamplepos, \
+    1, 1, 1, 1, imax_grains
+  xout aout
+endop
 
-  opcode	ShowLED_a, 0, Sakkk
-;shows an audiosignal in an outvalue channel, in dB or raw amplitudes
-;Soutchan: string as name of the outvalue channel
-;asig: audio signal to be shown
-;kdispfreq: refresh frequency of the display (Hz)
-;kdb: 1 = show as db, 0 = show as raw amplitudes (both in the range 0-1)
-;kdbrange: if idb=1: which dB range is shown
-Soutchan, asig, ktrig, kdb, kdbrange	xin
-kdispval	max_k	asig, ktrig, 1
-	if kdb != 0 then
-kdb 		= 		dbfsamp(kdispval)
-kval 		= 		(kdbrange + kdb) / kdbrange
-	else
-kval		=		kdispval
-	endif
-	if ktrig == 1 then
-		outvalue	Soutchan, kval
-	endif
-  endop
+opcode ShowLED_a(Soutchan:S, asig:a, ktrig:k, kdb:k, kdbrange:k):()
+  ; shows an audiosignal in an outvalue channel, in dB or raw amplitudes
+  ; Soutchan: string as name of the outvalue channel
+  ; asig: audio signal to be shown
+  ; kdispfreq: refresh frequency of the display (Hz)
+  ; kdb: 1 = show as db, 0 = show as raw amplitudes (both in the range 0-1)
+  ; kdbrange: if idb=1: which dB range is shown
+  kdispval max_k asig, ktrig, 1
+  if kdb != 0 then
+    kdb  = dbfsamp(kdispval)
+    kval = (kdbrange + kdb) / kdbrange
+  else
+    kval = kdispval
+  endif
+  if ktrig == 1 then
+    outvalue Soutchan, kval
+  endif
+endop
 
-  opcode ShowOver_a, 0, Sakk
-;shows if asig has been larger than 1 and stays khold seconds
-;Soutchan: string as name of the outvalue channel
-;kdispfreq: refresh frequency of the display (Hz)
-Soutchan, asig, ktrig, khold	xin
-kon		init		0
-ktim		times
-kstart		init		0
-kend		init		0
-khold		=		(khold < .01 ? .01 : khold); avoiding too short hold times
-kmax		max_k		asig, ktrig, 1
-	if kon == 0 && kmax > 1 && ktrig == 1 then
-kstart		=		ktim
-kend		=		kstart + khold
-		outvalue	Soutchan, kmax
-kon		=		1
-	endif
-	if kon == 1 && ktim > kend && ktrig == 1 then
-		outvalue	Soutchan, 0
-kon		=		0
-	endif
-  endop
+opcode ShowOver_a(Soutchan:S, asig:a, ktrig:k, khold:k):()
+  ; shows if asig has been larger than 1 and stays khold seconds
+  ; Soutchan: string as name of the outvalue channel
+  ; kdispfreq: refresh frequency of the display (Hz)
+  kon init 0
+  ktim times
+  kstart init 0
+  kend   init 0
+  khold = (khold < .01 ? .01 : khold)  ; avoiding too short hold times
+  kmax max_k asig, ktrig, 1
+  if kon == 0 && kmax > 1 && ktrig == 1 then
+    kstart = ktim
+    kend   = kstart + khold
+    outvalue Soutchan, kmax
+    kon = 1
+  endif
+  if kon == 1 && ktim > kend && ktrig == 1 then
+    outvalue Soutchan, 0
+    kon = 0
+  endif
+endop
 
 
-instr 1; master instrument
-;;get live input and write to buffer (ftable) giLiveBuf
-aLiveInPre	inch		1
-kingaindb	invalue	"ingaindb"
-kLiveInGain	=		ampdb(kingaindb)
-aLiveInPost	=		aLiveInPre * kLiveInGain
-iphasfreq	=		1 / (ftlen(giLiveBuf) / sr); phasor frequency
-kfreeze	invalue	"freeze"; if checked, freeze writing (and reading) of the buffer
-kphasfreq	=		(kfreeze == 1 ? 0 : iphasfreq)
-awritpnt	phasor		kphasfreq
-		tablew		aLiveInPost, awritpnt, giLiveBuf, 1, 0, 1
+instr 1  ; master instrument
+  ;;get live input and write to buffer (ftable) giLiveBuf
+  aLiveInPre inch 1
+  kingaindb chnget "ingaindb"
+  kLiveInGain = ampdb(kingaindb)
+  aLiveInPost = aLiveInPre * kLiveInGain
+  iphasfreq   = 1 / (ftlen(giLiveBuf) / sr)  ; phasor frequency
+  ; if checked, freeze writing (and reading) of the buffer
+  kfreeze chnget "freeze"
+  kphasfreq = (kfreeze == 1 ? 0 : iphasfreq)
+  awritpnt phasor kphasfreq
+  tablew aLiveInPost, awritpnt, giLiveBuf, 1, 0, 1
 
-;;create an instrument for a readpointer which is giMaxGrLen seconds later than the writepointer
-		event_i	"i", 2, giMaxGrLen, -1, iphasfreq
+  ;;create an instrument for a readpointer which is giMaxGrLen seconds later than the
+  ; writepointer
+  event_i "i", 2, giMaxGrLen, -1, iphasfreq
 
-;;show live input
-gkTrigDisp	metro		10
-gkshowdb	invalue	"showdb"
-gkdbrange	invalue	"dbrange"
-		ShowLED_a	"LiveInPre", aLiveInPre, gkTrigDisp, gkshowdb, gkdbrange
-		ShowOver_a	"LiveInPreOver", aLiveInPre, gkTrigDisp, 2
-		ShowLED_a	"LiveInPost", aLiveInPost, gkTrigDisp, gkshowdb, gkdbrange
-		ShowOver_a	"LiveInPostOver", aLiveInPost, gkTrigDisp, 2
+  ;;show live input
+  gkTrigDisp metro 10
+  gkshowdb  chnget "showdb"
+  gkdbrange chnget "dbrange"
+  ShowLED_a  "LiveInPre", aLiveInPre, gkTrigDisp, gkshowdb, gkdbrange
+  ShowOver_a "LiveInPreOver", aLiveInPre, gkTrigDisp, 2
+  ShowLED_a  "LiveInPost", aLiveInPost, gkTrigDisp, gkshowdb, gkdbrange
+  ShowOver_a "LiveInPostOver", aLiveInPost, gkTrigDisp, 2
 
-;;select shape of the grain envelope and show it
-kwinshape	invalue	"winshape"; 0=Hamming, 1=von Hann, 2=Bartlett, 3=Triangle, 4=Blackman-Harris,
-						;5=Gauss, 6=Kaiser, 7=Rectangle, 8=Sync
-		event_i	"i", 10, 0, -1, i(kwinshape)+1
-		outvalue	"ftab", -(kwinshape+1); graph widget shows selected window shape
+  ;;select shape of the grain envelope and show it
+  ; 0=Hamming, 1=von Hann, 2=Bartlett, 3=Triangle, 4=Blackman-Harris,
+  kwinshape chnget "winshape"
+  ; 5=Gauss, 6=Kaiser, 7=Rectangle, 8=Sync
+  event_i "i", 10, 0, -1, i(kwinshape)+1
+  chnset -(kwinshape+1), "ftab"  ; graph widget shows selected window shape
 
-;;triggers i 10 at the beginning and whenever the grain envelope has changed
-kchanged	changed	kwinshape; sends 1 if the windowshape has changed
- if kchanged == 1 then
-		event		"i", -10, 0, -1; turn off previous instance of i10
-		event		"i", 10, 0, -1, kwinshape+1; turn on new instance
- endif
+  ;;triggers i 10 at the beginning and whenever the grain envelope has changed
+  kchanged changed kwinshape  ; sends 1 if the windowshape has changed
+  if kchanged == 1 then
+    event "i", -10, 0, -1              ; turn off previous instance of i10
+    event "i", 10, 0, -1, kwinshape+1  ; turn on new instance
+  endif
 endin
 
-instr 2; creates the pointer for reading the buffer giLiveBuf
-iphasfreq	=		p4; usual phasor frequency (calculated and sent by instr 1) 
-kfreeze	invalue	"freeze"; if checked, freeze reading of the buffer
-kphasfreq	=		(kfreeze == 1 ? 0 : iphasfreq); otherwise use kphasfreq
-areadpnt	phasor		kphasfreq
-		chnset		areadpnt, "readpnt"; sends areadpnt to the channel 'readpnt'
+; creates the pointer for reading the buffer giLiveBuf
+instr 2
+  ; usual phasor frequency (calculated and sent by instr 1)
+  iphasfreq = p4
+  kfreeze chnget "freeze"                     ; if checked, freeze reading of the buffer
+  kphasfreq = (kfreeze == 1 ? 0 : iphasfreq)  ; otherwise use kphasfreq
+  areadpnt phasor kphasfreq
+  chnset areadpnt, "readpnt"  ; sends areadpnt to the channel 'readpnt'
 endin
 
-instr 10; performs granular synthesis
-;;parameters for the partikkel opcode
-iwin		=		p4; shape of the grain window 
-ifiltab	=		giLiveBuf; buffer to read
-apnt		init		0; initializing the read pointer
-kgrainrate	invalue	"grainrate"; grains per second
-kgrainsize	invalue	"grainsize"; length of the grains in ms
-kcent		invalue	"transp"; pitch transposition in cent
-kgraindb	invalue	"outgaindb"; volume
-kgrainamp	=		ampdb(kgraindb)
-kdist		invalue	"dist"; distribution (0=periodic, 1=scattered)
-kposrand	invalue	"posrand"; time position randomness (offset) of the read pointer in ms
-kcentrand	invalue	"centrand"; transposition randomness in cents (up and down)
-icosintab	=		giCosine; ftable with a cosine waveform
-idisttab	=		giDisttab; ftable with values for scattered distribution 
-apnt		chnget		"readpnt"; pointer generated 
+instr 10  ; performs granular synthesis
+  ;;parameters for the partikkel opcode
+  iwin    = p4                   ; shape of the grain window
+  ifiltab = giLiveBuf            ; buffer to read
+  apnt init 0                    ; initializing the read pointer
+  kgrainrate chnget "grainrate"  ; grains per second
+  kgrainsize chnget "grainsize"  ; length of the grains in ms
+  kcent      chnget "transp"     ; pitch transposition in cent
+  kgraindb   chnget "outgaindb"  ; volume
+  kgrainamp = ampdb(kgraindb)
+  kdist chnget "dist"  ; distribution (0=periodic, 1=scattered)
+  ; time position randomness (offset) of the read pointer in ms
+  kposrand  chnget "posrand"
+  kcentrand chnget "centrand"  ; transposition randomness in cents (up and down)
+  icosintab = giCosine         ; ftable with a cosine waveform
+  idisttab  = giDisttab        ; ftable with values for scattered distribution
+  apnt chnget "readpnt"        ; pointer generated
 
-;;granular synthesis
-agrain 	PartikkelSimpB 	ifiltab, apnt, kgrainamp, kgrainrate, kgrainsize,\
-					kdist, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
-		out		agrain
+  ;;granular synthesis
+  agrain PartikkelSimpB ifiltab, apnt, kgrainamp, kgrainrate, kgrainsize, \
+    kdist, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
+  out agrain
 
-;;show output
-		ShowLED_a	"out", agrain, gkTrigDisp, gkshowdb, gkdbrange
-		ShowOver_a	"outover", agrain, gkTrigDisp, 2
+  ;;show output
+  ShowLED_a  "out", agrain, gkTrigDisp, gkshowdb, gkdbrange
+  ShowOver_a "outover", agrain, gkTrigDisp, 2
 endin
 
 

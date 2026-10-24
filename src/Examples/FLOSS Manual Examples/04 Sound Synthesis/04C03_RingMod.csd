@@ -10,20 +10,20 @@ nchnls = 2
 0dbfs = 1
 
 instr Carrier
- aPartial_1 poscil .2, 400
- aPartial_2 poscil .2, 800
- aPartial_3 poscil .2, 1200
- gaCarrier sum aPartial_1, aPartial_2, aPartial_3
- ;only output this signal if RM is not playing
- if (active:k("RM") == 0) then
-  out gaCarrier, gaCarrier
- endif
+  aPartial_1 = poscil(.2, 400)
+  aPartial_2 = poscil(.2, 800)
+  aPartial_3 = poscil(.2, 1200)
+  gaCarrier  = sum(aPartial_1, aPartial_2, aPartial_3)
+  ; only output this signal if RM is not playing
+  if (active:k("RM") == 0) then
+    out gaCarrier, gaCarrier
+  endif
 endin
 
 instr RM
- iModFreq = p4
- aRM = gaCarrier * poscil:a(1,iModFreq)
- out aRM, aRM
+  iModFreq = p4
+  aRM = gaCarrier * poscil:a(1, iModFreq)
+  out aRM, aRM
 endin
 
 </CsInstruments>

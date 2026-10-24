@@ -3,20 +3,20 @@
 -o dac
 </CsOptions>
 <CsInstruments>
-sr=44100
-ksmps=32
-nchnls=2
-0dbfs=1
+sr = 44100
+ksmps = 32
+nchnls = 2
+0dbfs = 1
 
 instr 1
-ipos       ftgen      1, 0, 128, 10, 1 ; Initial Shape, sine
-imass      ftgen      2, 0, 128, -7, 1, 128, 1 ;Masses(adj.), constant value 1
-istiff     ftgen      3, 0, 128, -7, 0, 64, 100, 64, 0 ;Stiffness triangle
-idamp      ftgen      4, 0, 128, -7, 1, 128, 1; ;Damping; constant value 1
-ivel       ftgen      5, 0, 128, -7, 0, 128, 0 ;Initial Velocity 0
-iamp       =          0.2
-a1         scantable  iamp, 60, ipos, imass, istiff, idamp, ivel
-           outs       a1, a1
+  ipos = ftgen(1, 0, 128, 10, 1)                    ; Initial Shape, sine
+  imass = ftgen(2, 0, 128, -7, 1, 128, 1)           ; Masses(adj.), constant value 1
+  istiff = ftgen(3, 0, 128, -7, 0, 64, 100, 64, 0)  ; Stiffness triangle
+  idamp = ftgen(4, 0, 128, -7, 1, 128, 1)           ; ;Damping; constant value 1
+  ivel = ftgen(5, 0, 128, -7, 0, 128, 0)            ; Initial Velocity 0
+  iamp = 0.2
+  a1 = scantable(iamp, 60, ipos, imass, istiff, idamp, ivel)
+  out(a1, a1)
 endin
 </CsInstruments>
 <CsScore>
