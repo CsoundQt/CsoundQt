@@ -68,6 +68,7 @@ class CsoundEngine;
 class MidiHandler;
 class MidiLearnDialog;
 class WidgetLayout;
+class ScanService;
 
 #if defined(CSQT_QTHTML)
 class CsoundHtmlView;
@@ -186,6 +187,9 @@ public slots:
 	void pageLeft();
 	void pageRight();
 	void setWidgetTooltipsVisible(bool visible);
+	// Open the file a definition lives in (an included .inc or .udo) and jump
+	// to the definition there.
+	void openFileAtLine(const QString &path, int line, int column);
 	void closeExtraPanels(); // to close help and console panels when esc is pressed in the editor
 
 	//    void updateWidgets();
@@ -195,7 +199,6 @@ public slots:
 	//    void registerLiveEvent(QWidget *e);
 	void evaluateCsound(QString code = QString());
 	void breakpointReached();
-    void setParsedUDOs();
     void openExternalBrowser(QUrl url = QUrl());
 
     QMenu *createPopupMenu() override;
@@ -314,9 +317,6 @@ private slots:
 	void ensurePanelTabOrder(); // Widgets before Help in the right-hand tab group
 	void runUtility(QString flags);
 	//     void widgetDockLocationChanged(Qt::DockWidgetArea area);
-	void updateInspector();
-    void updateCurrentPageTask();
-    void markInspectorUpdate(); // Notification that inspector needs update
 	void setDefaultKeyboardShortcuts();
 	void showOrc(bool);
 	void showScore(bool);
@@ -397,6 +397,9 @@ private:
 	bool makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);
 	void setCurrentFile(const QString &fileName);
+	// Compose the window title from the current file and the
+	// "Include active file in the window title" setting.
+	void updateWindowTitle();
 	QString strippedName(const QString &fullFileName);
 	QString generateScript(bool realtime = true, QString tempFileName = "", QString executable = "");
 	void getCompanionFileName();
@@ -407,6 +410,9 @@ private:
 	// void createQuickRefPdf();
 	void deleteTab(int index = -1);
 	void setupEnvironment();
+	// The include directories from CsoundQt's settings. The document's own
+	// --env:INCDIR options are added by DocumentPage.
+	QStringList configuredIncludePaths() const;
     void openHtmlHelp(QString fileName, QString entry, bool external);
     // Drag & drop of non-Csound files
     void showDroppedFileMenu(const QString &fileName, const QPoint &globalPos);
@@ -564,6 +570,7 @@ private:
     QAction *gotoLineAct;
     QAction *goBackAct = nullptr;
     QAction *goToSourceAct = nullptr;
+    QAction *reloadDependenciesAct = nullptr;
 	QAction *aboutAct;
 	QAction *donateAct;
 	//    QAction *aboutQtAct;
@@ -597,8 +604,16 @@ private:
 	bool m_recoveryChecked = false;
 	int lastTabIndex;
 	bool m_resetPrefs; // Preferences were reset: do not save any settings until restart
-	bool m_inspectorNeedsUpdate = false;
-	QTimer *m_inspectorUpdateTimer = nullptr;
+	// Decides when the current document is scanned and hands the result to
+	// the document, the inspector and the opcode completion.
+	ScanService *m_scanService = nullptr;
+	// The configured include path the pages currently know about, to avoid
+	// rescanning every document on each Apply when the setting did not change.
+	QStringList m_appliedIncludePaths;
+	// The user-defined opcodes of the current document, in the form the
+	// opcode completion expects. The parser keeps a pointer to this map, so
+	// it is updated in place rather than replaced.
+	QHash<QString, Opcode> m_udosMap;
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
     QByteArray m_editorHiddenDockState; // dock layout saved while the editor is hidden
     UtilitiesDialog *utilitiesDialog;

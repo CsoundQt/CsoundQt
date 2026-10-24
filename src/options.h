@@ -62,6 +62,8 @@ public:
 	bool midiCcToCurrentPageOnly;
 	bool saveChanges;
 	bool quitOnLastTabClosed; // exit instead of opening an empty document
+    // Prepend the current tab's file name to the window title.
+    bool includeActiveFileInTitle;
 	bool rememberFile;
 	bool iconText;
 	bool showToolbar;

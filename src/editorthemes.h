@@ -57,9 +57,17 @@ struct Theme {
 QString userThemeDir();
 
 // Scans userThemeDir() and replaces the list of user themes. Call once at
-// startup, before reading the settings. Built-in themes are always available
-// and do not need this call.
+// startup, before reading the settings.
 void initialize();
+
+// Reloads the theme registry from the built-in resources and userThemeDir().
+// Call again when the theme folder may have changed, for example when the
+// settings dialog is opened.
+void refresh();
+
+// Incremented by refresh(). Consumers that cache a theme definition can use
+// this to notice that a theme with the same name may have new contents.
+int refreshGeneration();
 
 // Built-in theme names, in the order they are shown in the settings.
 QStringList builtInNames();

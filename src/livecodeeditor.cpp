@@ -1,3 +1,4 @@
+
 #include "livecodeeditor.h"
 #include "ui_livecodeeditor.h"
 
@@ -47,15 +48,10 @@ void LiveCodeEditor::setCsdMode(bool csdMode)
 
 void LiveCodeEditor::modeChanged(int index)
 {
-	if (index == 0) {
-		m_docView->setFileType(EDIT_CSOUND_MODE);
-//		m_docView->setBackgroundColor(QColor(240, 230, 230));
-		emit enableCsdMode(true);
-	} else {
-		m_docView->setFileType(EDIT_PYTHON_MODE);
-//		m_docView->setBackgroundColor(QColor(230, 240, 230));
-		emit enableCsdMode(false);
-	}
+    if (index != 0)
+        qDebug() << "LiveCodeEditor: only csound mode supported";
+	m_docView->setFileType(EDIT_CSOUND_MODE);
+    emit enableCsdMode(true);
 }
 
 void LiveCodeEditor::evaluateSlot(QString code)

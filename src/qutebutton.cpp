@@ -25,6 +25,7 @@
 #include "selectcolorbutton.h"
 
 #include <QPainter>
+using namespace Qt::StringLiterals;
 
 // ---------------------------------------------------------------------------
 //  QutePushButton
@@ -284,7 +285,7 @@ QString QuteButton::getQml()
 		QString eventLine = property("CSQT_eventLine").toString();
         QString turnOffLine = QString();
 		if (property("CSQT_latch").toBool() && eventLine.size() > 0) {
-            QStringList lineElements = eventLine.split(QRegularExpression("\\s"),Qt::SkipEmptyParts);
+            QStringList lineElements = eventLine.split(QRegularExpression(uR"(\s)"_s),Qt::SkipEmptyParts);
 			if (lineElements.size() > 0 && lineElements[0] == "i") {
 				lineElements.removeAt(0); // Remove first element if it is "i"
 			}
@@ -846,7 +847,7 @@ void QuteButton::performAction() {
 	if (type.contains("event") && !eventLine.isEmpty()) {
         if ( hasIndefiniteDuration() ) {
             if ( m_currentValue == 0 ) { // turn off
-                QStringList lineElements = eventLine.split(QRegularExpression("\\s"),SKIP_EMPTY_PARTS);
+                QStringList lineElements = eventLine.split(QRegularExpression(uR"(\s)"_s),SKIP_EMPTY_PARTS);
 				if (lineElements.size() > 0 && lineElements[0] == "i") {
 					lineElements.removeAt(0); // Remove first element if it is "i"
 				}
@@ -919,7 +920,7 @@ bool QuteButton::hasIndefiniteDuration()
 {
 	QString eventLine = property("CSQT_eventLine").toString();
 	if ( !eventLine.isEmpty()) {
-        QStringList lineElements = eventLine.split(QRegularExpression("\\s"),Qt::SkipEmptyParts);
+        QStringList lineElements = eventLine.split(QRegularExpression(uR"(\s)"_s),Qt::SkipEmptyParts);
 		if (lineElements.size() > 0 && lineElements[0] == "i") {
 			lineElements.removeAt(0); // Remove first element if it is "i"
 		}

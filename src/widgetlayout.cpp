@@ -48,6 +48,7 @@
 #include "framewidget.h"
 
 #include "csoundqt.h" // For passing the actions from button reserved channels
+using namespace Qt::StringLiterals;
 
 
 static void installHoverFilter(QObject *filter, QWidget *root)
@@ -1377,7 +1378,7 @@ QString WidgetLayout::getMidiControllerInstrument()
 				QString eventLine = widget->property("CSQT_eventLine").toString();
 
 				// find out if event has negative p3
-                QStringList lineElements = eventLine.split(QRegularExpression("\\s"),SKIP_EMPTY_PARTS);
+                QStringList lineElements = eventLine.split(QRegularExpression(uR"(\s)"_s),SKIP_EMPTY_PARTS);
 				if (lineElements.size() > 0 && lineElements[0] == "i") {
 					// Remove first element if it is "i"
 					lineElements.removeAt(0);

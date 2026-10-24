@@ -33,8 +33,6 @@ class OpEntryParser;
 
 typedef enum {
 	EDIT_CSOUND_MODE = 0,
-	EDIT_PYTHON_MODE = 1,
-	EDIT_XML_MODE = 2,
 	EDIT_ORC_MODE = 3,
 	EDIT_SCO_MODE = 4,
 	EDIT_INC_MODE = 5,
@@ -123,7 +121,7 @@ public slots:
 protected:
 	void hideAllEditors();
 
-	editor_mode_t m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
+	editor_mode_t m_mode; //type of text: csound, orc, sco
 	int m_viewMode; // 0 = csd without widget + preset section
 	// 1 = full plain text
 	// From here on, you can have an or'd combination
@@ -157,4 +155,3 @@ protected:
 };
 
 #endif // BASEVIEW_H
-

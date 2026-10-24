@@ -29,12 +29,12 @@ INCLUDEPATH += $$PWD/../src
 HEADERS += \
     $$PWD/../src/editorthemes.h \
     $$PWD/../src/highlighter.h \
-    $$PWD/../src/sourcedefinitions.h \
+    $$PWD/../src/sourcecursor.h \
     $$PWD/../src/texteditor.h
 
 SOURCES += \
     $$PWD/../src/editorthemes.cpp \
     $$PWD/../src/highlighter.cpp \
-    $$PWD/../src/sourcedefinitions.cpp \
+    $$PWD/../src/sourcecursor.cpp \
     $$PWD/../src/texteditor.cpp \
     $$PWD/test_gotosource.cpp

@@ -13,7 +13,8 @@ enum class RissetError { Ok, Error, HtmlError, RissetNotInstalled };
 class Risset
 {
 public:
-    Risset(QString pythonExe);
+    // An empty pythonExe lets Risset look for python3 itself.
+    Risset(QString pythonExe = QString());
 
     QString htmlManpage(QString opcodeName);
     RissetError generateDocumentation(std::function<void(int)> callback=nullptr);

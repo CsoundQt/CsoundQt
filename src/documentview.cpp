@@ -28,7 +28,7 @@
 #include "types.h"
 
 #include "highlighter.h"
-#include "sourcedefinitions.h"
+#include "sourcecursor.h"
 #include "texteditor.h"
 
 #include <QDir>
@@ -47,6 +47,30 @@ using namespace Qt::StringLiterals;
 
 
 static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesizer", "CsOptions"};
+
+// While the completion popup is already open, wait this long after the last
+// keystroke before filtering the list again.
+static constexpr int COMPLETION_UPDATE_DELAY_MS = 100;
+
+// Keys that continue the token being completed. They are forwarded to the
+// editor without closing the popup, so the popup can stay in place while the
+// debounced update filters its entries. Delimiters, whitespace, editing keys
+// and shortcuts still close the popup.
+static bool keepsCompletionMenuOpen(const QKeyEvent *event)
+{
+    if (event->modifiers() & (Qt::ControlModifier | Qt::AltModifier | Qt::MetaModifier))
+        return false;
+    const QString text = event->text();
+    if (text.isEmpty())
+        return false;
+    for (const QChar c : text) {
+        if (!(c.isLetterOrNumber() || c == QLatin1Char('_') || c == QLatin1Char('/')
+              || c == QLatin1Char('.') || c == QLatin1Char('-') || c == QLatin1Char('~')
+              || c == QLatin1Char('$') || c == QLatin1Char('@')))
+            return false;
+    }
+    return true;
+}
 
 // Colours of the opcode/word completion popup (MySyntaxMenu). The popup is its
 // own top-level window and does not take the editor's colours, so they are
@@ -110,20 +134,50 @@ static bool isSoundFile(const QFileInfo &file)
     return suffixes.contains(file.suffix().toLower());
 }
 
+// The files an #include directive is likely to pull in: Csound source, but
+// also plain text snippets used with #include. Sound files are not included.
+static bool isIncludeFile(const QFileInfo &file)
+{
+    static const QSet<QString> suffixes = {
+        u"udo"_s, u"inc"_s, u"csd"_s,
+        u"txt"_s, u"orc"_s, u"sco"_s
+    };
+    return suffixes.contains(file.suffix().toLower());
+}
+
 // A completion after schedule(), chnget(), chnset() or diskin2() has a fixed
 // set of candidates, so it must bypass the normal identifier/opcode completion.
 struct CompletionContext
 {
-    enum Kind { None, Schedule, Channel, Path, Property };
+    enum Kind { None, Schedule, Channel, Path, Property, Include, Option, EnvPath };
     Kind kind = None;
     bool quoted = false;
     QString prefix;
     int prefixStart = -1; // relative to the start of the line
+    // Candidates of an Option context, already without their "--" or "-+".
+    QStringList candidates;
 };
 
 static CompletionContext completionContext(const QString &textBeforeCursor)
 {
     CompletionContext context;
+
+    // The path of an #include directive is completed from the files that are
+    // likely to be included, not from sound files. Both Csound spellings are
+    // handled: #include "file" and #include <file>.
+    static const QRegularExpression includeQuotedRx(
+        uR"(^\s*#\s*include\s*$)"_s);
+    static const QRegularExpression includeAngledRx(
+        uR"(^\s*#\s*include\s*<([^>]*)$)"_s);
+    if (const auto angled = includeAngledRx.match(textBeforeCursor);
+        angled.hasMatch()) {
+        context.kind = CompletionContext::Include;
+        context.quoted = true;
+        context.prefix = angled.captured(1);
+        context.prefixStart = angled.capturedStart(1);
+        return context;
+    }
+
     const int quote = openDoubleQuoteIndex(textBeforeCursor);
     if (quote >= 0) {
         const QString beforeQuote = textBeforeCursor.left(quote);
@@ -139,7 +193,9 @@ static CompletionContext completionContext(const QString &textBeforeCursor)
             uR"(\boutvalue(?:\s*:\s*[akiSpfxbw]\b)?\s*(?:\(\s*)?$)"_s);
         static const QRegularExpression invalueQuotedRx(
             uR"(\binvalue(?:\s*:\s*[akiSpfxbw]\b)?\s*(?:\(\s*)?$)"_s);
-        if (scheduleQuotedRx.match(beforeQuote).hasMatch()) {
+        if (includeQuotedRx.match(beforeQuote).hasMatch()) {
+            context.kind = CompletionContext::Include;
+        } else if (scheduleQuotedRx.match(beforeQuote).hasMatch()) {
             context.kind = CompletionContext::Schedule;
         } else if (chngetQuotedRx.match(beforeQuote).hasMatch()
                    || chnsetLegacyQuotedRx.match(beforeQuote).hasMatch()
@@ -181,6 +237,94 @@ static CompletionContext completionContext(const QString &textBeforeCursor)
         context.kind = CompletionContext::Schedule;
         context.prefix = match.captured(2);
         context.prefixStart = match.capturedStart(2);
+    }
+    return context;
+}
+
+// True when the block lies between <CsOptions> and </CsOptions>. The split
+// view puts the options in an editor of their own, which the caller detects
+// separately: there are no tags in that editor.
+static bool isInsideOptionsSection(const QTextBlock &block)
+{
+    for (QTextBlock candidate = block; candidate.isValid();
+         candidate = candidate.previous()) {
+        const QStringView text = QStringView(candidate.text()).trimmed();
+        if (text.startsWith(u"</CsOptions>"))
+            return false;
+        if (text.startsWith(u"<CsOptions>"))
+            return true;
+        if (text.startsWith(u"<CsInstruments>") || text.startsWith(u"</CsInstruments>")
+                || text.startsWith(u"<CsScore>") || text.startsWith(u"</CsScore>"))
+            return false;
+    }
+    return false;
+}
+
+// The command-line option the cursor is on, in the <CsOptions> section. The
+// token is replaced from after its "--" or "-+", or after "--env:" for the
+// environment variable names, which are completed together with their '='.
+// A quoted path value after the '=' is completed from the filesystem instead.
+static CompletionContext optionCompletionContext(const QString &textBeforeCursor)
+{
+    static const QStringList longOptions = {
+        u"format"_s,        u"nopeaks"_s,       u"nodisplays"_s,
+        u"midifile="_s,     u"input"_s,         u"output"_s,
+        u"logfile"_s,       u"nosound"_s,       u"tempo="_s,
+        u"messagelevel="_s, u"env:"_s,          u"dither"_s,
+        u"opcode-dir"_s,    u"opcode-lib"_s,    u"omacro:"_s,
+        u"midi-key="_s,     u"midi-velocity="_s, u"no-default-paths"_s,
+        u"sample-accurate"_s, u"realtime"_s,    u"daemon"_s,
+        u"use-system-sr"_s, u"fftlib="_s,       u"udp-echo"_s,
+        u"limiter=1.0"_s,   u"no-deprecation-warnings"_s,
+        u"error-deprecated"_s, u"suppress-version"_s, u"vbr"_s,
+        u"port="_s
+    };
+    static const QStringList realtimeOptions = {
+        u"rtaudio"_s, u"rtmidi"_s, u"jack_client="_s,
+        u"jack_outportname="_s, u"skip_seconds="_s
+    };
+    static const QStringList environmentNames = {
+        u"INCDIR="_s, u"SFDIR="_s, u"SSDIR="_s
+    };
+
+    // The option token starts after the last whitespace.
+    qsizetype start = textBeforeCursor.size();
+    while (start > 0 && !textBeforeCursor.at(start - 1).isSpace())
+        --start;
+    const QStringView token = QStringView(textBeforeCursor).mid(start);
+
+    CompletionContext context;
+    if (token.startsWith(u"--env:")) {
+        // A quoted path value, --env:VAR="/... or --env:VAR="./... (and
+        // ../...): complete the path itself instead of the variable name.
+        const QStringView afterEnv = token.mid(6);
+        const qsizetype equals = afterEnv.indexOf(QLatin1Char('='));
+        if (equals > 0 && equals + 1 < afterEnv.size()
+                && afterEnv.at(equals + 1) == QLatin1Char('"')) {
+            const QStringView value = afterEnv.mid(equals + 2);
+            if (value.startsWith(QLatin1Char('/'))
+                    || value.startsWith("./"_L1)
+                    || value.startsWith("../"_L1)) {
+                context.kind = CompletionContext::EnvPath;
+                context.prefixStart = static_cast<int>(start + 6 + equals + 2);
+                context.prefix = value.toString();
+                return context;
+            }
+        }
+        context.kind = CompletionContext::Option;
+        context.prefixStart = static_cast<int>(start + 6); // after "--env:"
+        context.prefix = token.mid(6).toString();
+        context.candidates = environmentNames;
+    } else if (token.startsWith(u"--")) {
+        context.kind = CompletionContext::Option;
+        context.prefixStart = static_cast<int>(start + 2); // after "--"
+        context.prefix = token.mid(2).toString();
+        context.candidates = longOptions;
+    } else if (token.startsWith(u"-+")) {
+        context.kind = CompletionContext::Option;
+        context.prefixStart = static_cast<int>(start + 2); // after "-+"
+        context.prefix = token.mid(2).toString();
+        context.candidates = realtimeOptions;
     }
     return context;
 }
@@ -300,6 +444,13 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	// The stylesheet paints the background; leaving autofill on would paint the
 	// whole (square) popup rect first and undo the rounded corners.
 	syntaxMenu->setAutoFillBackground(false);
+	// A key typed into the open popup is forwarded to the editor and the
+	// popup stays visible. Filter its list after a short pause rather than on
+	// every keystroke.
+	connect(syntaxMenu, &MySyntaxMenu::completionKeyForwarded, this, [this]() {
+		if (syntaxMenu->isVisible())
+			scheduleAutoComplete(COMPLETION_UPDATE_DELAY_MS);
+	});
 
 	setViewMode(1);
 	setViewMode(0);  // To force a change
@@ -438,7 +589,7 @@ void DocumentView::updateOrcContext(QString orc)
     //QList <QStringView> lines = QStringView{instr}.split(u'\n', SKIP_EMPTY_PARTS); // old (preQt6): instr.splitRef("\n", SKIP_EMPTY_PARTS);
     auto lines = instr.split('\n', SKIP_EMPTY_PARTS); // here ther is not sense to use QStringView as QString is needed soon later
 
-    static const QRegularExpression rxWordSplit("[\\s,+-/\\*\\.\\^\\(\\)\\[\\]$]");
+    static const QRegularExpression rxWordSplit(uR"([\s,+-/\*\.\^\(\)\[\]$])"_s);
 	m_localVariables.clear();
     QSet<QString> seen;
     for(QString line: lines) {
@@ -672,15 +823,19 @@ void DocumentView::setViewMode(int mode)
 	case 0: // csd without extra sections
 		m_mainEditor->show();
         m_highlighter.setDocument(m_mainEditor->document());
+        // Undo the orchestra-only section used by the split view.
+        m_highlighter.setMode(m_mode);
         break;
 	case 1: // full plain text
 		m_mainEditor->show();
 		m_highlighter.setDocument(m_mainEditor->document());
+        m_highlighter.setMode(m_mode);
 
 		break;
 	default:
 		m_highlighter.setDocument(m_orcEditor->document());
         m_highlighter.setSectionType(CsdSection::OrchestraSection); // to enable to highlight it propery
+        m_highlighter.rehighlight();
 		m_orcEditor->setVisible(m_viewMode & 2);
 		m_scoreEditor->setVisible(m_viewMode & 4);
 		m_optionsEditor->setVisible(m_viewMode & 8);
@@ -1085,7 +1240,7 @@ QString DocumentView::helpWordUnderCursor()
 	cursor = m_mainEditor->textCursor();
 	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
 	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-	static const QRegularExpression wordBoundary("\\b");
+	static const QRegularExpression wordBoundary(uR"(\b)"_s);
 	auto words = cursor.selectedText().split(wordBoundary, SKIP_EMPTY_PARTS);
 	for (int i = words.size() - 1; i >= 0; --i) {
 		if (m_opcodeTree->isOpcode(words[i]))
@@ -1186,7 +1341,7 @@ void DocumentView::syntaxCheck()
 	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
 	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
 
-    static const QRegularExpression wordBoundary("\\b");
+    static const QRegularExpression wordBoundary(uR"(\b)"_s);
     auto words = cursor.selectedText().split(wordBoundary,
                                              SKIP_EMPTY_PARTS);
 	for(int i = 0; i < words.size(); i++) {
@@ -1412,8 +1567,36 @@ QStringList DocumentView::getCurrentScopeStringVariables() const
 }
 
 
+void DocumentView::scheduleAutoComplete(int delay)
+{
+    if (m_autoCompleteTimer == nullptr) {
+        m_autoCompleteTimer = new QTimer(this);
+        m_autoCompleteTimer->setSingleShot(true);
+        connect(m_autoCompleteTimer, &QTimer::timeout,
+                this, &DocumentView::autoCompleteAtCursor);
+    }
+    m_autoCompleteTimer->stop();
+    m_autoCompleteTimer->setInterval(delay);
+
+    TextEditor *editor = (syntaxMenu->isVisible() && m_autocompleteEditor != nullptr)
+            ? m_autocompleteEditor : activeEditor();
+    if (editor != nullptr) {
+        const QTextCursor cursor = editor->textCursor();
+        m_autoCompleteCursorPosition = cursor.position();
+        m_autoCompleteCursorAnchor = cursor.anchor();
+    }
+    m_autoCompleteTimer->start();
+}
+
+
 void DocumentView::autoCompleteAtCursor() {
-    TextEditor *editor = m_mainEditor;
+    // While the popup is open the focus is on its list, so activeEditor()
+    // cannot tell which editor is being completed (and in split view it points
+    // at the wrong one). Keep using the editor the popup belongs to.
+    TextEditor *editor = (syntaxMenu->isVisible() && m_autocompleteEditor != nullptr)
+            ? m_autocompleteEditor : activeEditor();
+    m_autocompleteEditor = editor;
+    syntaxMenu->setKeyTarget(editor);
     // TODO: replace all this with QCompleter
     QTextCursor cursor = editor->textCursor();
     int curIndex = cursor.position();
@@ -1429,15 +1612,29 @@ void DocumentView::autoCompleteAtCursor() {
 
     // Some constructs have a fixed candidate set (schedule, chnget, chnset).
     // They are allowed to complete inside an open string as well.
-    const CompletionContext context = completionContext(textBeforeCursor);
+    CompletionContext context = completionContext(textBeforeCursor);
+
+    // The command-line options of the <CsOptions> section are completed from
+    // their own lists. Nothing else is offered there.
+    const bool optionsSection = (editor == m_optionsEditor)
+            || (m_viewMode < 2 && isInsideOptionsSection(block));
+    if (optionsSection) {
+        context = optionCompletionContext(textBeforeCursor);
+        if (context.kind == CompletionContext::None) {
+            destroySyntaxMenu();
+            return;
+        }
+    }
 
     // Never complete inside an arbitrary string literal or after an open quote.
-    if (context.kind == CompletionContext::None && hasOpenQuote(textBeforeCursor))
+    if (context.kind == CompletionContext::None && hasOpenQuote(textBeforeCursor)) {
+        destroySyntaxMenu();
         return;
+    }
 
-    textBeforeCursor = textBeforeCursor.remove(QRegularExpression("[\\)\\,\"'\\]\\}\\s]+$")); // remove delimiters
+    textBeforeCursor = textBeforeCursor.remove(QRegularExpression(uR"([\)\,"'\]\}\s]+$)"_s)); // remove delimiters
 
-    QRegularExpression rx("([\\w]+)$");
+    QRegularExpression rx(uR"(([\w]+)$)"_s);
     QRegularExpressionMatch match = rx.match(textBeforeCursor);
 
     QString word;
@@ -1446,12 +1643,15 @@ void DocumentView::autoCompleteAtCursor() {
         word = match.captured(1);
         wordStartPosInLine = match.capturedStart(1);
     } else if (context.kind == CompletionContext::None) {
+        destroySyntaxMenu();
         return; // No word found, exit
     }
 
-    if (context.kind == CompletionContext::None && word.size() < 3)
+    if (context.kind == CompletionContext::None && word.size() < 3) {
         // only start completion after three characters
+        destroySyntaxMenu();
         return;
+    }
 
     QTextCursor selectionCursor;
     if (match.hasMatch()) {
@@ -1465,26 +1665,28 @@ void DocumentView::autoCompleteAtCursor() {
     int lineCommentIndex;
 
     if((lineCommentIndex = line.indexOf(";")) >= 0) {
-        if(lineStartPos + lineCommentIndex < curIndex)
+        if(lineStartPos + lineCommentIndex < curIndex) {
+            destroySyntaxMenu();
             return;
+        }
     }
     if((lineCommentIndex = line.indexOf("//")) >= 0) {
-        if(lineStartPos + lineCommentIndex < curIndex)
+        if(lineStartPos + lineCommentIndex < curIndex) {
+            destroySyntaxMenu();
             return;
+        }
     }
 
-    static const QRegularExpression rxOpcodeOrInstrAtStart("^\\s*(opcode|instr)");
+    static const QRegularExpression rxOpcodeOrInstrAtStart(uR"(^\s*(opcode|instr))"_s);
     if(rxOpcodeOrInstrAtStart.match(line).hasMatch()) {
+        destroySyntaxMenu();
         return;
     }
-    static const QRegularExpression rxTwoWords("\\s*\\w+\\s+\\w+");
+    static const QRegularExpression rxTwoWords(uR"(\s*\w+\s+\w+)"_s);
     bool useFunction = false;
     if(!rxTwoWords.match(line).hasMatch()) {
         useFunction = true;
     }
-    // matches long command line options, like --nosound, -+rtaudio, etc.
-    static const QRegularExpression rxCommandLineOption("\\s*-([+-])(\\w*)");
-
     bool showSyntaxMenu = false;
     int completionWidth = qMax(14, m_autoCompleteMenuWidth);
     QSet<QString>menuWordsSeen;
@@ -1587,7 +1789,11 @@ void DocumentView::autoCompleteAtCursor() {
                 contextMaxLength = qMax(contextMaxLength, display.size());
                 showSyntaxMenu = true;
             }
-        } else if (context.kind == CompletionContext::Path) {
+        } else if (context.kind == CompletionContext::Path
+                   || context.kind == CompletionContext::Include
+                   || context.kind == CompletionContext::EnvPath) {
+            const bool include = context.kind == CompletionContext::Include;
+            const bool envPath = context.kind == CompletionContext::EnvPath;
             const QString prefix = context.prefix;
             const int slash = prefix.lastIndexOf(QLatin1Char('/'));
             const QString directoryPrefix = slash >= 0
@@ -1595,22 +1801,57 @@ void DocumentView::autoCompleteAtCursor() {
             const QString filePrefix = slash >= 0
                     ? prefix.mid(slash + 1) : prefix;
 
-            QString lookup = directoryPrefix;
-            if (lookup.startsWith("~/"_L1))
-                lookup = QDir::homePath() + lookup.mid(1);
-            else if (lookup.isEmpty())
-                lookup = documentDirectory();
-            else if (!QDir::isAbsolutePath(lookup))
-                lookup = QDir(documentDirectory()).absoluteFilePath(lookup);
+            // Where to look. An #include name is resolved next to the document
+            // first, then in the configured include paths (CsoundQt's INCDIR
+            // plus the document's --env:INCDIR options), then in the working
+            // directory, as the scan does. QDir::filePath() keeps an absolute
+            // prefix as it is, so an absolute path is looked up only once.
+            QStringList lookups;
+            if (include) {
+                lookups.append(QDir(documentDirectory()).filePath(directoryPrefix));
+                for (const QString &path : includeSearchPaths()) {
+                    if (!path.isEmpty())
+                        lookups.append(QDir(path).filePath(directoryPrefix));
+                }
+                lookups.append(QDir::current().filePath(directoryPrefix));
+                lookups.removeDuplicates();
+            } else if (envPath) {
+                // The value of an --env: option is a path written in the
+                // document. Relative paths are resolved like the other path
+                // completions, against the document's directory.
+                QString lookup = directoryPrefix;
+                if (lookup.isEmpty())
+                    lookup = documentDirectory();
+                else if (!QDir::isAbsolutePath(lookup))
+                    lookup = QDir(documentDirectory()).absoluteFilePath(lookup);
+                lookups.append(lookup);
+            } else {
+                QString lookup = directoryPrefix;
+                // A regular path (diskin2 etc.) keeps the shell-like
+                // convenience of expanding '~'.
+                if (lookup.startsWith("~/"_L1))
+                    lookup = QDir::homePath() + lookup.mid(1);
+                else if (lookup.isEmpty())
+                    lookup = documentDirectory();
+                else if (!QDir::isAbsolutePath(lookup))
+                    lookup = QDir(documentDirectory()).absoluteFilePath(lookup);
+                lookups.append(lookup);
+            }
 
-            QDir directory(lookup);
-            if (directory.exists()) {
+            for (const QString &lookup : lookups) {
+                QDir directory(lookup);
+                if (!directory.exists())
+                    continue;
                 const QFileInfoList entries = directory.entryInfoList(
                             QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot,
                             QDir::DirsFirst | QDir::Name);
                 for (const QFileInfo &entry : entries) {
-                    if (!entry.isDir() && !isSoundFile(entry))
-                        continue;
+                    if (!entry.isDir()) {
+                        if (include && !isIncludeFile(entry))
+                            continue;
+                        if (!include && !envPath && !isSoundFile(entry))
+                            continue;
+                    }
                     if (!filePrefix.isEmpty()
                             && !entry.fileName().startsWith(
                                 filePrefix, Qt::CaseInsensitive)) {
@@ -1620,7 +1861,7 @@ void DocumentView::autoCompleteAtCursor() {
                     QString display = entry.fileName();
                     if (entry.isDir()) {
                         // Keep the directory open so the next path segment can
-                        // be completed as well: ~/Lib/sound/...
+                        // be completed as well: Lib/sound/...
                         insert += QLatin1Char('/');
                         display += QLatin1Char('/');
                     }
@@ -1640,6 +1881,9 @@ void DocumentView::autoCompleteAtCursor() {
                     showSyntaxMenu = true;
                 }
             }
+        } else if (context.kind == CompletionContext::Option) {
+            for (const QString &option : context.candidates)
+                addContextCompletion(option, false);
         } else {
             for (const QString &channel : widgetChannels())
                 addContextCompletion(channel, false);
@@ -1648,18 +1892,6 @@ void DocumentView::autoCompleteAtCursor() {
             destroySyntaxMenu();
         else
             completionWidth = qMax(completionWidth, contextMaxLength + 2);
-    }
-    else if((rxmatch = rxCommandLineOption.match(line)).hasMatch()) {
-        syntaxMenu->clearCompletions();
-        QString capt = rxmatch.captured(2);
-        QStringList options = rxmatch.captured(1)=="-"? m_longOptions: m_longOptions2;
-        for(const QString &option: options) {
-            if(option.startsWith(capt)) {
-                syntaxMenu->addCompletion(option, option, QString(), 0, this,
-                                          SLOT(insertAutoCompleteText()));
-                showSyntaxMenu = true;
-            }
-        }
     }
     else if (selectionCursor.position() > selectionCursor.anchor() && word.size() > 2 /* && !word.startsWith("\"") */ ) { // Only at the end of the word
         syntaxMenu->clearCompletions();
@@ -1748,7 +1980,13 @@ void DocumentView::autoCompleteAtCursor() {
                     text = text.trimmed();
 
                 QString syntaxText;
-                if (useFunction && !opcodedefs[i].inArgs.isEmpty()) {
+                if (opcodedefs[i].newStyle) {
+                    // Csound 7 UDOs are called with function syntax, and the
+                    // output types are not variables to prepend.
+                    syntaxText = QString("%1(%2)").arg(
+                        opcodedefs[i].opcodeName.simplified(),
+                        opcodedefs[i].inArgs.simplified());
+                } else if (useFunction && !opcodedefs[i].inArgs.isEmpty()) {
                     syntaxText = QString("%1(%2)").arg(
                         opcodedefs[i].opcodeName.simplified(),
                         opcodedefs[i].inArgs.simplified());
@@ -1795,31 +2033,48 @@ void DocumentView::autoCompleteAtCursor() {
         syntaxMenu->refreshCompletions(m_autoCompleteMenuMaxLines,
                                        completionWidth);
     }
+    int anchorPos = curIndex;
+    if (context.kind != CompletionContext::None && context.prefixStart >= 0)
+        anchorPos = lineStartPos + context.prefixStart;
+    else if (match.hasMatch() && wordStartPosInLine >= 0)
+        anchorPos = lineStartPos + wordStartPosInLine;
+    anchorPos = qBound(block.position(), anchorPos,
+                       block.position() + block.length() - 1);
+
     if(showSyntaxMenu && syntaxMenu->hasCompletions()) {
 
-        // Place the popup next to the cursor. Near the lower edge of the screen
-        // flip it above the cursor so it does not cover what is being typed.
-        // If it cannot fit on either side, use the larger side and cap its
-        // height.
-        const QRect cursorRect = editor->cursorRect();
-        const QWidget *viewport = editor->viewport();
-        // Leave a small gap so the menu does not sit right against the cursor.
-        const int gap = 4;
-        const QPoint cursorBottomLeft =
-                viewport->mapToGlobal(QPoint(cursorRect.left(), cursorRect.bottom() + 1 + gap));
-        const QPoint cursorTopLeft =
-                viewport->mapToGlobal(QPoint(cursorRect.left(), cursorRect.top() - gap));
+        // While the same token is being typed, the popup must not follow the
+        // caret: keep its position and let the rebuilt list filter the
+        // entries. A new token (or a different editor) is allowed to move it.
+        const bool keepPosition = syntaxMenu->isVisible()
+                && m_autocompleteAnchor == anchorPos
+                && m_autocompleteAnchorEditor == editor;
 
-        QScreen *screen = QGuiApplication::screenAt(cursorBottomLeft);
+        // Place the popup next to the start of the token. Near the lower edge
+        // of the screen flip it above the token so it does not cover what is
+        // being typed. If it cannot fit on either side, use the larger side
+        // and cap its height.
+        QTextCursor anchorCursor = editor->textCursor();
+        anchorCursor.setPosition(anchorPos);
+        const QRect anchorRect = editor->cursorRect(anchorCursor);
+        const QWidget *viewport = editor->viewport();
+        // Leave a small gap so the menu does not sit right against the token.
+        const int gap = 4;
+        const QPoint anchorBottomLeft =
+                viewport->mapToGlobal(QPoint(anchorRect.left(), anchorRect.bottom() + 1 + gap));
+        const QPoint anchorTopLeft =
+                viewport->mapToGlobal(QPoint(anchorRect.left(), anchorRect.top() - gap));
+
+        QScreen *screen = QGuiApplication::screenAt(anchorBottomLeft);
         if (!screen)
             screen = editor->screen();
         const QRect avail = screen ? screen->availableGeometry() : QRect();
 
         const QSize preferred = syntaxMenu->sizeHint();
         const int spaceBelow = avail.isValid()
-                ? avail.bottom() - cursorBottomLeft.y() + 1 : preferred.height();
+                ? avail.bottom() - anchorBottomLeft.y() + 1 : preferred.height();
         const int spaceAbove = avail.isValid()
-                ? cursorTopLeft.y() - avail.top() : preferred.height();
+                ? anchorTopLeft.y() - avail.top() : preferred.height();
 
         bool above;
         if (preferred.height() <= spaceBelow)
@@ -1848,19 +2103,37 @@ void DocumentView::autoCompleteAtCursor() {
         // visible immediately, also while the popup is already open.
         syntaxMenu->resize(width, height);
 
-        int x = cursorBottomLeft.x();
-        int y = above ? cursorTopLeft.y() - height : cursorBottomLeft.y();
-        if (avail.isValid()) {
-            x = qBound(avail.left(), x, qMax(avail.left(), avail.right() - width + 1));
-            y = qBound(avail.top(), y, qMax(avail.top(), avail.bottom() - height + 1));
-        }
+        if (keepPosition) {
+            // The popup is already on screen for this token: resizing keeps
+            // its top-left corner, so it does not jump while the user types.
+        } else {
+            int x = anchorBottomLeft.x();
+            int y = above ? anchorTopLeft.y() - height : anchorBottomLeft.y();
+            if (avail.isValid()) {
+                x = qBound(avail.left(), x, qMax(avail.left(), avail.right() - width + 1));
+                y = qBound(avail.top(), y, qMax(avail.top(), avail.bottom() - height + 1));
+            }
 
-        syntaxMenu->move(x, y);
-        syntaxMenu->show();
+            syntaxMenu->move(x, y);
+            m_autocompleteAnchor = anchorPos;
+            m_autocompleteAnchorEditor = editor;
+            syntaxMenu->show();
+        }
     }
 }
 
+void DocumentView::rehighlightSyntax()
+{
+    m_highlightUpdate = true;
+    m_highlighter.rehighlight();
+    m_highlightUpdate = false;
+}
+
 void DocumentView::textChanged() {
+    if (m_highlightUpdate) {
+        // The highlighter applied formats; nothing was edited.
+        return;
+    }
     if (internalChange) {
         internalChange = false;
 		return;
@@ -1901,15 +2174,11 @@ void DocumentView::textChanged() {
             // Only perform autocomplete if the change was not generated by deleting.
             // autoCompleteAtCursor decides whether an open quote belongs to a
             // context-aware completion (schedule/chnget/chnset) or not.
-            auto autoCompleteTask = new QTimer(this);
-            autoCompleteTask->setInterval(m_autoCompleteDelay);
-            autoCompleteTask->setSingleShot(true);
-            connect(autoCompleteTask, &QTimer::timeout, this, &DocumentView::autoCompleteAtCursor);
-            const QTextCursor cursor = m_mainEditor->textCursor();
-            m_autoCompleteCursorPosition = cursor.position();
-            m_autoCompleteCursorAnchor = cursor.anchor();
-            autoCompleteTask->start();
-            m_autoCompleteTimer = autoCompleteTask;
+            // With the popup already open, a shorter pause is enough: the list
+            // is only filtered, not opened from scratch.
+            scheduleAutoComplete(syntaxMenu->isVisible()
+                                 ? COMPLETION_UPDATE_DELAY_MS
+                                 : m_autoCompleteDelay);
         }
 
         // this->autoCompleteAtCursor();
@@ -2011,7 +2280,7 @@ void DocumentView::indentNewLine()
 		linecursor.movePosition(QTextCursor::PreviousBlock);
 		linecursor.select(QTextCursor::LineUnderCursor);
 		QString line = linecursor.selectedText();
-        static const QRegularExpression regex("\\s+");
+        static const QRegularExpression regex(uR"(\s+)"_s);
 		if (line.indexOf(regex) == 0) {
             // old: m_mainEditor->insertPlainText(regex.cap());
 
@@ -2379,17 +2648,13 @@ void DocumentView::inToGet()
 
 void DocumentView::insertAutoCompleteText()
 {
-    TextEditor *editor;
-	if (m_viewMode < 2) {
-		editor = m_mainEditor;
-	}
-	else { //  Split view
-		editor = (TextEditor *) focusWidget();
-		// TODO check properly for line number also from other editors
-		qDebug() << "Not implemented for split view.";
-	}
+    // The popup has the focus by now, so use the editor the completion was
+    // opened for, not the current focus widget.
+    TextEditor *editor = m_autocompleteEditor != nullptr
+            ? m_autocompleteEditor : activeEditor();
+    const bool trackedEditor = (editor == m_mainEditor || editor == m_orcEditor);
 	if (editor != 0) {
-		internalChange = true;
+		internalChange = trackedEditor;
 		QAction *action = static_cast<QAction *>(QObject::sender());
 		bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
 
@@ -2402,7 +2667,16 @@ void DocumentView::insertAutoCompleteText()
 				contextCursor.setPosition(end, QTextCursor::KeepAnchor);
 				editor->setTextCursor(contextCursor);
 			}
-			editor->insertPlainText(action->data().toString());
+			const QString insert = action->data().toString();
+			editor->insertPlainText(insert);
+			if (!trackedEditor)
+				internalChange = false; // no textChanged() will consume it
+			// Completing a directory only gets the user into it. Offer its
+			// contents right away, exactly as if completion had been invoked
+			// again (Ctrl+M). Queued, because this runs from the triggered()
+			// signal of an action the new completion will delete.
+			if (insert.endsWith(QLatin1Char('/')))
+				QTimer::singleShot(0, this, &DocumentView::autoCompleteAtCursor);
 			return;
 		}
 
@@ -2434,7 +2708,7 @@ void DocumentView::insertAutoCompleteText()
 		if (insertComplete) {
 			if (noOutargs) {
 				QString syntaxText = action->data().toString();
-                int index =syntaxText.indexOf(QRegularExpression("\\w\\s+\\w"));
+                int index =syntaxText.indexOf(QRegularExpression(uR"(\w\s+\w)"_s));
 				editor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
 			}
 			else {
@@ -2458,6 +2732,8 @@ void DocumentView::insertAutoCompleteText()
 				editor->insertPlainText(action->text());
 			}
 		}
+		if (!trackedEditor)
+			internalChange = false; // no textChanged() will consume it
 	}
 }
 
@@ -2520,8 +2796,12 @@ void DocumentView::createContextMenu(QPoint pos)
 		QAction *goToSource = menu->addAction(tr("Go to Source"));
 		connect(goToSource, &QAction::triggered, this, [this, pos]() {
 			const QTextCursor cursor = cursorAt(pos);
-			emit goToSourceRequested(SourceCursor::identifierAt(cursor),
-									 SourceCursor::isScheduleArgument(cursor));
+			const QString includePath = SourceCursor::includePathAt(cursor);
+			if (!includePath.isEmpty())
+				emit goToSourceIncludeRequested(includePath);
+			else
+				emit goToSourceRequested(SourceCursor::identifierAt(cursor),
+										 SourceCursor::isScheduleArgument(cursor));
 		});
 		menu->addAction(tr("Show/hide line numbers"), this, SLOT(toggleLineArea()));
 		menu->addSeparator();
@@ -3190,10 +3470,14 @@ TextEditor *DocumentView::activeEditor() const
     // The editor the user is working in.
     if (m_viewMode < 2)
         return m_mainEditor;
+    // The focus may sit on a child of the editor (its viewport, for example),
+    // so walk up to the TextEditor rather than testing the focus widget alone.
     QWidget *widget = const_cast<DocumentView *>(this)->focusWidget();
-    TextEditor *editor = qobject_cast<TextEditor *>(widget);
-    if (editor)
-        return editor;
+    while (widget != nullptr && widget != this) {
+        if (TextEditor *editor = qobject_cast<TextEditor *>(widget))
+            return editor;
+        widget = widget->parentWidget();
+    }
     return m_mainEditor;
 }
 
@@ -3211,6 +3495,14 @@ bool DocumentView::isScheduleArgumentAtCursor() const
     if (!editor)
         return false;
     return SourceCursor::isScheduleArgument(editor->textCursor());
+}
+
+QString DocumentView::includePathAtCursor() const
+{
+    TextEditor *editor = activeEditor();
+    if (!editor)
+        return QString();
+    return SourceCursor::includePathAt(editor->textCursor());
 }
 
 QTextCursor DocumentView::cursorAt(const QPoint &pos) const
@@ -3289,7 +3581,7 @@ QString DocumentView::changeToChnget(QString text)
 			line.replace("outvalue", "chnset");
 			int arg1Index = line.indexOf("chnset") + 7;
 			int arg2Index = line.indexOf(",") + 1;
-            int arg2EndIndex = line.indexOf(QRegularExpression("[\\s]*[;]"), arg2Index);
+            int arg2EndIndex = line.indexOf(QRegularExpression(uR"([\s]*[;])"_s), arg2Index);
 			QString arg1 = line.mid(arg1Index, arg2Index-arg1Index - 1).trimmed();
 			QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index).trimmed();
 			QString comment = line.mid(arg2EndIndex);
@@ -3315,7 +3607,7 @@ QString DocumentView::changeToInvalue(QString text)
 			line.replace("chnset", "outvalue");
 			int arg1Index = line.indexOf("outvalue") + 8;
 			int arg2Index = line.indexOf(",") + 1;
-            int arg2EndIndex = line.indexOf(QRegularExpression("[\\s]*[;]"), arg2Index);
+            int arg2EndIndex = line.indexOf(QRegularExpression(uR"([\s]*[;])"_s), arg2Index);
 			QString arg1 = line.mid(arg1Index, arg2Index-arg1Index - 1).trimmed();
 			QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index).trimmed();
 			QString comment = line.mid(arg2EndIndex);
@@ -3333,6 +3625,8 @@ void DocumentView::destroySyntaxMenu()
 {
     syntaxMenu->clearCompletions();
 	syntaxMenu->hide();
+    m_autocompleteAnchor = -1;
+    m_autocompleteAnchorEditor = nullptr;
     //  syntaxMenu = 0;
 }
 
@@ -3351,10 +3645,6 @@ void DocumentView::restoreCursorPosition()
 		m_mainEditor->setTextCursor(cursor);
 		m_oldCursorPosition = -1;
 	}
-}
-
-void DocumentView::setParsedUDOs(QStringList udos) {
-    m_highlighter.setUDOs(udos);
 }
 
 void DocumentView::setGlobalVariables(const QStringList &variables) {
@@ -3422,6 +3712,16 @@ QString DocumentView::documentDirectory() const {
     if (directory.isEmpty())
         directory = QDir::currentPath();
     return directory;
+}
+
+void DocumentView::setIncludeSearchPathsProvider(
+        const std::function<QStringList()> &provider) {
+    m_includeSearchPathsProvider = provider;
+}
+
+QStringList DocumentView::includeSearchPaths() const {
+    return m_includeSearchPathsProvider
+            ? m_includeSearchPathsProvider() : QStringList();
 }
 
 void DocumentView::setTheme(const QString &theme)
@@ -3687,10 +3987,29 @@ bool MySyntaxMenu::eventFilter(QObject *watched, QEvent *event)
         case Qt::Key_End:
             insertComplete = false;
             return false; // QListWidget handles navigation and scrolling
+        case Qt::Key_Shift:
+        case Qt::Key_Control:
+        case Qt::Key_Alt:
+        case Qt::Key_Meta:
+        case Qt::Key_AltGr:
+            // A modifier alone must not dismiss the popup: the next letter
+            // may be an upper-case character that continues the token.
+            return false;
         default:
+            if (keepsCompletionMenuOpen(keyEvent)) {
+                // Continue typing without closing the popup. The editor gets
+                // the key directly; the debounced update below filters the
+                // list in place.
+                QWidget *target = m_keyTarget ? m_keyTarget : parentWidget();
+                if (target)
+                    QApplication::sendEvent(target, keyEvent);
+                emit completionKeyForwarded();
+                event->accept();
+                return true;
+            }
             close();
-            if (parent())
-                parent()->event(event); // let the editor handle the key
+            if (QWidget *target = m_keyTarget ? m_keyTarget : parentWidget())
+                QApplication::sendEvent(target, keyEvent);
             event->accept();
             return true;
         }

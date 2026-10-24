@@ -54,12 +54,19 @@ public:
 	void refreshCompletions(int maxVisibleLines, int widthCharacters);
 	void setAvailableHeight(int height);
 	bool hasCompletions() const;
+	// The editor that receives keys typed while the popup has the focus.
+	void setKeyTarget(QWidget *target) { m_keyTarget = target; }
 
 	// (Re)apply the popup's style for the current application palette. Called
 	// by DocumentView::setTheme() so a theme switch does not leave the popup
 	// with the colours of the previous one; does nothing when the light/dark
 	// state has not changed.
 	void applyStyle();
+
+signals:
+	// A key that continues the completion was forwarded to the editor while
+	// the popup stayed open. The view uses this to debounce a list update.
+	void completionKeyForwarded();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -73,6 +80,7 @@ private:
 	QListWidget *m_completionList = nullptr;
 	QList<QAction *> m_completionActions;
 	QHash<QListWidgetItem *, QAction *> m_itemActions;
+	QWidget *m_keyTarget = nullptr; // editor that receives forwarded keys
 	int m_preferredListHeight = 0;
 	int m_minimumRowHeight = 1;
 	bool m_styleApplied = false; // whether the sheet below was built at all
@@ -134,9 +142,10 @@ public:
 	bool isModified();
 	bool childHasFocus();
 	void print(QPrinter *printer);
+	// Re-runs the syntax highlighter. Applying formats makes the editors emit
+	// textChanged(), which is not an edit: it is swallowed here.
+	void rehighlightSyntax();
 
-
-    void setParsedUDOs(QStringList udos);
     // Global variables scanned by the Inspector (g-prefixed or Csound 7
     // name@global:type); visible from every block.
     void setGlobalVariables(const QStringList &variables);
@@ -162,6 +171,10 @@ public:
     // Directory used to resolve relative paths in completion popups.
     void setDocumentDirectoryProvider(const std::function<QString()> &provider);
     QString documentDirectory() const;
+    // Directories searched for #include names (the configured INCDIR plus
+    // the document's --env:INCDIR options).
+    void setIncludeSearchPathsProvider(const std::function<QStringList()> &provider);
+    QStringList includeSearchPaths() const;
     Highlighter* getHighlighter() { return &m_highlighter; }
     void gotoLineDialog();
     void markCurrentPosition();
@@ -181,6 +194,9 @@ public:
 	// True when the cursor is on the first argument of a schedule() or
 	// schedulek() call.
 	bool isScheduleArgumentAtCursor() const;
+	// The file name of an #include directive when the cursor is inside its
+	// delimiters, or empty.
+	QString includePathAtCursor() const;
 	// Jumps to the definition of a name and leaves the cursor on the name.
 	void jumpToDefinition(int line, int column);
 	// BaseView::setTheme() switches the syntax highlighting; the completion
@@ -224,6 +240,10 @@ public slots:
 	void updateHoverText(int x, int y, QString text);
 	void createContextMenu(QPoint pos);
     void autoCompleteAtCursor();
+    // (Re)start the debounce timer that runs autoCompleteAtCursor. While the
+    // popup is visible it is called with COMPLETION_UPDATE_DELAY_MS so fast
+    // typing only filters the list after the user pauses.
+    void scheduleAutoComplete(int delay);
 
 	void showOrc(bool);
 	void showScore(bool);
@@ -312,9 +332,21 @@ private:
     QTimer* m_autoCompleteTimer = nullptr;
     int m_autoCompleteCursorPosition = -1;
     int m_autoCompleteCursorAnchor = -1;
+    // The editor the popup was opened for: accepting an item has to insert
+    // into that editor, not into whichever widget has focus by then (the
+    // popup itself takes the focus).
+    TextEditor *m_autocompleteEditor = nullptr;
+    // The token start and editor of the popup currently on screen. While the
+    // user keeps typing the same token the popup stays where it is; it is only
+    // moved when a new completion session starts.
+    int m_autocompleteAnchor = -1;
+    TextEditor *m_autocompleteAnchorEditor = nullptr;
     bool m_autoParameterMode;
 	bool errorMarked;
 	bool internalChange;  // to let popoup opcode completion know if text change was internal
+	// True while the highlighter applies formats, whose textChanged()
+	// notifications must not be mistaken for edits.
+	bool m_highlightUpdate = false;
 	QTextEdit * m_currentEditor;
 
 	bool lastCaseSensitive; // These last three are for search and replace
@@ -358,16 +390,8 @@ private:
 	std::function<QStringList()> m_widgetChannelsProvider;
 	std::function<QList<WidgetPropertyInfo>(const QString &)> m_widgetPropertiesProvider;
 	std::function<QString()> m_documentDirectoryProvider;
+	std::function<QStringList()> m_includeSearchPathsProvider;
     int m_lastCursorPosition;
-    QStringList m_longOptions = {
-        "syntax-check-only", "control-rate=", "messagelevel=",
-        "env:", "dither", "sched", "omacro:", "smacro:",
-        "verbose", "sample-accurate", "realtime",
-        "nchnls=", "nchnls_i=", "sinesize", "daemon",
-        "port=", "use-system-sr", "ksmps=",
-        "limiter", "udp-echo", "opcode-dir="
-    };
-    QStringList m_longOptions2 = {"rtmidi", "rtaudio"};
 
     QStringList delimiters = {")", ",", "\"", "'", "]", "}"};
 
@@ -379,7 +403,6 @@ private:
 		ORC_CONTEXT = 0,
 		SCO_CONTEXT,
 		OPTIONS_CONTEXT,
-		PYTHON_CONTEXT,
 		NO_CONTEXT
 	};
 	int m_currentContext;
@@ -400,6 +423,8 @@ signals:
     // Request a jump to the definition of a name. The flag tells whether the
     // name is the first argument of a schedule() or schedulek() call.
     void goToSourceRequested(const QString &name, bool isScheduleArgument);
+    // The cursor is inside an #include path: resolve the included file.
+    void goToSourceIncludeRequested(const QString &path);
     // Ask the page to outline widgets using this channel. Empty clears any
     // existing outline.
     void channelHighlightRequested(const QString &channel);

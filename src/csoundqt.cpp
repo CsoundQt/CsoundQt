@@ -46,6 +46,9 @@
 #include "configdialog.h"
 #include "console.h"
 #include "dockhelp.h"
+#include "codescan.h"
+#include "scanservice.h"
+#include "includecache.h"
 #include "documentpage.h"
 #include "externallauncher.h"
 #include "inspector.h"
@@ -96,6 +99,8 @@
 #include "RtMidi.h"
 #endif
 
+using namespace Qt::StringLiterals;
+
 namespace {
 
 bool openUrlWithDiagnostics(const QString &feature, const QUrl &url)
@@ -113,8 +118,6 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 
 #define MAX_THREAD_COUNT 32 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
 
-#define PAGE_TASK_UPDATE_PERIOD_MS 3000
-#define INSPECTOR_DEBOUNCE_MS 250
 
 
 CsoundQt::CsoundQt(QStringList fileNames)
@@ -134,10 +137,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QLocale::setDefault(QLocale::system());
     curPage = -1;
     m_options = new Options(&m_configlists);
-    m_inspectorUpdateTimer = new QTimer(this);
-    m_inspectorUpdateTimer->setSingleShot(true);
-    connect(m_inspectorUpdateTimer, &QTimer::timeout,
-            this, &CsoundQt::updateInspector);
+    m_scanService = new ScanService(this);
 
     auto palette = qApp->palette();
     // the palette is dark (dark "theme") if the background is darker than the text
@@ -219,9 +219,27 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     m_inspector = new Inspector(this);
     m_inspector->setObjectName("Inspector");
-    m_inspector->parseText(QString());
+    m_inspector->clearScan();
     addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
     m_inspector->hide();
+
+    // The scan of the document being edited feeds the panels: the inspector
+    // tree and the list of user-defined opcodes for completion. The document
+    // applies the result to itself (highlighting, completion, Go to Source).
+    connect(m_scanService, &ScanService::scanned, this,
+            [this](CodeScan::Source *source, const CodeScan::ResultPtr &scan) {
+        if (curPage < 0 || curPage >= documentPages.size())
+            return;
+        if (source != documentPages.at(curPage))
+            return; // a background document: its turn comes when it is shown
+        m_inspector->setScan(scan);
+        m_udosMap.clear();
+        for (const CodeScan::Definition &udo : scan->udos) {
+            Opcode opcode(udo.name, udo.outArgs, udo.inArgs);
+            opcode.newStyle = udo.newStyle;
+            m_udosMap.insert(udo.name, opcode);
+        }
+    });
 
 #ifdef CSQT_DEBUGGER
     m_debugPanel = new DebugPanel(this);
@@ -389,7 +407,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
     */
     m_opcodeTree = new OpEntryParser(":/opcodes.xml");
-    m_opcodeTree->setUdos(m_inspector->getUdosMap());
+    m_opcodeTree->setUdos(&m_udosMap);
 
     // Detecting risset spawns external processes (and may generate/fetch data),
     // which can take seconds. It is started from showEvent() so it never delays
@@ -473,10 +491,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 
     m_closing = false;
-    updateInspector(); //Starts update inspector thread
-
-    // Starts updating things like a list of udos for the current page, etc.
-    updateCurrentPageTask();
+    // Show the document that is open at startup, if any.
+    if (curPage >= 0 && curPage < documentPages.size()
+            && documentPages.at(curPage) != nullptr) {
+        m_scanService->setActiveSource(documentPages.at(curPage));
+        m_scanService->scanNow(documentPages.at(curPage));
+    }
 
     showWidgetsAct->setChecked(widgetsVisible);
     if (!m_options->widgetsIndependent) {
@@ -768,15 +788,14 @@ void CsoundQt::initRisset()
     // it finishes. This keeps both startup and the UI responsive. The worker
     // only allocates a Risset and does not touch this CsoundQt instance, so
     // quitting while it runs cannot use freed memory.
-    const QString pythonExe = QString();
     auto *watcher = new QFutureWatcher<Risset *>(this);
     connect(watcher, &QFutureWatcher<Risset *>::finished, this, [this, watcher]() {
         risset = watcher->result();
         applyRisset();
         watcher->deleteLater();
     });
-    watcher->setFuture(QtConcurrent::run([pythonExe]() -> Risset * {
-        auto *r = new Risset(pythonExe);
+    watcher->setFuture(QtConcurrent::run([]() -> Risset * {
+        auto *r = new Risset();
         if (r->isInstalled && !QFile::exists(r->rissetOpcodesXml)) {
             QDEBUG << "opcodes.xml not found, searched: " << r->rissetOpcodesXml;
             QDEBUG << "Calling risset to generate opcodes.xml";
@@ -892,17 +911,17 @@ void CsoundQt::changePage(int index)
         splitViewAct->setChecked(page->getViewMode() > 1);
         if (page->getFileName().endsWith(".csd")) {
             curCsdPage = curPage;
-            // force parsing
-            page->parseUdos(true);
         }
+        // From now on this is the document whose text changes are scanned on
+        // the typing debounce; the others wait until they are shown again.
+        m_scanService->setActiveSource(page);
+        m_scanService->scanNow(page);
     }
 #if defined(CSQT_QTHTML)
     if (!documentPages.isEmpty()) {
         updateHtmlView();
     }
 #endif
-    markInspectorUpdate();
-
     // set acceptsMidiCC for pages -  either all true, or only currrentPage true
     for (int i=0; i<documentPages.size(); i++ ) {
         if ( m_options->midiCcToCurrentPageOnly ) {
@@ -1069,7 +1088,7 @@ void CsoundQt::open()
     if (inspectorVisible && m_inspector->isFloating())
         m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
     fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), lastUsedDir ,
-                                              tr("Known Files (*.csd *.orc *.sco *.py *.inc *.udo *.html);;Csound Files (*.csd *.orc *.sco *.inc *.udo *.CSD *.ORC *.SCO *.INC *.UDO);;HTML files (*.html);;All Files (*)",
+                                              tr("Known Files (*.csd *.orc *.sco *.inc *.udo *.html);;Csound Files (*.csd *.orc *.sco *.inc *.udo);;HTML files (*.html);;All Files (*)",
                                                  "Be careful to respect spacing parenthesis and usage of punctuation"));
     //	if (widgetsVisible) {
     //		if (!m_options->widgetsIndependent) {
@@ -1339,7 +1358,7 @@ void CsoundQt::evaluateString(QString evalCode)
     TREE *testTree = NULL;
     if  (scratchPadCsdModeAct->isChecked()) {
         // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
-        if (QRegularExpression("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").match(evalCode).hasMatch()) {
+        if (QRegularExpression(uR"([if]\s*-*[0-9]+\s+[0-9]+\s+[0-9]+.*\n)"_s).match(evalCode).hasMatch()) {
             sendEvent(evalCode);
             return;
         }
@@ -1465,9 +1484,8 @@ QString CsoundQt::getSaveFileName()
     dir += name.mid(name.lastIndexOf("/") + 1);
     QString fileName = QFileDialog::getSaveFileName(
                 this, tr("Save File As"), dir,
-                tr("Known Files (*.csd *.orc *.sco *.py *.udo *.html);;"
-                   "Csound Files (*.csd *.orc *.sco *.udo *.inc *.CSD *.ORC"
-                   "*.SCO *.UDO *.INC);;"
+                tr("Known Files (*.csd *.orc *.sco *.udo *.html);;"
+                   "Csound Files (*.csd *.orc *.sco *.udo *.inc);;"
                    "Html files (*.html);;All Files (*)",
                    "Be careful to respect spacing parenthesis and usage of punctuation"));
     if (widgetsVisible) {
@@ -1550,6 +1568,13 @@ void CsoundQt::deleteTab(int index)
     }
     if (curPage < 0)
         curPage = 0; // deleting the document page decreases curPage, so must check
+}
+
+QStringList CsoundQt::configuredIncludePaths() const
+{
+    if (!m_options->incdirActive)
+        return QStringList();
+    return IncludeCache::splitPathList(m_options->incdir);
 }
 
 void CsoundQt::setupEnvironment()
@@ -1712,8 +1737,7 @@ void CsoundQt::focusToTab(int tab) {
     // 6 is  Live events that is independent window
 
     case 7:
-        qDebug()<<"Raise Python Console";
-        // TODO: remove later
+        qDebug() << "python not supported";
         break;
 
     case 8:
@@ -2568,7 +2592,7 @@ QString CsoundQt::writePlaybackTempFile(DocumentPage *page,
     if (baseName.isEmpty())
         baseName = "untitled.csd";
     // Keep the recovered names usable on every platform.
-    baseName.replace(QRegularExpression("[\\\\/:*?\"<>|]"), "_");
+    baseName.replace(QRegularExpression(uR"([\\/:*?"<>|])"_s), "_");
     if (QFileInfo(baseName).suffix().isEmpty())
         baseName += ".csd";
 
@@ -3072,11 +3096,11 @@ void CsoundQt::openExternalEditor()
     name += currentAudioFile;
     QString optionsText = documentPages[curPage]->getOptionsText();
     if (currentAudioFile == "") {
-        if (!optionsText.contains(QRegularExpression("\\W-o"))) {
+        if (!optionsText.contains(QRegularExpression(uR"(\W-o)"_s))) {
             name += "test.wav";
         }
         else {
-            optionsText = optionsText.mid(optionsText.indexOf(QRegularExpression("\\W-o")) + 3);
+            optionsText = optionsText.mid(optionsText.indexOf(QRegularExpression(uR"(\W-o)"_s)) + 3);
             optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
             optionsText = optionsText.left(optionsText.indexOf("-")).trimmed();
             if (!optionsText.startsWith("dac"))
@@ -3109,13 +3133,13 @@ void CsoundQt::openExternalPlayer()
     name += currentAudioFile;
     QString optionsText = documentPages[curPage]->getOptionsText();
     if (currentAudioFile == "") {
-        if (!optionsText.contains(QRegularExpression("\\W-o"))) {
+        if (!optionsText.contains(QRegularExpression(uR"(\W-o)"_s))) {
             name += "test.wav";
         }
         else {
-            optionsText = optionsText.mid(optionsText.indexOf(QRegularExpression("\\W-o")) + 3);
+            optionsText = optionsText.mid(optionsText.indexOf(QRegularExpression(uR"(\W-o)"_s)) + 3);
             optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
-            optionsText = optionsText.left(optionsText.indexOf(QRegularExpression("-"))).trimmed();
+            optionsText = optionsText.left(optionsText.indexOf(QRegularExpression(uR"(-)"_s))).trimmed();
             if (!optionsText.startsWith("dac"))
                 name += optionsText;
         }
@@ -3281,7 +3305,7 @@ void CsoundQt::openHtmlHelp(QString fileName, QString entry, bool external) {
 void CsoundQt::setHelpEntry()
 {
     QString line = documentPages[curPage]->lineUnderCursor();
-    auto match = QRegularExpression("-[-\\+][a-zA-Z-_]+").match(line);
+    auto match = QRegularExpression(uR"(-[-\+][a-zA-Z-_]+)"_s).match(line);
     if(match.hasMatch()) {
         auto capt = match.captured();
         if(m_longOptions.contains(capt)) {
@@ -4397,6 +4421,21 @@ void CsoundQt::applySettings()
     }
     setupEnvironment();
 
+    // Includes are resolved, scanned and opened using CsoundQt's include path
+    // (plus each document's own --env:INCDIR options). Follow a change of the
+    // setting immediately.
+    const QStringList includePaths = configuredIncludePaths();
+    if (includePaths != m_appliedIncludePaths) {
+        m_appliedIncludePaths = includePaths;
+        for (DocumentPage *page : documentPages)
+            page->setIncludeSearchPaths(includePaths);
+        m_scanService->reloadDependencies();
+    }
+
+    // The window-title setting has no document side effects, but the title has
+    // to follow it immediately.
+    updateWindowTitle();
+
     // set editorBgColor also for inspector, codepad
     // Maybe the latter should use the same color as console?
     // auto bgColor= m_options->editorBgColor.name();
@@ -4890,52 +4929,6 @@ void CsoundQt::runUtility(QString flags)
 }
 
 
-void CsoundQt::updateCurrentPageTask() {
-    if (m_closing || curPage >= documentPages.size() ) {
-        return;  // And don't call this again from the timer
-    }
-    Q_ASSERT(documentPages.size() > curPage);
-    auto currentPage = documentPages[curPage];
-    if ( !currentPage->getFileName().toLower().endsWith(".udo")  ) { // otherwise this marks an unedited .udo file as edited
-        currentPage->parseUdos();
-    }
-    QTimer::singleShot(PAGE_TASK_UPDATE_PERIOD_MS, this, SLOT(updateCurrentPageTask()));
-}
-
-
-void CsoundQt::updateInspector()
-{
-    if (m_closing || curPage < 0 || curPage >= documentPages.size()
-            || documentPages[curPage] == nullptr) {
-        return;
-    }
-    if (!m_inspectorNeedsUpdate)
-        return;
-
-    DocumentPage *page = documentPages[curPage];
-    if (!page->getFileName().endsWith(".py")) {
-        m_inspector->parseText(page->getBasicText());
-        page->setGlobalVariables(m_inspector->getGlobalVariables());
-        page->setGlobalStringVariables(m_inspector->getGlobalStringVariables());
-        page->setInstrumentNames(m_inspector->getInstrumentNames());
-    } else {
-        page->setGlobalVariables({});
-        page->setGlobalStringVariables({});
-        page->setInstrumentNames({});
-    }
-    m_inspectorNeedsUpdate = false;
-}
-
-void CsoundQt::markInspectorUpdate()
-{
-    //  qDebug() << "CsoundQt::markInspectorUpdate()";
-    m_inspectorNeedsUpdate = true;
-    // Coalesce bursts of editor changes. The inspector is cheap enough to
-    // update after a short pause, rather than waiting for a fixed 3 s poll.
-    if (m_inspectorUpdateTimer != nullptr)
-        m_inspectorUpdateTimer->start(INSPECTOR_DEBOUNCE_MS);
-}
-
 void CsoundQt::setDefaultKeyboardShortcuts()
 {
     newAct->setShortcut(tr("Ctrl+N"));
@@ -5029,6 +5022,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     gotoLineAct->setShortcut(tr("Ctrl+L"));
     goBackAct->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Left));
     goToSourceAct->setShortcut(tr("Ctrl+B"));
+    reloadDependenciesAct->setShortcut(tr("Ctrl+Shift+B"));
     showOrcAct->setShortcut(tr("Shift+Alt+1"));
     showScoreAct->setShortcut(tr("Shift+Alt+2"));
     showOptionsAct->setShortcut(tr("Shift+Alt+3"));
@@ -5837,6 +5831,13 @@ void CsoundQt::createActions()
     goToSourceAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(goToSourceAct, &QAction::triggered, [this]() { this->goToSource(); });
 
+    reloadDependenciesAct = new QAction(tr("Reload Included Files"), this);
+    reloadDependenciesAct->setStatusTip(
+                tr("Re-read the files pulled in by #include and scan the document again"));
+    reloadDependenciesAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(reloadDependenciesAct, &QAction::triggered,
+            [this]() { m_scanService->reloadDependencies(); });
+
     aboutAct = new QAction(tr("&About CsoundQt"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
     //   aboutAct->setIconText(tr("About"));
@@ -6007,6 +6008,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(gotoLineAct);
     m_keyActions.append(goBackAct);
     m_keyActions.append(goToSourceAct);
+    m_keyActions.append(reloadDependenciesAct);
     m_keyActions.append(evaluateAct);
     m_keyActions.append(evaluateSectionAct);
     m_keyActions.append(showOrcAct);
@@ -6075,7 +6077,8 @@ void CsoundQt::connectActions()
     disconnect(doc, 0,0,0);
     connect(doc, SIGNAL(stopSignal()), this, SLOT(markStopped()));
     connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
-    connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
+    connect(doc, &DocumentPage::goToSourceFileRequested,
+            this, &CsoundQt::openFileAtLine);
 
     connect(doc->getView(), SIGNAL(opcodeSyntaxSignal(QString)),
             this, SLOT(statusBarMessage(QString)));
@@ -6087,7 +6090,7 @@ void CsoundQt::connectActions()
     //          this, SLOT(setWidgetClipboard(QString)));
     connect(doc, SIGNAL(setCurrentAudioFile(QString)),
             this, SLOT(setCurrentAudioFile(QString)));
-    
+
     disconnect(showWidgetsAct, 0,0,0);
     connect(showWidgetsAct, &QAction::triggered, this, &CsoundQt::toggleWidgetsPanel);
     if (m_options->widgetsIndependent) {
@@ -6200,6 +6203,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(gotoLineAct);
     editMenu->addAction(goBackAct);
     editMenu->addAction(goToSourceAct);
+    editMenu->addAction(reloadDependenciesAct);
     editMenu->addSeparator();
     editMenu->addAction(commentAct);
     //  editMenu->addAction(uncommentAct);
@@ -6448,7 +6452,7 @@ void CsoundQt::fillFavoriteMenu()
 void CsoundQt::fillFavoriteSubMenu(QDir dir, QMenu *m, int depth)
 {
     QStringList filters;
-    filters << "*.csd" << "*.orc" << "*.sco" << "*.udo" << "*.inc" << "*.py";
+    filters << "*.csd" << "*.orc" << "*.sco" << "*.udo" << "*.inc";
     dir.setNameFilters(filters);
     QStringList files = dir.entryList(QDir::Files,QDir::Name);
     QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
@@ -6896,6 +6900,7 @@ void CsoundQt::readSettings()
     m_options->useCsoundMidi = settings.value("useCsoundMidi", false).toBool();
     m_options->simultaneousRun = settings.value("simultaneousRun", "").toBool();
     m_options->quitOnLastTabClosed = settings.value("quitOnLastTabClosed", false).toBool();
+    m_options->includeActiveFileInTitle = settings.value("includeActiveFileInTitle", true).toBool();
     m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
     settings.endGroup();
     settings.beginGroup("Environment");
@@ -7128,6 +7133,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("useCsoundMidi", m_options->useCsoundMidi);
     settings.setValue("simultaneousRun", m_options->simultaneousRun);
     settings.setValue("quitOnLastTabClosed", m_options->quitOnLastTabClosed);
+    settings.setValue("includeActiveFileInTitle", m_options->includeActiveFileInTitle);
     settings.setValue("sampleFormat", m_options->sampleFormat);
     settings.setValue("checkSyntaxBeforeRun", m_options->checkSyntaxBeforeRun);
     settings.endGroup(); // Options/Run
@@ -7348,7 +7354,7 @@ void CsoundQt::insertDroppedFtgen(const QString &fileName)
 {
     const QString path = droppedFilePath(fileName, true);
     QString name = QFileInfo(fileName).completeBaseName();
-    name.replace(QRegularExpression(QStringLiteral("[^A-Za-z0-9_]")),
+    name.replace(QRegularExpression(uR"([^A-Za-z0-9_])"_s),
                  QStringLiteral("_"));
     if (name.isEmpty())
         name = QStringLiteral("soundfile");
@@ -7570,6 +7576,8 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     }
     // auto t0 = std::chrono::high_resolution_clock::now();
     DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists, m_midiLearn);
+    newPage->setScanService(m_scanService);
+    newPage->setIncludeSearchPaths(configuredIncludePaths());
     int insertPoint = curPage + 1;
     curPage += 1;
     if (documentPages.size() == 0) {
@@ -7594,7 +7602,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
 
     if (!fileName.startsWith(":/")) {  // Don't store internal examples in recents menu
         lastUsedDir = fileName;
-        lastUsedDir.resize(fileName.lastIndexOf(QRegularExpression("[/]")) + 1);
+        lastUsedDir.resize(fileName.lastIndexOf(QRegularExpression(uR"([/])"_s)) + 1);
     }
     addToRecentFiles(fileName);
     documentTabs->insertTab(curPage, page->getView(),"");
@@ -7724,10 +7732,42 @@ void CsoundQt::setCurrentFile(const QString &fileName)
         shownName = strippedName(fileName);
     }
 
-    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("CsoundQt")));
+    updateWindowTitle();
     documentTabs->setTabText(curPage, shownName);
+    // The tab label shows only the file name; the tooltip has the full path.
+    // Resource paths (" :/examples/...") are already complete and must not be
+    // turned into a filesystem path.
+    QString toolTip;
+    if (!fileName.isEmpty()) {
+        toolTip = fileName.startsWith(":/"_L1)
+                ? fileName : QFileInfo(fileName).absoluteFilePath();
+    }
+    documentTabs->setTabToolTip(curPage, toolTip);
     updateTabText(curPage);
     //  updateWidgets();
+}
+
+void CsoundQt::updateWindowTitle()
+{
+    QString shownName;
+    if (curPage >= 0 && curPage < documentPages.size()) {
+        DocumentPage *page = documentPages.at(curPage);
+        if (page != nullptr) {
+            if (page->getFileName().isEmpty()) {
+                shownName = page->getTemporaryName().isEmpty()
+                        ? u"untitled.csd"_s : page->getTemporaryName();
+            } else {
+                shownName = strippedName(page->getFileName());
+            }
+        }
+    }
+
+    if (m_options->includeActiveFileInTitle && !shownName.isEmpty()) {
+        setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("CsoundQt")));
+    } else {
+        // Keep the modified marker, but leave the file out of the title.
+        setWindowTitle(tr("CsoundQt[*]"));
+    }
 }
 
 QString CsoundQt::strippedName(const QString &fullFileName)
@@ -8505,12 +8545,6 @@ void CsoundQt::loadPreset(int preSetIndex, int index) {
     }
 }
 
-void CsoundQt::setParsedUDOs() {
-    auto udos = m_inspector->getParsedUDOs();
-    auto doc = documentPages[curPage];
-    doc->setParsedUDOs(udos);
-}
-
 void CsoundQt::gotoLineDialog() {
     auto doc = this->getCurrentDocumentPage();
     doc->gotoLineDialog();
@@ -8521,4 +8555,24 @@ void CsoundQt::goToSource() {
     if (doc == nullptr)
         return;
     doc->goToSourceAtCursor();
+}
+
+void CsoundQt::openFileAtLine(const QString &path, int line, int column)
+{
+    const QString canonical = QFileInfo(path).canonicalFilePath();
+    // A file that is already open is shown in its own tab, so the definition
+    // is reached without loading a second copy of it.
+    for (int i = 0; i < documentPages.size(); ++i) {
+        DocumentPage *page = documentPages.at(i);
+        const QString pagePath = QFileInfo(page->getFileName()).canonicalFilePath();
+        if (!pagePath.isEmpty() && pagePath == canonical) {
+            documentTabs->setCurrentIndex(i);
+            page->jumpToDefinition(line, column);
+            return;
+        }
+    }
+    const int index = loadFile(path, false);
+    if (index < 0 || index >= documentPages.size())
+        return;
+    documentPages[index]->jumpToDefinition(line, column);
 }

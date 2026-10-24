@@ -1,6 +1,8 @@
 #include "midihandler.h"
 #include "midilearndialog.h"
 
+using namespace Qt::StringLiterals;
+
 #ifdef CSQT_RTMIDI
 #include "RtMidi.h"
 #endif
@@ -99,7 +101,7 @@ int MidiHandler::findMidiInPortByName(QString name) {
 	int port = 9999; // stands for None
 #ifdef CSQT_RTMIDI
 	// to check agains alsa names wihtout port
-    static const QRegularExpression re("(\\s\\d+):(\\d+)$");
+    static const QRegularExpression re(uR"((\s\d+):(\d+)$)"_s);
     int index = name.indexOf(re);
 	if (index>0) {
 		qDebug()<<name << " seems to be Alsa device. Excluding port part.";
@@ -123,7 +125,7 @@ int MidiHandler::findMidiInPortByName(QString name) {
 int MidiHandler::findMidiOutPortByName(QString name) {
 	int port = 9999; // stands for None
 #ifdef CSQT_RTMIDI
-    static const QRegularExpression re("(\\s\\d+):(\\d+)$");
+    static const QRegularExpression re(uR"((\s\d+):(\d+)$)"_s);
     int index = name.indexOf(re);
 	if (index>0) {
 		qDebug()<<name << " seems to be Alsa device. Excluding port part.";

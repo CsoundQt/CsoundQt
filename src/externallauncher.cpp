@@ -14,6 +14,7 @@
 #include <QDBusInterface>
 #include <QDBusMessage>
 #endif
+using namespace Qt::StringLiterals;
 
 namespace ExternalLauncher {
 
@@ -32,7 +33,7 @@ namespace {
 bool isFlatpakSession()
 {
     return qEnvironmentVariableIsSet("FLATPAK_ID")
-            || QFileInfo::exists(QStringLiteral("/.flatpak-info"));
+            || QFileInfo::exists(u"/.flatpak-info"_s);
 }
 
 bool isAppImage()
@@ -53,9 +54,9 @@ bool relyOnSystemUrlHandler()
 // kde-open's attempt to read a directory as a file.
 bool showFolderWithFileManager1(const QString &path, const QString &feature)
 {
-    QDBusInterface manager(QStringLiteral("org.freedesktop.FileManager1"),
-                           QStringLiteral("/org/freedesktop/FileManager1"),
-                           QStringLiteral("org.freedesktop.FileManager1"),
+    QDBusInterface manager(u"org.freedesktop.FileManager1"_s,
+                           u"/org/freedesktop/FileManager1"_s,
+                           u"org.freedesktop.FileManager1"_s,
                            QDBusConnection::sessionBus());
     if (!manager.isValid())
         return false;
@@ -64,7 +65,7 @@ bool showFolderWithFileManager1(const QString &path, const QString &feature)
     const QString uri = QUrl::fromLocalFile(QDir(path).absolutePath()).toString();
     qDebug().noquote() << "External open attempt: feature=" << feature
                        << "mechanism=filemanager1" << "target=" << uri;
-    const QDBusMessage reply = manager.call(QStringLiteral("ShowFolders"),
+    const QDBusMessage reply = manager.call(u"ShowFolders"_s,
                                             QStringList{uri}, QString());
     const bool ok = reply.type() != QDBusMessage::ErrorMessage;
     qDebug().noquote() << "External open result: feature=" << feature
@@ -77,26 +78,26 @@ bool showFolderWithFileManager1(const QString &path, const QString &feature)
 QString systemHandlerReason(const QString &configuredBrowser)
 {
     if (qEnvironmentVariableIsSet("APPIMAGE") || qEnvironmentVariableIsSet("APPDIR"))
-        return QStringLiteral("appimage");
+        return u"appimage"_s;
     if (qEnvironmentVariableIsSet("FLATPAK_ID")
-        || QFileInfo::exists(QStringLiteral("/.flatpak-info")))
-        return QStringLiteral("flatpak");
+        || QFileInfo::exists(u"/.flatpak-info"_s))
+        return u"flatpak"_s;
     if (configuredBrowser.isEmpty())
-        return QStringLiteral("no-browser-configured");
-    return QStringLiteral("configured-browser-unlaunchable");
+        return u"no-browser-configured"_s;
+    return u"configured-browser-unlaunchable"_s;
 }
 
 QString platformName()
 {
     return QGuiApplication::instance() ? QGuiApplication::platformName()
-                                       : QStringLiteral("unknown");
+                                       : u"unknown"_s;
 }
 
 void logEnvironmentContext()
 {
     qDebug().noquote() << "External open context:"
                        << "appimage=" << (qEnvironmentVariableIsSet("APPIMAGE") || qEnvironmentVariableIsSet("APPDIR") ? "yes" : "no")
-                       << "flatpak=" << (qEnvironmentVariableIsSet("FLATPAK_ID") || QFileInfo::exists(QStringLiteral("/.flatpak-info")) ? "yes" : "no")
+                       << "flatpak=" << (qEnvironmentVariableIsSet("FLATPAK_ID") || QFileInfo::exists(u"/.flatpak-info"_s) ? "yes" : "no")
                        << "qtPlatform=" << platformName()
                        << "desktop=" << qEnvironmentVariable("XDG_CURRENT_DESKTOP")
                        << "session=" << qEnvironmentVariable("XDG_SESSION_TYPE")
@@ -110,7 +111,7 @@ QString boundedOutput(const QByteArray &output)
     const QByteArray tail = output.right(maxBytes);
     QString text = QString::fromLocal8Bit(tail).trimmed();
     if (output.size() > maxBytes)
-        text.prepend(QStringLiteral("...[earlier output omitted]...\n"));
+        text.prepend(u"...[earlier output omitted]...\n"_s);
     return text;
 }
 
@@ -123,7 +124,7 @@ QStringList safeArgumentsForLog(const QStringList &args)
         if (url.isValid() && !url.scheme().isEmpty()) {
             safeArgs.append(redactUrlForLog(url));
         } else if (QFileInfo(arg).isAbsolute()) {
-            safeArgs.append(QStringLiteral("…/%1").arg(QFileInfo(arg).fileName()));
+            safeArgs.append(u"…/%1"_s.arg(QFileInfo(arg).fileName()));
         } else {
             safeArgs.append(arg);
         }
@@ -136,12 +137,12 @@ QStringList safeArgumentsForLog(const QStringList &args)
 QString redactUrlForLog(const QUrl &url)
 {
     if (url.isLocalFile())
-        return QStringLiteral("file://…/%1").arg(QFileInfo(url.toLocalFile()).fileName());
+        return u"file://…/%1"_s.arg(QFileInfo(url.toLocalFile()).fileName());
 
-    const QString scheme = url.scheme().isEmpty() ? QStringLiteral("<no-scheme>") : url.scheme();
+    const QString scheme = url.scheme().isEmpty() ? u"<no-scheme>"_s : url.scheme();
     if (url.host().isEmpty())
-        return scheme + QStringLiteral(":<no-host>");
-    return scheme + QStringLiteral("://") + url.host();
+        return scheme + u":<no-host>"_s;
+    return scheme + u"://"_s + url.host();
 }
 
 bool launchExecutable(const QString &executable, const QStringList &args,
@@ -168,15 +169,15 @@ bool launchExecutable(const QString &executable, const QStringList &args,
     auto timer = QSharedPointer<QElapsedTimer>::create();
     auto childPid = QSharedPointer<qint64>::create(0);
     timer->start();
-    const QString request = feature.isEmpty() ? QStringLiteral("external") : feature;
+    const QString request = feature.isEmpty() ? u"external"_s : feature;
     qDebug().noquote() << "External open attempt: feature=" << request
                        << "mechanism=direct-exec"
                        << "program=" << executable
                        << "args=" << safeArgumentsForLog(args)
                        << "workingDirectory="
                        << (process->workingDirectory().isEmpty()
-                               ? QStringLiteral("<default>")
-                               : QStringLiteral("…/%1").arg(QFileInfo(process->workingDirectory()).fileName()));
+                               ? u"<default>"_s
+                               : u"…/%1"_s.arg(QFileInfo(process->workingDirectory()).fileName()));
     logEnvironmentContext();
 
     QObject::connect(process, &QProcess::readyReadStandardOutput, process,
@@ -206,7 +207,7 @@ bool launchExecutable(const QString &executable, const QStringList &args,
                            << "pid=" << *childPid << "exitCode=" << exitCode
                            << "exitStatus=" << (status == QProcess::NormalExit ? "normal" : "crash")
                            << "elapsedMs=" << timer->elapsed()
-                           << "output=" << (stderrTail.isEmpty() ? QStringLiteral("<empty>") : stderrTail);
+                           << "output=" << (stderrTail.isEmpty() ? u"<empty>"_s : stderrTail);
         process->deleteLater();
     });
 
@@ -237,7 +238,7 @@ bool openWithDefaultApplication(const QUrl &url, QString *errorString, const QSt
         return false;
     }
 
-    const QString request = feature.isEmpty() ? QStringLiteral("external") : feature;
+    const QString request = feature.isEmpty() ? u"external"_s : feature;
     qDebug().noquote() << "External open attempt: feature=" << request
                        << "mechanism=QDesktopServices::openUrl"
                        << "target=" << redactUrlForLog(url);
@@ -263,7 +264,7 @@ bool openFolder(const QString &path, QString *errorString, const QString &featur
         return false;
     }
 
-    const QString request = feature.isEmpty() ? QStringLiteral("open-folder") : feature;
+    const QString request = feature.isEmpty() ? u"open-folder"_s : feature;
 
 #if defined(Q_OS_LINUX)
     // A Flatpak sandbox must use the portal through QDesktopServices. Outside
@@ -302,7 +303,7 @@ bool openBrowser(const QString &configuredBrowser, const QUrl &url, QString *err
         qDebug().noquote() << "External browser request: feature=browser"
                            << "mechanism=QDesktopServices::openUrl" << "reason=" << reason
                            << "target=" << redactUrlForLog(url)
-                           << "configuredBrowser=" << (configuredBrowser.isEmpty() ? QStringLiteral("<empty>") : configuredBrowser);
+                           << "configuredBrowser=" << (configuredBrowser.isEmpty() ? u"<empty>"_s : configuredBrowser);
         if (!configuredBrowser.isEmpty()) {
             const QFileInfo configuredInfo(configuredBrowser);
             qDebug().noquote() << "External browser configured path facts: exists=" << configuredInfo.exists()
@@ -323,7 +324,7 @@ bool openBrowser(const QString &configuredBrowser, const QUrl &url, QString *err
                        << "isFile=" << browserInfo.isFile() << "isDir=" << browserInfo.isDir()
                        << "isExecutable=" << browserInfo.isExecutable()
                        << "isSymLink=" << browserInfo.isSymLink()
-                       << "symLinkTarget=" << (browserInfo.isSymLink() ? browserInfo.symLinkTarget() : QStringLiteral("<none>"));
+                       << "symLinkTarget=" << (browserInfo.isSymLink() ? browserInfo.symLinkTarget() : u"<none>"_s);
     if (browserInfo.isExecutable() && !browserInfo.isDir()) {
         if (launchExecutable(configuredBrowser, QStringList(url.toString()),
                              QString(), &launchError, feature))

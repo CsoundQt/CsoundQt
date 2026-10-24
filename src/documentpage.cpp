@@ -27,6 +27,8 @@
 
 #include "documentpage.h"
 #include "documentview.h"
+#include "scanservice.h"
+#include "includecache.h"
 #include "csoundengine.h"
 #include "csoundqt.h" // For playParent and renderParent functions (called from button
                         // reserved channels) and for connecting from console to log file
@@ -61,6 +63,9 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 			return QDir::currentPath();
 		return QFileInfo(fileName).absolutePath();
 	});
+	m_view->setIncludeSearchPathsProvider([this]() {
+		return includeSearchPaths();
+	});
 	connect(m_view, &DocumentView::channelHighlightRequested,
 	        this, [this](const QString &channel) {
 		WidgetLayout *layout = getWidgetLayout();
@@ -75,7 +80,6 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 	        this, &DocumentPage::clearWidgetChannelHighlights);
 	m_midiLearn = midiLearn;
     m_colorTheme = "";
-    m_parseUdosNeeded = true;
 	foreach(WidgetLayout* wl, m_widgetLayouts) {
 		connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
         connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)),
@@ -101,6 +105,10 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 DocumentPage::~DocumentPage()
 {
 	//  qDebug();
+	// The service keys its state by the page; it must not keep a pointer to a
+	// page that is going away.
+	if (m_scanService != nullptr)
+		m_scanService->forget(this);
 	disconnect(m_console, 0,0,0);
 	disconnect(m_view, 0,0,0);
 	//  deleteAllLiveEvents(); // FIXME This is also crashing...
@@ -493,14 +501,14 @@ int DocumentPage::characterCount(bool countExtras)
 int DocumentPage::instrumentCount()
 {
 	QString text = this->getBasicText();
-    static const  QRegularExpression instrRegex("\\n[ \\t]*instr\\s");
+    static const  QRegularExpression instrRegex(uR"(\n[ \t]*instr\s)"_s);
     return text.count(instrRegex);
 }
 
 int DocumentPage::udoCount()
 {
 	QString text = this->getBasicText();
-    static const  QRegularExpression opcodeRegex("\\n[ \\t]*opcode\\s");
+    static const  QRegularExpression opcodeRegex(uR"(\n[ \t]*opcode\s)"_s);
     return text.count(opcodeRegex);
 }
 
@@ -531,11 +539,14 @@ void DocumentPage::setModified(bool mod)
         emit modified();
 	}
 	else {
-        emit unmodified();
+        // Clear the children before announcing it: the listeners of
+        // unmodified() call isModified() to update the tab marker, and must
+        // see the saved document, or they put the '*' back.
 		m_view->setModified(false);
 		foreach (WidgetLayout  *wl, m_widgetLayouts) {
 			wl->setModified(false);
 		}
+        emit unmodified();
 	}
 }
 
@@ -595,6 +606,16 @@ void DocumentPage::focusWidgets()
 QString DocumentPage::getFileName()
 {
 	return fileName;
+}
+
+void DocumentPage::setFileName(QString name)
+{
+    const QString previous = fileName;
+    BaseDocument::setFileName(name);
+    // The path is part of how #include directives resolve and how the file
+    // type is highlighted. A Save As therefore invalidates the scan.
+    if (name != previous && m_scanService != nullptr)
+        m_scanService->sourceChanged(this);
 }
 
 QString DocumentPage::getCompanionFileName()
@@ -888,6 +909,8 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	// the program is compiled and does not depend on the meta-object at run
 	// time, so the request cannot get lost.
 	connect(m_view, &DocumentView::goToSourceRequested, this, &DocumentPage::goToSource);
+	connect(m_view, &DocumentView::goToSourceIncludeRequested,
+	        this, &DocumentPage::openIncludedFile);
 
 
 	// Connect for clearing marked lines and letting inspector know text has changed
@@ -1059,6 +1082,11 @@ void DocumentPage::jumpToLineWithoutFocus(int line)
 	m_view->jumpToLineWithoutFocus(line);
 }
 
+void DocumentPage::jumpToDefinition(int line, int column)
+{
+	m_view->jumpToDefinition(line, column);
+}
+
 void DocumentPage::comment()
 {
 	//  qDebug();
@@ -1154,14 +1182,13 @@ void DocumentPage::showWidgetEdit(bool show)
 
 void DocumentPage::textChanged()
 {
-    m_parseUdosNeeded = true;
+    if (m_scanService != nullptr)
+        m_scanService->sourceChanged(this);
     // Keep the page's modified state in sync with the editor. Loading a file
     // also inserts text, but loadFile()/setTextString() clear the state again
     // right afterwards. isModified() additionally covers modified widget
     // layouts, so clearing an undone text change must not forget about them.
     setModified(isModified());
-    // This signal triggers an inspector update
-	emit currentTextUpdated();
 }
 
 
@@ -1183,10 +1210,6 @@ void DocumentPage::setHighlightingTheme(QString theme) {
 
 void DocumentPage::enableScoreSyntaxHighlighting(bool status) {
     m_view->enableScoreSyntaxHighlighting(status);
-}
-
-void DocumentPage::setParsedUDOs(QStringList udos) {
-    m_view->setParsedUDOs(udos);
 }
 
 void DocumentPage::setGlobalVariables(const QStringList &variables) {
@@ -1247,46 +1270,121 @@ void DocumentPage::updateWidgetChannels() {
     m_view->setWidgetChannels(getWidgetChannels());
 }
 
-void DocumentPage::parseUdos(bool force) {
-    if(!m_parseUdosNeeded && !force)
-        return;
-    const QStringList oldUdos = m_parsedUdos;
-    m_definitions.scan(this->getBasicText());
-    m_parsedUdos = m_definitions.udoNames();
-    auto highlighter = m_view->getHighlighter();
-    highlighter->setUDOs(m_parsedUdos);
-    if(oldUdos != m_parsedUdos) {
-        highlighter->rehighlight();
+QString DocumentPage::scanText()
+{
+    return getBasicText();
+}
+
+QString DocumentPage::scanFilePath() const
+{
+    return fileName;
+}
+
+QStringList DocumentPage::includeSearchPaths()
+{
+    // Only CsoundQt's own INCDIR setting and the document's <CsOptions> count.
+    // The process environment and .csound7rc are intentionally ignored: they
+    // are not portable and the editor must not depend on them.
+    return IncludeCache::includePathsFromOptions(getOptionsText(),
+                                                 m_includeSearchPaths);
+}
+
+CodeScan::Mode DocumentPage::scanMode() const
+{
+    const QString name = fileName.toLower();
+    // HTML panels are not Csound source; a .sco is score text, which the
+    // orchestra scanner has nothing to say about.
+    if (name.endsWith(".html") || name.endsWith(".sco"))
+        return CodeScan::Mode::None;
+    // A split view edits the bare orchestra: getBasicText() is the body of the
+    // instrument section, without the <CsInstruments> tags.
+    if (m_view != nullptr && m_view->getViewMode() >= 2)
+        return CodeScan::Mode::Orc;
+    if (name.isEmpty() || name.endsWith(".csd"))
+        return CodeScan::Mode::Csd;
+    // .orc, .udo and .inc (and anything else that is Csound code) are
+    // orchestra code; a .udo is the same thing with only opcodes in it.
+    return CodeScan::Mode::Orc;
+}
+
+void DocumentPage::applyScan(const CodeScan::ResultPtr &scan)
+{
+    m_scan = scan;
+
+    // The highlighter colours calls of the opcodes defined in the document.
+    // Re-running it is only necessary when that set changed.
+    QSet<QString> udos;
+    udos.reserve(scan->udos.size());
+    for (const CodeScan::Definition &udo : scan->udos)
+        udos.insert(udo.name);
+    if (udos != m_parsedUdos) {
+        m_parsedUdos = udos;
+        m_view->getHighlighter()->setUDOs(QStringList(udos.begin(), udos.end()));
+        m_view->rehighlightSyntax();
     }
-    m_parseUdosNeeded = false;
+
+    setGlobalVariables(scan->globalVariables);
+    setGlobalStringVariables(scan->globalStringVariables);
+    setInstrumentNames(scan->instrumentNames);
 }
 
 void DocumentPage::goToSourceAtCursor()
 {
+    // Inside the file name of an #include directive the cursor points at the
+    // included file, not at a Csound name.
+    const QString includePath = m_view->includePathAtCursor();
+    if (!includePath.isEmpty()) {
+        openIncludedFile(includePath);
+        return;
+    }
     goToSource(m_view->identifierAtCursor(), m_view->isScheduleArgumentAtCursor());
+}
+
+void DocumentPage::openIncludedFile(const QString &includePath)
+{
+    const QString file = m_scanService != nullptr
+            ? m_scanService->resolveInclude(includePath, getFileName(),
+                                            includeSearchPaths())
+            : QString();
+    if (!file.isEmpty()) {
+        emit goToSourceFileRequested(file, 1, 0);
+        return;
+    }
+    Notification::showTransient(static_cast<QWidget *>(parent()),
+        tr("Go to source: included file \"%1\" not found").arg(includePath),
+        4000);
 }
 
 void DocumentPage::goToSource(const QString &name, bool isScheduleArgument)
 {
-    // The index of definitions is refreshed on every text change, but only
-    // when the timer gets to it, so it is brought up to date here.
-    m_definitions.scan(this->getBasicText());
+    // Only the current page can be edited, so the applied scan may be older
+    // than the text: bring it up to date before looking anything up.
+    if (m_scanService != nullptr)
+        m_scanService->scanNow(this);
+    const CodeScan::Result *scan = m_scan.data();
 
     if (name.isEmpty()) {
         qDebug() << "Go to source: there is no name at the cursor";
         return;
     }
-    const SourceDefinitions::Definition *definition = m_definitions.find(name);
+    const CodeScan::Definition *definition = scan->find(name);
     if (definition == nullptr) {
         qDebug() << "Go to source:" << name << "is not defined in this document";
         Notification::showTransient(static_cast<QWidget *>(parent()),
             tr("Go to source: \"%1\" not defined").arg(name), 4000);
         return;
     }
-    if (definition->kind == SourceDefinitions::Instrument && !isScheduleArgument) {
+    if (definition->kind == CodeScan::Kind::Instrument && !isScheduleArgument) {
         // An instrument is only reached through a schedule() or schedulek()
-        // call: anywhere else the name may be a variable or a string.
+        // call: anywhere else the name may be a variable or a string. This
+        // holds for instruments defined in an included file too.
         qDebug() << "Go to source:" << name << "is an instrument but is not scheduled here";
+        return;
+    }
+    if (!definition->file.isEmpty()) {
+        // Defined in an included file: the application opens that file.
+        emit goToSourceFileRequested(definition->file, definition->line,
+                                     definition->column);
         return;
     }
     m_view->jumpToDefinition(definition->line, definition->column);

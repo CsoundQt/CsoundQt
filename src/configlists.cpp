@@ -34,6 +34,7 @@
 
 #include "csound.h"
 #include "configlists.h"
+using namespace Qt::StringLiterals;
 
 typedef QPair<QString, QString> QStringPair;
 
@@ -315,9 +316,9 @@ bool ConfigLists::isSoundFile(const QString &fileName) const
     }
     // Formats that are commonly read but not offered for recording.
     static const QStringList extraSoundExtensions = {
-        QStringLiteral("aif"), QStringLiteral("aifc"), QStringLiteral("snd"),
-        QStringLiteral("wave"), QStringLiteral("ogg"), QStringLiteral("oga"),
-        QStringLiteral("mp3")
+        u"aif"_s, u"aifc"_s, u"snd"_s,
+        u"wave"_s, u"ogg"_s, u"oga"_s,
+        u"mp3"_s
     };
     return extraSoundExtensions.contains(suffix);
 }
@@ -340,7 +341,7 @@ bool ConfigLists::isPipeWireRunning() {
     if (dir.isEmpty())
         return false;
     QString remote = qEnvironmentVariable("PIPEWIRE_REMOTE",
-                                          QStringLiteral("pipewire-0"));
+                                          u"pipewire-0"_s);
     return QFile::exists(dir + QLatin1Char('/') + remote);
 #else
     return false;
@@ -349,11 +350,11 @@ bool ConfigLists::isPipeWireRunning() {
 
 bool ConfigLists::isFixedSamplerateBackend(const QString &module)
 {
-    return module == QLatin1String("jack")
-            || module == QLatin1String("auhal")
-            || module == QLatin1String("coreaudio")
-            || module == QLatin1String("pipewire")
-            || module == QLatin1String("pw");
+    return module == "jack"_L1
+            || module == "auhal"_L1
+            || module == "coreaudio"_L1
+            || module == "pipewire"_L1
+            || module == "pw"_L1;
 }
 
 int ConfigLists::backendSamplerate(const QString &module)
@@ -373,7 +374,7 @@ int ConfigLists::backendSamplerate(const QString &module)
         csoundSetMessageCallback(cs, msgCallback);
         const QByteArray rtAudio = ("-+rtaudio=" + module).toLocal8Bit();
         const QByteArray orchestra = csd.fileName().toLocal8Bit();
-        const QByteArray output = module == QLatin1String("jack")
+        const QByteArray output = module == "jack"_L1
                 ? QByteArray("-odac:null") : QByteArray("-odac");
         const char *argv[] = {"csound", "--get-system-sr", rtAudio.constData(),
                               output.constData(), orchestra.constData()};
@@ -444,7 +445,7 @@ static bool jackNaturalLessThan(const QString &a, const QString &b)
 
 static QString jackEscapeRegex(const QString &text)
 {
-    static const QString special = QStringLiteral("\\^$.|?*+()[]{}");
+    static const QString special = u"\\^$.|?*+()[]{}"_s;
     QString escaped;
     escaped.reserve(text.size() * 2);
     for (const QChar c : text) {
@@ -480,19 +481,19 @@ static bool jackDeviceIndex(const QString &device, const QString &prefix, int *i
 
 QString ConfigLists::jackHardwarePattern(bool isOutput)
 {
-    const QString prefix = isOutput ? QStringLiteral("dac") : QStringLiteral("adc");
+    const QString prefix = isOutput ? u"dac"_s : u"adc"_s;
     if (isPipeWireRunning()) {
-        return prefix + (isOutput ? QStringLiteral(":.*:playback_.*")
-                                  : QStringLiteral(":.*:capture_.*"));
+        return prefix + (isOutput ? u":.*:playback_.*"_s
+                                  : u":.*:capture_.*"_s);
     }
-    return prefix + (isOutput ? QStringLiteral(":system:playback_")
-                              : QStringLiteral(":system:capture_"));
+    return prefix + (isOutput ? u":system:playback_"_s
+                              : u":system:capture_"_s);
 }
 
 QString ConfigLists::resolveJackDevice(const QString &device, bool isOutput,
                                        bool connectSuccessive)
 {
-    const QString prefix = isOutput ? QStringLiteral("dac") : QStringLiteral("adc");
+    const QString prefix = isOutput ? u"dac"_s : u"adc"_s;
     if (device.contains(QLatin1Char(':')))
         return device;
     if (device.isEmpty())
@@ -502,8 +503,8 @@ QString ConfigLists::resolveJackDevice(const QString &device, bool isOutput,
     int index = -1;
     if (!jackDeviceIndex(device, prefix, &index))
         return device;
-    const QList<QStringPair> ports = isOutput ? getAudioOutputDevices(QStringLiteral("jack"))
-                                              : getAudioInputDevices(QStringLiteral("jack"));
+    const QList<QStringPair> ports = isOutput ? getAudioOutputDevices(u"jack"_s)
+                                              : getAudioInputDevices(u"jack"_s);
     if (index < 0 || index >= int(ports.size()))
         return device;
     const QString selected = ports.at(index).first;

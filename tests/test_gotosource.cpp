@@ -21,7 +21,7 @@
 #include <QTextCursor>
 #include <QTextDocument>
 
-#include "sourcedefinitions.h"
+#include "sourcecursor.h"
 #include "texteditor.h"
 
 // A document with the text under test, so that a cursor can be placed in it.
@@ -48,107 +48,12 @@ class TestGoToSource : public QObject
     Q_OBJECT
 
 private slots:
-    void testDefinitions();
-    void testDefinitionInCommentOrString();
-    void testLastDefinitionWins();
-    void testUdoOnFirstLine();
     void testIdentifierAtCursor();
     void testScheduleArgument();
     void testNotScheduleArgument();
+    void testIncludePathAtCursor();
     void testContextMenuPosition();
 };
-
-// The definitions of a small orchestra.
-void TestGoToSource::testDefinitions()
-{
-    const QString text =
-        "<CsInstruments>\n"            // 1
-        "opcode Foo, S, k\n"             // 2
-        "endop\n"                       // 3
-        "instr MyInstr\n"               // 4
-        "#define RAISE #1#\n"           // 5
-        "struct MyType val0:i\n"        // 6
-        "instr 1, 2\n";                 // 7 (numbered instruments are not names)
-
-    SourceDefinitions definitions;
-    definitions.scan(text);
-
-    const SourceDefinitions::Definition *udo = definitions.find("Foo");
-    QVERIFY(udo != nullptr);
-    QCOMPARE(udo->kind, SourceDefinitions::Udo);
-    QCOMPARE(udo->line, 2);
-    QCOMPARE(udo->column, 7);
-
-    const SourceDefinitions::Definition *instrument = definitions.find("MyInstr");
-    QVERIFY(instrument != nullptr);
-    QCOMPARE(instrument->kind, SourceDefinitions::Instrument);
-    QCOMPARE(instrument->line, 4);
-    QCOMPARE(instrument->column, 6);
-
-    const SourceDefinitions::Definition *macro = definitions.find("RAISE");
-    QVERIFY(macro != nullptr);
-    QCOMPARE(macro->kind, SourceDefinitions::Macro);
-    QCOMPARE(macro->line, 5);
-
-    const SourceDefinitions::Definition *type = definitions.find("MyType");
-    QVERIFY(type != nullptr);
-    QCOMPARE(type->kind, SourceDefinitions::Struct);
-    QCOMPARE(type->line, 6);
-
-    // A numbered instrument is not a name.
-    QVERIFY(definitions.find("1") == nullptr);
-
-    QCOMPARE(definitions.udoNames(), QStringList() << "Foo");
-}
-
-void TestGoToSource::testDefinitionInCommentOrString()
-{
-    const QString text =
-        "; opcode Commented, S, k\n"           // 1
-        "/* opcode BlockComment, S, k */\n"     // 2
-        "print \"opcode InString, S, k\"\n"     // 3
-        "{{\n"                                  // 4
-        "opcode InMultilineString, S, k\n"      // 5
-        "}}\n";                                 // 6
-
-    SourceDefinitions definitions;
-    definitions.scan(text);
-
-    QVERIFY(definitions.find("Commented") == nullptr);
-    QVERIFY(definitions.find("BlockComment") == nullptr);
-    QVERIFY(definitions.find("InString") == nullptr);
-    QVERIFY(definitions.find("InMultilineString") == nullptr);
-    QVERIFY(definitions.isEmpty());
-}
-
-void TestGoToSource::testLastDefinitionWins()
-{
-    const QString text =
-        "opcode Foo, S, k\n"     // 1
-        "opcode Foo, S, k, i\n";  // 2
-
-    SourceDefinitions definitions;
-    definitions.scan(text);
-
-    const SourceDefinitions::Definition *udo = definitions.find("Foo");
-    QVERIFY(udo != nullptr);
-    QCOMPARE(udo->line, 2);
-}
-
-// A definition on the very first line of the text.
-void TestGoToSource::testUdoOnFirstLine()
-{
-    SourceDefinitions definitions;
-    definitions.scan("opcode First, S, k\ninstr Second\n");
-
-    const SourceDefinitions::Definition *udo = definitions.find("First");
-    QVERIFY(udo != nullptr);
-    QCOMPARE(udo->line, 1);
-
-    const SourceDefinitions::Definition *instrument = definitions.find("Second");
-    QVERIFY(instrument != nullptr);
-    QCOMPARE(instrument->line, 2);
-}
 
 void TestGoToSource::testIdentifierAtCursor()
 {
@@ -251,6 +156,54 @@ void TestGoToSource::testNotScheduleArgument()
         QTextCursor cursor = fixture.cursorAt(1, 8);
         QCOMPARE(SourceCursor::identifierAt(cursor), QString("MyInstr"));
         QVERIFY(!SourceCursor::isScheduleArgument(cursor));
+    }
+}
+
+// Inside the file name of an #include directive the cursor points at the
+// included file, so "Go to Source" can open it.
+void TestGoToSource::testIncludePathAtCursor()
+{
+    // "#include \"/path/to/myinclude.udo\"": the path is at columns 10..31.
+    {
+        TextFixture fixture("#include \"/path/to/myinclude.udo\"");
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 10)),
+                 QString("/path/to/myinclude.udo"));
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 20)),
+                 QString("/path/to/myinclude.udo"));
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 32)),
+                 QString("/path/to/myinclude.udo"));
+        // Before the opening quote and after the closing one.
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 9)), QString());
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 33)), QString());
+    }
+    // The angled form, with leading whitespace.
+    {
+        TextFixture fixture("  #include <lib.inc>");
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 12)),
+                 QString("lib.inc"));
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 15)),
+                 QString("lib.inc"));
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 19)),
+                 QString("lib.inc"));
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 20)), QString());
+    }
+    // Strings that are not an include path.
+    {
+        TextFixture fixture("Sfile = \"/path/to/myinclude.udo\"");
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 15)), QString());
+    }
+    {
+        TextFixture fixture("; #include \"lib.inc\"");
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 15)), QString());
+    }
+    {
+        TextFixture fixture("#includes \"lib.inc\"");
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 15)), QString());
+    }
+    // An include whose path is not closed yet is not a usable target.
+    {
+        TextFixture fixture("#include \"lib.inc");
+        QCOMPARE(SourceCursor::includePathAt(fixture.cursorAt(1, 15)), QString());
     }
 }
 

@@ -59,6 +59,7 @@ Options::Options(ConfigLists *configlists) :
 	midiCcToCurrentPageOnly = false;
     saveChanges = false;
     quitOnLastTabClosed = false;
+    includeActiveFileInTitle = true;
     rememberFile = true;
     // iconText = true;
     iconText = false;

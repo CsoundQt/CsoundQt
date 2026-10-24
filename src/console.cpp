@@ -25,6 +25,7 @@
 
 #include <QDebug>
 #include <QtWidgets>
+using namespace Qt::StringLiterals;
 
 
 // Mixes color a towards color b. percentB = 0 gives a, 100 gives b.
@@ -44,7 +45,7 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
     m_infoColor = QColor("#006400");
     m_debugColor = QColor(128, 128, 128);
     m_pendingRole = (int) MessageRole::Auto;
-    rxerr.setPattern("^\\s*error:\\.+line\\ ");
+    rxerr.setPattern(uR"(^\s*error:\.+line\ )"_s);
 }
 
 Console::~Console()

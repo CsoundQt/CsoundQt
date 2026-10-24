@@ -452,12 +452,6 @@ void BaseDocument::setFileName(QString name)
 	if (name.endsWith(".csd") || name.isEmpty()) {
 		m_view->setFileType(EDIT_CSOUND_MODE);
 	}
-	else if (name.endsWith(".py")) {
-		m_view->setFileType(EDIT_PYTHON_MODE);
-	}
-	else if (name.endsWith(".xml")) {
-		m_view->setFileType(EDIT_XML_MODE);
-	}
 	else if (name.endsWith(".orc")) {
 		m_view->setFileType(EDIT_ORC_MODE);
 	}

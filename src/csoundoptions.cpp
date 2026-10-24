@@ -29,6 +29,7 @@
 #include <QDebug>
 #include <cstdlib> // for calloc
 #include <QRegularExpression>
+using namespace Qt::StringLiterals;
 
 
 
@@ -111,7 +112,7 @@ QString CsoundOptions::generateCmdLineFlags()
 QStringList CsoundOptions::generateCmdLineFlagsList()
 {
     QStringList opts;
-    static const QRegularExpression wihteSpaceRegex("[\\s]");
+    static const QRegularExpression wihteSpaceRegex(uR"([\s])"_s);
 	if (bufferSizeActive)
         opts << "-b" + QString::number(bufferSize);
 	if (HwBufferSizeActive)

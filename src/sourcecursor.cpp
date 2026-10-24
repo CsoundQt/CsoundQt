@@ -11,11 +11,9 @@
 	GNU Lesser General Public License for more details.
 */
 
-#include "sourcedefinitions.h"
+#include "sourcecursor.h"
 
-#include "highlighter.h"
-
-#include <QRegularExpression>
+#include <QTextBlock>
 
 namespace {
 
@@ -75,72 +73,6 @@ bool isScheduleOpcode(const QString &name)
 
 } // namespace
 
-void SourceDefinitions::scan(const QString &text)
-{
-    m_definitions.clear();
-    m_udoNames.clear();
-
-    // A definition is a name at the start of a line. The name must start with
-    // a letter or an underscore: numbered instruments ("instr 1,2") are not
-    // names and are not indexed.
-    static const QRegularExpression udoRx("^\\s*opcode\\s+([A-Za-z_]\\w*)");
-    static const QRegularExpression instrRx("^\\s*instr\\s+([A-Za-z_]\\w*)");
-    static const QRegularExpression macroRx("^\\s*#\\s*define\\s+([A-Za-z_]\\w*)");
-    static const QRegularExpression structRx("^\\s*struct\\s+([A-Za-z_]\\w*)");
-
-    // The lexical state at the end of the previous line: 0 none, 1 inside a
-    // block comment, 2 inside a multiline string.
-    int state = 0;
-
-    const QStringList lines = text.split('\n');
-    for (int i = 0; i < lines.size(); ++i) {
-        const QString &line = lines.at(i);
-        const CsoundLex::Line lex = CsoundLex::scan(line, state);
-        state = lex.endState;
-
-        QRegularExpressionMatch match;
-        Kind kind = Udo;
-        if ((match = udoRx.match(line)).hasMatch()) {
-            kind = Udo;
-        }
-        else if ((match = instrRx.match(line)).hasMatch()) {
-            kind = Instrument;
-        }
-        else if ((match = macroRx.match(line)).hasMatch()) {
-            kind = Macro;
-        }
-        else if ((match = structRx.match(line)).hasMatch()) {
-            kind = Struct;
-        }
-        else {
-            continue;
-        }
-
-        // A definition in a comment or in a string is not a definition.
-        if (!CsoundLex::isCode(lex, match.capturedStart(1)))
-            continue;
-
-        Definition definition;
-        definition.name = match.captured(1);
-        definition.line = i + 1;
-        definition.column = match.capturedStart(1);
-        definition.kind = kind;
-        // A later definition of the same name replaces the earlier one: in
-        // Csound the last definition of a name is the valid one.
-        m_definitions.insert(definition.name, definition);
-        if (kind == Udo && !m_udoNames.contains(definition.name))
-            m_udoNames.append(definition.name);
-    }
-}
-
-const SourceDefinitions::Definition *SourceDefinitions::find(const QString &name) const
-{
-    const auto it = m_definitions.constFind(name);
-    if (it == m_definitions.constEnd())
-        return nullptr;
-    return &it.value();
-}
-
 QString SourceCursor::identifierAt(const QTextCursor &cursor)
 {
     if (cursor.isNull())
@@ -149,6 +81,52 @@ QString SourceCursor::identifierAt(const QTextCursor &cursor)
     int start = 0;
     int end = 0;
     if (!identifierBounds(line, cursor.positionInBlock(), &start, &end))
+        return QString();
+    return line.mid(start, end - start);
+}
+
+QString SourceCursor::includePathAt(const QTextCursor &cursor)
+{
+    if (cursor.isNull())
+        return QString();
+    const QString line = cursor.block().text();
+
+    // The directive has to start the line, after optional whitespace.
+    int pos = 0;
+    while (pos < line.size() && line.at(pos).isSpace())
+        ++pos;
+    if (pos >= line.size() || line.at(pos) != QLatin1Char('#'))
+        return QString();
+    ++pos;
+    while (pos < line.size() && line.at(pos).isSpace())
+        ++pos;
+    if (line.mid(pos, 7) != QLatin1String("include"))
+        return QString();
+    pos += 7;
+    // "#includes" or "#include_x" is not the directive.
+    if (pos < line.size() && isNameChar(line.at(pos)))
+        return QString();
+    while (pos < line.size() && line.at(pos).isSpace())
+        ++pos;
+    if (pos >= line.size())
+        return QString();
+
+    QChar close;
+    if (line.at(pos) == QLatin1Char('"'))
+        close = QLatin1Char('"');
+    else if (line.at(pos) == QLatin1Char('<'))
+        close = QLatin1Char('>');
+    else
+        return QString();
+
+    const int start = pos + 1;
+    const int end = line.indexOf(close, start);
+    if (end < 0)
+        return QString();
+    // Anywhere inside the delimiters, from just after the opening one to just
+    // before the closing one.
+    const int position = cursor.positionInBlock();
+    if (position < start || position > end)
         return QString();
     return line.mid(start, end - start);
 }

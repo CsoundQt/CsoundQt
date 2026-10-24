@@ -33,6 +33,7 @@ namespace {
 
 QHash<QString, Theme> g_themes;
 QStringList g_jsonNames; // shipped + user themes, sorted for display
+int g_refreshGeneration = 0;
 
 const QStringList &builtInThemeNames()
 {
@@ -51,6 +52,18 @@ QColor saturateColor(const QColor &color, int percent)
     if (saturation > 255)
         saturation = 255;
     return QColor::fromHsl(color.hue(), saturation, color.lightness());
+}
+
+// Closing XML/csd tags (</CsInstruments>, </CsOptions>, ...) are only
+// structural markers. A colour halfway between the normal tag colour and the
+// editor background makes them less intrusive while still visible.
+QColor dimmedColor(const QColor &foreground, const QColor &background, double factor)
+{
+    if (!foreground.isValid() || !background.isValid())
+        return foreground;
+    return QColor((foreground.red()*(1-factor) + background.red()*factor),
+                  (foreground.green()*(1-factor) + background.green()*factor),
+                  (foreground.blue()*(1-factor) + background.blue()* factor));
 }
 
 FormatSpec makeSpec(const QColor &foreground = QColor(),
@@ -114,6 +127,7 @@ Theme makeLightTheme()
     f[u"io"_s] = makeSpec(QColor(u"#8844BB"_s), {}, QFont::Bold);
     f[u"udo"_s] = makeSpec(opcodeColor.darker(150), {}, QFont::Bold);
     f[u"csdtag"_s] = makeSpec(instanceColor);
+    f[u"csdtagClose"_s] = makeSpec(dimmedColor(instanceColor, theme.defaultBackground, 0.3));
     f[u"operator"_s] = makeSpec(instanceColor);
     f[u"scoreLetter"_s] = makeSpec(opcodeColor, {}, QFont::Bold);
     return theme;
@@ -161,6 +175,7 @@ Theme makeDarkTheme()
     f[u"io"_s] = makeSpec(QColor(u"#FFD54F"_s), {}, QFont::Bold);
     f[u"udo"_s] = makeSpec(opcodeColor);
     f[u"csdtag"_s] = makeSpec(instanceColor);
+    f[u"csdtagClose"_s] = makeSpec(dimmedColor(instanceColor, theme.defaultBackground, 0.55));
     f[u"operator"_s] = makeSpec(nameColor);
     f[u"scoreLetter"_s] = makeSpec(opcodeColor, {}, QFont::Bold);
     return theme;
@@ -182,6 +197,8 @@ Theme makeClassicTheme()
     const QColor opcodeColor = blue;
     QHash<QString, FormatSpec> &f = theme.formats;
     f[u"csdtag"_s] = makeSpec(brown, {}, QFont::Bold);
+    f[u"csdtagClose"_s] = f[u"csdtag"_s];
+    // f[u"csdtagClose"_s].foreground = dimmedColor(brown, theme.defaultBackground);
     f[u"inst"_s] = makeSpec(purple, {}, QFont::Bold);
     f[u"keyword"_s] = makeSpec(QColor(u"#E65100"_s), {}, QFont::Bold);
     f[u"header"_s] = makeSpec(brown, {}, QFont::Bold);
@@ -469,9 +486,9 @@ QJsonObject formatToJson(const FormatSpec &spec)
 QString sanitizedFileBase(const QString &name)
 {
     QString base = name;
-    base.replace(QRegularExpression(u"[^A-Za-z0-9._-]+"_s),
+    base.replace(QRegularExpression(uR"([^A-Za-z0-9._-]+)"_s),
                  u"-"_s);
-    base.remove(QRegularExpression(u"^-+|-+$"_s));
+    base.remove(QRegularExpression(uR"(^-+|-+$)"_s));
     if (base.isEmpty())
         base = u"theme"_s;
     return base;
@@ -488,10 +505,11 @@ QString userThemeDir()
     return QDir(dataLocation).filePath(u"csoundqt/themes"_s);
 }
 
-void initialize()
+void refresh()
 {
     g_themes.clear();
     g_jsonNames.clear();
+    ++g_refreshGeneration;
 
     // Compiled-in themes first: they are reserved and always available.
     addBuiltInThemes();
@@ -518,6 +536,16 @@ void initialize()
               [](const QString &a, const QString &b) {
         return QString::localeAwareCompare(a, b) < 0;
     });
+}
+
+void initialize()
+{
+    refresh();
+}
+
+int refreshGeneration()
+{
+    return g_refreshGeneration;
 }
 
 QStringList builtInNames()

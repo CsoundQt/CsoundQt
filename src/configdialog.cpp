@@ -262,6 +262,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     themeComboBox->setItemData(2, "light");
     themeComboBox->setCurrentIndex(themeComboBox->findData(m_options->themeMode));
 
+    // The user may have edited or added theme JSON files while the dialog was
+    // closed. Rescan the theme folder so the editor theme list is current.
+    EditorThemes::refresh();
     populateEditorThemes();
     connect(duplicateThemeButton, &QPushButton::clicked,
             this, &ConfigDialog::duplicateEditorTheme);
@@ -463,6 +466,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	csoundMidiCheckBox->setChecked(m_options->useCsoundMidi);
 	simultaneousCheckBox->setChecked(m_options->simultaneousRun);
 	quitOnLastTabClosedCheckBox->setChecked(m_options->quitOnLastTabClosed);
+	includeActiveFileInTitleCheckBox->setChecked(m_options->includeActiveFileInTitle);
 
 	sampleFormatComboBox->setCurrentIndex(m_options->sampleFormat);
 	debugPortSpinBox->setValue(m_options->debugPort);
@@ -822,6 +826,7 @@ void ConfigDialog::apply()
 	m_options->useCsoundMidi = csoundMidiCheckBox->isChecked();
 	m_options->simultaneousRun = simultaneousCheckBox->isChecked();
 	m_options->quitOnLastTabClosed = quitOnLastTabClosedCheckBox->isChecked();
+	m_options->includeActiveFileInTitle = includeActiveFileInTitleCheckBox->isChecked();
 
 	m_options->sampleFormat = sampleFormatComboBox->currentIndex();
 

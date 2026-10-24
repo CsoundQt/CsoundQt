@@ -26,8 +26,8 @@
 
 #include <QDockWidget>
 #include <QTreeWidget>
-#include <QMutex>
-#include "types.h"
+
+#include "codescan.h"
 
 class TreeItem : public QTreeWidgetItem
 {
@@ -38,48 +38,44 @@ public:
 
 	int getLine() {return m_line;}
 	void setLine(int line) {m_line = line;}
-    void setInputArgs(QString args) { inargs = args; }
-    void setOutputArgs(QString args) { outargs = args; }
 
 private:
-	int m_line;
-    QString inargs;
-    QString outargs;
+	int m_line = -1;
 };
 
 
+// The tree view of the current document: opcodes, macros, instruments,
+// f-tables and the score. The panel only renders what CodeScan found; it does
+// not parse anything itself, so it can be shown and hidden freely while the
+// scanning runs elsewhere.
 class Inspector : public QDockWidget
 {
 	Q_OBJECT
 public:
 	Inspector(QWidget *parent);
 	~Inspector();
-	void parseText(const QString &text);
+	// Show the result of scanning the current document. The tree is only
+	// built while the dock is visible; a scan that arrives while it is hidden
+	// is kept and the tree is built when the dock is shown.
+	void setScan(const CodeScan::ResultPtr &scan);
+	void clearScan() { setScan(CodeScan::empty()); }
 	// Give keyboard focus to the inspector's tree, for the Focus Inspector
-    // action. Showing/raising the dock itself is the caller's job.
-    void focusTree();
-    QStringList getParsedUDOs() { return m_opcodes; }
-    QVector<Opcode*> getUdosVector() { return udosVector; }
-    QHash<QString, Opcode>*getUdosMap() { return &udosMap; }
-    // Global variables found in the current document (g-prefixed or Csound 7
-    // name@global:type). A type suffix takes precedence over the prefix:
-    // gkfoo:a is local, not global. Globals are visible from every instrument
-    // and opcode, unlike the block-local variables.
-    const QStringList &getGlobalVariables() const { return m_globalVariables; }
-    const QStringList &getGlobalStringVariables() const { return m_globalStringVariables; }
-    // Names of the named instruments in the current document, for schedule().
-    const QStringList &getInstrumentNames() const { return m_instrumentNames; }
-
+	// action. Showing/raising the dock itself is the caller's job.
+	void focusTree();
 
 protected:
 	virtual void focusInEvent (QFocusEvent * event);
-	virtual void closeEvent(QCloseEvent * event);
+	virtual void closeEvent (QCloseEvent * event);
 	virtual void showEvent (QShowEvent * event);
 	// Intercept Space (navigate like a click, keep focus) and Tab (always
 	// move focus to the editor) on the tree.
 	virtual bool eventFilter(QObject *obj, QEvent *event);
 
 private:
+	// Replaces the tree with the entries of the scan, keeping the expansion
+	// state of the groups and of the instruments across rebuilds.
+	void buildTree(const CodeScan::Result &scan);
+
 	QTreeWidget *m_treeWidget;
 	TreeItem *treeItem1;
 	TreeItem *treeItem2;
@@ -87,25 +83,8 @@ private:
 	TreeItem *treeItem4;
 	TreeItem *treeItem5;
 
-	QMutex inspectorMutex;
-    // QVector<QString> m_opcodes;
-    QStringList m_opcodes;
-    QStringList m_globalVariables;
-    QStringList m_globalStringVariables;
-    QStringList m_instrumentNames;
-    QRegularExpression opcodeRegexp;
-    QRegularExpression rxOpcode;
-    bool inspectLabels;
-    QHash<QString, Opcode>udosMap;
-    QVector<Opcode *>udosVector;
-
-    QRegularExpression xinRx;
-    QRegularExpression xoutRx;
-    QRegularExpression ftableRx1;
-    QRegularExpression ftableRx2;
-    QString m_lastText;
-    bool m_treeDirty = true;
-
+	CodeScan::ResultPtr m_scan = CodeScan::empty();
+	bool m_treeDirty = true;
 
 private slots:
 	void itemActivated(QTreeWidgetItem * item, int column = 0);
@@ -124,7 +103,6 @@ signals:
 	void jumpToLineAndFocus(int line);
 	// Move keyboard focus to the editor without navigating (Tab).
 	void focusEditorRequested();
-    void parsedUDOs();
 };
 
 #endif // INSPECTOR_H

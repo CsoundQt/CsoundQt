@@ -43,7 +43,10 @@ HEADERS = "src/about.h" \
     "src/bracketmatcher.h" \
     "src/channeltext.h" \
     "src/channelhighlightmode.h" \
-    "src/sourcedefinitions.h" \
+    "src/sourcecursor.h" \
+    "src/codescan.h" \
+    "src/scanservice.h" \
+    "src/includecache.h" \
     "src/highlighter.h" \
     "src/inspector.h" \
     "src/keyboardshortcuts.h" \
@@ -113,7 +116,10 @@ SOURCES = "src/about.cpp" \
     "src/framewidget.cpp" \
     "src/bracketmatcher.cpp" \
     "src/channeltext.cpp" \
-    "src/sourcedefinitions.cpp" \
+    "src/sourcecursor.cpp" \
+    "src/codescan.cpp" \
+    "src/scanservice.cpp" \
+    "src/includecache.cpp" \
     "src/highlighter.cpp" \
     "src/inspector.cpp" \
     "src/keyboardshortcuts.cpp" \

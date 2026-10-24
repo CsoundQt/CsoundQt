@@ -99,9 +99,9 @@ struct Line
 };
 
 // Scans one line. startState is the state at the end of the previous line.
-Line scan(const QString &line, int startState);
+Line scan(QStringView line, int startState);
 // Same, but fills an existing Line and reuses its vector capacity.
-void scanInto(const QString &line, int startState, Line &info);
+void scanInto(QStringView line, int startState, Line &info);
 
 // True when the position is not part of a comment or a string.
 inline bool isCode(const Line &info, int position)
@@ -201,7 +201,7 @@ private:
     QRegularExpression rxScoreLetter;
     QRegularExpression rxQuotation;
 
-    QTextCharFormat csdtagFormat, instFormat, headerFormat;
+    QTextCharFormat csdtagFormat, csdtagCloseFormat, instFormat, headerFormat;
 	QTextCharFormat irateFormat, krateFormat, arateFormat, girateFormat, gkrateFormat, garateFormat;
 	QTextCharFormat stringVarFormat, gstringVarFormat, fsigFormat, gfsigFormat;
     QTextCharFormat booleanFormat; // Csound 7: :b / :B boolean typed variables
@@ -349,6 +349,7 @@ private:
 
     QString m_theme;
     bool m_themeSet = false;
+    int m_themeGeneration = -1;
 
 	// for html
     QTextCharFormat jsKeywordFormat, htmlTagFormat, attrFormat, tagNameFormat;

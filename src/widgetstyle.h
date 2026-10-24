@@ -27,6 +27,7 @@
 #include <QStringList>
 #include <QStyle>
 #include <QStyleFactory>
+using namespace Qt::StringLiterals;
 
 // Some desktop styles (e.g. Breeze) put themed icons on dialog buttons
 // (Yes/No/Cancel/...). Those icons follow the desktop icon theme rather than
@@ -75,7 +76,7 @@ public:
 inline QString defaultWidgetStyleName()
 {
 #ifdef Q_OS_LINUX
-    return QStringLiteral("Fusion");
+    return u"Fusion"_s;
 #else
     return QString();
 #endif
@@ -100,7 +101,7 @@ inline QString currentWidgetStyleName()
 // "windows11"/"windowsvista". Hide it from the chooser and never select it.
 inline bool isHiddenWidgetStyle(const QString &name)
 {
-    return name.compare(QStringLiteral("Windows"), Qt::CaseInsensitive) == 0;
+    return name.compare(u"Windows"_s, Qt::CaseInsensitive) == 0;
 }
 
 // Widget styles offered to the user: Qt's own keys in Qt's order, minus the

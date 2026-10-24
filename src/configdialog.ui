@@ -1420,6 +1420,16 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QCheckBox" name="includeActiveFileInTitleCheckBox">
+               <property name="toolTip">
+                <string>Include the file of the current tab in the window title</string>
+               </property>
+               <property name="text">
+                <string>Include active file in the window title</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
            <item row="1" column="1" rowspan="5">

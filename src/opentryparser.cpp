@@ -26,6 +26,7 @@
 
 #include <QFile>
 #include <QSet>
+using namespace Qt::StringLiterals;
 
 void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
     QDomDocument m_doc("opcodes");
@@ -149,7 +150,7 @@ QString OpEntryParser::repairOpcodesXml(const QString &xml)
     result.reserve(xml.size());
     int openOpcodes = 0;
     int pos = 0;
-    QRegularExpression tagRx("<[^>]+>");
+    QRegularExpression tagRx(uR"(<[^>]+>)"_s);
     QRegularExpressionMatchIterator it = tagRx.globalMatch(xml);
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
@@ -264,6 +265,19 @@ Opcode OpEntryParser::findOpcode(QString opcodeName) {
 }
 
 QString opcodeSyntax(Opcode opc) {
+    if (opc.newStyle) {
+        QString syntax = opc.opcodeName.simplified()
+                + "(" + opc.inArgs.simplified() + ")";
+        if (!opc.outArgs.isEmpty()) {
+            if (opc.outArgs.contains(QLatin1Char(',')))
+                syntax += ":(" + opc.outArgs.simplified() + ")";
+            else
+                syntax += ":" + opc.outArgs.simplified();
+        }
+        if (!opc.desc.isEmpty())
+            syntax += "<br />[ " + opc.desc + " ]";
+        return syntax;
+    }
     QString syntax = opc.outArgs.simplified();
     if (!opc.outArgs.isEmpty())
         syntax += " ";
@@ -380,13 +394,13 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
     if (inArgs.contains("["))
         inArgsOpt = inArgs.mid(inArgs.indexOf("["));
     inArgs.remove(inArgsOpt);
-    QStringList args = inArgs.split(QRegularExpression("[,\\\"]+"), SKIP_EMPTY_PARTS);
+    QStringList args = inArgs.split(QRegularExpression(uR"([,\"]+)"_s), SKIP_EMPTY_PARTS);
     for (int count = 0; count < args.size(); count ++) {
         args[count] = args[count].trimmed();
         if (args[count] == "")
             args.removeAt(count);
     }
-    QStringList argsOpt = inArgsOpt.split(QRegularExpression("[,\\\\\\s\\[\\]]+"), SKIP_EMPTY_PARTS);
+    QStringList argsOpt = inArgsOpt.split(QRegularExpression(uR"([,\\\s\[\]]+)"_s), SKIP_EMPTY_PARTS);
     for (int j = 0; j < inputs.size(); j++) {
         if (j < args.size()) {
             inputs[j].argName = args[j];
@@ -414,8 +428,8 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
     if (outArgs.contains("["))
         outArgsOpt = outArgs.mid(outArgs.indexOf("["));
     outArgs.remove(outArgsOpt);
-    args = outArgs.split(QRegularExpression("[,\\s]+"), SKIP_EMPTY_PARTS);
-    argsOpt = outArgsOpt.split(QRegularExpression("[,\\\\\\s\\[\\]]"), SKIP_EMPTY_PARTS);
+    args = outArgs.split(QRegularExpression(uR"([,\s]+)"_s), SKIP_EMPTY_PARTS);
+    argsOpt = outArgsOpt.split(QRegularExpression(uR"([,\\\s\[\]])"_s), SKIP_EMPTY_PARTS);
     for (int j = 0; j < outputs.size(); j++) {
         if (j < args.size()) {
             outputs[j].argName = args[j];

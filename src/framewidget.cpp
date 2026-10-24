@@ -24,6 +24,7 @@
 #include "qutewidget.h"
 
 #include <QColor>
+using namespace Qt::StringLiterals;
 
 // Grab zones at the bottom-right and top-left corners of an edit-mode frame.
 // The zones shrink for very small widgets so that both always fit without
@@ -89,7 +90,7 @@ static QString unselectedFrameStyleSheet(bool dotted)
     const QColor border = s_frameColorUnselected;
     return QString("FrameWidget { color:%1; border:2px %2 rgba(%3, %4, %5, %6); }")
             .arg(qApp->palette().color(QPalette::WindowText).name(),
-                 dotted ? QStringLiteral("dotted") : QStringLiteral("solid"))
+                 dotted ? u"dotted"_s : u"solid"_s)
             .arg(border.red()).arg(border.green()).arg(border.blue()).arg(border.alpha());
 }
 

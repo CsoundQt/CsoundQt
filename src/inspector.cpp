@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -21,16 +22,14 @@
 */
 
 #include "inspector.h"
-#include "types.h"
-#include <chrono>
-#include <QStringView>
+
 #include <QShowEvent>
-#include <QtGui>
+
+using namespace Qt::StringLiterals;
 
 Inspector::Inspector(QWidget *parent)
 	: QDockWidget(parent)
 {
-    QDEBUG << "setWindowTitle Inspector";
 	setWindowTitle(tr("Inspector"));
 	m_treeWidget = new QTreeWidget(this);
 //	m_treeWidget->setHeaderLabel(tr("Inspector"));
@@ -59,15 +58,6 @@ Inspector::Inspector(QWidget *parent)
     m_treeWidget->expandItem(treeItem3);    // instruments
     m_treeWidget->collapseItem(treeItem4);  // ftables
     m_treeWidget->collapseItem(treeItem5);    // score
-    // Matches both the old opcode syntax ("opcode name, outtypes, intypes")
-    // and the new-style syntax ("opcode name(inargs):(outargs)").
-    rxOpcode.setPattern("\\bopcode\\s+(\\w+)\\s*(?:,|\\()");
-    xinRx.setPattern("\\bxin\\b");
-    // xinRx.setPattern("[akiS]\\w+[,\\w\\d\\s_]+\\bxin\\s*$");
-    xoutRx.setPattern("\\bxout\\s+");
-    // ftableRx1.setPattern("^f\\s*\\d");
-    ftableRx2.setPattern("^\\w*\\s*ftgen");
-    inspectLabels = false;
 }
 
 
@@ -77,340 +67,144 @@ Inspector::~Inspector()
 }
 
 
-void Inspector::parseText(const QString &text)
+void Inspector::setScan(const CodeScan::ResultPtr &scan)
 {
-    // The data does not change when the text is identical, unless a deferred
-    // tree rebuild is pending after the inspector was hidden.
-    if (text == m_lastText && !m_treeDirty)
+    if (scan == m_scan)
         return;
-
-    udosMap.clear();
-    inspectorMutex.lock();
-    QSet<QString> globalVariables;
-    QSet<QString> globalStringVariables;
-    QSet<QString> explicitGlobals;
-    QSet<QString> explicitLocals;
-    QSet<QString> instrumentNames;
-    // Global variables are either g + a type character (the classic syntax)
-    // or names annotated with @global:<type> (Csound 7). An explicit type
-    // suffix takes precedence over the prefix: gkfoo:a is a local audio
-    // variable, not a global control variable.
-    static const QRegularExpression globalVariableRx(
-                QStringLiteral("\\b(g[akiSpfxbw][A-Za-z0-9_]*)\\b"));
-    static const QRegularExpression annotatedGlobalRx(
-                QStringLiteral("\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
-                               "@global\\s*:\\s*([akiSpfxbw])\\b(?:\\s*\\[\\])?"));
-    static const QRegularExpression annotatedLocalRx(
-                QStringLiteral("(?<!@)\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
-                               ":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"));
-
-    // auto t1 = std::chrono::high_resolution_clock::now();
-
-    m_lastText = text;
-    // The tree is only needed while the inspector is actually shown. The
-    // parsed data (UDOs, globals and instrument names) is always updated.
-    const bool buildTree = !isHidden();
-    m_treeDirty = !buildTree;
-
-    bool treeItem1Expanded = true;
-    bool treeItem2Expanded = true;
-    bool treeItem3Expanded = true;
-    bool treeItem4Expanded = true;
-    bool treeItem5Expanded = true;
-    bool insideOrc = false;
-    QHash<QString, bool> instrumentExpanded;  // Remember if instrument is expanded in menu
-    if (buildTree) {
-        if  (treeItem1 != 0) {
-            treeItem1Expanded = treeItem1->isExpanded();
-            treeItem2Expanded = treeItem2->isExpanded();
-            treeItem3Expanded = treeItem3->isExpanded();
-            treeItem4Expanded = (treeItem4 != 0 ? treeItem4->isExpanded() : false);
-            treeItem5Expanded = (treeItem5 != 0 ? treeItem5->isExpanded() : false);
-        }
-        for (int i = 0; i < treeItem3->childCount(); i++) {
-            QTreeWidgetItem * instr = treeItem3->child(i);
-            Q_ASSERT(instr->columnCount() > 0);
-            instrumentExpanded[instr->text(0)] = instr->isExpanded();
-        }
-
-        m_treeWidget->clear();
-        treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
-        treeItem1->setLine(-1);
-        treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Preprocessor")));
-        treeItem2->setLine(-1);
-        treeItem3 = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
-        treeItem3->setLine(-1);
-        treeItem4 = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
-        treeItem4->setLine(-1);
-        treeItem5 = new TreeItem(m_treeWidget, QStringList(tr("Score")));
-        treeItem5->setLine(-1);  // This might be overridden below
+    m_scan = scan;
+    if (isHidden()) {
+        // Nothing is rendered while the dock is hidden; the tree is built from
+        // the latest scan when it is shown again.
+        m_treeDirty = true;
+        return;
     }
-    TreeItem *currentItem = buildTree ? treeItem3 : nullptr;
-    Opcode *currentOpcode = nullptr;
-    bool inInstrument = false;
-    int commentIndex = 0;
-    bool partOfComment = false;
-    int i = 0;
-    const QList<QStringView> lines = QStringView(text).split(QLatin1Char('\n'));
-    QRegularExpressionMatch match;
-    static QRegularExpression orcStartRx("^\\s*<CsInstruments>");
+    buildTree(*m_scan);
+}
 
-    for(; i<lines.size(); i++) {
-        if(lines[i].contains(QLatin1Char('<'))
-                && orcStartRx.match(lines[i]).hasMatch()) {
-            i++;
-            if (buildTree)
-                treeItem3->setLine(i);
-            insideOrc = true;
-            break;
+
+void Inspector::buildTree(const CodeScan::Result &scan)
+{
+    m_treeDirty = false;
+
+    // The expansion state belongs to the user, not to the document: keep the
+    // groups and the instruments open or closed as they were.
+    bool opcodesExpanded = true;
+    bool macrosExpanded = true;
+    bool instrumentsExpanded = true;
+    bool ftablesExpanded = true;
+    bool scoreExpanded = true;
+    QHash<QString, bool> instrumentExpanded;
+    if (treeItem1 != nullptr) {
+        opcodesExpanded = treeItem1->isExpanded();
+        macrosExpanded = treeItem2->isExpanded();
+        instrumentsExpanded = treeItem3->isExpanded();
+        ftablesExpanded = treeItem4->isExpanded();
+        scoreExpanded = treeItem5->isExpanded();
+        for (int i = 0; i < treeItem3->childCount(); ++i) {
+            QTreeWidgetItem *instrument = treeItem3->child(i);
+            if (instrument->columnCount() > 0)
+                instrumentExpanded[instrument->text(0)] = instrument->isExpanded();
         }
     }
 
-    // Parsing orchestra
+    m_treeWidget->clear();
+    treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
+    treeItem1->setLine(-1);
+    treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
+    treeItem2->setLine(-1);
+    treeItem3 = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
+    treeItem3->setLine(-1);
+    treeItem4 = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
+    treeItem4->setLine(-1);
+    treeItem5 = new TreeItem(m_treeWidget, QStringList(tr("Score")));
+    treeItem5->setLine(-1);
 
-    if(insideOrc) {
-        for (; i< lines.size(); i++) {
-            const QStringView line = lines[i].trimmed();
-            if (line.isEmpty() || line[0] == ';' || line.startsWith(QLatin1StringView("//")))
-                continue;
-
-            if (partOfComment) {
-                if (line.indexOf(QLatin1StringView("*/")) != -1)
-                    partOfComment = false;
-                continue;
-            }
-            if (!partOfComment && (commentIndex=line.indexOf(QLatin1StringView("/*"))) != -1) {
-                partOfComment = line.indexOf(QLatin1StringView("*/"), commentIndex) == -1;
-                continue;
-            }
-            if (line[0] == '<') {
-                if (!line.startsWith(QLatin1StringView("</CsInstruments>")))
-                    QDEBUG << "Malformed orchestra, tag" << line.toString() << "is invalid";
-                break;
-            }
-
-            QStringView codeLine = line;
-            const int semicolon = codeLine.indexOf(QLatin1Char(';'));
-            const int slashes = codeLine.indexOf(QLatin1String("//"));
-            const int comment = (semicolon >= 0 && slashes >= 0)
-                    ? qMin(semicolon, slashes) : qMax(semicolon, slashes);
-            if (comment >= 0)
-                codeLine = codeLine.left(comment);
-            if (codeLine.contains(QLatin1Char('g'))) {
-                for (auto globalMatch = globalVariableRx.globalMatch(codeLine);
-                     globalMatch.hasNext(); ) {
-                    const QString name = globalMatch.next().captured(1);
-                    globalVariables.insert(name);
-                    if (name.size() > 1 && name.at(1) == QLatin1Char('S'))
-                        globalStringVariables.insert(name);
-                }
-            }
-            if (codeLine.contains(QLatin1Char('@'))) {
-                for (auto globalMatch = annotatedGlobalRx.globalMatch(codeLine);
-                     globalMatch.hasNext(); ) {
-                    const auto match = globalMatch.next();
-                    const QString name = match.captured(1);
-                    globalVariables.insert(name);
-                    explicitGlobals.insert(name);
-                    if (match.captured(2) == QLatin1String("S"))
-                        globalStringVariables.insert(name);
-                }
-            }
-            if (codeLine.contains(QLatin1Char(':'))) {
-                for (auto localMatch = annotatedLocalRx.globalMatch(codeLine);
-                     localMatch.hasNext(); ) {
-                    explicitLocals.insert(localMatch.next().captured(1));
-                }
-            }
-
-            if(currentOpcode == nullptr && !inInstrument) {
-                // we are at instr 0
-                if (line.startsWith(QLatin1StringView("instr"))) {
-                    const QStringView instrline = line.mid(6).trimmed();
-                    // Keep the name for schedule() completion. Instrument names
-                    // may be quoted; quotes are not part of the name.
-                    QStringView instrName = instrline;
-                    const int semicolon = instrName.indexOf(QLatin1Char(';'));
-                    const int slashes = instrName.indexOf(QLatin1String("//"));
-                    const int commentPos = (semicolon >= 0 && slashes >= 0)
-                            ? qMin(semicolon, slashes) : qMax(semicolon, slashes);
-                    if (commentPos >= 0)
-                        instrName = instrName.left(commentPos);
-                    instrName = instrName.trimmed();
-                    if (instrName.startsWith(QLatin1Char('"'))) {
-                        const int close = instrName.indexOf(QLatin1Char('"'), 1);
-                        instrName = close > 0 ? instrName.mid(1, close - 1) : instrName.mid(1);
-                    } else {
-                        static const QRegularExpression nameRx(
-                                    QStringLiteral("^([^\\s(,;]+)"));
-                        const auto match = nameRx.match(instrName);
-                        instrName = match.hasMatch() ? match.capturedView(1) : QStringView();
-                    }
-                    if (!instrName.isEmpty() && !instrName.at(0).isDigit())
-                        instrumentNames.insert(instrName.toString());
-                    inInstrument = true;
-                    if (buildTree) {
-                        auto newItem = new TreeItem(treeItem3, QStringList(instrline.toString()));
-                        newItem->setLine(i + 1);
-                        currentItem = newItem;
-                    }
-                }
-                else if(line.startsWith(QLatin1StringView("opcode")) && (match=rxOpcode.match(line)).hasMatch()) {
-                    auto opcodeName = match.captured(1);
-                    if (buildTree) {
-                        const QStringView itemtext = line.mid(7);
-                        QStringList columnslist(itemtext.toString());
-                        if (treeItem1->childCount() == 0) { // set line for element to the first one found
-                            treeItem1->setLine(i + 1);
-                        }
-                        TreeItem *newItem = new TreeItem(treeItem1, columnslist);
-                        newItem->setLine(i + 1);
-                        currentItem = newItem;
-                    }
-                    udosMap.insert(opcodeName, Opcode(opcodeName));
-                    currentOpcode = &udosMap[opcodeName];
-                }
-                else if (line[0] == '#') {
-                    if (buildTree) {
-                        if (line.startsWith(QLatin1StringView("#define"))) {
-                            const QStringView item = line.mid(8);
-                            if (treeItem2->childCount() == 0) { // set line for element to the first one found
-                                treeItem2->setLine(i + 1);
-                            }
-                            TreeItem *newItem = new TreeItem(treeItem2, QStringList(item.toString()));
-                            newItem->setLine(i + 1);
-                        } else if (line.startsWith(QLatin1StringView("#include"))) {
-                            // TODO: parse include file
-                            if (treeItem2->childCount() == 0) { // set line for element to the first one found
-                                treeItem2->setLine(i + 1);
-                            }
-                            TreeItem *newItem = new TreeItem(treeItem2, QStringList(line.toString()));
-                            newItem->setLine(i + 1);
-                        }
-                    }
-                }
-                else if(line.contains(QLatin1String("ftgen")) && ftableRx2.match(line).hasMatch()) {
-                    if (buildTree) {
-                        QStringList columnslist(line.toString());
-                        if (treeItem4->childCount() == 0) { // set line for element to the first one found
-                            treeItem4->setLine(i + 1);
-                        }
-                        TreeItem *newItem = new TreeItem(treeItem4, columnslist);
-                        newItem->setLine(i + 1);
-                    }
-                }
-            }
-            else if(currentOpcode != nullptr) {
-                if (line == QLatin1StringView("endop")) {
-                    if(currentOpcode != nullptr) {
-                        currentOpcode = nullptr;
-                        currentItem = buildTree ? treeItem3 : nullptr;
-                    }
-                    else {
-                        qDebug() << "endop found outside opcode definition, line" << (i+1);
-                    }
-                }
-                else if(currentOpcode->inArgs.isEmpty() && (match=xinRx.match(line)).hasMatch()) {
-                    currentOpcode->inArgs = line.mid(0, match.capturedStart()).toString().simplified();
-                    if (buildTree) {
-                        QStringList columnslist(currentOpcode->inArgs + " xin");
-                        TreeItem *newItem = new TreeItem(currentItem, columnslist);
-                        newItem->setLine(i + 1);
-                    }
-                }
-                else if(currentOpcode->outArgs.isEmpty() && (match=xoutRx.match(line)).hasMatch()) {
-                    currentOpcode->outArgs = line.mid(match.capturedEnd()).toString().simplified();
-                    if (buildTree) {
-                        QStringList columnslist("xout " + currentOpcode->outArgs);
-                        TreeItem *newItem = new TreeItem(currentItem, columnslist);
-                        newItem->setLine(i + 1);
-                    }
-                }
-            }
-            else if (line == QLatin1StringView("endin")) {
-                // everything between instruments is placed in the main instrument menu
-                inInstrument = false;
-                currentItem = buildTree ? treeItem3 : nullptr;
-            }
-        }
-    }
-
-
-    static QRegularExpression rxCsScore("^\\s*<CsScore>");
-    for(; i< lines.size(); i++) {
-        if (lines[i].contains(QLatin1Char('<'))
-                && rxCsScore.match(lines[i]).hasMatch()) {
-            if (buildTree) {
-                treeItem5->setLine(i + 1);
-                currentItem = treeItem5;
-            }
-            break;
-        }
-    }
-
-    if (buildTree) {
-        treeItem1->setExpanded(treeItem1Expanded);
-        treeItem2->setExpanded(treeItem2Expanded);
-        treeItem3->setExpanded(treeItem3Expanded);
-        treeItem4->setExpanded(treeItem4Expanded);
-        treeItem5->setExpanded(treeItem5Expanded);
-
-        for (int i = 0; i < treeItem3->childCount(); i++) {
-            QTreeWidgetItem * instr = treeItem3->child(i);
-            if (instrumentExpanded.contains(instr->text(0))) {
-                instr->setExpanded(instrumentExpanded[instr->text(0)]);
-            }
-        }
-    }
-    m_globalVariables.clear();
-    for (const QString &name : globalVariables) {
-        // An explicit local type wins over the g prefix: gkfoo:a is local.
-        if (explicitLocals.contains(name) && !explicitGlobals.contains(name))
+    // The scan also carries the symbols declared in the files the document
+    // includes: completion, highlighting and "Go to Source" use them. The tree
+    // describes the document the user is editing, so it lists only the
+    // definitions whose file is the document itself.
+    for (const CodeScan::Definition &udo : scan.udos) {
+        if (!udo.file.isEmpty())
             continue;
-        // A UDO can have a g-prefixed name too; it is not a variable.
-        if (!udosMap.contains(name))
-            m_globalVariables.append(name);
+        if (treeItem1->getLine() < 0)
+            treeItem1->setLine(udo.line);
+        TreeItem *item = new TreeItem(treeItem1, QStringList(udo.text));
+        item->setLine(udo.line);
+        // A Csound 7 signature already shows the arguments in the declaration
+        // line; there are no xin/xout lines to list below it.
+        if (!udo.newStyle) {
+            if (!udo.inArgs.isEmpty()) {
+                TreeItem *args = new TreeItem(item, QStringList(udo.inArgs + u" xin"_s));
+                args->setLine(udo.inArgsLine);
+            }
+            if (!udo.outArgs.isEmpty()) {
+                TreeItem *args = new TreeItem(item, QStringList(u"xout "_s + udo.outArgs));
+                args->setLine(udo.outArgsLine);
+            }
+        }
     }
-    m_globalVariables.sort(Qt::CaseInsensitive);
 
-    m_globalStringVariables.clear();
-    for (const QString &name : globalStringVariables) {
-        if (explicitLocals.contains(name) && !explicitGlobals.contains(name))
+    for (const CodeScan::Definition &entry : scan.preprocessor) {
+        if (!entry.file.isEmpty())
             continue;
-        if (!udosMap.contains(name))
-            m_globalStringVariables.append(name);
+        if (treeItem2->getLine() < 0)
+            treeItem2->setLine(entry.line);
+        TreeItem *item = new TreeItem(treeItem2, QStringList(entry.text));
+        item->setLine(entry.line);
     }
-    m_globalStringVariables.sort(Qt::CaseInsensitive);
 
-    m_instrumentNames = instrumentNames.values();
-    m_instrumentNames.sort(Qt::CaseInsensitive);
+    treeItem3->setLine(scan.orchestraLine);
+    for (const CodeScan::Definition &instrument : scan.instruments) {
+        if (!instrument.file.isEmpty())
+            continue;
+        TreeItem *item = new TreeItem(treeItem3, QStringList(instrument.text));
+        item->setLine(instrument.line);
+    }
 
-    // std::chrono::duration<double, std::milli> ms_double = std::chrono::high_resolution_clock::now() - t1;
-    // qDebug() << "Inspector::parseText: "<< ms_double.count() << "ms\n";
-    inspectorMutex.unlock();
+    for (const CodeScan::Definition &ftable : scan.ftables) {
+        if (!ftable.file.isEmpty())
+            continue;
+        if (treeItem4->getLine() < 0)
+            treeItem4->setLine(ftable.line);
+        TreeItem *item = new TreeItem(treeItem4, QStringList(ftable.text));
+        item->setLine(ftable.line);
+    }
 
+    treeItem5->setLine(scan.scoreLine);
+
+    treeItem1->setExpanded(opcodesExpanded);
+    treeItem2->setExpanded(macrosExpanded);
+    treeItem3->setExpanded(instrumentsExpanded);
+    treeItem4->setExpanded(ftablesExpanded);
+    treeItem5->setExpanded(scoreExpanded);
+    for (int i = 0; i < treeItem3->childCount(); ++i) {
+        QTreeWidgetItem *instrument = treeItem3->child(i);
+        if (instrumentExpanded.contains(instrument->text(0)))
+            instrument->setExpanded(instrumentExpanded[instrument->text(0)]);
+    }
 }
 
 
 void Inspector::focusInEvent (QFocusEvent * event)
 {
 	QWidget::focusInEvent(event);
-	//  parseText();
 }
+
 
 void Inspector::focusTree()
 {
-    m_treeWidget->setFocus(Qt::ActiveWindowFocusReason);
+	m_treeWidget->setFocus(Qt::ActiveWindowFocusReason);
 }
+
 
 void Inspector::showEvent(QShowEvent *event)
 {
     QDockWidget::showEvent(event);
-    // Updates made while the dock was hidden only refreshed the parsed data.
-    // Build the stale tree now that it can actually be seen.
+    // Scans that arrived while the dock was hidden only replaced the data.
+    // Build the tree now that it can actually be seen.
     if (m_treeDirty) {
         m_treeDirty = false;
-        parseText(m_lastText);
+        buildTree(*m_scan);
     }
 }
 
@@ -437,7 +231,8 @@ void Inspector::activateItem(QTreeWidgetItem *item, bool focusEditor)
 {
 	if (item == nullptr)
 		return;
-	int line = static_cast<TreeItem *>(item)->getLine();
+	TreeItem *treeItem = static_cast<TreeItem *>(item);
+	int line = treeItem->getLine();
 	if (line < 0)
 		return;
 	if (focusEditor)

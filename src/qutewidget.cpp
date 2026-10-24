@@ -28,6 +28,7 @@
 #include <QHeaderView>
 #include <QPainter>
 #include <QTreeWidget>
+using namespace Qt::StringLiterals;
 
 // Copied widget styles, keyed by widget type. A copied style holds all dynamic
 // "CSQT_*" properties except position, size, channel(s), text and identity, so
@@ -551,41 +552,41 @@ QString QuteWidget::propertyType(const QString &name) const
     // A few properties are stored as strings even though their value is
     // boolean or numeric; present the type the user should supply.
     static const QHash<QString, QString> knownTypes = {
-        {QStringLiteral("x"), QStringLiteral("integer")},
-        {QStringLiteral("y"), QStringLiteral("integer")},
-        {QStringLiteral("width"), QStringLiteral("integer")},
-        {QStringLiteral("height"), QStringLiteral("integer")},
-        {QStringLiteral("fontsize"), QStringLiteral("number")},
-        {QStringLiteral("precision"), QStringLiteral("integer")},
-        {QStringLiteral("borderWidth"), QStringLiteral("integer")},
-        {QStringLiteral("borderRadius"), QStringLiteral("integer")},
-        {QStringLiteral("midichan"), QStringLiteral("integer")},
-        {QStringLiteral("midicc"), QStringLiteral("integer")},
-        {QStringLiteral("selectedIndex"), QStringLiteral("integer")},
-        {QStringLiteral("pressedValue"), QStringLiteral("number")},
-        {QStringLiteral("visible"), QStringLiteral("boolean")},
-        {QStringLiteral("enabled"), QStringLiteral("boolean")},
-        {QStringLiteral("locked"), QStringLiteral("boolean")},
-        {QStringLiteral("selected"), QStringLiteral("boolean")},
-        {QStringLiteral("latch"), QStringLiteral("boolean")},
-        {QStringLiteral("momentaryMidiButton"), QStringLiteral("boolean")},
-        {QStringLiteral("flatStyle"), QStringLiteral("boolean")},
-        {QStringLiteral("randomizable"), QStringLiteral("boolean")},
-        {QStringLiteral("randomizableMode"), QStringLiteral("integer")},
-        {QStringLiteral("randomizableGroup"), QStringLiteral("integer")},
-        {QStringLiteral("color"), QStringLiteral("color")},
-        {QStringLiteral("pressedColor"), QStringLiteral("color")},
-        {QStringLiteral("borderColor"), QStringLiteral("color")},
-        {QStringLiteral("textColor"), QStringLiteral("color")},
-        {QStringLiteral("pressedTextColor"), QStringLiteral("color")},
-        {QStringLiteral("bgcolor"), QStringLiteral("color")},
-        {QStringLiteral("cursorcolor"), QStringLiteral("color")},
-        {QStringLiteral("rulercolor"), QStringLiteral("color")}
+        {u"x"_s, u"integer"_s},
+        {u"y"_s, u"integer"_s},
+        {u"width"_s, u"integer"_s},
+        {u"height"_s, u"integer"_s},
+        {u"fontsize"_s, u"number"_s},
+        {u"precision"_s, u"integer"_s},
+        {u"borderWidth"_s, u"integer"_s},
+        {u"borderRadius"_s, u"integer"_s},
+        {u"midichan"_s, u"integer"_s},
+        {u"midicc"_s, u"integer"_s},
+        {u"selectedIndex"_s, u"integer"_s},
+        {u"pressedValue"_s, u"number"_s},
+        {u"visible"_s, u"boolean"_s},
+        {u"enabled"_s, u"boolean"_s},
+        {u"locked"_s, u"boolean"_s},
+        {u"selected"_s, u"boolean"_s},
+        {u"latch"_s, u"boolean"_s},
+        {u"momentaryMidiButton"_s, u"boolean"_s},
+        {u"flatStyle"_s, u"boolean"_s},
+        {u"randomizable"_s, u"boolean"_s},
+        {u"randomizableMode"_s, u"integer"_s},
+        {u"randomizableGroup"_s, u"integer"_s},
+        {u"color"_s, u"color"_s},
+        {u"pressedColor"_s, u"color"_s},
+        {u"borderColor"_s, u"color"_s},
+        {u"textColor"_s, u"color"_s},
+        {u"pressedTextColor"_s, u"color"_s},
+        {u"bgcolor"_s, u"color"_s},
+        {u"cursorcolor"_s, u"color"_s},
+        {u"rulercolor"_s, u"color"_s}
     };
     if (knownTypes.contains(name))
         return knownTypes.value(name);
 
-    const QByteArray key = QStringLiteral("CSQT_%1").arg(name).toLatin1();
+    const QByteArray key = u"CSQT_%1"_s.arg(name).toLatin1();
     QVariant value = property(key.constData());
     if (!value.isValid()) {
         const int index = metaObject()->indexOfProperty(name.toLatin1());
@@ -593,13 +594,13 @@ QString QuteWidget::propertyType(const QString &name) const
             value = metaObject()->property(index).read(this);
     }
     const QString type = QString::fromLatin1(value.typeName());
-    if (type == QLatin1String("QColor")) return QStringLiteral("color");
-    if (type == QLatin1String("QString")) return QStringLiteral("string");
-    if (type == QLatin1String("bool")) return QStringLiteral("boolean");
-    if (type == QLatin1String("int")) return QStringLiteral("integer");
-    if (type == QLatin1String("double") || type == QLatin1String("float"))
-        return QStringLiteral("number");
-    if (type.isEmpty()) return QStringLiteral("value");
+    if (type == "QColor"_L1) return u"color"_s;
+    if (type == "QString"_L1) return u"string"_s;
+    if (type == "bool"_L1) return u"boolean"_s;
+    if (type == "int"_L1) return u"integer"_s;
+    if (type == "double"_L1 || type == "float"_L1)
+        return u"number"_s;
+    if (type.isEmpty()) return u"value"_s;
     return type;
 }
 
@@ -610,47 +611,47 @@ QString QuteWidget::propertyDescription(const QString &name) const
         return specific.value(name);
 
     static const QHash<QString, QString> common = {
-        {QStringLiteral("x"), QStringLiteral("Horizontal position in pixels")},
-        {QStringLiteral("y"), QStringLiteral("vertical position in pixels")},
-        {QStringLiteral("width"), QStringLiteral("Width in pixels")},
-        {QStringLiteral("height"), QStringLiteral("Height in pixels")},
-        {QStringLiteral("visible"), QStringLiteral("Whether the widget is shown")},
-        {QStringLiteral("enabled"), QStringLiteral("Does the widget accept input/value updates?")},
-        {QStringLiteral("locked"), QStringLiteral("Prevent moving/resizing")},
-        {QStringLiteral("color"), QStringLiteral("Main colour of the widget")},
-        {QStringLiteral("bgcolor"), QStringLiteral("Background colour")},
-        {QStringLiteral("pressedColor"), QStringLiteral("Colour while a button is pressed")},
-        {QStringLiteral("borderColor"), QStringLiteral("Border colour")},
-        {QStringLiteral("textColor"), QStringLiteral("Text colour")},
-        {QStringLiteral("pressedTextColor"), QStringLiteral("Text colour while pressed")},
-        {QStringLiteral("font"), QStringLiteral("Font family")},
-        {QStringLiteral("fontsize"), QStringLiteral("Font size")},
-        {QStringLiteral("text"), QStringLiteral("Text displayed by the widget")},
-        {QStringLiteral("label"), QStringLiteral("Label displayed by the widget")},
-        {QStringLiteral("value"), QStringLiteral("Current numeric value")},
-        {QStringLiteral("description"), QStringLiteral("Description shown as a tooltip")},
-        {QStringLiteral("eventLine"), QStringLiteral("Score event triggered")},
-        {QStringLiteral("image"), QStringLiteral("Image file used by the widget")},
-        {QStringLiteral("mode"), QStringLiteral("Display or behaviour mode")},
-        {QStringLiteral("minimum"), QStringLiteral("Minimum value")},
-        {QStringLiteral("maximum"), QStringLiteral("Maximum value")},
-        {QStringLiteral("borderWidth"), QStringLiteral("Border width in pixels")},
-        {QStringLiteral("borderRadius"), QStringLiteral("Corner radius in pixels")},
-        {QStringLiteral("flatStyle"), QStringLiteral("Use a flat, platform-independent style")},
-        {QStringLiteral("latch"), QStringLiteral("Stays pressed until clicked again")},
-        {QStringLiteral("latched"), QStringLiteral("Current latched state")},
-        {QStringLiteral("momentaryMidiButton"), QStringLiteral("Latching behaviour for MIDI notes/buttons")},
-        {QStringLiteral("pressedValue"), QStringLiteral("Value reported while pressed")},
-        {QStringLiteral("stringvalue"), QStringLiteral("Current string value")},
-        {QStringLiteral("type"), QStringLiteral("Widget or button variant")},
-        {QStringLiteral("alignment"), QStringLiteral("Horizontal text alignment")},
-        {QStringLiteral("valignment"), QStringLiteral("Vertical text alignment")},
-        {QStringLiteral("padding"), QStringLiteral("Inner padding in pixels")},
-        {QStringLiteral("midicc"), QStringLiteral("MIDI controller number")},
-        {QStringLiteral("midichan"), QStringLiteral("MIDI channel")},
-        {QStringLiteral("findfft"), QStringLiteral("Variable name given to dispfft")},
-        {QStringLiteral("findaudio"), QStringLiteral("Variable name given to display opcode")},
-        {QStringLiteral("findtable"), QStringLiteral("Number of the function table to display")}
+        {u"x"_s, u"Horizontal position in pixels"_s},
+        {u"y"_s, u"vertical position in pixels"_s},
+        {u"width"_s, u"Width in pixels"_s},
+        {u"height"_s, u"Height in pixels"_s},
+        {u"visible"_s, u"Whether the widget is shown"_s},
+        {u"enabled"_s, u"Does the widget accept input/value updates?"_s},
+        {u"locked"_s, u"Prevent moving/resizing"_s},
+        {u"color"_s, u"Main colour of the widget"_s},
+        {u"bgcolor"_s, u"Background colour"_s},
+        {u"pressedColor"_s, u"Colour while a button is pressed"_s},
+        {u"borderColor"_s, u"Border colour"_s},
+        {u"textColor"_s, u"Text colour"_s},
+        {u"pressedTextColor"_s, u"Text colour while pressed"_s},
+        {u"font"_s, u"Font family"_s},
+        {u"fontsize"_s, u"Font size"_s},
+        {u"text"_s, u"Text displayed by the widget"_s},
+        {u"label"_s, u"Label displayed by the widget"_s},
+        {u"value"_s, u"Current numeric value"_s},
+        {u"description"_s, u"Description shown as a tooltip"_s},
+        {u"eventLine"_s, u"Score event triggered"_s},
+        {u"image"_s, u"Image file used by the widget"_s},
+        {u"mode"_s, u"Display or behaviour mode"_s},
+        {u"minimum"_s, u"Minimum value"_s},
+        {u"maximum"_s, u"Maximum value"_s},
+        {u"borderWidth"_s, u"Border width in pixels"_s},
+        {u"borderRadius"_s, u"Corner radius in pixels"_s},
+        {u"flatStyle"_s, u"Use a flat, platform-independent style"_s},
+        {u"latch"_s, u"Stays pressed until clicked again"_s},
+        {u"latched"_s, u"Current latched state"_s},
+        {u"momentaryMidiButton"_s, u"Latching behaviour for MIDI notes/buttons"_s},
+        {u"pressedValue"_s, u"Value reported while pressed"_s},
+        {u"stringvalue"_s, u"Current string value"_s},
+        {u"type"_s, u"Widget or button variant"_s},
+        {u"alignment"_s, u"Horizontal text alignment"_s},
+        {u"valignment"_s, u"Vertical text alignment"_s},
+        {u"padding"_s, u"Inner padding in pixels"_s},
+        {u"midicc"_s, u"MIDI controller number"_s},
+        {u"midichan"_s, u"MIDI channel"_s},
+        {u"findfft"_s, u"Variable name given to dispfft"_s},
+        {u"findaudio"_s, u"Variable name given to display opcode"_s},
+        {u"findtable"_s, u"Number of the function table to display"_s}
     };
     if (common.contains(name))
         return common.value(name);

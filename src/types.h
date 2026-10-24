@@ -140,6 +140,10 @@ public:
     int isFlag;
     bool isInstalled;
     bool deprecated = false;  // superseded name or opcode the manual marks as deprecated
+    // Csound 7 UDO signature ("opcode Foo(a:i):k"): inArgs is the parameter
+    // name list and outArgs the output type list, and calls use function
+    // syntax.
+    bool newStyle = false;
 
     Opcode() = default;
     Opcode(QString name, QString outs="", QString ins="", bool installed=true): opcodeName(name), outArgs(outs), inArgs(ins), isInstalled(installed) {}

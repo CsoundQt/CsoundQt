@@ -26,6 +26,7 @@
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
 #include <QRegularExpression>
+#include <QSet>
 #include <QTextEdit>
 #include <QDomElement>
 #include <QStack>
@@ -33,10 +34,11 @@
 #include <vector>
 #include "basedocument.h"
 #include "channelhighlightmode.h"
-#include "sourcedefinitions.h"
+#include "codescan.h"
 #include "widgetpropertyinfo.h"
 
 class OpEntryParser;
+class ScanService;
 class DocumentView;
 class LiveEventFrame;
 class EventSheet;
@@ -45,7 +47,7 @@ class SndfileHandle;
 class MidiLearnDialog;
 class QuteWidget;
 
-class DocumentPage : public BaseDocument
+class DocumentPage : public BaseDocument, public CodeScan::Source
 {
 	Q_OBJECT
 public:
@@ -75,10 +77,29 @@ public:
 	void toggleParameterMode();
 	void showParametersInEditor();
     void setHighlightingTheme(QString theme);
-    void setParsedUDOs(QStringList udos);
     void setGlobalVariables(const QStringList &variables);
     void setGlobalStringVariables(const QStringList &variables);
     void setInstrumentNames(const QStringList &names);
+    // The document is scanned by the ScanService, which owns the scheduling
+    // and hands the results back through these three methods.
+    void setScanService(ScanService *service) { m_scanService = service; }
+    // The text to scan, as Csound sees it.
+    QString scanText() override;
+    // How this document is scanned: a .csd between its tags, an orchestra-only
+    // document (.orc, .udo, .inc, split view) from its first line, and nothing
+    // at all for documents that are not Csound source.
+    CodeScan::Mode scanMode() const override;
+    // The file on disk, so that relative #include directives can be resolved.
+    QString scanFilePath() const override;
+    // The configured include path plus the document's own --env:INCDIR
+    // options, used for scanning, completion and "Go to Source".
+    QStringList includeSearchPaths() override;
+    // The configured include path from CsoundQt's settings. The document's
+    // own options are added on top by includeSearchPaths().
+    void setIncludeSearchPaths(const QStringList &paths) { m_includeSearchPaths = paths; }
+    // Apply the result of a scan: highlighting, completion and "Go to Source"
+    // all read the same parse of the same text.
+    void applyScan(const CodeScan::ResultPtr &scan) override;
     QStringList getWidgetChannels();
     QList<WidgetPropertyInfo> getWidgetProperties(const QString &channelOrName);
     void updateWidgetChannels();
@@ -130,6 +151,10 @@ public:
 	void focusWidgets();
 	QString getFileName();
 	QString getCompanionFileName();
+	// The file name decides both the highlighting mode and the directory
+	// relative #include directives resolve against; changing it invalidates
+	// the scan.
+	void setFileName(QString name) override;
 	// Edition- are routed to section with focus
 	void copy();
 	void cut();
@@ -195,7 +220,6 @@ public:
 	// from a previous session). Saving still asks for a real file name.
 	QString getTemporaryName() const { return m_temporaryName; }
 	void setTemporaryName(const QString &name) { m_temporaryName = name; }
-    void parseUdos(bool force=false);
     void gotoLine(int line);
     void gotoLineDialog();
     void goBackToPreviousPosition();
@@ -206,6 +230,9 @@ public:
     // Jump to the definition of the name at the cursor (a user-defined
     // opcode, a scheduled instrument, a macro or a struct type).
     void goToSourceAtCursor();
+    // Resolve an include path against the document and its include search
+    // paths, then ask the application to open the file.
+    void openIncludedFile(const QString &includePath);
 
 public slots:
 	virtual int play(CsoundOptions *options);
@@ -233,6 +260,9 @@ public slots:
 	// Passed directly to document view
 	void jumpToLine(int line);
 	void jumpToLineWithoutFocus(int line);
+	// Jump to a definition: the line of the definition and the column of the
+	// name, as reported by the scanner (also used to reach included files).
+	void jumpToDefinition(int line, int column);
 	void comment();
 	void uncomment();
 	void indent();
@@ -261,26 +291,31 @@ private:
 	// Options
 	bool saveLiveEvents;
     QString m_colorTheme;
-    QStringList m_parsedUdos;
-    bool m_parseUdosNeeded;
+    // Names of the user-defined opcodes in the last scan, so that the
+    // highlighter is only re-run when that set actually changed.
+    QSet<QString> m_parsedUdos;
+    // The last scan of this document, as applied by the ScanService.
+    CodeScan::ResultPtr m_scan = CodeScan::empty();
+    ScanService *m_scanService = nullptr;
+    // The include path from CsoundQt's settings (not the document's own).
+    QStringList m_includeSearchPaths;
 	ChannelReferenceHighlightMode m_channelReferenceHighlightMode = ChannelReferenceHighlightMode::Always;
 	bool m_widgetChannelHighlightPinned = false;
 	QStringList m_pinnedWidgetChannels;
-    // The names defined in the document (user-defined opcodes, named
-    // instruments, macros and struct types), used by "Go to Source".
-    SourceDefinitions m_definitions;
 
 private slots:
 	void textChanged();
 
 signals:
-	void currentTextUpdated();  // To let inspector know it must update
 	void setCurrentAudioFile(QString name);
     //void liveEventsVisible(bool);  // To change the action in the main window
 	void modified();  // Triggered whenever the children change
     void unmodified();
     void stopSignal(); // To tell main application that running has stopped
 	void setHelpSignal(); // Propagated from view
+    // The definition at line/column is in an included file: the application
+    // has to open that file and jump there.
+    void goToSourceFileRequested(const QString &file, int line, int column);
 	void setWidgetClipboardSignal(QString text);
 };
 

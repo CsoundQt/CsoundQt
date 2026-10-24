@@ -54,7 +54,7 @@ void TextBlockData::insert(const BracketInfo &info)
 
 namespace CsoundLex {
 
-void scanInto(const QString &line, int startState, Line &info)
+void scanInto(QStringView line, int startState, Line &info)
 {
 	info.clear();
 	const int length = line.length();
@@ -62,7 +62,7 @@ void scanInto(const QString &line, int startState, Line &info)
 
 	// A line can continue a comment or a string from the previous one.
 	if (startState == 1) {
-		const int end = line.indexOf("*/");
+		const int end = line.indexOf(u"*/"_s);
 		if (end < 0) {
 			info.comments.append({0, length});
 			info.endState = 1;
@@ -71,7 +71,7 @@ void scanInto(const QString &line, int startState, Line &info)
 		info.comments.append({0, end + 2});
 		pos = end + 2;
 	} else if (startState == 2) {
-		const int end = line.indexOf("}}");
+		const int end = line.indexOf(u"}}"_s);
 		if (end < 0) {
 			info.multilineStrings.append({0, length});
 			info.endState = 2;
@@ -98,7 +98,7 @@ void scanInto(const QString &line, int startState, Line &info)
 		&& pos + 1 < length) {
 			const QChar next = line.at(pos + 1);
 			if (next == QLatin1Char('*')) {
-				const int end = line.indexOf("*/", pos + 2);
+				const int end = line.indexOf(u"*/"_s, pos + 2);
 				if (end < 0) {
 					info.comments.append({pos, length});
 					info.endState = 1;
@@ -119,7 +119,7 @@ void scanInto(const QString &line, int startState, Line &info)
 		} else if (c == QLatin1Char('{') && pos + 1 < length
 				   && line.at(pos + 1) == QLatin1Char('{')) {
 			// A {{ ... }} string, which may span lines.
-			const int end = line.indexOf("}}", pos + 2);
+			const int end = line.indexOf(u"}}"_s, pos + 2);
 			if (end < 0) {
 				info.multilineStrings.append({pos, length});
 				info.endState = 2;
@@ -133,7 +133,7 @@ void scanInto(const QString &line, int startState, Line &info)
 	}
 }
 
-Line scan(const QString &line, int startState)
+Line scan(QStringView line, int startState)
 {
 	Line info;
 	scanInto(line, startState, info);
@@ -175,6 +175,19 @@ const QRegularExpression globalRx(
         QStringLiteral("(\\w+)@global:(\\w+(?:\\[\\])?)"));
 const QRegularExpression expressionRx(
         QStringLiteral("\\b[\\w:]+\\b"));
+
+// The names of the Csound preprocessor directives. A '#' anywhere else is
+// ordinary text -- a colour in a string, a stray symbol, a comment -- and
+// must not be painted as a preprocessor directive.
+bool isPreprocessorDirective(QStringView name)
+{
+    static const QSet<QString> directives = {
+        u"define"_s, u"include"_s, u"undef"_s,
+        u"ifdef"_s, u"ifndef"_s, u"if"_s,
+        u"elseif"_s, u"else"_s, u"end"_s, u"endif"_s
+    };
+    return directives.contains(name.toString());
+}
 
 const QSet<QString> builtinTypes = {
     u"i"_s, u"k"_s, u"a"_s, u"S"_s, u"f"_s, u"b"_s, u"B"_s,
@@ -224,6 +237,18 @@ void Highlighter::finishTheme()
     QColor color = saturateColor(headerFormat.foreground().color().lighter(150), 150);
     csoundOptionFormat.setForeground(color);
 
+    // Closing csd tags are less intrusive when their colour is halfway
+    // between the tag colour and the editor background.
+    csdtagCloseFormat = csdtagFormat;
+    const QColor tagColor = csdtagFormat.foreground().color();
+    const QColor background = defaultFormat.background().color();
+    if (tagColor.isValid() && background.isValid()) {
+        csdtagCloseFormat.setForeground(QColor(
+                (tagColor.red() + background.red()) / 2,
+                (tagColor.green() + background.green()) / 2,
+                (tagColor.blue() + background.blue()) / 2));
+    }
+
     // html
     htmlTagFormat = csdtagFormat;
     tagNameFormat = arateFormat;
@@ -236,6 +261,7 @@ void Highlighter::resetFormats()
     // Start every theme from scratch. Otherwise attributes that a previous
     // theme set (bold, underline, ...) would leak into the next one.
     csdtagFormat = QTextCharFormat();
+    csdtagCloseFormat = QTextCharFormat();
     instFormat = QTextCharFormat();
     headerFormat = QTextCharFormat();
     irateFormat = QTextCharFormat();
@@ -279,6 +305,7 @@ QTextCharFormat *Highlighter::formatForName(const QString &name)
 {
     if (name == QLatin1String("default")) return &defaultFormat;
     if (name == QLatin1String("csdtag")) return &csdtagFormat;
+    if (name == QLatin1String("csdtagClose")) return &csdtagCloseFormat;
     if (name == QLatin1String("inst")) return &instFormat;
     if (name == QLatin1String("header")) return &headerFormat;
     if (name == QLatin1String("keyword")) return &keywordFormat;
@@ -344,8 +371,10 @@ void Highlighter::setTheme(const QString &theme)
 {
     // Re-applying an unchanged theme would force a full rehighlight of the
     // document. On an already laid-out, visible editor that is extremely
-    // expensive (seconds on large files), so skip it.
-    if (m_themeSet && theme == m_theme)
+    // expensive (seconds on large files), so skip it. A refreshed theme
+    // registry bumps the generation even when the name did not change.
+    const int generation = EditorThemes::refreshGeneration();
+    if (m_themeSet && theme == m_theme && m_themeGeneration == generation)
         return;
 
     QString applied = theme;
@@ -374,9 +403,22 @@ void Highlighter::setTheme(const QString &theme)
         applyTheme(*definition);
     }
     finishTheme();
+    // finishTheme() derives a dimmed colour for closing tags from csdtag and
+    // the background. A theme may define csdtagClose explicitly; that value
+    // wins, and it is also what shows up in a duplicated theme file.
+    if (definition) {
+        const auto closeSpec =
+                definition->formats.constFind(u"csdtagClose"_s);
+        if (closeSpec != definition->formats.constEnd()) {
+            QHash<QString, EditorThemes::FormatSpec> explicitClose;
+            explicitClose.insert(u"csdtagClose"_s, *closeSpec);
+            applyFormats(explicitClose);
+        }
+    }
 
     m_theme = applied;
     m_themeSet = true;
+    m_themeGeneration = generation;
     clearTypedVars();
     rehighlight();
 }
@@ -387,6 +429,8 @@ QTextCharFormat Highlighter::getFormat(QString tag) {
     }
     if(tag == "csdtag")
         return csdtagFormat;
+    if(tag == "csdtagClose")
+        return csdtagCloseFormat;
     if(tag == "inst")
         return instFormat;
     if(tag == "keyword")
@@ -408,8 +452,8 @@ QTextCharFormat Highlighter::getFormat(QString tag) {
 Highlighter::Highlighter(QTextDocument *parent)
 	: QSyntaxHighlighter(parent)
 {
-    commentStartExpression.setPattern("/\\*");
-    commentEndExpression.setPattern("\\*/");
+    commentStartExpression.setPattern(uR"(/\*)"_s);
+    commentEndExpression.setPattern(uR"(\*/)"_s);
 
     //  b64encStartExpression = QRegularExpression("<CsFileB .*>");
     //  b64encEndExpression = QRegularExpression("<CsFileB>");
@@ -465,8 +509,8 @@ Highlighter::Highlighter(QTextDocument *parent)
                 << "<!\\bDOCTYPE\\b";
     */
 
-    rxScoreLetter.setPattern("^\\s*(i|f|e|d|s)");
-    rxQuotation.setPattern("\"[^\"]*\"");
+    rxScoreLetter.setPattern(uR"(^\s*(i|f|e|d|s))"_s);
+    rxQuotation.setPattern(uR"("[^"]*")"_s);
 
     // this->setTheme("classic");
 }
@@ -513,7 +557,26 @@ void Highlighter::setOpcodeNameList(const QStringList &list)
 
 void Highlighter::setMode(int mode)
 {
-	m_mode = mode;
+    m_mode = mode;
+    // A standalone orchestra, include or score document has no csd tags to
+    // discover the section from. It is one section, exactly like the
+    // corresponding editor in the split view.
+    switch (mode) {
+    case 3: // Orc (.orc and .udo)
+    case 5: // Inc
+        m_sectionType = OrchestraSection;
+        break;
+    case 4: // Sco
+        m_sectionType = ScoreSection;
+        break;
+    default:
+        m_sectionType = UnknownSection;
+        break;
+    }
+    // A mode change alters the highlighting even when the text is unchanged
+    // (for example after saving a .csd under a new extension).
+    if (document() != nullptr)
+        rehighlight();
 }
 
 
@@ -874,7 +937,11 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
             } else {
                 blockdata->section = UnknownSection;
             }
-            setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), csdtagFormat);
+            const int nameStart = static_cast<int>(rxmatch.capturedStart(1));
+            const bool closing = nameStart > 0
+                    && line.at(nameStart - 1) == QLatin1Char('/');
+            setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(),
+                      closing ? csdtagCloseFormat : csdtagFormat);
             return;
         }
     }
@@ -1049,8 +1116,12 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
 
             if(wordStart > 0) {
                 const QChar prev = text.at(wordStart - 1);
-                if(prev == QLatin1Char('$') || prev == QLatin1Char('#')) {
-                    // check if macro name - replacement for regexp solution
+                // "$name" is a macro expansion anywhere. "#name" is a
+                // preprocessor directive only when name is one: "#" followed
+                // by anything else is not highlighted.
+                if(prev == QLatin1Char('$')
+                        || (prev == QLatin1Char('#')
+                            && isPreprocessorDirective(rxmatch.capturedView()))) {
                     setFormat(wordStart - 1, wordEnd - wordStart + 1, macroDefineFormat);
                     continue;
                 }
@@ -1082,7 +1153,7 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
                 const bool closing = text.at(wordStart - 1) == QLatin1Char('/');
                 setFormat(wordStart - (closing ? 2 : 1),
                           wordLength + (closing ? 3 : 2),
-                          csdtagFormat);
+                          closing ? csdtagCloseFormat : csdtagFormat);
             }
             else if(headerPatterns.contains(wordKey)) {
                 setFormat(wordStart, wordLength, headerFormat);
@@ -1302,7 +1373,7 @@ void Highlighter::highlightHtmlBlock(const QString &text)
     // check what type of block it is:
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
 
-    rx.setPattern("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>");
+    rx.setPattern(uR"(^\s*<\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>)"_s);
     rxmatch = rx.match(text);
     if(rxmatch.hasMatch() ) {
         if(rxmatch.captured(1) == "CsInstruments" ) {
@@ -1316,7 +1387,11 @@ void Highlighter::highlightHtmlBlock(const QString &text)
         } else {
             blockdata->section = UnknownSection;
         }
-        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), csdtagFormat);
+        const int nameStart = static_cast<int>(rxmatch.capturedStart(1));
+        const bool closing = nameStart > 0
+                && text.at(nameStart - 1) == QLatin1Char('/');
+        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(),
+                  closing ? csdtagCloseFormat : csdtagFormat);
         return;
     }
 
@@ -1325,7 +1400,7 @@ void Highlighter::highlightHtmlBlock(const QString &text)
         return;
     }
 
-    static const QRegularExpression tagRx("<[^>]+>");
+    static const QRegularExpression tagRx(uR"(<[^>]+>)"_s);
     int index = text.indexOf(tagRx);
     while (index >= 0) {
         int len = tagRx.match(text, index).capturedLength();
@@ -1333,14 +1408,14 @@ void Highlighter::highlightHtmlBlock(const QString &text)
         index = text.indexOf(tagRx, index + len);
     }
 
-    static const QRegularExpression tagNameRx("<\\s*/?\\s*([a-zA-Z][a-zA-Z0-9-]*)");
+    static const QRegularExpression tagNameRx(uR"(<\s*/?\s*([a-zA-Z][a-zA-Z0-9-]*))"_s);
     QRegularExpressionMatch match = tagNameRx.match(text);
     while (match.hasMatch()) {
         setFormat(match.capturedStart(1), match.capturedLength(1), tagNameFormat); // or tagNameFormat
         match = tagNameRx.match(text, match.capturedEnd());
     }
 
-    static const QRegularExpression attrNameRx("\\s([a-zA-Z_:][a-zA-Z0-9_:.-]*)=");
+    static const QRegularExpression attrNameRx(uR"(\s([a-zA-Z_:][a-zA-Z0-9_:.-]*)=)"_s);
     QRegularExpressionMatch attrMatch = attrNameRx.match(text);
     while (attrMatch.hasMatch()) {
         setFormat(attrMatch.capturedStart(1), attrMatch.capturedLength(1), attrFormat );
@@ -1349,14 +1424,14 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 
 
 
-    static const QRegularExpression strings( QRegularExpression("\"[^\"]*\""));
+    static const QRegularExpression strings( QRegularExpression(uR"("[^"]*")"_s));
     index = text.indexOf(strings);
 	while (index >= 0) {
         int length = strings.match(text).capturedLength(); //strings.matchedLength();
 		setFormat(index, length, quotationFormat);
 		index = text.indexOf(strings, index + length);
 	}
-    static const QRegularExpression strings2("'[^'']*'");
+    static const QRegularExpression strings2(uR"('[^'']*')"_s);
     index = text.indexOf(strings2);
 	while (index >= 0) {
         int length = strings.match(text).capturedLength(); //strings.matchedLength();
@@ -1364,7 +1439,7 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 		index = text.indexOf(strings, index + length);
 	}
 	int commentIndex = -1;
-    static const QRegularExpression expComment("//.*"); // TODO: avaoid https://
+    static const QRegularExpression expComment(uR"(//.*)"_s); // TODO: avaoid https://
 	index = text.indexOf(expComment);
 	if (index>0 ) {
 		if (text.at(index-1)!=':') { // clumsy way to avoid addresses like https://
@@ -1387,8 +1462,8 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 
     // multiline
     setCurrentBlockState(0);
-    static const QRegularExpression htmlCommentStartExpression("<!--");
-    static const QRegularExpression htmlCommentEndExpression("-->");
+    static const QRegularExpression htmlCommentStartExpression(uR"(<!--)"_s);
+    static const QRegularExpression htmlCommentEndExpression(uR"(-->)"_s);
 
 
 	int startIndex = 0;
@@ -1428,7 +1503,7 @@ void Highlighter::setLastRules()
 
     // labels (kept in sync with labelRx in highlightCsoundBlock; this list is
     // currently unused, the active label highlight lives there)
-    rule = {QRegularExpression("^\\s*([a-zA-Z]\\w*):(?=\\s|$)"), labelFormat, 1};
+    rule = {QRegularExpression(uR"(^\s*([a-zA-Z]\w*):(?=\s|$))"_s), labelFormat, 1};
     lastHighlightingRules.append(rule);
 
     // strings

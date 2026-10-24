@@ -29,6 +29,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QSet>
+using namespace Qt::StringLiterals;
 
 namespace {
 
@@ -94,33 +95,33 @@ private:
 const QHash<QString, QString> &iconNameMap()
 {
 	static const QHash<QString, QString> map = {
-		{ QStringLiteral("edit-new"),      QStringLiteral("document-new") },
-		{ QStringLiteral("folder"),        QStringLiteral("document-open") },
-		{ QStringLiteral("reload"),        QStringLiteral("view-refresh") },
-		{ QStringLiteral("floppy"),        QStringLiteral("document-save") },
-		{ QStringLiteral("edit-close"),    QStringLiteral("window-close") },
-		{ QStringLiteral("browse-prev"),   QStringLiteral("go-previous") },
-		{ QStringLiteral("br_prev"),       QStringLiteral("go-previous") },
-		{ QStringLiteral("browse-next"),   QStringLiteral("go-next") },
-		{ QStringLiteral("br_next"),       QStringLiteral("go-next") },
-		{ QStringLiteral("media-play"),    QStringLiteral("media-playback-start") },
-		{ QStringLiteral("media-pause"),   QStringLiteral("media-playback-pause") },
-		{ QStringLiteral("media-stop"),    QStringLiteral("media-playback-stop") },
-		{ QStringLiteral("terminal"),      QStringLiteral("utilities-terminal") },
-		{ QStringLiteral("render"),        QStringLiteral("document-export") },
-		{ QStringLiteral("scratchpad"),    QStringLiteral("document-edit") },
-		{ QStringLiteral("playfile"),      QStringLiteral("audio-x-generic") },
-		{ QStringLiteral("editfile"),      QStringLiteral("document-edit") },
-		{ QStringLiteral("widgets"),       QStringLiteral("view-grid") },
-		{ QStringLiteral("editor"),        QStringLiteral("accessories-text-editor") },
-		{ QStringLiteral("devel"),         QStringLiteral("applications-utilities") },
-		{ QStringLiteral("midi-keyboard"), QStringLiteral("audio-midi") },
-		{ QStringLiteral("info"),          QStringLiteral("dialog-information") },
-		{ QStringLiteral("settings"),      QStringLiteral("configure") },
-		{ QStringLiteral("home"),          QStringLiteral("go-home") },
-		{ QStringLiteral("about"),         QStringLiteral("help-about") },
-		{ QStringLiteral("note"),          QStringLiteral("audio-x-generic") },
-		{ QStringLiteral("hearing"),       QStringLiteral("audio-volume-high") },
+		{ u"edit-new"_s,      u"document-new"_s },
+		{ u"folder"_s,        u"document-open"_s },
+		{ u"reload"_s,        u"view-refresh"_s },
+		{ u"floppy"_s,        u"document-save"_s },
+		{ u"edit-close"_s,    u"window-close"_s },
+		{ u"browse-prev"_s,   u"go-previous"_s },
+		{ u"br_prev"_s,       u"go-previous"_s },
+		{ u"browse-next"_s,   u"go-next"_s },
+		{ u"br_next"_s,       u"go-next"_s },
+		{ u"media-play"_s,    u"media-playback-start"_s },
+		{ u"media-pause"_s,   u"media-playback-pause"_s },
+		{ u"media-stop"_s,    u"media-playback-stop"_s },
+		{ u"terminal"_s,      u"utilities-terminal"_s },
+		{ u"render"_s,        u"document-export"_s },
+		{ u"scratchpad"_s,    u"document-edit"_s },
+		{ u"playfile"_s,      u"audio-x-generic"_s },
+		{ u"editfile"_s,      u"document-edit"_s },
+		{ u"widgets"_s,       u"view-grid"_s },
+		{ u"editor"_s,        u"accessories-text-editor"_s },
+		{ u"devel"_s,         u"applications-utilities"_s },
+		{ u"midi-keyboard"_s, u"audio-midi"_s },
+		{ u"info"_s,          u"dialog-information"_s },
+		{ u"settings"_s,      u"configure"_s },
+		{ u"home"_s,          u"go-home"_s },
+		{ u"about"_s,         u"help-about"_s },
+		{ u"note"_s,          u"audio-x-generic"_s },
+		{ u"hearing"_s,       u"audio-volume-high"_s },
 	};
 	return map;
 }
@@ -130,21 +131,21 @@ const QHash<QString, QString> &iconNameMap()
 bool isStandardName(const QString &baseName)
 {
 	static const QSet<QString> names = {
-		QStringLiteral("edit-undo"),
-		QStringLiteral("edit-redo"),
-		QStringLiteral("edit-cut"),
-		QStringLiteral("edit-copy"),
-		QStringLiteral("edit-paste"),
-		QStringLiteral("edit-find"),
-		QStringLiteral("media-record"),
-		QStringLiteral("align-horizontal-left"),
-		QStringLiteral("align-horizontal-right"),
-		QStringLiteral("align-horizontal-center"),
-		QStringLiteral("align-vertical-top"),
-		QStringLiteral("align-vertical-bottom"),
-		QStringLiteral("align-vertical-center"),
-		QStringLiteral("object-order-front"),
-		QStringLiteral("object-order-back"),
+		u"edit-undo"_s,
+		u"edit-redo"_s,
+		u"edit-cut"_s,
+		u"edit-copy"_s,
+		u"edit-paste"_s,
+		u"edit-find"_s,
+		u"media-record"_s,
+		u"align-horizontal-left"_s,
+		u"align-horizontal-right"_s,
+		u"align-horizontal-center"_s,
+		u"align-vertical-top"_s,
+		u"align-vertical-bottom"_s,
+		u"align-vertical-center"_s,
+		u"object-order-front"_s,
+		u"object-order-back"_s,
 	};
 	return names.contains(baseName);
 }

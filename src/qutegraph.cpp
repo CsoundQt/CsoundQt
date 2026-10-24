@@ -29,6 +29,7 @@
 
 
 #include <QColorDialog>
+using namespace Qt::StringLiterals;
 
 
 enum CsoundEngineStatus {
@@ -1616,7 +1617,7 @@ int QuteGraph::getIndexForTableNum(int ftable)
 	for (int i = 0; i < curves.size(); i++) {
 		QString text = curves[i]->get_caption();
 		if (text.contains("ftable")) {
-            QStringList parts = text.split(QRegularExpression("[ :]"), Qt::SkipEmptyParts);
+            QStringList parts = text.split(QRegularExpression(uR"([ :])"_s), Qt::SkipEmptyParts);
             if (parts.size() > 1) {
 				int num = parts.last().toInt();
 				if (ftable == num) {
