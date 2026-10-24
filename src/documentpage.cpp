@@ -1043,6 +1043,13 @@ void DocumentPage::setWidgetEditMode(bool active)
 	}
 }
 
+void DocumentPage::setWidgetDrawingEnabled(bool enabled)
+{
+	foreach (WidgetLayout *wl, m_widgetLayouts) {
+		wl->setDrawingEnabled(enabled);
+	}
+}
+
 void DocumentPage::setWidgetFrameColors(const QColor &unselected, const QColor &selected)
 {
 	foreach (WidgetLayout *wl, m_widgetLayouts) {

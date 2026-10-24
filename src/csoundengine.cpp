@@ -1391,6 +1391,15 @@ bool CsoundEngine::isRecording()
     return m_recording;
 }
 
+double CsoundEngine::scoreTime()
+{
+    if (!isRunning()) {
+        return 0.0;
+    }
+    CSOUND *cs = getCsound();
+    return cs != nullptr ? csoundGetScoreTime(cs) : 0.0;
+}
+
 CSOUND *CsoundEngine::getCsound()
 {
     return ud->csound;

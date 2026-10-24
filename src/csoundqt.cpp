@@ -108,6 +108,90 @@ bool openUrlWithDiagnostics(const QString &feature, const QUrl &url)
     return ExternalLauncher::openWithDefaultApplication(url, nullptr, feature);
 }
 
+// Best-effort duration of a Csound score, used only to turn the render
+// progress bar into a percentage. Returns 0 when the score is indefinite or
+// uses constructs that cannot be estimated without a tempo-aware parser.
+double estimateScoreDuration(const QString &scoreText)
+{
+    double end = 0.0;
+    static const QRegularExpression whitespace(uR"(\s+)"_s);
+    for (QString line : scoreText.split('\n')) {
+        const int semicolon = line.indexOf(';');
+        if (semicolon >= 0)
+            line.truncate(semicolon);
+        const int slashComment = line.indexOf("//"_L1);
+        if (slashComment >= 0)
+            line.truncate(slashComment);
+        line = line.trimmed();
+        if (line.isEmpty())
+            continue;
+
+        const QStringList fields = line.split(whitespace, SKIP_EMPTY_PARTS);
+        if (fields.isEmpty())
+            continue;
+        const QString event = fields.first();
+
+        bool instrumentNumber = false;
+        if (event.size() > 1 && event.startsWith(QLatin1Char('i'))) {
+            event.mid(1).toInt(&instrumentNumber);
+        }
+        if (event == "i"_L1 || instrumentNumber) {
+            // Both "i 1 0 2" and "i1 0 2" are valid score notation.
+            const int startIndex = event == "i"_L1 ? 2 : 1;
+            bool okStart = false;
+            bool okDuration = false;
+            const double start = fields.size() > startIndex
+                    ? fields.at(startIndex).toDouble(&okStart) : 0.0;
+            const double duration = fields.size() > startIndex + 1
+                    ? fields.at(startIndex + 1).toDouble(&okDuration) : 0.0;
+            if (!okStart)
+                continue;
+            if (!okDuration || duration <= 0.0) {
+                // Held until the score ends; no reliable percentage.
+                return 0.0;
+            }
+            end = qMax(end, start + duration);
+        }
+        else if (event == "f0"_L1) {
+            bool ok = false;
+            const double duration = fields.size() > 1
+                    ? fields.at(1).toDouble(&ok) : 0.0;
+            if (ok && duration > 0.0)
+                end = qMax(end, duration);
+        }
+        else if (event == "f"_L1 && fields.size() > 2 && fields.at(1) == "0"_L1) {
+            bool ok = false;
+            const double duration = fields.at(2).toDouble(&ok);
+            if (ok && duration > 0.0)
+                end = qMax(end, duration);
+        }
+        else if (event == "e"_L1) {
+            break;
+        }
+    }
+    return end;
+}
+
+QString formatRenderDuration(double seconds)
+{
+    if (seconds <= 0.0)
+        return u"-"_s;
+    const int totalSeconds = int(seconds);
+    const int hours = totalSeconds / 3600;
+    const int minutes = (totalSeconds % 3600) / 60;
+    const double rest = seconds - hours * 3600.0 - minutes * 60.0;
+    if (hours > 0) {
+        return u"%1:%2:%3"_s.arg(hours)
+                .arg(minutes, 2, 10, QLatin1Char('0'))
+                .arg(rest, 5, 'f', 2, QLatin1Char('0'));
+    }
+    if (minutes > 0) {
+        return u"%1:%2"_s.arg(minutes)
+                .arg(rest, 5, 'f', 2, QLatin1Char('0'));
+    }
+    return u"%1 s"_s.arg(seconds, 0, 'f', 2);
+}
+
 }
 
 #ifdef Q_OS_WIN32
@@ -1453,12 +1537,13 @@ void CsoundQt::openThemesFolder()
 
 void CsoundQt::setLineAndColumn(int line, int column)
 {
-    QString labelText = QString("%1 : %2, %3 : ").arg(tr("Line")).arg(line).arg(tr("Column"));
-    if (column>80) {
-        QString color = "red"; //isDarkPalette ? "#FF4C4C" : "red";
-        labelText += QString("<span style='color:%1;'><b>%2</b></span>").arg(color).arg(column);
+    QString labelText = QString::number(line) + ":";
+    if (column > 80) {
+        // Keep the warning colour for lines longer than 80 columns.
+        labelText += QString("<span style='color:red;'><b>%1</b></span>")
+                .arg(column);
     } else {
-        labelText +=  QString::number(column);
+        labelText += QString::number(column);
     }
     lineAndColumnLabel->setText(labelText);
 }
@@ -2012,58 +2097,6 @@ void CsoundQt::toggleConsolePanel()
     m_console->activateWindow();
     showConsoleAct->setChecked(true);
     m_console->focusText();
-}
-
-void CsoundQt::updateFocusIndicator(QWidget *focused)
-{
-    if (focused == nullptr) {
-        return;  // popups/menus: keep the last shown panel
-    }
-    // Focus changes often arrive in bursts (old -> null -> new, or a dock
-    // raising itself). Coalesce them and report the panel that actually holds
-    // focus once things settle, so the indicator and flash always name the
-    // panel that GOT the focus, never the one that lost it.
-    if (m_focusIndicatorTimer != nullptr) {
-        m_focusIndicatorTimer->start();
-    } else {
-        applyFocusIndicator();
-    }
-}
-
-void CsoundQt::applyFocusIndicator()
-{
-    QWidget *focused = QApplication::focusWidget();
-    if (focused == nullptr) {
-        return;
-    }
-    QString name;
-    DocumentPage *doc = getCurrentDocumentPage();
-    WidgetLayout *wl = (doc != nullptr) ? doc->getWidgetLayout() : nullptr;
-    if (documentTabs != nullptr && isDescendantOf(focused, documentTabs)) {
-        name = "Editor";
-    } else if (widgetPanel != nullptr && isDescendantOf(focused, widgetPanel)) {
-        name = "Widgets";
-    } else if (wl != nullptr && isDescendantOf(focused, wl)) {
-        // Widgets in their independent window.
-        name = "Widgets";
-    } else if (helpPanel != nullptr && isDescendantOf(focused, helpPanel)) {
-        name = "Help";
-    } else if (m_inspector != nullptr && isDescendantOf(focused, m_inspector)) {
-        name = "Inspector";
-    } else if (m_console != nullptr && isDescendantOf(focused, m_console)) {
-        name = "Console";
-#ifdef CSQT_QTHTML
-    } else if (csoundHtmlView != nullptr && isDescendantOf(focused, csoundHtmlView)) {
-        name = "HTML";
-#endif
-    } else if (m_scratchPad != nullptr && isDescendantOf(focused, m_scratchPad)) {
-        name = "CodePad";
-    }
-    if (name.isEmpty()) {
-        focusPanelLabel->setText("");
-        return;
-    }
-    focusPanelLabel->setText("[" + name + "]");
 }
 
 void CsoundQt::ambiguosShortcut()
@@ -3011,8 +3044,255 @@ void CsoundQt::render()
     if (outName.isEmpty()) {
         outName = "test.wav";
     }
+    DocumentPage *page = documentPages[curPage];
+    // Resolve relative output names against the document, not the process
+    // working directory: rendering should not depend on where the application
+    // happened to be started from.
+    const QString documentName = page->getFileName();
+    const QString outputBaseDir = (documentName.isEmpty()
+                                   || documentName.startsWith(QLatin1Char(':')))
+            ? QDir::currentPath()
+            : QFileInfo(documentName).absolutePath();
+    const QFileInfo outputInfo(outName);
+    const QString absoluteOutName = outputInfo.isAbsolute()
+            ? outputInfo.absoluteFilePath()
+            : QDir(outputBaseDir).filePath(outName);
+    // When CsoundQt's render options override the document, always pass the
+    // output file. Otherwise a "-odac" in <CsOptions> wins and starts a
+    // realtime performance instead of rendering.
+    if (m_options->fileUseOptions) {
+        m_options->fileOutputFilename = absoluteOutName;
+        m_options->fileOutputFilenameActive = true;
+    }
     setCurrentAudioFile(outName);
+
+    if (m_offlineRendering)
+        finishRenderStatus();
+    m_renderPage = page;
+    m_offlineRendering = true;
+    m_renderCsdFile = documentName.isEmpty()
+            ? tr("(untitled)")
+            : (documentName.startsWith(QLatin1Char(':'))
+               ? documentName
+               : QFileInfo(documentName).absoluteFilePath());
+    m_renderScoreTime = 0.0;
+    m_renderSampleRate = 0;
+    m_renderStopConnection = connect(page, &DocumentPage::stopSignal,
+                                     this, &CsoundQt::finishRenderStatus);
+    page->setWidgetDrawingEnabled(false);
+    startRenderStatus(absoluteOutName, estimateScoreDuration(page->getSco()));
     play(false);
+    // A compile error or an immediately rejected start never reaches the
+    // engine's stopSignal; do not leave the progress display running.
+    if (m_offlineRendering && !page->isRunning())
+        finishRenderStatus();
+}
+
+void CsoundQt::startRenderStatus(const QString &path, double duration)
+{
+    if (!m_renderStatusWidget)
+        return;
+    m_renderStatusHideTimer->stop();
+    statusBar()->clearMessage();
+    // While a render job is active, the render progress is the only
+    // information shown on the right side of the status bar.
+    if (lineAndColumnLabel != nullptr)
+        lineAndColumnLabel->hide();
+    m_renderPath = path;
+    m_renderDuration = duration;
+    m_renderPercent = -1;
+    const QString displayPath = QDir::toNativeSeparators(path);
+    m_renderFileLabel->setText(m_renderFileLabel->fontMetrics().elidedText(
+                                   displayPath, Qt::ElideMiddle, 420));
+    m_renderFileLabel->setToolTip(displayPath);
+    if (duration > 0.0) {
+        m_renderProgressBar->setRange(0, 100);
+        m_renderProgressBar->setValue(0);
+        m_renderPercentLabel->setText("0%"_L1);
+    }
+    else {
+        // The score cannot be estimated reliably: show a busy indicator.
+        m_renderProgressBar->setRange(0, 0);
+        m_renderPercentLabel->clear();
+    }
+    m_renderStatusWidget->show();
+    m_renderProgressTimer->start();
+}
+
+void CsoundQt::updateRenderProgress()
+{
+    if (!m_offlineRendering || !m_renderPage) {
+        m_renderProgressTimer->stop();
+        return;
+    }
+    CsoundEngine *engine = m_renderPage->getEngine();
+    if (engine == nullptr || !engine->isRunning())
+        return;
+    const double scoreTime = engine->scoreTime();
+    m_renderScoreTime = qMax(m_renderScoreTime, scoreTime);
+    if (engine->getUserData() != nullptr && engine->getUserData()->sampleRate > 0)
+        m_renderSampleRate = engine->getUserData()->sampleRate;
+    if (m_renderDuration > 0.0) {
+        const int percent = qBound(0, int(100.0 * scoreTime / m_renderDuration), 99);
+        m_renderProgressBar->setValue(percent);
+        if (percent != m_renderPercent) {
+            m_renderPercent = percent;
+            m_renderPercentLabel->setText(QString::number(percent) + "%"_L1);
+        }
+    }
+}
+
+void CsoundQt::finishRenderStatus()
+{
+    if (!m_offlineRendering)
+        return;
+    m_offlineRendering = false;
+    if (m_renderProgressTimer)
+        m_renderProgressTimer->stop();
+    if (m_renderStopConnection)
+        disconnect(m_renderStopConnection);
+    m_renderStopConnection = QMetaObject::Connection();
+
+    if (m_renderPage) {
+        CsoundEngine *engine = m_renderPage->getEngine();
+        if (engine != nullptr && engine->getUserData() != nullptr
+                && engine->getUserData()->sampleRate > 0) {
+            m_renderSampleRate = engine->getUserData()->sampleRate;
+        }
+        m_renderPage->setWidgetDrawingEnabled(true);
+    }
+    m_renderPage = nullptr;
+
+    const bool fileWritten = !m_renderPath.isEmpty()
+            && QFileInfo(m_renderPath).isFile()
+            && QFileInfo(m_renderPath).size() > 0;
+    if (m_renderFileLabel) {
+        const QString displayPath = QDir::toNativeSeparators(m_renderPath);
+        const QString text = fileWritten
+                ? tr("Rendered %1").arg(displayPath)
+                : tr("Render failed %1").arg(displayPath);
+        m_renderFileLabel->setText(m_renderFileLabel->fontMetrics().elidedText(
+                                       text, Qt::ElideMiddle, 420));
+        m_renderFileLabel->setToolTip(displayPath);
+    }
+    if (m_renderPercentLabel)
+        m_renderPercentLabel->setText("100%"_L1);
+    if (m_renderProgressBar) {
+        m_renderProgressBar->setRange(0, 100);
+        m_renderProgressBar->setValue(100);
+    }
+    if (fileWritten) {
+        RenderJob job;
+        job.csdFile = m_renderCsdFile;
+        job.soundFile = m_renderPath;
+        job.duration = m_renderScoreTime > 0.0 ? m_renderScoreTime
+                                               : m_renderDuration;
+        job.sampleRate = m_renderSampleRate;
+        m_renderHistory.append(job);
+        refreshRenderHistoryTable();
+    }
+    statusBar()->clearMessage();
+    if (m_renderStatusHideTimer)
+        m_renderStatusHideTimer->start(5000);
+    m_renderPath.clear();
+    m_renderCsdFile.clear();
+    m_renderScoreTime = 0.0;
+    m_renderSampleRate = 0;
+}
+
+void CsoundQt::showRenderHistory()
+{
+    if (m_renderHistoryDialog) {
+        refreshRenderHistoryTable();
+        m_renderHistoryDialog->raise();
+        m_renderHistoryDialog->activateWindow();
+        return;
+    }
+
+    auto *dialog = new QDialog(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->setWindowTitle(tr("Render History"));
+    dialog->resize(1000, 360);
+    auto *layout = new QVBoxLayout(dialog);
+
+    auto *table = new QTableWidget(0, 5, dialog);
+    table->setHorizontalHeaderLabels(QStringList{
+        tr("Csd file"), tr("Soundfile"), tr("Duration"),
+        tr("Sample rate"), QString()});
+    table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    table->setSelectionMode(QAbstractItemView::SingleSelection);
+    table->setAlternatingRowColors(true);
+    table->setWordWrap(false);
+    table->verticalHeader()->setVisible(false);
+    table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    table->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    table->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
+    table->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
+    layout->addWidget(table);
+
+    auto *buttons = new QHBoxLayout;
+    auto *closeButton = new QPushButton(tr("Close"), dialog);
+    connect(closeButton, &QPushButton::clicked, dialog, &QDialog::close);
+    buttons->addStretch();
+    buttons->addWidget(closeButton);
+    layout->addLayout(buttons);
+
+    m_renderHistoryDialog = dialog;
+    m_renderHistoryTable = table;
+    connect(dialog, &QObject::destroyed, this, [this]() {
+        m_renderHistoryDialog = nullptr;
+        m_renderHistoryTable = nullptr;
+    });
+    refreshRenderHistoryTable();
+    dialog->show();
+}
+
+void CsoundQt::refreshRenderHistoryTable()
+{
+    if (!m_renderHistoryTable)
+        return;
+    auto *table = m_renderHistoryTable;
+    table->clearContents();
+    table->setRowCount(m_renderHistory.size());
+    for (int row = 0; row < m_renderHistory.size(); ++row) {
+        const RenderJob &job = m_renderHistory.at(row);
+
+        auto *csdItem = new QTableWidgetItem(
+                    QDir::toNativeSeparators(job.csdFile));
+        csdItem->setToolTip(job.csdFile);
+        table->setItem(row, 0, csdItem);
+
+        auto *soundItem = new QTableWidgetItem(
+                    QDir::toNativeSeparators(job.soundFile));
+        soundItem->setToolTip(job.soundFile);
+        table->setItem(row, 1, soundItem);
+
+        auto *durationItem = new QTableWidgetItem(formatRenderDuration(job.duration));
+        durationItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        table->setItem(row, 2, durationItem);
+
+        auto *rateItem = new QTableWidgetItem(
+                    job.sampleRate > 0 ? u"%1 Hz"_s.arg(job.sampleRate) : u"-"_s);
+        rateItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        table->setItem(row, 3, rateItem);
+
+        auto *openFolderButton = new QPushButton(tr("Open Folder"), table);
+        connect(openFolderButton, &QPushButton::clicked, this,
+                [this, soundFile = job.soundFile]() {
+            const QString folder = QFileInfo(soundFile).absolutePath();
+            QString error;
+            if (!ExternalLauncher::openFolder(folder, &error,
+                                              QStringLiteral("render-history"))) {
+                QMessageBox::warning(this, tr("Open Folder"),
+                                     error.isEmpty()
+                                     ? tr("Could not open the folder:\n%1").arg(folder)
+                                     : error);
+            }
+        });
+        table->setCellWidget(row, 4, openFolderButton);
+    }
 }
 
 void CsoundQt::openExternalEditor()
@@ -5313,6 +5593,11 @@ void CsoundQt::createActions()
     externalEditorAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
 
+    renderHistoryAct = new QAction(tr("Render History"), this);
+    renderHistoryAct->setStatusTip(tr("Show files rendered during this session"));
+    renderHistoryAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(renderHistoryAct, SIGNAL(triggered()), this, SLOT(showRenderHistory()));
+
     showWidgetsAct = new QAction(icon("widgets.png"),
                                  tr("Widgets"), this);
     showWidgetsAct->setCheckable(true);
@@ -5740,6 +6025,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(tabsToSpacesAct);
     m_keyActions.append(externalPlayerAct);
     m_keyActions.append(externalEditorAct);
+    m_keyActions.append(renderHistoryAct);
     m_keyActions.append(showEditorAct);
     m_keyActions.append(showWidgetsAct);
     m_keyActions.append(showHelpAct);
@@ -5998,6 +6284,7 @@ void CsoundQt::createMenus()
     controlMenu->addAction(stopAct);
     controlMenu->addAction(stopAllAct);
     controlMenu->addSeparator();
+    controlMenu->addAction(renderHistoryAct);
     controlMenu->addAction(externalEditorAct);
     controlMenu->addAction(externalPlayerAct);
     controlMenu->addAction(checkSyntaxAct);
@@ -6357,23 +6644,50 @@ void CsoundQt::createStatusBar()
     auto statusbar = statusBar();
     statusbar->showMessage(tr("Ready"));
 
+    m_renderStatusWidget = new QWidget(statusbar);
+    auto *renderLayout = new QHBoxLayout(m_renderStatusWidget);
+    renderLayout->setContentsMargins(0, 0, 0, 0);
+    renderLayout->setSpacing(6);
+    m_renderProgressBar = new QProgressBar(m_renderStatusWidget);
+    m_renderProgressBar->setMaximumWidth(180);
+    // A QProgressBar's default height hint is taller than the status bar and
+    // would make the whole bar grow. Keep it compact; the percentage is shown
+    // in its own label instead.
+    m_renderProgressBar->setTextVisible(false);
+    m_renderProgressBar->setMaximumHeight(statusbar->fontMetrics().height());
+    m_renderProgressBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    m_renderPercentLabel = new QLabel(m_renderStatusWidget);
+    m_renderPercentLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_renderPercentLabel->setMinimumWidth(38);
+    m_renderFileLabel = new QLabel(m_renderStatusWidget);
+    m_renderFileLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_renderFileLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    renderLayout->addWidget(m_renderProgressBar, 0, Qt::AlignVCenter);
+    renderLayout->addWidget(m_renderPercentLabel, 0, Qt::AlignVCenter);
+    renderLayout->addWidget(m_renderFileLabel, 0, Qt::AlignRight | Qt::AlignVCenter);
+    // Permanent widgets are not hidden by transient status messages (for
+    // example the opcode help text shown when moving the cursor), so the
+    // render progress remains visible while the user keeps editing.
+    statusbar->addPermanentWidget(m_renderStatusWidget, 0);
+    m_renderStatusWidget->hide();
+
+    m_renderProgressTimer = new QTimer(this);
+    m_renderProgressTimer->setInterval(100);
+    connect(m_renderProgressTimer, &QTimer::timeout,
+            this, &CsoundQt::updateRenderProgress);
+    m_renderStatusHideTimer = new QTimer(this);
+    m_renderStatusHideTimer->setSingleShot(true);
+    connect(m_renderStatusHideTimer, &QTimer::timeout, this, [this]() {
+        m_renderStatusWidget->hide();
+        // The line/column indicator was hidden for the duration of the
+        // render; bring it back together with the rest of the right side.
+        if (lineAndColumnLabel != nullptr)
+            lineAndColumnLabel->show();
+    });
+
     lineAndColumnLabel = new QLabel();
     setLineAndColumn(0,0);
     statusbar->addPermanentWidget(lineAndColumnLabel);
-
-    // Focus indicator at the far right: [Editor], [Widgets], [Help], ...
-    // (added last so it sits rightmost of the permanent widgets).
-    focusPanelLabel = new QLabel();
-    statusbar->addPermanentWidget(focusPanelLabel);
-    // Coalesce bursts of focus changes so the indicator/flash always end up
-    // naming the panel that actually holds focus.
-    m_focusIndicatorTimer = new QTimer(this);
-    m_focusIndicatorTimer->setSingleShot(true);
-    m_focusIndicatorTimer->setInterval(60);
-    connect(m_focusIndicatorTimer, &QTimer::timeout,
-            this, &CsoundQt::applyFocusIndicator);
-    connect(qApp, &QApplication::focusChanged,
-            this, &CsoundQt::updateFocusIndicator);
 }
 
 void CsoundQt::readSettings()
@@ -6640,6 +6954,8 @@ void CsoundQt::readSettings()
     m_options->fileInputFilename = settings.value("fileInputFilename", "").toString();
     m_options->fileOutputFilenameActive = settings.value("fileOutputFilenameActive", false).toBool();
     m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
+    m_options->disableDisplaysOnRender =
+            settings.value("disableDisplaysOnRender", true).toBool();
     m_options->rtUseOptions = settings.value("rtUseOptions", true).toBool();
     m_options->rtOverrideOptions = settings.value("rtOverrideOptions", false).toBool();
     m_options->rtAudioModule = settings.value("rtAudioModule", "pa_cb").toString();
@@ -6875,6 +7191,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("fileInputFilename", m_options->fileInputFilename);
     settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
     settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
+    settings.setValue("disableDisplaysOnRender", m_options->disableDisplaysOnRender);
     settings.setValue("rtUseOptions", m_options->rtUseOptions);
     settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
     settings.setValue("rtAudioModule", m_options->rtAudioModule);

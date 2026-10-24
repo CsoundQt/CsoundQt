@@ -179,6 +179,9 @@ public slots:
 	void markStopped();
 	void perfEnded();
 	void render();
+	void showRenderHistory();
+	void updateRenderProgress();
+	void finishRenderStatus();
 	void record(bool);
 	void record(bool, int index);
 	void sendEvent(QString eventLine, double delay = 0);
@@ -272,8 +275,6 @@ private slots:
     void toggleHelpPanel();
     void toggleInspectorPanel();
     void toggleConsolePanel();
-    void updateFocusIndicator(QWidget *focused);
-    void applyFocusIndicator();
     void showDebugger(bool show);
 	void showVirtualKeyboard(bool show);
 	void showTableEditor(bool show);
@@ -437,6 +438,38 @@ private:
 public: CsoundHtmlView *csoundHtmlView;
 #endif
     void applyThemeToPage(DocumentPage *p);
+
+    // Offline-render progress. The document keeps producing values while the
+    // widget display is frozen, so this only drives the status bar.
+    void startRenderStatus(const QString &path, double duration);
+    bool m_offlineRendering = false;
+    QPointer<DocumentPage> m_renderPage;
+    QMetaObject::Connection m_renderStopConnection;
+    QTimer *m_renderProgressTimer = nullptr;
+    QTimer *m_renderStatusHideTimer = nullptr;
+    QWidget *m_renderStatusWidget = nullptr;
+    QLabel *m_renderPercentLabel = nullptr;
+    QLabel *m_renderFileLabel = nullptr;
+    QProgressBar *m_renderProgressBar = nullptr;
+    QString m_renderPath;
+    QString m_renderCsdFile;
+    double m_renderDuration = 0.0;
+    double m_renderScoreTime = 0.0;
+    int m_renderPercent = -1;
+    int m_renderSampleRate = 0;
+
+    // Per-session list of completed render jobs shown by Render History.
+    struct RenderJob {
+        QString csdFile;
+        QString soundFile;
+        double duration = 0.0;
+        int sampleRate = 0;
+    };
+    QVector<RenderJob> m_renderHistory;
+    QPointer<QDialog> m_renderHistoryDialog;
+    QTableWidget *m_renderHistoryTable = nullptr;
+    void refreshRenderHistoryTable();
+
 private:
 	//    QString m_widgetClipboard;
 	Inspector *m_inspector;
@@ -500,6 +533,7 @@ private:
 	QAction *stopAllAct;
 	QAction *recAct;
 	QAction *renderAct;
+	QAction *renderHistoryAct;
 	QAction *externalEditorAct;
 	QAction *externalPlayerAct;
     QAction *showEditorAct;
@@ -626,15 +660,13 @@ private:
     QStringList m_longOptions = {
         "--syntax-check-only", "--control-rate=", "--messagelevel=",
         "--env:", "--dither", "--sched", "--omacro:", "--smacro:",
-        "--verbose", "--sample-accurate", "--realtime",
+        "--verbose", "--sample-accurate", "--realtime", "--nodisplays",
         "--nchnls=", "--nchnls_i=", "--sinesize", "--daemon",
         "--port=", "--use-system-sr", "--ksmps=",
         "--limiter", "--udp-echo", "--opcode-dir=", "-+rtmidi", "-+rtaudio",
         "--format"
     };
     QLabel *lineAndColumnLabel;
-    QLabel *focusPanelLabel;
-    QTimer *m_focusIndicatorTimer;
     QPalette makeAppPalette(bool dark);
     QFileSystemWatcher *m_fileWatcher;
     QSet<QString> m_pendingFileChanges;

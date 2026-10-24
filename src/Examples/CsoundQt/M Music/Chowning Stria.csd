@@ -1,257 +1,260 @@
 <CsoundSynthesizer>
 <CsOptions>
+-odac
+
 </CsOptions>
 <CsInstruments>
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Stria
-;;; by John Chowning
-;;; Reconstruction - ORChestra csound code
-;;; Kevin Dahan 2007-20010
-;;; kevin.dahan@wanadoo.fr
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; The basis for this code was the original MUS10 orchestra file
-;;; with modifications by John Chowning and Kevin Dahan
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; - Initial release : 2007
-;;; - 11/2009: sco modifications for correcting END
-;;; - 08/2010: orc modifications (butlp filters)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ;; Stria
+; ;; by John Chowning
+; ;; Reconstruction - ORChestra csound code
+; ;; Kevin Dahan 2007-20010
+; ;; kevin.dahan@wanadoo.fr
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ;; The basis for this code was the original MUS10 orchestra file
+; ;; with modifications by John Chowning and Kevin Dahan
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ;; - Initial release : 2007
+; ;; - 11/2009: sco modifications for correcting END
+; ;; - 08/2010: orc modifications (butlp filters)
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  sr        =           48000
-  ksmps     =           16
-  nchnls    =           2
+sr     = 48000
+ksmps  = 16
+nchnls = 2
+0dbfs  = 32768
 
-  gaudio    init        0
-  ga1       init        0
-  ga2       init        0
-  ga3       init        0
-  ga4       init        0
-
-
-
-instr 1                                         ;  vlna
-
-  iamp      =           p4                      ;  amp 
-  isk       =           p14
-  idis      =           p15                     ;  distance
-  ifc       =           p5                      ;  Freq Carrier
-  ifma      =           p6                      ;  Freq ModA
-  indxa1    =           p7                      ;  indx ampA1
-  indxa2    =           p8                      ;  indx ampA2
-
-  idifa     =           p8-p7                   
-
-  ifmb      =           p9                      ; Freq ModB
-  indxb1    =           p10                     ; index ampB1
-  indxb2    =           p11                     ; index ampB2
-
-            ; get correct index values for end.mem
-  if ( p32 == 1 )   then      
-  indxb2    =           indxa2
-  endif     
-
-  idifb     =           p11-p10                 
-
-  imag      =           1                       ; fun to test
-
-  ifactor   =           (p3-(p12+p13))/2
-
-            ;  generate global envelop pointer
-  kndx      linseg      0, p12, 0.25, ifactor, 0.5, ifactor, 0.75, p13, 1
-
-            ; generate first envelop (env)
-  ifn1      =           p28
-  ixmode    =           1
-  ktable    table       kndx, ifn1, ixmode
-  kenv      =           ktable*iamp
-
-            ; generate second envelop (skew)
-  ifn2      =           p29
-  ktable2   table       kndx, ifn2, ixmode
-  ksk  	    = ktable2*isk
-  kskew     =           1+ksk
-
-            ; generate third envelop (fda)
-  ifn3      =           p30
-  ktable3   table       kndx, ifn3, ixmode
-  kfda      =           ktable3*(ifma*idifa*imag)
-
-            ; generate            fourth      envelop(fdb)
-  ifn4      =           p31
-  ktable4   table       kndx, ifn4, ixmode
-  kfdb      =           ktable4*(ifmb*idifb*imag)
+gaudio init 0
+ga1    init 0
+ga2    init 0
+ga3    init 0
+ga4    init 0
 
 
-  amoda     oscil       (ifma*indxa1*imag)+kfda, (ifma*imag)*kskew, 1
-  amodb     oscil       (ifma*indxb1*imag)+kfdb, (ifmb*imag)*kskew, 1
-  asig      oscil       kenv, ((ifc*imag)*kskew)+amoda+amodb, 1
 
-  gaudio    =           gaudio+(asig*p16)       ; sends reverb signal
-  asig      =           asig*idis               ; adjust distance
+instr 1  ; vlna
+
+  iamp   = p4  ; amp
+  isk    = p14
+  idis   = p15  ; distance
+  ifc    = p5   ; Freq Carrier
+  ifma   = p6   ; Freq ModA
+  indxa1 = p7   ; indx ampA1
+  indxa2 = p8   ; indx ampA2
+
+  idifa = p8-p7
+
+  ifmb   = p9   ; Freq ModB
+  indxb1 = p10  ; index ampB1
+  indxb2 = p11  ; index ampB2
+
+  ; get correct index values for end.mem
+  if (p32 == 1) then
+    indxb2 = indxa2
+  endif
+
+  idifb = p11-p10
+
+  imag = 1  ; fun to test
+
+  ifactor = (p3-(p12+p13))/2
+
+  ; generate global envelop pointer
+  kndx linseg 0, p12, 0.25, ifactor, 0.5, ifactor, 0.75, p13, 1
+
+  ; generate first envelop (env)
+  ifn1   = p28
+  ixmode = 1
+  ktable table kndx, ifn1, ixmode
+  kenv = ktable*iamp
+
+  ; generate second envelop (skew)
+  ifn2 = p29
+  ktable2 table kndx, ifn2, ixmode
+  ksk   = ktable2*isk
+  kskew = 1+ksk
+
+  ; generate third envelop (fda)
+  ifn3 = p30
+  ktable3 table kndx, ifn3, ixmode
+  kfda = ktable3*(ifma*idifa*imag)
+
+  ; generate            fourth      envelop(fdb)
+  ifn4 = p31
+  ktable4 table kndx, ifn4, ixmode
+  kfdb = ktable4*(ifmb*idifb*imag)
 
 
-  aout1     =           asig*p22                ; FL
-  aout2     =           asig*p23                ; FR
-  aout3     =           asig*p24                ; RR
-  aout4     =           asig*p25                ; RL
+  amoda oscil (ifma*indxa1*imag)+kfda, (ifma*imag)*kskew, 1
+  amodb oscil (ifma*indxb1*imag)+kfdb, (ifmb*imag)*kskew, 1
+  asig  oscil kenv, ((ifc*imag)*kskew)+amoda+amodb, 1
 
-  ga1       =           ga1+aout1
-  ga2       =           ga2+aout2
-  ga3       =           ga3+aout3
-  ga4       =           ga4+aout4
-
-endin 
+  gaudio = gaudio+(asig*p16)  ; sends reverb signal
+  asig   = asig*idis          ; adjust distance
 
 
-;   p1 p2    p3    p4      p5   p6       p7    p8    p9       p10  p11
-;   i  beg   dur   amp     Fc   FmA      ia1   ia2   FmB      ib1  ib2
-; insa 1.000 6.924 151.644 2618 4235.924 0.056 0.223 4235.924 .000 1.023 
+  aout1 = asig*p22  ; Fl
+  aout2 = asig*p23  ; Fr
+  aout3 = asig*p24  ; Rr
+  aout4 = asig*p25  ; Rl
 
-; p12   p13   p14   p15   p16   p17  p18  p19  p20  p21
-; att   dec   %skew dis   %rev                        
-; 1.385 2.306 0.006 0.333 0.150 .000 .000 .000 .000 .000
-
-; p22  p23   p24  p25  p26  p27  p28  p29   p30  p31
-; ch1  ch2   ch3  ch4  -    -    ampF skewF IAF  IBF
-; 0.82 0.997 .000 .000 .000 .000 F2   F6    F2   F4
-
-
-instr 99                                        ;  reverb unit
-
-   a1        init        0                       
-   a2        init        0
-   a3        init        0
-   a4        init        0
-   a5        init        0
-   a6        init        0
-   a7        init        0
-
-            ; factor to compensate changing rate (1 to disable)
-  ifactor   =           2                       
-  imag      =           1
-
-
-  a1        alpass      gaudio, 20*(647/25600)*ifactor, 647/25600*ifactor
-  a2        alpass      a1, 20*(213/25600)*ifactor, 213/25600*ifactor
-  a3        alpass      a2, 20*(67/25600)*ifactor, 67/25600*ifactor
-
-  a4        comb        a3, 32*(3201/25600)*ifactor, 3201/25600*ifactor
-  a5        comb        a3, 27*(3667/25600)*ifactor, 3667/25600*ifactor
-  a6        comb        a3, 25*(4053/25600)*ifactor, 4053/25600*ifactor
-  a7        comb        a3, 25*(4451/25600)*ifactor, 4451/25600*ifactor
-
-  afirstline    =           a4-a5+a6-a7
-  asecondline   =           a4+a5+a6+a7
-  athirdline    =           a4-a5-a6-a7
-  afourthline   =           a4+a5-a6-a7
-
-  arev1     poscil       p5-p4, imag/p3, 9
-  arevsc    line        p4, p3, p5
-
-  aos1      oscili       1000*p6, 0.0089*arevsc, 1, 0.75 ; 0.013
-  amod1     =           1000+aos1
-  az1       vdelay      afirstline, (amod1/25.600)*ifactor, 10000
-
-  aos2      oscili       1000*p6, 0.0083*arevsc, 1, 0.75 ;  0.011
-  amod2     =           1000+aos2
-  az2       vdelay      asecondline, (amod2/25.600)*ifactor, 10000
-
-  aos3      oscili      1000*p6, 0.0097*arevsc, 1 ;  0.017
-  amod3     =           1000+aos3
-  az3       vdelay      athirdline, (amod3/25.600)*ifactor, 10000
-
-  aos4      oscili       1000*p6,  0.0101*arevsc, 1 ;  0.019
-  amod4     =           1000+aos4
-  az4       vdelay      afourthline, (amod4/25.600)*ifactor, 10000
-
-            ; get correct scaling for multiple reverb instances
-  kenv      linseg      1, p3-2, 1, 2, 0
-  az1       =           az1*kenv
-  az2       =           az2*kenv
-  az3       =           az3*kenv
-  az4       =           az4*kenv
-
-  ga1       =           ga1+az1
-  ga2       =           ga2+az2
-  ga3       =           ga3+az3
-  ga4       =           ga4+az4
-
-  gaudio    =           0
+  ga1 = ga1+aout1
+  ga2 = ga2+aout2
+  ga3 = ga3+aout3
+  ga4 = ga4+aout4
 
 endin
 
 
-instr 999                                       ;  global amplitude shaping envelope
-								    ; filter banks
+; p1 p2    p3    p4      p5   p6       p7    p8    p9       p10  p11
+; i  beg   dur   amp     Fc   FmA      ia1   ia2   FmB      ib1  ib2
+; insa 1.000 6.924 151.644 2618 4235.924 0.056 0.223 4235.924 .000 1.023
+
+; p12   p13   p14   p15   p16   p17  p18  p19  p20  p21
+; att   dec   %skew dis   %rev
+; 1.385 2.306 0.006 0.333 0.150 .000 .000 .000 .000 .000
+
+; p22  p23   p24  p25  p26  p27  p28  p29   p30  p31
+; ch1  ch2   ch3  ch4  -    -    ampF skewF IAF  IBF
+; 0.82 0.997 .000 .000 .000 .000 F2   f6    f2   f4
 
 
-;; filter banks 
-  alpa1	butterlp ga1, 11500
-  alpa2	butterlp alpa1, 11500
-  alpa3	butterlp alpa2, 11500
-  aout1 	butterlp alpa3, 11500
-;;;
-  alpb1	butterlp ga2, 11500
-  alpb2	butterlp alpb1, 11500
-  alpb3	butterlp alpb2, 11500
-  aout2    butterlp alpb3, 11500
-;;;
-  alpc1	butterlp ga3, 11500
-  alpc2	butterlp alpc1, 11500
-  alpc3	butterlp alpc2, 11500
-  aout3 	butterlp alpc3, 11500
-;;;
-  alpd1	butterlp ga4, 11500
-  alpd2	butterlp alpd1, 11500
-  alpd3	butterlp alpd2, 11500
-  aout4 	butterlp alpd3, 11500
-;
-  ga1=aout1
-  ga2=aout2
-  ga3=aout3
-  ga4=aout4
-; end filters
+instr 99  ; reverb unit
+
+  a1 init 0
+  a2 init 0
+  a3 init 0
+  a4 init 0
+  a5 init 0
+  a6 init 0
+  a7 init 0
+
+  ; factor to compensate changing rate (1 to disable)
+  ifactor = 2
+  imag    = 1
 
 
-  kpointer  linseg      0, 427, 0.1, 77, 0.35, 1, 0.45, 33, 0.45, 1, 0.35, 4, 0.45, 9, 0.5, 15, 0.5, 26, 0.8, 43, 0.8, 27, 0.9, 1, 0.8, 294, 0.95
-  kv        tablei      kpointer, 2, 1
-  kenv      =           1+(kv*18)               
+  a1 alpass gaudio, 20*(647/25600)*ifactor, 647/25600*ifactor
+  a2 alpass a1, 20*(213/25600)*ifactor, 213/25600*ifactor
+  a3 alpass a2, 20*(67/25600)*ifactor, 67/25600*ifactor
 
-  ga1       =           ga1*kenv
-  ga2       =           ga2*kenv
-  ga3       =           ga3*kenv
-  ga4       =           ga4*kenv
+  a4 comb a3, 32*(3201/25600)*ifactor, 3201/25600*ifactor
+  a5 comb a3, 27*(3667/25600)*ifactor, 3667/25600*ifactor
+  a6 comb a3, 25*(4053/25600)*ifactor, 4053/25600*ifactor
+  a7 comb a3, 25*(4451/25600)*ifactor, 4451/25600*ifactor
+
+  afirstline  = a4-a5+a6-a7
+  asecondline = a4+a5+a6+a7
+  athirdline  = a4-a5-a6-a7
+  afourthline = a4+a5-a6-a7
+
+  arev1 poscil p5-p4, imag/p3, 9
+  arevsc line p4, p3, p5
+
+  aos1 oscili 1000*p6, 0.0089*arevsc, 1, 0.75  ; 0.013
+  amod1 = 1000+aos1
+  az1 vdelay afirstline, (amod1/25.600)*ifactor, 10000
+
+  aos2 oscili 1000*p6, 0.0083*arevsc, 1, 0.75  ; 0.011
+  amod2 = 1000+aos2
+  az2 vdelay asecondline, (amod2/25.600)*ifactor, 10000
+
+  aos3 oscili 1000*p6, 0.0097*arevsc, 1  ; 0.017
+  amod3 = 1000+aos3
+  az3 vdelay athirdline, (amod3/25.600)*ifactor, 10000
+
+  aos4 oscili 1000*p6, 0.0101*arevsc, 1  ; 0.019
+  amod4 = 1000+aos4
+  az4 vdelay afourthline, (amod4/25.600)*ifactor, 10000
+
+  ; get correct scaling for multiple reverb instances
+  kenv linseg 1, p3-2, 1, 2, 0
+  az1 = az1*kenv
+  az2 = az2*kenv
+  az3 = az3*kenv
+  az4 = az4*kenv
+
+  ga1 = ga1+az1
+  ga2 = ga2+az2
+  ga3 = ga3+az3
+  ga4 = ga4+az4
+
+  gaudio = 0
+
+endin
 
 
-            outs        ga2+ga3, ga1+ga4
+instr 999  ; global amplitude shaping envelope
+  ; filter banks
 
-            ;  uncomment below to generate 
-            ;  the quadraphonic version files
- ;   fout "stria-FL.wav", 8, ga1        
-  ;  fout "stria-FR.wav", 8, ga2         
-  ;  fout "stria-RR.wav", 8, ga3
-   ; fout "stria-RL.wav", 8, ga4
 
-  ga1       =           0
-  ga2       =           0
-  ga3       =           0
-  ga4       =           0
+  ; ; filter banks
+  alpa1 butterlp ga1, 11500
+  alpa2 butterlp alpa1, 11500
+  alpa3 butterlp alpa2, 11500
+  aout1 butterlp alpa3, 11500
+  ; ;;
+  alpb1 butterlp ga2, 11500
+  alpb2 butterlp alpb1, 11500
+  alpb3 butterlp alpb2, 11500
+  aout2 butterlp alpb3, 11500
+  ; ;;
+  alpc1 butterlp ga3, 11500
+  alpc2 butterlp alpc1, 11500
+  alpc3 butterlp alpc2, 11500
+  aout3 butterlp alpc3, 11500
+  ; ;;
+  alpd1 butterlp ga4, 11500
+  alpd2 butterlp alpd1, 11500
+  alpd3 butterlp alpd2, 11500
+  aout4 butterlp alpd3, 11500
+
+  ga1 = aout1
+  ga2 = aout2
+  ga3 = aout3
+  ga4 = aout4
+  ; end filters
+
+
+  kpointer linseg 0, 427, 0.1, 77, 0.35, 1, 0.45, 33, 0.45, 1, 0.35, 4, 0.45, 9, 0.5, 15, 0.5, 26, 0.8, 43, 0.8, 27, 0.9, 1, 0.8, 294, 0.95
+  kv tablei kpointer, 2, 1
+  kenv = 1+(kv*18)
+
+  ga1 = ga1*kenv
+  ga2 = ga2*kenv
+  ga3 = ga3*kenv
+  ga4 = ga4*kenv
+
+
+  out(ga2+ga3, ga1+ga4)
+
+  ; uncomment below to generate
+  ; the quadraphonic version files
+  ; fout "stria-FL.wav", 8, ga1
+  ; fout "stria-FR.wav", 8, ga2
+  ; fout "stria-RR.wav", 8, ga3
+  ; fout "stria-RL.wav", 8, ga4
+
+  ga1 = 0
+  ga2 = 0
+  ga3 = 0
+  ga4 = 0
 
 
 endin
 
 ; spectrogram for gui display in csoundqt
 instr setup
-	outvalue "graph1/findfft", "amon"
-	turnoff
+  outvalue "graph1/findfft", "amon"
+  turnoff
 endin
 
 instr 2000
-	amon1, amon2 monitor
-	dispfft amon1, 1/12, 4096, 1
+  amon1, amon2 monitor
+  dispfft amon1, 1/12, 4096, 1
 endin
 
 
@@ -713,14 +716,7 @@ i1 918.3183 30.6817 175.176041266161 2229.79286350906 5837.4282524091 0.1 0.3423
 e
 
 </CsScore>
-
 </CsoundSynthesizer>
-
-
-
-
-
-
 
 
 
@@ -745,7 +741,9 @@ e
   <width>379</width>
   <height>143</height>
   <uuid>{33a86a23-e29a-4833-8f9c-c1fdaa9f1752}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -761,7 +759,8 @@ The basis for this code was the original MUS10 orchestra file with modifications
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
+  <padding>5</padding>
+  <locked>false</locked>
   <color>
    <r>0</r>
    <g>0</g>
@@ -772,6 +771,11 @@ The basis for this code was the original MUS10 orchestra file with modifications
    <g>215</g>
    <b>220</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -783,12 +787,15 @@ The basis for this code was the original MUS10 orchestra file with modifications
   <width>744</width>
   <height>437</height>
   <uuid>{38315abe-d31c-48f2-8280-3b86eb15f50f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <value>9</value>
   <objectName2/>
+  <zoomx>2.00000000</zoomx>
   <zoomx>2.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -806,4 +813,3 @@ The basis for this code was the original MUS10 orchestra file with modifications
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="480" y="302" width="596" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

@@ -82,6 +82,10 @@ public:
 	QString fileInputFilename;
 	bool fileOutputFilenameActive;
 	QString fileOutputFilename;
+	// Offline rendering only: pass --nodisplays to Csound. This controls
+	// Csound's own display opcodes, independently of whether CsoundQt draws
+	// its widgets during a render.
+	bool disableDisplaysOnRender;
 
 	int sampleFormat;
 

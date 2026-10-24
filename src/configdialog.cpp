@@ -407,6 +407,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	OutputFilenameCheckBox->setChecked(m_options->fileOutputFilenameActive);
 	OutputFilenameLineEdit->setText(m_options->fileOutputFilename);
 	OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
+	DisableDisplaysCheckBox->setChecked(m_options->disableDisplaysOnRender);
 	RtUseOptionsCheckBox->setChecked(m_options->rtUseOptions);
 	RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
 	int index = RtModuleComboBox->findData(m_options->rtAudioModule);
@@ -792,6 +793,7 @@ void ConfigDialog::apply()
 	m_options->fileInputFilename = InputFilenameLineEdit->text();
 	m_options->fileOutputFilenameActive = OutputFilenameCheckBox->isChecked();
 	m_options->fileOutputFilename = OutputFilenameLineEdit->text();
+	m_options->disableDisplaysOnRender = DisableDisplaysCheckBox->isChecked();
 	m_options->rtUseOptions = RtUseOptionsCheckBox->isChecked();
 	m_options->rtOverrideOptions = RtOverrideCheckBox->isChecked();
     m_options->rtAudioModule = RtModuleComboBox->itemData(

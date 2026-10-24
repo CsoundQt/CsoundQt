@@ -862,6 +862,19 @@
                 <property name="spacing">
                  <number>6</number>
                 </property>
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="DisableDisplaysCheckBox">
+                  <property name="toolTip">
+                   <string>Pass --nodisplays to Csound when rendering offline. This suppresses Csound's display opcodes. CsoundQt widget drawing is disabled separately during rendering.</string>
+                  </property>
+                  <property name="text">
+                   <string>Disable displays</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
                 <item row="0" column="3">
                  <widget class="QLabel" name="label_9">
                   <property name="maximumSize">

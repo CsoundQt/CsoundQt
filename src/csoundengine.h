@@ -180,6 +180,9 @@ public:
 	bool isRunning();
 	bool isRecording();
 	bool isPaused() {return m_paused; }
+	// Current score time in seconds (0 when not running). Used for the
+	// offline-render progress display.
+	double scoreTime();
 
 	// To pass to parent document for access from python scripting
 	CSOUND * getCsound();

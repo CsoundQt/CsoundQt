@@ -315,6 +315,10 @@ public slots:
 	void selectBgColor();
 	void setEditEnabled(bool enabled);
 	void setEditMode(bool active);
+	// Offline render: keep receiving values and keep sending input values to
+	// Csound, but do not update or paint the widget displays.
+	void setDrawingEnabled(bool enabled);
+	bool drawingEnabled() const { return m_drawingEnabled; }
 	void setFrameColors(const QColor &unselected, const QColor &selected);
 	void deselectAll();
 	void selectAll();
@@ -477,6 +481,7 @@ private:
 	bool tryApplyStructuralChange(int targetIndex);
 	bool m_modified;
 	bool m_editMode;
+	bool m_drawingEnabled = true;
 	//    QString m_clipboard;
     // Whether contained in another widget (scrollbar in widget panel or widget panel)
     bool m_contained;

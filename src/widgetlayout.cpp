@@ -1821,7 +1821,7 @@ void WidgetLayout::refreshWidgets()
     };
 
     for (int i=0; i < m_widgets.size(); i++) {
-        if (m_widgets[i]->isWidgetEnabled()
+        if (m_drawingEnabled && m_widgets[i]->isWidgetEnabled()
                 && (m_widgets[i]->m_valueChanged || m_widgets[i]->m_value2Changed)) {
             m_widgets[i]->refreshWidget();
         }
@@ -4748,6 +4748,28 @@ void WidgetLayout::setEditMode(bool active)
     selectDownAct->setEnabled(active);
 }
 
+void WidgetLayout::setDrawingEnabled(bool enabled)
+{
+    if (m_drawingEnabled == enabled) {
+        return;
+    }
+    m_drawingEnabled = enabled;
+    // Suppressing updates for the layout also suppresses paint events for all
+    // child widgets. Values and channel snapshots keep flowing; only the
+    // visible representation is frozen.
+    setUpdatesEnabled(enabled);
+    if (!enabled) {
+        return;
+    }
+    // Bring pending values and the latest graph data back on screen.
+    refreshWidgets();
+    QMutexLocker locker(&layoutMutex);
+    for (Curve *curve : curves) {
+        setCurveData(curve);
+    }
+    update();
+}
+
 void WidgetLayout::setFrameColors(const QColor &unselected, const QColor &selected)
 {
     FrameWidget::setFrameColors(unselected, selected);
@@ -5350,17 +5372,20 @@ void WidgetLayout::updateData()
             curve->set_absmax(curveData->absmax);
             // Y axis scaling factor
             // curve->set_y_scale(windat->y_scale);
-            setCurveData(curve);
+            if (m_drawingEnabled)
+                setCurveData(curve);
         }
         // delete curveData; //FIXME don't do this deleting here...
     }
-    for (int i = 0; i < scopeWidgets.size(); i++) {
-        if (scopeWidgets[i]->isWidgetEnabled())
-            scopeWidgets[i]->updateData();
-    }
-    for (int i = 0; i < waveformWidgets.size(); i++) {
-        if (waveformWidgets[i]->isWidgetEnabled())
-            waveformWidgets[i]->updateData();
+    if (m_drawingEnabled) {
+        for (int i = 0; i < scopeWidgets.size(); i++) {
+            if (scopeWidgets[i]->isWidgetEnabled())
+                scopeWidgets[i]->updateData();
+        }
+        for (int i = 0; i < waveformWidgets.size(); i++) {
+            if (waveformWidgets[i]->isWidgetEnabled())
+                waveformWidgets[i]->updateData();
+        }
     }
     layoutMutex.unlock();
     closing = 0;

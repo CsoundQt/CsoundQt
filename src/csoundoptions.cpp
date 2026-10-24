@@ -65,6 +65,7 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	fileInputFilename = "";
 	fileOutputFilenameActive = false;
 	fileOutputFilename = "";
+	disableDisplaysOnRender = true;
 
 	sampleFormat = 0;
 
@@ -212,6 +213,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
             opts << "--print_version";
         }
     } else {
+        if (!rt && disableDisplaysOnRender)
+            opts << "--nodisplays";
         opts << "--format=" + m_configlists->fileTypeNames[fileFileType]
 				+ ":" + m_configlists->fileFormatFlags[fileSampleFormat];
 		if (fileInputFilenameActive)
