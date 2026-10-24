@@ -86,8 +86,8 @@ public:
     // The text to scan, as Csound sees it.
     QString scanText() override;
     // How this document is scanned: a .csd between its tags, an orchestra-only
-    // document (.orc, .udo, .inc, split view) from its first line, and nothing
-    // at all for documents that are not Csound source.
+    // document (.orc, .udo, .inc) from its first line, and nothing at all for
+    // documents that are not Csound source.
     CodeScan::Mode scanMode() const override;
     // The file on disk, so that relative #include directives can be resolved.
     QString scanFilePath() const override;
@@ -108,7 +108,6 @@ public:
 	QString getSelectedText(int section = -1);
 	QString getSelectedWidgetsText();
 	QString getHtmlText();
-	int getViewMode();
 	QString wordUnderCursor();
     QString lineUnderCursor();
 	QRect getWidgetLayoutOuterGeometry();
@@ -270,14 +269,6 @@ public slots:
 	void tabsToSpaces();
 	void killLine();
 	void killToEnd();
-	void setViewMode(int mode);
-	void showOrc(bool);
-	void showScore(bool);
-	void showOptions(bool);
-	void showFileB(bool);
-	void showOther(bool);
-	void showOtherCsd(bool);
-	void showWidgetEdit(bool);
 
 
 private:

@@ -364,8 +364,7 @@ static QString withoutParentheses(const QString &args)
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	BaseView(parent,opcodeTree)
 {
-	// The bracket matcher belongs to the document the highlighter is attached
-	// to (set again in setViewMode()).
+	// The bracket matcher belongs to the document the highlighter is attached to.
 	m_bracketMatcher.setDocument(m_highlighter.document());
 
 	m_autoComplete = true;
@@ -385,20 +384,10 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
     m_hoverText->setMinimumWidth(300);
 	m_hoverWidget->hide();
 
-	for (int i = 0; i < editors.size(); i++) {
-        if (editors[i]!=m_filebEditor && editors[i] != m_mainEditor) { // FilebEditor does not have this slot
-            // to fix always marked as modified, comment it out and handle setModified in this->textChanged slot
-            // connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
-		}
-		splitter->addWidget(editors[i]);
-        editors[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		editors[i]->setContextMenuPolicy(Qt::CustomContextMenu);
-		connect(editors[i], SIGNAL(customContextMenuRequested(QPoint)),
-				this, SLOT(createContextMenu(QPoint)));
-	}
-    connect(m_orcEditor, SIGNAL(textChanged()), this, SLOT(textChanged()));
-	connect(m_orcEditor, SIGNAL(cursorPositionChanged()),
-            this, SLOT(syntaxCheck()));
+	m_mainEditor->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	m_mainEditor->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(m_mainEditor, SIGNAL(customContextMenuRequested(QPoint)),
+			this, SLOT(createContextMenu(QPoint)));
 	setFocusProxy(m_mainEditor);  // for comment action from main application
 	internalChange = false;
 
@@ -452,8 +441,6 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			scheduleAutoComplete(COMPLETION_UPDATE_DELAY_MS);
 	});
 
-	setViewMode(1);
-	setViewMode(0);  // To force a change
 	setAcceptDrops(true);
 
 	// The channel probe also works while only navigating the text: hovering a
@@ -492,14 +479,7 @@ void DocumentView::markCurrentPosition() {
 
 bool DocumentView::childHasFocus()
 {
-	if (this->hasFocus() || m_scoreEditor->hasFocus()
-			|| m_optionsEditor->hasFocus()
-			|| m_otherEditor->hasFocus()
-			|| m_otherCsdEditor->hasFocus()
-			|| m_widgetEditor->hasFocus()) {
-		return true;
-	}
-	return false;
+	return hasFocus() || m_mainEditor->hasFocus();
 }
 
 void DocumentView::print(QPrinter *printer)
@@ -731,55 +711,18 @@ void DocumentView::setModified(bool mod)
         // stays true after a save, and undoing back to the saved text would
         // keep reporting the document as modified.
         m_mainEditor->document()->setModified(false);
-        if (m_orcEditor)
-            m_orcEditor->document()->setModified(false);
     }
 }
 
 void DocumentView::insertText(QString text, int section)
 {
-	if (section == -1 || section < 0) {
-		section = 0;  // TODO implment for multiple views
+	if (section > 0) {
+		qDebug() << "Section " << section << " not implemented.";
+		return;
 	}
-	QTextCursor cursor;
-	switch(section) {
-	case 0:
-		cursor = m_mainEditor->textCursor();
-		cursor.insertText(text);
-		m_mainEditor->setTextCursor(cursor);
-		break;
-		//  case 1:
-		//    orcEditor;
-		//    break;
-		//  case 2:
-		//    scoreEditor;
-		//    break;
-		//  case 3:
-		//    optionsEditor;
-		//    break;
-		//  case 4:
-		//    filebEditor;
-		//    break;
-		//  case 5:
-		//    versionEditor;
-		//    break;
-		//  case 6:
-		//    licenceEditor;
-		//    break;
-		//  case 7:
-		//    otherEditor;
-		//    break;
-		//  case 8:
-		//    widgetEditor;
-		//    break;
-		//  case 9:
-		//    ladspaEditor;
-		//    break;
-		//  case 10:
-		//    break;
-	default:
-		qDebug() <<"Section " << section << " not implemented.";
-	}
+	QTextCursor cursor = m_mainEditor->textCursor();
+	cursor.insertText(text);
+	m_mainEditor->setTextCursor(cursor);
 }
 
 void DocumentView::setAutoComplete(bool autoComplete, int delay)
@@ -806,94 +749,13 @@ void DocumentView::setAutoParameterMode(bool autoParameterMode)
 	m_autoParameterMode = autoParameterMode;
 }
 
-void DocumentView::setViewMode(int mode)
-{
-	if (m_viewMode == mode)
-		return;
-	QString fullText = getFullText();
-	m_viewMode = mode;
-	setFullText(fullText); // Update text for new mode
-	hideAllEditors();
-
-	// The documents are swapped below: drop the bracket mark from the old one.
-	m_bracketMatcher.clear();
-
-	// TODO implement modes properly
-	switch (m_viewMode) {
-	case 0: // csd without extra sections
-		m_mainEditor->show();
-        m_highlighter.setDocument(m_mainEditor->document());
-        // Undo the orchestra-only section used by the split view.
-        m_highlighter.setMode(m_mode);
-        break;
-	case 1: // full plain text
-		m_mainEditor->show();
-		m_highlighter.setDocument(m_mainEditor->document());
-        m_highlighter.setMode(m_mode);
-
-		break;
-	default:
-		m_highlighter.setDocument(m_orcEditor->document());
-        m_highlighter.setSectionType(CsdSection::OrchestraSection); // to enable to highlight it propery
-        m_highlighter.rehighlight();
-		m_orcEditor->setVisible(m_viewMode & 2);
-		m_scoreEditor->setVisible(m_viewMode & 4);
-		m_optionsEditor->setVisible(m_viewMode & 8);
-		m_filebEditor->setVisible(m_viewMode & 16);
-		m_otherEditor->setVisible(m_viewMode & 32);
-		m_otherCsdEditor->setVisible(m_viewMode & 64);
-		m_widgetEditor->setVisible(m_viewMode & 128);
-        auto defaultFormat = m_highlighter.getFormat("default");
-        if (m_viewMode & 2) {
-            QPalette p = m_orcEditor->palette();
-            p.setColor(QPalette::Base, defaultFormat.background().color());
-            p.setColor(QPalette::Text, defaultFormat.foreground().color());
-            m_orcEditor->setPalette(p);
-        }
-
-
-	}
-
-	// The highlighter follows the document, so the matcher has to follow too.
-	m_bracketMatcher.setDocument(m_highlighter.document());
-}
-
 QString DocumentView::getSelectedText(int section)
 {
-	if (section < 0) {
-		section = 0;  // TODO implment for multiple views
-	}
-	QString text;
-	switch(section) {
-	case 0:
-		text = m_mainEditor->textCursor().selectedText();
-		break;
-	case 1:
-		text = m_orcEditor->textCursor().selectedText();
-		break;
-	case 2:
-		text = m_scoreEditor->getSelection();
-		break;
-	case 3:
-		text = m_optionsEditor->textCursor().selectedText();
-		//    ;
-		break;
-	case 4:
-		//    filebEditor;
-		break;
-	case 5:
-		text = m_otherEditor->textCursor().selectedText();
-		break;
-	case 6:
-		text = m_otherCsdEditor->textCursor().selectedText();
-		break;
-	case 7:
-		text = m_widgetEditor->textCursor().selectedText();
-		break;
-	default:
+	if (section > 0) {
 		qDebug() << "Section " << section << " not implemented.";
+		return QString();
 	}
-	return text;
+	return m_mainEditor->textCursor().selectedText();
 }
 
 QString DocumentView::getWidgetsText()
@@ -904,31 +766,10 @@ QString DocumentView::getWidgetsText()
     return "Not implemented.";
 }
 
-int DocumentView::getViewMode()
-{
-	return m_viewMode;
-}
-
 int DocumentView::currentLineNumber()
 {
-	// Returns text without tags
-	int line = -1;
-	if (m_viewMode < 2) {// A single editor (orc and sco are not split)
-		QTextCursor cursor = m_mainEditor->textCursor();
-		line = cursor.blockNumber() + 1;
-	}
-	else { //  Split view
-		// TODO check properly for line number also from other editors
-		QWidget *w = this->focusWidget(); // Gives last child of this widget that has had focus.
-		if (w == m_scoreEditor || w == m_filebEditor) {
-			qDebug() << "Not implemented for score and fileb editor.";
-		}
-		else if (w != 0 && editors.contains(w)) { // Somehow this widget can sometimes be invalid... so must check if it is one of the editors
-			QTextCursor cursor = static_cast<TextEditor *>(w)->textCursor();
-			line = cursor.blockNumber() + 1;
-		}
-	}
-	return line;
+	QTextCursor cursor = m_mainEditor->textCursor();
+	return cursor.blockNumber() + 1;
 }
 
 QString DocumentView::channelAtCursor() const
@@ -1191,10 +1032,6 @@ bool DocumentView::eventFilter(QObject *watched, QEvent *event)
 }
 
 QString DocumentView::lineUnderCursor() {
-    if(m_viewMode >= 2) {
-        QDEBUG << "Not implemented";
-        return "";
-    }
     QTextCursor cursor = m_mainEditor->textCursor();
     cursor.select(QTextCursor::LineUnderCursor);
     auto line = cursor.selectedText();
@@ -1203,29 +1040,17 @@ QString DocumentView::lineUnderCursor() {
 
 QString DocumentView::wordUnderCursor()
 {
-	QString word;
-	if (m_viewMode < 2) {// A single editor (orc and sco are not split)
-		QTextCursor cursor = m_mainEditor->textCursor();
+	QTextCursor cursor = m_mainEditor->textCursor();
+	QString word = cursor.selectedText();
+	if (word.isEmpty()) {
+		cursor.select(QTextCursor::WordUnderCursor);
 		word = cursor.selectedText();
-		if (word.isEmpty()) {
-			cursor.select(QTextCursor::WordUnderCursor);
-			word = cursor.selectedText();
-		}
-	}
-	else { //  Split view
-		// TODO check properly for line number also from other editors
-		qDebug() << "Not implemented for split view.";
 	}
 	return word;
 }
 
 QString DocumentView::helpWordUnderCursor()
 {
-	if (m_viewMode >= 2) {
-		// TODO check properly for line number also from other editors
-		qDebug() << "Not implemented for split view.";
-		return QString();
-	}
 	QTextCursor cursor = m_mainEditor->textCursor();
 	if (cursor.hasSelection())
 		return cursor.selectedText();
@@ -1253,75 +1078,58 @@ QString DocumentView::getActiveSection()
 {
 	// Will return all document if there are no ## boundaries (for any kind of file)
 	QString section;
-	if (m_viewMode < 2) {
-		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {
-			QTextCursor cursor = m_mainEditor->textCursor();
-			m_oldCursorPosition = cursor.position(); // to move back there on next keypress
+	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {
+		QTextCursor cursor = m_mainEditor->textCursor();
+		m_oldCursorPosition = cursor.position(); // to move back there on next keypress
+		cursor.select(QTextCursor::LineUnderCursor);
+		QString text = cursor.selectedText().simplified();
+		bool sectionStart = text.startsWith("instr") || text.startsWith(";;");
+		while (!sectionStart && !(cursor.anchor() == 0)) {
+			cursor.movePosition(QTextCursor::PreviousBlock);
 			cursor.select(QTextCursor::LineUnderCursor);
-			QString text = cursor.selectedText().simplified();
-			bool sectionStart = text.startsWith("instr") || text.startsWith(";;");
-            while (!sectionStart && !(cursor.anchor() == 0)) {
-				cursor.movePosition(QTextCursor::PreviousBlock);
-				cursor.select(QTextCursor::LineUnderCursor);
-				text = cursor.selectedText().simplified();
-				sectionStart = text.startsWith("instr") || text.startsWith(";;");
-			}
-			int start = cursor.anchor();
-			cursor = m_mainEditor->textCursor();
+			text = cursor.selectedText().simplified();
+			sectionStart = text.startsWith("instr") || text.startsWith(";;");
+		}
+		int start = cursor.anchor();
+		cursor = m_mainEditor->textCursor();
+		cursor.movePosition(QTextCursor::NextBlock);
+		cursor.select(QTextCursor::LineUnderCursor);
+		text = cursor.selectedText().simplified();
+		bool sectionEnd = text.startsWith("endin") || text.startsWith(";;");
+		while (!sectionEnd && !cursor.atEnd()) {
 			cursor.movePosition(QTextCursor::NextBlock);
 			cursor.select(QTextCursor::LineUnderCursor);
 			text = cursor.selectedText().simplified();
-			bool sectionEnd = text.startsWith("endin") || text.startsWith(";;");
-			while (!sectionEnd && !cursor.atEnd()) {
-				cursor.movePosition(QTextCursor::NextBlock);
-				cursor.select(QTextCursor::LineUnderCursor);
-				text = cursor.selectedText().simplified();
-				sectionEnd = text.startsWith("endin") || text.startsWith(";;");
-			}
-			cursor.movePosition(QTextCursor::EndOfLine);
-			cursor.setPosition(start, QTextCursor::KeepAnchor);
-			m_mainEditor->setTextCursor(cursor);
-			section = cursor.selectedText();
-			section.replace(QChar(0x2029), QChar('\n'));
+			sectionEnd = text.startsWith("endin") || text.startsWith(";;");
 		}
-	}
-	else { //  Split view
-		// TODO check properly for line number also from other editors
-		qDebug() << "Not implemented for split view.";
+		cursor.movePosition(QTextCursor::EndOfLine);
+		cursor.setPosition(start, QTextCursor::KeepAnchor);
+		m_mainEditor->setTextCursor(cursor);
+		section = cursor.selectedText();
+		section.replace(QChar(0x2029), QChar('\n'));
 	}
 	return section;
 }
 
 QString DocumentView::getActiveText()
 {
-	QString selection;
-	if (m_viewMode < 2) {
-		QTextCursor cursor = m_mainEditor->textCursor();
+	QTextCursor cursor = m_mainEditor->textCursor();
+	QString selection = cursor.selectedText();
+	if (selection == "") {
+		cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+		cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 		selection = cursor.selectedText();
-		if (selection == "") {
-			cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-			cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-			selection = cursor.selectedText();
-		}
-		selection.replace(QChar(0x2029), QChar('\n'));
-		if (!selection.endsWith("\n")) {
-			selection.append("\n");
-		}
 	}
-	else { //  Split view
-		// TODO check properly for line number also from other editors
-		qDebug() << "Not implemented for split view.";
+	selection.replace(QChar(0x2029), QChar('\n'));
+	if (!selection.endsWith("\n")) {
+		selection.append("\n");
 	}
 	return selection;
 }
 
 void DocumentView::syntaxCheck()
 {
-	// TODO implment for multiple views
-
-	TextEditor *editor;
-    editor = m_viewMode < 2 ? m_mainEditor : (TextEditor *) sender();
-    m_currentEditor = editor ; // for parenthesis functions
+	TextEditor *editor = m_mainEditor;
 
     QTextCursor cursor = editor->textCursor();
 
@@ -1590,9 +1398,8 @@ void DocumentView::scheduleAutoComplete(int delay)
 
 
 void DocumentView::autoCompleteAtCursor() {
-    // While the popup is open the focus is on its list, so activeEditor()
-    // cannot tell which editor is being completed (and in split view it points
-    // at the wrong one). Keep using the editor the popup belongs to.
+    // While the popup is open the focus is on its list, so use the editor the
+    // popup belongs to rather than the current focus widget.
     TextEditor *editor = (syntaxMenu->isVisible() && m_autocompleteEditor != nullptr)
             ? m_autocompleteEditor : activeEditor();
     m_autocompleteEditor = editor;
@@ -1616,8 +1423,7 @@ void DocumentView::autoCompleteAtCursor() {
 
     // The command-line options of the <CsOptions> section are completed from
     // their own lists. Nothing else is offered there.
-    const bool optionsSection = (editor == m_optionsEditor)
-            || (m_viewMode < 2 && isInsideOptionsSection(block));
+    const bool optionsSection = isInsideOptionsSection(block);
     if (optionsSection) {
         context = optionCompletionContext(textBeforeCursor);
         if (context.kind == CompletionContext::None) {
@@ -2141,9 +1947,6 @@ void DocumentView::textChanged() {
 
     //test: seems to do the trick and solve "always modified bug
     bool modified = m_mainEditor->document()->isModified();
-    // In split view the main editor may not be the one being edited.
-    if (m_orcEditor)
-        modified = modified || m_orcEditor->document()->isModified();
     setModified(modified);
     // Let the page update its modified indicator in both directions: an undo
     // back to the saved state must clear the marker as well.
@@ -2164,11 +1967,8 @@ void DocumentView::textChanged() {
         }
         // Never trigger autocomplete as a result of a paste. The flag is set
         // by TextEditor for every paste path (Ctrl+V, context menu, paste()
-        // API, middle-click, drag-and-drop) and consumed here. It is read
-        // from both editors since either can emit textChanged().
-        bool wasPaste = m_mainEditor->consumePaste();
-        if (m_orcEditor && m_orcEditor->consumePaste())
-            wasPaste = true;
+        // API, middle-click, drag-and-drop) and consumed here.
+        const bool wasPaste = m_mainEditor->consumePaste();
         auto key = m_mainEditor->getLastKey();
         if(!wasPaste && key != Qt::Key_Backspace && key != Qt::Key_Delete && key != Qt::Key_Space && key != Qt::Key_Comma && key != Qt::Key_BraceLeft && key != Qt::Key_Colon) {
             // Only perform autocomplete if the change was not generated by deleting.
@@ -2210,7 +2010,6 @@ void DocumentView::cancelAutoCompleteOnCursorMove()
 
 void DocumentView::escapePressed()
 {
-	// TODO implment for multiple views
 	emit editorEscapePressed();
 	if (!m_widgetChannelSelections.isEmpty()) {
 		clearWidgetChannelHighlights();
@@ -2224,50 +2023,35 @@ void DocumentView::escapePressed()
 		closeFindBar();
 		return;
 	}
-	if (m_viewMode < 2) {
-        if(errorMarked)
-            unmarkErrorLines();
+	if(errorMarked)
+		unmarkErrorLines();
 
-		if (m_mainEditor->getParameterMode()) {
-			// Force unselecting
-			m_mainEditor->moveCursor(QTextCursor::NextCharacter);
-			m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
-			exitParameterMode();
-		} else if (m_hoverText->isVisible()){
-			hideHoverText();
-		} else {
-            qDebug()<<"closeExtraPanels now omitted -  let know, if it should be brought back.";
-            //emit closeExtraPanels();
-		}
-	}
-	else {
-		qDebug() << "Not implemented for split view";
+	if (m_mainEditor->getParameterMode()) {
+		// Force unselecting
+		m_mainEditor->moveCursor(QTextCursor::NextCharacter);
+		m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
+		exitParameterMode();
+	} else if (m_hoverText->isVisible()){
+		hideHoverText();
+	} else {
+		qDebug()<<"closeExtraPanels now omitted -  let know, if it should be brought back.";
+		//emit closeExtraPanels();
 	}
 }
 
 void DocumentView::finishParameterMode()
 {
-	// TODO implment for multiple views
-	if (m_viewMode < 2) {
-		if (m_mainEditor->getParameterMode()) {
-			killToEnd();
-			exitParameterMode();
-		} else {
-			hideHoverText();
-		}
+	if (m_mainEditor->getParameterMode()) {
+		killToEnd();
+		exitParameterMode();
 	} else {
-		qDebug() << "Not implemented for split view";
+		hideHoverText();
 	}
 }
 
 void DocumentView::exitParameterMode()
 {
-	// TODO implment for multiple views
-	if (m_viewMode < 2) {
-		m_mainEditor->setParameterMode(false);
-	} else {
-		qDebug() << "Not implemented for split view";
-	}
+	m_mainEditor->setParameterMode(false);
 	hideHoverText();
 //	parameterButton->setVisible(false);
 }
@@ -2295,12 +2079,6 @@ void DocumentView::indentNewLine()
 
 void DocumentView::findReplace()
 {
-	// TODO implment for multiple views
-	if (m_viewMode >= 2) {
-		// Split view: not implemented for section editors
-		qDebug() << "Not implemented for split view.";
-		return;
-	}
 	ensureFindBar();
 
 	// If a word (or any selection) is selected, use it as the query.
@@ -2335,25 +2113,16 @@ void DocumentView::ensureOpcodeInsertBar()
 		return;
 	m_opcodeInsertBar = new OpcodeInsertBar(m_mainEditor);
 	connect(m_opcodeInsertBar, &OpcodeInsertBar::opcodeChosen, this, [this](const QString &opcode) {
-		if (m_viewMode < 2) {
-			internalChange = true; // suppress autocomplete/syntax work for this edit
-			QTextCursor cursor = m_mainEditor->textCursor();
-			cursor.insertText(opcode);
-			m_mainEditor->setTextCursor(cursor);
-		}
-		else {
-			qDebug() << "Not implemented for split view";
-		}
+		internalChange = true; // suppress autocomplete/syntax work for this edit
+		QTextCursor cursor = m_mainEditor->textCursor();
+		cursor.insertText(opcode);
+		m_mainEditor->setTextCursor(cursor);
 		m_opcodeInsertBar->hideBar();
 	});
 }
 
 void DocumentView::showOpcodeInsertBar()
 {
-	if (m_viewMode >= 2) {
-		qDebug() << "Not implemented for split view.";
-		return;
-	}
 	ensureOpcodeInsertBar();
 	m_opcodeInsertBar->setOpcodes(m_opcodeTree->opcodeNameList());
 	m_opcodeInsertBar->showBar();
@@ -2621,29 +2390,16 @@ void DocumentView::highlightWidgetChannel()
 void DocumentView::getToIn()
 {
     // Change chnget/chnset to invalue/outvalue
-	// TODO implment for multiple views
-	if (m_viewMode < 2) {
-		internalChange = true;
-		m_mainEditor->setPlainText(changeToInvalue(m_mainEditor->toPlainText()));
-        m_mainEditor->document()->setModified(true);  // Necessary, or is setting it locally enough?
-	}
-	else { //  Split view
-		qDebug() << "Not implemented for split view.";
-	}
+	internalChange = true;
+	m_mainEditor->setPlainText(changeToInvalue(m_mainEditor->toPlainText()));
+	m_mainEditor->document()->setModified(true);  // Necessary, or is setting it locally enough?
 }
 
 void DocumentView::inToGet()
 {
-	// TODO implment for multiple views
-	if (m_viewMode < 2) {
-		internalChange = true;
-		m_mainEditor->setPlainText(changeToChnget(m_mainEditor->toPlainText()));
-        m_mainEditor->document()->setModified(true);
-	}
-	else { //  Split view
-		// TODO check properly for line number also from other editors
-		qDebug() << "Not implemented for split view.";
-	}
+	internalChange = true;
+	m_mainEditor->setPlainText(changeToChnget(m_mainEditor->toPlainText()));
+	m_mainEditor->document()->setModified(true);
 }
 
 void DocumentView::insertAutoCompleteText()
@@ -2652,9 +2408,8 @@ void DocumentView::insertAutoCompleteText()
     // opened for, not the current focus widget.
     TextEditor *editor = m_autocompleteEditor != nullptr
             ? m_autocompleteEditor : activeEditor();
-    const bool trackedEditor = (editor == m_mainEditor || editor == m_orcEditor);
 	if (editor != 0) {
-		internalChange = trackedEditor;
+		internalChange = true;
 		QAction *action = static_cast<QAction *>(QObject::sender());
 		bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
 
@@ -2669,8 +2424,6 @@ void DocumentView::insertAutoCompleteText()
 			}
 			const QString insert = action->data().toString();
 			editor->insertPlainText(insert);
-			if (!trackedEditor)
-				internalChange = false; // no textChanged() will consume it
 			// Completing a directory only gets the user into it. Offer its
 			// contents right away, exactly as if completion had been invoked
 			// again (Ctrl+M). Queued, because this runs from the triggered()
@@ -2732,19 +2485,11 @@ void DocumentView::insertAutoCompleteText()
 				editor->insertPlainText(action->text());
 			}
 		}
-		if (!trackedEditor)
-			internalChange = false; // no textChanged() will consume it
 	}
 }
 
 void DocumentView::findString(QString query)
 {
-	// TODO search across all editors
-	if (m_viewMode >= 2) {
-		// Split view: not implemented for section editors
-		qDebug() << "Not implemented for split view.";
-		return;
-	}
 	ensureFindBar();
 	if (!query.isEmpty())
 		m_findBar->setQuery(query);
@@ -2784,324 +2529,153 @@ void DocumentView::evaluate()
 
 void DocumentView::createContextMenu(QPoint pos)
 {
-	if (m_viewMode < 2) {
-		QMenu *menu = m_mainEditor->createStandardContextMenu();
-		menu->addSeparator();
-		menu->addAction(tr("Evaluate Selection"), this, SLOT(evaluate()));
-		menu->addAction(tr("Opcode Help"), this, SLOT(opcodeHelp()));
-		// The definition index lives in the document page, so the request is
-		// passed on instead of jumping here. The name under the mouse is
-		// used, not the one at the cursor: the user may right-click on a name
-		// without having put the cursor there first.
-		QAction *goToSource = menu->addAction(tr("Go to Source"));
-		connect(goToSource, &QAction::triggered, this, [this, pos]() {
-			const QTextCursor cursor = cursorAt(pos);
-			const QString includePath = SourceCursor::includePathAt(cursor);
-			if (!includePath.isEmpty())
-				emit goToSourceIncludeRequested(includePath);
-			else
-				emit goToSourceRequested(SourceCursor::identifierAt(cursor),
-										 SourceCursor::isScheduleArgument(cursor));
-		});
-		menu->addAction(tr("Show/hide line numbers"), this, SLOT(toggleLineArea()));
-		menu->addSeparator();
-		QMenu *opcodeMenu = menu->addMenu("Opcodes");
-        QMenu *mainMenu = 0;
-		QMenu *subMenu;
-		QString currentMain = "";
-		for (int i = 0; i < m_opcodeTree->getCategoryCount(); i++) {
-			QString category = m_opcodeTree->getCategory(i);
-			QStringList categorySplit = category.split(":");
-			if (!categorySplit.isEmpty() && categorySplit[0] != currentMain) {
-				mainMenu = opcodeMenu->addMenu(categorySplit[0]);
-				currentMain = categorySplit[0];
-			}
-			if (categorySplit.size() < 2) {
-				subMenu = mainMenu;
-			}
-            else {
-                subMenu = mainMenu->addMenu(categorySplit[1]);
-			}
-            foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
-				QAction *action = subMenu->addAction(opcode.opcodeName, this, SLOT(opcodeFromMenu()));
-				QString opcodeText = opcode.outArgs;
-				opcodeText += (!opcode.outArgs.isEmpty()
-							   && !opcode.outArgs.endsWith(" ")
-							   && !opcode.opcodeName.startsWith(" ") ?
-								   " " : "");
-				opcodeText += opcode.opcodeName;
-				opcodeText += (!opcode.inArgs.isEmpty()
-							   && !opcode.inArgs.startsWith(" ")
-							   && !opcode.inArgs.startsWith("(")
-							   && !opcode.opcodeName.endsWith(" ") ?
-								   " " : "");
-				opcodeText += opcode.inArgs;
-				action->setData(opcodeText);
-			}
+	QMenu *menu = m_mainEditor->createStandardContextMenu();
+	menu->addSeparator();
+	menu->addAction(tr("Evaluate Selection"), this, SLOT(evaluate()));
+	menu->addAction(tr("Opcode Help"), this, SLOT(opcodeHelp()));
+	// The definition index lives in the document page, so the request is
+	// passed on instead of jumping here. The name under the mouse is
+	// used, not the one at the cursor: the user may right-click on a name
+	// without having put the cursor there first.
+	QAction *goToSource = menu->addAction(tr("Go to Source"));
+	connect(goToSource, &QAction::triggered, this, [this, pos]() {
+		const QTextCursor cursor = cursorAt(pos);
+		const QString includePath = SourceCursor::includePathAt(cursor);
+		if (!includePath.isEmpty())
+			emit goToSourceIncludeRequested(includePath);
+		else
+			emit goToSourceRequested(SourceCursor::identifierAt(cursor),
+									 SourceCursor::isScheduleArgument(cursor));
+	});
+	menu->addAction(tr("Show/hide line numbers"), this, SLOT(toggleLineArea()));
+	menu->addSeparator();
+	QMenu *opcodeMenu = menu->addMenu("Opcodes");
+	QMenu *mainMenu = 0;
+	QMenu *subMenu;
+	QString currentMain = "";
+	for (int i = 0; i < m_opcodeTree->getCategoryCount(); i++) {
+		QString category = m_opcodeTree->getCategory(i);
+		QStringList categorySplit = category.split(":");
+		if (!categorySplit.isEmpty() && categorySplit[0] != currentMain) {
+			mainMenu = opcodeMenu->addMenu(categorySplit[0]);
+			currentMain = categorySplit[0];
 		}
-		menu->exec(m_mainEditor->viewport()->mapToGlobal(pos));
-		delete menu;
+		if (categorySplit.size() < 2) {
+			subMenu = mainMenu;
+		}
+		else {
+			subMenu = mainMenu->addMenu(categorySplit[1]);
+		}
+		foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
+			QAction *action = subMenu->addAction(opcode.opcodeName, this, SLOT(opcodeFromMenu()));
+			QString opcodeText = opcode.outArgs;
+			opcodeText += (!opcode.outArgs.isEmpty()
+						   && !opcode.outArgs.endsWith(" ")
+						   && !opcode.opcodeName.startsWith(" ") ?
+							   " " : "");
+			opcodeText += opcode.opcodeName;
+			opcodeText += (!opcode.inArgs.isEmpty()
+						   && !opcode.inArgs.startsWith(" ")
+						   && !opcode.inArgs.startsWith("(")
+						   && !opcode.opcodeName.endsWith(" ") ?
+							   " " : "");
+			opcodeText += opcode.inArgs;
+			action->setData(opcodeText);
+		}
 	}
-	else { //  Split view
-		// TODO check properly for line number also from other editors
-		qDebug() << "Not implemented for split view.";
-	}
-}
-
-
-void DocumentView::showOrc(bool show)
-{
-	// FIXME set m_viewmode
-	if (m_viewMode >= 2) {
-		m_orcEditor->setVisible(show);
-	}
-}
-
-void DocumentView::showScore(bool show)
-{
-	// FIXME set m_viewmode
-	if (m_viewMode >= 2) {
-		m_scoreEditor->setVisible(show);
-	}
-}
-
-void DocumentView::showOptions(bool show)
-{
-	// FIXME set m_viewmode
-	if (m_viewMode >= 2) {
-		m_optionsEditor->setVisible(show);
-	}
-}
-
-void DocumentView::showFileB(bool show)
-{
-	// FIXME set m_viewmode
-	if (m_viewMode >= 2) {
-		m_filebEditor->setVisible(show);
-	}
-}
-
-void DocumentView::showOther(bool show)
-{
-	// FIXME set m_viewmode
-	if (m_viewMode >= 2) {
-		m_otherEditor->setVisible(show);
-	}
-}
-
-void DocumentView::showOtherCsd(bool show)
-{
-	// FIXME set m_viewmode
-	if (m_viewMode >= 2) {
-		m_otherCsdEditor->setVisible(show);
-	}
-}
-
-void DocumentView::showWidgetEdit(bool show)
-{
-	// FIXME set m_viewmode
-	if (m_viewMode >= 2) {
-		m_widgetEditor->setVisible(show);
-	}
+	menu->exec(m_mainEditor->viewport()->mapToGlobal(pos));
+	delete menu;
 }
 
 void DocumentView::cut()
 {
-	if (m_viewMode < 2) {
-		m_mainEditor->cut();
-	}
-	else {
-		if (m_scoreEditor->hasFocus()) {
-			m_scoreEditor->cut();
-		}
-		else if (m_optionsEditor->hasFocus()) {
-			m_optionsEditor->cut();
-		}
-		else if (m_otherEditor->hasFocus() ) {
-			m_otherEditor->cut();
-		}
-		else if (m_otherCsdEditor->hasFocus()) {
-			m_otherCsdEditor->cut();
-		}
-		else if (m_widgetEditor->hasFocus()) {
-			m_widgetEditor->cut();
-		}
-	}
+	m_mainEditor->cut();
 }
 
 void DocumentView::copy()
 {
-	if (m_viewMode < 2) {
-		m_mainEditor->copy();
-	}
-	else {
-		if (m_scoreEditor->hasFocus()) {
-			m_scoreEditor->copy();
-		}
-		else if (m_optionsEditor->hasFocus()) {
-			m_optionsEditor->copy();
-		}
-		else if (m_otherEditor->hasFocus() ) {
-			m_otherEditor->copy();
-		}
-		else if (m_otherCsdEditor->hasFocus()) {
-			m_otherCsdEditor->copy();
-		}
-		else if (m_widgetEditor->hasFocus()) {
-			m_widgetEditor->copy();
-		}
-	}
+	m_mainEditor->copy();
 }
 
 void DocumentView::paste()
 {
-	if (m_viewMode < 2) {
-		m_mainEditor->paste();
-	}
-	else {
-		if (m_scoreEditor->hasFocus()) {
-			m_scoreEditor->paste();
-		}
-		else if (m_optionsEditor->hasFocus()) {
-			m_optionsEditor->paste();
-		}
-		else if (m_otherEditor->hasFocus() ) {
-			m_otherEditor->paste();
-		}
-		else if (m_otherCsdEditor->hasFocus()) {
-			m_otherCsdEditor->paste();
-		}
-		else if (m_widgetEditor->hasFocus()) {
-			m_widgetEditor->paste();
-		}
-	}
+	m_mainEditor->paste();
 }
 
 void DocumentView::undo()
 {
-	if (m_viewMode < 2) {
-		m_mainEditor->undo();
-	}
-	else {
-		if (m_scoreEditor->hasFocus()) {
-			m_scoreEditor->undo();
-		}
-		else if (m_optionsEditor->hasFocus()) {
-			m_optionsEditor->undo();
-		}
-		else if (m_otherEditor->hasFocus() ) {
-			m_otherEditor->undo();
-		}
-		else if (m_otherCsdEditor->hasFocus()) {
-			m_otherCsdEditor->undo();
-		}
-		else if (m_widgetEditor->hasFocus()) {
-			m_widgetEditor->undo();
-		}
-	}
+	m_mainEditor->undo();
 	escapePressed();
 }
 
 void DocumentView::redo()
 {
-	if (m_viewMode < 2) {
-		m_mainEditor->redo();
-	}
-	else {
-		if (m_scoreEditor->hasFocus()) {
-			m_scoreEditor->redo();
-		}
-		else if (m_optionsEditor->hasFocus()) {
-			m_optionsEditor->redo();
-		}
-		else if (m_otherEditor->hasFocus() ) {
-			m_otherEditor->redo();
-		}
-		else if (m_otherCsdEditor->hasFocus()) {
-			m_otherCsdEditor->redo();
-		}
-		else if (m_widgetEditor->hasFocus()) {
-			m_widgetEditor->redo();
-		}
-	}
+	m_mainEditor->redo();
 }
 
 void DocumentView::comment()
 {
-	// TODO implment for multiple views
-	//  qDebug() << "DocumentView::comment()";
-	if (m_viewMode < 2) {
-		internalChange = true;
-		QString commentChar = "";
-		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
-				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
-			commentChar = ";";
-		}
-		QTextCursor cursor = m_mainEditor->textCursor();
-		if (cursor.position() > cursor.anchor()) {
-			int temp = cursor.anchor();
-			cursor.setPosition(cursor.position());
-			cursor.setPosition(temp, QTextCursor::KeepAnchor);
-		}
-		if (!cursor.atBlockStart()) {
-			cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-		}
-		int start = cursor.selectionStart();
-		QString text = cursor.selectedText();
-		if (text.startsWith(commentChar)) {
-			uncomment();
-			return;
-		}
-		text.prepend(commentChar);
-		text.replace(QChar(QChar::ParagraphSeparator), QString("\n" + commentChar));
-		if (text.endsWith("\n" + commentChar) ) {
-			text.chop(1);
-		}
-		cursor.insertText(text);
-		cursor.setPosition(start);
-		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
-		m_mainEditor->setTextCursor(cursor);
+	internalChange = true;
+	QString commentChar = "";
+	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+			|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
+		commentChar = ";";
 	}
-	else {
-		qDebug() << "Not implemented for split view";
+	QTextCursor cursor = m_mainEditor->textCursor();
+	if (cursor.position() > cursor.anchor()) {
+		int temp = cursor.anchor();
+		cursor.setPosition(cursor.position());
+		cursor.setPosition(temp, QTextCursor::KeepAnchor);
 	}
+	if (!cursor.atBlockStart()) {
+		cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+	}
+	int start = cursor.selectionStart();
+	QString text = cursor.selectedText();
+	if (text.startsWith(commentChar)) {
+		uncomment();
+		return;
+	}
+	text.prepend(commentChar);
+	text.replace(QChar(QChar::ParagraphSeparator), QString("\n" + commentChar));
+	if (text.endsWith("\n" + commentChar) ) {
+		text.chop(1);
+	}
+	cursor.insertText(text);
+	cursor.setPosition(start);
+	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
+	m_mainEditor->setTextCursor(cursor);
 }
 
 void DocumentView::uncomment()
 {
-	// TODO implment for multiple views
-	if (m_viewMode < 2) {
-		internalChange = true;
-		QString commentChar = "";
-		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
-				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
-			commentChar = ";";
-		}
-		QTextCursor cursor = m_mainEditor->textCursor();
-		if (cursor.position() > cursor.anchor()) {
-			int temp = cursor.anchor();
-			cursor.setPosition(cursor.position());
-			cursor.setPosition(temp, QTextCursor::KeepAnchor);
-		}
-		QString text = cursor.selectedText();
-		if (!cursor.atBlockStart() && !text.startsWith(commentChar)) {
-			cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-			text = cursor.selectedText();
-		}
-		if (text.startsWith(commentChar)) {
-			text.remove(0,1);
-		}
-		int start = cursor.selectionStart();
-		text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
-		text.replace(QString("\n" + commentChar), QString("\n")); //TODO make more robust
-		cursor.insertText(text);
-		cursor.setPosition(start);
-		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
-		m_mainEditor->setTextCursor(cursor);
+	internalChange = true;
+	QString commentChar = "";
+	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+			|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
+		commentChar = ";";
 	}
-	else {
-		qDebug() << "Not implemented for split view";
+	QTextCursor cursor = m_mainEditor->textCursor();
+	if (cursor.position() > cursor.anchor()) {
+		int temp = cursor.anchor();
+		cursor.setPosition(cursor.position());
+		cursor.setPosition(temp, QTextCursor::KeepAnchor);
 	}
+	QString text = cursor.selectedText();
+	if (!cursor.atBlockStart() && !text.startsWith(commentChar)) {
+		cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+		text = cursor.selectedText();
+	}
+	if (text.startsWith(commentChar)) {
+		text.remove(0,1);
+	}
+	int start = cursor.selectionStart();
+	text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
+	text.replace(QString("\n" + commentChar), QString("\n")); //TODO make more robust
+	cursor.insertText(text);
+	cursor.setPosition(start);
+	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
+	m_mainEditor->setTextCursor(cursor);
 }
 
 QString DocumentView::indentString() const
@@ -3117,43 +2691,36 @@ QString DocumentView::indentString() const
 
 void DocumentView::indent()
 {
-	// TODO implment for multiple views
-	if (m_viewMode < 2) {
-		//   qDebug("DocumentPage::indent");
-		internalChange = true;
-		QString indentChar = "";
-		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
-				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
-			indentChar = indentString();
-		}
-		if (indentChar.isEmpty()) {
-			return;  // nothing is indented in this mode
-		}
-		QTextCursor cursor = m_mainEditor->textCursor();
-		QTextCursor::MoveMode moveMode = cursor.selectedText().isEmpty() ? QTextCursor::MoveAnchor : QTextCursor::KeepAnchor;
-		if (cursor.position() > cursor.anchor()) {
-			int temp = cursor.anchor();
-			cursor.setPosition(cursor.position());
-			cursor.setPosition(temp, QTextCursor::KeepAnchor);
-		}
-		if (!cursor.atBlockStart()) {
-			cursor.movePosition(QTextCursor::StartOfLine, moveMode);
-		}
-		int start = cursor.selectionStart();
-		QString text = cursor.selectedText();
-		text.prepend(indentChar);
-		text.replace(QChar(QChar::ParagraphSeparator), "\n" + indentChar);
-		if (text.endsWith("\n" + indentChar)) {
-			text.chop(indentChar.size());
-		}
-		cursor.insertText(text);
-		cursor.setPosition(start);
-		cursor.movePosition(QTextCursor::NextCharacter, moveMode, text.size());
-		m_mainEditor->setTextCursor(cursor);
+	internalChange = true;
+	QString indentChar = "";
+	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+			|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
+		indentChar = indentString();
 	}
-	else {
-		qDebug() << "Not implemented for split view";
+	if (indentChar.isEmpty()) {
+		return;  // nothing is indented in this mode
 	}
+	QTextCursor cursor = m_mainEditor->textCursor();
+	QTextCursor::MoveMode moveMode = cursor.selectedText().isEmpty() ? QTextCursor::MoveAnchor : QTextCursor::KeepAnchor;
+	if (cursor.position() > cursor.anchor()) {
+		int temp = cursor.anchor();
+		cursor.setPosition(cursor.position());
+		cursor.setPosition(temp, QTextCursor::KeepAnchor);
+	}
+	if (!cursor.atBlockStart()) {
+		cursor.movePosition(QTextCursor::StartOfLine, moveMode);
+	}
+	int start = cursor.selectionStart();
+	QString text = cursor.selectedText();
+	text.prepend(indentChar);
+	text.replace(QChar(QChar::ParagraphSeparator), "\n" + indentChar);
+	if (text.endsWith("\n" + indentChar)) {
+		text.chop(indentChar.size());
+	}
+	cursor.insertText(text);
+	cursor.setPosition(start);
+	cursor.movePosition(QTextCursor::NextCharacter, moveMode, text.size());
+	m_mainEditor->setTextCursor(cursor);
 }
 
 // Removes one indentation step from the start of a single line. In spaces mode
@@ -3180,11 +2747,6 @@ static QString removeOneIndent(const QString &line, bool useSpaces, int tabSpace
 
 void DocumentView::unindent()
 {
-	// TODO implment for multiple views
-	if (m_viewMode >= 2) {
-		qDebug() << "Not implemented for split view";
-		return;
-	}
 	if (!(m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
 			|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE)) {
 		return;  // nothing is indented in this mode
@@ -3259,12 +2821,6 @@ void DocumentView::unindent()
 
 void DocumentView::tabsToSpaces()
 {
-	// TODO implment for multiple views
-	if (m_viewMode >= 2) {
-		qDebug() << "Not implemented for split view";
-		return;
-	}
-
 	QTextDocument *document = m_mainEditor->document();
 
 	// A tab only counts as indentation when everything before it on the line
@@ -3325,95 +2881,69 @@ void DocumentView::tabsToSpaces()
 
 void DocumentView::killLine()
 {
-	// TODO implment for multiple views
-	if (m_viewMode < 2) {
-		QTextCursor cursor = m_mainEditor->textCursor();
-		if (!cursor.atBlockStart()) {
-			cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-		}
-		cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-		cursor.insertText("");
+	QTextCursor cursor = m_mainEditor->textCursor();
+	if (!cursor.atBlockStart()) {
+		cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
 	}
-	else {
-		qDebug() << "Not implemented for split view";
-	}
+	cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+	cursor.insertText("");
 }
 
 void DocumentView::killToEnd()
 {
-	// TODO implment for multiple views
-	//  internalChange = true;
-	if (m_viewMode < 2) {
-		QTextCursor cursor = m_mainEditor->textCursor();
-		if (!cursor.atBlockEnd()) {
-			cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-		}
-		cursor.insertText("");
+	QTextCursor cursor = m_mainEditor->textCursor();
+	if (!cursor.atBlockEnd()) {
+		cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 	}
-	else {
-		qDebug() << "Not implemented for split view";
-	}
+	cursor.insertText("");
 }
 
 void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 {
-	// TODO implement for multiple views
-	if (m_viewMode < 2) {
-        auto fmt = m_highlighter.getFormat("default");
-        auto fg = fmt.foreground().color();
-        auto bg = fmt.background().color();
-        bool originallyMod = m_mainEditor->document()->isModified();
+    auto fmt = m_highlighter.getFormat("default");
+    auto fg = fmt.foreground().color();
+    auto bg = fmt.background().color();
+    bool originallyMod = m_mainEditor->document()->isModified();
+	internalChange = true;
+	QTextCharFormat errorFormat;
+    // make error background depend on color theme
+    QColor errbg = fg.lightness() < bg.lightness() ? bg.darker(200) : bg.lighter(200);
+    errbg.setRed(errbg.blue() * 2.5);
+    errorFormat.setBackground(QBrush(errbg));
+	QTextCursor cur = m_mainEditor->textCursor();
+	cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    for(int i = 0; i < lines.size(); i++) {
+		int line = lines[i].first;
+        cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, line-1);
+		cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+		cur.mergeCharFormat(errorFormat);
 		internalChange = true;
-		QTextCharFormat errorFormat;
-        // make error background depend on color theme
-        QColor errbg = fg.lightness() < bg.lightness() ? bg.darker(200) : bg.lighter(200);
-        errbg.setRed(errbg.blue() * 2.5);
-        errorFormat.setBackground(QBrush(errbg));
-		QTextCursor cur = m_mainEditor->textCursor();
-		cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-        for(int i = 0; i < lines.size(); i++) {
-			int line = lines[i].first;
-            cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, line-1);
-			cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-			cur.mergeCharFormat(errorFormat);
-			internalChange = true;
-			m_mainEditor->setTextCursor(cur);
-			errorMarked = true;
-			if (!originallyMod) {
-				m_mainEditor->document()->setModified(false);
-			}
+		m_mainEditor->setTextCursor(cur);
+		errorMarked = true;
+		if (!originallyMod) {
+			m_mainEditor->document()->setModified(false);
 		}
-	}
-	else {
-		qDebug() << "Not implemented for split view";
 	}
 }
 
 void DocumentView::unmarkErrorLines()
 {
-	// TODO implment for multiple views
 	if (!errorMarked)
 		return;
-	//   qDebug("DocumentPage::unmarkErrorLines()");
-	if (m_viewMode < 2) {
-		int position = m_mainEditor->verticalScrollBar()->value();
-		QTextCursor currentCursor = m_mainEditor->textCursor();
-		errorMarked = false;
-		m_mainEditor->selectAll();
-		internalChange = true;
-		QTextCursor cur = m_mainEditor->textCursor();
-		QTextCharFormat format = cur.blockCharFormat();
-		format.clearBackground();
-		cur.setCharFormat(format);
-		internalChange = true;
-		m_mainEditor->setTextCursor(cur);  //sets format
-		internalChange = true;
-		m_mainEditor->setTextCursor(currentCursor); //returns cursor to initial position
-		m_mainEditor->verticalScrollBar()->setValue(position); //return document display to initial position
-	}
-	else {
-		qDebug() << "Not implemented for split view";
-	}
+	int position = m_mainEditor->verticalScrollBar()->value();
+	QTextCursor currentCursor = m_mainEditor->textCursor();
+	errorMarked = false;
+	m_mainEditor->selectAll();
+	internalChange = true;
+	QTextCursor cur = m_mainEditor->textCursor();
+	QTextCharFormat format = cur.blockCharFormat();
+	format.clearBackground();
+	cur.setCharFormat(format);
+	internalChange = true;
+	m_mainEditor->setTextCursor(cur);  //sets format
+	internalChange = true;
+	m_mainEditor->setTextCursor(currentCursor); //returns cursor to initial position
+	m_mainEditor->verticalScrollBar()->setValue(position); //return document display to initial position
 }
 
 
@@ -3443,7 +2973,6 @@ void DocumentView::jumpToLineInternal(int line, bool mark, bool focus)
 {
     if(mark)
         markCurrentPosition();
-	// TODO implment for multiple views
     TextEditor *editor = currentLineEditor();
     editorJumpToLine(editor, line);
     editor->ensureCursorVisible();
@@ -3460,24 +2989,11 @@ void DocumentView::jumpToLineInternal(int line, bool mark, bool focus)
 
 TextEditor *DocumentView::currentLineEditor() const
 {
-    // The editor the line numbers of the document refer to: the whole
-    // document in the unified view, the orchestra in the split view.
-    return (m_viewMode < 2) ? (TextEditor *)m_mainEditor : m_orcEditor;
+    return m_mainEditor;
 }
 
 TextEditor *DocumentView::activeEditor() const
 {
-    // The editor the user is working in.
-    if (m_viewMode < 2)
-        return m_mainEditor;
-    // The focus may sit on a child of the editor (its viewport, for example),
-    // so walk up to the TextEditor rather than testing the focus widget alone.
-    QWidget *widget = const_cast<DocumentView *>(this)->focusWidget();
-    while (widget != nullptr && widget != this) {
-        if (TextEditor *editor = qobject_cast<TextEditor *>(widget))
-            return editor;
-        widget = widget->parentWidget();
-    }
     return m_mainEditor;
 }
 
@@ -3550,14 +3066,9 @@ void DocumentView::gotoNextLine()
 void DocumentView::opcodeFromMenu()
 {
 	QAction *action = (QAction *) QObject::sender();
-	if (m_viewMode < 2) {
-		QTextCursor cursor = m_mainEditor->textCursor();
-		QString text = action->data().toString();
-		cursor.insertText(text);
-	}
-	else {
-		qDebug() << "Not implemented for split view";
-	}
+	QTextCursor cursor = m_mainEditor->textCursor();
+	QString text = action->data().toString();
+	cursor.insertText(text);
 }
 
 void DocumentView::contextMenuEvent(QContextMenuEvent *event)

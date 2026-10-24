@@ -294,12 +294,6 @@ QString DocumentPage::getHtmlText()
 
 }
 
-int DocumentPage::getViewMode()
-{
-	return m_view->getViewMode();
-}
-
-
 QString DocumentPage::wordUnderCursor()
 {
 	return m_view->wordUnderCursor();
@@ -1138,48 +1132,6 @@ void DocumentPage::goBackToPreviousPosition() {
     m_view->goBackToPreviousPosition();
 }
 
-void DocumentPage::setViewMode(int mode)
-{
-	m_view->setViewMode(mode);
-    // this->setHighlightingTheme(m_colorTheme);
-}
-
-void DocumentPage::showOrc(bool show)
-{
-	m_view->showOrc(show);
-}
-
-void DocumentPage::showScore(bool show)
-{
-	m_view->showScore(show);
-}
-
-void DocumentPage::showOptions(bool show)
-{
-	m_view->showOptions(show);
-}
-
-void DocumentPage::showFileB(bool show)
-{
-	m_view->showFileB(show);
-}
-
-void DocumentPage::showOther(bool show)
-{
-	m_view->showOther(show);
-}
-
-void DocumentPage::showOtherCsd(bool show)
-{
-	m_view->showOtherCsd(show);
-}
-
-void DocumentPage::showWidgetEdit(bool show)
-{
-	m_view->showWidgetEdit(show);
-}
-
-
 void DocumentPage::textChanged()
 {
     if (m_scanService != nullptr)
@@ -1296,10 +1248,6 @@ CodeScan::Mode DocumentPage::scanMode() const
     // orchestra scanner has nothing to say about.
     if (name.endsWith(".html") || name.endsWith(".sco"))
         return CodeScan::Mode::None;
-    // A split view edits the bare orchestra: getBasicText() is the body of the
-    // instrument section, without the <CsInstruments> tags.
-    if (m_view != nullptr && m_view->getViewMode() >= 2)
-        return CodeScan::Mode::Orc;
     if (name.isEmpty() || name.endsWith(".csd"))
         return CodeScan::Mode::Csd;
     // .orc, .udo and .inc (and anything else that is Csound code) are

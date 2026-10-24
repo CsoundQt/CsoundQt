@@ -908,7 +908,6 @@ void CsoundQt::changePage(int index)
         m_console->setWidget(page->getConsole());
         runAct->setChecked(page->isRunning());
         recAct->setChecked(page->isRecording());
-        splitViewAct->setChecked(page->getViewMode() > 1);
         if (page->getFileName().endsWith(".csd")) {
             curCsdPage = curPage;
         }
@@ -2207,77 +2206,6 @@ void CsoundQt::findPrevious()
         return;
     }
     documentPages[curPage]->findPrevious();
-}
-
-bool CsoundQt::join(bool ask)
-{
-    QDialog dialog(this);
-    dialog.resize(700, 350);
-    dialog.setModal(true);
-    QPushButton *okButton = new QPushButton(tr("Ok"));
-    QPushButton *cancelButton = new QPushButton(tr("Cancel"));
-
-    connect(okButton, SIGNAL(released()), &dialog, SLOT(accept()));
-    connect(cancelButton, SIGNAL(released()), &dialog, SLOT(reject()));
-
-    QGridLayout *layout = new QGridLayout(&dialog);
-    QListWidget *list1 = new QListWidget(&dialog);
-    QListWidget *list2 = new QListWidget(&dialog);
-    layout->addWidget(list1, 0, 0);
-    layout->addWidget(list2, 0, 1);
-    layout->addWidget(okButton, 1,0);
-    layout->addWidget(cancelButton, 1,1);
-    //   layout->resize(400, 200);
-
-    for (int i = 0; i < documentPages.size(); i++) {
-        QString name = documentPages[i]->getFileName();
-        if (name.endsWith(".orc"))
-            list1->addItem(name);
-        else if (name.endsWith(".sco"))
-            list2->addItem(name);
-    }
-    QString name = documentPages[curPage]->getFileName();
-    QList<QListWidgetItem *> itemList = list1->findItems(name, Qt::MatchExactly);
-    if (itemList.size() == 0) {
-        itemList = list1->findItems(name.replace(".sco", ".orc"),Qt::MatchExactly);
-    }
-    if (itemList.size() > 0) {
-        list1->setCurrentItem(itemList[0]);
-    }
-    QList<QListWidgetItem *> itemList2 = list2->findItems(name.replace(".orc", ".sco"),
-                                                          Qt::MatchExactly);
-    if (itemList2.size() == 0) {
-        itemList2 = list1->findItems(name,Qt::MatchExactly);
-    }
-    if (itemList2.size() > 0)
-        list2->setCurrentItem(itemList2[0]);
-    if (itemList.size() == 0 || itemList.size() == 0) {
-        if (!ask) {
-            QMessageBox::warning(this, tr("Join"),
-                                 tr("Please open the orc and sco files in CsoundQt first!"));
-        }
-        return false;
-    }
-    if (!ask || dialog.exec() == QDialog::Accepted) {
-        QString orcText = "";
-        QString scoText = "";
-        for (int i = 0; i < documentPages.size(); i++) {
-            QString name = documentPages[i]->getFileName();
-            if (name == list1->currentItem()->text())
-                orcText = documentPages[i]->getFullText();
-            else if (name == list2->currentItem()->text())
-                scoText = documentPages[i]->getFullText();
-        }
-        QString text = "<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n";
-        text += orcText;
-        text += "</CsInstruments>\n<CsScore>\n";
-        text += scoText;
-        text += "</CsScore>\n</CsoundSynthesizer>\n";
-        newFile();
-        documentPages[curPage]->loadTextString(text);
-        return true;
-    }
-    return false;
 }
 
 void CsoundQt::showUtilities(bool show)
@@ -3669,41 +3597,6 @@ void CsoundQt::showHtml5Gui(bool show)
 #endif
 }
 
-void CsoundQt::splitView(bool split)
-{
-    if (split) {
-        int mode = showOrcAct->isChecked() ? 2 : 0 ;
-        mode |= showScoreAct->isChecked() ? 4 : 0 ;
-        mode |= showOptionsAct->isChecked() ? 8 : 0 ;
-        mode |= showFileBAct->isChecked() ? 16 : 0 ;
-        mode |= showOtherAct->isChecked() ? 32 : 0 ;
-        mode |= showOtherCsdAct->isChecked() ? 64 : 0 ;
-        mode |= showWidgetEditAct->isChecked() ? 128 : 0 ;
-        if (mode == 0) {
-            mode = 2+4;
-        }
-        documentPages[curPage]->setViewMode(mode);
-    }
-    else {
-        documentPages[curPage]->setViewMode(0);
-    }
-}
-
-void CsoundQt::setSplitViewActionsEnabled(bool enabled)
-{
-    // Actions that only make sense in split view: the section visibility
-    // toggles plus joining the orc/sco editors. Outside split view they are
-    // meaningless, so hide them rather than leaving greyed-out menu entries.
-    const QList<QAction *> actions = {
-        showOrcAct, showScoreAct, showOptionsAct, showFileBAct,
-        showOtherAct, showOtherCsdAct, showWidgetEditAct, joinAct
-    };
-    for (QAction *act : actions) {
-        act->setEnabled(enabled);
-        act->setVisible(enabled);
-    }
-}
-
 void CsoundQt::showMidiLearn()
 {
     m_midiLearn->show();
@@ -4948,7 +4841,6 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     copyAct->setShortcut(tr("Ctrl+C"));
     pasteAct->setShortcut(tr("Ctrl+V"));
     duplicateAct->setShortcut(tr("Ctrl+D"));
-    joinAct->setShortcut(tr(""));
     inToGetAct->setShortcut(tr(""));
     getToInAct->setShortcut(tr(""));
     highlightWidgetChannelAct->setShortcut(tr("Ctrl+Shift+H"));
@@ -4993,7 +4885,6 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #endif
     showVirtualKeyboardAct->setShortcut(tr("Ctrl+Shift+V"));
     showTableEditorAct->setShortcut(tr(""));
-    splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
     midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
 
 #ifdef CSQT_QTHTML
@@ -5023,13 +4914,6 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     goBackAct->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Left));
     goToSourceAct->setShortcut(tr("Ctrl+B"));
     reloadDependenciesAct->setShortcut(tr("Ctrl+Shift+B"));
-    showOrcAct->setShortcut(tr("Shift+Alt+1"));
-    showScoreAct->setShortcut(tr("Shift+Alt+2"));
-    showOptionsAct->setShortcut(tr("Shift+Alt+3"));
-    showFileBAct->setShortcut(tr("Shift+Alt+4"));
-    showOtherAct->setShortcut(tr("Shift+Alt+5"));
-    showOtherCsdAct->setShortcut(tr("Shift+Alt+6"));
-    showWidgetEditAct->setShortcut(tr("Shift+Alt+7"));
     lineNumbersAct->setShortcut(tr("Shift+Alt+L"));
     parameterModeAct->setShortcut(tr("Shift+Alt+P"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
@@ -5039,41 +4923,6 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     storeSettings();
 }
 
-
-void CsoundQt::showOrc(bool show)
-{
-    documentPages[curPage]->showOrc(show);
-}
-
-void CsoundQt::showScore(bool show)
-{
-    documentPages[curPage]->showScore(show);
-}
-
-void CsoundQt::showOptions(bool show)
-{
-    documentPages[curPage]->showOptions(show);
-}
-
-void CsoundQt::showFileB(bool show)
-{
-    documentPages[curPage]->showFileB(show);
-}
-
-void CsoundQt::showOther(bool show)
-{
-    documentPages[curPage]->showOther(show);
-}
-
-void CsoundQt::showOtherCsd(bool show)
-{
-    documentPages[curPage]->showOtherCsd(show);
-}
-
-void CsoundQt::showWidgetEdit(bool show)
-{
-    documentPages[curPage]->showWidgetEdit(show);
-}
 
 void CsoundQt::toggleLineArea()
 {
@@ -5311,12 +5160,6 @@ void CsoundQt::createActions()
     pasteAct->setIconText(tr("Paste"));
     pasteAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
-
-    joinAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("&Join orc/sco"), this);
-    joinAct->setStatusTip(tr("Join orc/sco files in a single csd file"));
-    //   joinAct->setIconText(tr("Join"));
-    joinAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(joinAct, SIGNAL(triggered()), this, SLOT(join()));
 
     evaluateAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Evaluate selection"), this);
     evaluateAct->setStatusTip(tr("Evaluate selection"));
@@ -5658,78 +5501,10 @@ void CsoundQt::createActions()
     focusMapper->setMapping(raiseHtml5Act, 4);
     this->addAction(raiseHtml5Act);
 #endif
-    splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
-    splitViewAct->setCheckable(true);
-    splitViewAct->setChecked(false);
-    splitViewAct->setStatusTip(tr("Toggle between full csd and split text display"));
-    splitViewAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(splitViewAct, SIGNAL(toggled(bool)), this, SLOT(splitView(bool)));
-
     midiLearnAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("MIDI Learn"), this);
     midiLearnAct->setStatusTip(tr("Show MIDI Learn Window for widgets"));
     midiLearnAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(midiLearnAct, SIGNAL(triggered()), this, SLOT(showMidiLearn()));
-
-    showOrcAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Orchestra"), this);
-    showOrcAct->setCheckable(true);
-    showOrcAct->setChecked(true);
-    showOrcAct->setEnabled(false);
-    showOrcAct->setStatusTip(tr("Show orchestra panel in split view"));
-    showOrcAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(showOrcAct, SIGNAL(toggled(bool)), this, SLOT(showOrc(bool)));
-
-    showScoreAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Score"), this);
-    showScoreAct->setCheckable(true);
-    showScoreAct->setChecked(true);
-    showScoreAct->setEnabled(false);
-    showScoreAct->setStatusTip(tr("Show orchestra panel in split view"));
-    showScoreAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(showScoreAct, SIGNAL(toggled(bool)), this, SLOT(showScore(bool)));
-
-    showOptionsAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show CsOptions"), this);
-    showOptionsAct->setCheckable(true);
-    showOptionsAct->setChecked(true);
-    showOptionsAct->setEnabled(false);
-    showOptionsAct->setStatusTip(tr("Show CsOptions section panel in split view"));
-    showOptionsAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(showOptionsAct, SIGNAL(toggled(bool)), this, SLOT(showOptions(bool)));
-
-    showFileBAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Embedded files"), this);
-    showFileBAct->setCheckable(true);
-    showFileBAct->setChecked(false);
-    showFileBAct->setEnabled(false);
-    showFileBAct->setStatusTip(tr("Show Embedded files panel in split view"));
-    showFileBAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(showFileBAct, SIGNAL(toggled(bool)), this, SLOT(showFileB(bool)));
-
-    showOtherAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Information Text"), this);
-    showOtherAct->setCheckable(true);
-    showOtherAct->setChecked(false);
-    showOtherAct->setEnabled(false);
-    showOtherAct->setStatusTip(tr("Show information text panel in split view"));
-    showOtherAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(showOtherAct, SIGNAL(toggled(bool)), this, SLOT(showOther(bool)));
-
-    showOtherCsdAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Extra Tags"), this);
-    showOtherCsdAct->setCheckable(true);
-    showOtherCsdAct->setChecked(false);
-    showOtherCsdAct->setEnabled(false);
-    showOtherCsdAct->setStatusTip(tr("Show extra tags panel in split view"));
-    showOtherCsdAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(showOtherCsdAct, SIGNAL(toggled(bool)), this, SLOT(showOtherCsd(bool)));
-
-    showWidgetEditAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Widgets Text"), this);
-    showWidgetEditAct->setCheckable(true);
-    showWidgetEditAct->setChecked(false);
-    showWidgetEditAct->setEnabled(false);
-    showWidgetEditAct->setStatusTip(tr("Show Widgets text panel in split view"));
-    showWidgetEditAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(showWidgetEditAct, SIGNAL(toggled(bool)), this, SLOT(showWidgetEdit(bool)));
-
-    // These section toggles only make sense in split view. Hide them instead
-    // of leaving a block of greyed-out entries when split view is off.
-    connect(splitViewAct, &QAction::toggled, this, &CsoundQt::setSplitViewActionsEnabled);
-    setSplitViewActionsEnabled(splitViewAct->isChecked());
 
     setHelpEntryAct = new QAction(icon("info.png"), tr("Opcode Entry"), this);
     setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
@@ -5943,7 +5718,6 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(copyAct);
     m_keyActions.append(pasteAct);
     m_keyActions.append(duplicateAct);
-    m_keyActions.append(joinAct);
     m_keyActions.append(inToGetAct);
     m_keyActions.append(getToInAct);
     m_keyActions.append(highlightWidgetChannelAct);
@@ -6001,7 +5775,6 @@ void CsoundQt::setKeyboardShortcutsList()
 #ifdef CSQT_DEBUGGER
     m_keyActions.append(showDebugAct);
 #endif
-    m_keyActions.append(splitViewAct);
     m_keyActions.append(midiLearnAct);
     m_keyActions.append(killLineAct);
     m_keyActions.append(killToEndAct);
@@ -6011,13 +5784,6 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(reloadDependenciesAct);
     m_keyActions.append(evaluateAct);
     m_keyActions.append(evaluateSectionAct);
-    m_keyActions.append(showOrcAct);
-    m_keyActions.append(showScoreAct);
-    m_keyActions.append(showOptionsAct);
-    m_keyActions.append(showFileBAct);
-    m_keyActions.append(showOtherAct);
-    m_keyActions.append(showOtherCsdAct);
-    m_keyActions.append(showWidgetEditAct);
     m_keyActions.append(lineNumbersAct);
     m_keyActions.append(parameterModeAct);
     //	m_keyActions.append(showParametersAct);
@@ -6215,7 +5981,6 @@ void CsoundQt::createMenus()
     editMenu->addAction(lineNumbersAct);
     editMenu->addAction(parameterModeAct);
     editMenu->addSeparator();
-    editMenu->addAction(joinAct);
     editMenu->addAction(inToGetAct);
     editMenu->addAction(getToInAct);
     editMenu->addSeparator();
@@ -6259,16 +6024,6 @@ void CsoundQt::createMenus()
     viewMenu->addSeparator();
     viewMenu->addAction(viewFullScreenAct);
     viewMenu->addAction(maximizePanelAct);
-    viewMenu->addSeparator();
-    viewMenu->addAction(splitViewAct);
-    viewMenu->addSeparator();
-    viewMenu->addAction(showOrcAct);
-    viewMenu->addAction(showScoreAct);
-    viewMenu->addAction(showOptionsAct);
-    viewMenu->addAction(showFileBAct);
-    viewMenu->addAction(showOtherAct);
-    viewMenu->addAction(showOtherCsdAct);
-    viewMenu->addAction(showWidgetEditAct);
     viewMenu->addSeparator();
     viewMenu->addAction(increaseFontAction);
     viewMenu->addAction(decreaseFontAction);

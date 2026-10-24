@@ -114,11 +114,6 @@
 #endif
 
 
-enum viewMode {
-	VIEW_CSD,
-	VIEW_ORC_SCO
-};
-
 // Role/severity of a message shown in the console panel. Determines the colour
 // it is printed in. Auto lets the console infer the colour from the text, which
 // is what Csound's own messages need (they carry no role information).

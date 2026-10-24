@@ -25,10 +25,9 @@
 #include <QtWidgets>
 
 #include "highlighter.h"
-#include "scoreeditor.h"
-#include "filebeditor.h"
 
 class TextEditor;
+class TextEditLineNumbers;
 class OpEntryParser;
 
 typedef enum {
@@ -74,9 +73,6 @@ public:
 	void clearFileBText();
 	void appendFileBText(QString text);
 	void setOptionsText(QString text);
-	void setLadspaText(QString text);
-	void setOtherCsdText(QString text);
-	void setOtherText(QString text);
 	void showLineArea(bool visible);
 	// 0 makes the numbers vanish into the gutter, 100 uses the full editor
 	// foreground colour.
@@ -104,8 +100,6 @@ public:
 	QString getSco();  // Without tags
 	QString getOptionsText();  // Without tags
 	QString getFileB(); // Embedded files. With tags (for filenames)
-	QString getExtraCsdText();  // All other tags like version and licence with tags
-	QString getExtraText(); // Text outside any known tags
 
 	void clearUndoRedoStack();
 
@@ -119,37 +113,15 @@ public slots:
 	void toggleParameterMode();
 
 protected:
-	void hideAllEditors();
-
 	editor_mode_t m_mode; //type of text: csound, orc, sco
-	int m_viewMode; // 0 = csd without widget + preset section
-	// 1 = full plain text
-	// From here on, you can have an or'd combination
-	// 2 = show CsInstruments Section
-	// 4 = show CsScore Section
-	// 8 = show CsOptions Section
-	// 16 = show <CsFileB> Section(s)
-	// 32 = show remaining Text outside CsoundSynthesizer tag
-	// 64 = show remaining text inside CsoundSynthesizer tag
-	// 128 = show Widget, Preset and Extra Options sections
 	Highlighter m_highlighter;
 	int m_lineNumberContrast = 50;
 	OpEntryParser *m_opcodeTree;
-	QSplitter *splitter;
 	TextEditLineNumbers *m_mainEditor;
-	TextEditor *m_orcEditor;
-	ScoreEditor *m_scoreEditor;
-	TextEditor *m_optionsEditor;
-	FileBEditor *m_filebEditor;
-	TextEditor *m_otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd. Also called information text elsewhere
-	TextEditor *m_otherCsdEditor;  // Extra text and tags inside CsoundSynthesizer tags
-	TextEditor *m_widgetEditor;
+	// Embedded files are kept out of the editable text (and therefore out of
+	// the scanner and the Csound code). getFullText() puts them back.
+	QString m_filebText;
 
-	int m_orcStartLine;
-	int m_scoStartLine;
-
-	QVector<QWidget *> editors; // A vector to hold pointers for the above for easy processing
-	TextEditor *m_lastDropEditor = nullptr; // Editor that last received a file drop
 	int m_tabSize = 2; // tab size in spaces, see setTabSize()
 	void applyTabSize();
 };

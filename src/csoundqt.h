@@ -243,7 +243,6 @@ private slots:
 	void findReplace();  // Direct to current Page
 	void findString();  // Direct to current Page
 	void findPrevious();  // Direct to current Page
-	bool join(bool ask = true);
 	void showUtilities(bool);
 	void getToIn();
 	void inToGet();
@@ -281,7 +280,6 @@ private slots:
 	void virtualKeyboardActOff(QObject *parent=0);
 	void tableEditorActOff(QObject *parent=0);
 	void showHtml5Gui(bool show);
-	void splitView(bool split);
 	void showMidiLearn();
 	void virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVariant velocity);
 	void virtualCCIn(int channel, int cc, int value);
@@ -318,14 +316,6 @@ private slots:
 	void runUtility(QString flags);
 	//     void widgetDockLocationChanged(Qt::DockWidgetArea area);
 	void setDefaultKeyboardShortcuts();
-	void showOrc(bool);
-	void showScore(bool);
-	void showOptions(bool);
-	void showFileB(bool);
-	void showOther(bool);
-	void showOtherCsd(bool);
-	void showWidgetEdit(bool);
-	void setSplitViewActionsEnabled(bool enabled);
 	void toggleLineArea();
 	void toggleParameterMode();
     void autocomplete();
@@ -487,7 +477,6 @@ private:
 	QAction *copyAct;
 	QAction *pasteAct;
 	QAction *duplicateAct;
-	QAction *joinAct;
 	QAction *evaluateAct;
 	QAction *evaluateSectionAct;
 	QAction *scratchPadCsdModeAct;
@@ -540,14 +529,6 @@ private:
     QAction *raiseHtml5Act;
 #endif
 	QAction *midiLearnAct;
-	QAction *splitViewAct;
-	QAction *showOrcAct;
-	QAction *showScoreAct;
-	QAction *showOptionsAct;
-	QAction *showFileBAct;
-	QAction *showOtherAct;
-	QAction *showOtherCsdAct;
-	QAction *showWidgetEditAct;
 	QAction *setHelpEntryAct;
 	QAction *browseBackAct;
 	QAction *browseForwardAct;

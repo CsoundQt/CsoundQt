@@ -559,8 +559,7 @@ void Highlighter::setMode(int mode)
 {
     m_mode = mode;
     // A standalone orchestra, include or score document has no csd tags to
-    // discover the section from. It is one section, exactly like the
-    // corresponding editor in the split view.
+    // discover the section from. It is one section.
     switch (mode) {
     case 3: // Orc (.orc and .udo)
     case 5: // Inc

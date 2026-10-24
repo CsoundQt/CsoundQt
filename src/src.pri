@@ -9,7 +9,6 @@ FORMS = "src/about.ui" \
     "src/keyboardshortcuts.ui" \
     "src/keyselector.ui" \
     "src/utilitiesdialog.ui" \
-    "src/filebeditor.ui" \
     src/midilearndialog.ui \
     src/debugpanel.ui \
     src/dockhelp.ui \
@@ -81,8 +80,6 @@ HEADERS = "src/about.h" \
     "src/qutesheet.h" \
     "src/basedocument.h" \
     "src/baseview.h" \
-    "src/scoreeditor.h" \
-    "src/filebeditor.h" \
     $$PWD/csound_threaded_csqt.hpp \
     $$PWD/risset.h \
     $$PWD/selectcolorbutton.h \
@@ -153,8 +150,6 @@ SOURCES = "src/about.cpp" \
     "src/qutesheet.cpp" \
     "src/basedocument.cpp" \
     "src/baseview.cpp" \
-    "src/scoreeditor.cpp" \
-    "src/filebeditor.cpp" \
     $$PWD/risset.cpp \
     $$PWD/selectcolorbutton.cpp \
     src/midihandler.cpp \

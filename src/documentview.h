@@ -117,7 +117,6 @@ public:
     void setAutoCompleteMenuWidth(int width);
     void setAutoCompleteMenuMaxLines(int lines);
 	void setAutoParameterMode(bool autoParameterMode);
-	void setViewMode(int mode);
 
 	// TODO add all text inputs here as below
 
@@ -127,7 +126,6 @@ public:
 	// Widgets are being edited in text format. In most cases, you want to
 	// get the widgets Text from the widget layout object
 	QString getWidgetsText(); // With tags including presets, in new xml format
-	int getViewMode();
 
 	QString wordUnderCursor();
     QString lineUnderCursor();
@@ -245,14 +243,6 @@ public slots:
     // typing only filters the list after the user pauses.
     void scheduleAutoComplete(int delay);
 
-	void showOrc(bool);
-	void showScore(bool);
-	void showOptions(bool);
-	void showFileB(bool);
-	void showOther(bool);
-	void showOtherCsd(bool);
-	void showWidgetEdit(bool);
-
 	void cut();
 	void copy();
 	void paste();
@@ -303,8 +293,7 @@ private:
 	void updateFindStatus();
 	void refreshFindAfterEdit();
 	void jumpToLineInternal(int line, bool mark, bool focus);
-	// The editor the line numbers of the document refer to (the whole
-	// document in the unified view, the orchestra in the split view).
+	// The editor the line numbers of the document refer to.
 	TextEditor *currentLineEditor() const;
 	// The editor the user is working in.
 	TextEditor *activeEditor() const;
@@ -347,7 +336,6 @@ private:
 	// True while the highlighter applies formats, whose textChanged()
 	// notifications must not be mistaken for edits.
 	bool m_highlightUpdate = false;
-	QTextEdit * m_currentEditor;
 
 	bool lastCaseSensitive; // These last three are for search and replace
 	QString lastSearch;

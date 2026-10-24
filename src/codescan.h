@@ -32,9 +32,8 @@
 namespace CodeScan {
 
 // How the text is laid out. A .csd document has its orchestra between
-// <CsInstruments> tags; an orchestra-only document (.orc, .udo, .inc, or the
-// orchestra shown in a split view) is a single orchestra section that starts
-// at the first line.
+// <CsInstruments> tags; an orchestra-only document (.orc, .udo, .inc) is a
+// single orchestra section that starts at the first line.
 enum class Mode {
     None,   // not a Csound document: nothing to scan
     Csd,    // full .csd, orchestra between the tags
