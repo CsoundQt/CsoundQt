@@ -12,21 +12,23 @@ CONFIG -= debug_and_release debug_and_release_target \
     copy_dir_files precompile_header shared
 
 # Set default paths
-DEFAULT_CSOUND_API_INCLUDE_DIRS = "$$(PROGRAMFILES)\\Csound6\\include\\csound"
+DEFAULT_CSOUND_API_INCLUDE_DIRS = "$$(PROGRAMFILES)\\Csound7\\include\\csound"
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
-DEFAULT_CSOUND_LIBRARY_DIRS = "$$(PROGRAMFILES)\\Csound6\\bin"
+# Csound 7 keeps the import libraries in lib and the runtime DLLs in bin.
+DEFAULT_CSOUND_LIBRARY_DIRS = "$$(PROGRAMFILES)\\Csound7\\lib" \
+    "$$(PROGRAMFILES)\\Csound7\\bin"
 
-win32-g++:build32: DEFAULT_CSOUND_LIBS = csound32.dll
-win32-g++:build64: DEFAULT_CSOUND_LIBS = csound64.dll
+win32-g++:build32: DEFAULT_CSOUND_LIBS = csound7.dll
+win32-g++:build64: DEFAULT_CSOUND_LIBS = csound7_64.dll
 
 # Need a Visual Studio import library for these...
-win32-msvc2013:build32: DEFAULT_CSOUND_LIBS = csound32.lib
-win32-msvc2013:build64: DEFAULT_CSOUND_LIBS = csound64.lib
-win32-msvc2015:build32: DEFAULT_CSOUND_LIBS = csound32.lib
-win32-msvc2015:build64: DEFAULT_CSOUND_LIBS = csound64.lib
-win32-msvc2017:build32: DEFAULT_CSOUND_LIBS = csound32.lib
-win32-msvc2017:build64: DEFAULT_CSOUND_LIBS = csound64.lib
-win32-msvc:build64: DEFAULT_CSOUND_LIBS = csound64.lib
+win32-msvc2013:build32: DEFAULT_CSOUND_LIBS = csound7.lib
+win32-msvc2013:build64: DEFAULT_CSOUND_LIBS = csound7_64.lib
+win32-msvc2015:build32: DEFAULT_CSOUND_LIBS = csound7.lib
+win32-msvc2015:build64: DEFAULT_CSOUND_LIBS = csound7_64.lib
+win32-msvc2017:build32: DEFAULT_CSOUND_LIBS = csound7.lib
+win32-msvc2017:build64: DEFAULT_CSOUND_LIBS = csound7_64.lib
+win32-msvc:build64: DEFAULT_CSOUND_LIBS = csound7_64.lib
 
 DEFAULT_PYTHON_INCLUDE_DIRS = "$$(HOMEDRIVE)\\Python26\\include"
 DEFAULT_PYTHONQT_SRC_DIRS = "$$(PROGRAMFILES)\\PythonQt"
@@ -42,9 +44,6 @@ win32-msvc: INCLUDEPATH += $${PTHREAD_INCLUDE_DIR} $${DEFAULT_LIBSNDFILE_INCLUDE
 
 RC_FILE = "src/csoundqt.rc"
 LCSOUND = "$${CSOUND_LIBRARY_DIR}/$${CSOUND_LIB}"
-#win32-g++:csound6: LCSND = "$${CSOUND_LIBRARY_DIR}/csnd6.dll"
-
-win32-msvc:record_support: LCSND = "$${CSOUND_LIBRARY_DIR}/csnd6.lib" # needed for build on Windows 11
 
 rtmidi {
 DEFINES += __WINDOWS_MM__

@@ -326,7 +326,7 @@ jobs:
           CSINC=$(cygpath -m "${CSOUND_DIR}/include/csound")
           CSLIB=$(cygpath -m "${CSOUND_DIR}/lib")
           mkdir -p bin
-          cp -f "${CSOUND_DIR}/bin/csound64.dll" bin/ 2>/dev/null || true
+          cp -f "${CSOUND_DIR}/bin/csound7_64.dll" bin/
           qmake CONFIG+=rtmidi CONFIG+=release qcs.pro \
             "CSOUND_API_INCLUDE_DIR=${CSINC}" \
             "CSOUND_INTERFACES_INCLUDE_DIR=${CSINC}" \
@@ -363,7 +363,7 @@ jobs:
           rm -rf "${STAGE}"
           mkdir -p "${STAGE}/plugins64"
           cp -r bin/. "${STAGE}/"
-          cp -f "${CSOUND_DIR}/bin/csound64.dll" "${STAGE}/"
+          cp -f "${CSOUND_DIR}/bin/csound7_64.dll" "${STAGE}/"
           if [ -d "${CSOUND_DIR}/plugins64" ]; then
             cp -rf "${CSOUND_DIR}/plugins64/." "${STAGE}/plugins64/"
           fi

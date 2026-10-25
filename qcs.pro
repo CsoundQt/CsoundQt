@@ -50,7 +50,7 @@ DEFINES += NOMINMAX
 # CONFIG += c++14
 CONFIG += c++23
 
-#for csound7 (was csound6 before). Will not have no meaning in CsoundQt7
+# CsoundQt targets Csound 7 only.
 DEFINES += CSOUND7
 CONFIG += csound7
 message("Building for Csound 7.")
@@ -80,7 +80,6 @@ win32-msvc2015:include (qcs-win32.pro)
 win32-msvc2017:include (qcs-win32.pro)
 win32-msvc:include (qcs-win32.pro)
 
-# Requires Csound >= 6.04
 record_support|perfThread_build {
     DEFINES += PERFTHREAD_RECORD
     message("Building recording support.")
@@ -225,14 +224,12 @@ macx {
         csound.path= $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/
         csound.files = /Applications/Csound/CsoundLib64.framework
         INSTALLS+=csound
-        #final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib @rpath/CsoundLib64.framework/Versions/6.0/libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
         final.commands += install_name_tool -change  /Applications/Csound/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
         final.commands += install_name_tool -id @rpath/CsoundLib64.framework/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/CsoundLib64
     } else {
         final.path = $$PWD
         final.commands = rm -rf  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework ;
-        #final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-        final.commands += install_name_tool -change  @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Applications/Csound/CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        final.commands += install_name_tool -change  @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Applications/Csound/CsoundLib64.framework/Versions/7.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
     }
 
     final.path = $$PWD

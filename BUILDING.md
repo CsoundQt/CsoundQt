@@ -39,7 +39,7 @@ qmake qcs.pro CONFIG+=rtmidi CONFIG+=release `
     "CSOUND_LIBRARY_DIR=C:/Program Files/Csound7/lib"
 nmake
 
-Copy-Item "C:\Program Files\Csound7\bin\csound64.dll" bin\
+Copy-Item "C:\Program Files\Csound7\bin\csound7_64.dll" bin\
 Copy-Item "C:\Program Files\Csound7\plugins64" bin\plugins64 -Recurse
 windeployqt --qmldir src\QML bin\CsoundQt-d-cs7.exe
 
@@ -62,7 +62,7 @@ To rebuild after editing code, run the build and run commands again from the
    ```
    Then **Build ▸ Run qmake**.
 5. Run (Ctrl+R).
-6. Before the first run, copy `csound64.dll` from `C:\Program Files\Csound7\bin`
+6. Before the first run, copy `csound7_64.dll` from `C:\Program Files\Csound7\bin`
    into the `bin` directory listed under **Projects ▸ Build Settings**.
 
 ## Notes

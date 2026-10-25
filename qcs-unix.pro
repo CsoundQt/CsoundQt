@@ -62,7 +62,3 @@ system_rtmidi {
 build32:LCSOUND = -L$${CSOUND_LIBRARY_DIR} -lcsound
 build64:LCSOUND = -L$${CSOUND_LIBRARY_DIR} -lcsound64
 
-#  libcsnd7 is integrated to libcsound64 in CS7
-#csound6: LCSND = -lcsnd6
-#else: LCSND =  -lcsnd
-

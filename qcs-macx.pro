@@ -28,7 +28,7 @@ DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         $$(HOME)/Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers \
         /usr/local/include/csound \
         /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Headers \
-        /opt/homebrew/opt/csound/Frameworks/CsoundLib64.framework/Versions/6.0/Headers \
+        /opt/homebrew/opt/csound/Frameworks/CsoundLib64.framework/Versions/7.0/Headers \
         
         
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
@@ -37,7 +37,7 @@ DEFAULT_CSOUND_LIBRARY_DIRS = $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR} \
         $$(HOME)/Library/Frameworks/CsoundLib64.framework/Versions/Current \
         /usr/local/lib \
         /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Versions/Current \
-        /opt/homebrew/opt/csound/Frameworks/CsoundLib64.framework/Versions/6.0
+        /opt/homebrew/opt/csound/Frameworks/CsoundLib64.framework/Versions/7.0
 
 build32:DEFAULT_CSOUND_LIBS = CsoundLib
 build64:DEFAULT_CSOUND_LIBS = CsoundLib64

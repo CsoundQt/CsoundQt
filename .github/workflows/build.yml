@@ -305,7 +305,7 @@ jobs:
           cd csound
 
           # point ctcsound.py at the fixed framework location
-          sed -i -e 's$ctypes.util.find_library("CsoundLib64")$"/Applications/Csound/Csound64.framework/CsoundLib64"$g' languages/python/ctcsound.py
+          sed -i -e 's$ctypes.util.find_library("CsoundLib64")$"/Applications/Csound/CsoundLib64.framework/CsoundLib64"$g' languages/python/ctcsound.py
 
           mkdir -p csound_install/CsoundLib64.framework/Versions/7.0/Resources/Python
           cp languages/python/ctcsound.py csound_install/CsoundLib64.framework/Versions/7.0/Resources/Python
@@ -442,7 +442,7 @@ jobs:
           echo "Csound installer: ${INSTALLER}"
           cp "${INSTALLER}" csound-dl/Csound7-windows-x86_64.exe
           # Silent install into a local folder (same layout as "Program Files\Csound7"):
-          #   bin\csound64.dll, lib\csound64.lib, include\csound, plugins64
+          #   bin\csound7_64.dll, lib\csound7_64.lib, include\csound, plugins64
           CSOUND_DIR=$(cygpath -w "$GITHUB_WORKSPACE/csound7")
           MSYS_NO_PATHCONV=1 "${INSTALLER}" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- "/DIR=${CSOUND_DIR}"
           ls "$GITHUB_WORKSPACE/csound7"
@@ -475,10 +475,11 @@ jobs:
           CSOUND_DIR="$GITHUB_WORKSPACE/csound7"
           CSINC=$(cygpath -m "${CSOUND_DIR}/include/csound")
           CSLIB=$(cygpath -m "${CSOUND_DIR}/lib")
-          # Keep csound64.dll next to the exe so the linker/deployment tools
-          # never complain about a missing import.
+          # Keep csound7_64.dll next to the exe so the linker/deployment tools
+          # never complain about a missing import. Fail early if Csound ever
+          # renames it again.
           mkdir -p bin
-          cp -f "${CSOUND_DIR}/bin/csound64.dll" bin/ 2>/dev/null || true
+          cp -f "${CSOUND_DIR}/bin/csound7_64.dll" bin/
           qmake CONFIG+=rtmidi CONFIG+=no_splash CONFIG+=release qcs.pro \
             "CSOUND_API_INCLUDE_DIR=${CSINC}" \
             "CSOUND_INTERFACES_INCLUDE_DIR=${CSINC}" \
@@ -522,7 +523,7 @@ jobs:
           cp -r bin/. "${STAGE}/"
           # Bundle the Csound runtime CsoundQt was built against, so the
           # resulting installation is self-contained and distributable.
-          cp -f "${CSOUND_DIR}/bin/csound64.dll" "${STAGE}/"
+          cp -f "${CSOUND_DIR}/bin/csound7_64.dll" "${STAGE}/"
           if [ -d "${CSOUND_DIR}/plugins64" ]; then
             cp -rf "${CSOUND_DIR}/plugins64/." "${STAGE}/plugins64/"
           fi
