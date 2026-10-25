@@ -367,6 +367,17 @@ jobs:
           if [ -d "${CSOUND_DIR}/plugins64" ]; then
             cp -rf "${CSOUND_DIR}/plugins64/." "${STAGE}/plugins64/"
           fi
+          # Bundle the offline Csound manual next to the exe; CsoundQt looks
+          # for it in <app>/doc/manual (see findManualDirectory()).
+          MANUAL_DIR="manual/csound7-manual-offline"
+          if [ ! -d "$MANUAL_DIR" ]; then
+            mkdir -p manual
+            curl -L --fail --silent --show-error -o manual/csound7-manual-offline.zip \
+              https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip
+            powershell -Command "Expand-Archive -Path 'manual/csound7-manual-offline.zip' -DestinationPath 'manual' -Force"
+          fi
+          mkdir -p "${STAGE}/doc/manual"
+          cp -r "$MANUAL_DIR/." "${STAGE}/doc/manual/"
           cp -f images/csoundqt.ico "${STAGE}/"
           mkdir -p artifacts
           export CSOUNDQT_VERSION="$(tr -d '\r\n ' < VERSION.txt)"

@@ -770,13 +770,8 @@ QString CsoundQt::findManualDirectory() const
 
     QStringList possibleDirectories;
 #if defined(Q_OS_WIN)
-    QString programFilesPath = QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
-    QString programFilesPathx86 = QDir::fromNativeSeparators(qgetenv("PROGRAMFILES(X86)"));
-    possibleDirectories << initialDir + "/doc/manual"
-                        << programFilesPath + "/Csound6/doc/manual"
-                        << programFilesPathx86 + "/Csound6/doc/manual"
-                        << programFilesPath + "/Csound6_x64/doc/manual"
-                        << programFilesPath + "/csound/doc/manual";
+    // The Windows installer bundles the offline manual in <app>/doc/manual.
+    possibleDirectories << initialDir + "/doc/manual";
 #elif defined(FLATPAK_BUILD)
     // Csound manual is bundled with the flatpak in /app/share/manual
     possibleDirectories << "/app/share/manual";
