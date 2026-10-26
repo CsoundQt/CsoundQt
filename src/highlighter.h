@@ -71,9 +71,9 @@ private:
 //
 // The rules are the ones of the Csound language: /* ... */ comments (which
 // may span lines), ; and // line comments, "..." strings and {{ ... }} strings
-// (which may span lines). Unlike the highlighter, which colours a line as it
-// finds it, the scanner walks the line from left to right, so a ';' inside a
-// string does not start a comment.
+// (which may span lines). The scanner walks the line from left to right, so a
+// ';' inside a string does not start a comment. The highlighter uses these
+// ranges to keep code colouring out of comments and strings.
 namespace CsoundLex {
 
 struct Line
@@ -196,8 +196,6 @@ private:
 	QVector<HighlightingRule> highlightingRules;
 	QVector<HighlightingRule> lastHighlightingRules;
 
-    QRegularExpression commentStartExpression;
-    QRegularExpression commentEndExpression;
     QRegularExpression rxScoreLetter;
     QRegularExpression rxQuotation;
 

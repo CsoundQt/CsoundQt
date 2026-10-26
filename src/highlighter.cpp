@@ -452,9 +452,6 @@ QTextCharFormat Highlighter::getFormat(QString tag) {
 Highlighter::Highlighter(QTextDocument *parent)
 	: QSyntaxHighlighter(parent)
 {
-    commentStartExpression.setPattern(uR"(/\*)"_s);
-    commentEndExpression.setPattern(uR"(\*/)"_s);
-
     //  b64encStartExpression = QRegularExpression("<CsFileB .*>");
     //  b64encEndExpression = QRegularExpression("<CsFileB>");
 	colorVariables = true;
@@ -699,9 +696,10 @@ void Highlighter::highlightBlock(const QString &text)
         }
     }
 
-    // Highlight only code, not the contents of strings. The lexer also reports
-    // an unterminated quote as a string that runs to the end of the line, so
-    // "chnget \"fftsize" does not colour fftsize as an fsig variable.
+    // Highlight only code, not the contents of comments or strings. The lexer
+    // also reports an unterminated quote as a string that runs to the end of
+    // the line, so "chnget \"fftsize" does not colour fftsize as an fsig
+    // variable.
     const auto maskRanges = [](QString &codeText,
                                const QVector<QPair<int, int>> &ranges) {
         const int size = codeText.size();
@@ -719,8 +717,10 @@ void Highlighter::highlightBlock(const QString &text)
     QString maskedText;
     const QString *highlightText = &text;
     if (m_theme != "none" && !insideMultilineString
-            && (!lex.strings.isEmpty() || !lex.multilineStrings.isEmpty())) {
+            && (!lex.comments.isEmpty() || !lex.strings.isEmpty()
+                || !lex.multilineStrings.isEmpty())) {
         maskedText = text;
+        maskRanges(maskedText, lex.comments);
         maskRanges(maskedText, lex.strings);
         maskRanges(maskedText, lex.multilineStrings);
         highlightText = &maskedText;
@@ -775,6 +775,25 @@ void Highlighter::highlightBlock(const QString &text)
         // The {{ ... }} strings are painted the same way.
         for (const QPair<int, int> &range : lex.multilineStrings) {
             setFormat(range.first, range.second - range.first, quotationFormat);
+        }
+
+        // Comments are painted last, after the code, so that words inside them
+        // keep the comment colour instead of being coloured as opcodes,
+        // variables or headers. The scan already knows the exact ranges; a
+        // range that starts at the beginning of a continuation line belongs to
+        // a /* ... */ comment.
+        for (const QPair<int, int> &range : lex.comments) {
+            const int start = range.first;
+            const int length = range.second - start;
+            const QStringView marker = QStringView(text).mid(start, 2);
+            QTextCharFormat format = singleLineCommentFormat;
+            if ((start == 0 && previousBlockState() == 1)
+                    || marker == QLatin1StringView("/*")) {
+                format = multiLineCommentFormat;
+            } else if (marker == QLatin1StringView(";;")) {
+                format = importantCommentFormat;
+            }
+            setFormat(start, length, format);
         }
     }
 
@@ -867,55 +886,9 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
     if(m_theme == "none")
         return;
 
-    // comments first
-
-    // multiline comments
-    setCurrentBlockState(0);
-
-    int startIndex = 0;
-    //int commentIndex = -1;
-    bool lineStartsInComment = previousBlockState() == 1;
-    if(previousBlockState() != 1) {
-        rxmatch = commentStartExpression.match(line, 0);
-        startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
-    }
-
-    QRegularExpressionMatch endMatch;
-
-    while (startIndex >= 0 ) {
-        if (startIndex == 0)
-            lineStartsInComment = true;
-        endMatch = commentEndExpression.match(line, startIndex);
-        int endIndex = endMatch.hasMatch() ? endMatch.capturedStart() : -1;
-        int commentLength;
-        if (endIndex == -1) {
-            setCurrentBlockState(1);
-            commentLength = line.length() - startIndex;
-        } else {
-            commentLength = endIndex - startIndex + endMatch.capturedLength();
-        }
-        setFormat(startIndex, commentLength, multiLineCommentFormat);
-        rxmatch = commentStartExpression.match(line, startIndex + commentLength);
-        startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
-    }
-
-    // single line comments
-    int commentIndex = line.indexOf(';'); // try both comment markings
-	if (commentIndex < 0) {
-        commentIndex = line.indexOf("//");
-	}
-
-    if(commentIndex >= 0) {
-        if(line[commentIndex] == ';' && line.size() > commentIndex+1 && line[commentIndex+1] == ';') {
-            setFormat(commentIndex, line.size() - commentIndex, importantCommentFormat);
-            return;
-        } else {
-            setFormat(commentIndex, line.size() - commentIndex, singleLineCommentFormat);
-        }
-    } else {
-        commentIndex = line.size() + 1;
-    }
-
+    // Comments and strings were masked out by highlightBlock(), so the text
+    // that reaches this function is code only. They are painted afterwards,
+    // which keeps their contents from being coloured as opcodes or variables.
     int index = 0;
 
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
@@ -947,7 +920,7 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
 
     if(blockdata->section == ScoreSection || m_sectionType == ScoreSection) {
         if(m_scoreSyntaxHighlighting) {
-            highlightScore(line, 0, commentIndex);
+            highlightScore(line, 0, static_cast<int>(line.size()));
         }
         return;
     } else if (blockdata->section == HtmlSection || m_sectionType == HtmlSection) {
@@ -982,13 +955,8 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
         return;
     }
     else if(blockdata->section == OrchestraSection || m_sectionType == OrchestraSection) {
-        //auto text = QStringRef(&line, 0, commentIndex);
-        const QStringView text = QStringView(line).mid(0,commentIndex);
+        const QStringView text = QStringView(line);
         const QStringView codeText = text.trimmed();
-
-        if (lineStartsInComment) {
-            return;
-        }
 
         // define
         if (codeText.startsWith(QLatin1Char('#'))) {
@@ -1060,7 +1028,7 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
         // Csound 7: detect struct type definitions, e.g. "struct MyType val0:i, val1:i"
         if (codeText.startsWith(QLatin1StringView("struct"))) {
             rxmatch = structRx.match(text);
-            if(rxmatch.hasMatch() && rxmatch.capturedStart(1) < commentIndex) {
+            if(rxmatch.hasMatch()) {
                 m_userTypeNames.insert(rxmatch.capturedView(1).toString());
                 setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1), nameFormat);
                 // 'struct' keyword will be formatted by the word loop via keywordLiterals
@@ -1073,9 +1041,7 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
             QRegularExpressionMatchIterator globalIt = globalRx.globalMatch(text);
             while(globalIt.hasNext()) {
                 auto m = globalIt.next();
-                if(m.capturedStart() < commentIndex) {
-                    registerGlobalTypedVar(m.capturedView(1), m.capturedView(2));
-                }
+                registerGlobalTypedVar(m.capturedView(1), m.capturedView(2));
             }
         }
 
