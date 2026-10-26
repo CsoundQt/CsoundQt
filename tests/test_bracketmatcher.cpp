@@ -316,6 +316,53 @@ private slots:
                  "the instrument outside the string should have its own colour");
     }
 
+    // Words inside a /* ... */ comment keep the comment colour, on the line
+    // that opens the comment as well as on the following lines.
+    void doesNotHighlightInsideMultilineComments()
+    {
+        const QString text = QStringLiteral(
+            "<CsInstruments>\n"
+            "opcode zinit2,0, ii\n"
+            "  /* init the system, similar to zakinit\n"
+            "\n"
+            "\t# Syntax\n"
+            "\n"
+            "\tzinit iasize, iksize\n"
+            "\n"
+            "  # Args\n"
+            "  * iasize - the number of audio buses\n"
+            "  * iksize - the number of scalar buses\n"
+            "  */\n"
+            "  iasize, iksize xin\n"
+            "  izinitdone chnget \"_z.initdone\"\n"
+            "endop\n"
+            "</CsInstruments>\n");
+
+        QTextDocument document;
+        document.setPlainText(text);
+        Highlighter highlighter(&document);
+        highlighter.setTheme(QStringLiteral("light"));
+
+        const QColor commentColour = colourAt(document, text.indexOf("/* init"));
+        QVERIFY2(commentColour.isValid(), "the comment should be painted");
+
+        // On the opening line ...
+        QCOMPARE(colourAt(document, text.indexOf("init the")), commentColour);
+        QCOMPARE(colourAt(document, text.indexOf("system")), commentColour);
+        QCOMPARE(colourAt(document, text.indexOf("zakinit")), commentColour);
+        // ... and on the continuation lines.
+        QCOMPARE(colourAt(document, text.indexOf("# Syntax")), commentColour);
+        QCOMPARE(colourAt(document, text.indexOf("zinit iasize")), commentColour);
+        QCOMPARE(colourAt(document, text.indexOf("the number of audio buses")),
+                 commentColour);
+
+        // The code after the comment is still highlighted normally.
+        const QColor variableColour = colourAt(document, text.indexOf("izinitdone"));
+        QVERIFY2(variableColour.isValid() && variableColour != commentColour,
+                 "the code after the comment should have its own colour");
+        QVERIFY(colourAt(document, text.indexOf("chnget")).isValid());
+    }
+
 private:
     // Runs the matcher over a piece of text and returns the marked pair.
     static QPair<int, int> match(const QString &text, int cursorPosition)
