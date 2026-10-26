@@ -32,6 +32,7 @@
 #include <QStandardPaths>
 #include <QSysInfo>
 #include <QProcess>
+#include <QSaveFile>
 #include <QShortcut>
 #include <QToolTip>
 #include <QScreen>
@@ -102,6 +103,29 @@
 using namespace Qt::StringLiterals;
 
 namespace {
+
+bool isUdoFile(const QString &fileName)
+{
+    return fileName.endsWith(".udo"_L1, Qt::CaseInsensitive);
+}
+
+bool isOrcFile(const QString &fileName)
+{
+    return fileName.endsWith(".orc"_L1, Qt::CaseInsensitive);
+}
+
+// Read a text file as UTF-8 with normalized newlines. Used by the .orc -> .csd
+// conversion so a Windows-style companion score does not end up in the wrapper.
+QString readUtf8TextFile(const QString &path)
+{
+    QFile file(path);
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+        return QString();
+    QString text = QString::fromUtf8(file.readAll());
+    text.replace("\r\n"_L1, "\n"_L1);
+    text.replace(QLatin1Char('\r'), QLatin1Char('\n'));
+    return text;
+}
 
 bool openUrlWithDiagnostics(const QString &feature, const QUrl &url)
 {
@@ -280,6 +304,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // "Go Back" (Alt+Left) belongs to the editor: while the widget panel has
     // focus, Alt+Left nudges the widget selection instead (see onFocusChanged).
     connect(qApp, &QApplication::focusChanged, this, &CsoundQt::onFocusChanged);
+    // Needed to keep the disabled shortcuts of a .udo from turning into an
+    // ambiguous shortcut or a silent no-op: eventFilter() explains them.
+    qApp->installEventFilter(this);
 
     m_console = new DockConsole(this);
     m_console->setObjectName("m_console");
@@ -2013,6 +2040,31 @@ void CsoundQt::resizeEvent(QResizeEvent *event)
 
 bool CsoundQt::eventFilter(QObject *obj, QEvent *event)
 {
+    // While a .udo is current its run actions are disabled. Catch their
+    // (single-chord) shortcuts before the shortcut map resolves them: accepting
+    // the ShortcutOverride makes Qt skip shortcut handling, and the following
+    // KeyPress is then replaced by the explanation banner. Doing this here also
+    // covers a sequence that another enabled action happens to share.
+    if ((event->type() == QEvent::ShortcutOverride
+         || event->type() == QEvent::KeyPress)
+            && !m_udoShortcutSequences.isEmpty()) {
+        DocumentPage *page = getCurrentDocumentPage();
+        if (page != nullptr && isUdoFile(page->getFileName())) {
+            auto *keyEvent = static_cast<QKeyEvent *>(event);
+            const QKeySequence pressed(keyEvent->keyCombination());
+            for (const QKeySequence &sequence : m_udoShortcutSequences) {
+                if (sequence.matches(pressed) != QKeySequence::ExactMatch)
+                    continue;
+                if (event->type() == QEvent::ShortcutOverride) {
+                    event->accept();
+                    return false;
+                }
+                showUdoNotRunnable();
+                return true;
+            }
+        }
+    }
+
     // A resize of a right-column dock is a divider drag only if the window
     // width did not change; otherwise it is just the window being resized and
     // the ratio must not be overwritten with the old pixel width.
@@ -2340,6 +2392,16 @@ void CsoundQt::play(bool realtime, int index)
     }
     curPage = index;
     auto page = documentPages[curPage];
+
+    // A .udo contains only opcode definitions: it has no instruments or score
+    // to perform. Check Syntax still goes through here and is allowed.
+    if (isUdoFile(page->getFileName()) && !m_options->checkSyntaxOnly) {
+        showUdoNotRunnable();
+        if (curPage == oldPage)
+            runAct->setChecked(false);
+        curPage = oldPage;
+        return;
+    }
 
     QFileInfo fileInfo(QFileInfo(page->getFileName()).path());
 
@@ -2793,6 +2855,11 @@ void CsoundQt::openRecoveredFile(const QString &path)
 
 void CsoundQt::runInTerm(bool realtime)
 {
+    if (isUdoFile(documentPages[curPage]->getFileName())) {
+        showUdoNotRunnable();
+        runAct->setChecked(false);
+        return;
+    }
     QString fileName = documentPages[curPage]->getFileName();
     QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "CsoundQtExample-XXXXXX.csd");
     tempFile.setAutoRemove(false);
@@ -2966,6 +3033,13 @@ void CsoundQt::record(bool rec) {
 void CsoundQt::record(bool rec, int index=-1)
 {
     if (index==-1) index=curPage;
+    if (rec && index >= 0 && index < documentPages.size()
+            && isUdoFile(documentPages[index]->getFileName())) {
+        showUdoNotRunnable();
+        QSignalBlocker blocker(recAct);
+        recAct->setChecked(false);
+        return;
+    }
     if (rec) {
         // A recording is written next to the document. Unnamed documents no
         // longer receive a temporary CSD name for playback, so ask for a real
@@ -3013,6 +3087,11 @@ void CsoundQt::sendEvent(int index, QString eventLine, double delay)
 
 void CsoundQt::render()
 {
+    if (curPage >= 0 && curPage < documentPages.size()
+            && isUdoFile(documentPages[curPage]->getFileName())) {
+        showUdoNotRunnable();
+        return;
+    }
     if (m_options->fileAskFilename) {
         QString defaultFile;
         if (m_options->fileOutputFilenameActive) {
@@ -4132,6 +4211,8 @@ void CsoundQt::openShortcutDialog()
     if(dialog.needsSave()) {
         writeSettings(QStringList(), 0);
     }
+    // The .udo shortcut guards mirror the current shortcut assignments.
+    updateFileTypeActions();
 }
 
 void CsoundQt::downloadManual()
@@ -5392,6 +5473,18 @@ void CsoundQt::createActions()
     saveNoWidgetsAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(saveNoWidgetsAct, SIGNAL(triggered()), this, SLOT(saveNoWidgets()));
 
+    switchOrcScoAct = new QAction(tr("Switch orc/sco"), this);
+    switchOrcScoAct->setStatusTip(
+                tr("Switch between the .orc and .sco files with the same name"));
+    switchOrcScoAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(switchOrcScoAct, SIGNAL(triggered()), this, SLOT(switchOrcSco()));
+
+    convertToCsdAct = new QAction(tr("Convert to .csd"), this);
+    convertToCsdAct->setStatusTip(
+                tr("Convert the current .orc to a .csd file"));
+    convertToCsdAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(convertToCsdAct, SIGNAL(triggered()), this, SLOT(convertToCsd()));
+
     closeTabAct = new QAction(tr("Close current tab"), this);
     closeTabAct->setStatusTip(tr("Close current tab"));
     //   closeTabAct->setIconText(tr("Close"));
@@ -6245,6 +6338,8 @@ void CsoundQt::createMenus()
     fileMenu->addAction(saveNoWidgetsAct);
     fileMenu->addAction(qmlAct);
     fileMenu->addAction(reloadAct);
+    fileMenu->addAction(switchOrcScoAct);
+    fileMenu->addAction(convertToCsdAct);
     fileMenu->addAction(closeTabAct);
     fileMenu->addAction(printAct);
     fileMenu->addAction(infoAct);
@@ -7809,6 +7904,186 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
     return true;
 }
 
+void CsoundQt::showUdoNotRunnable()
+{
+    Notification::showTransient(this, tr(".udo files cannot be run"), 3000);
+}
+
+void CsoundQt::updateFileTypeActions()
+{
+    DocumentPage *page = getCurrentDocumentPage();
+    const QString fileName = page ? page->getFileName() : QString();
+    const bool udo = isUdoFile(fileName);
+    const bool orc = isOrcFile(fileName);
+    const bool sco = fileName.endsWith(".sco"_L1, Qt::CaseInsensitive);
+
+    const QList<QAction *> performActions{
+        runAct, runTermAct, pauseAct, renderAct, recAct, stopAct
+    };
+    for (QAction *action : performActions)
+        action->setEnabled(!udo);
+
+    // Switching works in both directions; conversion is for .orc only.
+    if (switchOrcScoAct != nullptr)
+        switchOrcScoAct->setEnabled(orc || sco);
+    if (convertToCsdAct != nullptr)
+        convertToCsdAct->setEnabled(orc);
+
+    // A disabled QAction also disables its shortcut, so the normal shortcut
+    // never fires for a .udo. Install replacements for exactly those key
+    // sequences that explain why nothing happened. Rebuilding them here also
+    // picks up shortcut changes from the Keyboard Shortcuts dialog.
+    qDeleteAll(m_udoShortcutGuards);
+    m_udoShortcutGuards.clear();
+    m_udoShortcutSequences.clear();
+    if (!udo)
+        return;
+
+    QSet<QString> seen;
+    for (QAction *action : performActions) {
+        const QList<QKeySequence> sequences = action->shortcuts();
+        for (const QKeySequence &sequence : sequences) {
+            if (sequence.isEmpty())
+                continue;
+            const QString key = sequence.toString(QKeySequence::PortableText);
+            if (seen.contains(key))
+                continue;
+            seen.insert(key);
+            if (sequence.count() == 1)
+                m_udoShortcutSequences.append(sequence);
+            auto *guard = new QShortcut(sequence, this);
+            guard->setContext(Qt::ApplicationShortcut);
+            connect(guard, &QShortcut::activated,
+                    this, &CsoundQt::showUdoNotRunnable);
+            m_udoShortcutGuards.append(guard);
+        }
+    }
+}
+
+void CsoundQt::switchOrcSco()
+{
+    DocumentPage *page = getCurrentDocumentPage();
+    if (page == nullptr)
+        return;
+    const QFileInfo sourceInfo(page->getFileName());
+    const QString sourceName = sourceInfo.fileName();
+    QString targetExtension;
+    if (isOrcFile(sourceName))
+        targetExtension = ".sco"_L1;
+    else if (sourceName.endsWith(".sco"_L1, Qt::CaseInsensitive))
+        targetExtension = ".orc"_L1;
+    else
+        return;
+
+    const QString targetName = sourceInfo.completeBaseName() + targetExtension;
+    const QString targetFileName =
+            QDir(sourceInfo.absolutePath()).filePath(targetName);
+    if (!QFile::exists(targetFileName)) {
+        Notification::showTransient(this,
+            tr("No corresponding %1 found in %2")
+                    .arg(targetName, sourceInfo.absolutePath()),
+            5000);
+        return;
+    }
+
+    const int openIndex = isOpen(targetFileName);
+    if (openIndex != -1) {
+        documentTabs->setCurrentIndex(openIndex);
+        return;
+    }
+    loadFile(targetFileName);
+    // Opening a lone .orc or .sco also opens its companion (and therefore
+    // switches to it). The action's purpose is the opposite, so select the
+    // requested file again once loading has settled.
+    const int loadedIndex = isOpen(targetFileName);
+    if (loadedIndex != -1 && loadedIndex != documentTabs->currentIndex())
+        documentTabs->setCurrentIndex(loadedIndex);
+}
+
+void CsoundQt::convertToCsd()
+{
+    DocumentPage *page = getCurrentDocumentPage();
+    if (page == nullptr)
+        return;
+    const QFileInfo orcInfo(page->getFileName());
+    if (!isOrcFile(orcInfo.fileName()))
+        return;
+
+    const QString directory = orcInfo.absolutePath();
+    const QString baseName = orcInfo.completeBaseName();
+    const QString scoreFileName =
+            QDir(directory).filePath(baseName + ".sco"_L1);
+    const QString destination =
+            QDir(directory).filePath(baseName + ".csd"_L1);
+
+    QString orchestra = page->getBasicText();
+    if (!orchestra.isEmpty() && !orchestra.endsWith(QLatin1Char('\n')))
+        orchestra += QLatin1Char('\n');
+
+    QString score;
+    const int scoreOpenIndex = isOpen(scoreFileName);
+    if (scoreOpenIndex != -1) {
+        // Prefer the editor state so unsaved score edits end up in the .csd.
+        score = documentPages[scoreOpenIndex]->getBasicText();
+    }
+    else if (QFile::exists(scoreFileName)) {
+        score = readUtf8TextFile(scoreFileName);
+    }
+    if (!score.isEmpty() && !score.endsWith(QLatin1Char('\n')))
+        score += QLatin1Char('\n');
+
+    const int openIndex = isOpen(destination);
+    if (QFile::exists(destination)) {
+        QString message = tr("%1 already exists. Overwrite it?").arg(destination);
+        if (openIndex != -1 && documentPages[openIndex]->isModified())
+            message += u"\n\n"_s
+                    + tr("The open .csd has unsaved changes that will be discarded.");
+        if (QMessageBox::question(this, tr("Convert to .csd"), message,
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  QMessageBox::No) != QMessageBox::Yes) {
+            return;
+        }
+    }
+
+    QString csd = u"<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n"
+                  "<CsInstruments>\n"_s;
+    csd += orchestra;
+    csd += u"</CsInstruments>\n<CsScore>\n"_s;
+    csd += score;
+    csd += u"</CsScore>\n</CsoundSynthesizer>\n"_s;
+
+    QSaveFile file(destination);
+    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr("Convert to .csd"),
+                             tr("Cannot write file %1:\n%2.")
+                             .arg(destination, file.errorString()));
+        return;
+    }
+    const QByteArray utf8 = csd.toUtf8();
+    if (file.write(utf8) != utf8.size() || !file.commit()) {
+        QMessageBox::warning(this, tr("Convert to .csd"),
+                             tr("Cannot write file %1:\n%2.")
+                             .arg(destination, file.errorString()));
+        return;
+    }
+
+    // The write is ours: keep the file watcher from treating it as an external
+    // change, and make sure an already open .csd is refreshed in place.
+    m_selfSavedPaths.insert(destination);
+    m_fileWatcher->addPath(destination);
+    if (openIndex != -1) {
+        DocumentPage *target = documentPages[openIndex];
+        target->loadTextString(csd);
+        target->setModified(false);
+        documentTabs->setCurrentIndex(openIndex);
+    }
+    else {
+        loadFile(destination);
+    }
+    Notification::showTransient(this,
+            tr("Converted %1 to %2").arg(orcInfo.fileName(), destination), 4000);
+}
+
 void CsoundQt::setCurrentFile(const QString &fileName)
 {
     QString shownName;
@@ -7834,6 +8109,7 @@ void CsoundQt::setCurrentFile(const QString &fileName)
     }
     documentTabs->setTabToolTip(curPage, toolTip);
     updateTabText(curPage);
+    updateFileTypeActions();
     //  updateWidgets();
 }
 

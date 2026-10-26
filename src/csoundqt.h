@@ -25,6 +25,7 @@
 #define QUTECSOUND_H
 
 #include <QtWidgets>
+#include <QKeySequence>
 #include <QQuickWidget>
 #include <QQuickItem>
 
@@ -46,6 +47,7 @@
 
 class QAction;
 class QMenu;
+class QShortcut;
 class QTextEdit;
 class QFileSystemWatcher;
 class QLockFile;
@@ -198,6 +200,10 @@ public slots:
 	//    void updateWidgets();
 	void openExample();
 	void openTemplate();
+	// Switch between same-named .orc and .sco files in the same folder.
+	void switchOrcSco();
+	// Write a .csd wrapper around the current .orc (and its companion score).
+	void convertToCsd();
     void statusBarMessage(QString message);
 	//    void registerLiveEvent(QWidget *e);
 	void evaluateCsound(QString code = QString());
@@ -387,6 +393,10 @@ private:
     //    bool saveCurrent();
 	bool makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);
+	// Enable/disable the actions that only make sense for some file types and
+	// install the shortcut guards that explain why a .udo cannot be performed.
+	void updateFileTypeActions();
+	void showUdoNotRunnable();
 	void setCurrentFile(const QString &fileName);
 	// Compose the window title from the current file and the
 	// "Include active file in the window title" setting.
@@ -480,6 +490,13 @@ private:
 	MidiHandler *midiHandler;
 	MidiLearnDialog *m_midiLearn;
 	QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
+	// Replacement shortcuts shown while a .udo is active. The run actions are
+	// disabled, so their real shortcuts do not fire; these only explain why.
+	// Single-chord sequences are intercepted by eventFilter() (so a sequence
+	// shared with an enabled action cannot become ambiguous); the QShortcuts
+	// cover multi-chord sequences.
+	QList<QShortcut *> m_udoShortcutGuards;
+	QList<QKeySequence> m_udoShortcutSequences;
 	QMenu *fileMenu;
 	QMenu *recentMenu;
 	QMenu *templateMenu;
@@ -499,6 +516,8 @@ private:
 	QAction *saveAct;
 	QAction *saveAsAct;
 	QAction *saveNoWidgetsAct;
+	QAction *switchOrcScoAct = nullptr;
+	QAction *convertToCsdAct = nullptr;
 	QAction *closeTabAct;
 	QAction *printAct;
 	QAction *infoAct;
