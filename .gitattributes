@@ -1,0 +1,4 @@
+# Shell scripts must keep LF endings: Git for Windows defaults to
+# core.autocrlf=true, and a CRLF shebang makes the script fail with
+# "/usr/bin/env: 'bash\r': No such file or directory" (also on the Windows CI).
+*.sh text eol=lf

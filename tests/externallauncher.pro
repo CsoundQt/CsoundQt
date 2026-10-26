@@ -1,8 +1,12 @@
-# Unit tests that do not need Csound or the full CsoundQt build.
+# Unit tests for opening links in an external browser / the system default
+# application (no Csound, no full CsoundQt build).
 #
-# Build and run:
+# Build and run all tests:  tests/run-tests.sh
+# Build and run this one:   tests/run-tests.sh --only externallauncher
+#
+# Or manually:
 #   mkdir build && cd build
-#   qmake ../tests/tests.pro CONFIG+=release
+#   qmake ../tests/externallauncher.pro CONFIG+=release
 #   make
 #   QT_QPA_PLATFORM=offscreen ./test_externallauncher
 

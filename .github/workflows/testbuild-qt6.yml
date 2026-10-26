@@ -405,6 +405,14 @@ jobs:
           name: CsoundQt-${{ matrix.os }}-${{ strategy.job-index }}
           path: artifacts/*
 
+      # test_opcodes needs the Csound API headers at compile time only. They
+      # are available here, where Csound is built/installed above - unlike in
+      # the unit-tests job, which skips this test. The script finds the headers
+      # per platform (/usr/local/include/csound, the macOS framework or
+      # csound7/include/csound on Windows).
+      - name: unit test opcodes
+        run: bash tests/run-tests.sh --only opcodes
+
   buildjob-htmlsupport-linux:
     name: Test Build CsoundQt HTML5 GUI (QtWebEngine, html_support)
     runs-on: ubuntu-24.04
@@ -612,12 +620,12 @@ jobs:
             qcs.pro
           make -j$(nproc)
 
-  # Fast, self-contained tests for opening links / .html files in a configured
-  # browser or the system default application (src/externallauncher.cpp).
-  # No Csound or full CsoundQt build needed, so this covers macOS and Windows
-  # where the behavior differs (e.g. the macOS .app bundle default).
-  external-launch-tests:
-    name: External open tests on ${{ matrix.os }}
+  # Unit tests from tests/. They need Qt and the CsoundQt sources only - no
+  # Csound runtime and no full CsoundQt build. test_opcodes is the exception:
+  # it needs the Csound API headers at compile time, so it is skipped here and
+  # runs in the buildjob jobs, which build and install Csound anyway.
+  unit-tests:
+    name: Unit tests on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -671,59 +679,14 @@ jobs:
         with:
           arch: x64
 
-      - name: Build and run external open tests (unix)
-        if: runner.os != 'Windows'
-        env:
-          QT_QPA_PLATFORM: offscreen
-        run: |
-          set -euo pipefail
-          qmake --version
-          mkdir -p tests-build
-          cd tests-build
-          qmake ../tests/tests.pro CONFIG+=release
-          if command -v nproc >/dev/null 2>&1; then
-            JOBS=$(nproc)
-          else
-            JOBS=$(sysctl -n hw.logicalcpu)
-          fi
-          make -j"${JOBS}"
-          ./test_externallauncher -v2
+      - name: Build and run unit tests
+        run: bash tests/run-tests.sh --build-dir "$GITHUB_WORKSPACE/tests-build"
 
-      - name: Build and run external open tests (windows)
-        if: runner.os == 'Windows'
-        env:
-          QT_QPA_PLATFORM: offscreen
-        run: |
-          set -euo pipefail
-          qmake --version
-          mkdir -p tests-build
-          cd tests-build
-          qmake ../tests/tests.pro CONFIG+=release
-          # MSYS/Git-bash puts /usr/bin first, where `link` is GNU coreutils'
-          # link, not MSVC's link.exe. Filter those entries out before nmake,
-          # as the main windows build job does.
-          NMAKE_PATH=""
-          while IFS= read -r p; do
-            case "${p}" in
-              */usr/bin|/usr/bin|*/bin|/bin|*/mingw*/bin) ;;
-              *) NMAKE_PATH="${NMAKE_PATH}:${p}" ;;
-            esac
-          done < <(printf '%s' "${PATH}" | tr ':' '\n')
-          NMAKE_PATH="${NMAKE_PATH#:}"
-          env PATH="${NMAKE_PATH}" nmake
-          EXE=$(find . -maxdepth 2 -iname 'test_externallauncher*.exe' -type f | head -1)
-          test -n "${EXE}" || { echo "test executable not found"; ls -R .; exit 1; }
-          # The QtTest banner/Totals printed by the test executable are not
-          # reliably captured in the Windows runner log. Ask QtTest to also
-          # write the results to a file and print that file here, so the
-          # outcome is always visible, while still propagating the exit code.
-          set +e
-          "${EXE}" -v2 -o test-results.txt,txt
-          rc=$?
-          set -e
-          echo "test_externallauncher exit code: ${rc}"
-          echo "----- test_externallauncher results -----"
-          cat test-results.txt || true
-          echo "----- end of test_externallauncher results -----"
-          exit "${rc}"
+      - name: Upload unit test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-logs-${{ matrix.os }}
+          path: tests-build/**/*.log
+          if-no-files-found: ignore
 
