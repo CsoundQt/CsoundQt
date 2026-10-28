@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -206,6 +207,7 @@ public:
                 int idx = (currentPos + i) % size;
                 buffer[idx] = data[i] * scaleFactor;
             }
+            
         } else {
             for(int i=0; i<dataSize; i++) {
                 int idx = (currentPos + i) % size;
