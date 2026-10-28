@@ -62,7 +62,6 @@
 #include "editorthemes.h"
 #include "widgetpanel.h"
 #include "utilitiesdialog.h"
-#include "keyboardshortcuts.h"
 #include "about.h"
 #include "midihandler.h"
 #include "midilearndialog.h"
@@ -2213,7 +2212,7 @@ void CsoundQt::ambiguosShortcut()
     QMessageBox::warning(this, tr("Shortcuts changed"),
         tr("Ambiguous shortcut. In version 0.9.5 some shortcuts changed, please configure "
            "the shourtcuts or set to defaults "
-           "(Edit/Configure shortcuts/Restore Defaults) "));
+           "(Configuration/Shortcuts/Restore Defaults) "));
 
 }
 
@@ -4323,27 +4322,6 @@ void CsoundQt::reportCsoundBug()
     openExternalBrowser(QUrl("https://github.com/csound/csound/issues"));
 }
 
-void CsoundQt::openShortcutDialog()
-{
-    KeyboardShortcuts dialog(this, m_keyActions);
-    connect(&dialog, SIGNAL(restoreDefaultShortcuts()), this, SLOT(setDefaultKeyboardShortcuts()));
-    // The list is long enough that the size the user chose is worth keeping.
-    QSettings settings("csoundqt", "csoundqt");
-    settings.beginGroup("GUI");
-    const QSize savedSize = settings.value("shortcutsDialogSize").toSize();
-    if (savedSize.isValid()) {
-        dialog.resize(savedSize);
-    }
-    dialog.exec();
-    settings.setValue("shortcutsDialogSize", dialog.size());
-    settings.endGroup();
-    if(dialog.needsSave()) {
-        writeSettings(QStringList(), 0);
-    }
-    // The .udo shortcut guards mirror the current shortcut assignments.
-    updateFileTypeActions();
-}
-
 void CsoundQt::downloadManual()
 {
     if (m_manualDownloadInProgress)
@@ -4658,7 +4636,8 @@ void CsoundQt::documentWasModified(bool status)
 
 void CsoundQt::configure()
 {
-    ConfigDialog dialog(this,  m_options, &m_configlists);
+    ConfigDialog dialog(this,  m_options, &m_configlists, m_keyActions,
+                        m_defaultShortcuts);
     dialog.setCurrentTab(configureTab);
     // dialog.newParserCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.multicoreCheckBox->setEnabled(csoundGetVersion() > 5125);
@@ -4667,11 +4646,24 @@ void CsoundQt::configure()
             this, SLOT(applySettings()));
     connect(&dialog, SIGNAL(disableInternalRtMidi()),
             this, SLOT(disableInternalRtMidi()) );
+    connect(&dialog, SIGNAL(restoreDefaultShortcuts()),
+            this, SLOT(setDefaultKeyboardShortcuts()));
     connect(dialog.testAudioSetupButton, SIGNAL(released()),
             this, SLOT(testAudioSetup()));
-    if (dialog.exec() == QDialog::Accepted) {
+    const int result = dialog.exec();
+    // Shortcuts are applied and permanent as soon as they are assigned, so
+    // they are kept whatever button closes the dialog: store them even on
+    // Cancel, where nothing else is written.
+    const bool shortcutsChanged = dialog.shortcutsModified();
+    if (result == QDialog::Accepted) {
         applySettings();
         storeSettings();
+    } else if (shortcutsChanged) {
+        writeSettings(QStringList(), 0);
+    }
+    if (shortcutsChanged) {
+        // The .udo shortcut guards mirror the current assignments.
+        updateFileTypeActions();
     }
     configureTab = dialog.currentTab();
 }
@@ -5713,8 +5705,8 @@ void CsoundQt::createActions()
     connect(getToInAct, SIGNAL(triggered()), this, SLOT(getToIn()));
 
     // Experimental channel probe. It deliberately has no menu entry yet, but
-    // it is registered with the global actions so it appears in Edit/Keyboard
-    // Shortcuts and can be rebound there.
+    // it is registered with the global actions so it appears in the Shortcuts
+    // page of the configuration and can be rebound there.
     highlightWidgetChannelAct = new QAction(tr("Highlight Widgets for Channel"), this);
     highlightWidgetChannelAct->setStatusTip(tr("Outline widgets using the literal channel at the cursor"));
     highlightWidgetChannelAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -6083,12 +6075,6 @@ void CsoundQt::createActions()
     showUtilitiesAct->setIconText(tr("Utilities"));
     showUtilitiesAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showUtilitiesAct, SIGNAL(triggered(bool)), this, SLOT(showUtilities(bool)));
-
-    setShortcutsAct = new QAction(tr("Keyboard Shortcuts"), this);
-    setShortcutsAct->setStatusTip(tr("Set Keyboard Shortcuts"));
-    setShortcutsAct->setIconText(tr("Set Shortcuts"));
-    setShortcutsAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(setShortcutsAct, SIGNAL(triggered()), this, SLOT(openShortcutDialog()));
 
     commentAct = new QAction(tr("Comment/Uncomment"), this);
     commentAct->setStatusTip(tr("Comment/Uncomment selection"));
@@ -6596,7 +6582,6 @@ void CsoundQt::createMenus()
     editMenu->addAction(editAct);
     editMenu->addSeparator();
     editMenu->addAction(configureAct);
-    editMenu->addAction(setShortcutsAct);
 
     controlMenu = menuBar()->addMenu(tr("Control"));
     controlMenu->addAction(runAct);
@@ -7100,6 +7085,12 @@ void CsoundQt::readSettings()
     }
     recentFiles = uniqueRecentFiles;
     setDefaultKeyboardShortcuts();
+    // Remember the defaults before the stored assignments replace them: the
+    // Shortcuts page marks deviations from them and can restore a row.
+    m_defaultShortcuts.clear();
+    for (QAction *action : m_keyActions) {
+        m_defaultShortcuts.insert(action, action->shortcut());
+    }
     QHash<QString, QVariant> actionList = settings.value("shortcuts").toHash();
 
     if (actionList.count() != 0) {
@@ -8158,7 +8149,7 @@ void CsoundQt::updateFileTypeActions()
     // A disabled QAction also disables its shortcut, so the normal shortcut
     // never fires for a .udo. Install replacements for exactly those key
     // sequences that explain why nothing happened. Rebuilding them here also
-    // picks up shortcut changes from the Keyboard Shortcuts dialog.
+    // picks up shortcut changes from the configuration dialog.
     qDeleteAll(m_udoShortcutGuards);
     m_udoShortcutGuards.clear();
     m_udoShortcutSequences.clear();

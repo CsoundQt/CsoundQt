@@ -50,25 +50,27 @@ QString shortcutName(QAction *action)
 }
 }
 
-KeyboardShortcuts::KeyboardShortcuts(QWidget *parent, const QVector<QAction *> keyActions)
-	: QDialog(parent), m_keyActions(keyActions)
+KeyboardShortcutsWidget::KeyboardShortcutsWidget(QWidget *parent,
+												 const QVector<QAction *> keyActions,
+												 const QHash<QAction *, QKeySequence> &defaultShortcuts)
+	: QWidget(parent), m_keyActions(keyActions), m_defaultShortcuts(defaultShortcuts)
 {
     m_modified = false;
 	setupUi(this);
-	setWindowTitle(tr("Keyboard Shortcuts"));
+	// The row number says nothing: the action name is the identity here.
+	tableWidget->verticalHeader()->setVisible(false);
 	// The .ui leaves the header texts empty, and Qt then numbers the columns.
 	tableWidget->setHorizontalHeaderLabels(QStringList{
 			tr("Action"), tr("Shortcut")});
-	//   QDialog::setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 	connect(restorePushButton, SIGNAL(released()), this, SLOT(restoreDefaults()));
 	connect(tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(assignShortcut(int, int)));
 	// Incremental filter: hide rows that match neither action nor shortcut text,
 	// cf. QuteWidget::showAvailableProperties()
-	connect(filterLineEdit, &QLineEdit::textChanged, this, &KeyboardShortcuts::filterTable);
+	connect(filterLineEdit, &QLineEdit::textChanged, this, &KeyboardShortcutsWidget::filterTable);
 	refreshTable();
 }
 
-void KeyboardShortcuts::refreshTable()
+void KeyboardShortcutsWidget::refreshTable()
 {
 	tableWidget->setColumnWidth(0, 320);
 	tableWidget->setColumnWidth(1, 170);
@@ -86,12 +88,13 @@ void KeyboardShortcuts::refreshTable()
 		}
 		name->setText(shortcutName(m_keyActions[i]));
 		key->setText(m_keyActions[i]->shortcut().toString());
+		formatShortcutItem(i, m_keyActions[i]);
 	}
     tableWidget->sortItems(0);
 	filterTable(filterLineEdit->text());
 }
 
-void KeyboardShortcuts::filterTable(const QString &filter)
+void KeyboardShortcutsWidget::filterTable(const QString &filter)
 {
 	for (int row = 0; row < tableWidget->rowCount(); row++) {
 		QTableWidgetItem *name = tableWidget->item(row, 0);
@@ -106,7 +109,7 @@ void KeyboardShortcuts::filterTable(const QString &filter)
 
 // The rows whose shortcut cannot coexist with this one: the same sequence, or
 // one that is a prefix of the other (Qt would fire the shorter one at once).
-QList<int> KeyboardShortcuts::conflictingRows(const QString &shortcut,
+QList<int> KeyboardShortcutsWidget::conflictingRows(const QString &shortcut,
 											  int excludeRow) const
 {
 	QList<int> rows;
@@ -130,7 +133,7 @@ QList<int> KeyboardShortcuts::conflictingRows(const QString &shortcut,
 // The dialog only has a Close button, so every change is written to the action
 // at the moment it is made instead of being collected and applied when the
 // window goes away.
-void KeyboardShortcuts::applyShortcut(const QString &actionName,
+void KeyboardShortcutsWidget::applyShortcut(const QString &actionName,
 									  const QString &shortcut)
 {
 	for (QAction *action : m_keyActions) {
@@ -141,7 +144,42 @@ void KeyboardShortcuts::applyShortcut(const QString &actionName,
 	}
 }
 
-void KeyboardShortcuts::restoreDefaults()
+// Rows are sorted by the action name, so the row index says nothing about the
+// order of m_keyActions.
+QAction *KeyboardShortcutsWidget::actionForRow(int row) const
+{
+	QTableWidgetItem *nameItem = tableWidget->item(row, 0);
+	if (nameItem == nullptr)
+		return nullptr;
+	const QString name = nameItem->text();
+	for (QAction *action : m_keyActions) {
+		if (shortcutName(action) == name)
+			return action;
+	}
+	return nullptr;
+}
+
+void KeyboardShortcutsWidget::formatShortcutItem(int row, QAction *action)
+{
+	QTableWidgetItem *item = tableWidget->item(row, 1);
+	if (item == nullptr)
+		return;
+	const bool hasDefault = action != nullptr && m_defaultShortcuts.contains(action);
+	const QKeySequence defaultShortcut = hasDefault
+			? m_defaultShortcuts.value(action) : QKeySequence();
+	// A shortcut that differs from its built-in assignment is shown in bold,
+	// with the default at hand in a tooltip.
+	const bool modified = hasDefault && action->shortcut() != defaultShortcut;
+	QFont font = item->font();
+	font.setBold(modified);
+	item->setFont(font);
+	item->setToolTip(modified
+			? tr("Default: %1").arg(defaultShortcut.isEmpty()
+									? tr("None") : defaultShortcut.toString())
+			: QString());
+}
+
+void KeyboardShortcutsWidget::restoreDefaults()
 {
 	emit restoreDefaultShortcuts();  // To have the main application restore the default shortcuts in the m_keyActions pointer
 	// Defaults are new values too, and must be stored when the dialog closes.
@@ -149,7 +187,7 @@ void KeyboardShortcuts::restoreDefaults()
 	refreshTable();
 }
 
-void KeyboardShortcuts::assignShortcut(int row, int /*column*/)
+void KeyboardShortcutsWidget::assignShortcut(int row, int /*column*/)
 {
 	Q_ASSERT(m_keyActions.size() > row);
 	Q_ASSERT(tableWidget->rowCount() > row);
@@ -165,7 +203,13 @@ void KeyboardShortcuts::assignShortcut(int row, int /*column*/)
 	}
 	QString name = nameItem->text();
 	QString key = keyitem->text();
-	KeySelector dialog(this, name, key);
+	// A shortcut that differs from its default offers the default (and a way
+	// back to it) in the key selector.
+	QAction *action = actionForRow(row);
+	const bool hasDefault = action != nullptr && m_defaultShortcuts.contains(action);
+	const QKeySequence defaultShortcut = hasDefault
+			? m_defaultShortcuts.value(action) : QKeySequence();
+	KeySelector dialog(this, name, key, defaultShortcut, hasDefault);
 	if (dialog.exec() == QDialog::Accepted) {
 		// A shortcut belongs to one action. Rather than refuse the assignment,
 		// name the actions that hold it and let the user take it over.
@@ -209,10 +253,12 @@ void KeyboardShortcuts::assignShortcut(int row, int /*column*/)
 				}
 				applyShortcut(conflictName != nullptr
 							  ? conflictName->text() : QString(), QString());
+				formatShortcutItem(conflictRow, actionForRow(conflictRow));
 			}
 		}
 		keyitem->setText(dialog.newShortcut);
 		applyShortcut(name, dialog.newShortcut);
+		formatShortcutItem(row, action);
         m_modified = true;
 		//    refreshTable();
 	}
@@ -220,8 +266,10 @@ void KeyboardShortcuts::assignShortcut(int row, int /*column*/)
 
 /* ---------------------------------------------------*/
 
-KeySelector::KeySelector(QWidget *parent, QString command, QString currentShortcut)
-	: QDialog(parent)
+KeySelector::KeySelector(QWidget *parent, const QString &command,
+						 const QString &currentShortcut,
+						 const QKeySequence &defaultShortcut, bool hasDefault)
+	: QDialog(parent), m_defaultShortcut(defaultShortcut)
 {
 	setupUi(this);
 	setWindowTitle(tr("Press Key Combination"));
@@ -230,14 +278,56 @@ KeySelector::KeySelector(QWidget *parent, QString command, QString currentShortc
 	// QKeySequenceEdit supports multi-chord sequences (e.g. "Ctrl+T, E").
 	keySequenceEdit->setKeySequence(QKeySequence(currentShortcut));
 	keySequenceEdit->setFocus();
+	// Escape is used to dismiss the dialog, so it must never become part of
+	// the shortcut; the editor would record it like any other key.
+	keySequenceEdit->installEventFilter(this);
+	// The default is only worth a line of its own when the action deviates
+	// from it; restoring writes the default and closes the dialog at once.
+	const bool modified = hasDefault
+			&& QKeySequence(currentShortcut) != defaultShortcut;
+	if (modified) {
+		defaultLabel->setText(defaultShortcut.isEmpty()
+							  ? tr("None") : defaultShortcut.toString());
+		connect(restoreButton, &QPushButton::clicked, this, [this]() {
+			keySequenceEdit->setKeySequence(m_defaultShortcut);
+			accept();
+		});
+	} else {
+		defaultCaptionLabel->hide();
+		defaultLabel->hide();
+		restoreButton->hide();
+	}
 }
 
 KeySelector::~KeySelector()
 {
 }
 
+bool KeySelector::eventFilter(QObject *watched, QEvent *event)
+{
+	if (watched == keySequenceEdit && event->type() == QEvent::KeyPress) {
+		auto *keyEvent = static_cast<QKeyEvent *>(event);
+		// Escape is a dialog key, not a shortcut key: with modifiers or in the
+		// middle of a sequence it still means "close without assigning".
+		if (keyEvent->key() == Qt::Key_Escape) {
+			reject();
+			return true;
+		}
+	}
+	return QDialog::eventFilter(watched, event);
+}
+
 void KeySelector::accept()
 {
-	newShortcut = keySequenceEdit->keySequence().toString();
+	const QKeySequence sequence = keySequenceEdit->keySequence();
+	// Belt and braces for a sequence that got in another way (set by code):
+	// a shortcut containing Escape is never accepted.
+	for (int i = 0; i < sequence.count(); ++i) {
+		if (sequence[i].key() == Qt::Key_Escape) {
+			reject();
+			return;
+		}
+	}
+	newShortcut = sequence.toString();
 	QDialog::accept();
 }

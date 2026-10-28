@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>KeyboardShortcuts</class>
- <widget class="QDialog" name="KeyboardShortcuts">
-  <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
-  </property>
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>496</width>
-    <height>517</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Keyboard Shortcuts</string>
-  </property>
+ <widget class="QWidget" name="KeyboardShortcuts">
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QLineEdit" name="filterLineEdit">
@@ -73,34 +59,10 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>Close</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>cancelButton</sender>
-   <signal>clicked()</signal>
-   <receiver>KeyboardShortcuts</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>399</x>
-     <y>483</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>179</x>
-     <y>282</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

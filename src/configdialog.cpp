@@ -38,6 +38,7 @@
 #include "debuglog.h"
 #include "editorthemes.h"
 #include "externallauncher.h"
+#include "keyboardshortcuts.h"
 using namespace Qt::StringLiterals;
 
 
@@ -89,13 +90,20 @@ static ChannelReferenceHighlightMode channelReferenceHighlightModeFromIndex(int 
 	return ChannelReferenceHighlightMode::Always;
 }
 
-ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *configlists)
+ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *configlists,
+						   const QVector<QAction *> &keyActions,
+						   const QHash<QAction *, QKeySequence> &defaultShortcuts)
 	: QDialog(parent), m_parent(parent), m_options(options), m_configlists(configlists)
 {
 	setupUi(this);
     // don't expand over screen, leave some room for panels
     setMaximumSize(  QGuiApplication::primaryScreen()->geometry().width()  * 0.9,
                    QGuiApplication::primaryScreen()->geometry().height() * 0.9);
+
+    m_shortcutsWidget = new KeyboardShortcutsWidget(this, keyActions, defaultShortcuts);
+    shortcutsTabLayout->addWidget(m_shortcutsWidget);
+    connect(m_shortcutsWidget, &KeyboardShortcutsWidget::restoreDefaultShortcuts,
+            this, &ConfigDialog::restoreDefaultShortcuts);
 
     // "Tab Size" applies in both modes: it is the width of a tab character and,
     // when spaces are inserted, the number of spaces a Tab press inserts.
@@ -705,9 +713,14 @@ void ConfigDialog::warnOpcodeDir(bool on)
 
 void ConfigDialog::setCurrentTab(int index)
 {
-	if (index >= 0 && index < 4) {
+	if (index >= 0 && index < editorTabWidget->count()) {
 		editorTabWidget->setCurrentIndex(index);
 	}
+}
+
+bool ConfigDialog::shortcutsModified() const
+{
+	return m_shortcutsWidget != nullptr && m_shortcutsWidget->needsSave();
 }
 
 void ConfigDialog::accept()

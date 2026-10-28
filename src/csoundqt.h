@@ -63,7 +63,6 @@ class ConfigLists;
 class DocumentPage;
 class UtilitiesDialog;
 class Curve;
-class KeyboardShortcuts;
 class EventDispatcher;
 class EventSheet;
 class CsoundEngine;
@@ -305,7 +304,6 @@ private slots:
 	void resetPreferences();
 	void reportBug();
     void reportCsoundBug();
-    void openShortcutDialog();
 	void downloadManual();
 	void about();
 	void donate();
@@ -503,6 +501,9 @@ private:
 	MidiHandler *midiHandler;
 	MidiLearnDialog *m_midiLearn;
 	QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
+	// Shortcuts the actions had before the stored assignments were applied.
+	// The Shortcuts page marks deviations from them and can restore a row.
+	QHash<QAction *, QKeySequence> m_defaultShortcuts;
 	// Replacement shortcuts shown while a .udo is active. The run actions are
 	// disabled, so their real shortcuts do not fire; these only explain why.
 	// Single-chord sequences are intercepted by eventFilter() (so a sequence
@@ -555,7 +556,6 @@ private:
 	QAction *findAgainAct;
 	QAction *findPreviousAct;
 	QAction *configureAct;
-	QAction *setShortcutsAct;
 	QAction *editAct;
 	QAction *runAct;
     QAction *checkSyntaxAct;

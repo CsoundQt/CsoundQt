@@ -3066,6 +3066,12 @@
            </item>
           </layout>
          </widget>
+         <widget class="QWidget" name="shortcutsTab">
+          <attribute name="title">
+           <string>Shortcuts</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="shortcutsTabLayout"/>
+         </widget>
          <widget class="QWidget" name="tab_3">
           <attribute name="title">
            <string>Environment</string>

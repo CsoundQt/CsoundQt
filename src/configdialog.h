@@ -28,6 +28,8 @@
 class CsoundQt;
 class Options;
 class ConfigLists;
+class QAction;
+class KeyboardShortcutsWidget;
 
 constexpr int ORCHESTRA = 0; // instead of macros
 constexpr int SYSTEM = 1;  // and lazy for using enum...
@@ -36,11 +38,16 @@ class ConfigDialog : public QDialog, public Ui::ConfigDialog
 {
 	Q_OBJECT
 public:
-	ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *configlists);
+	ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *configlists,
+				 const QVector<QAction *> &keyActions,
+				 const QHash<QAction *, QKeySequence> &defaultShortcuts);
 
 	~ConfigDialog();
 	int currentTab();
 	void setCurrentTab(int index);
+	// Whether a shortcut was assigned while the dialog was open. Those changes
+	// are immediate: they are kept whatever button closes the dialog.
+	bool shortcutsModified() const;
 
 
 
@@ -52,6 +59,7 @@ private:
 	CsoundQt* m_parent;
 	Options *m_options;
 	ConfigLists *m_configlists;
+	KeyboardShortcutsWidget *m_shortcutsWidget = nullptr;
 	void browseFile(QString &destination);
 	void browseSaveFile(QString &destination);
 	void browseDir(QString &destination);
@@ -107,6 +115,9 @@ private slots:
 
 signals:
 	void disableInternalRtMidi();
+	// Restore Defaults pressed in the Shortcuts tab; the application owns the
+	// default assignments.
+	void restoreDefaultShortcuts();
 	//    void changeFont();
 
 };
