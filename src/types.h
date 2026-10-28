@@ -132,8 +132,8 @@ public:
     QString outArgs;
     QString inArgs;
     QString desc;
-    int isFlag;
-    bool isInstalled;
+    int isFlag = 0;
+    bool isInstalled = true;
     bool deprecated = false;  // superseded name or opcode the manual marks as deprecated
     // Csound 7 UDO signature ("opcode Foo(a:i):k"): inArgs is the parameter
     // name list and outArgs the output type list, and calls use function
