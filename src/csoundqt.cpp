@@ -48,6 +48,7 @@
 #include "console.h"
 #include "dockhelp.h"
 #include "codescan.h"
+#include "markdown.h"
 #include "scanservice.h"
 #include "includecache.h"
 #include "documentpage.h"
@@ -216,6 +217,43 @@ QString formatRenderDuration(double seconds)
     return u"%1 s"_s.arg(seconds, 0, 'f', 2);
 }
 
+// The body of an ad-hoc help page for a scanned definition (a UDO or an
+// instrument). The page title is added by whoever shows the page: the help
+// panel as an h1, the quick-reference card as its title label. A UDO's call
+// reads best as a code block; an instrument's fields are a single line, so
+// inline code keeps them compact.
+QString definitionHelpHtml(const QString &signature, const QString &docstring,
+                           bool signatureAsBlock)
+{
+    QString html;
+    if (!signature.isEmpty()) {
+        html += signatureAsBlock
+                ? u"<pre><code>%1</code></pre>\n"_s.arg(signature.toHtmlEscaped())
+                : u"<p><code>%1</code></p>\n"_s.arg(signature.toHtmlEscaped());
+    }
+    html += Markdown::toHtml(docstring, 1);
+    return html;
+}
+
+// The opcode data behind a quick reference. Long options are kept in the
+// opcode list under their name without the leading dashes.
+Opcode quickReferenceOpcode(OpEntryParser *parser, const QString &word)
+{
+    if (parser->isKnownOpcode(word))
+        return parser->findOpcode(word);
+
+    QString name = word;
+    while (name.startsWith(QLatin1Char('-')))
+        name.remove(0, 1);
+    while (name.endsWith(QLatin1Char(':')) || name.endsWith(QLatin1Char('=')))
+        name.chop(1);
+    for (const Opcode &opcode : parser->opcodeList) {
+        if (opcode.isFlag && opcode.opcodeName == name)
+            return opcode;
+    }
+    return Opcode();
+}
+
 }
 
 #ifdef Q_OS_WIN32
@@ -348,6 +386,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
         for (const CodeScan::Definition &udo : scan->udos) {
             Opcode opcode(udo.name, udo.outArgs, udo.inArgs);
             opcode.newStyle = udo.newStyle;
+            // The status bar shows "syntax [description]", as it does for the
+            // built-in opcodes; the first docstring sentence is the abstract.
+            opcode.desc = CodeScan::docstringAbstract(udo.docstring);
             m_udosMap.insert(udo.name, opcode);
         }
     });
@@ -3605,18 +3646,97 @@ void CsoundQt::openHtmlHelp(QString fileName, QString entry, bool external) {
 }
 
 
+QString CsoundQt::helpEntryWord()
+{
+    if (curPage < 0 || curPage >= documentPages.size())
+        return QString();
+    // A long option on the line wins: the word under the cursor would only be
+    // the part after its dashes.
+    const QString line = documentPages[curPage]->lineUnderCursor();
+    const QRegularExpressionMatch option =
+            QRegularExpression(uR"(-[-\+][a-zA-Z-_]+)"_s).match(line);
+    if (option.hasMatch() && m_longOptions.contains(option.captured()))
+        return option.captured();
+    return documentPages[curPage]->getView()->helpWordUnderCursor();
+}
+
+
 void CsoundQt::setHelpEntry()
 {
-    QString line = documentPages[curPage]->lineUnderCursor();
-    auto match = QRegularExpression(uR"(-[-\+][a-zA-Z-_]+)"_s).match(line);
-    if(match.hasMatch()) {
-        auto capt = match.captured();
-        if(m_longOptions.contains(capt)) {
-            return helpForEntry(capt);
-        }
+    const QString word = helpEntryWord();
+    if (word.isEmpty())
+        return;
+
+    // A user-defined opcode has no page in the manual. Its help page is built
+    // from the scan instead: the name is the page title, followed by the call
+    // signature and the docstring, whose headings start below the title.
+    QString signature, docstring;
+    if (documentPages[curPage]->udoInfo(word, &signature, &docstring)) {
+        helpPanel->showHtml(word, definitionHelpHtml(signature, docstring, true));
+        helpPanel->show();
+        helpPanel->raise();
+        helpPanel->focusText();
+        return;
     }
-    QString word = documentPages[curPage]->getView()->helpWordUnderCursor();
+
+    // An instrument's help page is built the same way: the name is the page
+    // title, the p-field assignments are the signature (inline code, as a call
+    // would pass them), and the docstring follows.
+    if (documentPages[curPage]->instrInfo(word, &signature, &docstring)) {
+        helpPanel->showHtml(word, definitionHelpHtml(signature, docstring, false));
+        helpPanel->show();
+        helpPanel->raise();
+        helpPanel->focusText();
+        return;
+    }
+
     return helpForEntry(word);
+}
+
+
+QString CsoundQt::quickReferenceHtml(const QString &word, DocumentPage *page)
+{
+    if (page == nullptr || word.isEmpty())
+        return QString();
+
+    // A UDO or an instrument has an ad-hoc page built from the scan: the same
+    // page Opcode Entry shows in the help panel.
+    QString signature, docstring;
+    if (page->udoInfo(word, &signature, &docstring))
+        return definitionHelpHtml(signature, docstring, true);
+    if (page->instrInfo(word, &signature, &docstring))
+        return definitionHelpHtml(signature, docstring, false);
+
+    // A built-in opcode has a manual page, but the quick reference is made from
+    // the opcode data instead, so it does not need the manual directory.
+    const Opcode opcode = quickReferenceOpcode(m_opcodeTree, word);
+    if (opcode.opcodeName.isEmpty())
+        return QString();
+    return m_opcodeTree->quickReferenceHtml(opcode.opcodeName);
+}
+
+
+void CsoundQt::showQuickReference()
+{
+    const QString word = helpEntryWord();
+    if (word.isEmpty() || curPage < 0 || curPage >= documentPages.size())
+        return;
+    DocumentPage *page = documentPages[curPage];
+    const QString html = quickReferenceHtml(word, page);
+    if (html.isEmpty())
+        return;
+    page->showQuickHelp(word, html);
+}
+
+
+void CsoundQt::showQuickReferenceAt(DocumentPage *page, const QString &word,
+                                    const QPoint &globalAnchor)
+{
+    const QString html = quickReferenceHtml(word, page);
+    if (html.isEmpty())
+        return;
+    // Passive: the pointer keeps tracking the name, the editor keeps focus.
+    page->showQuickHelpAt(word, html, globalAnchor, true);
 }
 
 
@@ -4207,7 +4327,16 @@ void CsoundQt::openShortcutDialog()
 {
     KeyboardShortcuts dialog(this, m_keyActions);
     connect(&dialog, SIGNAL(restoreDefaultShortcuts()), this, SLOT(setDefaultKeyboardShortcuts()));
+    // The list is long enough that the size the user chose is worth keeping.
+    QSettings settings("csoundqt", "csoundqt");
+    settings.beginGroup("GUI");
+    const QSize savedSize = settings.value("shortcutsDialogSize").toSize();
+    if (savedSize.isValid()) {
+        dialog.resize(savedSize);
+    }
     dialog.exec();
+    settings.setValue("shortcutsDialogSize", dialog.size());
+    settings.endGroup();
     if(dialog.needsSave()) {
         writeSettings(QStringList(), 0);
     }
@@ -4764,6 +4893,8 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->showLineNumbers(m_options->showLineNumberArea);
     p->setLineNumberContrast(m_options->lineNumberContrast);
     p->setEditorPadding(m_options->editorPadding);
+    p->setQuickHelpOnHover(m_options->quickHelpOnHover);
+    p->setQuickHelpHoverDelay(m_options->quickHelpHoverDelay);
 
     p->enableScoreSyntaxHighlighting(m_options->highlightScore);
 
@@ -5018,6 +5149,7 @@ void CsoundQt::setColors(QString themeMode)
     setIcon(aboutAct, "about.png");
     setIcon(configureAct, "settings.png");
     setIcon(setHelpEntryAct, "info.png");
+    setIcon(quickReferenceAct, "info.png");
 
     if (controlToolBar)  controlToolBar->update();
     if (configureToolBar) configureToolBar->update();
@@ -5267,9 +5399,10 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #ifdef CSQT_QTHTML
     raiseHtml5Act->setShortcut(tr("Ctrl+4"));
 #endif
-    openDocumentationAct->setShortcut(tr("F1"));
+    openDocumentationAct->setShortcut(tr("Ctrl+F1"));
     showUtilitiesAct->setShortcut(tr("Ctrl+9"));
 
+    quickReferenceAct->setShortcut(tr("F1"));
     setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F1));
     externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
     showInspectorAct->setShortcut(tr("Ctrl+T, I"));
@@ -5287,6 +5420,9 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     raiseScratchPadAct->setShortcut(tr("Ctrl+8"));
     killLineAct->setShortcut(tr("Ctrl+K"));
     killToEndAct->setShortcut(tr("Shift+Alt+K"));
+    duplicateLineAct->setShortcut(tr("Ctrl+Shift+D"));
+    moveLineUpAct->setShortcut(tr("Ctrl+Shift+Up"));
+    moveLineDownAct->setShortcut(tr("Ctrl+Shift+Down"));
     gotoLineAct->setShortcut(tr("Ctrl+L"));
     goBackAct->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Left));
     goToSourceAct->setShortcut(tr("Ctrl+B"));
@@ -5687,7 +5823,8 @@ void CsoundQt::createActions()
     connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
     checkSyntaxAct = new QAction(tr("Check Syntax"), this);
-    checkSyntaxAct->setShortcutContext(Qt::ApplicationShortcut);
+    // Editor action: scoped to the editor by applyEditorActions().
+    checkSyntaxAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(checkSyntaxAct, SIGNAL(triggered()), this, SLOT(checkSyntaxMenuAction()));
 
     externalPlayerAct = new QAction(icon("media-play.png"), tr("Play Rendered Audiofile"), this);
@@ -5906,6 +6043,12 @@ void CsoundQt::createActions()
     setHelpEntryAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(setHelpEntryAct, SIGNAL(triggered()), this, SLOT(setHelpEntry()));
 
+    quickReferenceAct = new QAction(icon("info.png"), tr("Quick Reference"), this);
+    quickReferenceAct->setStatusTip(
+                tr("Show a quick reference for the opcode, UDO or instrument under the cursor"));
+    quickReferenceAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(quickReferenceAct, SIGNAL(triggered()), this, SLOT(showQuickReference()));
+
     browseBackAct = new QAction(tr("Help Back"), this);
     browseBackAct->setStatusTip(tr("Go back in help page"));
     browseBackAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -5977,11 +6120,25 @@ void CsoundQt::createActions()
 
     killLineAct = new QAction(tr("Kill Line"), this);
     killLineAct->setStatusTip(tr("Completely delete current line"));
-    killLineAct->setShortcutContext(Qt::ApplicationShortcut);
+    // A line-editing action: its shortcut is registered on the editor itself
+    // (see applyEditorActions), so it only fires while the editor has focus.
+    killLineAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
     killToEndAct = new QAction(tr("Kill to End of Line"), this);
     killToEndAct->setStatusTip(tr("Delete everything from cursor to the end of the current line"));
-    killToEndAct->setShortcutContext(Qt::ApplicationShortcut);
+    killToEndAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
+    duplicateLineAct = new QAction(tr("Duplicate Line"), this);
+    duplicateLineAct->setStatusTip(tr("Insert a copy of the current line below it"));
+    duplicateLineAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
+    moveLineUpAct = new QAction(tr("Move Line Up"), this);
+    moveLineUpAct->setStatusTip(tr("Swap the current line with the one above it"));
+    moveLineUpAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
+    moveLineDownAct = new QAction(tr("Move Line Down"), this);
+    moveLineDownAct->setStatusTip(tr("Swap the current line with the one below it"));
+    moveLineDownAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
     gotoLineAct = new QAction(tr("Goto Line"), this);
     gotoLineAct->setStatusTip(tr("Go to a given line"));
@@ -6003,7 +6160,8 @@ void CsoundQt::createActions()
     reloadDependenciesAct = new QAction(tr("Reload Included Files"), this);
     reloadDependenciesAct->setStatusTip(
                 tr("Re-read the files pulled in by #include and scan the document again"));
-    reloadDependenciesAct->setShortcutContext(Qt::ApplicationShortcut);
+    // Document/editing action: scoped to the editor by applyEditorActions().
+    reloadDependenciesAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(reloadDependenciesAct, &QAction::triggered,
             [this]() { m_scanService->reloadDependencies(); });
 
@@ -6047,11 +6205,14 @@ void CsoundQt::createActions()
     connect(reportCsoundBugAct, SIGNAL(triggered()), this, SLOT(reportCsoundBug()));
 
     duplicateAct = new QAction(tr("Duplicate Widgets"), this);
-    duplicateAct->setShortcutContext(Qt::ApplicationShortcut);
+    // Only meaningful while working with the widgets of the panel: it is
+    // registered on the widget layout in connectActions().
+    duplicateAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
 
     lineNumbersAct = new QAction(tr("Toggle line numbers"),this);
-    lineNumbersAct->setShortcutContext(Qt::ApplicationShortcut);
+    // Editor action: scoped to the editor by applyEditorActions().
+    lineNumbersAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(lineNumbersAct,SIGNAL(triggered()), this, SLOT(toggleLineArea()));
 
     parameterModeAct = new QAction(tr("Toggle parameter mode"),this);
@@ -6158,6 +6319,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(raiseHtml5Act);
 #endif
     m_keyActions.append(setHelpEntryAct);
+    m_keyActions.append(quickReferenceAct);
     m_keyActions.append(browseBackAct);
     m_keyActions.append(browseForwardAct);
     m_keyActions.append(externalBrowserAct);
@@ -6173,6 +6335,9 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(midiLearnAct);
     m_keyActions.append(killLineAct);
     m_keyActions.append(killToEndAct);
+    m_keyActions.append(duplicateLineAct);
+    m_keyActions.append(moveLineUpAct);
+    m_keyActions.append(moveLineDownAct);
     m_keyActions.append(gotoLineAct);
     m_keyActions.append(goBackAct);
     m_keyActions.append(goToSourceAct);
@@ -6194,6 +6359,9 @@ void CsoundQt::connectActions()
     disconnect(tabsToSpacesAct, 0, 0, 0);
     disconnect(killLineAct, 0, 0, 0);
     disconnect(killToEndAct, 0, 0, 0);
+    disconnect(duplicateLineAct, 0, 0, 0);
+    disconnect(moveLineUpAct, 0, 0, 0);
+    disconnect(moveLineDownAct, 0, 0, 0);
     connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
     //  connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
     connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));
@@ -6201,6 +6369,44 @@ void CsoundQt::connectActions()
     connect(tabsToSpacesAct, SIGNAL(triggered()), doc, SLOT(tabsToSpaces()));
     connect(killLineAct, SIGNAL(triggered()), doc, SLOT(killLine()));
     connect(killToEndAct, SIGNAL(triggered()), doc, SLOT(killToEnd()));
+    connect(duplicateLineAct, SIGNAL(triggered()), doc, SLOT(duplicateLine()));
+    connect(moveLineUpAct, SIGNAL(triggered()), doc, SLOT(moveLineUp()));
+    connect(moveLineDownAct, SIGNAL(triggered()), doc, SLOT(moveLineDown()));
+
+    // Line-editing and other editor actions are editor shortcuts: their
+    // shortcuts must only fire while the editor has focus, not from the
+    // console, the inspector or a widget in the panel. Register them on the
+    // page that is becoming current; this also drops them from the editor of
+    // the previous page.
+    doc->applyEditorActions({
+        // Text editing.
+        undoAct, redoAct, cutAct, copyAct, pasteAct,
+        commentAct, indentAct, unindentAct, tabsToSpacesAct,
+        killLineAct, killToEndAct, duplicateLineAct,
+        moveLineUpAct, moveLineDownAct,
+        autocompleteAct, insertOpcodeAct,
+        inToGetAct, getToInAct,
+        // Moving around the edited text.
+        gotoLineAct, goBackAct, goToSourceAct,
+        // Editor modes and highlights.
+        parameterModeAct, highlightWidgetChannelAct,
+        highlightWidgetChannelsAct,
+        // Document-level editor commands.
+        checkSyntaxAct, reloadDependenciesAct, lineNumbersAct
+    });
+
+    // Duplicate Widgets belongs to the widgets panel. Register it on the
+    // page's widget layout: it is the parent of the widgets both when the
+    // panel is docked and when the widgets live in their own window. Take it
+    // back from the layout of the previous page first.
+    if (WidgetLayout *layout = doc->getWidgetLayout()) {
+        const QList<QObject *> associated = duplicateAct->associatedObjects();
+        for (QObject *object : associated) {
+            if (auto *oldLayout = qobject_cast<WidgetLayout *>(object))
+                oldLayout->removeAction(duplicateAct);
+        }
+        layout->addAction(duplicateAct);
+    }
 
     // line and column number connection
     connect(doc->getView(), SIGNAL(newLineAndColumn(int, int)), this, SLOT(setLineAndColumn(int,int)));
@@ -6243,6 +6449,12 @@ void CsoundQt::connectActions()
 
     connect(doc->getView(), SIGNAL(opcodeSyntaxSignal(QString)),
             this, SLOT(statusBarMessage(QString)));
+    // Ctrl+hover over an opcode, UDO or instrument in the editor: show the
+    // same card as Quick Reference, next to the mouse.
+    connect(doc->getView(), &DocumentView::quickReferenceRequested, doc,
+            [this, doc](const QString &word, const QPoint &globalAnchor) {
+                showQuickReferenceAt(doc, word, globalAnchor);
+            });
 
     connect(doc, SIGNAL(modified()), this, SLOT(documentWasModified()));
     connect(doc, &DocumentPage::unmodified, [this](){this->documentWasModified(false);});
@@ -6437,6 +6649,7 @@ void CsoundQt::createMenus()
     helpMenu = menuBar()->addMenu(tr("Help"));
     helpMenu->addAction(openDocumentationAct);
     helpMenu->addAction(setHelpEntryAct);
+    helpMenu->addAction(quickReferenceAct);
     helpMenu->addAction(externalBrowserAct);
     // helpMenu->addSeparator();
     // helpMenu->addAction(browseBackAct);
@@ -6906,6 +7119,15 @@ void CsoundQt::readSettings()
     // to F3; an explicitly different user binding is left untouched.
     if (findAgainAct && findAgainAct->shortcut() == QKeySequence("Ctrl+G"))
         findAgainAct->setShortcut(QKeySequence("F3"));
+    // F1 used to open the documentation, but Quick Reference took it over.
+    // Settings that still map the documentation to that old default follow it
+    // to Ctrl+F1. A stored Quick Reference binding means the user has seen the
+    // new defaults, and then F1 on the documentation is deliberate.
+    if (quickReferenceAct != nullptr
+            && !actionList.contains(quickReferenceAct->text().remove("&"))
+            && openDocumentationAct->shortcut() == QKeySequence("F1")) {
+        openDocumentationAct->setShortcut(QKeySequence("Ctrl+F1"));
+    }
 
     settings.endGroup();
     settings.beginGroup("Options");
@@ -6986,6 +7208,8 @@ void CsoundQt::readSettings()
     m_options->toolbarIconSize = settings.value("toolbarIconSize", 20).toInt();
     m_options->wrapLines = settings.value("wrapLines", true).toBool();
     m_options->autoComplete = settings.value("autoComplete", true).toBool();
+    m_options->quickHelpOnHover = settings.value("quickHelpOnHover", true).toBool();
+    m_options->quickHelpHoverDelay = settings.value("quickHelpHoverDelay", 500).toInt();
     m_options->autoCompleteDelay = settings.value("autoCompleteDelay", 150).toInt();
     m_options->autocompleteMenuWidth = settings.value("autocompleteMenuWidth", 42).toInt();
     m_options->autocompleteMenuMaxLines = settings.value("autocompleteMenuMaxLines", 20).toInt();
@@ -7235,6 +7459,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("lockToolbar", m_options->lockToolbar);
     settings.setValue("toolbarIconSize", m_options->toolbarIconSize);
     settings.setValue("wrapLines", m_options->wrapLines);
+    settings.setValue("quickHelpOnHover", m_options->quickHelpOnHover);
+    settings.setValue("quickHelpHoverDelay", m_options->quickHelpHoverDelay);
     settings.setValue("autoComplete", m_options->autoComplete);
     settings.setValue("autoCompleteDelay", m_options->autoCompleteDelay);
     settings.setValue("autocompleteMenuWidth", m_options->autocompleteMenuWidth);

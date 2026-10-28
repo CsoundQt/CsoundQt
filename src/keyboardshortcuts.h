@@ -36,13 +36,18 @@ class KeyboardShortcuts : public QDialog, private Ui::KeyboardShortcuts
 
 public:
 	KeyboardShortcuts(QWidget *parent, const QVector<QAction *> keyActions);
-	~KeyboardShortcuts();
 
 	void refreshTable();
-	bool shortcutTaken(QString shortcut, int excludeRow = -1);
     bool needsSave() { return m_modified; }
 
 private:
+	// Write one action's shortcut right away: the dialog has no OK button, so
+	// a change must not wait for the window to be closed (or destroyed).
+	void applyShortcut(const QString &actionName, const QString &shortcut);
+	// The rows whose shortcut cannot coexist with this one: the same sequence,
+	// or one that is a prefix of the other.
+	QList<int> conflictingRows(const QString &shortcut, int excludeRow = -1) const;
+
 	QVector<QAction *> m_keyActions;
     bool m_modified;
 
@@ -50,7 +55,6 @@ private slots:
 	void restoreDefaults();
 	void assignShortcut(int row, int column);
 	void filterTable(const QString &filter);
-	QString getShortcut(QString action);
 
 signals:
 	void restoreDefaultShortcuts();

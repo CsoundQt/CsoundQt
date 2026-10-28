@@ -15,7 +15,10 @@ The output format is fixed by that parser:
     </category>
 
 The out-arguments are the text before the <opcodename> element, the
-in-arguments the text after it; the parser reads those text nodes.
+in-arguments the text after it; the parser reads those text nodes. The
+in-arguments are stored as CsoundQt displays them: the manual's repeated
+optional argument groups, "[, iskip] [, insmps]", are joined into one group,
+"[,iskip, insmps]".
 
 The category order and the symbol names of the operator pages come from the
 manual itself (categories.py and diffopnames.py), so the manual stays the only
@@ -50,6 +53,31 @@ def name_pattern(name):
     if name[-1:].isalnum() or name[-1:] == '_':
         pattern = pattern + r'(?![\w])'
     return pattern
+
+
+# The manual gives every optional argument its own group, which repeats the
+# comma: "ilpt [, iskip] [, insmps]". Shown as one group it reads
+# "ilpt [,iskip, insmps]" and means the same: either none of these arguments or
+# all of them, in this order. Only adjacent groups are joined, so nested
+# optional arguments are left as they are.
+ADJACENT_OPTIONAL_GROUPS = re.compile(r'\[(\s*,[^\[\]]*)\]\s*\[\s*,([^\[\]]*)\]')
+
+
+def merge_optional_groups(in_args):
+    """Join the manual's repeated optional argument groups.
+
+    The transformation is done here rather than in the application so that the
+    opcodes.xml already holds the form CsoundQt shows.
+    """
+    while True:
+        match = ADJACENT_OPTIONAL_GROUPS.search(in_args)
+        if match is None:
+            return in_args
+        first = match.group(1)
+        first_args = first[first.index(',') + 1:].strip()
+        in_args = (in_args[:match.start()]
+                   + '[,{}, {}]'.format(first_args, match.group(2).strip())
+                   + in_args[match.end():])
 
 
 @dataclass
@@ -189,7 +217,8 @@ def resolve(line, candidates):
     call = CALL_RE.search(line)
     if call:
         name = call.group(1)
-        return name, line[:call.start(1)].strip(), line[call.end(1):].strip()
+        return (name, line[:call.start(1)].strip(),
+                merge_optional_groups(line[call.end(1):].strip()))
 
     for candidate in candidates:
         if not candidate:
@@ -197,7 +226,7 @@ def resolve(line, candidates):
         match = re.search(name_pattern(candidate), line)
         if match:
             return (candidate, line[:match.start()].strip(),
-                    line[match.end():].strip())
+                    merge_optional_groups(line[match.end():].strip()))
     return None
 
 

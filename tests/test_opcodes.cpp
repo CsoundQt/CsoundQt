@@ -66,6 +66,41 @@ private slots:
         QVERIFY(zeroDbfs.contains({QString(), QStringLiteral("= iarg")}));
     }
 
+    // The quick reference is built from the parsed data: every syntax variant
+    // the manual lists, then the description.
+    void buildsAQuickReference()
+    {
+        const QString html = m_parser->quickReferenceHtml(QStringLiteral("oscili"));
+        // The variants share one block, so no empty line separates them.
+        QVERIFY(html.contains(QStringLiteral(
+            "<pre><code>ares = oscili(xamp, xcps[, ifn, iphs])\n"
+            "kres = oscili(kamp, kcps[, ifn, iphs])</code></pre>")));
+        QVERIFY(html.contains(QStringLiteral(
+            "<p>A simple oscillator with linear interpolation.</p>")));
+        QVERIFY(m_parser->quickReferenceHtml(QStringLiteral("not_an_opcode")).isEmpty());
+
+        // A long option has no syntax, only the description added with it.
+        const QString flag = m_parser->quickReferenceHtml(
+                    QStringLiteral("use-system-sr"));
+        QVERIFY(flag.contains(QStringLiteral(
+            "Use the samplerate defined by the realtime audio backend")));
+        QVERIFY(!flag.contains(QStringLiteral("<pre>")));
+
+        // The generated opcodes.xml already joins the manual's repeated
+        // optional groups into one, and the name is followed by the arguments
+        // without a space, as in a call.
+        const QString comb = m_parser->quickReferenceHtml(QStringLiteral("comb"));
+        QVERIFY(comb.contains(QStringLiteral(
+            "<pre><code>ares = comb(asig, krvt, ilpt [,iskip, insmps])</code></pre>")));
+        QVERIFY(m_parser->getSyntax(QStringLiteral("comb")).startsWith(
+            QStringLiteral("ares = comb(asig, krvt, ilpt [,iskip, insmps])<br />")));
+
+        // More than two groups keep merging into the same one.
+        const QString vco2 = m_parser->quickReferenceHtml(QStringLiteral("vco2"));
+        QVERIFY(vco2.contains(QStringLiteral(
+            "<pre><code>ares = vco2(kamp, kcps [,imode, kpw, kphs, inyx])</code></pre>")));
+    }
+
     // The names an opcode had before it was renamed are known, but they are
     // not listed in the menu.
     void knowsTheLegacyNames()

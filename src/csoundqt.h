@@ -263,6 +263,9 @@ private slots:
 	void setEditorFocus();
     void showEditor(bool show);
 	void setHelpEntry();
+    // Show the same entry Opcode Entry would, but as a quick-reference card
+    // next to the cursor instead of in the help panel.
+    void showQuickReference();
     void helpForEntry(QString text, bool external=false);
     void setFullScreen(bool full);
     void checkFullScreen();
@@ -371,6 +374,16 @@ private:
 	void setKeyboardShortcutsList();
 	void connectActions();
 	QString getExamplePath(QString dir);
+    // The entry Opcode Entry and Quick Reference look up: a long option on the
+    // line of the cursor, or the word under the cursor.
+    QString helpEntryWord();
+    // The help page of a name for the floating card: a docstring for a UDO or
+    // an instrument from the scan, or the parsed opcodes.xml data for a
+    // built-in opcode. Empty when the name is not known.
+    QString quickReferenceHtml(const QString &word, DocumentPage *page);
+    // Show that card from the ctrl+hover lookup, anchored at the mouse.
+    void showQuickReferenceAt(DocumentPage *page, const QString &word,
+                              const QPoint &globalAnchor);
 	void createMenus();
 	void fillExampleMenu();
     void fillExampleSubmenu(QDir dir, QMenu *m, int depth);
@@ -563,7 +576,8 @@ private:
 	QAction *downloadManualAct;
 	QAction *showGenAct;
 	QAction *showOverviewAct;
-	QAction *showOpcodeQuickRefAct;
+	QAction *
+	showOpcodeQuickRefAct;
 	QAction *showConsoleAct;
     QAction *raiseConsoleAct;
     QAction *viewFullScreenAct;
@@ -583,6 +597,7 @@ private:
 #endif
 	QAction *midiLearnAct;
 	QAction *setHelpEntryAct;
+	QAction *quickReferenceAct;
 	QAction *browseBackAct;
 	QAction *browseForwardAct;
 	QAction *externalBrowserAct;
@@ -601,6 +616,9 @@ private:
 	QAction *tabsToSpacesAct;
 	QAction *killLineAct;
 	QAction *killToEndAct;
+	QAction *duplicateLineAct;
+	QAction *moveLineUpAct;
+	QAction *moveLineDownAct;
     QAction *gotoLineAct;
     QAction *goBackAct = nullptr;
     QAction *goToSourceAct = nullptr;

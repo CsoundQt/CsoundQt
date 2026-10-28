@@ -170,6 +170,350 @@ QString parameterNames(const QString &parameters)
     return names.join(u", "_s);
 }
 
+// The documentation comment of a UDO: a /* ... */ block that starts on the
+// first non-empty line after the opcode declaration. The delimiters are
+// removed and the indentation shared by the lines is stripped, so the
+// docstring reads as written without the indentation of the block. Returns an
+// empty string when the declaration is not followed by a block comment.
+QString readDocstring(const QVector<QStringView> &lines, int declarationLine)
+{
+    int openLine = declarationLine + 1;
+    while (openLine < lines.size() && lines.at(openLine).trimmed().isEmpty())
+        ++openLine;
+    if (openLine >= lines.size())
+        return QString();
+
+    const QStringView opening = lines.at(openLine);
+    const qsizetype open = opening.indexOf(u"/*"_s);
+    // The comment must start the line: code before it is not a docstring.
+    if (open < 0 || !opening.left(open).trimmed().isEmpty())
+        return QString();
+
+    QStringList body;
+    const qsizetype closeOnOpening = opening.indexOf(u"*/"_s, open + 2);
+    if (closeOnOpening >= 0) {
+        body.append(opening.mid(open + 2, closeOnOpening - open - 2).toString());
+    }
+    else {
+        body.append(opening.mid(open + 2).toString());
+        qsizetype close = -1;
+        for (int i = openLine + 1; i < lines.size(); ++i) {
+            const QStringView line = lines.at(i);
+            close = line.indexOf(u"*/"_s);
+            if (close >= 0) {
+                body.append(line.left(close).toString());
+                break;
+            }
+            body.append(line.toString());
+        }
+        // An unterminated comment is not a docstring: Csound will reject the
+        // text anyway.
+        if (close < 0)
+            return QString();
+    }
+
+    // The delimiters usually sit on lines of their own; the empty lines around
+    // the text are not part of the docstring.
+    while (!body.isEmpty() && body.first().trimmed().isEmpty())
+        body.removeFirst();
+    while (!body.isEmpty() && body.last().trimmed().isEmpty())
+        body.removeLast();
+    if (body.isEmpty())
+        return QString();
+
+    // Strip the indentation shared by all non-empty lines. Relative
+    // indentation (nested lists, code examples) is kept.
+    QString indent;
+    bool haveIndent = false;
+    for (const QString &line : body) {
+        if (line.trimmed().isEmpty())
+            continue;
+        qsizetype spaces = 0;
+        while (spaces < line.size() && line.at(spaces).isSpace())
+            ++spaces;
+        const QString prefix = line.left(spaces);
+        if (!haveIndent) {
+            indent = prefix;
+            haveIndent = true;
+            continue;
+        }
+        qsizetype common = 0;
+        while (common < indent.size() && common < prefix.size()
+               && indent.at(common) == prefix.at(common))
+            ++common;
+        indent.truncate(common);
+    }
+    for (QString &line : body) {
+        if (line.trimmed().isEmpty()) {
+            line.clear();
+            continue;
+        }
+        if (line.startsWith(indent))
+            line.remove(0, indent.size());
+        while (line.endsWith(QLatin1Char(' ')) || line.endsWith(QLatin1Char('\t')))
+            line.chop(1);
+    }
+    return body.join(QLatin1Char('\n'));
+}
+
+// One variable of a p-field assignment, with the field it takes: "ifoo" and
+// 4 -> "ifoo:i(p4)". The type is a Csound 7 annotation ("foo:i") or, in the
+// classic form, the letter in the name ("ifoo", "gkbar", where the type follows
+// the g of a global). Returns an empty string when the variable has no type.
+QString variableField(const QString &variable, int pField)
+{
+    static const QRegularExpression variableRx(
+                uR"(^\s*([A-Za-z_]\w*)(?:\s*:\s*([akiSpfxbw]))?\s*$)"_s);
+    const QRegularExpressionMatch match = variableRx.match(variable);
+    if (!match.hasMatch())
+        return QString();
+
+    const QString name = match.captured(1);
+    QString type = match.captured(2);
+    if (type.isEmpty()) {
+        const qsizetype prefix =
+                name.startsWith(QLatin1Char('g')) && name.size() > 1 ? 1 : 0;
+        if (prefix >= name.size() || !isTypeChar(name.at(prefix)))
+            return QString();
+        type = QString(name.at(prefix));
+    }
+    return name + QLatin1Char(':') + type + u"(p"_s
+            + QString::number(pField) + QLatin1Char(')');
+}
+
+// The p-fields of a direct assignment inside an instrument, as shown in its
+// help page:
+//   "ifoo = p4"                   -> {"ifoo:i(p4)"}
+//   "ichan, icc = p4, p5"         -> {"ichan:i(p4)", "icc:i(p5)"}
+//   "ichan, icc passign 4"        -> {"ichan:i(p4)", "icc:i(p5)"}
+//   "ichan, icc = passign(4)"     -> {"ichan:i(p4)", "icc:i(p5)"}
+// Only assignments whose right-hand side is p-fields count: "kfreq = p5 * 2"
+// depends on more than the field, so the help page cannot spell it as a
+// parameter. An empty list means the line is not a p-field assignment.
+QStringList pAssignmentFields(QStringView statement)
+{
+    // passign takes its variables from consecutive p-fields. The classic
+    // "vars passign [istart][, iend]" and the modern
+    // "vars = passign([istart][, iend])" spell the same thing. Without istart
+    // the assignment starts at p1, the instrument number, as in Csound. iend
+    // only limits how many p-fields may be taken; it does not renumber them.
+    static const QRegularExpression passignClassicRx(
+                uR"(^(.+?)\s+passign\s*(?:(\d+)(?:\s*,\s*\d+)?)?\s*$)"_s);
+    static const QRegularExpression passignFunctionRx(
+                uR"(^(.+?)\s*=\s*passign\s*\(\s*(?:(\d+)(?:\s*,\s*\d+)?)?\s*\)$)"_s);
+    static const QRegularExpression assignmentRx(
+                uR"(^(.+?)\s*=\s*(.+?)\s*$)"_s);
+    static const QRegularExpression pFieldRx(uR"(^p(\d+)$)"_s);
+
+    QRegularExpressionMatch match;
+    if ((match = passignClassicRx.matchView(statement)).hasMatch()
+            || (match = passignFunctionRx.matchView(statement)).hasMatch()) {
+        int pField = match.captured(2).isEmpty() ? 1 : match.captured(2).toInt();
+        if (pField < 1)
+            return QStringList();
+        QStringList fields;
+        for (const QString &variable : match.captured(1).split(QLatin1Char(','))) {
+            const QString field = variableField(variable, pField++);
+            if (field.isEmpty())
+                return QStringList();
+            fields.append(field);
+        }
+        return fields;
+    }
+
+    if (!(match = assignmentRx.matchView(statement)).hasMatch())
+        return QStringList();
+    const QStringList variables = match.captured(1).split(QLatin1Char(','));
+    const QStringList values = match.captured(2).split(QLatin1Char(','));
+    // Each variable takes the p-field at the same position; a line that does
+    // not pair them one to one is not a plain parameter list.
+    if (variables.size() != values.size())
+        return QStringList();
+    QStringList fields;
+    for (qsizetype i = 0; i < variables.size(); ++i) {
+        const QRegularExpressionMatch pField =
+                pFieldRx.match(values.at(i).trimmed());
+        if (!pField.hasMatch())
+            return QStringList();
+        const QString field = variableField(variables.at(i),
+                                            pField.captured(1).toInt());
+        if (field.isEmpty())
+            return QStringList();
+        fields.append(field);
+    }
+    return fields;
+}
+
+// The variable of a p-field entry: "ifoo:i(p4)" -> "ifoo". An instrument body
+// can assign a variable more than once; its parameter is the first assignment.
+QString fieldVariable(const QString &field)
+{
+    const qsizetype colon = field.indexOf(QLatin1Char(':'));
+    return colon < 0 ? field : field.left(colon);
+}
+
+// The names of "asig, kout" -> {"asig", "kout"}.
+QStringList nameList(const QString &names)
+{
+    QStringList result;
+    for (const QString &name : names.split(QLatin1Char(','))) {
+        const QString trimmed = name.trimmed();
+        if (!trimmed.isEmpty())
+            result.append(trimmed);
+    }
+    return result;
+}
+
+// The type characters of a declared parameter: the regular variable types
+// plus the optional argument types, which stand for a type and a default.
+bool isParameterTypeChar(QChar c)
+{
+    switch (c.unicode()) {
+    case 'o': case 'O': case 'j': case 'J': case 'P':
+        return true;
+    default:
+        return isTypeChar(c);
+    }
+}
+
+// The type names of a declaration. Csound 7 writes them separately, "(k, a)",
+// the classic form as a string of type characters, "ka"; both list k and a.
+// A lone "0" is how a classic declaration says "no arguments".
+QStringList typeList(const QString &types)
+{
+    QString text = types.trimmed();
+    if (text == u"0"_s)
+        return QStringList();
+    if (text.startsWith(QLatin1Char('(')) && text.endsWith(QLatin1Char(')')))
+        text = text.mid(1, text.size() - 2);
+
+    QStringList result;
+    for (const QString &part : text.split(QLatin1Char(','))) {
+        const QString type = part.trimmed();
+        if (type.isEmpty())
+            continue;
+        bool characters = type.size() > 1;
+        for (const QChar c : type) {
+            if (!isParameterTypeChar(c))
+                characters = false;
+        }
+        if (characters) {
+            for (const QChar c : type)
+                result.append(QString(c));
+        }
+        else {
+            result.append(type);
+        }
+    }
+    return result;
+}
+
+// The type shown in an input parameter list. The optional type characters
+// carry their default value:
+//   o -> i=0   O -> k=0   j -> i=-1   J -> k=-1   p -> i=1   P -> k=1
+QString parameterType(QString type)
+{
+    if (type.isEmpty())
+        return type;
+    QChar replacement;
+    int defaultValue = 0;
+    switch (type.at(0).unicode()) {
+    case 'o': replacement = QLatin1Char('i'); defaultValue = 0; break;
+    case 'O': replacement = QLatin1Char('k'); defaultValue = 0; break;
+    case 'j': replacement = QLatin1Char('i'); defaultValue = -1; break;
+    case 'J': replacement = QLatin1Char('k'); defaultValue = -1; break;
+    case 'p': replacement = QLatin1Char('i'); defaultValue = 1; break;
+    case 'P': replacement = QLatin1Char('k'); defaultValue = 1; break;
+    default:
+        return type;
+    }
+    return QString(replacement) + type.mid(1)
+            + QLatin1Char('=') + QString::number(defaultValue);
+}
+
+// A Csound 7 parameter list with the optional types made explicit:
+// "bar:i, baz:o" -> "bar:i, baz:i=0".
+QString parameterList(const QString &parameters)
+{
+    QStringList result;
+    for (const QString &parameter : parameters.split(QLatin1Char(','))) {
+        const QString trimmed = parameter.trimmed();
+        if (trimmed.isEmpty())
+            continue;
+        const qsizetype colon = trimmed.indexOf(QLatin1Char(':'));
+        if (colon < 0) {
+            result.append(trimmed);
+            continue;
+        }
+        result.append(trimmed.left(colon).trimmed() + QLatin1Char(':')
+                      + parameterType(trimmed.mid(colon + 1).trimmed()));
+    }
+    return result.join(u", "_s);
+}
+
+// True when xout names plain variables, as opposed to an expression such as
+// "kfoo + kbar", which has no name to show in the signature.
+bool isVariableList(const QString &names)
+{
+    static const QRegularExpression identifier(uR"(^[A-Za-z_]\w*$)"_s);
+    const QStringList list = nameList(names);
+    if (list.isEmpty())
+        return false;
+    for (const QString &name : list) {
+        if (!identifier.match(name).hasMatch())
+            return false;
+    }
+    return true;
+}
+
+// "kin, kfreq" with "k, i" -> "kin:k, kfreq:i". A name without a type and a
+// type without a name are kept alone, so a declaration with only output types
+// still reads sensibly.
+QString variablesWithTypes(const QStringList &variables, const QStringList &types)
+{
+    QStringList pairs;
+    for (qsizetype i = 0; i < qMax(variables.size(), types.size()); ++i) {
+        const QString variable = i < variables.size() ? variables.at(i) : QString();
+        const QString type = i < types.size() ? types.at(i) : QString();
+        if (!variable.isEmpty() && !type.isEmpty())
+            pairs.append(variable + QLatin1Char(':') + type);
+        else if (!variable.isEmpty())
+            pairs.append(variable);
+        else
+            pairs.append(type);
+    }
+    return pairs.join(u", "_s);
+}
+
+// The call signature of a UDO, as a call would spell it: the parameter list
+// from the declaration, and the output variables from xout with the declared
+// output types: "myop(foo:k, bar:i) -> asig:a".
+QString buildCallSignature(const Definition &udo)
+{
+    QString signature = udo.name;
+    if (udo.newStyle) {
+        signature += QLatin1Char('(') + parameterList(udo.signatureParams)
+                + QLatin1Char(')');
+    }
+    else {
+        QStringList inputTypes;
+        for (const QString &type : typeList(udo.inTypes))
+            inputTypes.append(parameterType(type));
+        signature += QLatin1Char('(')
+                + variablesWithTypes(nameList(udo.inArgs), inputTypes)
+                + QLatin1Char(')');
+    }
+
+    // An xout expression has no variable name to show, only its type.
+    const QStringList outVariables = isVariableList(udo.outVars)
+            ? nameList(udo.outVars) : QStringList();
+    const QString outputs = variablesWithTypes(outVariables,
+                                               typeList(udo.outTypes));
+    if (!outputs.isEmpty())
+        signature += u" -> "_s + outputs;
+    return signature;
+}
+
 // One program, however many files it is spread over: globals, instruments and
 // the names of the opcodes are shared by the document and everything it
 // includes.
@@ -391,6 +735,7 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
     CsoundLex::Line lex;
     bool inInstrument = false;
     int opcodeIndex = -1; // index into result.udos while inside an opcode
+    int instrumentIndex = -1; // index into result.instruments while inside one
     int conditionalDepth = 0; // inside a skipped #ifdef/#ifndef block
     int guardDepth = 0;       // inside an include guard (#ifndef/#define)
 
@@ -459,16 +804,41 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
                     opcode.outArgs = statement.mid(match.capturedEnd())
                             .toString().simplified();
                     opcode.outArgsLine = i + 1;
+                    opcode.outVars = opcode.outArgs;
                 }
+            }
+            else if (opcode.outVars.isEmpty()
+                     && (match = xoutRx.matchView(statement)).hasMatch()) {
+                // The outputs are named on xout even with a Csound 7
+                // signature; the call signature needs those names.
+                opcode.outVars = statement.mid(match.capturedEnd())
+                        .toString().simplified();
             }
             continue;
         }
 
-        // Inside an instrument there is nothing to scan: only endin matters,
-        // so that the header is recognised again after it.
+        // Inside an instrument only the direct p-field assignments are of
+        // interest: they are the instrument's parameters, shown in its help
+        // page. Everything else in the body is skipped.
         if (inInstrument) {
-            if (statement == u"endin"_s)
+            if (statement == u"endin"_s) {
                 inInstrument = false;
+                instrumentIndex = -1;
+            }
+            else if (instrumentIndex >= 0) {
+                Definition &instrument = result.instruments[instrumentIndex];
+                const QStringList fields = pAssignmentFields(statement);
+                for (const QString &field : fields) {
+                    // A variable can be assigned again later in the body; the
+                    // first direct assignment is the parameter.
+                    const QString variable = fieldVariable(field);
+                    bool known = false;
+                    for (const QString &existing : instrument.pFields)
+                        known = known || fieldVariable(existing) == variable;
+                    if (!known)
+                        instrument.pFields.append(field);
+                }
+            }
             continue;
         }
 
@@ -549,10 +919,12 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
             definition.file = definitionFile;
             if (!instrName.isEmpty() && !instrName.at(0).isDigit())
                 definition.name = instrName.toString();
+            definition.docstring = readDocstring(lines, i);
             result.instruments.append(definition);
             if (!definition.name.isEmpty())
                 accumulator.instrumentNames.insert(definition.name);
             inInstrument = true;
+            instrumentIndex = result.instruments.size() - 1;
         }
         else if (startsWithKeyword(statement, u"opcode"_s)
                  && (match = opcodeRx.matchView(statement)).hasMatch()) {
@@ -574,7 +946,20 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
                 if (outputs == u"void"_s)
                     outputs.clear();
                 definition.outArgs = outputs;
+                definition.outTypes = outputs;
+                definition.signatureParams = signature.captured(1).trimmed();
             }
+            else {
+                // Classic form: "opcode Name, outtypes, intypes".
+                const QStringList parts =
+                        definition.text.split(QLatin1Char(','), Qt::SkipEmptyParts);
+                if (parts.size() >= 2)
+                    definition.outTypes = parts.at(1).trimmed();
+                if (parts.size() >= 3)
+                    definition.inTypes = QStringList(parts.mid(2))
+                            .join(QLatin1Char(',')).trimmed();
+            }
+            definition.docstring = readDocstring(lines, i);
             result.udos.append(definition);
             opcodeIndex = result.udos.size() - 1;
             accumulator.udoNames.insert(definition.name);
@@ -646,6 +1031,20 @@ const Definition *Result::find(const QString &name) const
     return &it.value();
 }
 
+QString docstringAbstract(const QString &docstring)
+{
+    const QString text = docstring.trimmed();
+    qsizetype end = text.size();
+    const qsizetype period = text.indexOf(QLatin1Char('.'));
+    if (period >= 0)
+        end = qMin(end, period);
+    const qsizetype newline = text.indexOf(QLatin1Char('\n'));
+    if (newline >= 0)
+        end = qMin(end, newline);
+    // The delimiter itself is not part of the abstract.
+    return text.left(end).trimmed();
+}
+
 ResultPtr empty()
 {
     using MutablePtr = QSharedPointer<Result>;
@@ -679,6 +1078,19 @@ Result scan(const QString &text, Mode mode, IncludeProvider *includes,
     }
 
     scanDocument(result, accumulator, text, mode, filePath, includes, openFiles, 0);
+
+    // The help page shows how the opcode is called. The xin/xout variables of
+    // a classic declaration are only known once the body has been scanned, so
+    // the signatures are built after the whole program (includes included).
+    for (Definition &udo : result.udos)
+        udo.callSignature = buildCallSignature(udo);
+    // An instrument's help signature is its name and the p-fields assigned in
+    // its body. Anonymous (numeric) instruments have no name to show.
+    for (Definition &instrument : result.instruments) {
+        if (!instrument.name.isEmpty() && !instrument.pFields.isEmpty())
+            instrument.callSignature = instrument.name + QLatin1Char(' ')
+                    + instrument.pFields.join(u", "_s);
+    }
 
     for (const QString &name : accumulator.globalVariables) {
         // An explicit local type wins over the g prefix: gkfoo:a is local.

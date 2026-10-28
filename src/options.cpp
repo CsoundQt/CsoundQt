@@ -69,6 +69,8 @@ Options::Options(ConfigLists *configlists) :
     toolbarIconSize = 20;
     wrapLines = true;
     autoComplete = true;
+    quickHelpOnHover = true;
+    quickHelpHoverDelay = 500;
     // The width the autocomplete menu had before it became configurable: the
     // entries are 42 characters wide.
     autocompleteMenuWidth = 42;

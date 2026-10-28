@@ -44,6 +44,8 @@ HEADERS = "src/about.h" \
     "src/channelhighlightmode.h" \
     "src/sourcecursor.h" \
     "src/codescan.h" \
+    "src/markdown.h" \
+    "src/docstringpopup.h" \
     "src/scanservice.h" \
     "src/includecache.h" \
     "src/highlighter.h" \
@@ -115,6 +117,8 @@ SOURCES = "src/about.cpp" \
     "src/channeltext.cpp" \
     "src/sourcecursor.cpp" \
     "src/codescan.cpp" \
+    "src/markdown.cpp" \
+    "src/docstringpopup.cpp" \
     "src/scanservice.cpp" \
     "src/includecache.cpp" \
     "src/highlighter.cpp" \

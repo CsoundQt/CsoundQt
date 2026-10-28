@@ -26,7 +26,7 @@ set -euo pipefail
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
 # Tests that are executed (and must exit with status 0).
-tests=(bracketmatcher codescan gotosource inspectorview opcodes scanservice externallauncher)
+tests=(bracketmatcher codescan gotosource inspectorview markdown opcodes scanservice externallauncher)
 # Benchmarks: built, but only executed with --with-benchmark.
 benchmarks=(benchmark_channeltext)
 

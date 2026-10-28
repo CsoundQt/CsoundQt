@@ -1124,6 +1124,26 @@ void DocumentPage::killLine()
 	m_view->killLine();
 }
 
+void DocumentPage::duplicateLine()
+{
+	m_view->duplicateLine();
+}
+
+void DocumentPage::moveLineUp()
+{
+	m_view->moveLineUp();
+}
+
+void DocumentPage::moveLineDown()
+{
+	m_view->moveLineDown();
+}
+
+void DocumentPage::applyEditorActions(const QList<QAction *> &actions)
+{
+	m_view->applyEditorActions(actions);
+}
+
 void DocumentPage::gotoLine(int line)
 {
     m_view->jumpToLine(line);
@@ -1281,6 +1301,62 @@ void DocumentPage::applyScan(const CodeScan::ResultPtr &scan)
     setGlobalVariables(scan->globalVariables);
     setGlobalStringVariables(scan->globalStringVariables);
     setInstrumentNames(scan->instrumentNames);
+    m_view->setUdoNames(QStringList(udos.begin(), udos.end()));
+}
+
+bool DocumentPage::udoInfo(const QString &name, QString *signature, QString *docstring)
+{
+    if (name.isEmpty())
+        return false;
+    // The help action may arrive before the debounced scan has run; make sure
+    // the information reflects the text as it is now.
+    if (m_scanService != nullptr)
+        m_scanService->scanNow(this);
+
+    bool found = false;
+    for (const CodeScan::Definition &udo : m_scan->udos) {
+        if (udo.name != name)
+            continue;
+        found = true; // a later definition wins
+        if (signature != nullptr)
+            *signature = udo.callSignature;
+        if (docstring != nullptr)
+            *docstring = udo.docstring;
+    }
+    return found;
+}
+
+bool DocumentPage::instrInfo(const QString &name, QString *signature, QString *docstring)
+{
+    if (name.isEmpty())
+        return false;
+    // The help action may arrive before the debounced scan has run; make sure
+    // the information reflects the text as it is now.
+    if (m_scanService != nullptr)
+        m_scanService->scanNow(this);
+
+    bool found = false;
+    for (const CodeScan::Definition &instrument : m_scan->instruments) {
+        if (instrument.name != name)
+            continue;
+        found = true; // a later definition wins
+        if (signature != nullptr)
+            *signature = instrument.callSignature;
+        if (docstring != nullptr)
+            *docstring = instrument.docstring;
+    }
+    return found;
+}
+
+void DocumentPage::showQuickHelp(const QString &title, const QString &html)
+{
+    m_view->showQuickHelp(title, html);
+}
+
+void DocumentPage::showQuickHelpAt(const QString &title, const QString &html,
+                                   const QPoint &globalAnchor, bool passive)
+{
+    m_view->showQuickHelpAt(title, html, globalAnchor, passive);
 }
 
 void DocumentPage::goToSourceAtCursor()
@@ -1359,6 +1435,14 @@ void DocumentPage::highlightWidgetChannel() {
 
 void DocumentPage::setChannelHighlightMode(ChannelHighlightMode mode) {
     m_view->setChannelHighlightMode(mode);
+}
+
+void DocumentPage::setQuickHelpOnHover(bool enabled) {
+    m_view->setQuickHelpOnHover(enabled);
+}
+
+void DocumentPage::setQuickHelpHoverDelay(int milliseconds) {
+    m_view->setQuickHelpHoverDelay(milliseconds);
 }
 
 void DocumentPage::setChannelReferenceHighlightMode(ChannelReferenceHighlightMode mode) {

@@ -29,6 +29,8 @@
 #include <QStatusBar>
 #include <QFile>
 
+using namespace Qt::StringLiterals;
+
 
 DockHelp::DockHelp(QWidget *parent)
 	: QDockWidget(parent), ui(new Ui::DockHelp)
@@ -98,6 +100,17 @@ void DockHelp::loadFile(QString fileName, QString anchor) {
     m_view->loadFile(fileName, anchor);
 }
 
+void DockHelp::showHtml(const QString &title, const QString &html)
+{
+    const QString page = uR"(<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head><body>
+<div dir="ltr"><h1>%1</h1>
+%2
+</div></body></html>)"_s.arg(title.toHtmlEscaped(), html);
+    setWindowTitle(tr("Help: %1").arg(title));
+    m_view->loadHtml(page);
+}
+
 void DockHelp::clear()
 {
     m_view->clear();
@@ -156,7 +169,8 @@ void DockHelp::showOverview()
 	this->focusText();
 }
 
-void DockHelp::showOpcodeQuickRef()
+void DockHelp::
+showOpcodeQuickRef()
 {
 	this->setVisible(true);
 	this->loadFile(docDir + "/opcodesQuickRef.html");

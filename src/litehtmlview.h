@@ -20,6 +20,7 @@
 #include <QStringList>
 #include <QList>
 #include <QVector>
+#include <QHash>
 #include <QRectF>
 #include <QPointF>
 
@@ -69,6 +70,9 @@ public:
     ~LiteHtmlView() override;
 
     bool loadFile(const QString &path, const QString &fragment = QString());
+    // Renders HTML that is not a file, e.g. the docstring of a user-defined
+    // opcode. The page joins the normal history, so Back and Forward work.
+    bool loadHtml(const QString &html);
     void clear();
     QString currentPath() const { return m_currentPath; }
 
@@ -180,6 +184,9 @@ private:
 
     QString                   m_currentPath;
     QString                   m_currentHtml;      // processed article, cached for zoom re-load
+    // In-memory pages (UDO docstrings), keyed by a synthetic path. History
+    // stores the key, so navigating back can render the page again.
+    QHash<QString, QString>   m_inlinePages;
     int                       m_scrollbarWidth = 14;
     QStringList               m_history;
     int                       m_historyPos = -1;

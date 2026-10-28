@@ -22,6 +22,7 @@
 
 #include "documentview.h"
 #include "channeltext.h"
+#include "docstringpopup.h"
 #include "findbar.h"
 #include "opcodeinsertbar.h"
 #include "opentryparser.h"
@@ -32,6 +33,7 @@
 #include "texteditor.h"
 
 #include <QDir>
+#include <QCursor>
 #include <QFileInfo>
 #include <QFontDatabase>
 #include <QGuiApplication>
@@ -40,6 +42,7 @@
 #include <QScreen>
 #include <QStyle>
 #include <QStyledItemDelegate>
+#include <QTimer>
 #include <QVBoxLayout>
 
 #include <algorithm>
@@ -1002,11 +1005,34 @@ void DocumentView::highlightWidgetChannels(const QStringList &channels,
 
 bool DocumentView::eventFilter(QObject *watched, QEvent *event)
 {
+	TextEditor *editor = qobject_cast<TextEditor *>(watched->parent());
+	const bool onEditorViewport = editor && editor->viewport() == watched;
+	// The quick reference follows the pointer: Ctrl+hover always asks for it,
+	// and Settings/Editor/Behavior can make a plain hover enough. It is asked
+	// for once per name: while the card is up the popup holds the pointer, so
+	// these moves stop and checkHoverHelp() closes the card once it leaves.
+	if (onEditorViewport && event->type() == QEvent::MouseMove) {
+		auto *mouseEvent = static_cast<QMouseEvent *>(event);
+		// Dragging (selecting text, moving text) must not pop cards up under the
+		// pointer; Ctrl+hover during a drag keeps its old behaviour.
+		const bool ctrl = mouseEvent->modifiers().testFlag(Qt::ControlModifier);
+		const bool wantsHelp = ctrl
+				|| (m_quickHelpOnHover && mouseEvent->buttons() == Qt::NoButton);
+		if (wantsHelp)
+			requestHoverHelp(editor, mouseEvent->position().toPoint(), ctrl);
+		else
+			cancelPendingHoverHelp();
+	} else if (onEditorViewport
+			&& (event->type() == QEvent::Leave
+				|| event->type() == QEvent::MouseButtonPress)) {
+		// The pointer left the editor, or a click started: a card still waiting
+		// out its delay must not appear afterwards.
+		cancelPendingHoverHelp();
+	}
 	if (m_channelHighlightMode != ChannelHighlightMode::Full
 			&& m_channelHighlightMode != ChannelHighlightMode::MouseOnly)
 		return QWidget::eventFilter(watched, event);
-	TextEditor *editor = qobject_cast<TextEditor *>(watched->parent());
-	if (editor && editor->viewport() == watched) {
+	if (onEditorViewport) {
 		if (event->type() == QEvent::MouseMove) {
 			auto *mouseEvent = static_cast<QMouseEvent *>(event);
 			const QTextCursor cursor = editor->cursorAt(
@@ -1029,6 +1055,154 @@ bool DocumentView::eventFilter(QObject *watched, QEvent *event)
 		}
 	}
 	return QWidget::eventFilter(watched, event);
+}
+
+QString DocumentView::hoverHelpWordAt(TextEditor *editor,
+                                      const QPoint &viewportPos) const
+{
+    if (editor == nullptr)
+        return QString();
+    QTextCursor cursor = editor->cursorAt(viewportPos);
+    cursor.select(QTextCursor::WordUnderCursor);
+    if (!cursor.hasSelection())
+        return QString();
+    // A quoted name (an instrument in a schedule call, say) is left to the
+    // explicit shortcuts: hovering over a string is too easy to trigger by
+    // accident, and the quoted text does not reference a definition.
+    const QTextDocument *document = editor->document();
+    const int start = cursor.selectionStart();
+    const int end = cursor.selectionEnd();
+    if (start > 0 && document->characterAt(start - 1) == QLatin1Char('"')
+            && document->characterAt(end) == QLatin1Char('"'))
+        return QString();
+    return cursor.selectedText();
+}
+
+bool DocumentView::isHelpName(const QString &name) const
+{
+    return m_opcodeTree->isOpcode(name) || m_udoNames.contains(name)
+            || m_instrumentNames.contains(name);
+}
+
+void DocumentView::requestHoverHelp(TextEditor *editor, const QPoint &viewportPos,
+                                    bool immediate)
+{
+    const QString word = hoverHelpWordAt(editor, viewportPos);
+    // A name dismissed with Escape is left alone until the pointer moves to
+    // another one.
+    if (word != m_hoverHelpDismissedWord)
+        m_hoverHelpDismissedWord.clear();
+    if (word.isEmpty() || word == m_hoverHelpWord
+            || word == m_hoverHelpDismissedWord || !isHelpName(word)) {
+        // Whatever was waiting belonged to another name, or there is nothing
+        // to wait for at all.
+        cancelPendingHoverHelp();
+        return;
+    }
+
+    if (immediate) {
+        // Ctrl+hover is an explicit request: it should not be held up by a
+        // delay the user did not ask for.
+        cancelPendingHoverHelp();
+        showHoverHelp(editor, word, viewportPos);
+        return;
+    }
+
+    // A plain hover must rest on the name for the configured time. Moving to
+    // another name starts the wait again; staying on this one keeps the
+    // running timer.
+    if (word == m_hoverHelpPendingWord && editor == m_hoverHelpPendingEditor)
+        return;
+    cancelPendingHoverHelp();
+    m_hoverHelpPendingWord = word;
+    m_hoverHelpPendingEditor = editor;
+    if (m_hoverHelpDelayTimer == nullptr) {
+        m_hoverHelpDelayTimer = new QTimer(this);
+        m_hoverHelpDelayTimer->setSingleShot(true);
+        connect(m_hoverHelpDelayTimer, &QTimer::timeout,
+                this, &DocumentView::showPendingHoverHelp);
+    }
+    m_hoverHelpDelayTimer->start(m_quickHelpHoverDelay);
+}
+
+void DocumentView::showPendingHoverHelp()
+{
+    TextEditor *editor = m_hoverHelpPendingEditor.data();
+    const QString word = m_hoverHelpPendingWord;
+    m_hoverHelpPendingWord.clear();
+    m_hoverHelpPendingEditor.clear();
+    if (word.isEmpty() || editor == nullptr)
+        return;
+    // The timer can outlive a pointer move that never reached us (a leave, a
+    // jump to another window); only show the card for the name that is still
+    // under the pointer.
+    const QPoint pos = editor->viewport()->mapFromGlobal(QCursor::pos());
+    if (!editor->viewport()->rect().contains(pos)
+            || hoverHelpWordAt(editor, pos) != word)
+        return;
+    if (word == m_hoverHelpWord || word == m_hoverHelpDismissedWord)
+        return;
+    showHoverHelp(editor, word, pos);
+}
+
+void DocumentView::showHoverHelp(TextEditor *editor, const QString &word,
+                                 const QPoint &viewportPos)
+{
+    m_hoverHelpWord = word;
+    m_hoverHelpEditor = editor;
+    emit quickReferenceRequested(word,
+                                 editor->viewport()->mapToGlobal(viewportPos));
+    if (m_docstringPopup == nullptr || !m_docstringPopup->isVisible()
+            || m_quickHelpShownWord != word) {
+        // Nothing to show for this name after all.
+        stopHoverHelpTracking();
+        return;
+    }
+    if (m_hoverHelpTimer == nullptr) {
+        m_hoverHelpTimer = new QTimer(this);
+        m_hoverHelpTimer->setInterval(50);
+        connect(m_hoverHelpTimer, &QTimer::timeout,
+                this, &DocumentView::checkHoverHelp);
+    }
+    m_hoverHelpTimer->start();
+}
+
+void DocumentView::checkHoverHelp()
+{
+    TextEditor *editor = m_hoverHelpEditor.data();
+    if (m_hoverHelpWord.isEmpty() || editor == nullptr) {
+        stopHoverHelpTracking();
+        return;
+    }
+    if (m_docstringPopup == nullptr || !m_docstringPopup->isVisible()) {
+        // Closed with Escape or the close button while the pointer stayed on
+        // the name: do not open it again for that name.
+        m_hoverHelpDismissedWord = m_hoverHelpWord;
+        stopHoverHelpTracking();
+        return;
+    }
+    const QPoint pos = editor->viewport()->mapFromGlobal(QCursor::pos());
+    if (editor->viewport()->rect().contains(pos)
+            && hoverHelpWordAt(editor, pos) == m_hoverHelpWord)
+        return;
+    m_docstringPopup->hide();
+    stopHoverHelpTracking();
+}
+
+void DocumentView::stopHoverHelpTracking()
+{
+    if (m_hoverHelpTimer != nullptr)
+        m_hoverHelpTimer->stop();
+    m_hoverHelpWord.clear();
+    m_hoverHelpEditor.clear();
+}
+
+void DocumentView::cancelPendingHoverHelp()
+{
+    if (m_hoverHelpDelayTimer != nullptr)
+        m_hoverHelpDelayTimer->stop();
+    m_hoverHelpPendingWord.clear();
+    m_hoverHelpPendingEditor.clear();
 }
 
 QString DocumentView::lineUnderCursor() {
@@ -1056,8 +1230,19 @@ QString DocumentView::helpWordUnderCursor()
 		return cursor.selectedText();
 	cursor.select(QTextCursor::WordUnderCursor);
 	QString word = cursor.selectedText();
-	if (m_opcodeTree->isOpcode(word))
+	const auto knownName = [this](const QString &name) {
+		return m_opcodeTree->isOpcode(name) || m_udoNames.contains(name);
+	};
+	if (knownName(word))
 		return word;
+	// The instrument that schedule and friends are asked to play: the name can
+	// be written as a string, "bar", so the quotes are not part of it.
+	QString instrument = word;
+	if (instrument.size() >= 2 && instrument.startsWith(QLatin1Char('"'))
+			&& instrument.endsWith(QLatin1Char('"')))
+		instrument = instrument.mid(1, instrument.size() - 2);
+	if (m_instrumentNames.contains(instrument))
+		return instrument;
 	// Fall back to the nearest known opcode before the cursor on the same
 	// line, mirroring how the status bar signature matching behaves, so
 	// help is found even when the cursor sits on an argument or whitespace
@@ -1068,7 +1253,7 @@ QString DocumentView::helpWordUnderCursor()
 	static const QRegularExpression wordBoundary(uR"(\b)"_s);
 	auto words = cursor.selectedText().split(wordBoundary, SKIP_EMPTY_PARTS);
 	for (int i = words.size() - 1; i >= 0; --i) {
-		if (m_opcodeTree->isOpcode(words[i]))
+		if (knownName(words[i]))
 			return words[i];
 	}
 	return word;
@@ -2010,6 +2195,27 @@ void DocumentView::cancelAutoCompleteOnCursorMove()
 
 void DocumentView::escapePressed()
 {
+	// A card still waiting out the hover delay is cancelled, and Escape means
+	// the same for that name as it does for a visible card: leave it alone
+	// while the pointer stays on it.
+	if (!m_hoverHelpPendingWord.isEmpty()) {
+		m_hoverHelpDismissedWord = m_hoverHelpPendingWord;
+		cancelPendingHoverHelp();
+		return;
+	}
+	
+	if (m_docstringPopup != nullptr && !m_docstringPopup->isHidden())
+        m_docstringPopup->hide();
+	
+	// The ctrl+hover card is passive: it never has the focus, so Escape for it
+	// arrives here. A dismissed name is not reopened while the pointer stays.
+	if (!m_hoverHelpWord.isEmpty()) {
+		m_hoverHelpDismissedWord = m_hoverHelpWord;
+		// if (m_docstringPopup != nullptr)
+        //     m_docstringPopup->hide();
+		stopHoverHelpTracking();
+		return;
+	}
 	emit editorEscapePressed();
 	if (!m_widgetChannelSelections.isEmpty()) {
 		clearWidgetChannelHighlights();
@@ -2237,7 +2443,7 @@ void DocumentView::findQueryChanged(const QString &query)
 void DocumentView::findNext()
 {
 	if (m_findMatches.isEmpty())
-		return;
+        return;
 	m_findCurrent = (m_findCurrent + 1) % m_findMatches.size();
 	updateFindHighlights(true);
 	updateFindStatus();
@@ -2263,7 +2469,7 @@ void DocumentView::findPrevious()
 		return;
 	}
 	if (m_findMatches.isEmpty())
-		return;
+        return;
 	m_findCurrent = (m_findCurrent - 1 + m_findMatches.size()) % m_findMatches.size();
 	updateFindHighlights(true);
 	updateFindStatus();
@@ -2898,6 +3104,93 @@ void DocumentView::killToEnd()
 	cursor.insertText("");
 }
 
+void DocumentView::duplicateLine()
+{
+    QTextCursor cursor = m_mainEditor->textCursor();
+    const QTextBlock block = cursor.block();
+    const QString line = block.text();
+    const int blockStart = block.position();
+    // Where in the line the caret sits; kept on the copy.
+    const int column = cursor.position() - blockStart;
+    // Insert after the line's own text, before its line break (or at the end
+    // of the document for the last line): in both cases the copy ends up on a
+    // line of its own directly below.
+    QTextCursor insertAt(cursor);
+    insertAt.movePosition(QTextCursor::EndOfBlock);
+    insertAt.insertText(QLatin1Char('\n') + line);
+    // Put the caret on the copy, at the same column as before, so repeating
+    // the action keeps duplicating the line the caret is now on.
+    QTextCursor copy(m_mainEditor->document());
+    copy.setPosition(blockStart + line.size() + 1
+                     + qMin(column, line.size()));
+    m_mainEditor->setTextCursor(copy);
+}
+
+void DocumentView::moveLineUp()
+{
+    moveLine(-1);
+}
+
+void DocumentView::applyEditorActions(const QList<QAction *> &actions)
+{
+    TextEditor *editor = m_mainEditor;
+    for (QAction *action : actions) {
+        // The action may still be registered with the editor of another page
+        // (connectActions() runs on every tab switch), so take it back first:
+        // an action registered on two editors would fire in both. Only editors
+        // are touched: the action may also be in a menu or a toolbar, and must
+        // stay there.
+        const QList<QObject *> associated = action->associatedObjects();
+        for (QObject *object : associated) {
+            if (auto *oldEditor = qobject_cast<TextEditor *>(object))
+                oldEditor->removeAction(action);
+        }
+        // Widget-scoped so the shortcut only fires with the editor focused.
+        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        if (editor != nullptr)
+            editor->addAction(action);
+    }
+}
+
+void DocumentView::moveLineDown()
+{
+    moveLine(1);
+}
+
+void DocumentView::moveLine(int offset)
+{
+    QTextCursor cursor = m_mainEditor->textCursor();
+    const QTextBlock current = cursor.block();
+    const QTextBlock neighbour = offset < 0 ? current.previous() : current.next();
+    if (!neighbour.isValid())
+        return;
+    const QString currentText = current.text();
+    const QString neighbourText = neighbour.text();
+    // The caret keeps its column; a shorter line cannot hold it.
+    const int column = cursor.position() - current.position();
+    // Replace both lines with the same two lines in the other order. The span
+    // ends at the last character of the lower line, so the line break after it
+    // is left where it is.
+    const int start = qMin(current.position(), neighbour.position());
+    const int end = qMax(current.position() + currentText.size(),
+                         neighbour.position() + neighbourText.size());
+    // Where the moved line starts once the swap is done: the neighbour's old
+    // position above, or after the neighbour's text below.
+    const int movedStart = offset < 0
+            ? start : start + neighbourText.size() + 1;
+    QTextCursor span(m_mainEditor->document());
+    span.setPosition(start);
+    span.setPosition(end, QTextCursor::KeepAnchor);
+    span.beginEditBlock();
+    span.insertText(offset < 0
+                    ? currentText + QLatin1Char('\n') + neighbourText
+                    : neighbourText + QLatin1Char('\n') + currentText);
+    span.endEditBlock();
+    QTextCursor moved(m_mainEditor->document());
+    moved.setPosition(movedStart + qMin(column, currentText.size()));
+    m_mainEditor->setTextCursor(moved);
+}
+
 void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 {
     auto fmt = m_highlighter.getFormat("default");
@@ -3170,6 +3463,41 @@ void DocumentView::setInstrumentNames(const QStringList &names) {
     m_instrumentNames = names;
 }
 
+void DocumentView::setUdoNames(const QStringList &names) {
+    m_udoNames = QSet<QString>(names.begin(), names.end());
+}
+
+void DocumentView::showQuickHelp(const QString &title, const QString &html)
+{
+    TextEditor *editor = activeEditor();
+    if (editor == nullptr)
+        editor = m_mainEditor;
+    if (editor == nullptr)
+        return;
+    // An explicit lookup owns the card from here on: the pointer may well be
+    // somewhere else, so the ctrl+hover tracking must not close it.
+    stopHoverHelpTracking();
+    cancelPendingHoverHelp();
+    m_hoverHelpDismissedWord.clear();
+    const bool ispassive = true;
+    showQuickHelpAt(title, html,
+                    editor->viewport()->mapToGlobal(editor->cursorRect().bottomLeft() + QPoint(0, 4)), ispassive);
+}
+
+void DocumentView::showQuickHelpAt(const QString &title, const QString &html,
+                                   const QPoint &globalAnchor, bool passive)
+{
+    if (m_docstringPopup == nullptr)
+        m_docstringPopup = new DocstringPopup(this);
+    // Use the editor's syntax theme rather than the application palette: the
+    // card is about the text under it.
+    const QTextCharFormat theme = getDefaultFormat();
+    m_quickHelpShownWord = title;
+    m_docstringPopup->setThemeColors(theme.foreground().color(),
+                                     theme.background().color());
+    m_docstringPopup->showHtml(title, html, globalAnchor, passive);
+}
+
 void DocumentView::setWidgetChannels(const QStringList &channels) {
     m_widgetChannels = channels;
 }
@@ -3242,6 +3570,13 @@ void DocumentView::setTheme(const QString &theme)
     TextEditor *editor = currentLineEditor();
     if (editor)
         editor->setExtraSelections(extraSelectionsFor(editor));
+    // The quick help card is a top-level window with colours of its own; keep a
+    // visible one in step with a theme switch.
+    if (m_docstringPopup != nullptr && m_docstringPopup->isVisible()) {
+        const QTextCharFormat defaultFormat = getDefaultFormat();
+        m_docstringPopup->setThemeColors(defaultFormat.foreground().color(),
+                                         defaultFormat.background().color());
+    }
     if (syntaxMenu)
         syntaxMenu->applyStyle();
 }

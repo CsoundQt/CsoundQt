@@ -96,13 +96,38 @@ struct Definition
     QString file;
     // User-defined opcodes only: the arguments declared with xin and xout,
     // and the lines they were found on (for the tree). A Csound 7 signature,
-    // "opcode Foo(a:i):k", fills the same fields from the declaration:
-    // inArgs holds the parameter names and outArgs the output types, and
-    // newStyle is set. There are no xin/xout lines in that case.
+    // "opcode Foo(a:i):k", fills inArgs from the parameter names and outArgs
+    // from the output types, and sets newStyle. Such an opcode has no xin
+    // line, but its outputs are still assigned with xout.
     QString inArgs, outArgs;
     int inArgsLine = -1, outArgsLine = -1;
     bool newStyle = false;
+    // The documentation comment that follows the declaration line: the body
+    // of a /* ... */ block without the delimiters and the indentation the
+    // comment shares. Empty when the opcode or instrument has no docstring.
+    QString docstring;
+    // Instruments only: the direct p-field assignments in the body, as shown
+    // in the help page: "ifoo:i(p4)", "kbar:k(p5)". This covers single and
+    // list assignments as well as passign; only assignments whose right-hand
+    // side is just p-fields are listed, once per variable.
+    QStringList pFields;
+    // How the definition is shown in its help page. For a user-defined opcode
+    // the call with its arguments and outputs: "myop(foo:k, bar:i) -> asig:a";
+    // for an instrument the name and its p-fields: "bar ifoo:i(p4), kbar:k(p5)".
+    // Built by the scanner, because the declared types and the xin/xout or
+    // p-field variables have to be combined.
+    QString callSignature;
+    // User-defined opcodes only: the parts callSignature is built from. A
+    // Csound 7 declaration keeps its parameter list, types included, in
+    // signatureParams; the classic "opcode Foo, a, kk" form instead has the
+    // type strings in outTypes and inTypes. outVars are the names given to
+    // xout, for both forms.
+    QString signatureParams, outTypes, inTypes, outVars;
 };
+
+// The first sentence of a docstring, used as its abstract: the text up to the
+// first '.' or line break, trimmed. Empty when there is no such text.
+QString docstringAbstract(const QString &docstring);
 
 struct Result
 {

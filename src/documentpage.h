@@ -100,6 +100,23 @@ public:
     // Apply the result of a scan: highlighting, completion and "Go to Source"
     // all read the same parse of the same text.
     void applyScan(const CodeScan::ResultPtr &scan) override;
+    // The call signature and docstring of a user-defined opcode defined here
+    // or in one of the included files. Returns false when name is not a UDO;
+    // either output pointer may be null.
+    bool udoInfo(const QString &name, QString *signature, QString *docstring);
+    // The signature and docstring of an instrument defined here or in one of
+    // the included files. The signature is the name and the p-fields assigned
+    // in the body, and is empty when the instrument has no such assignments.
+    // Returns false when name is not an instrument; either output pointer may
+    // be null.
+    bool instrInfo(const QString &name, QString *signature, QString *docstring);
+    // Show an already rendered ad-hoc help page in the floating card. Reserved
+    // for Quick Reference; Opcode Entry uses the help panel.
+    void showQuickHelp(const QString &title, const QString &html);
+    // The same card anchored at a global point, for the ctrl+hover lookup,
+    // which shows it next to the mouse instead of the text cursor.
+    void showQuickHelpAt(const QString &title, const QString &html,
+                         const QPoint &globalAnchor, bool passive = false);
     QStringList getWidgetChannels();
     QList<WidgetPropertyInfo> getWidgetProperties(const QString &channelOrName);
     void updateWidgetChannels();
@@ -200,6 +217,11 @@ public:
 	void setWidgetEnabled(bool enabled);
 	void setChannelHighlightMode(ChannelHighlightMode mode);
 	void setChannelReferenceHighlightMode(ChannelReferenceHighlightMode mode);
+	// Show the quick reference card when the pointer rests on an opcode, UDO or
+	// instrument; Ctrl+hover works regardless.
+	void setQuickHelpOnHover(bool enabled);
+	// How long, in milliseconds, the pointer must rest before that card shows.
+	void setQuickHelpHoverDelay(int milliseconds);
 	// Experimental: mark editor lines that reference the selected widget.
 	void highlightSelectedWidgetChannels();
 	void updateWidgetChannelLineHighlights();
@@ -271,6 +293,12 @@ public slots:
 	void tabsToSpaces();
 	void killLine();
 	void killToEnd();
+	void duplicateLine();
+	void moveLineUp();
+	void moveLineDown();
+	// Register the actions on this page's editor, so their shortcuts only fire
+	// while the editor has focus.
+	void applyEditorActions(const QList<QAction *> &actions);
 
 
 private:

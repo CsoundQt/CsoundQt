@@ -41,6 +41,10 @@ public:
 	void addExtraOpcodes();
     QStringList opcodeNameList(bool includeDisabled=false);
 	QString getSyntax(QString opcodeName);
+    // The body of a quick-reference page for an opcode, built from what was
+    // parsed from opcodes.xml: every syntax variant and the description, as
+    // simple HTML. Empty when the name is not in the list.
+    QString quickReferenceHtml(const QString &opcodeName) const;
     QVector<Opcode> getMatchingOpcodes(QString word, int maxsize = 0);
 	QList< QPair<QString, QList<Opcode> > > getOpcodesByCategory();
 	int getCategoryCount();

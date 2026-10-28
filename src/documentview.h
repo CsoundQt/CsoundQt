@@ -34,6 +34,7 @@
 
 #include <QKeyEvent> // For syntax menu class
 #include <QPair>
+#include <QSet>
 #include <functional>
 
 class QListWidget;
@@ -150,9 +151,29 @@ public:
     void setGlobalStringVariables(const QStringList &variables);
     // Named instruments and widget channels for the context-aware completions.
     void setInstrumentNames(const QStringList &names);
+    // Names of the user-defined opcodes in the current scan. Help and the
+    // "nearest opcode before the cursor" lookup treat them like built-ins.
+    void setUdoNames(const QStringList &names);
     void setWidgetChannels(const QStringList &channels);
+    // Show an ad-hoc help page (a docstring, an instrument's fields or an
+    // opcode reference) in the floating card near the cursor. Used by the
+    // Quick Reference action; Opcode Entry uses the help panel.
+    void showQuickHelp(const QString &title, const QString &html);
+    // The same card, anchored at a point given in global coordinates: the
+    // ctrl+hover lookup shows it next to the mouse rather than the cursor, and
+    // passive so that it does not take the focus away from the editor.
+    void showQuickHelpAt(const QString &title, const QString &html,
+                         const QPoint &globalAnchor, bool passive = false);
     // How channel literals in the editor outline their widgets.
     void setChannelHighlightMode(ChannelHighlightMode mode);
+    // Show the quick reference card when the pointer rests on a help name.
+    // Ctrl+hover shows it in either state; this switch only decides whether the
+    // modifier is needed.
+    void setQuickHelpOnHover(bool enabled) { m_quickHelpOnHover = enabled; }
+    // How long the pointer must rest on a help name before the card appears
+    // without Ctrl. Ctrl+hover ignores this and shows it at once.
+    void setQuickHelpHoverDelay(int milliseconds)
+    { m_quickHelpHoverDelay = qMax(0, milliseconds); }
     // Experimental: mark all lines that reference any of these widget channels.
     void highlightWidgetChannels(const QStringList &channels,
                                  bool jumpToFirstReference = false);
@@ -255,6 +276,15 @@ public slots:
 	void tabsToSpaces();
 	void killLine();
 	void killToEnd();
+	void duplicateLine();
+	void moveLineUp();
+	void moveLineDown();
+	// Swap the current line with its neighbour: offset -1 is the line above,
+	// +1 the line below.
+	void moveLine(int offset);
+	// Associate these actions with this view's editor. Their shortcuts are
+	// widget-scoped, so they only fire while the editor has focus.
+	void applyEditorActions(const QList<QAction *> &actions);
 
 	void markErrorLines(QList<QPair<int, QString> > lines);
 	void unmarkErrorLines();
@@ -282,6 +312,28 @@ private:
 	// Extra editor selections shared by syntaxCheck() and the find bar.
 	QList<QTextEdit::ExtraSelection> extraSelectionsFor(
 			TextEditor *editor) const;
+    // Ctrl+hover: the help name under a viewport position, or empty when there
+    // is none or it is quoted.
+    QString hoverHelpWordAt(TextEditor *editor, const QPoint &viewportPos) const;
+    // Whether help exists for this name (opcode, UDO or instrument).
+    bool isHelpName(const QString &name) const;
+    // Ask for the quick reference of the name under the pointer, the first
+    // time the pointer enters it. Ctrl+hover (immediate) shows the card at
+    // once; a plain hover waits for the configured delay instead.
+    void requestHoverHelp(TextEditor *editor, const QPoint &viewportPos,
+                          bool immediate);
+    // Show the card for a name, and start tracking the pointer while it stays
+    // on that name.
+    void showHoverHelp(TextEditor *editor, const QString &word,
+                       const QPoint &viewportPos);
+    // The hover delay elapsed: show the card if the pointer is still there.
+    void showPendingHoverHelp();
+    // Drop a waiting hover card; the name itself is not remembered.
+    void cancelPendingHoverHelp();
+    // While the ctrl+hover card is up: close it once the pointer leaves the
+    // name. Escape closes it too, and it is not reopened for that name.
+    void checkHoverHelp();
+    void stopHoverHelpTracking();
     // Text of the instrument/opcode block containing the cursor, or empty.
     QString currentScopeText() const;
 
@@ -347,6 +399,26 @@ private:
 
 	FindBar *m_findBar = nullptr;
 	OpcodeInsertBar *m_opcodeInsertBar = nullptr;
+	class DocstringPopup *m_docstringPopup = nullptr;
+	// Ctrl+hover quick reference: the card follows the pointer while it stays
+	// on one name, so the name and its editor are remembered while it is up.
+	// A name dismissed with Escape is not reopened until the pointer moves on.
+	QTimer *m_hoverHelpTimer = nullptr;
+	QString m_hoverHelpWord;
+	QString m_hoverHelpDismissedWord;
+	QPointer<TextEditor> m_hoverHelpEditor;
+	// The name of the last card actually shown: a lookup can find no page for
+	// a name, and then there is nothing to track.
+	QString m_quickHelpShownWord;
+	// Whether the card also appears without Ctrl (Settings/Editor/Behavior).
+	bool m_quickHelpOnHover = true;
+	// Delay, in milliseconds, before a plain hover shows the card.
+	int m_quickHelpHoverDelay = 500;
+	// A plain hover that is waiting out the delay: the name and editor it was
+	// asked for. The timer is single-shot and restarted when the name changes.
+	QTimer *m_hoverHelpDelayTimer = nullptr;
+	QString m_hoverHelpPendingWord;
+	QPointer<TextEditor> m_hoverHelpPendingEditor;
 	QList<QTextEdit::ExtraSelection> m_findSelections;
 	QList<QTextEdit::ExtraSelection> m_widgetChannelSelections;
 	TextEditor *m_widgetChannelEditor = nullptr;
@@ -359,6 +431,7 @@ private:
 	QStringList m_globalVariables;
 	QStringList m_globalStringVariables;
 	QStringList m_instrumentNames;
+	QSet<QString> m_udoNames;
 	QStringList m_widgetChannels;
 	ChannelHighlightMode m_channelHighlightMode = ChannelHighlightMode::CursorOnly;
 	enum class ChannelHighlightSource { None, Cursor, Mouse };
@@ -419,6 +492,10 @@ signals:
     // The user pressed Escape in the editor; pages use this to clear their
     // pinned widget-channel highlight state as well as the extra selections.
     void editorEscapePressed();
+    // Ctrl+hover over an opcode, UDO or instrument: ask for its quick
+    // reference, anchored at the mouse. The card stays while the pointer is on
+    // the name, and until Escape.
+    void quickReferenceRequested(const QString &word, const QPoint &globalAnchor);
 
 };
 

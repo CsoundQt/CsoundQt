@@ -34,6 +34,11 @@ private slots:
     void testNoOrchestra();
     void testUdoArgs();
     void testNewStyleUdo();
+    void testUdoCallSignature();
+    void testDocstringAbstract();
+    void testUdoDocstring();
+    void testUdoWithoutDocstring();
+    void testUdoDocstringForms();
     void testBlockEndsWithComment();
     void testKeywordBoundaries();
     void testSpacedPreprocessorRejected();
@@ -50,6 +55,9 @@ private slots:
     void testAnnotatedGlobals();
     void testUdoNameIsNotGlobal();
     void testInstrumentNames();
+    void testInstrumentDocstring();
+    void testInstrumentSignature();
+    void testInstrumentMultiAssignment();
     void testInclude();
     void testGlobalInStringIsNotGlobal();
     void testIncludedDefinitions();
@@ -195,6 +203,9 @@ void TestCodeScan::testUdoArgs()
     QCOMPARE(result.udos.first().inArgsLine, 2);
     QCOMPARE(result.udos.first().outArgs, QString("ain * kgain"));
     QCOMPARE(result.udos.first().outArgsLine, 3);
+    // xout is an expression, so the signature shows the type but no variable.
+    QCOMPARE(result.udos.first().callSignature,
+             QString("Gain(ain:a, kgain:k) -> a"));
 }
 
 // Csound 7 UDO signatures carry the arguments on the declaration line.
@@ -202,7 +213,9 @@ void TestCodeScan::testNewStyleUdo()
 {
     const QString text =
         "opcode Lowpass2(x:a, c1:k, c2:k):a\n" // 1
-        "  xout x\n"                           // 2 (new style: not scanned)
+        "  xout x\n"                           // 2 (outArgs stays empty; the
+                                               //    name is kept for the call
+                                               //    signature)
         "endop\n"                              // 3
         "opcode Empty():void\n"                // 4
         "endop\n"                              // 5
@@ -225,6 +238,137 @@ void TestCodeScan::testNewStyleUdo()
 
     QCOMPARE(result.udos.at(2).inArgs, QString("a"));
     QCOMPARE(result.udos.at(2).outArgs, QString("a, k"));
+}
+
+// The help page shows how a UDO is called: the declared parameter list, then
+// the xout names with the declared output types.
+void TestCodeScan::testUdoCallSignature()
+{
+    const Result result = scan(
+        "opcode myfilter(sig:a, cutoff:k, bandwidth:i...):a\n"
+        "  xout asig\n"
+        "endop\n"
+        "opcode Pair(a:i):(a, k)\n"
+        "  xout aout, kout\n"
+        "endop\n"
+        "opcode NoOut(x:i):void\n"
+        "endop\n"
+        "opcode Classic, a, ki\n" // classic: output types, input types
+        "  kin, iamp xin\n"
+        "  xout asig\n"
+        "endop\n"
+        "opcode znumactive, ii, 0\n" // "0" inputs: the list is empty
+        "  xout ifoo, ibar\n"
+        "endop\n"
+        "opcode Opt(bar:i, baz:o, octrl:O, neg:j, one:p, kneg:J, kone:P):i\n"
+        "  xout ko\n"
+        "endop\n"
+        "opcode Sum(kfoo:a, kbar:k):k\n" // xout is an expression
+        "  xout kfoo + kbar\n"
+        "endop\n", Mode::Orc);
+
+    QCOMPARE(result.udos.size(), 7);
+    QCOMPARE(result.udos.at(0).callSignature,
+             QString("myfilter(sig:a, cutoff:k, bandwidth:i...) -> asig:a"));
+    QCOMPARE(result.udos.at(1).callSignature,
+             QString("Pair(a:i) -> aout:a, kout:k"));
+    QCOMPARE(result.udos.at(2).callSignature, QString("NoOut(x:i)"));
+    // A classic declaration names its output types separately from the xout
+    // variables; the signature joins them.
+    QCOMPARE(result.udos.at(3).callSignature,
+             QString("Classic(kin:k, iamp:i) -> asig:a"));
+    QVERIFY(result.udos.at(4).callSignature
+            == u"znumactive() -> ifoo:i, ibar:i"_s);
+    // Optional argument types are shown as their type and default value.
+    QCOMPARE(result.udos.at(5).callSignature,
+             QString("Opt(bar:i, baz:i=0, octrl:k=0, neg:i=-1, one:i=1, "
+                     "kneg:k=-1, kone:k=1) -> ko:i"));
+    // An expression has no output variable name: only the type is shown.
+    QCOMPARE(result.udos.at(6).callSignature, QString("Sum(kfoo:a, kbar:k) -> k"));
+}
+
+// The abstract is the first sentence used on the status bar.
+void TestCodeScan::testDocstringAbstract()
+{
+    QCOMPARE(docstringAbstract("A nice filter. More text.\nSecond line"),
+             QString("A nice filter"));
+    QCOMPARE(docstringAbstract("First line\nsecond sentence."),
+             QString("First line"));
+    QCOMPARE(docstringAbstract("No period\n"), QString("No period"));
+    QCOMPARE(docstringAbstract("  padded abstract.  "), QString("padded abstract"));
+    QVERIFY(docstringAbstract(QString()).isEmpty());
+}
+
+// A /* ... */ block directly after an opcode declaration documents it. The
+// delimiters and the indentation of the block are not part of the docstring.
+void TestCodeScan::testUdoDocstring()
+{
+    const QString text =
+        "opcode myfilter(sig:a, cutoff:k, bandwidth:i...):a\n" // 1
+        "  /*\n"                                               // 2
+        "  A nice filter\n"                                    // 3
+        "\n"                                                   // 4
+        "  Args:\n"                                            // 5
+        "    sig: input signal\n"                              // 6
+        "    cutoff: cutoff frequency\n"                       // 7
+        "    bandwidth: bandwidth of the filter\n"             // 8
+        "\n"                                                   // 9
+        "  Returns:\n"                                         // 10
+        "    the filtered signal\n"                            // 11
+        "  */\n"                                               // 12
+        "endop\n";                                             // 13
+
+    const Result result = scan(text, Mode::Orc);
+    QCOMPARE(result.udos.size(), 1);
+    QCOMPARE(result.udos.first().name, QString("myfilter"));
+    QCOMPARE(result.udos.first().docstring,
+             QString("A nice filter\n"
+                     "\n"
+                     "Args:\n"
+                     "  sig: input signal\n"
+                     "  cutoff: cutoff frequency\n"
+                     "  bandwidth: bandwidth of the filter\n"
+                     "\n"
+                     "Returns:\n"
+                     "  the filtered signal"));
+}
+
+// Only a comment right after the declaration documents the opcode. Without a
+// comment, or with one after the body has started, the docstring is empty.
+void TestCodeScan::testUdoWithoutDocstring()
+{
+    const Result none = scan(
+        "opcode Foo, a, k\n"
+        "kin xin\n"
+        "xout kin\n"
+        "endop\n", Mode::Orc);
+    QCOMPARE(none.udos.size(), 1);
+    QVERIFY(none.udos.first().docstring.isEmpty());
+
+    const Result afterCode = scan(
+        "opcode Foo, a, k\n"
+        "kin xin\n"
+        "/* not a docstring */\n"
+        "xout kin\n"
+        "endop\n", Mode::Orc);
+    QCOMPARE(afterCode.udos.size(), 1);
+    QVERIFY(afterCode.udos.first().docstring.isEmpty());
+}
+
+// Blank lines may separate the declaration from its comment, a one-line block
+// comment is a docstring too, and each opcode gets its own.
+void TestCodeScan::testUdoDocstringForms()
+{
+    const Result result = scan(
+        "opcode A, a, k\n"
+        "endop\n"
+        "opcode B, a, k\n"
+        "\n"
+        "  /* B's doc. */\n"
+        "endop\n", Mode::Orc);
+    QCOMPARE(result.udos.size(), 2);
+    QVERIFY(result.udos.at(0).docstring.isEmpty());
+    QCOMPARE(result.udos.at(1).docstring, QString("B's doc."));
 }
 
 // A trailing comment does not stop endin/endop from closing the block.
@@ -559,6 +703,109 @@ void TestCodeScan::testInstrumentNames()
     QCOMPARE(result.instrumentNames, QStringList() << "Bells" << "Quoted Name");
     QCOMPARE(result.instruments.size(), 3);
     QCOMPARE(result.instruments.at(2).text, QString("\"Quoted Name\""));
+}
+
+// An instrument is documented with a /* ... */ block after its declaration,
+// exactly like a user-defined opcode.
+void TestCodeScan::testInstrumentDocstring()
+{
+    const QString text =
+        "instr bar\n"
+        "  /* bar instr */\n"
+        "  ifoo = p4\n"
+        "endin\n"
+        "instr \"Quoted\"\n"
+        "  /*\n"
+        "    A quoted instrument.\n"
+        "  */\n"
+        "endin\n"
+        "instr Plain\n"
+        "  ifoo = p4\n"           // no comment: no docstring
+        "endin\n";
+
+    const Result result = scan(text, Mode::Orc);
+    QCOMPARE(result.instruments.size(), 3);
+    QCOMPARE(result.instruments.at(0).docstring, QString("bar instr"));
+    QCOMPARE(result.instruments.at(1).docstring, QString("A quoted instrument."));
+    QVERIFY(result.instruments.at(2).docstring.isEmpty());
+}
+
+// The help signature of an instrument is its name and the p-fields directly
+// assigned in the body: legacy prefix types and Csound 7 type suffixes.
+void TestCodeScan::testInstrumentSignature()
+{
+    const QString text =
+        "instr bar\n"
+        "  /* bar instr */\n"
+        "  ifoo = p4\n"
+        "  kbar = p5\n"
+        "  gkglob = p6\n"         // global: the type follows the g
+        "  typed:k = p7\n"        // Csound 7 annotation
+        "  inamed:i = p8\n"
+        "  kfreq = p5 * 2\n"      // not a direct p-field
+        "  dummy = p9\n"          // no type at all
+        "  ifoo = p10\n"          // same variable again: not listed twice
+        "endin\n"
+        "instr Other\n"
+        "  ibaz = p4\n"
+        "endin\n"
+        "instr Empty\n"
+        "endin\n"
+        "instr 4\n"              // numeric: nothing to name in a signature
+        "  ifoo = p4\n"
+        "endin\n";
+
+    const Result result = scan(text, Mode::Orc);
+    QCOMPARE(result.instruments.size(), 4);
+
+    const Definition &bar = result.instruments.at(0);
+    QCOMPARE(bar.pFields, QStringList() << "ifoo:i(p4)" << "kbar:k(p5)"
+                                        << "gkglob:k(p6)" << "typed:k(p7)"
+                                        << "inamed:i(p8)");
+    QCOMPARE(bar.callSignature,
+             QString("bar ifoo:i(p4), kbar:k(p5), gkglob:k(p6), "
+                     "typed:k(p7), inamed:i(p8)"));
+
+    QCOMPARE(result.instruments.at(1).callSignature, QString("Other ibaz:i(p4)"));
+    // Without p-fields there is no signature; the docstring still documents it.
+    QVERIFY(result.instruments.at(2).callSignature.isEmpty());
+    QVERIFY(result.instruments.at(3).callSignature.isEmpty());
+}
+
+// An instrument can take several p-fields at once: as a list of assignments,
+// or with passign, which numbers them from the given start.
+void TestCodeScan::testInstrumentMultiAssignment()
+{
+    const QString text =
+        "instr bar\n"
+        "  idefault passign\n"           // default start is p1
+        "  ichan, icc, ival = p4, p5, p6\n"
+        "  typedpan:k, typeddep:k = p7, p8\n"
+        "  inote, ivel passign 9\n"
+        "  ipan, idepth = passign(11)\n"
+        "  ifoo, ifoo2 passign 13, 15\n" // iend limits, it does not renumber
+        "  ibare = p16\n"
+        "  ifail = p17, p18\n"           // counts differ: not a parameter list
+        "  kfoo = p19 + 1\n"             // not a direct p-field
+        "  iarr[0] = p20\n"              // not a plain variable
+        "  ityped:q = p21\n"             // unknown type: not a variable
+        "endin\n";
+
+    const Result result = scan(text, Mode::Orc);
+    const Definition &bar = result.instruments.first();
+    QCOMPARE(bar.pFields, QStringList() << "idefault:i(p1)" << "ichan:i(p4)"
+                                        << "icc:i(p5)" << "ival:i(p6)"
+                                        << "typedpan:k(p7)" << "typeddep:k(p8)"
+                                        << "inote:i(p9)" << "ivel:i(p10)"
+                                        << "ipan:i(p11)" << "idepth:i(p12)"
+                                        << "ifoo:i(p13)" << "ifoo2:i(p14)"
+                                        << "ibare:i(p16)");
+    QCOMPARE(bar.callSignature,
+             QString("bar idefault:i(p1), ichan:i(p4), icc:i(p5), "
+                     "ival:i(p6), typedpan:k(p7), typeddep:k(p8), "
+                     "inote:i(p9), ivel:i(p10), ipan:i(p11), "
+                     "idepth:i(p12), ifoo:i(p13), ifoo2:i(p14), "
+                     "ibare:i(p16)"));
 }
 
 void TestCodeScan::testInclude()

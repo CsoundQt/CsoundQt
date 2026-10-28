@@ -56,6 +56,9 @@ KeyboardShortcuts::KeyboardShortcuts(QWidget *parent, const QVector<QAction *> k
     m_modified = false;
 	setupUi(this);
 	setWindowTitle(tr("Keyboard Shortcuts"));
+	// The .ui leaves the header texts empty, and Qt then numbers the columns.
+	tableWidget->setHorizontalHeaderLabels(QStringList{
+			tr("Action"), tr("Shortcut")});
 	//   QDialog::setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 	connect(restorePushButton, SIGNAL(released()), this, SLOT(restoreDefaults()));
 	connect(tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(assignShortcut(int, int)));
@@ -63,13 +66,6 @@ KeyboardShortcuts::KeyboardShortcuts(QWidget *parent, const QVector<QAction *> k
 	// cf. QuteWidget::showAvailableProperties()
 	connect(filterLineEdit, &QLineEdit::textChanged, this, &KeyboardShortcuts::filterTable);
 	refreshTable();
-}
-
-KeyboardShortcuts::~KeyboardShortcuts()
-{
-	for (int i = 0; i < m_keyActions.size(); i++) {
-		m_keyActions[i]->setShortcut(getShortcut(shortcutName(m_keyActions[i])));
-	}
 }
 
 void KeyboardShortcuts::refreshTable()
@@ -108,45 +104,48 @@ void KeyboardShortcuts::filterTable(const QString &filter)
 	}
 }
 
-bool KeyboardShortcuts::shortcutTaken(QString shortcut, int excludeRow)
+// The rows whose shortcut cannot coexist with this one: the same sequence, or
+// one that is a prefix of the other (Qt would fire the shorter one at once).
+QList<int> KeyboardShortcuts::conflictingRows(const QString &shortcut,
+											  int excludeRow) const
 {
+	QList<int> rows;
 	const QKeySequence candidate(shortcut);
 	if (candidate.isEmpty()) {
-		return false; // An empty shortcut clears the assignment
+		return rows; // An empty shortcut clears the assignment
 	}
-	int rows = tableWidget->rowCount();
-	for (int i = 0; i < rows; i++) {
+	for (int i = 0; i < tableWidget->rowCount(); i++) {
 		if (i == excludeRow) {
 			continue;
 		}
 		QTableWidgetItem *key = tableWidget->item(i, 1);
 		if (key != 0 && !key->text().isEmpty()
 				&& sequencesConflict(candidate, QKeySequence(key->text()))) {
-			return true;
+			rows.append(i);
 		}
 	}
-	return false;
+	return rows;
 }
 
-QString KeyboardShortcuts::getShortcut(QString action)
+// The dialog only has a Close button, so every change is written to the action
+// at the moment it is made instead of being collected and applied when the
+// window goes away.
+void KeyboardShortcuts::applyShortcut(const QString &actionName,
+									  const QString &shortcut)
 {
-	int rows = tableWidget->rowCount();
-	for (int i = 0; i < rows; i++) {
-		QTableWidgetItem *name = tableWidget->item(i, 0);
-		QTableWidgetItem *key = tableWidget->item(i, 1);
-		if (name != 0 && name->text() == action) {
-			if (key != 0) {
-				return key->text();
-			}
-			break;
+	for (QAction *action : m_keyActions) {
+		if (shortcutName(action) == actionName) {
+			action->setShortcut(QKeySequence(shortcut));
+			return;
 		}
 	}
-	return QString();
 }
 
 void KeyboardShortcuts::restoreDefaults()
 {
 	emit restoreDefaultShortcuts();  // To have the main application restore the default shortcuts in the m_keyActions pointer
+	// Defaults are new values too, and must be stored when the dialog closes.
+	m_modified = true;
 	refreshTable();
 }
 
@@ -168,14 +167,52 @@ void KeyboardShortcuts::assignShortcut(int row, int /*column*/)
 	QString key = keyitem->text();
 	KeySelector dialog(this, name, key);
 	if (dialog.exec() == QDialog::Accepted) {
-		if (shortcutTaken(dialog.newShortcut, row)) {
-			QMessageBox::warning(this, tr("Invalid shortcut"),
-								 tr("Shortcut cannot be assigned.\nIt is already used or is a prefix of another shortcut."),
-								 QMessageBox::Ok,
-								 QMessageBox::Ok);
-			return;
+		// A shortcut belongs to one action. Rather than refuse the assignment,
+		// name the actions that hold it and let the user take it over.
+		const QList<int> conflicts = conflictingRows(dialog.newShortcut, row);
+		if (!conflicts.isEmpty()) {
+			QStringList usedBy;
+			for (int conflictRow : conflicts) {
+				QTableWidgetItem *conflictName = tableWidget->item(conflictRow, 0);
+				usedBy.append(QStringLiteral("\"%1\"").arg(
+						conflictName != nullptr
+						? conflictName->text().toHtmlEscaped() : QString()));
+			}
+			const QString shortcut = QKeySequence(dialog.newShortcut).toString()
+					.toHtmlEscaped();
+			QMessageBox box(this);
+			box.setIcon(QMessageBox::Warning);
+			box.setWindowTitle(tr("Shortcut Already Used"));
+			if (usedBy.size() == 1) {
+				box.setText(tr("The shortcut <b>%1</b> is already used by<br>%2.")
+							.arg(shortcut, usedBy.first()));
+			} else {
+				box.setText(tr("The shortcut <b>%1</b> is already used by:<br>%2")
+							.arg(shortcut, usedBy.join(QStringLiteral("<br>"))));
+			}
+			box.setInformativeText(tr("Overwrite it and assign the shortcut to \"%1\"?")
+								   .arg(name.toHtmlEscaped()));
+			QPushButton *overwrite = box.addButton(tr("Overwrite"),
+												   QMessageBox::AcceptRole);
+			QPushButton *cancel = box.addButton(QMessageBox::Cancel);
+			box.setDefaultButton(cancel);
+			box.exec();
+			if (box.clickedButton() != overwrite) {
+				return;
+			}
+			// Take the sequence over: the other actions lose their shortcut
+			// right away, exactly as their cleared rows show.
+			for (int conflictRow : conflicts) {
+				QTableWidgetItem *conflictName = tableWidget->item(conflictRow, 0);
+				if (QTableWidgetItem *conflictKey = tableWidget->item(conflictRow, 1)) {
+					conflictKey->setText(QString());
+				}
+				applyShortcut(conflictName != nullptr
+							  ? conflictName->text() : QString(), QString());
+			}
 		}
 		keyitem->setText(dialog.newShortcut);
+		applyShortcut(name, dialog.newShortcut);
         m_modified = true;
 		//    refreshTable();
 	}

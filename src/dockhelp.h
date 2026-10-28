@@ -41,6 +41,9 @@ public:
 
 	bool hasFocus();
     void loadFile(QString fileName, QString anchor="");
+    // Renders a page that is not part of the manual, e.g. a UDO docstring.
+    // title is plain text; html is the rendered document body.
+    void showHtml(const QString &title, const QString &html);
     void clear();
 	bool externalBrowser;
 	QString docDir;

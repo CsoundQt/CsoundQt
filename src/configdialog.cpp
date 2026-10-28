@@ -273,6 +273,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     lineNumberContrastSpinBox->setEnabled(lineNumbersCheckBox->isChecked());
     connect(lineNumbersCheckBox, &QCheckBox::toggled,
             lineNumberContrastSpinBox, &QWidget::setEnabled);
+    // The hover delay only means something while the card appears on hover.
+    quickHelpOnHoverDelaySpinBox->setEnabled(quickHelpOnHoverCheckBox->isChecked());
+    connect(quickHelpOnHoverCheckBox, &QCheckBox::toggled,
+            quickHelpOnHoverDelaySpinBox, &QWidget::setEnabled);
     connect(editorThemeComboBox, &QComboBox::currentIndexChanged,
             this, [this](int) {
         duplicateThemeButton->setEnabled(
@@ -345,6 +349,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     toolbarIconSizeSpinBox->setValue(m_options->toolbarIconSize);
 	wrapLinesCheckBox->setChecked(m_options->wrapLines);
 	autoCompleteCheckBox->setChecked(m_options->autoComplete);
+    quickHelpOnHoverCheckBox->setChecked(m_options->quickHelpOnHover);
+    quickHelpOnHoverDelaySpinBox->setValue(m_options->quickHelpHoverDelay);
     autoCompleteDelaySpinBox->setValue(m_options->autoCompleteDelay);
     autocompleteMenuWidthSpinBox->setValue(m_options->autocompleteMenuWidth);
     autocompleteMenuMaxLinesSpinBox->setValue(m_options->autocompleteMenuMaxLines);
@@ -743,6 +749,10 @@ void ConfigDialog::apply()
     m_options->toolbarIconSize = toolbarIconSizeSpinBox->value();
 	m_options->wrapLines = wrapLinesCheckBox->isChecked();
 	m_options->autoComplete = autoCompleteCheckBox->isChecked();
+	m_options->quickHelpOnHover = quickHelpOnHoverCheckBox->isChecked();
+	// Keep the delay on the spin box grid even when a value was typed in.
+	m_options->quickHelpHoverDelay =
+			(quickHelpOnHoverDelaySpinBox->value() / 10) * 10;
     m_options->autoCompleteDelay = autoCompleteDelaySpinBox->value();
     m_options->autocompleteMenuWidth = autocompleteMenuWidthSpinBox->value();
     m_options->autocompleteMenuMaxLines = autocompleteMenuMaxLinesSpinBox->value();

@@ -264,31 +264,77 @@ Opcode OpEntryParser::findOpcode(QString opcodeName) {
     return Opcode("");
 }
 
-QString opcodeSyntax(Opcode opc) {
+namespace {
+
+// The call of an opcode as the manual writes it, without its description.
+// (The manual's repeated optional argument groups are already joined into one
+// group when opcodes.xml is generated, see util/opcodeparser7.py.)
+QString opcodeCallSyntax(const Opcode &opc)
+{
+    const QString inArgs = opc.inArgs.simplified();
     if (opc.newStyle) {
-        QString syntax = opc.opcodeName.simplified()
-                + "(" + opc.inArgs.simplified() + ")";
+        QString syntax = opc.opcodeName.simplified() + "(" + inArgs + ")";
         if (!opc.outArgs.isEmpty()) {
             if (opc.outArgs.contains(QLatin1Char(',')))
                 syntax += ":(" + opc.outArgs.simplified() + ")";
             else
                 syntax += ":" + opc.outArgs.simplified();
         }
-        if (!opc.desc.isEmpty())
-            syntax += "<br />[ " + opc.desc + " ]";
         return syntax;
     }
     QString syntax = opc.outArgs.simplified();
     if (!opc.outArgs.isEmpty())
         syntax += " ";
     syntax += opc.opcodeName.simplified();
-    if (!opc.inArgs.isEmpty()) {
-        syntax += " " + opc.inArgs.simplified();
+    if (!inArgs.isEmpty()) {
+        // The arguments come with their parentheses: the name is followed by
+        // them directly, as in a call.
+        syntax += inArgs.startsWith(QLatin1Char('(')) ? inArgs
+                                                      : " " + inArgs;
     }
+    return syntax;
+}
+
+} // namespace
+
+QString opcodeSyntax(Opcode opc) {
+    QString syntax = opcodeCallSyntax(opc);
     if(!opc.desc.isEmpty()) {
         syntax += "<br />[ " + opc.desc + " ]";
     }
     return syntax;
+}
+
+// The body of a quick-reference page for an opcode: every syntax variant the
+// manual lists for the name, then its description. The page title is added by
+// whoever shows the page. Long options have no syntax, only a description.
+QString OpEntryParser::quickReferenceHtml(const QString &opcodeName) const
+{
+    QStringList syntaxes;
+    QString description;
+    for (const Opcode &opcode : opcodeList) {
+        if (opcode.opcodeName != opcodeName)
+            continue;
+        if (description.isEmpty())
+            description = opcode.desc;
+        if (opcode.isFlag)
+            continue;
+        const QString syntax = opcodeCallSyntax(opcode);
+        if (!syntax.isEmpty() && !syntaxes.contains(syntax))
+            syntaxes.append(syntax);
+    }
+
+    QString html;
+    if (!syntaxes.isEmpty()) {
+        // One block for all variants: a <pre> per variant would be separated by
+        // the element's margin, which reads as an empty line between them.
+        html += u"<pre><code>%1</code></pre>\n"_s.arg(
+                    syntaxes.join(QLatin1Char('\n')).toHtmlEscaped());
+    }
+    if (!description.isEmpty()) {
+        html += u"<p>%1</p>\n"_s.arg(description.toHtmlEscaped());
+    }
+    return html;
 }
 
 QString OpEntryParser::getSyntax(QString opcodeName)

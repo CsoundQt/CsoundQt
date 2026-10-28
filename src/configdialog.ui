@@ -2078,6 +2078,76 @@
                 </property>
                </widget>
               </item>
+              <item row="3" column="3">
+               <widget class="QCheckBox" name="quickHelpOnHoverCheckBox">
+                <property name="toolTip">
+                 <string>Show quick reference for symbol on hover. &lt;ctrl&gt;+hover always shows quick help</string>
+                </property>
+                <property name="text">
+                 <string>Show Quick Help on hover</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="4">
+               <layout class="QHBoxLayout" name="quickHelpOnHoverDelayLayout">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QSpinBox" name="quickHelpOnHoverDelaySpinBox">
+                  <property name="toolTip">
+                   <string>How long the pointer must rest on a symbol before the quick reference card appears, in milliseconds</string>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="suffix">
+                   <string> ms</string>
+                  </property>
+                  <property name="maximum">
+                   <number>2000</number>
+                  </property>
+                  <property name="singleStep">
+                   <number>10</number>
+                  </property>
+                  <property name="value">
+                   <number>500</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="quickHelpOnHoverDelaySpacer">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>10</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
               <item row="0" column="4">
                <spacer name="horizontalSpacer_15">
                 <property name="orientation">

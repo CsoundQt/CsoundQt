@@ -75,6 +75,11 @@ public:
 	bool wrapLines;
 	bool autoComplete;
     int autoCompleteDelay;
+    // Show the quick reference card when the pointer rests on an opcode, UDO or
+    // instrument, without pressing Ctrl. Ctrl+hover works in either case.
+    bool quickHelpOnHover;
+    // Delay before that card appears, in milliseconds; 0 shows it at once.
+    int quickHelpHoverDelay;
     // Width of the autocomplete menu, in characters of the entries it lists.
     int autocompleteMenuWidth;
     // Maximum number of rows visible in the autocomplete popup; the rest of

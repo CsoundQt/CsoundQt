@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 #include <QClipboard>
 #include <QRegularExpression>
+#include <QCryptographicHash>
 #include <QMap>
 #include <QDebug>
 
@@ -166,6 +167,54 @@ static std::string loadStylesheets(const QString &dir)
     return all;
 }
 
+// Styling for pages that are not part of the manual (UDO docstrings). The
+// manual stylesheets are not available for those pages, so this supplies the
+// few rules the generated Markdown HTML relies on.
+static const char *const inlineCss = R"(
+body {
+    color: #202020;
+    background-color: #ffffff;
+    margin: 16px;
+    font-size: 14px;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #202020;
+    margin-top: 0.8em;
+    margin-bottom: 0.4em;
+}
+h1 {
+    margin-top: 0;
+}
+p {
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+}
+ul {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+    padding-left: 24px;
+}
+li {
+    margin-top: 0.15em;
+    margin-bottom: 0.15em;
+}
+code {
+    font-family: monospace;
+    background-color: #f1f1f1;
+    color: #202020;
+}
+pre {
+    background-color: #f4f4f4;
+    padding: 8px;
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
+}
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
+)";
+
 // ---------------------------------------------------------------------------
 
 LiteHtmlView::LiteHtmlView(QWidget *parent)
@@ -268,6 +317,23 @@ bool LiteHtmlView::loadFile(const QString &path, const QString &fragment)
     return true;
 }
 
+bool LiteHtmlView::loadHtml(const QString &html)
+{
+    if (html.isEmpty())
+        return false;
+
+    // Give every distinct page its own key. History stores the key, so going
+    // back to a docstring still renders that docstring and not a later one.
+    const QByteArray digest = QCryptographicHash::hash(
+                html.toUtf8(), QCryptographicHash::Sha1).toHex();
+    const QString key = u"csoundqt-inline:"_s + QString::fromLatin1(digest);
+    m_inlinePages.insert(key, html);
+    if (m_currentPath == key)
+        return true;
+    doLoad(key, QString(), true);
+    return true;
+}
+
 void LiteHtmlView::clear()
 {
     // Drop the rendered document and all state that refers to it (history,
@@ -275,6 +341,7 @@ void LiteHtmlView::clear()
     m_doc.reset();
     m_currentPath.clear();
     m_currentHtml.clear();
+    m_inlinePages.clear();
     m_history.clear();
     m_historyPos = -1;
     m_selecting = false;
@@ -296,7 +363,13 @@ void LiteHtmlView::clear()
 void LiteHtmlView::doLoad(const QString &path, const QString &fragment, bool pushHistory)
 {
     m_zoomCommitTimer->stop(); // this load renders the requested zoom
-    if (m_currentHtml.isEmpty() || m_currentPath != path)
+    const auto inlinePage = m_inlinePages.constFind(path);
+    const bool isInlinePage = inlinePage != m_inlinePages.constEnd();
+    if (isInlinePage)
+    {
+        m_currentHtml = inlinePage.value();
+    }
+    else if (m_currentHtml.isEmpty() || m_currentPath != path)
     {
         QFile f(path);
         if (!f.open(QIODevice::ReadOnly))
@@ -307,10 +380,15 @@ void LiteHtmlView::doLoad(const QString &path, const QString &fragment, bool pus
         m_currentHtml = extractArticle(QString::fromUtf8(f.readAll()));
     }
     m_currentPath = path;
-    m_container.setBaseDir(QFileInfo(path).absolutePath());
+    if (isInlinePage)
+        m_container.setBaseDir(QString());
+    else
+        m_container.setBaseDir(QFileInfo(path).absolutePath());
     m_container.setDefaultFontSize(qRound(16.0 * m_zoomFactor));
     m_renderedZoom = m_zoomFactor; // the preview scale is 1 from here on
-    std::string css = loadStylesheets(findSiteRoot(path));
+    std::string css = isInlinePage
+            ? std::string(inlineCss)
+            : loadStylesheets(findSiteRoot(path));
     m_doc = document::createFromString(m_currentHtml.toStdString(), &m_container, master_css, css);
     m_selecting = false;
     m_hasSelection = false;

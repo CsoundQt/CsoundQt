@@ -129,6 +129,27 @@ class TestNameResolution(unittest.TestCase):
     def test_unresolved_line(self):
         self.assertIsNone(opcodeparser7.resolve('...', ['for']))
 
+    def test_repeated_optional_groups_are_joined(self):
+        name, out_args, in_args = opcodeparser7.resolve(
+            'ares = comb(asig, krvt, ilpt [, iskip] [, insmps])', ['comb'])
+        self.assertEqual(in_args, '(asig, krvt, ilpt [,iskip, insmps])')
+
+    def test_more_than_two_optional_groups_keep_joining(self):
+        name, out_args, in_args = opcodeparser7.resolve(
+            'ares = vco2(kamp, kcps [, imode] [, kpw] [, kphs] [, inyx])',
+            ['vco2'])
+        self.assertEqual(in_args, '(kamp, kcps [,imode, kpw, kphs, inyx])')
+
+    def test_optional_groups_already_in_one_group_are_kept(self):
+        name, out_args, in_args = opcodeparser7.resolve(
+            'ares = oscili(xamp, xcps[, ifn, iphs])', ['oscili'])
+        self.assertEqual(in_args, '(xamp, xcps[, ifn, iphs])')
+
+    def test_nested_optional_groups_are_left_alone(self):
+        name, out_args, in_args = opcodeparser7.resolve(
+            'kres = x(kamp [, iatt [, idec]])', ['x'])
+        self.assertEqual(in_args, '(kamp [, iatt [, idec]])')
+
 
 class TestPage(unittest.TestCase):
     def test_front_matter(self):

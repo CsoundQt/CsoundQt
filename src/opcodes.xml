@@ -74,7 +74,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ar =<opcodename>adsynt2</opcodename>(kamp, kcps, iwfn, ifreqfn, iampfn, icnt [, iphs])</synopsis>
 </opcode>
 <opcode><desc>An oscillator which takes tonality and brightness as arguments, relative to a base frequency.</desc>
-<synopsis>ares =<opcodename>hsboscil</opcodename>(kamp, ktone, kbrite, ibasfreq, iwfn, ioctfn [, ioctcnt] [, iphs])</synopsis>
+<synopsis>ares =<opcodename>hsboscil</opcodename>(kamp, ktone, kbrite, ibasfreq, iwfn, ioctfn [,ioctcnt, iphs])</synopsis>
 </opcode>
 </category>
 <category name="Signal Generators:Basic Oscillators">
@@ -83,7 +83,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>lfo</opcodename>(kamp, kcps [, itype])</synopsis>
 </opcode>
 <opcode><desc>Mixes the output of any number of oscillators.</desc>
-<synopsis>ares =<opcodename>oscilbank</opcodename>(kcps, kamd, kfmd, kpmd, iovrlap, iseed, kl1minf, kl1maxf, kl2minf, kl2maxf, ilfomode, keqminf, keqmaxf, keqminl, keqmaxl, keqminq, keqmaxq, ieqmode, kfn [, il1fn] [, il2fn] [, ieqffn] [, ieqlfn] [, ieqqfn] [, itabl] [, ioutfn])</synopsis>
+<synopsis>ares =<opcodename>oscilbank</opcodename>(kcps, kamd, kfmd, kpmd, iovrlap, iseed, kl1minf, kl1maxf, kl2minf, kl2maxf, ilfomode, keqminf, keqmaxf, keqminl, keqmaxl, keqminq, keqmaxq, ieqmode, kfn [,il1fn, il2fn, ieqffn, ieqlfn, ieqqfn, itabl, ioutfn])</synopsis>
 </opcode>
 <opcode><desc>A simple oscillator without any interpolation.</desc>
 <synopsis>ares =<opcodename>oscil</opcodename>(xamp, xcps [, ifn, iphs])</synopsis>
@@ -98,8 +98,8 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>oscili</opcodename>(kamp, kcps[, ifn, iphs])</synopsis>
 </opcode>
 <opcode><desc>A linearly interpolated oscillator that allows changing the table number at k-rate.</desc>
-<synopsis>ares =<opcodename>oscilikt</opcodename>(xamp, xcps, kfn [, iphs] [, istor])</synopsis>
-<synopsis>kres =<opcodename>oscilikt</opcodename>(kamp, kcps, kfn [, iphs] [, istor])</synopsis>
+<synopsis>ares =<opcodename>oscilikt</opcodename>(xamp, xcps, kfn [,iphs, istor])</synopsis>
+<synopsis>kres =<opcodename>oscilikt</opcodename>(kamp, kcps, kfn [,iphs, istor])</synopsis>
 </opcode>
 <opcode><desc>A linearly interpolated oscillator that allows allows phase modulation.</desc>
 <synopsis>ares =<opcodename>osciliktp</opcodename>(kcps, kfn, kphs [, istor])</synopsis>
@@ -151,14 +151,14 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>mpulse</opcodename>(kamp, kintvl [, ioffset])</synopsis>
 </opcode>
 <opcode><desc>A mostly bandlimited shape-shifting square-pulse-saw-sinewave oscillator with hardsync.</desc>
-<synopsis>aout [, asyncout] =<opcodename>squinewave</opcodename>(acps, aClip, aSkew, asyncin [, iMinSweep] [, iphase])</synopsis>
-<synopsis>aout [, asyncout] =<opcodename>squinewave</opcodename>(acps, aClip, aSkew [, ksyncin] [, iMinSweep] [, iphase])</synopsis>
+<synopsis>aout [, asyncout] =<opcodename>squinewave</opcodename>(acps, aClip, aSkew, asyncin [,iMinSweep, iphase])</synopsis>
+<synopsis>aout [, asyncout] =<opcodename>squinewave</opcodename>(acps, aClip, aSkew [,ksyncin, iMinSweep, iphase])</synopsis>
 </opcode>
 <opcode><desc>Implementation of a band limited, analog modeled oscillator.</desc>
-<synopsis>ares =<opcodename>vco</opcodename>(xamp, xcps, iwave, kpw [, ifn] [, imaxd] [, ileak] [, inyx] [, iphs] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>vco</opcodename>(xamp, xcps, iwave, kpw [,ifn, imaxd, ileak, inyx, iphs, iskip])</synopsis>
 </opcode>
 <opcode><desc>Implementation of a band-limited oscillator using pre-calculated tables.</desc>
-<synopsis>ares =<opcodename>vco2</opcodename>(kamp, kcps [, imode] [, kpw] [, kphs] [, inyx])</synopsis>
+<synopsis>ares =<opcodename>vco2</opcodename>(kamp, kcps [,imode, kpw, kphs, inyx])</synopsis>
 </opcode>
 <opcode><desc>Returns a table number at k-time for a given oscillator frequency and wavform.</desc>
 <synopsis>kfn =<opcodename>vco2ft</opcodename>(kcps, iwave [, inyx])</synopsis>
@@ -167,27 +167,27 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ifn =<opcodename>vco2ift</opcodename>(icps, iwave [, inyx])</synopsis>
 </opcode>
 <opcode><desc>Calculates tables for use by vco2 opcode.</desc>
-<synopsis>ifn =<opcodename>vco2init</opcodename>(iwave [, ibasfn] [, ipmul] [, iminsiz] [, imaxsiz] [, isrcft])</synopsis>
+<synopsis>ifn =<opcodename>vco2init</opcodename>(iwave [,ibasfn, ipmul, iminsiz, imaxsiz, isrcft])</synopsis>
 </opcode>
 </category>
 <category name="Signal Generators:FM Synthesis">
 <opcode><desc>Two oscillators, mutually frequency and/or phase modulated by each other.</desc>
-<synopsis>a1, a2 =<opcodename>crossfm</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2])</synopsis>
+<synopsis>a1, a2 =<opcodename>crossfm</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [,iphs1, iphs2])</synopsis>
 </opcode>
 <opcode><desc>Two oscillators, mutually frequency and/or phase modulated by each other.</desc>
-<synopsis>a1, a2 =<opcodename>crossfmi</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2])</synopsis>
+<synopsis>a1, a2 =<opcodename>crossfmi</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [,iphs1, iphs2])</synopsis>
 </opcode>
 <opcode><desc>Two oscillators, mutually frequency and/or phase modulated by each other.</desc>
-<synopsis>a1, a2 =<opcodename>crosspm</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2])</synopsis>
+<synopsis>a1, a2 =<opcodename>crosspm</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [,iphs1, iphs2])</synopsis>
 </opcode>
 <opcode><desc>Two oscillators, mutually frequency and/or phase modulated by each other.</desc>
-<synopsis>a1, a2 =<opcodename>crosspmi</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2])</synopsis>
+<synopsis>a1, a2 =<opcodename>crosspmi</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [,iphs1, iphs2])</synopsis>
 </opcode>
 <opcode><desc>Two oscillators, mutually frequency and/or phase modulated by each other.</desc>
-<synopsis>a1, a2 =<opcodename>crossfmpm</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2])</synopsis>
+<synopsis>a1, a2 =<opcodename>crossfmpm</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [,iphs1, iphs2])</synopsis>
 </opcode>
 <opcode><desc>Two oscillators, mutually frequency and/or phase modulated by each other.</desc>
-<synopsis>a1, a2 =<opcodename>crossfmpmi</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2])</synopsis>
+<synopsis>a1, a2 =<opcodename>crossfmpmi</opcodename>(xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [,iphs1, iphs2])</synopsis>
 </opcode>
 <opcode><desc>Uses FM synthesis to create a Hammond B3 organ sound.</desc>
 <synopsis>ares =<opcodename>fmb3</opcodename>(kamp, kfreq, kc1, kc2, kvdepth, kvrate[, ifn1, ifn2, ifn3, ifn4, ivfn])</synopsis>
@@ -222,25 +222,25 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>asig =<opcodename>diskgrain</opcodename>(Sfname, kamp, kfreq, kpitch, kgrsize, kprate, ifun, iolaps [,imaxgrsize , ioffset])</synopsis>
 </opcode>
 <opcode><desc>Produces sinusoid bursts useful for formant and granular synthesis.</desc>
-<synopsis>ares =<opcodename>fof</opcodename>(xamp, xfund, xform, koct, kband, kris, kdur, kdec, iolaps, ifna, ifnb, itotdur [, iphs] [, ifmode] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>fof</opcodename>(xamp, xfund, xform, koct, kband, kris, kdur, kdec, iolaps, ifna, ifnb, itotdur [,iphs, ifmode, iskip])</synopsis>
 </opcode>
 <opcode><desc>Produces sinusoid bursts including k-rate incremental indexing with each successive burst.</desc>
 <synopsis>ares =<opcodename>fof2</opcodename>(xamp, xfund, xform, koct, kband, kris, kdur, kdec, iolaps, ifna, ifnb, itotdur, kphs, kgliss [, iskip])</synopsis>
 </opcode>
 <opcode><desc>Audio output is a succession of grains derived from data in a stored function table.</desc>
-<synopsis>ares =<opcodename>fog</opcodename>(xamp, xdens, xtrans, aspd, koct, kband, kris, kdur, kdec, iolaps, ifna, ifnb, itotdur [, iphs] [, itmode] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>fog</opcodename>(xamp, xdens, xtrans, aspd, koct, kband, kris, kdur, kdec, iolaps, ifna, ifnb, itotdur [,iphs, itmode, iskip])</synopsis>
 </opcode>
 <opcode><desc>Generates granular synthesis textures.</desc>
 <synopsis>ares =<opcodename>grain</opcodename>(xamp, xpitch, xdens, kampoff, kpitchoff, kgdur, igfn, iwfn, imgdur [, igrnd])</synopsis>
 </opcode>
 <opcode><desc>Easy-to-use granular synthesis texture generator.</desc>
-<synopsis>ares =<opcodename>grain2</opcodename>(kcps, kfmd, kgdur, iovrlp, kfn, iwfn [, irpow] [, iseed] [, imode])</synopsis>
+<synopsis>ares =<opcodename>grain2</opcodename>(kcps, kfmd, kgdur, iovrlp, kfn, iwfn [,irpow, iseed, imode])</synopsis>
 </opcode>
 <opcode><desc>Generate granular synthesis textures with more user control.</desc>
-<synopsis>ares =<opcodename>grain3</opcodename>(kcps, kphs, kfmd, kpmd, kgdur, kdens, imaxovr, kfn, iwfn, kfrpow, kprpow [, iseed] [, imode])</synopsis>
+<synopsis>ares =<opcodename>grain3</opcodename>(kcps, kphs, kfmd, kpmd, kgdur, kdens, imaxovr, kfn, iwfn, kfrpow, kprpow [,iseed, imode])</synopsis>
 </opcode>
 <opcode><desc>A more complex granular synthesis texture generator.</desc>
-<synopsis>ares =<opcodename>granule</opcodename>(xamp, ivoice, iratio, imode, ithd, ifn, ipshift, igskip, igskip_os, ilength, kgap, igap_os, kgsize, igsize_os, iatt, idec [, iseed] [, ipitch1] [, ipitch2] [, ipitch3] [, ipitch4] [, ifnenv])</synopsis>
+<synopsis>ares =<opcodename>granule</opcodename>(xamp, ivoice, iratio, imode, ithd, ifn, ipshift, igskip, igskip_os, ilength, kgap, igap_os, kgsize, igsize_os, iatt, idec [,iseed, ipitch1, ipitch2, ipitch3, ipitch4, ifnenv])</synopsis>
 </opcode>
 <opcode><desc>Granular synthesizer with "per grain" control over many of its parameters.</desc>
 <synopsis>a1 [, a2, a3, a4, a5, a6, a7, a8] =<opcodename>partikkel</opcodename>(agrainfreq, kdistribution, idisttab, async, kenv2amt, ienv2tab, ienv_attack, ienv_decay, ksustain_amount, ka_d_ratio, kduration, kamp, igainmasks, kwavfreq, ksweepshape, iwavfreqstarttab, iwavfreqendtab, awavfm, ifmamptab, kfmenv, icosine, ktraincps, knumpartials, kchroma, ichannelmasks, krandommask, kwaveform1, kwaveform2, kwaveform3, kwaveform4, iwaveamptab, asamplepos1, asamplepos2, asamplepos3, asamplepos4, kwavekey1, kwavekey2, kwavekey3, kwavekey4, imax_grains [, iopcode_id, ipanlaws])</synopsis>
@@ -267,7 +267,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>asig =<opcodename>syncloop</opcodename>(kamp, kfreq, kpitch, kgrsize, kprate, klstart, klend, ifun1, ifun2, iolaps[,istart, iskip])</synopsis>
 </opcode>
 <opcode><desc>Simple vocal simulation based on glottal pulses with formant characteristics.</desc>
-<synopsis>ar =<opcodename>vosim</opcodename>(kamp, kFund, kForm, kDecay, kPulseCount, kPulseFactor, ifn [, iskip] [, icorrect])</synopsis>
+<synopsis>ar =<opcodename>vosim</opcodename>(kamp, kFund, kForm, kDecay, kPulseCount, kPulseFactor, ifn [,iskip, icorrect])</synopsis>
 </opcode>
 </category>
 <category name="Signal Generators:Hyper Vectorial Synthesis">
@@ -302,16 +302,16 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ky, kz =<opcodename>bpfcos</opcodename>(kx, ixs[], iys[], izs[])</synopsis>
 </opcode>
 <opcode><desc>Trace a series of line segments between specified points with cosine interpolation.</desc>
-<synopsis>ares =<opcodename>cosseg</opcodename>(ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
-<synopsis>kres =<opcodename>cosseg</opcodename>(ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
+<synopsis>ares =<opcodename>cosseg</opcodename>(ia, idur1, ib [,idur2, ic] [...])</synopsis>
+<synopsis>kres =<opcodename>cosseg</opcodename>(ia, idur1, ib [,idur2, ic] [...])</synopsis>
 </opcode>
 <opcode><desc>Trace a series of line segments between specified absolute points with cosine interpolation.</desc>
-<synopsis>ares =<opcodename>cossegb</opcodename>(ia, itim1, ib [, itim2] [, ic] [...])</synopsis>
-<synopsis>kres =<opcodename>cossegb</opcodename>(ia, itim1, ib [, itim2] [, ic] [...])</synopsis>
+<synopsis>ares =<opcodename>cossegb</opcodename>(ia, itim1, ib [,itim2, ic] [...])</synopsis>
+<synopsis>kres =<opcodename>cossegb</opcodename>(ia, itim1, ib [,itim2, ic] [...])</synopsis>
 </opcode>
 <opcode><desc>Trace a series of line segments between specified points with cosine interpolation, including a release segment.</desc>
-<synopsis>ares =<opcodename>cossegr</opcodename>(ia, idur1, ib [, idur2] [, ic] [...], irel, iz)</synopsis>
-<synopsis>kres =<opcodename>cossegr</opcodename>(ia, idur1, ib [, idur2] [, ic] [...], irel, iz)</synopsis>
+<synopsis>ares =<opcodename>cossegr</opcodename>(ia, idur1, ib [,idur2, ic] [...], irel, iz)</synopsis>
+<synopsis>kres =<opcodename>cossegr</opcodename>(ia, idur1, ib [,idur2, ic] [...], irel, iz)</synopsis>
 </opcode>
 <opcode><desc>Generates a normalised exponential curve in range 0 to 1 of arbitrary steepness.</desc>
 <synopsis>kout =<opcodename>expcurve</opcodename>(kindex, ksteepness)</synopsis>
@@ -321,22 +321,22 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>expon</opcodename>(ia, idur, ib)</synopsis>
 </opcode>
 <opcode><desc>Trace a series of exponential segments between specified points.</desc>
-<synopsis>ares =<opcodename>expseg</opcodename>(ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
-<synopsis>kres =<opcodename>expseg</opcodename>(ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
+<synopsis>ares =<opcodename>expseg</opcodename>(ia, idur1, ib [,idur2, ic] [...])</synopsis>
+<synopsis>kres =<opcodename>expseg</opcodename>(ia, idur1, ib [,idur2, ic] [...])</synopsis>
 </opcode>
 <opcode><desc>An exponential segment generator operating at a-rate.</desc>
-<synopsis>ares =<opcodename>expsega</opcodename>(ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
+<synopsis>ares =<opcodename>expsega</opcodename>(ia, idur1, ib [,idur2, ic] [...])</synopsis>
 </opcode>
 <opcode><desc>Trace a series of exponential segments between specified absolute points.</desc>
-<synopsis>ares =<opcodename>expsegb</opcodename>(ia, itim1, ib [, itim2] [, ic] [...])</synopsis>
-<synopsis>kres =<opcodename>expsegb</opcodename>(ia, itim1, ib [, itim2] [, ic] [...])</synopsis>
+<synopsis>ares =<opcodename>expsegb</opcodename>(ia, itim1, ib [,itim2, ic] [...])</synopsis>
+<synopsis>kres =<opcodename>expsegb</opcodename>(ia, itim1, ib [,itim2, ic] [...])</synopsis>
 </opcode>
 <opcode><desc>An exponential segment generator operating at a-rate with absolute times.</desc>
-<synopsis>ares =<opcodename>expsegba</opcodename>(ia, itim1, ib [, itim2] [, ic] [...])</synopsis>
+<synopsis>ares =<opcodename>expsegba</opcodename>(ia, itim1, ib [,itim2, ic] [...])</synopsis>
 </opcode>
 <opcode><desc>Trace a series of exponential segments between specified points including a release segment.</desc>
-<synopsis>ares =<opcodename>expsegr</opcodename>(ia, idur1, ib [, idur2] [, ic] [...], irel, iz)</synopsis>
-<synopsis>kres =<opcodename>expsegr</opcodename>(ia, idur1, ib [, idur2] [, ic] [...], irel, iz)</synopsis>
+<synopsis>ares =<opcodename>expsegr</opcodename>(ia, idur1, ib [,idur2, ic] [...], irel, iz)</synopsis>
+<synopsis>kres =<opcodename>expsegr</opcodename>(ia, idur1, ib [,idur2, ic] [...], irel, iz)</synopsis>
 </opcode>
 <opcode><desc>An implementation of a logarithmic gain curve which is similar to the gainslider~ object from Cycling 74 Max / MSP.</desc>
 <synopsis>kout =<opcodename>gainslider</opcodename>(kindex)</synopsis>
@@ -357,37 +357,37 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kC[] =<opcodename>linlin</opcodename>(kx, kA[], kB[] [, kx0, kx1 ])</synopsis>
 </opcode>
 <opcode><desc>Trace a series of line segments between specified points.</desc>
-<synopsis>ares =<opcodename>linseg</opcodename>(ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
-<synopsis>kres =<opcodename>linseg</opcodename>(ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
+<synopsis>ares =<opcodename>linseg</opcodename>(ia, idur1, ib [,idur2, ic] [...])</synopsis>
+<synopsis>kres =<opcodename>linseg</opcodename>(ia, idur1, ib [,idur2, ic] [...])</synopsis>
 </opcode>
 <opcode><desc>Trace a series of line segments between specified absolute points.</desc>
-<synopsis>ares =<opcodename>linsegb</opcodename>(ia, itim1, ib [, itim2] [, ic] [...])</synopsis>
-<synopsis>kres =<opcodename>linsegb</opcodename>(ia, itim1, ib [, itim2] [, ic] [...])</synopsis>
+<synopsis>ares =<opcodename>linsegb</opcodename>(ia, itim1, ib [,itim2, ic] [...])</synopsis>
+<synopsis>kres =<opcodename>linsegb</opcodename>(ia, itim1, ib [,itim2, ic] [...])</synopsis>
 </opcode>
 <opcode><desc>Trace a series of line segments between specified points including a release segment.</desc>
-<synopsis>ares =<opcodename>linsegr</opcodename>(ia, idur1, ib [, idur2] [, ic] [...], irel, iz)</synopsis>
-<synopsis>kres =<opcodename>linsegr</opcodename>(ia, idur1, ib [, idur2] [, ic] [...], irel, iz)</synopsis>
+<synopsis>ares =<opcodename>linsegr</opcodename>(ia, idur1, ib [,idur2, ic] [...], irel, iz)</synopsis>
+<synopsis>kres =<opcodename>linsegr</opcodename>(ia, idur1, ib [,idur2, ic] [...], irel, iz)</synopsis>
 </opcode>
 <opcode><desc>This opcode implements a formula for generating a normalised logarithmic curve in range 0 - 1.</desc>
 <synopsis>kout =<opcodename>logcurve</opcodename>(kindex, ksteepness)</synopsis>
 </opcode>
 <opcode><desc>Generate control signal consisting of linear segments delimited by two or more specified points.</desc>
-<synopsis>ksig =<opcodename>loopseg</opcodename>(kfreq, ktrig, iphase, kvalue0, ktime0 [, kvalue1] [, ktime1] [, kvalue2] [, ktime2][...])</synopsis>
+<synopsis>ksig =<opcodename>loopseg</opcodename>(kfreq, ktrig, iphase, kvalue0, ktime0 [,kvalue1, ktime1, kvalue2, ktime2][...])</synopsis>
 </opcode>
 <opcode><desc>Control signals based on linear segments.</desc>
 <synopsis>ksig =<opcodename>loopsegp</opcodename>(kphase, kvalue0, kdur0, kvalue1 [, kdur1, ... , kdurN-1, kvalueN])</synopsis>
 </opcode>
 <opcode><desc>Generate control signal consisting of exponential or linear segments delimited by two or more specified points.</desc>
-<synopsis>ksig =<opcodename>looptseg</opcodename>(kfreq, ktrig, iphase, kvalue0, ktype0, ktime0 [, kvalue1] [,ktype1] [, ktime1] [, kvalue2] [,ktype2] [, ktime2] [...] [, kvalueN] [,ktypeN] [, ktimeN])</synopsis>
+<synopsis>ksig =<opcodename>looptseg</opcodename>(kfreq, ktrig, iphase, kvalue0, ktype0, ktime0 [,kvalue1, ktype1, ktime1, kvalue2, ktype2, ktime2] [...] [,kvalueN, ktypeN, ktimeN])</synopsis>
 </opcode>
 <opcode><desc>Generate control signal consisting of exponential segments delimited by two or more specified points.</desc>
-<synopsis>ksig =<opcodename>loopxseg</opcodename>(kfreq, ktrig, iphase, kvalue0, ktime0  [, kvalue1] [, ktime1] [, kvalue2] [, ktime2] [...])</synopsis>
+<synopsis>ksig =<opcodename>loopxseg</opcodename>(kfreq, ktrig, iphase, kvalue0, ktime0  [,kvalue1, ktime1, kvalue2, ktime2] [...])</synopsis>
 </opcode>
 <opcode><desc>Generate control signal consisting of held segments.</desc>
-<synopsis>ksig =<opcodename>lpshold</opcodename>(kfreq, ktrig, iphase, kvalue0, ktime0  [, kvalue1] [, ktime1] [, kvalue2] [, ktime2] [...])</synopsis>
+<synopsis>ksig =<opcodename>lpshold</opcodename>(kfreq, ktrig, iphase, kvalue0, ktime0  [,kvalue1, ktime1, kvalue2, ktime2] [...])</synopsis>
 </opcode>
 <opcode><desc>Control signals based on held segments.</desc>
-<synopsis>ksig =<opcodename>lpsholdp</opcodename>(kphase, kvalue0, ktime0  [, kvalue1] [, ktime1] [, kvalue2] [, ktime2] [...])</synopsis>
+<synopsis>ksig =<opcodename>lpsholdp</opcodename>(kphase, kvalue0, ktime0  [,kvalue1, ktime1, kvalue2, ktime2] [...])</synopsis>
 </opcode>
 <opcode><desc>Maps a value through a curve defined by a table of breakpoints.</desc>
 <synopsis>y:k =<opcodename>remap</opcodename>(x:k, xdata[], ydata[], mode:i, bounds:i [, fill:i])</synopsis>
@@ -401,24 +401,24 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kscl =<opcodename>scale2</opcodename>(kinput, kmin, kmax [, kimin, kimax, ihtime])</synopsis>
 </opcode>
 <opcode><desc>Constructs a user-definable envelope.</desc>
-<synopsis>ares =<opcodename>transeg</opcodename>(ia, idur, itype, ib [, idur2] [, itype] [, ic] ...)</synopsis>
-<synopsis>kres =<opcodename>transeg</opcodename>(ia, idur, itype, ib [, idur2] [, itype] [, ic] ...)</synopsis>
+<synopsis>ares =<opcodename>transeg</opcodename>(ia, idur, itype, ib [,idur2, itype, ic] ...)</synopsis>
+<synopsis>kres =<opcodename>transeg</opcodename>(ia, idur, itype, ib [,idur2, itype, ic] ...)</synopsis>
 </opcode>
 <opcode><desc>Constructs a user-definable envelope in absolute time.</desc>
-<synopsis>ares =<opcodename>transegb</opcodename>(ia, itim, itype, ib [, itim2] [, itype] [, ic] ...)</synopsis>
-<synopsis>kres =<opcodename>transegb</opcodename>(ia, itim, itype, ib [, itim2] [, itype] [, ic] ...)</synopsis>
+<synopsis>ares =<opcodename>transegb</opcodename>(ia, itim, itype, ib [,itim2, itype, ic] ...)</synopsis>
+<synopsis>kres =<opcodename>transegb</opcodename>(ia, itim, itype, ib [,itim2, itype, ic] ...)</synopsis>
 </opcode>
 <opcode><desc>Constructs a user-definable envelope with extended release segment.</desc>
-<synopsis>ares =<opcodename>transegr</opcodename>(ia, idur, itype, ib [, idur2] [, itype] [, ic] ...)</synopsis>
-<synopsis>kres =<opcodename>transegr</opcodename>(ia, idur, itype, ib [, idur2] [, itype] [, ic] ...)</synopsis>
+<synopsis>ares =<opcodename>transegr</opcodename>(ia, idur, itype, ib [,idur2, itype, ic] ...)</synopsis>
+<synopsis>kres =<opcodename>transegr</opcodename>(ia, idur, itype, ib [,idur2, itype, ic] ...)</synopsis>
 </opcode>
 <opcode><desc>Triggers a series of exponential segments between specified points.</desc>
-<synopsis>ares =<opcodename>trigexpseg</opcodename>(kTrig, ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
-<synopsis>kres =<opcodename>trigexpseg</opcodename>(kTrig, ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
+<synopsis>ares =<opcodename>trigexpseg</opcodename>(kTrig, ia, idur1, ib [,idur2, ic] [...])</synopsis>
+<synopsis>kres =<opcodename>trigexpseg</opcodename>(kTrig, ia, idur1, ib [,idur2, ic] [...])</synopsis>
 </opcode>
 <opcode><desc>Triggers a series of line segments between specified points.</desc>
-<synopsis>ares =<opcodename>triglinseg</opcodename>(kTrig, ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
-<synopsis>kres =<opcodename>triglinseg</opcodename>(kTrig, ia, idur1, ib [, idur2] [, ic] [...])</synopsis>
+<synopsis>ares =<opcodename>triglinseg</opcodename>(kTrig, ia, idur1, ib [,idur2, ic] [...])</synopsis>
+<synopsis>kres =<opcodename>triglinseg</opcodename>(kTrig, ia, idur1, ib [,idur2, ic] [...])</synopsis>
 </opcode>
 <opcode><desc>2D linear interpolation.</desc>
 <synopsis>kout =<opcodename>xyscale</opcodename>(kx, ky, k00, k10, k01, k11)</synopsis>
@@ -434,8 +434,8 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>envlpx</opcodename>(kamp, irise, idur, idec, ifn, iatss, iatdec [, ixmod])</synopsis>
 </opcode>
 <opcode><desc>The envlpx opcode with a final release segment.</desc>
-<synopsis>ares =<opcodename>envlpxr</opcodename>(xamp, irise, idec, ifn, iatss, iatdec [, ixmod] [,irind])</synopsis>
-<synopsis>kres =<opcodename>envlpxr</opcodename>(kamp, irise, idec, ifn, iatss, iatdec [, ixmod] [,irind])</synopsis>
+<synopsis>ares =<opcodename>envlpxr</opcodename>(xamp, irise, idec, ifn, iatss, iatdec [,ixmod, irind])</synopsis>
+<synopsis>kres =<opcodename>envlpxr</opcodename>(kamp, irise, idec, ifn, iatss, iatdec [,ixmod, irind])</synopsis>
 </opcode>
 <opcode><desc>A gated linear attack-decay-sustain with exponential release.</desc>
 <synopsis>ares =<opcodename>gtadsr</opcodename>(asig, katt, kdec, ksus, krel, kgate)</synopsis>
@@ -450,12 +450,12 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>linenr</opcodename>(kamp, irise, idec, iatdec)</synopsis>
 </opcode>
 <opcode><desc>Calculates the classical ADSR envelope using the linsegr mechanism.</desc>
-<synopsis>ares =<opcodename>madsr</opcodename>(iatt, idec, islev, irel [, idel] [, ireltim])</synopsis>
-<synopsis>kres =<opcodename>madsr</opcodename>(iatt, idec, islev, irel [, idel] [, ireltim])</synopsis>
+<synopsis>ares =<opcodename>madsr</opcodename>(iatt, idec, islev, irel [,idel, ireltim])</synopsis>
+<synopsis>kres =<opcodename>madsr</opcodename>(iatt, idec, islev, irel [,idel, ireltim])</synopsis>
 </opcode>
 <opcode><desc>Calculates the classical ADSR envelope using the expsegr mechanism.</desc>
-<synopsis>ares =<opcodename>mxadsr</opcodename>(iatt, idec, islev, irel [, idel] [, ireltim])</synopsis>
-<synopsis>kres =<opcodename>mxadsr</opcodename>(iatt, idec, islev, irel [, idel] [, ireltim])</synopsis>
+<synopsis>ares =<opcodename>mxadsr</opcodename>(iatt, idec, islev, irel [,idel, ireltim])</synopsis>
+<synopsis>kres =<opcodename>mxadsr</opcodename>(iatt, idec, islev, irel [,idel, ireltim])</synopsis>
 </opcode>
 <opcode><desc>Calculates the classical ADSR envelope.</desc>
 <synopsis>ares =<opcodename>xadsr</opcodename>(iatt, idec, islev, irel [, idel])</synopsis>
@@ -464,19 +464,19 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Signal Generators:Models and Emulations">
 <opcode><desc>Semi-physical model of a bamboo sound.</desc>
-<synopsis>ares =<opcodename>bamboo</opcodename>(kamp, idettack [, inum] [, idamp] [, imaxshake] [, ifreq] [, ifreq1] [, ifreq2])</synopsis>
+<synopsis>ares =<opcodename>bamboo</opcodename>(kamp, idettack [,inum, idamp, imaxshake, ifreq, ifreq1, ifreq2])</synopsis>
 </opcode>
 <opcode><desc>Creates a tone similar to a struck metal bar.</desc>
 <synopsis>ares =<opcodename>barmodel</opcodename>(kbcL, kbcR, iK, ib, kscan, iT30, ipos, ivel, iwid)</synopsis>
 </opcode>
 <opcode><desc>Semi-physical model of a cabasa sound.</desc>
-<synopsis>ares =<opcodename>cabasa</opcodename>(iamp, idettack [, inum] [, idamp] [, imaxshake])</synopsis>
+<synopsis>ares =<opcodename>cabasa</opcodename>(iamp, idettack [,inum, idamp, imaxshake])</synopsis>
 </opcode>
 <opcode><desc>Semi-physical model of a crunch sound.</desc>
-<synopsis>ares =<opcodename>crunch</opcodename>(iamp, idettack [, inum] [, idamp] [, imaxshake])</synopsis>
+<synopsis>ares =<opcodename>crunch</opcodename>(iamp, idettack [,inum, idamp, imaxshake])</synopsis>
 </opcode>
 <opcode><desc>Semi-physical model of a water drop.</desc>
-<synopsis>ares =<opcodename>dripwater</opcodename>(kamp, idettack [, inum] [, idamp] [, imaxshake] [, ifreq] [, ifreq1] [, ifreq2])</synopsis>
+<synopsis>ares =<opcodename>dripwater</opcodename>(kamp, idettack [,inum, idamp, imaxshake, ifreq, ifreq1, ifreq2])</synopsis>
 </opcode>
 <opcode><desc>Returns the length of a Farey Sequence.</desc>
 <synopsis>kfl =<opcodename>fareylen</opcodename>(kfn)</synopsis>
@@ -485,22 +485,22 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ifl =<opcodename>fareyleni</opcodename>(ifn)</synopsis>
 </opcode>
 <opcode><desc>Dynamic stochastic approach to waveform synthesis conceived by Iannis Xenakis.</desc>
-<synopsis>ares =<opcodename>gendy</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl [, initcps] [, knum])</synopsis>
-<synopsis>kres =<opcodename>gendy</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl [, initcps] [, knum])</synopsis>
+<synopsis>ares =<opcodename>gendy</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl [,initcps, knum])</synopsis>
+<synopsis>kres =<opcodename>gendy</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl [,initcps, knum])</synopsis>
 </opcode>
 <opcode><desc>Dynamic stochastic approach to waveform synthesis using cubic interpolation.</desc>
-<synopsis>ares =<opcodename>gendyc</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl [, initcps] [, knum])</synopsis>
-<synopsis>kres =<opcodename>gendyc</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl [, initcps] [, knum])</synopsis>
+<synopsis>ares =<opcodename>gendyc</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl [,initcps, knum])</synopsis>
+<synopsis>kres =<opcodename>gendyc</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl [,initcps, knum])</synopsis>
 </opcode>
 <opcode><desc>Variation of the dynamic stochastic approach to waveform synthesis conceived by Iannis Xenakis.</desc>
-<synopsis>ares =<opcodename>gendyx</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl, kcurveup, kcurvedown [, initcps] [, knum])</synopsis>
-<synopsis>kres =<opcodename>gendyx</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl, kcurveup, kcurvedown [, initcps] [, knum])</synopsis>
+<synopsis>ares =<opcodename>gendyx</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl, kcurveup, kcurvedown [,initcps, knum])</synopsis>
+<synopsis>kres =<opcodename>gendyx</opcodename>(kamp, kampdist, kdurdist, kadpar, kddpar, kminfreq, kmaxfreq, kampscl, kdurscl, kcurveup, kcurvedown [,initcps, knum])</synopsis>
 </opcode>
 <opcode><desc>Audio output is a tone related to the striking of a cow bell or similar.</desc>
 <synopsis>ares =<opcodename>gogobel</opcodename>(kamp, kfreq, ihrd, ipos, imp, kvibf, kvamp, ivfn)</synopsis>
 </opcode>
 <opcode><desc>Semi-physical model of a guiro sound.</desc>
-<synopsis>ares =<opcodename>guiro</opcodename>(kamp, idettack [, inum] [, idamp] [, imaxshake] [, ifreq] [, ifreq1])</synopsis>
+<synopsis>ares =<opcodename>guiro</opcodename>(kamp, idettack [,inum, idamp, imaxshake, ifreq, ifreq1])</synopsis>
 </opcode>
 <opcode><desc>Implements the Lorenz system of equations.</desc>
 <synopsis>ax, ay, az =<opcodename>lorenz</opcodename>(ksv, krv, kbv, kh, ix, iy, iz, iskip [, iskipinit])</synopsis>
@@ -509,38 +509,38 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kiter, koutrig =<opcodename>mandel</opcodename>( ktrig, kx, ky, kmaxIter)</synopsis>
 </opcode>
 <opcode><desc>An emulation of a mandolin.</desc>
-<synopsis>ares =<opcodename>mandol</opcodename>(kamp, kfreq, kpluck, kdetune, kgain, ksize [, ifn] [, iminfreq])</synopsis>
+<synopsis>ares =<opcodename>mandol</opcodename>(kamp, kfreq, kpluck, kdetune, kgain, ksize [,ifn, iminfreq])</synopsis>
 </opcode>
 <opcode><desc>Physical model related to the striking of a wooden block as found in a marimba.</desc>
-<synopsis>ares =<opcodename>marimba</opcodename>(kamp, kfreq, ihrd, ipos, imp, kvibf, kvamp, ivibfn, idec [, idoubles] [, itriples])</synopsis>
+<synopsis>ares =<opcodename>marimba</opcodename>(kamp, kfreq, ihrd, ipos, imp, kvibf, kvamp, ivibfn, idec [,idoubles, itriples])</synopsis>
 </opcode>
 <opcode><desc>An emulation of a mini-Moog synthesizer.</desc>
 <synopsis>ares =<opcodename>moog</opcodename>(kamp, kfreq, kfiltq, kfiltrate, kvibf, kvamp, iafn, iwfn, ivfn)</synopsis>
 </opcode>
 <opcode><desc>Simulates a planet orbiting in a binary star system.</desc>
-<synopsis>ax, ay, az =<opcodename>planet</opcodename>(kmass1, kmass2, ksep, ix, iy, iz, ivx, ivy, ivz, idelta [, ifriction] [, iskip])</synopsis>
+<synopsis>ax, ay, az =<opcodename>planet</opcodename>(kmass1, kmass2, ksep, ix, iy, iz, ivx, ivy, ivz, idelta [,ifriction, iskip])</synopsis>
 </opcode>
 <opcode><desc>Creates a tone similar to a piano string prepared in a Cageian fashion.</desc>
 <synopsis>ares =<opcodename>prepiano</opcodename>(ifreq, iNS, iD, iK, iT30, iB, kbcl, kbcr, imass, ihvfreq, iinit, ipos, ivel, isfreq, isspread[, irattles, irubbers])</synopsis>
 <synopsis>al, ar =<opcodename>prepiano</opcodename>(ifreq, iNS, iD, iK, iT30, iB, kbcl, kbcr, imass, ihvfreq, iinit, ipos, ivel, isfreq, isspread[, irattles, irubbers])</synopsis>
 </opcode>
 <opcode><desc>Semi-physical model of a sandpaper sound.</desc>
-<synopsis>ares =<opcodename>sandpaper</opcodename>(iamp, idettack [, inum] [, idamp] [, imaxshake])</synopsis>
+<synopsis>ares =<opcodename>sandpaper</opcodename>(iamp, idettack [,inum, idamp, imaxshake])</synopsis>
 </opcode>
 <opcode><desc>Semi-physical model of a sekere sound.</desc>
-<synopsis>ares =<opcodename>sekere</opcodename>(iamp, idettack [, inum] [, idamp] [, imaxshake])</synopsis>
+<synopsis>ares =<opcodename>sekere</opcodename>(iamp, idettack [,inum, idamp, imaxshake])</synopsis>
 </opcode>
 <opcode><desc>Sounds like the shaking of a maraca or similar gourd instrument.</desc>
 <synopsis>ares =<opcodename>shaker</opcodename>(kamp, kfreq, kbeans, kdamp, ktimes [, idecay])</synopsis>
 </opcode>
 <opcode><desc>Semi-physical model of a sleighbell sound.</desc>
-<synopsis>ares =<opcodename>sleighbells</opcodename>(kamp, idettack [, inum] [, idamp] [, imaxshake] [, ifreq] [, ifreq1] [, ifreq2])</synopsis>
+<synopsis>ares =<opcodename>sleighbells</opcodename>(kamp, idettack [,inum, idamp, imaxshake, ifreq, ifreq1, ifreq2])</synopsis>
 </opcode>
 <opcode><desc>Semi-physical model of a stick sound.</desc>
-<synopsis>ares =<opcodename>stix</opcodename>(iamp, idettack [, inum] [, idamp] [, imaxshake])</synopsis>
+<synopsis>ares =<opcodename>stix</opcodename>(iamp, idettack [,inum, idamp, imaxshake])</synopsis>
 </opcode>
 <opcode><desc>Semi-physical model of a tambourine sound.</desc>
-<synopsis>ares =<opcodename>tambourine</opcodename>(kamp, idettack [, inum] [, idamp] [, imaxshake] [, ifreq] [, ifreq1] [, ifreq2])</synopsis>
+<synopsis>ares =<opcodename>tambourine</opcodename>(kamp, idettack [,inum, idamp, imaxshake, ifreq, ifreq1, ifreq2])</synopsis>
 </opcode>
 <opcode><desc>Physical model related to the striking of a metal block as found in a vibraphone.</desc>
 <synopsis>ares =<opcodename>vibes</opcodename>(kamp, kfreq, ihrd, ipos, imp, kvibf, kvamp, ivibfn, idec)</synopsis>
@@ -639,8 +639,8 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>gaussi</opcodename>(krange, xamp, xcps)</synopsis>
 </opcode>
 <opcode><desc>Random impulses around a certain frequency.</desc>
-<synopsis>ares =<opcodename>gausstrig</opcodename>(kamp, kcps, kdev [, imode] [, ifrst1])</synopsis>
-<synopsis>kres =<opcodename>gausstrig</opcodename>(kamp, kcps, kdev [, imode] [, ifrst1])</synopsis>
+<synopsis>ares =<opcodename>gausstrig</opcodename>(kamp, kcps, kdev [,imode, ifrst1])</synopsis>
+<synopsis>kres =<opcodename>gausstrig</opcodename>(kamp, kcps, kdev [,imode, ifrst1])</synopsis>
 </opcode>
 <opcode><desc>Reads the global seed value.</desc>
 <synopsis>ians =<opcodename>getseed</opcodename>()</synopsis>
@@ -676,7 +676,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>pinker</opcodename>()</synopsis>
 </opcode>
 <opcode><desc>Generates approximate pink noise (-3dB/oct response).</desc>
-<synopsis>ares =<opcodename>pinkish</opcodename>(xin [, imethod] [, inumbands] [, iseed] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>pinkish</opcodename>(xin [,imethod, inumbands, iseed, iskip])</synopsis>
 </opcode>
 <opcode><desc>Poisson distribution random number generator (positive values only).</desc>
 <synopsis>ares =<opcodename>poisson</opcodename>(klambda)</synopsis>
@@ -684,20 +684,20 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>poisson</opcodename>(klambda)</synopsis>
 </opcode>
 <opcode><desc>Output is a controlled random number series between -amp and +amp.</desc>
-<synopsis>ares =<opcodename>rand</opcodename>(xamp [, iseed] [, isel] [, ioffset])</synopsis>
-<synopsis>kres =<opcodename>rand</opcodename>(xamp [, iseed] [, isel] [, ioffset])</synopsis>
+<synopsis>ares =<opcodename>rand</opcodename>(xamp [,iseed, isel, ioffset])</synopsis>
+<synopsis>kres =<opcodename>rand</opcodename>(xamp [,iseed, isel, ioffset])</synopsis>
 </opcode>
 <opcode><desc>Generates a controlled random number series with cubic interpolation between each new number.</desc>
-<synopsis>ares =<opcodename>randc</opcodename>(xamp, xcps [, iseed] [, isize] [, ioffset])</synopsis>
-<synopsis>kres =<opcodename>randc</opcodename>(kamp, kcps [, iseed] [, isize] [, ioffset])</synopsis>
+<synopsis>ares =<opcodename>randc</opcodename>(xamp, xcps [,iseed, isize, ioffset])</synopsis>
+<synopsis>kres =<opcodename>randc</opcodename>(kamp, kcps [,iseed, isize, ioffset])</synopsis>
 </opcode>
 <opcode><desc>Generates random numbers and holds them for a period of time.</desc>
-<synopsis>ares =<opcodename>randh</opcodename>(xamp, xcps [, iseed] [, isize] [, ioffset])</synopsis>
-<synopsis>kres =<opcodename>randh</opcodename>(kamp, kcps [, iseed] [, isize] [, ioffset])</synopsis>
+<synopsis>ares =<opcodename>randh</opcodename>(xamp, xcps [,iseed, isize, ioffset])</synopsis>
+<synopsis>kres =<opcodename>randh</opcodename>(kamp, kcps [,iseed, isize, ioffset])</synopsis>
 </opcode>
 <opcode><desc>Generates a controlled random number series with interpolation between each new number.</desc>
-<synopsis>ares =<opcodename>randi</opcodename>(xamp, xcps [, iseed] [, isize] [, ioffset])</synopsis>
-<synopsis>kres =<opcodename>randi</opcodename>(kamp, kcps [, iseed] [, isize] [, ioffset])</synopsis>
+<synopsis>ares =<opcodename>randi</opcodename>(xamp, xcps [,iseed, isize, ioffset])</synopsis>
+<synopsis>kres =<opcodename>randi</opcodename>(kamp, kcps [,iseed, isize, ioffset])</synopsis>
 </opcode>
 <opcode><desc>Generates a controlled pseudo-random number series between min and max values.</desc>
 <synopsis>ares =<opcodename>random</opcodename>(kmin, kmax)</synopsis>
@@ -705,12 +705,12 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>random</opcodename>(kmin, kmax)</synopsis>
 </opcode>
 <opcode><desc>Generates random numbers with a user-defined limit and holds them for a period of time.</desc>
-<synopsis>ares =<opcodename>randomh</opcodename>(kmin, kmax, xcps [,imode] [,ifirstval])</synopsis>
-<synopsis>kres =<opcodename>randomh</opcodename>(kmin, kmax, kcps [,imode] [,ifirstval])</synopsis>
+<synopsis>ares =<opcodename>randomh</opcodename>(kmin, kmax, xcps [,imode, ifirstval])</synopsis>
+<synopsis>kres =<opcodename>randomh</opcodename>(kmin, kmax, kcps [,imode, ifirstval])</synopsis>
 </opcode>
 <opcode><desc>Generates a user-controlled random number series with interpolation between each new number.</desc>
-<synopsis>ares =<opcodename>randomi</opcodename>(kmin, kmax, xcps [,imode] [,ifirstval])</synopsis>
-<synopsis>kres =<opcodename>randomi</opcodename>(kmin, kmax, kcps [,imode] [,ifirstval])</synopsis>
+<synopsis>ares =<opcodename>randomi</opcodename>(kmin, kmax, xcps [,imode, ifirstval])</synopsis>
+<synopsis>kres =<opcodename>randomi</opcodename>(kmin, kmax, kcps [,imode, ifirstval])</synopsis>
 </opcode>
 <opcode><desc>31-bit bipolar random opcodes with controllable distribution.</desc>
 <synopsis>ax =<opcodename>rnd31</opcodename>(kscl, krpow [, iseed])</synopsis>
@@ -758,10 +758,10 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Signal Generators:Sample Playback">
 <opcode><desc>Generates breakbeat-style cut-ups of a mono audio stream.</desc>
-<synopsis>a1 =<opcodename>bbcutm</opcodename>(asource, ibps, isubdiv, ibarlength, iphrasebars, inumrepeats [, istutterspeed] [, istutterchance] [, ienvchoice ])</synopsis>
+<synopsis>a1 =<opcodename>bbcutm</opcodename>(asource, ibps, isubdiv, ibarlength, iphrasebars, inumrepeats [,istutterspeed, istutterchance, ienvchoice])</synopsis>
 </opcode>
 <opcode><desc>Generates breakbeat-style cut-ups of a stereo audio stream.</desc>
-<synopsis>a1,a2 =<opcodename>bbcuts</opcodename>(asource1, asource2, ibps, isubdiv, ibarlength, iphrasebars, inumrepeats [, istutterspeed] [, istutterchance] [, ienvchoice])</synopsis>
+<synopsis>a1,a2 =<opcodename>bbcuts</opcodename>(asource1, asource2, ibps, isubdiv, ibarlength, iphrasebars, inumrepeats [,istutterspeed, istutterchance, ienvchoice])</synopsis>
 </opcode>
 <opcode><desc>Function-table-based crossfading looper.</desc>
 <synopsis>asig1[, asig2] =<opcodename>flooper</opcodename>(kamp, kpitch, istart, idur, ifad, ifn)</synopsis>
@@ -770,23 +770,23 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>asig1[,asig2] =<opcodename>flooper2</opcodename>(kamp, kpitch, kloopstart, kloopend, kcrossfade, ifn [, istart, imode, ifenv, iskip])</synopsis>
 </opcode>
 <opcode><desc>Read sampled sound (mono or stereo) from a table.</desc>
-<synopsis>ar1 [,ar2] =<opcodename>loscil</opcodename>(xamp, kcps, ifn [, ibas] [, imod1] [, ibeg1] [, iend1] [, imod2] [, ibeg2] [, iend2])</synopsis>
+<synopsis>ar1 [,ar2] =<opcodename>loscil</opcodename>(xamp, kcps, ifn [,ibas, imod1, ibeg1, iend1, imod2, ibeg2, iend2])</synopsis>
 </opcode>
 <opcode><desc>Read sampled sound (mono or stereo) from a table.</desc>
-<synopsis>aph, ar1 [,ar2] =<opcodename>loscilphs</opcodename>(xamp, kcps, ifn [, ibas] [, imod1] [, ibeg1] [, iend1] [, imod2] [, ibeg2] [, iend2])</synopsis>
+<synopsis>aph, ar1 [,ar2] =<opcodename>loscilphs</opcodename>(xamp, kcps, ifn [,ibas, imod1, ibeg1, iend1, imod2, ibeg2, iend2])</synopsis>
 </opcode>
 <opcode><desc>Read sampled sound from a table using cubic interpolation.</desc>
-<synopsis>ar1 [,ar2] =<opcodename>loscil3</opcodename>(xamp, kcps, ifn [, ibas] [, imod1] [, ibeg1] [, iend1] [, imod2] [, ibeg2] [, iend2])</synopsis>
+<synopsis>ar1 [,ar2] =<opcodename>loscil3</opcodename>(xamp, kcps, ifn [,ibas, imod1, ibeg1, iend1, imod2, ibeg2, iend2])</synopsis>
 </opcode>
 <opcode><desc>Read sampled sound from a table using cubic interpolation.</desc>
-<synopsis>aph, ar1 [,ar2] =<opcodename>loscil3phs</opcodename>(xamp, kcps, ifn [, ibas] [, imod1] [, ibeg1] [, iend1] [, imod2] [, ibeg2] [, iend2])</synopsis>
+<synopsis>aph, ar1 [,ar2] =<opcodename>loscil3phs</opcodename>(xamp, kcps, ifn [,ibas, imod1, ibeg1, iend1, imod2, ibeg2, iend2])</synopsis>
 </opcode>
 <opcode><desc>Read sampled sound (up to 16 channels) from a table, with optional sustain and release looping.</desc>
 <synopsis>ar1 [, ar2, ar3, ar4, ar5, ar6, ar7, ar8, ar9, ar10, ar11, ar12, ar13, ar14, ar15, ar16] =<opcodename>loscilx</opcodename>(xamp, kcps, ifn [, iwsize, ibas, istrt, imod, ibeg, iend])</synopsis>
 <synopsis>ar[] =<opcodename>loscilx</opcodename>(xamp, kcps, ifn [, iwsize, ibas, istrt, imod, ibeg, iend])</synopsis>
 </opcode>
 <opcode><desc>Generates a table index for sample playback (e.g. with tablexkt).</desc>
-<synopsis>ares =<opcodename>lphasor</opcodename>(xtrns [, ilps] [, ilpe] [, imode] [, istrt] [, istor])</synopsis>
+<synopsis>ares =<opcodename>lphasor</opcodename>(xtrns [,ilps, ilpe, imode, istrt, istor])</synopsis>
 </opcode>
 <opcode><desc>Read sampled sound (mono or stereo) from a table, with looping, and high precision.</desc>
 <synopsis>ares =<opcodename>lposcil</opcodename>(kamp, kfreqratio, kloop, kend, ifn [, iphs])</synopsis>
@@ -807,16 +807,16 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>sfilist</opcodename>(ifilhandle [, Sprintprefix])</synopsis>
 </opcode>
 <opcode><desc>Plays a SoundFont2 (SF2) sample instrument, generating a stereo sound.</desc>
-<synopsis>ar1, ar2 =<opcodename>sfinstr</opcodename>(ivel, inotenum, xamp, xfreq, instrnum, ifilhandle [, iflag] [, ioffset])</synopsis>
+<synopsis>ar1, ar2 =<opcodename>sfinstr</opcodename>(ivel, inotenum, xamp, xfreq, instrnum, ifilhandle [,iflag, ioffset])</synopsis>
 </opcode>
 <opcode><desc>Plays a SoundFont2 (SF2) sample instrument, generating a stereo sound with cubic interpolation.</desc>
-<synopsis>ar1, ar2 =<opcodename>sfinstr3</opcodename>(ivel, inotenum, xamp, xfreq, instrnum, ifilhandle [, iflag] [, ioffset])</synopsis>
+<synopsis>ar1, ar2 =<opcodename>sfinstr3</opcodename>(ivel, inotenum, xamp, xfreq, instrnum, ifilhandle [,iflag, ioffset])</synopsis>
 </opcode>
 <opcode><desc>Plays a SoundFont2 (SF2) sample instrument, generating a mono sound with cubic interpolation.</desc>
-<synopsis>ares =<opcodename>sfinstr3m</opcodename>(ivel, inotenum, xamp, xfreq, instrnum, ifilhandle [, iflag] [, ioffset])</synopsis>
+<synopsis>ares =<opcodename>sfinstr3m</opcodename>(ivel, inotenum, xamp, xfreq, instrnum, ifilhandle [,iflag, ioffset])</synopsis>
 </opcode>
 <opcode><desc>Plays a SoundFont2 (SF2) sample instrument, generating a mono sound.</desc>
-<synopsis>ares =<opcodename>sfinstrm</opcodename>(ivel, inotenum, xamp, xfreq, instrnum, ifilhandle [, iflag] [, ioffset])</synopsis>
+<synopsis>ares =<opcodename>sfinstrm</opcodename>(ivel, inotenum, xamp, xfreq, instrnum, ifilhandle [,iflag, ioffset])</synopsis>
 </opcode>
 <opcode><desc>Loads an entire SoundFont2 (SF2) sample file into memory.</desc>
 <synopsis>ir =<opcodename>sfload</opcodename>("filename")</synopsis>
@@ -828,16 +828,16 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>sfpassign</opcodename>(istartindex, ifilhandle[, imsgs])</synopsis>
 </opcode>
 <opcode><desc>Plays a SoundFont2 (SF2) sample preset, generating a stereo sound.</desc>
-<synopsis>ar1, ar2 =<opcodename>sfplay</opcodename>(ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset] [, ienv])</synopsis>
+<synopsis>ar1, ar2 =<opcodename>sfplay</opcodename>(ivel, inotenum, xamp, xfreq, ipreindex [,iflag, ioffset, ienv])</synopsis>
 </opcode>
 <opcode><desc>Plays a SoundFont2 (SF2) sample preset, generating a stereo sound with cubic interpolation.</desc>
-<synopsis>ar1, ar2 =<opcodename>sfplay3</opcodename>(ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset] [, ienv])</synopsis>
+<synopsis>ar1, ar2 =<opcodename>sfplay3</opcodename>(ivel, inotenum, xamp, xfreq, ipreindex [,iflag, ioffset, ienv])</synopsis>
 </opcode>
 <opcode><desc>Plays a SoundFont2 (SF2) sample preset, generating a mono sound with cubic interpolation.</desc>
-<synopsis>ares =<opcodename>sfplay3m</opcodename>(ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset] [, ienv])</synopsis>
+<synopsis>ares =<opcodename>sfplay3m</opcodename>(ivel, inotenum, xamp, xfreq, ipreindex [,iflag, ioffset, ienv])</synopsis>
 </opcode>
 <opcode><desc>Plays a SoundFont2 (SF2) sample preset, generating a mono sound.</desc>
-<synopsis>ares =<opcodename>sfplaym</opcodename>(ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset] [, ienv])</synopsis>
+<synopsis>ares =<opcodename>sfplaym</opcodename>(ivel, inotenum, xamp, xfreq, ipreindex [,iflag, ioffset, ienv])</synopsis>
 </opcode>
 <opcode><desc>Prints a list of all presets of a previously loaded SoundFont2 (SF2) sample file.</desc>
 <synopsis><opcodename>sfplist</opcodename>(ifilhandle)</synopsis>
@@ -895,19 +895,19 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>oscil1i</opcodename>(idel, kamp, idur [, ifn])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Accesses table values by direct indexing.</desc>
-<synopsis>ares<opcodename>ptable</opcodename>andx, ifn [, ixmode] [, ixoff] [, iwrap]</synopsis>
-<synopsis>ires<opcodename>ptable</opcodename>indx, ifn [, ixmode] [, ixoff] [, iwrap]</synopsis>
-<synopsis>kres<opcodename>ptable</opcodename>kndx, ifn [, ixmode] [, ixoff] [, iwrap]</synopsis>
+<synopsis>ares<opcodename>ptable</opcodename>andx, ifn [,ixmode, ixoff, iwrap]</synopsis>
+<synopsis>ires<opcodename>ptable</opcodename>indx, ifn [,ixmode, ixoff, iwrap]</synopsis>
+<synopsis>kres<opcodename>ptable</opcodename>kndx, ifn [,ixmode, ixoff, iwrap]</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Accesses table values by direct indexing with cubic interpolation.</desc>
-<synopsis>ares<opcodename>ptable3</opcodename>andx, ifn [, ixmode] [, ixoff] [, iwrap]</synopsis>
-<synopsis>ires<opcodename>ptable3</opcodename>indx, ifn [, ixmode] [, ixoff] [, iwrap]</synopsis>
-<synopsis>kres<opcodename>ptable3</opcodename>kndx, ifn [, ixmode] [, ixoff] [, iwrap]</synopsis>
+<synopsis>ares<opcodename>ptable3</opcodename>andx, ifn [,ixmode, ixoff, iwrap]</synopsis>
+<synopsis>ires<opcodename>ptable3</opcodename>indx, ifn [,ixmode, ixoff, iwrap]</synopsis>
+<synopsis>kres<opcodename>ptable3</opcodename>kndx, ifn [,ixmode, ixoff, iwrap]</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Accesses table values by direct indexing with linear interpolation.</desc>
-<synopsis>ares<opcodename>ptablei</opcodename>andx, ifn [, ixmode] [, ixoff] [, iwrap]</synopsis>
-<synopsis>ires<opcodename>ptablei</opcodename>indx, ifn [, ixmode] [, ixoff] [, iwrap]</synopsis>
-<synopsis>kres<opcodename>ptablei</opcodename>kndx, ifn [, ixmode] [, ixoff] [, iwrap]</synopsis>
+<synopsis>ares<opcodename>ptablei</opcodename>andx, ifn [,ixmode, ixoff, iwrap]</synopsis>
+<synopsis>ires<opcodename>ptablei</opcodename>indx, ifn [,ixmode, ixoff, iwrap]</synopsis>
+<synopsis>kres<opcodename>ptablei</opcodename>kndx, ifn [,ixmode, ixoff, iwrap]</synopsis>
 </opcode>
 <opcode><desc>Fast table opcode.</desc>
 <synopsis>kr =<opcodename>tab</opcodename>(kndx, ifn[, ixmode])</synopsis>
@@ -917,19 +917,19 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ir =<opcodename>tabi</opcodename>(indx, ifn[, ixmode])</synopsis>
 </opcode>
 <opcode><desc>Accesses table values by direct indexing.</desc>
-<synopsis>ares =<opcodename>table</opcodename>(andx, ifn [, ixmode] [, ixoff] [, iwrap])</synopsis>
-<synopsis>ires =<opcodename>table</opcodename>(indx, ifn [, ixmode] [, ixoff] [, iwrap])</synopsis>
-<synopsis>kres =<opcodename>table</opcodename>(kndx, ifn [, ixmode] [, ixoff] [, iwrap])</synopsis>
+<synopsis>ares =<opcodename>table</opcodename>(andx, ifn [,ixmode, ixoff, iwrap])</synopsis>
+<synopsis>ires =<opcodename>table</opcodename>(indx, ifn [,ixmode, ixoff, iwrap])</synopsis>
+<synopsis>kres =<opcodename>table</opcodename>(kndx, ifn [,ixmode, ixoff, iwrap])</synopsis>
 </opcode>
 <opcode><desc>Accesses table values by direct indexing with cubic interpolation.</desc>
-<synopsis>ares =<opcodename>table3</opcodename>(andx, ifn [, ixmode] [, ixoff] [, iwrap])</synopsis>
-<synopsis>ires =<opcodename>table3</opcodename>(indx, ifn [, ixmode] [, ixoff] [, iwrap])</synopsis>
-<synopsis>kres =<opcodename>table3</opcodename>(kndx, ifn [, ixmode] [, ixoff] [, iwrap])</synopsis>
+<synopsis>ares =<opcodename>table3</opcodename>(andx, ifn [,ixmode, ixoff, iwrap])</synopsis>
+<synopsis>ires =<opcodename>table3</opcodename>(indx, ifn [,ixmode, ixoff, iwrap])</synopsis>
+<synopsis>kres =<opcodename>table3</opcodename>(kndx, ifn [,ixmode, ixoff, iwrap])</synopsis>
 </opcode>
 <opcode><desc>Accesses table values by direct indexing with linear interpolation.</desc>
-<synopsis>ares =<opcodename>tablei</opcodename>(andx, ifn [, ixmode] [, ixoff] [, iwrap])</synopsis>
-<synopsis>ires =<opcodename>tablei</opcodename>(indx, ifn [, ixmode] [, ixoff] [, iwrap])</synopsis>
-<synopsis>kres =<opcodename>tablei</opcodename>(kndx, ifn [, ixmode] [, ixoff] [, iwrap])</synopsis>
+<synopsis>ares =<opcodename>tablei</opcodename>(andx, ifn [,ixmode, ixoff, iwrap])</synopsis>
+<synopsis>ires =<opcodename>tablei</opcodename>(indx, ifn [,ixmode, ixoff, iwrap])</synopsis>
+<synopsis>kres =<opcodename>tablei</opcodename>(kndx, ifn [,ixmode, ixoff, iwrap])</synopsis>
 </opcode>
 <opcode><desc>Fast table opcodes.</desc>
 <synopsis><opcodename>tabw</opcodename>(ksig, kndx, ifn [,ixmode])</synopsis>
@@ -952,7 +952,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Signal Generators:Waveguide Physical Modeling">
 <opcode><desc>Produces a naturally decaying plucked string or drum sound.</desc>
-<synopsis>ares =<opcodename>pluck</opcodename>(kamp, kcps, icps, ifn, imeth [, iparm1] [, iparm2])</synopsis>
+<synopsis>ares =<opcodename>pluck</opcodename>(kamp, kcps, icps, ifn, imeth [,iparm1, iparm2])</synopsis>
 </opcode>
 <opcode><desc>Physical model of the plucked string.</desc>
 <synopsis>ares =<opcodename>repluck</opcodename>(iplk, kamp, icps, kpick, krefl, axcite)</synopsis>
@@ -961,19 +961,19 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>streson</opcodename>(asig, kfr, kfdbgain)</synopsis>
 </opcode>
 <opcode><desc>Creates a tone similar to a bowed string.</desc>
-<synopsis>ares =<opcodename>wgbow</opcodename>(kamp, kfreq, kpres, krat, kvibf, kvamp [, ifn] [, iminfreq])</synopsis>
+<synopsis>ares =<opcodename>wgbow</opcodename>(kamp, kfreq, kpres, krat, kvibf, kvamp [,ifn, iminfreq])</synopsis>
 </opcode>
 <opcode><desc>A physical model of a bowed bar.</desc>
-<synopsis>ares =<opcodename>wgbowedbar</opcodename>(kamp, kfreq, kpos, kbowpres, kgain [, iconst] [, itvel] [, ibowpos] [, ilow])</synopsis>
+<synopsis>ares =<opcodename>wgbowedbar</opcodename>(kamp, kfreq, kpos, kbowpres, kgain [,iconst, itvel, ibowpos, ilow])</synopsis>
 </opcode>
 <opcode><desc>Creates a tone related to a brass instrument.</desc>
-<synopsis>ares =<opcodename>wgbrass</opcodename>(kamp, kfreq, ktens, iatt, kvibf, kvamp [, ifn] [, iminfreq])</synopsis>
+<synopsis>ares =<opcodename>wgbrass</opcodename>(kamp, kfreq, ktens, iatt, kvibf, kvamp [,ifn, iminfreq])</synopsis>
 </opcode>
 <opcode><desc>Creates a tone similar to a clarinet.</desc>
-<synopsis>ares =<opcodename>wgclar</opcodename>(kamp, kfreq, kstiff, iatt, idetk, kngain, kvibf, kvamp [, ifn] [, iminfreq])</synopsis>
+<synopsis>ares =<opcodename>wgclar</opcodename>(kamp, kfreq, kstiff, iatt, idetk, kngain, kvibf, kvamp [,ifn, iminfreq])</synopsis>
 </opcode>
 <opcode><desc>Creates a tone similar to a flute.</desc>
-<synopsis>ares =<opcodename>wgflute</opcodename>(kamp, kfreq, kjet, iatt, idetk, kngain, kvibf, kvamp [, ifn] [, iminfreq] [, ijetrf] [, iendrf])</synopsis>
+<synopsis>ares =<opcodename>wgflute</opcodename>(kamp, kfreq, kjet, iatt, idetk, kngain, kvibf, kvamp [,ifn, iminfreq, ijetrf, iendrf])</synopsis>
 </opcode>
 <opcode><desc>A high fidelity simulation of a plucked string, using interpolating delay-lines.</desc>
 <synopsis>ares =<opcodename>wgpluck</opcodename>(icps, iamp, kpick, iplk, idamp, ifilt, axcite)</synopsis>
@@ -1000,14 +1000,14 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>ficlose</opcodename>(Sfilename)</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Read signals from a file at a-rate.</desc>
-<synopsis><opcodename>fin</opcodename>ifilename, iskipframes, iformat, ain1 [, ain2] [, ain3] [,...]</synopsis>
+<synopsis><opcodename>fin</opcodename>ifilename, iskipframes, iformat, ain1 [,ain2, ain3, ...]</synopsis>
 <synopsis><opcodename>fin</opcodename>ifilename, iskipframes, iformat, arr[]</synopsis>
 </opcode>
 <opcode><desc>Read signals from a file at i-rate.</desc>
-<synopsis><opcodename>fini</opcodename>(ifilename, iskipframes, iformat, in1 [, in2] [, in3] [, ...])</synopsis>
+<synopsis><opcodename>fini</opcodename>(ifilename, iskipframes, iformat, in1 [,in2, in3, ...])</synopsis>
 </opcode>
 <opcode><desc>Read signals from a file at k-rate.</desc>
-<synopsis><opcodename>fink</opcodename>(ifilename, iskipframes, iformat, kin1 [, kin2] [, kin3] [,...])</synopsis>
+<synopsis><opcodename>fink</opcodename>(ifilename, iskipframes, iformat, kin1 [,kin2, kin3, ...])</synopsis>
 </opcode>
 <opcode><desc>Opens a file in a specific mode.</desc>
 <synopsis>ihandle =<opcodename>fiopen</opcodename>(ifilename, imode)</synopsis>
@@ -1026,10 +1026,10 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>foutk</opcodename>(ifilename, iformat, kout1 [, kout2, kout3,....,koutN])</synopsis>
 </opcode>
 <opcode><desc>Similar to printks but prints to a file.</desc>
-<synopsis><opcodename>fprintks</opcodename>("filename", "string" [, kval1] [, kval2] [...])</synopsis>
+<synopsis><opcodename>fprintks</opcodename>("filename", "string" [,kval1, kval2] [...])</synopsis>
 </opcode>
 <opcode><desc>Similar to prints but prints to a file.</desc>
-<synopsis><opcodename>fprints</opcodename>("filename", "string" [, ival1] [, ival2] [...])</synopsis>
+<synopsis><opcodename>fprints</opcodename>("filename", "string" [,ival1, ival2] [...])</synopsis>
 </opcode>
 <opcode><desc>Reads a JSON file into a declared user-defined type or a one-dimensional typed array.</desc>
 <synopsis>value:Type =<opcodename>jsonunmarshalfile</opcodename>(Spath [, iflags [, imaxdepth]])</synopsis>
@@ -1114,7 +1114,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ar1 =<opcodename>mp3in</opcodename>(ifilcod[, iskptim, iformat, iskipinit, ibufsize])</synopsis>
 </opcode>
 <opcode><desc>Reads audio data from an external device or stream.</desc>
-<synopsis>ar1[, ar2[, ar3[, ... a24]]] =<opcodename>soundin</opcodename>(ifilcod [, iskptim] [, iformat] [, iskipinit] [, ibufsize])</synopsis>
+<synopsis>ar1[, ar2[, ar3[, ... a24]]] =<opcodename>soundin</opcodename>(ifilcod [,iskptim, iformat, iskipinit, ibufsize])</synopsis>
 </opcode>
 <opcode><desc>Reads touch data from a Trill sensor through the Bela Csound host.</desc>
 <synopsis>kcount, ksizes[], kvertical[], khorizontal[] =<opcodename>trill</opcodename>(inumTouches, isensor)</synopsis>
@@ -1150,7 +1150,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>outc</opcodename>(asig1 [, asig2] [...])</synopsis>
 </opcode>
 <opcode><desc>Writes multi-channel audio data, with user-controllable channels, to an external device or stream.</desc>
-<synopsis><opcodename>outch</opcodename>(kchan1, asig1 [, kchan2] [, asig2] [...])</synopsis>
+<synopsis><opcodename>outch</opcodename>(kchan1, asig1 [,kchan2, asig2] [...])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Writes 6-channel audio data to an external device or stream.</desc>
 <synopsis><opcodename>outh</opcodename>(asig1, asig2, asig3, asig4, asig5, asig6)</synopsis>
@@ -1306,16 +1306,16 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Signal I/O:Printing and Display">
 <opcode><desc>Displays the Fourier Transform of an audio or control signal.</desc>
-<synopsis><opcodename>dispfft</opcodename>(xsig, iprd, iwsiz [, iwtyp] [, idbout] [, iwtflg] [,imin] [,imax])</synopsis>
+<synopsis><opcodename>dispfft</opcodename>(xsig, iprd, iwsiz [,iwtyp, idbout, iwtflg, imin, imax])</synopsis>
 </opcode>
 <opcode><desc>Displays the audio or control signals as an amplitude vs.</desc>
-<synopsis><opcodename>display</opcodename>(xsig, iprd [, inprds] [, iwtflg])</synopsis>
+<synopsis><opcodename>display</opcodename>(xsig, iprd [,inprds, iwtflg])</synopsis>
 </opcode>
 <opcode><desc>Allows text to be displayed from instruments like sliders etc.</desc>
 <synopsis><opcodename>flashtxt</opcodename>( iwhich, String)</synopsis>
 </opcode>
 <opcode><desc>Displays the values of init (i-rate) variables.</desc>
-<synopsis><opcodename>print</opcodename>(iarg [, iarg1] [, iarg2] [...])</synopsis>
+<synopsis><opcodename>print</opcodename>(iarg [,iarg1, iarg2] [...])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Prints the type of a variable or expression.</desc>
 <synopsis><opcodename>print_type</opcodename>(xarg)</synopsis>
@@ -1327,25 +1327,25 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>printf</opcodename>(Sfmt, ktrig, [xarg1[, xarg2[, ... ]]])</synopsis>
 </opcode>
 <opcode><desc>Prints one k-rate value at specified intervals.</desc>
-<synopsis><opcodename>printk</opcodename>(itime, kval [, ispace] [, inamed])</synopsis>
+<synopsis><opcodename>printk</opcodename>(itime, kval [,ispace, inamed])</synopsis>
 </opcode>
 <opcode><desc>Prints a new value every time a control variable changes.</desc>
-<synopsis><opcodename>printk2</opcodename>(kvar [, inumspaces] [, inamed])</synopsis>
+<synopsis><opcodename>printk2</opcodename>(kvar [,inumspaces, inamed])</synopsis>
 </opcode>
 <opcode><desc>Prints at k-rate using a printf() style syntax.</desc>
-<synopsis><opcodename>printks</opcodename>("string", itime [, xval1] [, xval2] [...])</synopsis>
+<synopsis><opcodename>printks</opcodename>("string", itime [,xval1, xval2] [...])</synopsis>
 </opcode>
 <opcode><desc>Prints a new value every time a control variable changes using a printf() style syntax.</desc>
 <synopsis><opcodename>printks2</opcodename>("string", kval)</synopsis>
 </opcode>
 <opcode><desc>Prints at k-rate using a printf() style syntax like printks, appends a new line.</desc>
-<synopsis><opcodename>println</opcodename>("string" [, xval1] [, xval2] [...])</synopsis>
+<synopsis><opcodename>println</opcodename>("string" [,xval1, xval2] [...])</synopsis>
 </opcode>
 <opcode><desc>Prints at init-time using a printf() style syntax.</desc>
-<synopsis><opcodename>prints</opcodename>("string" [, xval1] [, xval2] [...])</synopsis>
+<synopsis><opcodename>prints</opcodename>("string" [,xval1, xval2] [...])</synopsis>
 </opcode>
 <opcode><desc>Prints at k-rate using a printf() style syntax.</desc>
-<synopsis><opcodename>printsk</opcodename>("string" [, xval1] [, xval2] [...])</synopsis>
+<synopsis><opcodename>printsk</opcodename>("string" [,xval1, xval2] [...])</synopsis>
 </opcode>
 <opcode><desc>Prints the type of a variable or expression.</desc>
 <synopsis><opcodename>printtype</opcodename>(xarg)</synopsis>
@@ -1392,10 +1392,10 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Signal Modifiers:Amplitude Modifiers">
 <opcode><desc>Adjust one audio signal according to the values of another.</desc>
-<synopsis>ares =<opcodename>balance</opcodename>(asig, acomp [, ihp] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>balance</opcodename>(asig, acomp [,ihp, iskip])</synopsis>
 </opcode>
 <opcode><desc>Adjust one audio signal according to the values of another.</desc>
-<synopsis>ares =<opcodename>balance2</opcodename>(asig, acomp [, ihp] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>balance2</opcodename>(asig, acomp [,ihp, iskip])</synopsis>
 </opcode>
 <opcode><desc>Clips an a-rate signal to a predefined limit, in a &amp;#8220;soft&amp;#8221; manner, using one of three methods.</desc>
 <synopsis>ares =<opcodename>clip</opcodename>(asig, imeth, ilimit [, iarg])</synopsis>
@@ -1410,7 +1410,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>dam</opcodename>(asig, kthreshold, icomp1, icomp2, irtime, iftime)</synopsis>
 </opcode>
 <opcode><desc>Adjusts the amplitude audio signal according to a root-mean-square value.</desc>
-<synopsis>ares =<opcodename>gain</opcodename>(asig, krms [, ihp] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>gain</opcodename>(asig, krms [,ihp, iskip])</synopsis>
 </opcode>
 </category>
 <category name="Signal Modifiers:Convolution and Morphing">
@@ -1478,7 +1478,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>deltapxw</opcodename>(ain, adel, iwsize [, indx])</synopsis>
 </opcode>
 <opcode><desc>Multitap delay line implementation.</desc>
-<synopsis>ares =<opcodename>multitap</opcodename>(asig [, itime1, igain1] [, itime2, igain2] [...])</synopsis>
+<synopsis>ares =<opcodename>multitap</opcodename>(asig [,itime1, igain1, itime2, igain2] [...])</synopsis>
 </opcode>
 <opcode><desc>An interpolating variable time delay.</desc>
 <synopsis>ares =<opcodename>vdelay</opcodename>(asig, adel, imaxdel [, iskip])</synopsis>
@@ -1571,7 +1571,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>aleft,aright =<opcodename>ms2st</opcodename>(am, as, kwidth)</synopsis>
 </opcode>
 <opcode><desc>Distribute an audio signal amongst four channels with localization control.</desc>
-<synopsis>a1, a2, a3, a4 =<opcodename>pan</opcodename>(asig, kx, ky, ifn [, imode] [, ioffset])</synopsis>
+<synopsis>a1, a2, a3, a4 =<opcodename>pan</opcodename>(asig, kx, ky, ifn [,imode, ioffset])</synopsis>
 </opcode>
 <opcode><desc>Distribute an audio signal across two channels with a choice of methods.</desc>
 <synopsis>a1, a2 =<opcodename>pan2</opcodename>(asig, xp [, imode])</synopsis>
@@ -1599,37 +1599,37 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>am,as =<opcodename>st2ms</opcodename>(aleft,aright)</synopsis>
 </opcode>
 <opcode><desc>Distributes an audio signal among many channels, up to 64 in the first form, arbitrary in the second.</desc>
-<synopsis>ar1[, ar2...] =<opcodename>vbap</opcodename>(asig, kazim [,kelev] [, kspread] [, ilayout])</synopsis>
-<synopsis>array[] =<opcodename>vbap</opcodename>(asig, kazim [,kelev] [, kspread] [, ilayout])</synopsis>
+<synopsis>ar1[, ar2...] =<opcodename>vbap</opcodename>(asig, kazim [,kelev, kspread, ilayout])</synopsis>
+<synopsis>array[] =<opcodename>vbap</opcodename>(asig, kazim [,kelev, kspread, ilayout])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Distributes an audio signal among 16 channels.</desc>
-<synopsis>ar1, ..., ar16 =<opcodename>vbap16</opcodename>(asig, kazim [, kelev] [, kspread])</synopsis>
+<synopsis>ar1, ..., ar16 =<opcodename>vbap16</opcodename>(asig, kazim [,kelev, kspread])</synopsis>
 </opcode>
 <opcode><desc>Distribute an audio signal among 16 channels with moving virtual sources.</desc>
 <synopsis>ar1, ..., ar16 =<opcodename>vbap16move</opcodename>(asig, idur, ispread, ifldnum, ifld1 [, ifld2] [...])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Distributes an audio signal among 4 channels.</desc>
-<synopsis>ar1, ar2, ar3, ar4 =<opcodename>vbap4</opcodename>(asig, kazim [, kelev] [, kspread])</synopsis>
+<synopsis>ar1, ar2, ar3, ar4 =<opcodename>vbap4</opcodename>(asig, kazim [,kelev, kspread])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Distributes an audio signal among 4 channels with moving virtual sources.</desc>
 <synopsis>ar1, ar2, ar3, ar4 =<opcodename>vbap4move</opcodename>(asig, idur, ispread, ifldnum, ifld1 [, ifld2] [...])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Distributes an audio signal among 8 channels.</desc>
-<synopsis>ar1, ..., ar8 =<opcodename>vbap8</opcodename>(asig, kazim [, kelev] [, kspread])</synopsis>
+<synopsis>ar1, ..., ar8 =<opcodename>vbap8</opcodename>(asig, kazim [,kelev, kspread])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Distributes an audio signal among 8 channels with moving virtual sources.</desc>
 <synopsis>ar1, ..., ar8 =<opcodename>vbap8move</opcodename>(asig, idur, ispread, ifldnum, ifld1 [, ifld2] [...])</synopsis>
 </opcode>
 <opcode><desc>Calculates the gains for a sound location for up to 64.</desc>
-<synopsis>k1[, k2...] =<opcodename>vbapg</opcodename>(kazim [,kelev] [, kspread] [, ilayout])</synopsis>
-<synopsis>karray[] =<opcodename>vbapg</opcodename>(kazim [,kelev] [, kspread] [, ilayout])</synopsis>
+<synopsis>k1[, k2...] =<opcodename>vbapg</opcodename>(kazim [,kelev, kspread, ilayout])</synopsis>
+<synopsis>karray[] =<opcodename>vbapg</opcodename>(kazim [,kelev, kspread, ilayout])</synopsis>
 </opcode>
 <opcode><desc>Calculates the gains for a sound location between multiple channels with moving virtual sources.</desc>
 <synopsis>kr1[, kr2...] =<opcodename>vbapgmove</opcodename>(idur, ispread, ifldnum, ifld1 [, ifld2] [...])</synopsis>
 <synopsis>karray[] =<opcodename>vbapgmove</opcodename>(idur, ispread, ifldnum, ifld1 [, ifld2] [...])</synopsis>
 </opcode>
 <opcode><desc>Configures VBAP output according to loudspeaker parameters.</desc>
-<synopsis><opcodename>vbaplsinit</opcodename>(idim, ilsnum [, idir1] [, idir2] [...] [, idir32])</synopsis>
+<synopsis><opcodename>vbaplsinit</opcodename>(idim, ilsnum [,idir1, idir2] [...] [, idir32])</synopsis>
 <synopsis><opcodename>vbaplsinit</opcodename>(idim, ilsnum, ilsarray)</synopsis>
 </opcode>
 <opcode><desc>Distributes an audio signal among upto 64 channels with moving virtual sources.</desc>
@@ -1637,7 +1637,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>aarray[] =<opcodename>vbapmove</opcodename>(asig, idur, ispread, ifldnum, ifld1 [, ifld2] [...])</synopsis>
 </opcode>
 <opcode><desc>Writes a multi-channel audio signal to a ZAK array.</desc>
-<synopsis><opcodename>vbapz</opcodename>(inumchnls, istartndx, asig, kazim [, kelev] [, kspread])</synopsis>
+<synopsis><opcodename>vbapz</opcodename>(inumchnls, istartndx, asig, kazim [,kelev, kspread])</synopsis>
 </opcode>
 <opcode><desc>Writes a multi-channel audio signal to a ZAK array with moving virtual sources.</desc>
 <synopsis><opcodename>vbapzmove</opcodename>(inumchnls, istartndx, asig, idur, ispread, ifldnum, ifld1, ifld2, [...])</synopsis>
@@ -1645,28 +1645,28 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Signal Modifiers:Reverberation">
 <opcode><desc>Reverberates an input signal with a flat frequency response.</desc>
-<synopsis>ares =<opcodename>alpass</opcodename>(asig, xrvt, ilpt [, iskip] [, insmps])</synopsis>
+<synopsis>ares =<opcodename>alpass</opcodename>(asig, xrvt, ilpt [,iskip, insmps])</synopsis>
 </opcode>
 <opcode><desc>A physical model reverberator.</desc>
-<synopsis>a1, a2 =<opcodename>babo</opcodename>(asig, ksrcx, ksrcy, ksrcz, irx, iry, irz [, idiff] [, ifno])</synopsis>
+<synopsis>a1, a2 =<opcodename>babo</opcodename>(asig, ksrcx, ksrcy, ksrcz, irx, iry, irz [,idiff, ifno])</synopsis>
 </opcode>
 <opcode><desc>A physical model reverberator.</desc>
-<synopsis>a1, a2 =<opcodename>babo2</opcodename>(asig, ksrcx, ksrcy, ksrcz, irx, iry, irz [, idiff] [, ifno])</synopsis>
+<synopsis>a1, a2 =<opcodename>babo2</opcodename>(asig, ksrcx, ksrcy, ksrcz, irx, iry, irz [,idiff, ifno])</synopsis>
 </opcode>
 <opcode><desc>Reverberates an input signal with a &amp;#8220;colored&amp;#8221; frequency response.</desc>
-<synopsis>ares =<opcodename>comb</opcodename>(asig, krvt, ilpt [, iskip] [, insmps])</synopsis>
+<synopsis>ares =<opcodename>comb</opcodename>(asig, krvt, ilpt [,iskip, insmps])</synopsis>
 </opcode>
 <opcode><desc>Reverberates an input signal with a &amp;#8220;colored&amp;#8221; frequency response.</desc>
-<synopsis>ares =<opcodename>combinv</opcodename>(asig, krvt, ilpt [, iskip] [, insmps])</synopsis>
+<synopsis>ares =<opcodename>combinv</opcodename>(asig, krvt, ilpt [,iskip, insmps])</synopsis>
 </opcode>
 <opcode><desc>Opcode version of Jezar's Freeverb.</desc>
 <synopsis>aoutL, aoutR =<opcodename>freeverb</opcodename>(ainL, ainR, kRoomSize, kHFDamp[, iSRate[, iSkip]])</synopsis>
 </opcode>
 <opcode><desc>Three different nested all-pass filters, useful for implementing reverbs.</desc>
-<synopsis>ares =<opcodename>nestedap</opcodename>(asig, imode, imaxdel, idel1, igain1 [, idel2] [, igain2] [, idel3] [, igain3] [, istor])</synopsis>
+<synopsis>ares =<opcodename>nestedap</opcodename>(asig, imode, imaxdel, idel1, igain1 [,idel2, igain2, idel3, igain3, istor])</synopsis>
 </opcode>
 <opcode><desc>A reverberator consisting of 6 parallel comb-lowpass filters.</desc>
-<synopsis>ares =<opcodename>nreverb</opcodename>(asig, ktime, khdif [, iskip] [,inumCombs] [, ifnCombs] [, inumAlpas] [, ifnAlpas])</synopsis>
+<synopsis>ares =<opcodename>nreverb</opcodename>(asig, ktime, khdif [,iskip, inumCombs, ifnCombs, inumAlpas, ifnAlpas])</synopsis>
 </opcode>
 <opcode><desc>Models the reverberation of a rectangular metal plate with settable physical characteristics when excited by audio signal(s).</desc>
 <synopsis>a1[, a2, ...] =<opcodename>platerev</opcodename>(itabexcite. itabouts, kbndry, iaspect, istiff, idecay, iloss, aexcite1[, aexcite2, ...])</synopsis>
@@ -1675,7 +1675,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>reverb</opcodename>(asig, krvt [, iskip])</synopsis>
 </opcode>
 <opcode><desc>Same as the nreverb opcode.</desc>
-<synopsis>ares =<opcodename>reverb2</opcodename>(asig, ktime, khdif [, iskip] [,inumCombs] [, ifnCombs] [, inumAlpas] [, ifnAlpas])</synopsis>
+<synopsis>ares =<opcodename>reverb2</opcodename>(asig, ktime, khdif [,iskip, inumCombs, ifnCombs, inumAlpas, ifnAlpas])</synopsis>
 </opcode>
 <opcode><desc>8 delay line stereo FDN reverb.</desc>
 <synopsis>aoutL, aoutR =<opcodename>reverbsc</opcodename>(ainL, ainR, kfblvl, kfco[, israte[, ipitchm[, iskip]]])</synopsis>
@@ -1684,10 +1684,10 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>aoutL, aoutR =<opcodename>reverbsc2</opcodename>(ainL, ainR, kfblvl, kfco [, israte [, ipitchm [, iskip]]])</synopsis>
 </opcode>
 <opcode><desc>Variably reverberates an input signal with a flat frequency response.</desc>
-<synopsis>ares =<opcodename>valpass</opcodename>(asig, krvt, xlpt, imaxlpt [, iskip] [, insmps])</synopsis>
+<synopsis>ares =<opcodename>valpass</opcodename>(asig, krvt, xlpt, imaxlpt [,iskip, insmps])</synopsis>
 </opcode>
 <opcode><desc>Variably reverberates an input signal with a &amp;#8220;colored&amp;#8221; frequency response.</desc>
-<synopsis>ares =<opcodename>vcomb</opcodename>(asig, krvt, xlpt, imaxlpt [, iskip] [, insmps])</synopsis>
+<synopsis>ares =<opcodename>vcomb</opcodename>(asig, krvt, xlpt, imaxlpt [,iskip, insmps])</synopsis>
 </opcode>
 </category>
 <category name="Signal Modifiers:Sample Level Operators">
@@ -1712,12 +1712,12 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>integ</opcodename>(ksig [, iskip])</synopsis>
 </opcode>
 <opcode><desc>Converts a control signal to an audio signal using linear interpolation.</desc>
-<synopsis>ares =<opcodename>interp</opcodename>(ksig [, iskip] [, imode] [, ivalue])</synopsis>
+<synopsis>ares =<opcodename>interp</opcodename>(ksig [,iskip, imode, ivalue])</synopsis>
 </opcode>
 <opcode><desc>Calculates the weighted mean value (i.e. linear interpolation) of two input signals.</desc>
-<synopsis>ares =<opcodename>ntrpol</opcodename>(asig1, asig2, kpoint [, imin] [, imax])</synopsis>
-<synopsis>ires =<opcodename>ntrpol</opcodename>(isig1, isig2, ipoint [, imin] [, imax])</synopsis>
-<synopsis>kres =<opcodename>ntrpol</opcodename>(ksig1, ksig2, kpoint [, imin] [, imax])</synopsis>
+<synopsis>ares =<opcodename>ntrpol</opcodename>(asig1, asig2, kpoint [,imin, imax])</synopsis>
+<synopsis>ires =<opcodename>ntrpol</opcodename>(isig1, isig2, ipoint [,imin, imax])</synopsis>
+<synopsis>kres =<opcodename>ntrpol</opcodename>(ksig1, ksig2, kpoint [,imin, imax])</synopsis>
 </opcode>
 <opcode><desc>Returns the number of inactive samples before a note starts in the current control block.</desc>
 <synopsis>kOffset =<opcodename>offsetsmps</opcodename>()</synopsis>
@@ -1738,8 +1738,8 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>S</opcodename>(x) (control-rate or init-rate arg)</synopsis>
 </opcode>
 <opcode><desc>Performs a sample-and-hold operation on its input.</desc>
-<synopsis>ares =<opcodename>samphold</opcodename>(asig, agate [, ival] [, ivstor])</synopsis>
-<synopsis>kres =<opcodename>samphold</opcodename>(ksig, kgate [, ival] [, ivstor])</synopsis>
+<synopsis>ares =<opcodename>samphold</opcodename>(asig, agate [,ival, ivstor])</synopsis>
+<synopsis>kres =<opcodename>samphold</opcodename>(ksig, kgate [,ival, ivstor])</synopsis>
 </opcode>
 <opcode><desc>Modify a signal by up-sampling.</desc>
 <synopsis>ares =<opcodename>upsamp</opcodename>(ksig)</synopsis>
@@ -1807,8 +1807,8 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>atone</opcodename>(asig, khp [, iskip])</synopsis>
 </opcode>
 <opcode><desc>Emulates a stack of filters using the atone opcode.</desc>
-<synopsis>ares =<opcodename>atonex</opcodename>(asig, khp [, inumlayer] [, iskip])</synopsis>
-<synopsis>ares =<opcodename>atonex</opcodename>(asig, ahp [, inumlayer] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>atonex</opcodename>(asig, khp [,inumlayer, iskip])</synopsis>
+<synopsis>ares =<opcodename>atonex</opcodename>(asig, ahp [,inumlayer, iskip])</synopsis>
 </opcode>
 <opcode><desc>A sweepable general purpose biquadratic digital filter.</desc>
 <synopsis>ares =<opcodename>biquad</opcodename>(asig, kb0, kb1, kb2, ka0, ka1, ka2 [, iskip])</synopsis>
@@ -1845,7 +1845,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>butterlp</opcodename>(asig, afreq [, iskip])</synopsis>
 </opcode>
 <opcode><desc>Implements the classical standard analog filter types: low-pass and high-pass.</desc>
-<synopsis>ares =<opcodename>clfilt</opcodename>(asig, kfreq, itype, inpol [, ikind] [, ipbr] [, isba] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>clfilt</opcodename>(asig, kfreq, itype, inpol [,ikind, ipbr, isba, iskip])</synopsis>
 </opcode>
 <opcode aliases="diode_ladder"><desc>Zero-delay feedback implementation of a 4 pole (24 dB/oct) diode low-pass filter.</desc>
 <synopsis>asig =<opcodename>diodeladder</opcodename>(ain, xcf, xk [, inlp, isaturation, istor])</synopsis>
@@ -1869,8 +1869,8 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>tone</opcodename>(asig, khp [, iskip])</synopsis>
 </opcode>
 <opcode><desc>Emulates a stack of filters using the tone opcode.</desc>
-<synopsis>ares =<opcodename>tonex</opcodename>(asig, khp [, inumlayer] [, iskip])</synopsis>
-<synopsis>ares =<opcodename>tonex</opcodename>(asig, ahp [, inumlayer] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>tonex</opcodename>(asig, khp [,inumlayer, iskip])</synopsis>
+<synopsis>ares =<opcodename>tonex</opcodename>(asig, ahp [,inumlayer, iskip])</synopsis>
 </opcode>
 <opcode aliases="zdf_1pole"><desc>Zero-delay feedback implementation of a 1 pole (6 dB/oct) filter.</desc>
 <synopsis>asig =<opcodename>zdf1pole</opcodename>(ain, xcf [, kmode, istor])</synopsis>
@@ -1890,16 +1890,16 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Signal Modifiers:Standard Filters:Resonant">
 <opcode><desc>A notch filter whose transfer functions are the complements of the reson opcode.</desc>
-<synopsis>ares =<opcodename>areson</opcodename>(asig, kcf, kbw [, iscl] [, iskip])</synopsis>
-<synopsis>ares =<opcodename>areson</opcodename>(asig, acf, kbw [, iscl] [, iskip])</synopsis>
-<synopsis>ares =<opcodename>areson</opcodename>(asig, kcf, abw [, iscl] [, iskip])</synopsis>
-<synopsis>ares =<opcodename>areson</opcodename>(asig, acf, abw [, iscl] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>areson</opcodename>(asig, kcf, kbw [,iscl, iskip])</synopsis>
+<synopsis>ares =<opcodename>areson</opcodename>(asig, acf, kbw [,iscl, iskip])</synopsis>
+<synopsis>ares =<opcodename>areson</opcodename>(asig, kcf, abw [,iscl, iskip])</synopsis>
+<synopsis>ares =<opcodename>areson</opcodename>(asig, acf, abw [,iscl, iskip])</synopsis>
 </opcode>
 <opcode><desc>Runge-Kutte numerical simulation of the Moog analog resonant filter.</desc>
 <synopsis>asig =<opcodename>bob</opcodename>(ain, xcf, xres, xsat [, iosamps, istor])</synopsis>
 </opcode>
 <opcode><desc>A second-order multi-mode filter.</desc>
-<synopsis>ares =<opcodename>bqrez</opcodename>(asig, xfco, xres [, imode] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>bqrez</opcodename>(asig, xfco, xres [,imode, iskip])</synopsis>
 </opcode>
 <opcode><desc>A resonant second-order lowpass filter.</desc>
 <synopsis>ares =<opcodename>lowpass2</opcodename>(asig, kcf, kq [, iskip])</synopsis>
@@ -1908,7 +1908,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>lowres</opcodename>(asig, xcutoff, xresonance [, iskip])</synopsis>
 </opcode>
 <opcode><desc>Simulates layers of serially connected resonant lowpass filters.</desc>
-<synopsis>ares =<opcodename>lowresx</opcodename>(asig, xcutoff, xresonance [, inumlayer] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>lowresx</opcodename>(asig, xcutoff, xresonance [,inumlayer, iskip])</synopsis>
 </opcode>
 <opcode><desc>A 3-pole sweepable resonant lowpass filter.</desc>
 <synopsis>ares =<opcodename>lpf18</opcodename>(asig, xfco, xres, xdist [, iskip])</synopsis>
@@ -1950,19 +1950,19 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>sig4:a, sig2:a  =<opcodename>otafilter</opcodename>(in:a, cf:{a,k}, res:{a,k}, drive:k[, stor:i])</synopsis>
 </opcode>
 <opcode><desc>A second-order resonant filter.</desc>
-<synopsis>ares =<opcodename>reson</opcodename>(asig, xcf, xbw [, iscl] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>reson</opcodename>(asig, xcf, xbw [,iscl, iskip])</synopsis>
 </opcode>
 <opcode><desc>A second-order, two-pole two-zero bandpass filter with variable frequency response.</desc>
-<synopsis>ares =<opcodename>resonr</opcodename>(asig, xcf, xbw [, iscl] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>resonr</opcodename>(asig, xcf, xbw [,iscl, iskip])</synopsis>
 </opcode>
 <opcode><desc>Emulates a stack of filters using the reson opcode.</desc>
-<synopsis>ares =<opcodename>resonx</opcodename>(asig, xcf, xbw [, inumlayer] [, iscl] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>resonx</opcodename>(asig, xcf, xbw [,inumlayer, iscl, iskip])</synopsis>
 </opcode>
 <opcode><desc>A bank of second-order bandpass filters, connected in parallel.</desc>
-<synopsis>ares =<opcodename>resony</opcodename>(asig, kbf, kbw, inum, ksep [, isepmode] [, iscl] [, iskip] [, icorrect])</synopsis>
+<synopsis>ares =<opcodename>resony</opcodename>(asig, kbf, kbw, inum, ksep [,isepmode, iscl, iskip, icorrect])</synopsis>
 </opcode>
 <opcode><desc>A second-order, two-pole two-zero bandpass filter with variable frequency response.</desc>
-<synopsis>ares =<opcodename>resonz</opcodename>(asig, xcf, xbw [, iscl] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>resonz</opcodename>(asig, xcf, xbw [,iscl, iskip])</synopsis>
 </opcode>
 <opcode><desc>A resonant low-pass filter.</desc>
 <synopsis>ares =<opcodename>rezzy</opcodename>(asig, xfco, xres [, imode, iskip])</synopsis>
@@ -1977,7 +1977,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ahp, alp, abp, abr =<opcodename>statevar</opcodename>(ain, xcf, xq [, iosamps, istor])</synopsis>
 </opcode>
 <opcode><desc>A resonant second order filter, with simultaneous lowpass, highpass and bandpass outputs.</desc>
-<synopsis>alow, ahigh, aband =<opcodename>svfilter</opcodename>(asig, kcf, kq [, iscl] [, iskip])</synopsis>
+<synopsis>alow, ahigh, aband =<opcodename>svfilter</opcodename>(asig, kcf, kq [,iscl, iskip])</synopsis>
 </opcode>
 <opcode><desc>Non-linear state variable filter.</desc>
 <synopsis>ahp,alp,abp,abr =<opcodename>svn</opcodename>(asig, xcf, xQ, kdrive[, ifn,inm,imx, istor])</synopsis>
@@ -1994,7 +1994,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Signal Modifiers:Standard Filters:Control">
 <opcode><desc>A notch filter whose transfer functions are the complements of the reson opcode.</desc>
-<synopsis>kres =<opcodename>aresonk</opcodename>(ksig, kcf, kbw [, iscl] [, iskip])</synopsis>
+<synopsis>kres =<opcodename>aresonk</opcodename>(ksig, kcf, kbw [,iscl, iskip])</synopsis>
 </opcode>
 <opcode><desc>A hi-pass filter whose transfer functions are the complements of the tonek opcode.</desc>
 <synopsis>kres =<opcodename>atonek</opcodename>(ksig, khp [, iskip])</synopsis>
@@ -2017,7 +2017,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>portk</opcodename>(ksig, khtim [, isig])</synopsis>
 </opcode>
 <opcode><desc>A second-order resonant filter.</desc>
-<synopsis>kres =<opcodename>resonk</opcodename>(ksig, kcf, kbw [, iscl] [, iskip])</synopsis>
+<synopsis>kres =<opcodename>resonk</opcodename>(ksig, kcf, kbw [,iscl, iskip])</synopsis>
 </opcode>
 <opcode><desc>Control signal resonant filter stack.</desc>
 <synopsis>kres =<opcodename>resonxk</opcodename>(ksig, kcf, kbw[, inumlayer, iscl, istor])</synopsis>
@@ -2050,7 +2050,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>dcblock</opcodename>(ain [, igain])</synopsis>
 </opcode>
 <opcode><desc>Implements a DC blocking filter with improved DC attenuation.</desc>
-<synopsis>ares =<opcodename>dcblock2</opcodename>(ain [, iorder] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>dcblock2</opcodename>(ain [,iorder, iskip])</synopsis>
 </opcode>
 <opcode><desc>Equalizer filter.</desc>
 <synopsis>asig =<opcodename>eqfil</opcodename>(ain, kcf, kbw, kgain[, istor])</synopsis>
@@ -2092,14 +2092,14 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>nlfilt2</opcodename>(ain, ka, kb, kd, kC, kL)</synopsis>
 </opcode>
 <opcode><desc>Implementation of Zoelzer's parametric equalizer filters, with some modifications by the author.</desc>
-<synopsis>ares =<opcodename>pareq</opcodename>(asig, kc, kv, kq [, imode] [, iskip])</synopsis>
+<synopsis>ares =<opcodename>pareq</opcodename>(asig, kc, kv, kq [,imode, iskip])</synopsis>
 </opcode>
 <opcode><desc>Parametric equalizer and filter opcode with 7 filter types, based on algorithm by Robert Bristow-Johnson.</desc>
 <synopsis>ar =<opcodename>rbjeq</opcodename>(asig, kfco, klvl, kQ, kS[, imode])</synopsis>
 </opcode>
 <opcode><desc>Savitzky-Golay smoothing and differentiation filter.</desc>
-<synopsis>ares =<opcodename>savgol</opcodename>(asig, iwinsize, iorder [, ideriv] [, idelta])</synopsis>
-<synopsis>kres =<opcodename>savgol</opcodename>(ksig, iwinsize, iorder [, ideriv] [, idelta])</synopsis>
+<synopsis>ares =<opcodename>savgol</opcodename>(asig, iwinsize, iorder [,ideriv, idelta])</synopsis>
+<synopsis>kres =<opcodename>savgol</opcodename>(ksig, iwinsize, iorder [,ideriv, idelta])</synopsis>
 </opcode>
 <opcode><desc>Returns the Savitzky-Golay filter coefficients as a 2-D array.</desc>
 <synopsis>imat[][] =<opcodename>savgolmat</opcodename>(iwinsize, iorder [, idelta])</synopsis>
@@ -2152,16 +2152,16 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kOut[] =<opcodename>cmp</opcodename>(k1, S_operator1, kIn[], S_operator2, k2)</synopsis>
 </opcode>
 <opcode><desc>Produces a signal that is the maximum of any number of input signals.</desc>
-<synopsis>amax =<opcodename>max</opcodename>(ain1, ain2 [, ain3] [, ain4] [...])</synopsis>
-<synopsis>kmax =<opcodename>max</opcodename>(kin1, kin2 [, kin3] [, kin4] [...])</synopsis>
-<synopsis>imax =<opcodename>max</opcodename>(iin1, iin2 [, iin3] [, iin4] [...])</synopsis>
+<synopsis>amax =<opcodename>max</opcodename>(ain1, ain2 [,ain3, ain4] [...])</synopsis>
+<synopsis>kmax =<opcodename>max</opcodename>(kin1, kin2 [,kin3, kin4] [...])</synopsis>
+<synopsis>imax =<opcodename>max</opcodename>(iin1, iin2 [,iin3, iin4] [...])</synopsis>
 </opcode>
 <opcode aliases="max_k"><desc>Local maximum (or minimum) value of an incoming asig signal, checked in the time interval between ktrig has become true twice.</desc>
 <synopsis>knumkout =<opcodename>maxk</opcodename>(asig, ktrig, itype)</synopsis>
 </opcode>
 <opcode><desc>Produces a signal that is the maximum of the absolute values of any number of input signals.</desc>
-<synopsis>amax =<opcodename>maxabs</opcodename>(ain1, ain2 [, ain3] [, ain4] [...])</synopsis>
-<synopsis>kmax =<opcodename>maxabs</opcodename>(kin1, kin2 [, kin3] [, kin4] [...])</synopsis>
+<synopsis>amax =<opcodename>maxabs</opcodename>(ain1, ain2 [,ain3, ain4] [...])</synopsis>
+<synopsis>kmax =<opcodename>maxabs</opcodename>(kin1, kin2 [,kin3, kin4] [...])</synopsis>
 </opcode>
 <opcode><desc>Accumulates the maximum of the absolute values of audio signals.</desc>
 <synopsis><opcodename>maxabsaccum</opcodename>(aAccumulator, aInput)</synopsis>
@@ -2170,13 +2170,13 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>maxaccum</opcodename>(aAccumulator, aInput)</synopsis>
 </opcode>
 <opcode><desc>Produces a signal that is the minimum of any number of input signals.</desc>
-<synopsis>amin =<opcodename>min</opcodename>(ain1, ain2 [, ain3] [, ain4] [...])</synopsis>
-<synopsis>kmin =<opcodename>min</opcodename>(kin1, kin2 [, kin3] [, kin4] [...])</synopsis>
-<synopsis>imin =<opcodename>min</opcodename>(iin1, iin2 [, iin3] [, iin4] [...])</synopsis>
+<synopsis>amin =<opcodename>min</opcodename>(ain1, ain2 [,ain3, ain4] [...])</synopsis>
+<synopsis>kmin =<opcodename>min</opcodename>(kin1, kin2 [,kin3, kin4] [...])</synopsis>
+<synopsis>imin =<opcodename>min</opcodename>(iin1, iin2 [,iin3, iin4] [...])</synopsis>
 </opcode>
 <opcode><desc>Produces a signal that is the minimum of the absolute values of any number of input signals.</desc>
-<synopsis>amin =<opcodename>minabs</opcodename>(ain1, ain2 [, ain3] [, ain4] [...])</synopsis>
-<synopsis>kmin =<opcodename>minabs</opcodename>(kin1, kin2 [, kin3] [, kin4] [...])</synopsis>
+<synopsis>amin =<opcodename>minabs</opcodename>(ain1, ain2 [,ain3, ain4] [...])</synopsis>
+<synopsis>kmin =<opcodename>minabs</opcodename>(kin1, kin2 [,kin3, kin4] [...])</synopsis>
 </opcode>
 <opcode><desc>Accumulates the minimum of the absolute values of audio signals.</desc>
 <synopsis><opcodename>minabsaccum</opcodename>(aAccumulator, aInput)</synopsis>
@@ -2260,20 +2260,20 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Instrument Control:Invocation">
 <opcode><desc>Generates a score event from an instrument.</desc>
-<synopsis><opcodename>event</opcodename>("scorechar", kinsnum, kdelay, kdur [, kp4] [, kp5] [, ...])</synopsis>
-<synopsis><opcodename>event</opcodename>("scorechar", "insname", kdelay, kdur [, kp4] [, kp5] [, ...])</synopsis>
+<synopsis><opcodename>event</opcodename>("scorechar", kinsnum, kdelay, kdur [,kp4, kp5, ...])</synopsis>
+<synopsis><opcodename>event</opcodename>("scorechar", "insname", kdelay, kdur [,kp4, kp5, ...])</synopsis>
 </opcode>
 <opcode aliases="event_i"><desc>Generates a score event from an instrument.</desc>
-<synopsis><opcodename>eventi</opcodename>("scorechar", iinsnum, idelay, idur [, ip4] [, ip5] [, ...])</synopsis>
-<synopsis><opcodename>eventi</opcodename>("scorechar", "insname", idelay, idur [, ip4] [, ip5] [, ...])</synopsis>
+<synopsis><opcodename>eventi</opcodename>("scorechar", iinsnum, idelay, idur [,ip4, ip5, ...])</synopsis>
+<synopsis><opcodename>eventi</opcodename>("scorechar", "insname", idelay, idur [,ip4, ip5, ...])</synopsis>
 </opcode>
 <opcode><desc>Mutes/unmutes new instances of a given instrument.</desc>
 <synopsis><opcodename>mute</opcodename>(insnum [, iswitch])</synopsis>
 <synopsis><opcodename>mute</opcodename>("insname" [, iswitch])</synopsis>
 </opcode>
 <opcode><desc>Schedules a new instrument instance, storing the instance handle in a variable.</desc>
-<synopsis>iHandle =<opcodename>nstance</opcodename>(insnum, iwhen, idur [, ip4] [, ip5] [...])</synopsis>
-<synopsis>iHandle =<opcodename>nstance</opcodename>("insname", iwhen, idur [, ip4] [, ip5] [...])</synopsis>
+<synopsis>iHandle =<opcodename>nstance</opcodename>(insnum, iwhen, idur [,ip4, ip5] [...])</synopsis>
+<synopsis>iHandle =<opcodename>nstance</opcodename>("insname", iwhen, idur [,ip4, ip5] [...])</synopsis>
 </opcode>
 <opcode><desc>Starts an instrument immediately and returns its instance.</desc>
 <synopsis>voice:Instr =<opcodename>play</opcodename>(definition[, ip4, ip5, ...])</synopsis>
@@ -2286,27 +2286,27 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>remove</opcodename>(definition)</synopsis>
 </opcode>
 <opcode><desc>Adds a new score event generated by a k-rate trigger.</desc>
-<synopsis><opcodename>schedkwhen</opcodename>(ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur [, ip4] [, ip5] [...])</synopsis>
-<synopsis><opcodename>schedkwhen</opcodename>(ktrigger, kmintim, kmaxnum, "insname", kwhen, kdur [, ip4] [, ip5] [...])</synopsis>
+<synopsis><opcodename>schedkwhen</opcodename>(ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur [,ip4, ip5] [...])</synopsis>
+<synopsis><opcodename>schedkwhen</opcodename>(ktrigger, kmintim, kmaxnum, "insname", kwhen, kdur [,ip4, ip5] [...])</synopsis>
 </opcode>
 <opcode><desc>Similar to schedkwhen but uses a named instrument at init-time.</desc>
-<synopsis><opcodename>schedkwhennamed</opcodename>(ktrigger, kmintim, kmaxnum, "name", kwhen, kdur [, ip4] [, ip5] [...])</synopsis>
+<synopsis><opcodename>schedkwhennamed</opcodename>(ktrigger, kmintim, kmaxnum, "name", kwhen, kdur [,ip4, ip5] [...])</synopsis>
 </opcode>
 <opcode><desc>Adds a new score event.</desc>
-<synopsis><opcodename>schedule</opcodename>(insnum, iwhen, idur [, ip4] [, ip5] [...])</synopsis>
-<synopsis><opcodename>schedule</opcodename>("insname", iwhen, idur [, ip4] [, ip5] [...])</synopsis>
+<synopsis><opcodename>schedule</opcodename>(insnum, iwhen, idur [,ip4, ip5] [...])</synopsis>
+<synopsis><opcodename>schedule</opcodename>("insname", iwhen, idur [,ip4, ip5] [...])</synopsis>
 <synopsis><opcodename>schedule</opcodename>(iPar[])</synopsis>
 <synopsis><opcodename>schedule</opcodename>(definition, iwhen, idur [, ip4, ip5, ...])</synopsis>
 <synopsis>voice:Instr =<opcodename>schedule</opcodename>(definition, iwhen, idur [, ip4, ip5, ...])</synopsis>
 </opcode>
 <opcode><desc>Adds a new score event.</desc>
-<synopsis><opcodename>schedulek</opcodename>(knsnum, kwhen, kdur [, kp4] [, kp5] [...])</synopsis>
-<synopsis><opcodename>schedulek</opcodename>("insname", kwhen, kdur [, kp4] [, kp5] [...])</synopsis>
+<synopsis><opcodename>schedulek</opcodename>(knsnum, kwhen, kdur [,kp4, kp5] [...])</synopsis>
+<synopsis><opcodename>schedulek</opcodename>("insname", kwhen, kdur [,kp4, kp5] [...])</synopsis>
 <synopsis><opcodename>schedulek</opcodename>(kPar[])</synopsis>
 </opcode>
 <opcode><desc>Adds a new score event.</desc>
-<synopsis><opcodename>schedwhen</opcodename>(ktrigger, kinsnum, kwhen, kdur [, ip4] [, ip5] [...])</synopsis>
-<synopsis><opcodename>schedwhen</opcodename>(ktrigger, "insname", kwhen, kdur [, ip4] [, ip5] [...])</synopsis>
+<synopsis><opcodename>schedwhen</opcodename>(ktrigger, kinsnum, kwhen, kdur [,ip4, ip5] [...])</synopsis>
+<synopsis><opcodename>schedwhen</opcodename>(ktrigger, "insname", kwhen, kdur [,ip4, ip5] [...])</synopsis>
 </opcode>
 <opcode><desc>Issues one or more score line events from an instrument.</desc>
 <synopsis><opcodename>scoreline</opcodename>(Sin, ktrig)</synopsis>
@@ -2626,7 +2626,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ktrig  =<opcodename>metro2</opcodename>( kfreq, kswing [, iamp, initphase])</synopsis>
 </opcode>
 <opcode><desc>Trigger Metronome with optional gate.</desc>
-<synopsis>ktrig  =<opcodename>metrobpm</opcodename>( kfreq [, initphase] [, kgate])</synopsis>
+<synopsis>ktrig  =<opcodename>metrobpm</opcodename>( kfreq [,initphase, kgate])</synopsis>
 </opcode>
 <opcode><desc>Returns a generic MIDI message from a MIDI file.</desc>
 <synopsis>status:i,chan:i,data1:i,data2:i,time:i =<opcodename>midifilein</opcodename>(index:i[, id:i])</synopsis>
@@ -2682,13 +2682,13 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ivalue =<opcodename>pindex</opcodename>(ipfieldIndex)</synopsis>
 </opcode>
 <opcode><desc>Tracks the pitch of a signal.</desc>
-<synopsis>koct, kamp =<opcodename>pitch</opcodename>(asig, iupdte, ilo, ihi, idbthresh [, ifrqs] [, iconf] [, istrt] [, iocts] [, iq] [, inptls] [, irolloff] [, iskip])</synopsis>
+<synopsis>koct, kamp =<opcodename>pitch</opcodename>(asig, iupdte, ilo, ihi, idbthresh [,ifrqs, iconf, istrt, iocts, iq, inptls, irolloff, iskip])</synopsis>
 </opcode>
 <opcode><desc>Estimate pitch by correlating successive windows of an audio signal.</desc>
 <synopsis>kpitch =<opcodename>pitchac</opcodename>(asig, kfmin, kfmax, iflow)</synopsis>
 </opcode>
 <opcode><desc>Follows the pitch of a signal based on the AMDF method (Average Magnitude Difference Function).</desc>
-<synopsis>kcps, krms =<opcodename>pitchamdf</opcodename>(asig, imincps, imaxcps [, icps] [, imedi] [, idowns] [, iexcps] [, irmsmedi])</synopsis>
+<synopsis>kcps, krms =<opcodename>pitchamdf</opcodename>(asig, imincps, imaxcps [,icps, imedi, idowns, iexcps, irmsmedi])</synopsis>
 </opcode>
 <opcode><desc>Tracks the pitch of a signal.</desc>
 <synopsis>acps, alock =<opcodename>plltrack</opcodename>(asig, kd [, kloopf, kloopq, klf, khf, kthresh])</synopsis>
@@ -2703,7 +2703,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>rewindscore</opcodename>()</synopsis>
 </opcode>
 <opcode><desc>Determines the root-mean-square amplitude of an audio signal.</desc>
-<synopsis>kres =<opcodename>rms</opcodename>(asig [, ihp] [, iskip])</synopsis>
+<synopsis>kres =<opcodename>rms</opcodename>(asig [,ihp, iskip])</synopsis>
 </opcode>
 <opcode><desc>Returns the ASCII code of a key that has been pressed, or -1 if no key has been pressed.</desc>
 <synopsis>kres [, kkeydown] =<opcodename>sensekey</opcodename>()</synopsis>
@@ -2715,8 +2715,8 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ktrig_out =<opcodename>seqtime2</opcodename>(ktrig_in, ktime_unit, kstart, kloop, kinitndx, kfn_times)</synopsis>
 </opcode>
 <opcode><desc>Emulate a hardware sequencer.</desc>
-<synopsis>kres =<opcodename>sequ</opcodename>(irhythm[], iinstr[], idata[], kbpm, klen [, kmode] [, kstep] [, kreset] [, iverbose] [, iid])</synopsis>
-<synopsis>kres =<opcodename>sequ</opcodename>(irhythm[], iinstr[], idata[][], kbpm, klen [, kmode] [, kstep] [, kreset] [, iverbose] [, iid])</synopsis>
+<synopsis>kres =<opcodename>sequ</opcodename>(irhythm[], iinstr[], idata[], kbpm, klen [,kmode, kstep, kreset, iverbose, iid])</synopsis>
+<synopsis>kres =<opcodename>sequ</opcodename>(irhythm[], iinstr[], idata[][], kbpm, klen [,kmode, kstep, kreset, iverbose, iid])</synopsis>
 </opcode>
 <opcode><desc>Reads a sequencer's event counter and current ordering of source indices.</desc>
 <synopsis>icount, iorder[] =<opcodename>sequstate</opcodename>([iid])</synopsis>
@@ -2732,7 +2732,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>splitrig</opcodename>(ktrig, kndx, imaxtics, ifn, kout1 [,kout2,...,koutN])</synopsis>
 </opcode>
 <opcode><desc>Estimate the tempo of beat patterns in a control signal.</desc>
-<synopsis>ktemp =<opcodename>tempest</opcodename>(kin, iprd, imindur, imemdur, ihp, ithresh, ihtim, ixfdbak, istartempo, ifn [, idisprd] [, itweek])</synopsis>
+<synopsis>ktemp =<opcodename>tempest</opcodename>(kin, iprd, imindur, imemdur, ihp, ithresh, ihtim, ixfdbak, istartempo, ifn [,idisprd, itweek])</synopsis>
 </opcode>
 <opcode><desc>Apply tempo control to an uninterpreted score.</desc>
 <synopsis><opcodename>tempo</opcodename>(ktempo, istartempo)</synopsis>
@@ -2756,17 +2756,17 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>writescratch</opcodename>(ival [index])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Sense the cursor position in an output window.</desc>
-<synopsis>kx, ky =<opcodename>xyin</opcodename>(iprd, ixmin, ixmax, iymin, iymax [, ixinit] [, iyinit])</synopsis>
+<synopsis>kx, ky =<opcodename>xyin</opcodename>(iprd, ixmin, ixmax, iymin, iymax [,ixinit, iyinit])</synopsis>
 </opcode>
 </category>
 <category name="Instrument Control:Subinstrument Control">
 <opcode><desc>Creates and runs a numbered instrument instance as if it were an opcode.</desc>
-<synopsis>a1, [...] [, a8] =<opcodename>subinstr</opcodename>(instrnum [, p4] [, p5] [...])</synopsis>
-<synopsis>a1, [...] [, a8] =<opcodename>subinstr</opcodename>("insname" [, p4] [, p5] [...])</synopsis>
+<synopsis>a1, [...] [, a8] =<opcodename>subinstr</opcodename>(instrnum [,p4, p5] [...])</synopsis>
+<synopsis>a1, [...] [, a8] =<opcodename>subinstr</opcodename>("insname" [,p4, p5] [...])</synopsis>
 </opcode>
 <opcode><desc>Runs the initialization code of a numbered or named instrument.</desc>
-<synopsis><opcodename>subinstrinit</opcodename>(instrnum [, p4] [, p5] [...])</synopsis>
-<synopsis><opcodename>subinstrinit</opcodename>("insname" [, p4] [, p5] [...])</synopsis>
+<synopsis><opcodename>subinstrinit</opcodename>(instrnum [,p4, p5] [...])</synopsis>
+<synopsis><opcodename>subinstrinit</opcodename>("insname" [,p4, p5] [...])</synopsis>
 </opcode>
 </category>
 <category name="Instrument Control:Time Reading">
@@ -2937,7 +2937,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kres =<opcodename>tableng</opcodename>(kfn)</synopsis>
 </opcode>
 <opcode><desc>Sums the values in an f-table in a consecutive range.</desc>
-<synopsis>kr =<opcodename>tabsum</opcodename>(ifn[[, kmin] [, kmax]])</synopsis>
+<synopsis>kr =<opcodename>tabsum</opcodename>(ifn[[,kmin, kmax]])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Table Read Access inside expressions.</desc>
 <synopsis><opcodename>tb0_init</opcodename>(ifn)</synopsis>
@@ -3054,19 +3054,19 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Table Control:Dynamic Selection">
 <opcode><desc>Reads a function table with cubic interpolation and a table number that can change at control rate.</desc>
-<synopsis>ares =<opcodename>table3kt</opcodename>(andx, kfn [, ixmode] [, ixoff] [, iwrap])</synopsis>
-<synopsis>kres =<opcodename>table3kt</opcodename>(kndx, kfn [, ixmode] [, ixoff] [, iwrap])</synopsis>
+<synopsis>ares =<opcodename>table3kt</opcodename>(andx, kfn [,ixmode, ixoff, iwrap])</synopsis>
+<synopsis>kres =<opcodename>table3kt</opcodename>(kndx, kfn [,ixmode, ixoff, iwrap])</synopsis>
 </opcode>
 <opcode><desc>Provides k-rate control over table numbers.</desc>
-<synopsis>ares =<opcodename>tableikt</opcodename>(xndx, kfn [, ixmode] [, ixoff] [, iwrap])</synopsis>
-<synopsis>kres =<opcodename>tableikt</opcodename>(kndx, kfn [, ixmode] [, ixoff] [, iwrap])</synopsis>
+<synopsis>ares =<opcodename>tableikt</opcodename>(xndx, kfn [,ixmode, ixoff, iwrap])</synopsis>
+<synopsis>kres =<opcodename>tableikt</opcodename>(kndx, kfn [,ixmode, ixoff, iwrap])</synopsis>
 </opcode>
 <opcode><desc>Provides k-rate control over table numbers.</desc>
-<synopsis>ares =<opcodename>tablekt</opcodename>(xndx, kfn [, ixmode] [, ixoff] [, iwrap])</synopsis>
-<synopsis>kres =<opcodename>tablekt</opcodename>(kndx, kfn [, ixmode] [, ixoff] [, iwrap])</synopsis>
+<synopsis>ares =<opcodename>tablekt</opcodename>(xndx, kfn [,ixmode, ixoff, iwrap])</synopsis>
+<synopsis>kres =<opcodename>tablekt</opcodename>(kndx, kfn [,ixmode, ixoff, iwrap])</synopsis>
 </opcode>
 <opcode><desc>Reads function tables with linear, cubic, or sinc interpolation.</desc>
-<synopsis>ares =<opcodename>tablexkt</opcodename>(xndx, kfn, kwarp, iwsize [, ixmode] [, ixoff] [, iwrap])</synopsis>
+<synopsis>ares =<opcodename>tablexkt</opcodename>(xndx, kfn, kwarp, iwsize [,ixmode, ixoff, iwrap])</synopsis>
 </opcode>
 </category>
 <category name="Table Control:Read/Write Operations">
@@ -3105,12 +3105,12 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>ftslicei</opcodename>(ifnsource, ifndest [, istart, iend, istep ])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Writes a value to a function table at initialization.</desc>
-<synopsis><opcodename>ptableiw</opcodename>(isig, indx, ifn [, ixmode] [, ixoff] [, iwgmode])</synopsis>
+<synopsis><opcodename>ptableiw</opcodename>(isig, indx, ifn [,ixmode, ixoff, iwgmode])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Change the contents of existing function tables of any length.</desc>
-<synopsis><opcodename>ptablew</opcodename>asig, andx, ifn [, ixmode] [, ixoff] [, iwgmode]</synopsis>
-<synopsis><opcodename>ptablew</opcodename>isig, indx, ifn [, ixmode] [, ixoff] [, iwgmode]</synopsis>
-<synopsis><opcodename>ptablew</opcodename>ksig, kndx, ifn [, ixmode] [, ixoff] [, iwgmode]</synopsis>
+<synopsis><opcodename>ptablew</opcodename>asig, andx, ifn [,ixmode, ixoff, iwgmode]</synopsis>
+<synopsis><opcodename>ptablew</opcodename>isig, indx, ifn [,ixmode, ixoff, iwgmode]</synopsis>
+<synopsis><opcodename>ptablew</opcodename>ksig, kndx, ifn [,ixmode, ixoff, iwgmode]</synopsis>
 </opcode>
 <opcode><desc>Simple, fast table copy opcode.</desc>
 <synopsis><opcodename>tablecopy</opcodename>(kdft, ksft)</synopsis>
@@ -3134,7 +3134,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>tableimix</opcodename>(idft, idoff, ilen, is1ft, is1off, is1g, is2ft, is2off, is2g)</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Deprecated as of version 3.</desc>
-<synopsis><opcodename>tableiw</opcodename>(isig, indx, ifn [, ixmode] [, ixoff] [, iwgmode])</synopsis>
+<synopsis><opcodename>tableiw</opcodename>(isig, indx, ifn [,ixmode, ixoff, iwgmode])</synopsis>
 </opcode>
 <opcode><desc>Mixes two tables.</desc>
 <synopsis><opcodename>tablemix</opcodename>(kdft, kdoff, klen, ks1ft, ks1off, ks1g, ks2ft, ks2off, ks2g)</synopsis>
@@ -3143,16 +3143,16 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>asig =<opcodename>tablera</opcodename>(kfn, kstart, koff)</synopsis>
 </opcode>
 <opcode><desc>Change the contents of existing function tables.</desc>
-<synopsis><opcodename>tablew</opcodename>(asig, andx, ifn [, ixmode] [, ixoff] [, iwgmode])</synopsis>
-<synopsis><opcodename>tablew</opcodename>(isig, indx, ifn [, ixmode] [, ixoff] [, iwgmode])</synopsis>
-<synopsis><opcodename>tablew</opcodename>(ksig, kndx, ifn [, ixmode] [, ixoff] [, iwgmode])</synopsis>
+<synopsis><opcodename>tablew</opcodename>(asig, andx, ifn [,ixmode, ixoff, iwgmode])</synopsis>
+<synopsis><opcodename>tablew</opcodename>(isig, indx, ifn [,ixmode, ixoff, iwgmode])</synopsis>
+<synopsis><opcodename>tablew</opcodename>(ksig, kndx, ifn [,ixmode, ixoff, iwgmode])</synopsis>
 </opcode>
 <opcode><desc>Writes an audio block to successive locations in a function table.</desc>
 <synopsis>kstart =<opcodename>tablewa</opcodename>(kfn, asig, koff[, iskip])</synopsis>
 </opcode>
 <opcode><desc>Change the contents of existing function tables.</desc>
-<synopsis><opcodename>tablewkt</opcodename>(asig, andx, kfn [, ixmode] [, ixoff] [, iwgmode])</synopsis>
-<synopsis><opcodename>tablewkt</opcodename>(ksig, kndx, kfn [, ixmode] [, ixoff] [, iwgmode])</synopsis>
+<synopsis><opcodename>tablewkt</opcodename>(asig, andx, kfn [,ixmode, ixoff, iwgmode])</synopsis>
+<synopsis><opcodename>tablewkt</opcodename>(ksig, kndx, kfn [,ixmode, ixoff, iwgmode])</synopsis>
 </opcode>
 <opcode><desc>Allows morphing between a set of tables of the same size, by means of a weighted average between two currently selected tables.</desc>
 <synopsis>kout =<opcodename>tabmorph</opcodename>(kindex, kweightpoint, ktabnum1, ktabnum2, ifn1, ifn2 [, ifn3, ifn4, ...,ifnN])</synopsis>
@@ -3261,7 +3261,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Mathematical Operations:Comparators and Accumulators">
 <opcode><desc>Zeroes a list of audio signals.</desc>
-<synopsis><opcodename>clear</opcodename>(avar1 [, avar2] [, avar3] [...])</synopsis>
+<synopsis><opcodename>clear</opcodename>(avar1 [,avar2, avar3] [...])</synopsis>
 <synopsis><opcodename>clear</opcodename>(avar[])</synopsis>
 </opcode>
 <opcode><desc>Increments one audio variable with another signal, i.e. it accumulates output.</desc>
@@ -3432,10 +3432,10 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>...<opcodename>divz</opcodename>(ka, kb, ksubst)... (no rate restriction)</synopsis>
 </opcode>
 <opcode><desc>Multiplies and accumulates a- and k-rate signals.</desc>
-<synopsis>ares =<opcodename>mac</opcodename>(ksig1, asig1 [, ksig2] [, asig2] [, ksig3] [, asig3] [...])</synopsis>
+<synopsis>ares =<opcodename>mac</opcodename>(ksig1, asig1 [,ksig2, asig2, ksig3, asig3] [...])</synopsis>
 </opcode>
 <opcode><desc>Multiply and accumulate a-rate signals only.</desc>
-<synopsis>ares =<opcodename>maca</opcodename>(asig1 , asig2 [, asig3] [, asig4] [, asig5] [...])</synopsis>
+<synopsis>ares =<opcodename>maca</opcodename>(asig1 , asig2 [,asig3, asig4, asig5] [...])</synopsis>
 </opcode>
 <opcode><desc>Efficiently evaluates a polynomial of arbitrary order.</desc>
 <synopsis>aout =<opcodename>polynomial</opcodename>(ain, k0 [, k1 [, k2 [...]]])</synopsis>
@@ -3453,7 +3453,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ares =<opcodename>product</opcodename>(asig1, asig2 [, asig3] [...])</synopsis>
 </opcode>
 <opcode><desc>Sums any number of a-rate signals, or array elements.</desc>
-<synopsis>ares =<opcodename>sum</opcodename>(asig1 [, asig2] [, asig3] [...])</synopsis>
+<synopsis>ares =<opcodename>sum</opcodename>(asig1 [,asig2, asig3] [...])</synopsis>
 <synopsis>kres =<opcodename>sum</opcodename>(karr)</synopsis>
 <synopsis>ires =<opcodename>sum</opcodename>(iarr)</synopsis>
 </opcode>
@@ -3546,8 +3546,8 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kaft =<opcodename>aftouch</opcodename>([imin] [, imax])</synopsis>
 </opcode>
 <opcode><desc>Get the current value of a MIDI channel controller and optionally map it onto specified range.</desc>
-<synopsis>ival =<opcodename>chanctrl</opcodename>(ichnl, ictlno [, ilow] [, ihigh])</synopsis>
-<synopsis>kval =<opcodename>chanctrl</opcodename>(ichnl, ictlno [, ilow] [, ihigh])</synopsis>
+<synopsis>ival =<opcodename>chanctrl</opcodename>(ichnl, ictlno [,ilow, ihigh])</synopsis>
+<synopsis>kval =<opcodename>chanctrl</opcodename>(ichnl, ictlno [,ilow, ihigh])</synopsis>
 </opcode>
 <opcode><desc>Reads MIDI controller messages and returns their value, controller number and channel.</desc>
 <synopsis>kvalue, knumber, kchannel =<opcodename>ctlchn</opcodename>([ichannel] [, icontroller])</synopsis>
@@ -3563,10 +3563,10 @@ This file is distributed under the GNU Free Documentation Licence-->
 <opcode><desc>Allows a floating-point 7-bit MIDI signal scaled with a minimum and a maximum range.</desc>
 <synopsis>idest =<opcodename>ctrl7</opcodename>(ichan, ictlno, imin, imax [, ifn])</synopsis>
 <synopsis>kdest =<opcodename>ctrl7</opcodename>(ichan, ictlno, kmin, kmax [, ifn])</synopsis>
-<synopsis>adest =<opcodename>ctrl7</opcodename>(ichan, ictlno, kmin, kmax [, ifn] [, icutoff])</synopsis>
+<synopsis>adest =<opcodename>ctrl7</opcodename>(ichan, ictlno, kmin, kmax [,ifn, icutoff])</synopsis>
 </opcode>
 <opcode><desc>Sets the initial values for a set of MIDI controllers.</desc>
-<synopsis><opcodename>ctrlinit</opcodename>(ichnl, ictlno1, ival1 [, ictlno2] [, ival2] [, ictlno3] [, ival3] [,...ival32])</synopsis>
+<synopsis><opcodename>ctrlinit</opcodename>(ichnl, ictlno1, ival1 [,ictlno2, ival2, ictlno3, ival3, ...ival32])</synopsis>
 </opcode>
 <opcode><desc>Defines a preset for MIDI controllers.</desc>
 <synopsis>kpreset =<opcodename>ctrlpreset</opcodename>(ktag, kchnl, kctlno1, [kctlno2] [, kctlno3] ...)</synopsis>
@@ -3609,8 +3609,8 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kdest =<opcodename>midic7</opcodename>(ictlno, kmin, kmax [, ifn])</synopsis>
 </opcode>
 <opcode><desc>Get the current value (0-127) of a specified MIDI controller.</desc>
-<synopsis>ival =<opcodename>midictrl</opcodename>(inum [, imin] [, imax])</synopsis>
-<synopsis>kval =<opcodename>midictrl</opcodename>(inum [, imin] [, imax])</synopsis>
+<synopsis>ival =<opcodename>midictrl</opcodename>(inum [,imin, imax])</synopsis>
+<synopsis>kval =<opcodename>midictrl</opcodename>(inum [,imin, imax])</synopsis>
 </opcode>
 <opcode><desc>Reads the last program number received on a MIDI channel.</desc>
 <synopsis>iprogram =<opcodename>midipgm</opcodename>([ichannel])</synopsis>
@@ -3630,8 +3630,8 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kprogram, kchannel =<opcodename>pgmchn</opcodename>([ichannel])</synopsis>
 </opcode>
 <opcode><desc>Returns the polyphonic after-touch pressure of the selected note number, optionally mapped to an user-specified range.</desc>
-<synopsis>ires =<opcodename>polyaft</opcodename>(inote [, ilow] [, ihigh])</synopsis>
-<synopsis>kres =<opcodename>polyaft</opcodename>(inote [, ilow] [, ihigh])</synopsis>
+<synopsis>ires =<opcodename>polyaft</opcodename>(inote [,ilow, ihigh])</synopsis>
+<synopsis>kres =<opcodename>polyaft</opcodename>(inote [,ilow, ihigh])</synopsis>
 </opcode>
 <opcode><desc>Get the velocity from a MIDI event.</desc>
 <synopsis>ival =<opcodename>veloc</opcodename>([ilow] [, ihigh])</synopsis>
@@ -3771,13 +3771,13 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Real-time MIDI:MIDI/Score Interoperability">
 <opcode><desc>Gets a MIDI channel's aftertouch value.</desc>
-<synopsis><opcodename>midichannelaftertouch</opcodename>(xchannelaftertouch [, ilow] [, ihigh])</synopsis>
+<synopsis><opcodename>midichannelaftertouch</opcodename>(xchannelaftertouch [,ilow, ihigh])</synopsis>
 </opcode>
 <opcode><desc>Returns the MIDI channel number (1 - 16) from which the note was activated.</desc>
 <synopsis>ichn =<opcodename>midichn</opcodename>()</synopsis>
 </opcode>
 <opcode><desc>Gets a MIDI control change value.</desc>
-<synopsis><opcodename>midicontrolchange</opcodename>(xcontroller, xcontrollervalue [, ilow] [, ihigh])</synopsis>
+<synopsis><opcodename>midicontrolchange</opcodename>(xcontroller, xcontrollervalue [,ilow, ihigh])</synopsis>
 </opcode>
 <opcode><desc>Changes values, depending on MIDI activation.</desc>
 <synopsis><opcodename>mididefault</opcodename>(xdefault, xvalue)</synopsis>
@@ -3798,10 +3798,10 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>midinoteonpch</opcodename>(xpch, xvelocity)</synopsis>
 </opcode>
 <opcode><desc>Gets a MIDI pitchbend value.</desc>
-<synopsis><opcodename>midipitchbend</opcodename>(xpitchbend [, ilow] [, ihigh])</synopsis>
+<synopsis><opcodename>midipitchbend</opcodename>(xpitchbend [,ilow, ihigh])</synopsis>
 </opcode>
 <opcode><desc>Gets a MIDI polyphonic aftertouch value.</desc>
-<synopsis><opcodename>midipolyaftertouch</opcodename>(xpolyaftertouch, xkey [, ilow] [, ihigh])</synopsis>
+<synopsis><opcodename>midipolyaftertouch</opcodename>(xpolyaftertouch, xkey [,ilow, ihigh])</synopsis>
 </opcode>
 <opcode><desc>Gets a MIDI program change value.</desc>
 <synopsis><opcodename>midiprogramchange</opcodename>(xprogram)</synopsis>
@@ -3946,34 +3946,34 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Spectral Processing:STFT">
 <opcode deprecated="true"><desc>Deprecated.</desc>
-<synopsis><opcodename>ktableseg</opcodename>ifn1, idur1, ifn2 [, idur2] [, ifn3] [...]</synopsis>
+<synopsis><opcodename>ktableseg</opcodename>ifn1, idur1, ifn2 [,idur2, ifn3] [...]</synopsis>
 </opcode>
 <opcode><desc>Reads from a pvoc file and uses the data to perform additive synthesis.</desc>
-<synopsis>ares =<opcodename>pvadd</opcodename>(ktimpnt, kfmod, ifilcod, ifn, ibins [, ibinoffset] [, ibinincr] [, iextractmode] [, ifreqlim] [, igatefn] [, ifiletime])</synopsis>
+<synopsis>ares =<opcodename>pvadd</opcodename>(ktimpnt, kfmod, ifilcod, ifn, ibins [,ibinoffset, ibinincr, iextractmode, ifreqlim, igatefn, ifiletime])</synopsis>
 </opcode>
 <opcode><desc>Reads from a phase vocoder analysis file and makes the retrieved data available.</desc>
 <synopsis><opcodename>pvbufread</opcodename>(ktimpnt, ifile [, ifiletime])</synopsis>
 </opcode>
 <opcode><desc>Applies the amplitudes from one phase vocoder analysis file to the data from a second file and then performs the resynthesis.</desc>
-<synopsis>ares =<opcodename>pvcross</opcodename>(ktimpnt, kfmod, ifile, kampscale1, kampscale2 [, ispecwp] [, ifiletime])</synopsis>
+<synopsis>ares =<opcodename>pvcross</opcodename>(ktimpnt, kfmod, ifile, kampscale1, kampscale2 [,ispecwp, ifiletime])</synopsis>
 </opcode>
 <opcode><desc>Interpolates between the amplitudes and frequencies of two phase vocoder analysis files.</desc>
 <synopsis>ares =<opcodename>pvinterp</opcodename>(ktimpnt, kfmod, ifile, kfreqscale1, kfreqscale2, kampscale1, kampscale2, kfreqinterp, kampinterp [, ifiletime])</synopsis>
 </opcode>
 <opcode><desc>Implements signal reconstruction using an fft-based phase vocoder.</desc>
-<synopsis>ares =<opcodename>pvoc</opcodename>(ktimpnt, kfmod, ifilcod [, ispecwp] [, iextractmode] [, ifreqlim] [, igatefn] [, ifiletime])</synopsis>
+<synopsis>ares =<opcodename>pvoc</opcodename>(ktimpnt, kfmod, ifilcod [,ispecwp, iextractmode, ifreqlim, igatefn, ifiletime])</synopsis>
 </opcode>
 <opcode><desc>Reads from a pvoc file and returns the frequency and amplitude from a single analysis channel or bin.</desc>
 <synopsis>kfreq, kamp =<opcodename>pvread</opcodename>(ktimpnt, ifile, ibin [, ifiletime])</synopsis>
 </opcode>
 <opcode><desc>Creates a new function table by making linear segments between values in stored function tables.</desc>
-<synopsis><opcodename>tableseg</opcodename>(ifn1, idur1, ifn2 [, idur2] [, ifn3] [...])</synopsis>
+<synopsis><opcodename>tableseg</opcodename>(ifn1, idur1, ifn2 [,idur2, ifn3] [...])</synopsis>
 </opcode>
 <opcode><desc>Creates a new function table by making exponential segments between values in stored function tables.</desc>
-<synopsis><opcodename>tablexseg</opcodename>(ifn1, idur1, ifn2 [, idur2] [, ifn3] [...])</synopsis>
+<synopsis><opcodename>tablexseg</opcodename>(ifn1, idur1, ifn2 [,idur2, ifn3] [...])</synopsis>
 </opcode>
 <opcode><desc>Implements signal reconstruction using an fft-based phase vocoder and an extra envelope.</desc>
-<synopsis>ares =<opcodename>vpvoc</opcodename>(ktimpnt, kfmod, ifile [, ispecwp] [, ifn])</synopsis>
+<synopsis>ares =<opcodename>vpvoc</opcodename>(ktimpnt, kfmod, ifile [,ispecwp, ifn])</synopsis>
 </opcode>
 </category>
 <category name="Spectral Processing:LPC">
@@ -4002,7 +4002,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis><opcodename>lpinterp</opcodename>(islot1, islot2, kmix)</synopsis>
 </opcode>
 <opcode><desc>Reads a control file of time-ordered information frames.</desc>
-<synopsis>krmsr, krmso, kerr, kcps =<opcodename>lpread</opcodename>(ktimpnt, ifilcod [, inpoles] [, ifrmrate])</synopsis>
+<synopsis>krmsr, krmso, kerr, kcps =<opcodename>lpread</opcodename>(ktimpnt, ifilcod [,inpoles, ifrmrate])</synopsis>
 </opcode>
 <opcode><desc>RResynthesises a signal from the data passed internally by a previous lpread.</desc>
 <synopsis>ares =<opcodename>lpreson</opcodename>(asig)</synopsis>
@@ -4039,10 +4039,10 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>kframe =<opcodename>pvs2tab</opcodename>(kmags[], kfreqs[], fsig)</synopsis>
 </opcode>
 <opcode><desc>Resynthesize using a fast oscillator-bank.</desc>
-<synopsis>ares =<opcodename>pvsadsyn</opcodename>(fsrc, inoscs, kfmod [, ibinoffset] [, ibinincr] [, iinit])</synopsis>
+<synopsis>ares =<opcodename>pvsadsyn</opcodename>(fsrc, inoscs, kfmod [,ibinoffset, ibinincr, iinit])</synopsis>
 </opcode>
 <opcode><desc>Generate an fsig from a mono audio source ain, using phase vocoder overlap-add analysis.</desc>
-<synopsis>fsig =<opcodename>pvsanal</opcodename>(ain, ifftsize, ioverlap, iwinsize, iwintype [, iformat] [, iinit])</synopsis>
+<synopsis>fsig =<opcodename>pvsanal</opcodename>(ain, ifftsize, ioverlap, iwinsize, iwintype [,iformat, iinit])</synopsis>
 </opcode>
 <opcode><desc>Arpeggiate the spectral components of a streaming pv signal.</desc>
 <synopsis>fsig =<opcodename>pvsarp</opcodename>(fsigin, kbin, kdepth, kgain)</synopsis>
@@ -4153,7 +4153,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>fsig =<opcodename>pvsmorph</opcodename>(fsig1, fsig2, kampint, kfrqint)</synopsis>
 </opcode>
 <opcode><desc>PVS-based oscillator simulator.</desc>
-<synopsis>fsig =<opcodename>pvsosc</opcodename>(kamp, kfreq, ktype, isize [,ioverlap] [, iwinsize] [, iwintype] [, iformat])</synopsis>
+<synopsis>fsig =<opcodename>pvsosc</opcodename>(kamp, kfreq, ktype, isize [,ioverlap, iwinsize, iwintype, iformat])</synopsis>
 </opcode>
 <opcode><desc>Write a fsig to the pvs output bus.</desc>
 <synopsis><opcodename>pvsout</opcodename>(fsig, kchan)</synopsis>
@@ -4434,25 +4434,25 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Vectorial:Scalar operations">
 <opcode><desc>Adds a scalar value to a vector in a table.</desc>
-<synopsis><opcodename>vadd</opcodename>(ifn, kval, kelements [, kdstoffset] [, kverbose])</synopsis>
+<synopsis><opcodename>vadd</opcodename>(ifn, kval, kelements [,kdstoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vadd_i"><desc>Adds a scalar value to a vector in a table.</desc>
 <synopsis><opcodename>vaddi</opcodename>(ifn, ival, ielements [, idstoffset])</synopsis>
 </opcode>
 <opcode><desc>Performs power-of operations between a vector and a scalar.</desc>
-<synopsis><opcodename>vexp</opcodename>(ifn, kval, kelements [, kdstoffset] [, kverbose])</synopsis>
+<synopsis><opcodename>vexp</opcodename>(ifn, kval, kelements [,kdstoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vexp_i"><desc>Performs power-of operations between a vector and a scalar.</desc>
 <synopsis><opcodename>vexpi</opcodename>(ifn, ival, ielements [, idstoffset])</synopsis>
 </opcode>
 <opcode><desc>Multiplies a vector in a table by a scalar value.</desc>
-<synopsis><opcodename>vmult</opcodename>(ifn, kval, kelements [, kdstoffset] [, kverbose])</synopsis>
+<synopsis><opcodename>vmult</opcodename>(ifn, kval, kelements [,kdstoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vmult_i"><desc>Multiplies a vector in a table by a scalar value.</desc>
 <synopsis><opcodename>vmulti</opcodename>(ifn, ival, ielements [, idstoffset])</synopsis>
 </opcode>
 <opcode><desc>Raises each element of a vector to a scalar power.</desc>
-<synopsis><opcodename>vpow</opcodename>(ifn, kval, kelements [, kdstoffset] [, kverbose])</synopsis>
+<synopsis><opcodename>vpow</opcodename>(ifn, kval, kelements [,kdstoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vpow_i"><desc>Raises each element of a vector to a scalar power.</desc>
 <synopsis><opcodename>vpowi</opcodename>(ifn, ival, ielements [, idstoffset])</synopsis>
@@ -4460,49 +4460,49 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Vectorial:Vectorial operations">
 <opcode><desc>Performs addition between two vectorial control signals.</desc>
-<synopsis><opcodename>vaddv</opcodename>(ifn1, ifn2, kelements [, kdstoffset] [, ksrcoffset] [,kverbose])</synopsis>
+<synopsis><opcodename>vaddv</opcodename>(ifn1, ifn2, kelements [,kdstoffset, ksrcoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vaddv_i"><desc>Performs addition between two vectorial control signals at init time.</desc>
-<synopsis><opcodename>vaddvi</opcodename>(ifn1, ifn2, ielements [, idstoffset] [, isrcoffset])</synopsis>
+<synopsis><opcodename>vaddvi</opcodename>(ifn1, ifn2, ielements [,idstoffset, isrcoffset])</synopsis>
 </opcode>
 <opcode><desc>Copies between two vectorial control signals.</desc>
-<synopsis><opcodename>vcopy</opcodename>(ifn1, ifn2, kelements [, kdstoffset] [, ksrcoffset] [, kverbose])</synopsis>
+<synopsis><opcodename>vcopy</opcodename>(ifn1, ifn2, kelements [,kdstoffset, ksrcoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vcopy_i"><desc>Copies a vector from one table to another.</desc>
 <synopsis><opcodename>vcopyi</opcodename>(ifn1, ifn2, ielements [,idstoffset, isrcoffset])</synopsis>
 </opcode>
 <opcode><desc>Performs division between two vectorial control signals.</desc>
-<synopsis><opcodename>vdivv</opcodename>(ifn1, ifn2, kelements [, kdstoffset] [, ksrcoffset] [,kverbose])</synopsis>
+<synopsis><opcodename>vdivv</opcodename>(ifn1, ifn2, kelements [,kdstoffset, ksrcoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vdivv_i"><desc>Performs division between two vectorial control signals at init time.</desc>
-<synopsis><opcodename>vdivvi</opcodename>(ifn1, ifn2, ielements [, idstoffset] [, isrcoffset])</synopsis>
+<synopsis><opcodename>vdivvi</opcodename>(ifn1, ifn2, ielements [,idstoffset, isrcoffset])</synopsis>
 </opcode>
 <opcode><desc>Performs exponential operations between two vectorial control signals.</desc>
-<synopsis><opcodename>vexpv</opcodename>(ifn1, ifn2, kelements [, kdstoffset] [, ksrcoffset] [,kverbose])</synopsis>
+<synopsis><opcodename>vexpv</opcodename>(ifn1, ifn2, kelements [,kdstoffset, ksrcoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vexpv_i"><desc>Performs exponential operations between two vectorial control signals at init time.</desc>
-<synopsis><opcodename>vexpvi</opcodename>(ifn1, ifn2, ielements [, idstoffset] [, isrcoffset])</synopsis>
+<synopsis><opcodename>vexpvi</opcodename>(ifn1, ifn2, ielements [,idstoffset, isrcoffset])</synopsis>
 </opcode>
 <opcode><desc>Maps elements from a vector onto another according to indexes.</desc>
 <synopsis><opcodename>vmap</opcodename>(ifn1, ifn2, ielements [,idstoffset, isrcoffset])</synopsis>
 </opcode>
 <opcode><desc>Performs mutiplication between two vectorial control signals.</desc>
-<synopsis><opcodename>vmultv</opcodename>(ifn1, ifn2, kelements [, kdstoffset] [, ksrcoffset] [,kverbose])</synopsis>
+<synopsis><opcodename>vmultv</opcodename>(ifn1, ifn2, kelements [,kdstoffset, ksrcoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vmultv_i"><desc>Performs mutiplication between two vectorial control signals at init time.</desc>
-<synopsis><opcodename>vmultvi</opcodename>(ifn1, ifn2, ielements [, idstoffset] [, isrcoffset])</synopsis>
+<synopsis><opcodename>vmultvi</opcodename>(ifn1, ifn2, ielements [,idstoffset, isrcoffset])</synopsis>
 </opcode>
 <opcode><desc>Performs power-of operations between two vectorial control signals.</desc>
-<synopsis><opcodename>vpowv</opcodename>(ifn1, ifn2, kelements [, kdstoffset] [, ksrcoffset] [,kverbose])</synopsis>
+<synopsis><opcodename>vpowv</opcodename>(ifn1, ifn2, kelements [,kdstoffset, ksrcoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vpowv_i"><desc>Performs power-of operations between two vectorial control signals at init time.</desc>
-<synopsis><opcodename>vpowvi</opcodename>(ifn1, ifn2, ielements [, idstoffset] [, isrcoffset])</synopsis>
+<synopsis><opcodename>vpowvi</opcodename>(ifn1, ifn2, ielements [,idstoffset, isrcoffset])</synopsis>
 </opcode>
 <opcode><desc>Performs subtraction between two vectorial control signals.</desc>
-<synopsis><opcodename>vsubv</opcodename>(ifn1, ifn2, kelements [, kdstoffset] [, ksrcoffset] [,kverbose])</synopsis>
+<synopsis><opcodename>vsubv</opcodename>(ifn1, ifn2, kelements [,kdstoffset, ksrcoffset, kverbose])</synopsis>
 </opcode>
 <opcode aliases="vsubv_i"><desc>Performs subtraction between two vectorial control signals at init time.</desc>
-<synopsis><opcodename>vsubvi</opcodename>(ifn1, ifn2, ielements [, idstoffset] [, isrcoffset])</synopsis>
+<synopsis><opcodename>vsubvi</opcodename>(ifn1, ifn2, ielements [,idstoffset, isrcoffset])</synopsis>
 </opcode>
 </category>
 <category name="Vectorial:Envelopes">
@@ -4537,10 +4537,10 @@ This file is distributed under the GNU Free Documentation Licence-->
 </category>
 <category name="Vectorial:Random">
 <opcode><desc>Generates a vector of random numbers stored into a table, holding the values for a period of time.</desc>
-<synopsis><opcodename>vrandh</opcodename>(ifn,  krange, kcps, ielements [, idstoffset] [, iseed] [, isize] [, ioffset])</synopsis>
+<synopsis><opcodename>vrandh</opcodename>(ifn,  krange, kcps, ielements [,idstoffset, iseed, isize, ioffset])</synopsis>
 </opcode>
 <opcode><desc>Generate a sort of 'vectorial band-limited noise'.</desc>
-<synopsis><opcodename>vrandi</opcodename>(ifn,  krange, kcps, ielements [, idstoffset] [, iseed] [, isize] [, ioffset])</synopsis>
+<synopsis><opcodename>vrandi</opcodename>(ifn,  krange, kcps, ielements [,idstoffset, iseed, isize, ioffset])</synopsis>
 </opcode>
 </category>
 <category name="Vectorial:Cellular Automata">
@@ -5028,7 +5028,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>wsig =<opcodename>spechist</opcodename>(wsigin)</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Estimates the pitch of the most prominent complex tone in the spectrum.</desc>
-<synopsis>koct, kamp =<opcodename>specptrk</opcodename>(wsig, kvar, ilo, ihi, istr, idbthresh, inptls, irolloff [, iodd] [, iconfs] [, interp] [, ifprd] [, iwtflg])</synopsis>
+<synopsis>koct, kamp =<opcodename>specptrk</opcodename>(wsig, kvar, ilo, ihi, istr, idbthresh, inptls, irolloff [,iodd, iconfs, interp, ifprd, iwtflg])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Scales an input spectral datablock with spectral envelopes.</desc>
 <synopsis>wsig =<opcodename>specscal</opcodename>(wsigin, ifscale, ifthresh)</synopsis>
@@ -5037,7 +5037,7 @@ This file is distributed under the GNU Free Documentation Licence-->
 <synopsis>ksum =<opcodename>specsum</opcodename>(wsig [, interp])</synopsis>
 </opcode>
 <opcode deprecated="true"><desc>Generate a constant-Q, exponentially-spaced DFT across all octaves of a multiply-downsampled control or audio input signal.</desc>
-<synopsis>wsig =<opcodename>spectrum</opcodename>(xsig, iprd, iocts, ifrqa [, iq] [, ihann] [, idbout] [, idsprd] [, idsinrs])</synopsis>
+<synopsis>wsig =<opcodename>spectrum</opcodename>(xsig, iprd, iocts, ifrqa [,iq, ihann, idbout, idsprd, idsinrs])</synopsis>
 </opcode>
 </category>
 </opcodes>
