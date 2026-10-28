@@ -46,11 +46,7 @@ static void writeBorderColorElement(QXmlStreamWriter &s, const QVariant &value)
 	const QColor color = borderColorFromVariant(value);
 	if (!color.isValid())
 		return;
-	s.writeStartElement("bordercolor");
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
+	QuteWidget::writeColorElement(s, "bordercolor", color);
 }
 
 QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
@@ -478,18 +474,10 @@ QString QuteText::getWidgetXmlText()
 	}
 
 	QColor color = property("CSQT_color").value<QColor>();
-	s.writeStartElement("color");
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
+	writeColorElement(s, "color", color);
 	color = property("CSQT_bgcolor").value<QColor>();
-	s.writeStartElement("bgcolor");
-	s.writeAttribute("mode", property("CSQT_bgcolormode").toBool()? "background":"nobackground");
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
+	writeColorElement(s, "bgcolor", color,
+	                  property("CSQT_bgcolormode").toBool()? "background":"nobackground");
 
 	// Only persist an explicit border color; an absent one means "text color".
 	writeBorderColorElement(s, property("CSQT_bordercolor"));
@@ -935,18 +923,10 @@ QString QuteLineEdit::getWidgetXmlText()
 	s.writeTextElement("precision", QString::number(property("CSQT_precision").toInt()));
 
 	QColor color = m_widget->palette().color(QPalette::WindowText);
-	s.writeStartElement("color");
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
+	writeColorElement(s, "color", color);
 	color = m_widget->palette().color(QPalette::Window);
-	s.writeStartElement("bgcolor");
-	s.writeAttribute("mode", m_widget->autoFillBackground()? "background":"nobackground");
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
+	writeColorElement(s, "bgcolor", color,
+	                  m_widget->autoFillBackground()? "background":"nobackground");
 
 	s.writeTextElement("background", m_widget->autoFillBackground()? "background":"nobackground");
 	writeBorderColorElement(s, property("CSQT_bordercolor"));
@@ -1298,18 +1278,10 @@ QString QuteScrollNumber::getWidgetXmlText()
 	s.writeTextElement("fontsize", QString::number(property("CSQT_fontsize").toInt()));
 
 	QColor color = property("CSQT_color").value<QColor>();
-	s.writeStartElement("color");
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
+	writeColorElement(s, "color", color);
 	color = property("CSQT_bgcolor").value<QColor>();
-	s.writeStartElement("bgcolor");
-	s.writeAttribute("mode", property("CSQT_bgcolormode").toBool()? "background":"nobackground");
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
+	writeColorElement(s, "bgcolor", color,
+	                  property("CSQT_bgcolormode").toBool()? "background":"nobackground");
 
 	s.writeTextElement("value", QString::number(m_value, 'f', 8));
 	s.writeTextElement("resolution", QString::number(property("CSQT_resolution").toDouble(), 'f', 8));

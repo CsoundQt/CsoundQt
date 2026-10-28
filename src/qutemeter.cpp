@@ -118,11 +118,7 @@ QString QuteMeter::getWidgetXmlText()
     s.writeTextElement("borderColor", property("CSQT_borderColor").toString());
 
     QColor color = property("CSQT_color").value<QColor>();
-    s.writeStartElement("color");
-    s.writeTextElement("r", QString::number(color.red()));
-    s.writeTextElement("g", QString::number(color.green()));
-    s.writeTextElement("b", QString::number(color.blue()));
-    s.writeEndElement();
+    writeColorElement(s, "color", color);
     s.writeStartElement("randomizable");
     s.writeAttribute("mode", property("CSQT_randomizableMode").toString());
     s.writeAttribute("group", QString::number(property("CSQT_randomizableGroup").toInt()));
@@ -130,11 +126,7 @@ QString QuteMeter::getWidgetXmlText()
     s.writeEndElement();
 
     QColor bgcolor = property("CSQT_bgcolor").value<QColor>();
-    s.writeStartElement("bgcolor");
-    s.writeTextElement("r", QString::number(bgcolor.red()));
-    s.writeTextElement("g", QString::number(bgcolor.green()));
-    s.writeTextElement("b", QString::number(bgcolor.blue()));
-    s.writeEndElement();
+    writeColorElement(s, "bgcolor", bgcolor);
 
     s.writeTextElement("bgcolormode", property("CSQT_bgcolormode").toBool()?"true":"false");
 

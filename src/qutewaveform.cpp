@@ -1048,15 +1048,6 @@ void QuteWaveform::applyInternalProperties()
 	view->setCursor(int(m_value2));
 }
 
-static void writeColorElement(QXmlStreamWriter &s, const QString &name, const QColor &color)
-{
-	s.writeStartElement(name);
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
-}
-
 QString QuteWaveform::getWidgetXmlText()
 {
 	xmlText = "";

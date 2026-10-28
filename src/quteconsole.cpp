@@ -57,18 +57,10 @@ QString QuteConsole::getWidgetXmlText()
 	s.writeTextElement("fontsize", QString::number(property("CSQT_fontsize").toInt()));
 
 	QColor color = property("CSQT_color").value<QColor>();
-	s.writeStartElement("color");
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
+	writeColorElement(s, "color", color);
 	color = property("CSQT_bgcolor").value<QColor>();
-	s.writeStartElement("bgcolor");
-	s.writeAttribute("mode", property("CSQT_bgcolormode").toBool()? "background":"nobackground");
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
+	writeColorElement(s, "bgcolor", color,
+	                  property("CSQT_bgcolormode").toBool()? "background":"nobackground");
 
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX

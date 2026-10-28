@@ -403,16 +403,10 @@ QString QuteKnob::getWidgetXmlText()
 	s.writeEndElement();
 
     QColor color = property("CSQT_color").value<QColor>();
-    s.writeStartElement("color");
-    s.writeTextElement("r", QString::number(color.red()));
-    s.writeTextElement("g", QString::number(color.green()));
-    s.writeTextElement("b", QString::number(color.blue()));
-    s.writeEndElement();
+    writeColorElement(s, "color", color);
 
-    // we save textcolor as a hex value (QColor::name() returns the hex
-    // representation, which can be used to create a QColor also
     QColor textcolor = static_cast<QVdial*>(m_widget)->getTextColor();
-    s.writeTextElement("textcolor", textcolor.name());
+    writeColorElement(s, "textcolor", textcolor);
     s.writeTextElement("border", QString::number(property("CSQT_border").toInt()));
     s.writeTextElement("borderColor", property("CSQT_borderColor").toString());
     s.writeTextElement("showvalue",

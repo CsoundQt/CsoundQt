@@ -120,6 +120,13 @@ public:
 	static MouseParam parseMouseParam(const QString& name);
 
 	void createXmlWriter(QXmlStreamWriter &s);
+	// Save a colour as "#RRGGBB" text inside an element. If `mode` is given,
+	// a mode="..." attribute is written on the same element (used for
+	// <bgcolor>, whose old <r>/<g>/<b> form had the attribute too).
+	static void writeColorElement(QXmlStreamWriter &s, const QString &name,
+	                              const QColor &color);
+	static void writeColorElement(QXmlStreamWriter &s, const QString &name,
+	                              const QColor &color, const QString &mode);
 	void markChanged();
 	void canFocus(bool can);
 	void updateDialogWindow(int cc, int channel);

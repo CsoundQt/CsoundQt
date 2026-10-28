@@ -2001,11 +2001,7 @@ QString QuteTable::getWidgetXmlText() {
     createXmlWriter(s);        // --------- start
 
     QColor color = property("CSQT_color").value<QColor>();
-    s.writeStartElement("color");
-    s.writeTextElement("r", QString::number(color.red()));
-    s.writeTextElement("g", QString::number(color.green()));
-    s.writeTextElement("b", QString::number(color.blue()));
-    s.writeEndElement();
+    writeColorElement(s, "color", color);
 
     auto range = property("CSQT_range").toDouble();
     s.writeTextElement("range", QString::number(range, 'f', 2));

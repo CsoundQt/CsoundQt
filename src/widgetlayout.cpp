@@ -493,11 +493,8 @@ QString WidgetLayout::getWidgetsText()
 
     QColor bgColor = this->property("CSQT_bgcolor").value<QColor>();
     auto bg = this->property("CSQT_bg").toBool()? QString("background"):QString("nobackground");
-    txts << "<bgcolor mode=\"" << bg << "\">\n";
-    txts << "<r>"<<QString::number(bgColor.red())<<"</r>\n"
-         << "<g>"<<QString::number(bgColor.green())<<"</g>\n"
-         << "<b>"<<QString::number(bgColor.blue())<<"</b>\n";
-    txts << "</bgcolor>\n";
+    txts << "<bgcolor mode=\"" << bg << "\">" << bgColor.name(QColor::HexRgb)
+         << "</bgcolor>\n";
 
     layoutMutex.unlock();
     widgetsMutex.lock();
@@ -3857,22 +3854,9 @@ int WidgetLayout::parseXmlNode(QDomNode node)
         m_uuid = node.firstChild().nodeValue();
     }
     else if (name == "bgcolor") {
-        bool bg = false;
         auto nodeElement = node.toElement();
-
-        if (nodeElement.attribute("mode")== "background") {
-            //qDebug() << "background true";
-            bg = true;
-        }
-        QDomElement er = nodeElement.firstChildElement("r");
-        QDomElement eg = nodeElement.firstChildElement("g");
-        QDomElement eb = nodeElement.firstChildElement("b");
-        auto bgcolor = QColor(er.firstChild().nodeValue().toInt(),
-                              eg.firstChild().nodeValue().toInt(),
-                              eb.firstChild().nodeValue().toInt());
-        // auto parent = node.parentNode().nodeName();
-        //qDebug() << "setting background" << parent << bgcolor << node.toElement().text();
-        setBackground(bg, bgcolor);
+        setBackground(nodeElement.attribute("mode") == "background",
+                      getColorFromElement(nodeElement));
     }
     else if (name == "bsbObject") {
         ret = newXmlWidget(node);
@@ -4633,6 +4617,19 @@ bool WidgetLayout::presetExists(int num)
 
 QColor WidgetLayout::getColorFromElement(QDomElement elem)
 {
+    // Current format: the element's own text is the colour ("#RRGGBB").
+    // Only direct text nodes count; QDomElement::text() would also concatenate
+    // the digits of the old <r>/<g>/<b> children.
+    QString text;
+    for (QDomNode node = elem.firstChild(); !node.isNull();
+         node = node.nextSibling()) {
+        if (node.isText() || node.isCDATASection())
+            text += node.nodeValue();
+    }
+    const QColor textColor(text.trimmed());
+    if (textColor.isValid())
+        return textColor;
+    // Old format: separate <r>, <g>, <b> child elements.
     QDomElement er = elem.firstChildElement("r");
     QDomElement eg = elem.firstChildElement("g");
     QDomElement eb = elem.firstChildElement("b");

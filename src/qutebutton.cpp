@@ -323,15 +323,6 @@ QString QuteButton::getQml()
 
 }
 
-static void writeButtonColorElement(QXmlStreamWriter &s, const QString &name, const QColor &color)
-{
-	s.writeStartElement(name);
-	s.writeTextElement("r", QString::number(color.red()));
-	s.writeTextElement("g", QString::number(color.green()));
-	s.writeTextElement("b", QString::number(color.blue()));
-	s.writeEndElement();
-}
-
 QString QuteButton::getWidgetXmlText()
 {
 	// Buttons are not implemented in blue
@@ -355,7 +346,7 @@ QString QuteButton::getWidgetXmlText()
 	s.writeTextElement("latched", QVariant(m_latched).toString());
     s.writeTextElement("fontsize", QString::number(property("CSQT_fontsize").toInt()));
 	s.writeTextElement("flatStyle", property("CSQT_flatStyle").toBool() ? "true" : "false");
-	writeButtonColorElement(s, "color", property("CSQT_color").value<QColor>());
+	writeColorElement(s, "color", property("CSQT_color").value<QColor>());
 	s.writeTextElement("pressedColor", property("CSQT_pressedColor").toString());
 	s.writeTextElement("borderColor", property("CSQT_borderColor").toString());
 	s.writeTextElement("textColor", property("CSQT_textColor").toString());

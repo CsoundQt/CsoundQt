@@ -438,6 +438,21 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
     s.writeTextElement("description", m_description);
 }
 
+void QuteWidget::writeColorElement(QXmlStreamWriter &s, const QString &name,
+                                   const QColor &color)
+{
+	s.writeTextElement(name, color.name(QColor::HexRgb));
+}
+
+void QuteWidget::writeColorElement(QXmlStreamWriter &s, const QString &name,
+                                   const QColor &color, const QString &mode)
+{
+	s.writeStartElement(name);
+	s.writeAttribute("mode", mode);
+	s.writeCharacters(color.name(QColor::HexRgb));
+	s.writeEndElement();
+}
+
 double QuteWidget::getValue()
 {
     // When reimplementing this, remember to use the widget mutex to protect data,

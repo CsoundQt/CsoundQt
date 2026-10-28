@@ -530,20 +530,10 @@ QString QuteVUMeter::getWidgetXmlText()
 	s.writeTextElement("cursorcolor", property("CSQT_cursorcolor").toString());
 	s.writeTextElement("cursorwidth", QString::number(property("CSQT_cursorwidth").toInt()));
 
-	QColor bgcolor = property("CSQT_bgcolor").value<QColor>();
-	s.writeStartElement("bgcolor");
-	s.writeTextElement("r", QString::number(bgcolor.red()));
-	s.writeTextElement("g", QString::number(bgcolor.green()));
-	s.writeTextElement("b", QString::number(bgcolor.blue()));
-	s.writeEndElement();
+	writeColorElement(s, "bgcolor", property("CSQT_bgcolor").value<QColor>());
 	s.writeTextElement("bgcolormode", property("CSQT_bgcolormode").toBool() ? "true" : "false");
 
-	QColor bordercolor = property("CSQT_bordercolor").value<QColor>();
-	s.writeStartElement("bordercolor");
-	s.writeTextElement("r", QString::number(bordercolor.red()));
-	s.writeTextElement("g", QString::number(bordercolor.green()));
-	s.writeTextElement("b", QString::number(bordercolor.blue()));
-	s.writeEndElement();
+	writeColorElement(s, "bordercolor", property("CSQT_bordercolor").value<QColor>());
 
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
