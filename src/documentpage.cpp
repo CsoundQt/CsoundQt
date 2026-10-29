@@ -731,6 +731,11 @@ void DocumentPage::setLineWrapMode(QTextEdit::LineWrapMode wrapLines)
 	m_view->setLineWrapMode(wrapLines);
 }
 
+void DocumentPage::setScrollBarVisible(bool visible)
+{
+	m_view->setScrollBarVisible(visible);
+}
+
 void DocumentPage::setColorVariables(bool colorVariables)
 {
 	m_view->setColorVariables(colorVariables);
@@ -1097,16 +1102,6 @@ void DocumentPage::comment()
 void DocumentPage::uncomment()
 {
 	m_view->uncomment();
-}
-
-void DocumentPage::indent()
-{
-	m_view->indent();
-}
-
-void DocumentPage::unindent()
-{
-	m_view->unindent();
 }
 
 void DocumentPage::tabsToSpaces()

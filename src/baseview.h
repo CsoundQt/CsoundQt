@@ -56,6 +56,7 @@ public:
 	void setTabUseSpaces(bool useSpaces);
 	void setTabSpaces(int spaces);
 	void setLineWrapMode(QTextEdit::LineWrapMode mode);
+	void setScrollBarVisible(bool visible);
 	void setAutoComplete(bool autoComplete);
 	void setColorVariables(bool color);
 	void setBackgroundColor(QColor color);

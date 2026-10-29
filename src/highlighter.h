@@ -202,6 +202,7 @@ private:
     QTextCharFormat csdtagFormat, csdtagCloseFormat, instFormat, headerFormat;
 	QTextCharFormat irateFormat, krateFormat, arateFormat, girateFormat, gkrateFormat, garateFormat;
 	QTextCharFormat stringVarFormat, gstringVarFormat, fsigFormat, gfsigFormat;
+    QTextCharFormat channelnameFormat; // quoted string used as a Csound channel name
     QTextCharFormat booleanFormat; // Csound 7: :b / :B boolean typed variables
     QTextCharFormat complexFormat; // Csound 7: :Complex typed variables
     QTextCharFormat opcodeFormat, udoFormat, macroDefineFormat, pfieldFormat;
@@ -370,6 +371,10 @@ private:
 
     void clearTypedVars();
     QTextCharFormat formatForType(QStringView typeStr) const;
+    // Detects whether the quoted string at `stringStart` is a channel name
+    // argument of chnget/chnset/outvalue/invalue/chnmix. `line` is the same
+    // line with comments and strings masked out (spaces).
+    bool isChannelNameArgument(const QString &line, int stringStart) const;
     void registerTypedVar(QStringView name, QStringView typeStr);
     void registerGlobalTypedVar(QStringView name, QStringView typeStr);
 };

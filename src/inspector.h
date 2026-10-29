@@ -62,6 +62,9 @@ public:
 	// Give keyboard focus to the inspector's tree, for the Focus Inspector
 	// action. Showing/raising the dock itself is the caller's job.
 	void focusTree();
+	// Mark the instrument/opcode whose declaration is on this line as the
+	// current one. -1 clears the mark. Called after the editor's debounce.
+	void setCurrentScopeLine(int line);
 
 protected:
 	virtual void focusInEvent (QFocusEvent * event);
@@ -75,6 +78,11 @@ private:
 	// Replaces the tree with the entries of the scan, keeping the expansion
 	// state of the groups and of the instruments across rebuilds.
 	void buildTree(const CodeScan::Result &scan);
+	// Paint/clear the subtle background on the tree entry for m_scopeLine.
+	void applyScopeHighlight();
+	void clearScopeHighlight();
+	bool isItemVisible(const QTreeWidgetItem *item) const;
+	QTreeWidgetItem *findScopeItem(int line) const;
 
 	QTreeWidget *m_treeWidget;
 	TreeItem *treeItem1;
@@ -85,6 +93,8 @@ private:
 
 	CodeScan::ResultPtr m_scan = CodeScan::empty();
 	bool m_treeDirty = true;
+	int m_scopeLine = -1;
+	QTreeWidgetItem *m_highlightedItem = nullptr;
 
 private slots:
 	void itemActivated(QTreeWidgetItem * item, int column = 0);

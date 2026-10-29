@@ -108,6 +108,7 @@ void Inspector::buildTree(const CodeScan::Result &scan)
     }
 
     m_treeWidget->clear();
+    m_highlightedItem = nullptr;
     treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
     treeItem1->setLine(-1);
     treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
@@ -182,8 +183,76 @@ void Inspector::buildTree(const CodeScan::Result &scan)
         if (instrumentExpanded.contains(instrument->text(0)))
             instrument->setExpanded(instrumentExpanded[instrument->text(0)]);
     }
+    applyScopeHighlight();
 }
 
+
+void Inspector::setCurrentScopeLine(int line)
+{
+    m_scopeLine = line;
+    applyScopeHighlight();
+}
+
+bool Inspector::isItemVisible(const QTreeWidgetItem *item) const
+{
+    if (item == nullptr || item->isHidden())
+        return false;
+    for (const QTreeWidgetItem *parent = item->parent(); parent != nullptr;
+         parent = parent->parent()) {
+        if (parent->isHidden() || !parent->isExpanded())
+            return false;
+    }
+    return true;
+}
+
+QTreeWidgetItem *Inspector::findScopeItem(int line) const
+{
+    // Only instruments and user-defined opcodes are tracked; macros, ftables,
+    // includes and score entries are not.
+    for (QTreeWidgetItem *group : {treeItem1, treeItem3}) {
+        if (group == nullptr)
+            continue;
+        for (int i = 0; i < group->childCount(); ++i) {
+            QTreeWidgetItem *item = group->child(i);
+            auto *treeItem = static_cast<TreeItem *>(item);
+            if (treeItem->getLine() == line)
+                return item;
+        }
+    }
+    return nullptr;
+}
+
+void Inspector::clearScopeHighlight()
+{
+    if (m_highlightedItem != nullptr) {
+        m_highlightedItem->setBackground(0, QBrush());
+        m_highlightedItem = nullptr;
+    }
+}
+
+void Inspector::applyScopeHighlight()
+{
+    clearScopeHighlight();
+    if (isHidden() || m_treeDirty || m_scopeLine < 0)
+        return;
+
+    QTreeWidgetItem *item = findScopeItem(m_scopeLine);
+    // If the group or the entry is folded, there is nothing to see; do not
+    // unfold it or scroll the tree.
+    if (item == nullptr || !isItemVisible(item))
+        return;
+
+    // A light tint rather than a full selection: the selection belongs to
+    // keyboard navigation and must not be moved by the editor cursor.
+    const QColor base = m_treeWidget->palette().color(QPalette::Base);
+    const QColor accent = m_treeWidget->palette().color(QPalette::Highlight);
+    const auto mix = [](int from, int to) { return (from * 4 + to) / 5; };
+    const QColor tint(mix(base.red(), accent.red()),
+                      mix(base.green(), accent.green()),
+                      mix(base.blue(), accent.blue()));
+    item->setBackground(0, QBrush(tint));
+    m_highlightedItem = item;
+}
 
 void Inspector::focusInEvent (QFocusEvent * event)
 {
@@ -206,6 +275,9 @@ void Inspector::showEvent(QShowEvent *event)
         m_treeDirty = false;
         buildTree(*m_scan);
     }
+    // The cursor may have moved (and the scope changed) while the dock was
+    // hidden. Apply the stored line now that the tree is visible.
+    applyScopeHighlight();
 }
 
 

@@ -166,6 +166,12 @@ void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
 	m_mainEditor->setLineWrapMode(mode);
 }
 
+void BaseView::setScrollBarVisible(bool visible)
+{
+	m_mainEditor->setVerticalScrollBarPolicy(visible ? Qt::ScrollBarAsNeeded
+	                                                : Qt::ScrollBarAlwaysOff);
+}
+
 void BaseView::setColorVariables(bool color)
 {
 	m_highlighter.setColorVariables(color);

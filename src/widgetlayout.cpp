@@ -29,6 +29,7 @@
 #include <limits>
 
 #include "widgetlayout.h"
+#include "dockpanelutils.h"
 #include "qutewidget.h"
 #include "bundledfonts.h"
 #include "notification.h"
@@ -870,9 +871,6 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     if (type == "BSBLabel" || type == "BSBDisplay") {
 
         QuteText *w = new QuteText(this);
-        // Displays must stay mouse-interactive so they can show tooltips; labels
-        // stay transparent for mouse events (and therefore have no tooltip).
-        w->setTransparentForMouse(type == "BSBLabel");
         w->setType(type == "BSBLabel" ? "label" : "display");
         QDomElement ebg = element.firstChildElement("bgcolor");
         if (!ebg.isNull()) {
@@ -1502,9 +1500,7 @@ void WidgetLayout::showWidgetTooltips(bool show)
 void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 {
     // This function must be protected/locked by the caller
-    // Labels are not tooltipped: they stay transparent for mouse events, so a
-    // description on them would have no effect (and is not offered).
-    if(!show || widget->getWidgetTypeID() == QuteWidgetType::LABEL) {
+    if(!show) {
         widget->setToolTip("");
         if (m_editMode && getEditWidget(widget) != nullptr) {
             getEditWidget(widget)->setToolTip("");
@@ -1520,14 +1516,17 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
         lines << " ";
     }
 
-    auto channelName = widget->getChannelName();
-    auto channel2Name = widget->getChannel2Name();
-    if(!channelName.isEmpty() && channel2Name.isEmpty()) {
-        lines << tr("Channel: ") + channelName;
-    }
-    else if(!channel2Name.isEmpty()){
-        lines << tr("ChannelH: ") + channelName + ", "
-                 + tr("ChannelV: ")+ channel2Name;
+    // Labels are static text and have no channel, so there is nothing to show.
+    if (widget->getWidgetTypeID() != QuteWidgetType::LABEL) {
+        auto channelName = widget->getChannelName();
+        auto channel2Name = widget->getChannel2Name();
+        if(!channelName.isEmpty() && channel2Name.isEmpty()) {
+            lines << tr("Channel: ") + channelName;
+        }
+        else if(!channel2Name.isEmpty()){
+            lines << tr("ChannelH: ") + channelName + ", "
+                     + tr("ChannelV: ")+ channel2Name;
+        }
     }
 
     int midichan = widget->property("CSQT_midichan").toInt();
@@ -2013,22 +2012,16 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
             p = p->parentWidget();
         }
     }
-    QAction *floatAct = nullptr;
-    if (dock != nullptr) {
-        menu.addSeparator(); // ------------------------------------------------------------
-        floatAct = menu.addAction(dock->isFloating() ? tr("Dock Panel") : tr("Float Panel"));
-    }
+    if (dock != nullptr)
+        DockPanelUtils::addPanelActions(dock, menu);
 
     currentPosition = event->pos();
     //  if (m_sbActive) {
     //    currentPosition.setX(currentPosition.x() + scrollArea->horizontalScrollBar()->value());
     //    currentPosition.setY(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
     //  }
-    QAction *selected = menu.exec(event->globalPos());
+    menu.exec(event->globalPos());
     //  menu.exec(event->pos());
-    if (floatAct != nullptr && selected == floatAct && dock != nullptr) {
-        dock->setFloating(!dock->isFloating());
-    }
 }
 
 void WidgetLayout::deselectAll()
@@ -3916,9 +3909,6 @@ QString WidgetLayout::createText(int x, int y, int width, int height,
     widget->setProperty("CSQT_bgcolormode", bgMode);
     widget->setProperty("CSQT_bordermode", borderMode);
     widget->setProperty("CSQT_precision", 3);
-    if (textType == "label") {
-        widget->setTransparentForMouse(true);
-    }
     widget->setProperty("CSQT_label", labelText);
     widget->applyInternalProperties();
     registerWidget(widget);

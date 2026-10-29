@@ -503,10 +503,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	//  defaultCsdCheckBox->setChecked(m_options->defaultCsdActive);
 	//  defaultCsdLineEdit->setText(m_options->defaultCsd);
 	//  defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
-	favoriteLineEdit->setText(m_options->favoriteDir);
     examplePathlineEdit->setText(m_options->examplePath);
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
-	templateLineEdit->setText(m_options->templateDir);
 	logDebugCheckBox->setChecked(m_options->logDebug);
 
 	TerminalLineEdit->setText(m_options->terminal);
@@ -546,14 +544,12 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
 	connect(rawWaveToolButton, SIGNAL(clicked()), this, SLOT(browseRawWaveDir()));
 	//  connect(defaultCsdToolButton, SIGNAL(clicked()), this, SLOT(browseDefaultCsd()));
-	connect(favoriteToolButton, SIGNAL(clicked()), this, SLOT(browseFavorite()));
     connect(examplePathToolButton, SIGNAL(clicked()), this, SLOT(browseExamplePath()) );
     connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
 	connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
 	connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
 	connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
 	connect(pdfViewerToolButton, SIGNAL(clicked()), this, SLOT(browsePdfViewer()));
-	connect(templateToolButton, SIGNAL(clicked()), this, SLOT(browseTemplateDir()));
 	connect(logDebugCheckBox, &QCheckBox::toggled, this, &ConfigDialog::updateLogPathLabel);
 	connect(openLogToolButton, &QToolButton::clicked, this, &ConfigDialog::openDebugLog);
 	updateLogPathLabel();
@@ -872,10 +868,8 @@ void ConfigDialog::apply()
 	m_options->rawWave = rawWaveLineEdit->text();
 	//  m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
 	//  m_options->defaultCsd = defaultCsdLineEdit->text();
-	m_options->favoriteDir = favoriteLineEdit->text();
     m_options->examplePath = examplePathlineEdit->text();
 	m_options->csoundExecutable = csoundExecutableLineEdit->text();
-	m_options->templateDir = templateLineEdit->text();
 	m_options->logDebug = logDebugCheckBox->isChecked();
 
 	m_options->terminal = TerminalLineEdit->text();
@@ -964,12 +958,6 @@ void ConfigDialog::browseCsoundExecutable()
 //  defaultCsdLineEdit->setText(m_options->defaultCsd);
 //}
 
-void ConfigDialog::browseFavorite()
-{
-	browseDir(m_options->favoriteDir);
-	favoriteLineEdit->setText(m_options->favoriteDir);
-}
-
 void ConfigDialog::browseExamplePath()
 {
     browseDir(m_options->examplePath);
@@ -1028,12 +1016,6 @@ void ConfigDialog::updateLogPathLabel()
 	logPathLabel->setVisible(enabled);
 	logPathLabel->setText(enabled ? DebugLog::filePath() : QString());
 	logPathLabel->setToolTip(enabled ? DebugLog::filePath() : QString());
-}
-
-void ConfigDialog::browseTemplateDir()
-{
-	browseDir(m_options->templateDir);
-	templateLineEdit->setText(m_options->templateDir);
 }
 
 void ConfigDialog::selectAudioInput()

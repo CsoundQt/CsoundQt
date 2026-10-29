@@ -81,10 +81,8 @@ private slots:
 	void browseIncdir();
 	void browseRawWaveDir();
 	//    void browseDefaultCsd();
-	void browseFavorite();
     void browseExamplePath();
 	void browseCsoundExecutable();
-	void browseTemplateDir();
 	void openDebugLog();
 	void updateLogPathLabel();
 	void browseTerminal();

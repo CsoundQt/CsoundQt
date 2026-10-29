@@ -73,6 +73,7 @@ public:
     bool lockToolbar;
     int  toolbarIconSize;
 	bool wrapLines;
+	bool showScrollBar;
 	bool autoComplete;
     int autoCompleteDelay;
     // Show the quick reference card when the pointer rests on an opcode, UDO or
@@ -127,10 +128,8 @@ public:
 	bool defaultCsdActive;
 	QString opcodexmldir;
 	bool opcodexmldirActive;
-	QString favoriteDir;
     QString examplePath;
 	QString csoundExecutable;
-	QString templateDir;
 	bool logDebug;  // write CsoundQt's own debug output to a log file
 
 	typedef enum {

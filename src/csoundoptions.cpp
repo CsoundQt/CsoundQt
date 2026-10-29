@@ -223,17 +223,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
             opts << "-o" + fileOutputFilename + "";
 		}
 	}
-	// These lines break setting of variables. Are they actually needed here for some reason?
-	//  if (sadirActive)
-	//    list << "--env:SADIR='" + sadir + "'";
-	//  if (ssdirActive)
-	//    list << "--env:SSDIR='" + ssdir + "'";
-	//  if (sfdirActive)
-	//    list << "--env:SFDIR='" + sfdir + "'";
-	//  if (incdirActive)
-	//    list << "--env:INCDIR='" + incdir + "'";
-    opts << "--env:CSNOSTOP=yes";
-    qDebug() << ">>>>> Csound options: " << opts;
+	qDebug() << ">>>>> Csound options: " << opts;
     return opts;
 }
 

@@ -194,6 +194,25 @@ const QSet<QString> builtinTypes = {
     u"Complex"_s, u"InstrDef"_s, u"Instr"_s, u"Opcode"_s,
 };
 
+// Argument position of the channel name for the opcodes that address a named
+// channel. -1 means that the opcode does not take one in the supported forms.
+int channelArgumentIndex(const QString &name)
+{
+    // "chnget \"chan\"", "invalue \"chan\"", "outvalue \"chan\", value"
+    if (name == QLatin1StringView("chnget")
+            || name == QLatin1StringView("invalue")
+            || name == QLatin1StringView("outvalue"))
+        return 0;
+    // "chnset value, \"chan\"", "chnmix value, \"chan\""
+    if (name == QLatin1StringView("chnset")
+            || name == QLatin1StringView("chnmix"))
+        return 1;
+    return -1;
+}
+
+const QRegularExpression channelSecondArgRx(
+        QStringLiteral("\\b(chnset|chnmix)\\b"));
+
 } // namespace
 
 QColor saturateColor(QColor color, int percent) {
@@ -274,6 +293,7 @@ void Highlighter::resetFormats()
     gstringVarFormat = QTextCharFormat();
     fsigFormat = QTextCharFormat();
     gfsigFormat = QTextCharFormat();
+    channelnameFormat = QTextCharFormat();
     booleanFormat = QTextCharFormat();
     complexFormat = QTextCharFormat();
     opcodeFormat = QTextCharFormat();
@@ -320,6 +340,7 @@ QTextCharFormat *Highlighter::formatForName(const QString &name)
     if (name == QLatin1String("krate")) return &krateFormat;
     if (name == QLatin1String("arate")) return &arateFormat;
     if (name == QLatin1String("stringVar")) return &stringVarFormat;
+    if (name == QLatin1String("channelname")) return &channelnameFormat;
     if (name == QLatin1String("fsig")) return &fsigFormat;
     if (name == QLatin1String("boolean")) return &booleanFormat;
     if (name == QLatin1String("complex")) return &complexFormat;
@@ -443,6 +464,8 @@ QTextCharFormat Highlighter::getFormat(QString tag) {
         return macroDefineFormat;
     if(tag == "pfield")
         return pfieldFormat;
+    if(tag == "channelname")
+        return channelnameFormat;
     QTextCharFormat fallback;
     fallback.setForeground(QColor("black"));
     fallback.setBackground(QColor(250, 250, 250));
@@ -664,6 +687,132 @@ void Highlighter::registerGlobalTypedVar(QStringView name, QStringView typeStr)
         registerTypedVar(name, typeStr);
 }
 
+bool Highlighter::isChannelNameArgument(const QString &line, int stringStart) const
+{
+    if (stringStart <= 0 || stringStart > line.size())
+        return false;
+
+    // Only whitespace may stand between the string and the '(' or ',' that
+    // introduces its argument; otherwise the string is part of an expression.
+    int pos = stringStart - 1;
+    while (pos >= 0 && line.at(pos).isSpace())
+        --pos;
+    if (pos < 0)
+        return false;
+
+    // Walk backwards to the innermost unclosed '(' (if any) and remember the
+    // nearest top-level comma. See the comments in channelArgumentIndex().
+    int depth = 0;
+    int openParen = -1;
+    int lastComma = -1;
+    for (int i = pos; i >= 0; --i) {
+        const QChar c = line.at(i);
+        if (c == QLatin1Char(')')) {
+            ++depth;
+        }
+        else if (c == QLatin1Char('(')) {
+            if (depth == 0) {
+                openParen = i;
+                break;
+            }
+            --depth;
+        }
+        else if (c == QLatin1Char(',') && depth == 0 && lastComma < 0) {
+            lastComma = i;
+        }
+    }
+
+    const auto argumentIsEmpty = [&](int argumentStart) {
+        return line.mid(argumentStart, stringStart - argumentStart)
+                .trimmed().isEmpty();
+    };
+
+    if (openParen >= 0) {
+        // The string is inside a function call: get the function name and the
+        // argument index.
+        const int argumentStart = lastComma > openParen ? lastComma + 1
+                                                        : openParen + 1;
+        if (!argumentIsEmpty(argumentStart))
+            return false;
+
+        pos = openParen - 1;
+        while (pos >= 0 && line.at(pos).isSpace())
+            --pos;
+        const int nameEnd = pos + 1;
+        while (pos >= 0) {
+            const QChar c = line.at(pos);
+            if (!c.isLetterOrNumber() && c != QLatin1Char('_')
+                    && c != QLatin1Char(':'))
+                break;
+            --pos;
+        }
+        const QString name = line.mid(pos + 1, nameEnd - pos - 1);
+        const int channelIndex = channelArgumentIndex(name);
+        if (channelIndex < 0)
+            return false;
+
+        int argumentIndex = 0;
+        int nested = 0;
+        for (int i = openParen + 1; i < stringStart; ++i) {
+            const QChar c = line.at(i);
+            if (c == QLatin1Char('(')) {
+                ++nested;
+            }
+            else if (c == QLatin1Char(')')) {
+                if (nested > 0)
+                    --nested;
+            }
+            else if (c == QLatin1Char(',') && nested == 0) {
+                ++argumentIndex;
+            }
+        }
+        return argumentIndex == channelIndex;
+    }
+
+    if (lastComma >= 0) {
+        // Command syntax with more than one argument: the channel is the
+        // second argument of chnset/chnmix, directly after the first comma.
+        if (!argumentIsEmpty(lastComma + 1))
+            return false;
+        QRegularExpressionMatch match;
+        auto it = channelSecondArgRx.globalMatch(line.left(lastComma));
+        while (it.hasNext())
+            match = it.next();
+        if (!match.hasMatch())
+            return false;
+
+        int argumentIndex = 0;
+        int nested = 0;
+        for (int i = match.capturedEnd(); i < stringStart; ++i) {
+            const QChar c = line.at(i);
+            if (c == QLatin1Char('(')) {
+                ++nested;
+            }
+            else if (c == QLatin1Char(')')) {
+                if (nested > 0)
+                    --nested;
+            }
+            else if (c == QLatin1Char(',') && nested == 0) {
+                ++argumentIndex;
+            }
+        }
+        return argumentIndex == 1;
+    }
+
+    // Command syntax with a single argument: "chnget \"chan\"",
+    // "invalue \"chan\"", "outvalue \"chan\", value".
+    int wordEnd = pos + 1;
+    while (pos >= 0) {
+        const QChar c = line.at(pos);
+        if (!c.isLetterOrNumber() && c != QLatin1Char('_')
+                && c != QLatin1Char(':'))
+            break;
+        --pos;
+    }
+    const QString name = line.mid(pos + 1, wordEnd - pos - 1);
+    return channelArgumentIndex(name) == 0;
+}
+
 void Highlighter::highlightBlock(const QString &text)
 {
     auto data = static_cast<TextBlockData*>(currentBlockUserData());
@@ -775,6 +924,18 @@ void Highlighter::highlightBlock(const QString &text)
         // The {{ ... }} strings are painted the same way.
         for (const QPair<int, int> &range : lex.multilineStrings) {
             setFormat(range.first, range.second - range.first, quotationFormat);
+        }
+
+        // Quoted strings used as channel names get their own colour. The
+        // detection runs on the masked line (comments and strings blanked),
+        // after the generic string painting above.
+        if (csoundCode && !maskedText.isEmpty()) {
+            for (const QPair<int, int> &range : lex.strings) {
+                if (isChannelNameArgument(maskedText, range.first)) {
+                    setFormat(range.first, range.second - range.first,
+                              channelnameFormat);
+                }
+            }
         }
 
         // Comments are painted last, after the code, so that words inside them

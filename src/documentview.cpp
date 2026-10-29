@@ -55,6 +55,15 @@ static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesi
 // keystroke before filtering the list again.
 static constexpr int COMPLETION_UPDATE_DELAY_MS = 100;
 
+// Wait this long after the cursor stops moving before updating the status bar
+// with the syntax of the opcode under it. Without this, holding an arrow key
+// or dragging the cursor makes the status bar flicker through every opcode.
+static constexpr int OPCODE_SYNTAX_DEBOUNCE_MS = 100;
+
+// The inspector highlight follows the cursor much more slowly: it only needs
+// to tell the user which instrument or opcode they are working in.
+static constexpr int INSPECTOR_SCOPE_DEBOUNCE_MS = 1000;
+
 // Keys that continue the token being completed. They are forwarded to the
 // editor without closing the popup, so the popup can stay in place while the
 // debounced update filters its entries. Delimiters, whitespace, editing keys
@@ -1337,25 +1346,58 @@ void DocumentView::syntaxCheck()
     static const QRegularExpression wordBoundary(uR"(\b)"_s);
     auto words = cursor.selectedText().split(wordBoundary,
                                              SKIP_EMPTY_PARTS);
+	QString opcodeSyntax;
 	for(int i = 0; i < words.size(); i++) {
         auto word = words[words.size() - i - 1];
 		if (m_opcodeTree->isOpcode(word)) {
-            QString syntax = m_opcodeTree->getSyntax(word);
+            const QString syntax = m_opcodeTree->getSyntax(word);
 			if(!syntax.isEmpty()) {
-				emit(opcodeSyntaxSignal(syntax));
+				opcodeSyntax = syntax;
 				m_currentOpcodeText = syntax; // used by the parameter-mode hover
                 break;
 			}
 		}
 	}
+	// Do not update the status bar on every cursor move: while the cursor is
+	// travelling it would flicker through all the opcodes it passes. Only the
+	// opcode under the settled cursor is reported.
+	if (!opcodeSyntax.isEmpty()) {
+		if (m_opcodeSyntaxTimer == nullptr) {
+			m_opcodeSyntaxTimer = new QTimer(this);
+			m_opcodeSyntaxTimer->setSingleShot(true);
+			connect(m_opcodeSyntaxTimer, &QTimer::timeout, this, [this]() {
+				if (!m_pendingOpcodeSyntax.isEmpty())
+					emit opcodeSyntaxSignal(m_pendingOpcodeSyntax);
+			});
+		}
+		m_pendingOpcodeSyntax = opcodeSyntax;
+		m_opcodeSyntaxTimer->start(OPCODE_SYNTAX_DEBOUNCE_MS);
+	}
+	else {
+		m_pendingOpcodeSyntax.clear();
+		if (m_opcodeSyntaxTimer)
+			m_opcodeSyntaxTimer->stop();
+	}
 	// Do not pop up the hover tooltip when a word is selected (e.g. on double
 	// click): the opcode syntax is already shown in the status bar. The hover
 	// is still used explicitly by parameter mode (showHoverText()).
 	hideHoverText();
+
+    // Tell the inspector which instrument/opcode contains the cursor, but only
+    // after the cursor has settled. Moving around quickly must not repaint the
+    // tree on every keystroke.
+    if (m_scopeLineTimer == nullptr) {
+        m_scopeLineTimer = new QTimer(this);
+        m_scopeLineTimer->setSingleShot(true);
+        connect(m_scopeLineTimer, &QTimer::timeout, this, [this]() {
+            emit currentScopeLineChanged(currentScopeLine());
+        });
+    }
+    m_scopeLineTimer->start(INSPECTOR_SCOPE_DEBOUNCE_MS);
 }
 
 
-QString DocumentView::currentScopeText() const
+QTextBlock DocumentView::currentScopeStartBlock() const
 {
     TextEditor *editor = m_mainEditor;
     if (!editor)
@@ -1369,10 +1411,8 @@ QString DocumentView::currentScopeText() const
     static const QRegularExpression blockEndRx(
                 u"^\\s*(endin|endop)\\b"_s);
 
-    const QTextBlock cursorBlock = editor->textCursor().block();
-    QTextBlock blockStart;
-    QString endKeyword;
-    for (QTextBlock block = cursorBlock; block.isValid(); block = block.previous()) {
+    for (QTextBlock block = editor->textCursor().block(); block.isValid();
+         block = block.previous()) {
         const QString line = block.text().trimmed();
         if (line.startsWith(QLatin1Char(';')) || line.startsWith("//"_L1))
             continue;
@@ -1380,16 +1420,35 @@ QString DocumentView::currentScopeText() const
         // two blocks, not inside either of them.
         if (blockEndRx.match(line).hasMatch())
             return {};
-        const QRegularExpressionMatch match = blockStartRx.match(line);
-        if (match.hasMatch()) {
-            blockStart = block;
-            endKeyword = match.captured(1) == "instr"_L1
-                    ? u"endin"_s : u"endop"_s;
-            break;
-        }
+        if (blockStartRx.match(line).hasMatch())
+            return block;
     }
+    return {};
+}
+
+int DocumentView::currentScopeLine() const
+{
+    const QTextBlock block = currentScopeStartBlock();
+    return block.isValid() ? block.blockNumber() + 1 : -1;
+}
+
+QString DocumentView::currentScopeText() const
+{
+    TextEditor *editor = m_mainEditor;
+    if (!editor)
+        return {};
+
+    const QTextBlock cursorBlock = editor->textCursor().block();
+    const QTextBlock blockStart = currentScopeStartBlock();
     if (!blockStart.isValid())
         return {}; // not inside an instrument or opcode
+
+    static const QRegularExpression blockStartRx(
+                u"^\\s*(instr|opcode)\\b"_s);
+    const QRegularExpressionMatch match =
+            blockStartRx.match(blockStart.text().trimmed());
+    const QString endKeyword = match.captured(1) == "instr"_L1
+            ? u"endin"_s : u"endop"_s;
 
     QTextBlock blockEnd;
     for (QTextBlock block = cursorBlock; block.isValid(); block = block.next()) {
@@ -2737,7 +2796,7 @@ void DocumentView::createContextMenu(QPoint pos)
 {
 	QMenu *menu = m_mainEditor->createStandardContextMenu();
 	menu->addSeparator();
-	menu->addAction(tr("Evaluate Selection"), this, SLOT(evaluate()));
+	menu->addAction(tr("Evaluate Selection/Line"), this, SLOT(evaluate()));
 	menu->addAction(tr("Opcode Help"), this, SLOT(opcodeHelp()));
 	// The definition index lives in the document page, so the request is
 	// passed on instead of jumping here. The name under the mouse is
@@ -3441,7 +3500,7 @@ void DocumentView::opcodeHelp()
 
 void DocumentView::restoreCursorPosition()
 {
-	// check if cursor must be moved to old position (after evaluateSection)
+	// check if cursor must be moved to old position (after selecting a section)
 	if (m_oldCursorPosition>=0) {
 		qDebug()<<"Restoring cursor position to "<<m_oldCursorPosition;
 		QTextCursor cursor = m_mainEditor->textCursor();

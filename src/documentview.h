@@ -138,6 +138,10 @@ public:
 	QString helpWordUnderCursor();
 	QString getActiveText();
     int currentLineNumber();
+    // Declaration line (1-based) of the instrument/opcode containing the
+    // cursor, or -1 when the cursor is outside both. Used to mark the current
+    // entry in the inspector.
+    int currentScopeLine() const;
 	bool isModified();
 	bool childHasFocus();
 	void print(QPrinter *printer);
@@ -336,6 +340,9 @@ private:
     void stopHoverHelpTracking();
     // Text of the instrument/opcode block containing the cursor, or empty.
     QString currentScopeText() const;
+    // First block of that instrument/opcode block, or an invalid block when
+    // the cursor is outside one.
+    QTextBlock currentScopeStartBlock() const;
 
 	void ensureFindBar();
 	void ensureOpcodeInsertBar();
@@ -362,6 +369,11 @@ private:
 	HoverWidget *m_hoverWidget;
 	QLabel *m_hoverText;
 	QString m_currentOpcodeText;
+	// Status-bar opcode syntax update, debounced while the cursor moves.
+	QString m_pendingOpcodeSyntax;
+	QTimer *m_opcodeSyntaxTimer = nullptr;
+	// Debounced cursor-scope report for the inspector.
+	QTimer *m_scopeLineTimer = nullptr;
 	//QPair<int, int> m_parenspos;
 
 	bool m_isModified;
@@ -467,7 +479,7 @@ private:
 		NO_CONTEXT
 	};
 	int m_currentContext;
-	int m_oldCursorPosition; // if necessary to move back, like after evaluateSection
+	int m_oldCursorPosition; // if necessary to move back, like after selecting a section
 
 private slots:
 	void destroySyntaxMenu();
@@ -481,6 +493,8 @@ signals:
 	void closeExtraPanels();
 	void evaluate(QString code);
     void newLineAndColumn(int line, int column);
+    // Debounced report of currentScopeLine(), for the inspector highlight.
+    void currentScopeLineChanged(int line);
     // Request a jump to the definition of a name. The flag tells whether the
     // name is the first argument of a schedule() or schedulek() call.
     void goToSourceRequested(const QString &name, bool isScheduleArgument);

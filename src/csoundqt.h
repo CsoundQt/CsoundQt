@@ -82,7 +82,7 @@ class CsoundQt:public QMainWindow
 	friend class WidgetPanel; //to pass ud
 	friend class FileOpenEater; //to pass curPage
 public:
-    CsoundQt(QStringList fileNames);
+    CsoundQt(QStringList fileNames, bool noRecentFiles = false);
 	~CsoundQt();
 	static void utilitiesMessageCallback(CSOUND *csound,
 										 int /*attr*/,
@@ -198,7 +198,6 @@ public slots:
 
 	//    void updateWidgets();
 	void openExample();
-	void openTemplate();
 	// Switch between same-named .orc and .sco files in the same folder.
 	void switchOrcSco();
 	// Write a .csd wrapper around the current .orc (and its companion score).
@@ -214,6 +213,8 @@ public slots:
     void increaseFontSize();
     void decreaseFontSize();
     void setWrapLines(bool enabled);
+    void setToolbarVisible(bool visible);
+    void setEditorScrollBarVisible(bool visible);
 
 
 protected:
@@ -240,7 +241,7 @@ private slots:
 	void paste();
 	void undo();
 	void redo();
-	void evaluateSection();
+	void selectCurrentSection();
 	void evaluate(QString code = QString());
 	void evaluateString(QString evalCode);
 	void setScratchPadMode(bool csdMode);
@@ -257,11 +258,12 @@ private slots:
 	void insertMidiControlInstrument();
     void saveWidgetsToQml();
 	void setCurrentAudioFile(const QString fileName);
-	void openExternalEditor();
-	void openExternalPlayer();
 	void setEditorFocus();
     void showEditor(bool show);
 	void setHelpEntry();
+    // Forward the debounced editor scope to the inspector, but only when the
+    // signal comes from the page that is actually current.
+    void updateInspectorScope(int scopeLine);
     // Show the same entry Opcode Entry would, but as a quick-reference card
     // next to the cursor instead of in the help panel.
     void showQuickReference();
@@ -300,10 +302,8 @@ private slots:
 	void openQuickRef();
 	void openOnlineDocumentation();
 	void showManualOnline();
-	void openLocalManualInBrowser();
 	void resetPreferences();
 	void reportBug();
-    void reportCsoundBug();
 	void downloadManual();
 	void about();
 	void donate();
@@ -340,7 +340,6 @@ private slots:
     void checkSyntaxMenuAction();
     void tabMoved(int to, int from);
     void openExamplesFolder();
-    void openThemesFolder();
     void setLineAndColumn(int line, int column);
 
     DocumentPage *getCurrentDocumentPage() {
@@ -387,8 +386,6 @@ private:
     void fillExampleSubmenu(QDir dir, QMenu *m, int depth);
 	void fillFileMenu();
 	void addToRecentFiles(const QString &fileName);
-	void fillFavoriteMenu();
-	void fillFavoriteSubMenu(QDir dir, QMenu *m, int depth);
 	void createToolBars();
     void createStatusBar();
 	void readSettings();
@@ -407,6 +404,7 @@ private:
 	// Enable/disable the actions that only make sense for some file types and
 	// install the shortcut guards that explain why a .udo cannot be performed.
 	void updateFileTypeActions();
+	void updateEvaluateAction();
 	void showUdoNotRunnable();
 	void setCurrentFile(const QString &fileName);
 	// Compose the window title from the current file and the
@@ -513,11 +511,9 @@ private:
 	QList<QKeySequence> m_udoShortcutSequences;
 	QMenu *fileMenu;
 	QMenu *recentMenu;
-	QMenu *templateMenu;
 	QMenu *editMenu;
 	QMenu *controlMenu;
 	QMenu *viewMenu;
-	QMenu *favoriteMenu;
 	QMenu *scriptsMenu;
 	QMenu *helpMenu;
 //	QToolBar *fileToolBar;
@@ -544,7 +540,7 @@ private:
 	QAction *pasteAct;
 	QAction *duplicateAct;
 	QAction *evaluateAct;
-	QAction *evaluateSectionAct;
+	QAction *selectInstrOpcodeAct;
 	QAction *scratchPadCsdModeAct;
 	QAction *getToInAct;
 	QAction *inToGetAct;
@@ -566,16 +562,12 @@ private:
 	QAction *recAct;
 	QAction *renderAct;
 	QAction *renderHistoryAct;
-	QAction *externalEditorAct;
-	QAction *externalPlayerAct;
     QAction *showEditorAct;
 	QAction *showHelpAct;
-	QAction *showManualAct;
 	QAction *showManualOnlineAct;
 	QAction *showFlossManualAct;
 	QAction *downloadManualAct;
 	QAction *showGenAct;
-	QAction *showOverviewAct;
 	QAction *
 	showOpcodeQuickRefAct;
 	QAction *showConsoleAct;
@@ -611,8 +603,6 @@ private:
     QAction *raiseScratchPadAct;
 	QAction *commentAct;
 	//    QAction *uncommentAct;
-	QAction *indentAct;
-	QAction *unindentAct;
 	QAction *tabsToSpacesAct;
 	QAction *killLineAct;
 	QAction *killToEndAct;
@@ -628,17 +618,17 @@ private:
 	//    QAction *aboutQtAct;
 	QAction *resetPreferencesAct;
 	QAction *reportBugAct;
-    QAction *reportCsoundBugAct;
     QAction *lineNumbersAct;
 	QAction *parameterModeAct;
     QAction *autocompleteAct;
     QAction *insertOpcodeAct;
 //	QAction *showParametersAct;
     QAction *openExamplesFolderAct;
-    QAction *openThemesFolderAct;
     QAction *increaseFontAction;
     QAction *decreaseFontAction;
     QAction *wrapLinesAct;
+    QAction *toggleToolbarAct;
+    QAction *toggleScrollBarAct;
 
     QSignalMapper *focusMapper;
 	int curPage;

@@ -187,6 +187,7 @@ public:
 	void setTabUseSpaces(bool useSpaces);
 	void setTabSpaces(int spaces);
 	void setLineWrapMode(QTextEdit::LineWrapMode wrapLines);
+	void setScrollBarVisible(bool visible);
 	void setColorVariables(bool colorVariables);
 	//    void setOpcodeNameList(QStringList opcodeNameList);
     void setAutoComplete(bool autoComplete, int delay = 0);
@@ -288,8 +289,6 @@ public slots:
 	void jumpToDefinition(int line, int column);
 	void comment();
 	void uncomment();
-	void indent();
-	void unindent();
 	void tabsToSpaces();
 	void killLine();
 	void killToEnd();

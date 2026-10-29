@@ -68,6 +68,7 @@ Options::Options(ConfigLists *configlists) :
     lockToolbar = false;
     toolbarIconSize = 20;
     wrapLines = true;
+    showScrollBar = true;
     autoComplete = true;
     quickHelpOnHover = true;
     quickHelpHoverDelay = 500;
@@ -99,14 +100,12 @@ Options::Options(ConfigLists *configlists) :
     defaultCsdActive = false;
     opcodexmldir = "";
     opcodexmldirActive = false;
-    favoriteDir = "";
     examplePath = "";
 #ifdef Q_OS_MACOS
     csoundExecutable = "/usr/local/bin/csound ";
 #else
     csoundExecutable = "csound ";
 #endif
-    templateDir = "";
     logDebug = false;
     evalLanguage = CS_ORC;
 

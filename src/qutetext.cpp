@@ -159,12 +159,6 @@ void QuteText::setType(QString type)
         
 }
 
-void QuteText::setTransparentForMouse(bool status)
-{
-    m_widget->setAttribute(Qt::WA_TransparentForMouseEvents, status);
-    setAttribute(Qt::WA_TransparentForMouseEvents, status);
-}
-
 void QuteText::setAlignment(QString alignment)
 {
     Qt::Alignment align;
@@ -498,9 +492,6 @@ void QuteText::createPropertiesDialog()
 		dialog->setWindowTitle("Label");
 		channelLabel->hide();
 		nameLineEdit->hide();
-		// Labels are not tooltipped, so a description would have no effect.
-		if (descriptionLabel) descriptionLabel->hide();
-		descriptionLineEdit->hide();
 	}
 	else if (m_type == "display") {
 		dialog->setWindowTitle("Display");

@@ -207,6 +207,8 @@ int main(int argc, char *argv[])
     }
 
     bool autoplay = false;
+    bool autorender = false;
+    bool noRecentFiles = false;
     bool forceNew = false;
     QStringList args = qapp.arguments();
     args.removeAt(0); // Remove program name
@@ -217,6 +219,8 @@ int main(int argc, char *argv[])
             out << "\n\n";
             out << "Options:" << Qt::endl;
             out << "   --play        Autoplay the last file passed via command line" << Qt::endl;
+            out << "   --render      Render the last file passed via command line" << Qt::endl;
+            out << "   --no-recent-files  Do not reopen files from the last session" << Qt::endl;
             out << "   --force-new   Start a new instance even if one is already running" << Qt::endl;
             out << "   --help        This message" << Qt::endl;
             out << Qt::endl;
@@ -224,6 +228,12 @@ int main(int argc, char *argv[])
         }
         if(arg == "--play") {
             autoplay = true;
+        }
+        if(arg == "--render") {
+            autorender = true;
+        }
+        if(arg == "--no-recent-files") {
+            noRecentFiles = true;
         }
         if(arg == "--force-new") {
             forceNew = true;
@@ -267,7 +277,7 @@ int main(int argc, char *argv[])
         QDEBUG << "Could load translator";
     }
 
-    CsoundQt *csoundQt = new CsoundQt(fileNames);
+    CsoundQt *csoundQt = new CsoundQt(fileNames, noRecentFiles);
     if (!csoundQt->startServer())
         qDebug()<<"Could not start local server.";
 #ifndef CSQT_NO_SPLASH
@@ -283,6 +293,8 @@ int main(int argc, char *argv[])
     
     if(autoplay && !fileNames.isEmpty())
         csoundQt->play();
+    if(autorender && !fileNames.isEmpty())
+        csoundQt->render();
 
     
     filterObj.setMainWindow(csoundQt);

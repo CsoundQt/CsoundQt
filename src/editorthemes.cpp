@@ -1,4 +1,5 @@
 
+
 /***************************************************************************
  *   Copyright (C) 2026 by the CsoundQt developers                          *
  *                                                                         *
@@ -39,7 +40,10 @@ const QStringList &builtInThemeNames()
 {
     static const QStringList names = {
         u"light"_s,
+        u"paper"_s,
         u"dark"_s,
+        u"midnight"_s,
+        u"neon"_s,
         u"light classic"_s
     };
     return names;
@@ -123,6 +127,8 @@ Theme makeLightTheme()
     f[u"label"_s] = makeSpec(QColor(205, 92, 92), {}, QFont::Bold, false, true);
     f[u"name"_s] = makeSpec(QColor(u"#F50057"_s), {}, QFont::Bold);
     f[u"quotation"_s] = makeSpec(QColor(u"#827717"_s));
+    f[u"channelname"_s] = makeSpec(QColor(u"#448fff"_s), {}, QFont::Bold); 
+    
     f[u"multiLineComment"_s] = f[u"quotation"_s];
     f[u"io"_s] = makeSpec(QColor(u"#8844BB"_s), {}, QFont::Bold);
     f[u"udo"_s] = makeSpec(opcodeColor.darker(150), {}, QFont::Bold);
@@ -148,6 +154,7 @@ Theme makeDarkTheme()
     const QColor commentColor(u"#a49fb0"_s);
     const QColor quotationColor(u"#c5b77d"_s);//(QStringLiteral("#91FF55"));
     const QColor nameColor(u"#D298FB"_s);
+
     QHash<QString, FormatSpec> &f = theme.formats;
     f[u"inst"_s] = makeSpec(instanceColor, {}, QFont::Bold);
     f[u"keyword"_s] = makeSpec(keywordColor, {}, QFont::Bold);
@@ -170,6 +177,7 @@ Theme makeDarkTheme()
     f[u"label"_s] = makeSpec(instanceColor, {}, QFont::Bold, false, true);
     f[u"name"_s] = makeSpec(nameColor, {}, QFont::Bold);
     f[u"quotation"_s] = makeSpec(quotationColor);
+    f[u"channelname"_s] = makeSpec(QColor(u"#448fff"_s), QColor(u"#1f273a"_s), QFont::Bold); // makeSpec(channelNameColor);  3180ff
     f[u"stringVar"_s] = makeSpec(QColor(u"#e5aIf82"_s));// f[QStringLiteral("quotation")];
     f[u"multiLineComment"_s] = f[u"singleLineComment"_s];
     f[u"io"_s] = makeSpec(QColor(u"#FFD54F"_s), {}, QFont::Bold);
@@ -178,6 +186,158 @@ Theme makeDarkTheme()
     f[u"csdtagClose"_s] = makeSpec(dimmedColor(instanceColor, theme.defaultBackground, 0.55));
     f[u"operator"_s] = makeSpec(nameColor);
     f[u"scoreLetter"_s] = makeSpec(opcodeColor, {}, QFont::Bold);
+    return theme;
+}
+
+// A cooler, blue-tinted dark theme. It keeps the role structure of the
+// standard dark theme but uses a navy background and a softer palette that is
+// easier on the eyes for long editing sessions.
+Theme makeMidnightTheme()
+{
+    Theme theme;
+    theme.name = u"midnight"_s;
+    theme.source = Source::BuiltIn;
+    theme.dark = true;
+    theme.defaultForeground = QColor(u"#d6deeb"_s);
+    theme.defaultBackground = QColor(u"#0f1620"_s);
+
+    const QColor instanceColor(u"#b48ead"_s);
+    const QColor keywordColor(u"#ff9d6f"_s);
+    const QColor opcodeColor(u"#82aaff"_s);
+    const QColor commentColor(u"#7a869a"_s);
+    const QColor nameColor(u"#d2a8ff"_s);
+    QHash<QString, FormatSpec> &f = theme.formats;
+    f[u"inst"_s] = makeSpec(instanceColor, {}, QFont::Bold);
+    f[u"keyword"_s] = makeSpec(keywordColor, {}, QFont::Bold);
+    f[u"header"_s] = f[u"keyword"_s];
+    f[u"opcode"_s] = makeSpec(opcodeColor, {}, QFont::Bold);
+    f[u"deprecated"_s] = makeSpec(QColor(u"#ff5874"_s), {},
+                                  QFont::Normal, false, true,
+                                  QColor(u"#880000"_s));
+    f[u"singleLineComment"_s] = makeSpec(commentColor, {}, QFont::Normal, true);
+    f[u"importantComment"_s] =
+            makeSpec(commentColor.lighter(160), theme.defaultBackground.lighter(150));
+    f[u"macroDefine"_s] = makeSpec(QColor(u"#ff6e9c"_s), {}, QFont::Bold);
+    f[u"pfield"_s] = makeSpec({}, {}, QFont::Bold);
+    f[u"krate"_s] = makeSpec(QColor(u"#7fdbca"_s));
+    f[u"irate"_s] = makeSpec(QColor(u"#a8b8e8"_s));
+    f[u"arate"_s] = makeSpec(QColor(u"#ff6e8a"_s));
+    f[u"stringVar"_s] = makeSpec(QColor(u"#ecc48d"_s));
+    f[u"fsig"_s] = makeSpec(QColor(u"#f07178"_s), {}, QFont::Bold);
+    f[u"boolean"_s] = makeSpec(QColor(u"#c3e88d"_s));
+    f[u"complex"_s] = makeSpec(QColor(u"#4ec9b0"_s));
+    f[u"label"_s] = makeSpec(instanceColor, {}, QFont::Bold, false, true);
+    f[u"name"_s] = makeSpec(nameColor, {}, QFont::Bold);
+    f[u"quotation"_s] = makeSpec(QColor(u"#ecc48d"_s));
+    f[u"channelname"_s] = makeSpec(QColor(u"#448fff"_s), {}, QFont::Bold);
+    f[u"multiLineComment"_s] = f[u"singleLineComment"_s];
+    f[u"io"_s] = makeSpec(QColor(u"#ffcb6b"_s), {}, QFont::Bold);
+    f[u"udo"_s] = makeSpec(opcodeColor.darker(125));
+    f[u"csdtag"_s] = makeSpec(instanceColor);
+    f[u"csdtagClose"_s] = makeSpec(dimmedColor(instanceColor, theme.defaultBackground, 0.55));
+    f[u"operator"_s] = makeSpec(nameColor);
+    f[u"scoreLetter"_s] = makeSpec(opcodeColor, {}, QFont::Bold);
+    return theme;
+}
+
+// A vivid, high-contrast dark theme with a near-black violet background and
+// saturated neon accents. Deliberately more colourful than the dark/midnight
+// pair, for users who like strong syntax colours.
+Theme makeNeonTheme()
+{
+    Theme theme;
+    theme.name = u"neon"_s;
+    theme.source = Source::BuiltIn;
+    theme.dark = true;
+    theme.defaultForeground = QColor(u"#f8f8f2"_s);
+    theme.defaultBackground = QColor(u"#08080f"_s);
+
+    const QColor magenta(u"#ff79c6"_s);
+    const QColor cyan(u"#8be9fd"_s);
+    const QColor yellow(u"#f1fa8c"_s);
+    const QColor green(u"#50fa7b"_s);
+    const QColor purple(u"#bd93f9"_s);
+    const QColor orange(u"#ffb86c"_s);
+    const QColor commentColor(u"#6f6f85"_s);
+    QHash<QString, FormatSpec> &f = theme.formats;
+    f[u"inst"_s] = makeSpec(magenta, {}, QFont::Bold);
+    f[u"keyword"_s] = makeSpec(QColor(u"#ff5555"_s), {}, QFont::Bold);
+    f[u"header"_s] = f[u"keyword"_s];
+    f[u"opcode"_s] = makeSpec(cyan, {}, QFont::Bold);
+    f[u"deprecated"_s] = makeSpec(QColor(u"#ff5555"_s), {},
+                                  QFont::Normal, false, true,
+                                  QColor(u"#880000"_s));
+    f[u"singleLineComment"_s] = makeSpec(commentColor, {}, QFont::Normal, true);
+    f[u"importantComment"_s] =
+            makeSpec(QColor(u"#d7d7e8"_s), QColor(u"#262636"_s), QFont::Bold);
+    f[u"macroDefine"_s] = makeSpec(QColor(u"#ff92d0"_s), {}, QFont::Bold);
+    f[u"pfield"_s] = makeSpec({}, {}, QFont::Bold);
+    f[u"krate"_s] = makeSpec(green);
+    f[u"irate"_s] = makeSpec(purple);
+    f[u"arate"_s] = makeSpec(orange);
+    f[u"stringVar"_s] = makeSpec(yellow);
+    f[u"fsig"_s] = makeSpec(magenta, {}, QFont::Bold);
+    f[u"boolean"_s] = makeSpec(green);
+    f[u"complex"_s] = makeSpec(cyan);
+    f[u"label"_s] = makeSpec(magenta, {}, QFont::Bold, false, true);
+    f[u"name"_s] = makeSpec(orange, {}, QFont::Bold);
+    f[u"quotation"_s] = makeSpec(yellow);
+    f[u"channelname"_s] = makeSpec(QColor(u"#00e5ff"_s), QColor(u"#00343b"_s), QFont::Bold);
+    f[u"multiLineComment"_s] = f[u"singleLineComment"_s];
+    f[u"io"_s] = makeSpec(yellow, {}, QFont::Bold);
+    f[u"udo"_s] = makeSpec(cyan.darker(115));
+    f[u"csdtag"_s] = makeSpec(magenta);
+    f[u"csdtagClose"_s] = makeSpec(dimmedColor(magenta, theme.defaultBackground, 0.55));
+    f[u"operator"_s] = makeSpec(magenta);
+    f[u"scoreLetter"_s] = makeSpec(cyan, {}, QFont::Bold);
+    return theme;
+}
+
+// A warm, low-glare light theme on a paper-coloured background. It is a
+// softer alternative to the neutral "light" theme, with muted ink-like
+// accents instead of highly saturated colours.
+Theme makePaperTheme()
+{
+    Theme theme;
+    theme.name = u"paper"_s;
+    theme.source = Source::BuiltIn;
+    theme.defaultForeground = QColor(u"#3b3a36"_s);
+    theme.defaultBackground = QColor(u"#f7f2e8"_s);
+
+    const QColor plum(u"#7b3f6b"_s);
+    const QColor rust(u"#a34b2e"_s);
+    const QColor steelBlue(u"#1f5f8b"_s);
+    const QColor commentColor(u"#8a8578"_s);
+    QHash<QString, FormatSpec> &f = theme.formats;
+    f[u"inst"_s] = makeSpec(plum, {}, QFont::Bold);
+    f[u"keyword"_s] = makeSpec(QColor(u"#b35c00"_s), {}, QFont::Bold);
+    f[u"header"_s] = f[u"keyword"_s];
+    f[u"opcode"_s] = makeSpec(steelBlue, {}, QFont::Bold);
+    f[u"deprecated"_s] = makeSpec(QColor(u"#a33b3b"_s), {},
+                                  QFont::Normal, false, true);
+    f[u"singleLineComment"_s] = makeSpec(commentColor, {}, QFont::Normal, true);
+    f[u"importantComment"_s] =
+            makeSpec(QColor(u"#5b5446"_s), QColor(u"#efe4c8"_s), QFont::Bold);
+    f[u"macroDefine"_s] = makeSpec(QColor(u"#8b3a62"_s), {}, QFont::Bold);
+    f[u"pfield"_s] = makeSpec({}, {}, QFont::Bold);
+    f[u"krate"_s] = makeSpec(QColor(u"#1f7a63"_s));
+    f[u"irate"_s] = makeSpec(QColor(u"#4a6572"_s));
+    f[u"arate"_s] = makeSpec(QColor(u"#a63d40"_s));
+    f[u"stringVar"_s] = makeSpec(QColor(u"#8a6d1f"_s));
+    f[u"fsig"_s] = makeSpec(QColor(u"#8e3b5f"_s), {}, QFont::Bold);
+    f[u"boolean"_s] = makeSpec(QColor(u"#6a4c93"_s));
+    f[u"complex"_s] = makeSpec(QColor(u"#2f6f6b"_s));
+    f[u"label"_s] = makeSpec(plum, {}, QFont::Bold, false, true);
+    f[u"name"_s] = makeSpec(rust, {}, QFont::Bold);
+    f[u"quotation"_s] = makeSpec(QColor(u"#7a6418"_s));
+    f[u"channelname"_s] = makeSpec(QColor(u"#3a6fd8"_s), QColor(u"#e8eefc"_s), QFont::Bold);
+    f[u"multiLineComment"_s] = f[u"singleLineComment"_s];
+    f[u"io"_s] = makeSpec(QColor(u"#7a4a9e"_s), {}, QFont::Bold);
+    f[u"udo"_s] = makeSpec(steelBlue.darker(125));
+    f[u"csdtag"_s] = makeSpec(plum);
+    f[u"csdtagClose"_s] = makeSpec(dimmedColor(plum, theme.defaultBackground, 0.3));
+    f[u"operator"_s] = makeSpec(rust);
+    f[u"scoreLetter"_s] = makeSpec(steelBlue, {}, QFont::Bold);
     return theme;
 }
 
@@ -217,6 +377,8 @@ Theme makeClassicTheme()
     f[u"label"_s] = makeSpec(QColor(205, 92, 92), {}, QFont::Bold);
     f[u"name"_s] = makeSpec(QColor(u"#880E4F"_s), {}, QFont::Bold);
     f[u"quotation"_s] = makeSpec(QColor(Qt::red));
+    f[u"channelname"_s] = makeSpec(QColor(u"#448fff"_s), {}, QFont::Bold); 
+    
     f[u"multiLineComment"_s] = makeSpec(green);
     f[u"io"_s] = f[u"opcode"_s];
     f[u"udo"_s] = f[u"opcode"_s];
@@ -239,8 +401,10 @@ Theme makeNoneTheme()
 
 void addBuiltInThemes()
 {
-    for (const Theme &theme : {makeLightTheme(), makeDarkTheme(),
-                               makeClassicTheme(), makeNoneTheme()}) {
+    for (const Theme &theme : {makeLightTheme(), makePaperTheme(),
+                               makeDarkTheme(), makeMidnightTheme(),
+                               makeNeonTheme(), makeClassicTheme(),
+                               makeNoneTheme()}) {
         g_themes.insert(theme.name, theme);
     }
 }
