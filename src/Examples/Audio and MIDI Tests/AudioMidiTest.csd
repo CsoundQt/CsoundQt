@@ -1,18 +1,19 @@
 <CsoundSynthesizer>
 <CsInstruments>
-ksmps  = 64
-nchnls = 2
-A4     = 442
-0dbfs  = 1
+nchnls   = 2
+nchnls_i = 2
 
+
+;; -------------------------------------------------------------
+
+A4 = 442
+ksmps = 64
+0dbfs = 1
 
 massign 0, 0
 
-gaSpectrumOut = init(0)
 gkSpectrumFFTSize = init(4096)
-
 giFFTSizes[] = [2048, 4096, 8192]
-
 
 instr AudioTest
   ; kon1, kon2, kon3, kon4, kon5,kon6, kon7, kon8 init 0
@@ -23,11 +24,12 @@ instr AudioTest
   iminAmp = db(-60)
   imeterUpLag = 0.0
   imeterDownLag = 0.08
+  iswitchlag = 0.3
+
   kdb init -999999
+  kSpectrumSelect init 1
 
-  kSpectrumSelect = init(1)
-
-  ; ; ----- UI input -----
+  ; ----- UI input -----
   ktrig = metro(iuiRefreshRate)
   ksignal = chnget("signaltype")
   kfftSizeIndex = chnget("fftsize")
@@ -53,7 +55,7 @@ instr AudioTest
     ksignalFreq = chnget("signalfreq")
   endif
 
-  ; ; Output
+  ; Output
 
   if ksignal == 0 then
     asig = noise(1, 0)
@@ -68,8 +70,6 @@ instr AudioTest
   asig *= interp(lag(kamp, 0.1))
   ; output to graph
   display asig, ksmps/sr*2
-
-  iswitchlag = 0.3
 
   aout1 = asig*interp(lag(kon1, iswitchlag))
   koutamp1 maxk aout1, ktrig, 1
@@ -116,7 +116,6 @@ skipOutput:
   ; ; Audio Input
 
   imin = db(-irange)
-
 
   kamp1 maxk inch(1), ktrig, 1
   kamp1 = lagud(kamp1, imeterUpLag, imeterDownLag)
@@ -233,7 +232,6 @@ instr MidiCC
   if eventcycles() == 0 then
     chnset Smsg, "displaycc"
   endif
-
 endin
 
 instr 3
@@ -250,7 +248,7 @@ instr MidiIn
   elseif kstatus == 128 || (kstatus == 144 && kdata1 == 0) then
     turnoff2 iMidiNote+kdata1/1000, 4, 1
   elseif kstatus == 176 then
-    schedulek "MidiCC", 0, 0.1, kchan, kdata1, kdata2
+    schedulek MidiCC, 0, 0.1, kchan, kdata1, kdata2
   endif
 endin
 
@@ -289,10 +287,10 @@ instr Setup
   chnset 0, "indb7"
   chnset 0, "indb8"
 
-
-  chnset sprintf("%d", sr), "samplerate"
-  chnset sprintf("%d", nchnls), "nchnls"
-
+  chnset sr, "samplerate"
+  chnset nchnls, "nchnls"
+  chnset nchnls_i, "nchnls_i"
+  
   for i0 in [1 ... nchnls] do
     outvalue sprintf("on%d/enabled", i0), 1
     outvalue sprintf("vu%d/enabled", i0), 1
@@ -317,69 +315,6 @@ i "Setup"       0.02 -1
 e
 </CsScore>
 </CsoundSynthesizer>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -389,15 +324,11 @@ e
  <height>620</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>65</r>
-  <g>65</g>
-  <b>65</b>
- </bgcolor>
+ <bgcolor mode="background">#414141</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>329</x>
-  <y>89</y>
+  <y>56</y>
   <width>373</width>
   <height>328</height>
   <uuid>{f046b35f-13ea-4c0f-9282-b4b6007fc90e}</uuid>
@@ -413,22 +344,10 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <padding>5</padding>
-  <locked>true</locked>
-  <color>
-   <r>240</r>
-   <g>240</g>
-   <b>240</b>
-  </color>
-  <bgcolor mode="background">
-   <r>99</r>
-   <g>99</g>
-   <b>99</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <locked>false</locked>
+  <color>#f0f0f0</color>
+  <bgcolor mode="background">#636363</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -436,7 +355,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
-  <y>312</y>
+  <y>279</y>
   <width>322</width>
   <height>105</height>
   <uuid>{d25e4c33-85be-48ad-a3f4-b071e3baa5fe}</uuid>
@@ -452,22 +371,10 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <padding>5</padding>
-  <locked>true</locked>
-  <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </color>
-  <bgcolor mode="background">
-   <r>99</r>
-   <g>99</g>
-   <b>99</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <locked>false</locked>
+  <color>#ffffff</color>
+  <bgcolor mode="background">#636363</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -492,21 +399,9 @@ e
   <fontsize>20</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </color>
-  <bgcolor mode="background">
-   <r>99</r>
-   <g>99</g>
-   <b>99</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#ffffff</color>
+  <bgcolor mode="background">#636363</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -514,7 +409,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
-  <y>89</y>
+  <y>56</y>
   <width>322</width>
   <height>220</height>
   <uuid>{6b0524fe-c62b-443e-a7cc-2786168abc62}</uuid>
@@ -530,22 +425,10 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <padding>5</padding>
-  <locked>true</locked>
-  <color>
-   <r>243</r>
-   <g>243</g>
-   <b>243</b>
-  </color>
-  <bgcolor mode="background">
-   <r>99</r>
-   <g>99</g>
-   <b>99</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <locked>false</locked>
+  <color>#f3f3f3</color>
+  <bgcolor mode="background">#636363</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -553,7 +436,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>17</x>
-  <y>254</y>
+  <y>221</y>
   <width>23</width>
   <height>25</height>
   <uuid>{cf92f08d-bb58-4a3d-acda-479165db96d4}</uuid>
@@ -570,21 +453,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>218</r>
-   <g>218</g>
-   <b>218</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#dadada</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -592,7 +463,7 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
   <x>204</x>
-  <y>357</y>
+  <y>324</y>
   <width>100</width>
   <height>48</height>
   <uuid>{a3545b15-5470-4efb-9dfd-eee56bc47d2a}</uuid>
@@ -613,11 +484,7 @@ e
   <latched>false</latched>
   <fontsize>9</fontsize>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>74</r>
-   <g>38</g>
-   <b>0</b>
-  </color>
+  <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
   <borderColor>#564341</borderColor>
   <textColor>#fdfdfd</textColor>
@@ -628,7 +495,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>18</x>
-  <y>341</y>
+  <y>308</y>
   <width>25</width>
   <height>25</height>
   <uuid>{a4ab00b5-62ab-45b1-9b1f-2978742d4057}</uuid>
@@ -652,23 +519,15 @@ e
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>255</r>
-   <g>76</g>
-   <b>17</b>
-  </color>
+  <color>#ff4c11</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>25</r>
-   <g>25</g>
-   <b>25</b>
-  </bgcolor>
+  <bgcolor>#191919</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>signaltype</objectName>
   <x>547</x>
-  <y>277</y>
+  <y>244</y>
   <width>110</width>
   <height>28</height>
   <uuid>{6d7e91db-0e40-4c78-8ff3-e01a436b45af}</uuid>
@@ -706,7 +565,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>56</x>
-  <y>254</y>
+  <y>221</y>
   <width>23</width>
   <height>25</height>
   <uuid>{00820929-c5f2-4b95-857d-8f65bc444510}</uuid>
@@ -723,21 +582,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>218</r>
-   <g>218</g>
-   <b>218</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#dadada</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -745,7 +592,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>95</x>
-  <y>254</y>
+  <y>221</y>
   <width>23</width>
   <height>25</height>
   <uuid>{731bae72-8739-4e2d-bcf8-dac396e37ccc}</uuid>
@@ -762,21 +609,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>218</r>
-   <g>218</g>
-   <b>218</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#dadada</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -784,7 +619,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>134</x>
-  <y>254</y>
+  <y>221</y>
   <width>23</width>
   <height>25</height>
   <uuid>{727c9851-0e1b-4fc9-8afc-fd6c62f253be}</uuid>
@@ -801,21 +636,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>218</r>
-   <g>218</g>
-   <b>218</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#dadada</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -823,7 +646,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>173</x>
-  <y>254</y>
+  <y>221</y>
   <width>23</width>
   <height>25</height>
   <uuid>{2846ddf1-0e08-457a-8d28-e6dd839a2eb8}</uuid>
@@ -840,21 +663,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>218</r>
-   <g>218</g>
-   <b>218</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#dadada</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -862,7 +673,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>212</x>
-  <y>254</y>
+  <y>221</y>
   <width>23</width>
   <height>25</height>
   <uuid>{f55bd16e-cd68-44a7-8b08-2f9e1183ab42}</uuid>
@@ -879,21 +690,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>218</r>
-   <g>218</g>
-   <b>218</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#dadada</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -901,7 +700,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>251</x>
-  <y>254</y>
+  <y>221</y>
   <width>23</width>
   <height>25</height>
   <uuid>{34ecffc5-5d86-422e-97fc-e5c9fd0e0aa7}</uuid>
@@ -918,21 +717,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>218</r>
-   <g>218</g>
-   <b>218</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#dadada</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -940,7 +727,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>290</x>
-  <y>254</y>
+  <y>221</y>
   <width>23</width>
   <height>25</height>
   <uuid>{4c976814-f547-431d-ab74-e9225f3aff12}</uuid>
@@ -957,21 +744,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>218</r>
-   <g>218</g>
-   <b>218</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#dadada</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -979,7 +754,7 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>on1</objectName>
   <x>338</x>
-  <y>200</y>
+  <y>167</y>
   <width>48</width>
   <height>48</height>
   <uuid>{55747531-f2e1-4e50-9839-3e788d995014}</uuid>
@@ -997,14 +772,10 @@ e
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>24</fontsize>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>74</r>
-   <g>38</g>
-   <b>0</b>
-  </color>
+  <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
   <borderColor>#564341</borderColor>
   <textColor>#9a9a9a</textColor>
@@ -1015,7 +786,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>582</x>
-  <y>219</y>
+  <y>186</y>
   <width>80</width>
   <height>25</height>
   <uuid>{a498f284-9d66-4ec8-9c40-07632ace83b4}</uuid>
@@ -1032,21 +803,9 @@ e
   <fontsize>14</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>223</r>
-   <g>112</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#df7000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1054,7 +813,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>355</x>
-  <y>117</y>
+  <y>84</y>
   <width>16</width>
   <height>80</height>
   <uuid>{738f62ff-0256-428d-826b-2e96fb28c483}</uuid>
@@ -1070,7 +829,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.41594178</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <exponent>1.00000000</exponent>
@@ -1078,23 +837,15 @@ e
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#3c332e</borderColor>
-  <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
-  </color>
+  <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
+  <bgcolor>#272727</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on2</objectName>
   <x>388</x>
-  <y>200</y>
+  <y>167</y>
   <width>48</width>
   <height>48</height>
   <uuid>{6fa42161-ada8-4ca1-a785-00e8d9ca3d0c}</uuid>
@@ -1112,14 +863,10 @@ e
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>24</fontsize>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>74</r>
-   <g>38</g>
-   <b>0</b>
-  </color>
+  <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
   <borderColor>#564341</borderColor>
   <textColor>#9a9a9a</textColor>
@@ -1130,7 +877,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>405</x>
-  <y>116</y>
+  <y>83</y>
   <width>16</width>
   <height>80</height>
   <uuid>{81589d71-6606-4fa8-b0fa-daeaf64b35ac}</uuid>
@@ -1146,7 +893,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.41594178</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -1154,23 +901,15 @@ e
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
-  </color>
+  <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
+  <bgcolor>#272727</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on3</objectName>
   <x>438</x>
-  <y>200</y>
+  <y>167</y>
   <width>48</width>
   <height>48</height>
   <uuid>{aeb8b307-415d-4a1f-83a6-edd57e6e525d}</uuid>
@@ -1191,11 +930,7 @@ e
   <latched>false</latched>
   <fontsize>24</fontsize>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>74</r>
-   <g>38</g>
-   <b>0</b>
-  </color>
+  <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
   <borderColor>#564341</borderColor>
   <textColor>#9a9a9a</textColor>
@@ -1206,7 +941,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>454</x>
-  <y>117</y>
+  <y>84</y>
   <width>16</width>
   <height>80</height>
   <uuid>{47096117-b4df-4a57-9f63-43e4433b93d2}</uuid>
@@ -1230,23 +965,15 @@ e
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
-  </color>
+  <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
+  <bgcolor>#272727</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on4</objectName>
   <x>488</x>
-  <y>200</y>
+  <y>167</y>
   <width>48</width>
   <height>48</height>
   <uuid>{28590fdc-f133-43b3-99b8-7d7c379d5f79}</uuid>
@@ -1267,11 +994,7 @@ e
   <latched>false</latched>
   <fontsize>24</fontsize>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>74</r>
-   <g>38</g>
-   <b>0</b>
-  </color>
+  <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
   <borderColor>#564341</borderColor>
   <textColor>#9a9a9a</textColor>
@@ -1282,7 +1005,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>504</x>
-  <y>118</y>
+  <y>85</y>
   <width>16</width>
   <height>80</height>
   <uuid>{1c265b1b-8455-4c2c-96e6-e6f5d5d97caf}</uuid>
@@ -1306,23 +1029,15 @@ e
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
-  </color>
+  <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
+  <bgcolor>#272727</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on5</objectName>
   <x>340</x>
-  <y>357</y>
+  <y>324</y>
   <width>48</width>
   <height>48</height>
   <uuid>{7a266b0a-9e69-4579-b3d5-bf911c9ae383}</uuid>
@@ -1343,11 +1058,7 @@ e
   <latched>false</latched>
   <fontsize>24</fontsize>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>74</r>
-   <g>38</g>
-   <b>0</b>
-  </color>
+  <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
   <borderColor>#564341</borderColor>
   <textColor>#9a9a9a</textColor>
@@ -1358,7 +1069,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>356</x>
-  <y>273</y>
+  <y>240</y>
   <width>16</width>
   <height>80</height>
   <uuid>{122c6052-83a6-4992-86e3-a44e37e9d19d}</uuid>
@@ -1382,23 +1093,15 @@ e
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
-  </color>
+  <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
+  <bgcolor>#272727</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on6</objectName>
   <x>390</x>
-  <y>357</y>
+  <y>324</y>
   <width>48</width>
   <height>48</height>
   <uuid>{e04bef86-57d9-46fc-8e12-508e8b42f03f}</uuid>
@@ -1419,11 +1122,7 @@ e
   <latched>false</latched>
   <fontsize>24</fontsize>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>74</r>
-   <g>38</g>
-   <b>0</b>
-  </color>
+  <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
   <borderColor>#564341</borderColor>
   <textColor>#9a9a9a</textColor>
@@ -1434,7 +1133,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>405</x>
-  <y>273</y>
+  <y>240</y>
   <width>16</width>
   <height>80</height>
   <uuid>{ad1f2483-c122-4501-8e77-b1795091923d}</uuid>
@@ -1458,23 +1157,15 @@ e
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
-  </color>
+  <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
+  <bgcolor>#272727</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on7</objectName>
   <x>440</x>
-  <y>357</y>
+  <y>324</y>
   <width>48</width>
   <height>48</height>
   <uuid>{987ad683-ffda-4c02-ba76-fba80eef6f99}</uuid>
@@ -1495,11 +1186,7 @@ e
   <latched>false</latched>
   <fontsize>24</fontsize>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>74</r>
-   <g>38</g>
-   <b>0</b>
-  </color>
+  <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
   <borderColor>#564341</borderColor>
   <textColor>#9a9a9a</textColor>
@@ -1510,7 +1197,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>455</x>
-  <y>273</y>
+  <y>240</y>
   <width>16</width>
   <height>80</height>
   <uuid>{831662dd-60f9-46a5-a8b2-6335223bf3ab}</uuid>
@@ -1534,23 +1221,15 @@ e
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
-  </color>
+  <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
+  <bgcolor>#272727</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on8</objectName>
   <x>490</x>
-  <y>357</y>
+  <y>324</y>
   <width>48</width>
   <height>48</height>
   <uuid>{eb86882f-def6-42b6-90ae-22f49f88a876}</uuid>
@@ -1571,11 +1250,7 @@ e
   <latched>false</latched>
   <fontsize>24</fontsize>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>74</r>
-   <g>38</g>
-   <b>0</b>
-  </color>
+  <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
   <borderColor>#564341</borderColor>
   <textColor>#9a9a9a</textColor>
@@ -1586,7 +1261,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>505</x>
-  <y>273</y>
+  <y>240</y>
   <width>16</width>
   <height>80</height>
   <uuid>{2816aa9b-fa21-4b9c-a8ae-c29e6509d5b7}</uuid>
@@ -1610,23 +1285,15 @@ e
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>255</r>
-   <g>85</g>
-   <b>0</b>
-  </color>
+  <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
+  <bgcolor>#272727</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
-  <y>317</y>
+  <y>284</y>
   <width>82</width>
   <height>26</height>
   <uuid>{3112a9ff-3ad0-4640-be66-9c8f659b03c2}</uuid>
@@ -1643,21 +1310,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>240</r>
-   <g>240</g>
-   <b>240</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#f0f0f0</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1665,7 +1320,7 @@ e
  <bsbObject type="BSBGraph" version="2">
   <objectName>graph-index</objectName>
   <x>547</x>
-  <y>307</y>
+  <y>274</y>
   <width>142</width>
   <height>98</height>
   <uuid>{c1ed5763-b6f3-49fa-a32b-01e54082a604}</uuid>
@@ -1695,7 +1350,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>17</x>
-  <y>385</y>
+  <y>352</y>
   <width>25</width>
   <height>25</height>
   <uuid>{4226d3d7-ef78-4a0f-8d15-8cd322f71634}</uuid>
@@ -1719,23 +1374,15 @@ e
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>0</r>
-   <g>154</g>
-   <b>231</b>
-  </color>
+  <color>#009ae7</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>25</r>
-   <g>25</g>
-   <b>25</b>
-  </bgcolor>
+  <bgcolor>#191919</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
-  <y>362</y>
+  <y>329</y>
   <width>82</width>
   <height>26</height>
   <uuid>{67bb9df3-11b5-4f60-a18d-7f0dd3cb6dd2}</uuid>
@@ -1752,21 +1399,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>240</r>
-   <g>240</g>
-   <b>240</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#f0f0f0</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1774,7 +1409,7 @@ e
  <bsbObject type="BSBDisplay" version="2">
   <objectName>displaycc</objectName>
   <x>43</x>
-  <y>385</y>
+  <y>352</y>
   <width>140</width>
   <height>25</height>
   <uuid>{37470029-ec0e-4126-921e-eb82afe59857}</uuid>
@@ -1791,21 +1426,9 @@ e
   <fontsize>12</fontsize>
   <precision>3</precision>
   <padding>5</padding>
-  <color>
-   <r>243</r>
-   <g>243</g>
-   <b>243</b>
-  </color>
-  <bgcolor mode="background">
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#f3f3f3</color>
+  <bgcolor mode="background">#272727</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>
@@ -1813,7 +1436,7 @@ e
  <bsbObject type="BSBKnob" version="2">
   <objectName>leveldb</objectName>
   <x>572</x>
-  <y>116</y>
+  <y>83</y>
   <width>100</width>
   <height>100</height>
   <uuid>{f8080f9c-7129-4dca-882f-9a3d2607106b}</uuid>
@@ -1831,11 +1454,7 @@ e
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
+  <color>#f57c00</color>
   <textcolor>#f57c00</textcolor>
   <border>0</border>
   <borderColor>#512900</borderColor>
@@ -1845,7 +1464,7 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>samplerate</objectName>
-  <x>508</x>
+  <x>470</x>
   <y>20</y>
   <width>60</width>
   <height>26</height>
@@ -1861,30 +1480,18 @@ e
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <precision>0</precision>
   <padding>2</padding>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#f57c00</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
-  <objectName>nchnls</objectName>
-  <x>660</x>
+  <objectName>nchnls_i</objectName>
+  <x>622</x>
   <y>20</y>
   <width>30</width>
   <height>26</height>
@@ -1894,36 +1501,24 @@ e
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <description>Set the number of channels in Edit/Configuration/Run</description>
+  <description>Set number of channels in Edit|Configuration|Run</description>
   <label>2</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
+  <precision>0</precision>
   <padding>5</padding>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#f57c00</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>420</x>
+  <x>382</x>
   <y>20</y>
   <width>90</width>
   <height>26</height>
@@ -1941,28 +1536,16 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>205</r>
-   <g>205</g>
-   <b>205</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#cdcdcd</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>580</x>
+  <x>542</x>
   <y>20</y>
   <width>80</width>
   <height>26</height>
@@ -1972,7 +1555,7 @@ e
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <description/>
+  <description>Set number of channels in Edit|Configuration|Run</description>
   <label>Channels</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
@@ -1980,21 +1563,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>205</r>
-   <g>205</g>
-   <b>205</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#cdcdcd</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2002,7 +1573,7 @@ e
  <bsbObject type="BSBGraph" version="2">
   <objectName>spectrum-index</objectName>
   <x>4</x>
-  <y>420</y>
+  <y>387</y>
   <width>698</width>
   <height>200</height>
   <uuid>{a99a03fb-0336-41b5-99f4-bc12ec8036c3}</uuid>
@@ -2012,7 +1583,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>1</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
@@ -2032,7 +1603,7 @@ e
  <bsbObject type="BSBDropdown" version="2">
   <objectName>spmenu</objectName>
   <x>622</x>
-  <y>422</y>
+  <y>389</y>
   <width>80</width>
   <height>28</height>
   <uuid>{a8934883-bf45-4155-be13-834e1b5f9a9b}</uuid>
@@ -2095,7 +1666,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>547</x>
-  <y>256</y>
+  <y>223</y>
   <width>97</width>
   <height>22</height>
   <uuid>{8afe76f5-61f5-4669-b921-f9520406a099}</uuid>
@@ -2112,21 +1683,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>171</r>
-   <g>171</g>
-   <b>171</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#ababab</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2134,7 +1693,7 @@ e
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>signalfreq</objectName>
   <x>657</x>
-  <y>278</y>
+  <y>245</y>
   <width>32</width>
   <height>26</height>
   <uuid>{53268cff-714e-423a-902b-7351141be7ec}</uuid>
@@ -2147,25 +1706,13 @@ e
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
+  <color>#f57c00</color>
+  <bgcolor mode="background">#272727</bgcolor>
   <value>1018.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>50.00000000</minimum>
   <maximum>4000.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -2175,7 +1722,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>658</x>
-  <y>256</y>
+  <y>223</y>
   <width>30</width>
   <height>22</height>
   <uuid>{ae79f074-43a6-4d48-965c-5f07fcc4d3ac}</uuid>
@@ -2192,21 +1739,9 @@ e
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>164</r>
-   <g>164</g>
-   <b>164</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#a4a4a4</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2214,7 +1749,7 @@ e
  <bsbObject type="BSBDropdown" version="2">
   <objectName>fftsize</objectName>
   <x>622</x>
-  <y>450</y>
+  <y>417</y>
   <width>80</width>
   <height>28</height>
   <uuid>{13bbe66e-eb51-4cd5-b44e-59eb1ee3e6dd}</uuid>
@@ -2244,49 +1779,10 @@ e
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
-  <x>5</x>
-  <y>55</y>
-  <width>690</width>
-  <height>32</height>
-  <uuid>{f10e642f-7bf6-4bd6-8c2d-7d8a2fccfd06}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>true</enabled>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>Set "Channels" in Configure/Run to match your hardware settings</label>
-  <alignment>left</alignment>
-  <valignment>center</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
-  <padding>5</padding>
-  <locked>false</locked>
-  <color>
-   <r>205</r>
-   <g>205</g>
-   <b>205</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>0</borderwidth>
- </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>display</objectName>
   <x>44</x>
-  <y>341</y>
+  <y>308</y>
   <width>140</width>
   <height>25</height>
   <uuid>{23d21873-0a2e-49e7-826a-9c6e4613e89a}</uuid>
@@ -2303,21 +1799,9 @@ e
   <fontsize>12</fontsize>
   <precision>3</precision>
   <padding>5</padding>
-  <color>
-   <r>243</r>
-   <g>243</g>
-   <b>243</b>
-  </color>
-  <bgcolor mode="background">
-   <r>39</r>
-   <g>39</g>
-   <b>39</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#f3f3f3</color>
+  <bgcolor mode="background">#272727</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>
@@ -2325,7 +1809,7 @@ e
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>in2</objectName>
   <x>60</x>
-  <y>108</y>
+  <y>75</y>
   <width>32</width>
   <height>155</height>
   <uuid>{dff5c758-6ef9-4c17-9096-68c25c5fafb8}</uuid>
@@ -2343,22 +1827,14 @@ e
   <exponent>0.30000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>179</r>
-   <g>179</g>
-   <b>179</b>
-  </bordercolor>
+  <bordercolor>#b3b3b3</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>in1</objectName>
   <x>22</x>
-  <y>108</y>
+  <y>75</y>
   <width>32</width>
   <height>155</height>
   <uuid>{733f880f-dbe6-43bd-93dc-ec633a0f78c3}</uuid>
@@ -2376,22 +1852,14 @@ e
   <exponent>0.30000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>179</r>
-   <g>179</g>
-   <b>179</b>
-  </bordercolor>
+  <bordercolor>#b3b3b3</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>in3</objectName>
   <x>100</x>
-  <y>115</y>
+  <y>82</y>
   <width>12</width>
   <height>140</height>
   <uuid>{00719c73-78e7-477c-89e0-027caab08d48}</uuid>
@@ -2409,22 +1877,14 @@ e
   <exponent>0.30000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>179</r>
-   <g>179</g>
-   <b>179</b>
-  </bordercolor>
+  <bordercolor>#b3b3b3</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>in4</objectName>
   <x>139</x>
-  <y>115</y>
+  <y>82</y>
   <width>12</width>
   <height>140</height>
   <uuid>{fb742b82-b354-4ab5-8cee-d4579f1a1c98}</uuid>
@@ -2442,22 +1902,14 @@ e
   <exponent>0.30000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>179</r>
-   <g>179</g>
-   <b>179</b>
-  </bordercolor>
+  <bordercolor>#b3b3b3</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>in5</objectName>
   <x>178</x>
-  <y>115</y>
+  <y>82</y>
   <width>12</width>
   <height>140</height>
   <uuid>{6afdf700-3d48-40e3-ab43-ea1f3679820f}</uuid>
@@ -2475,22 +1927,14 @@ e
   <exponent>0.30000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>179</r>
-   <g>179</g>
-   <b>179</b>
-  </bordercolor>
+  <bordercolor>#b3b3b3</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>in6</objectName>
   <x>217</x>
-  <y>115</y>
+  <y>82</y>
   <width>12</width>
   <height>140</height>
   <uuid>{826da4a0-55e9-4d35-99b4-b20e1f1d33c7}</uuid>
@@ -2508,22 +1952,14 @@ e
   <exponent>0.30000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>179</r>
-   <g>179</g>
-   <b>179</b>
-  </bordercolor>
+  <bordercolor>#b3b3b3</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>in7</objectName>
   <x>256</x>
-  <y>115</y>
+  <y>82</y>
   <width>12</width>
   <height>140</height>
   <uuid>{27bf4ddf-2e7c-4b4f-8ca1-9b6ff75d697d}</uuid>
@@ -2541,22 +1977,14 @@ e
   <exponent>0.30000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>179</r>
-   <g>179</g>
-   <b>179</b>
-  </bordercolor>
+  <bordercolor>#b3b3b3</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>in8</objectName>
   <x>295</x>
-  <y>115</y>
+  <y>82</y>
   <width>12</width>
   <height>140</height>
   <uuid>{92b27e66-4065-4726-816f-3752986b8659}</uuid>
@@ -2574,25 +2002,44 @@ e
   <exponent>0.30000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>179</r>
-   <g>179</g>
-   <b>179</b>
-  </bordercolor>
+  <bordercolor>#b3b3b3</bordercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>indb2</objectName>
   <x>51</x>
-  <y>279</y>
+  <y>246</y>
   <width>36</width>
   <height>21</height>
   <uuid>{647cc93d-f278-474f-9efe-397ef1e22adf}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>-26</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <precision>0</precision>
+  <padding>5</padding>
+  <color>#55ff7f</color>
+  <bgcolor mode="background">#31363b</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>indb1</objectName>
+  <x>13</x>
+  <y>246</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{6020d615-b765-4bca-97e3-810a3c0774f5}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
@@ -2606,60 +2053,9 @@ e
   <fontsize>10</fontsize>
   <precision>0</precision>
   <padding>5</padding>
-  <color>
-   <r>85</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBDisplay" version="2">
-  <objectName>indb1</objectName>
-  <x>13</x>
-  <y>279</y>
-  <width>36</width>
-  <height>21</height>
-  <uuid>{6020d615-b765-4bca-97e3-810a3c0774f5}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>true</enabled>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>-22</label>
-  <alignment>center</alignment>
-  <valignment>center</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>0</precision>
-  <padding>5</padding>
-  <color>
-   <r>85</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#55ff7f</color>
+  <bgcolor mode="background">#31363b</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -2667,7 +2063,7 @@ e
  <bsbObject type="BSBDisplay" version="2">
   <objectName>indb3</objectName>
   <x>89</x>
-  <y>279</y>
+  <y>246</y>
   <width>36</width>
   <height>21</height>
   <uuid>{5cf612a7-df07-4cfe-9e01-c0c98c58bbf4}</uuid>
@@ -2684,21 +2080,9 @@ e
   <fontsize>10</fontsize>
   <precision>0</precision>
   <padding>5</padding>
-  <color>
-   <r>85</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#55ff7f</color>
+  <bgcolor mode="background">#31363b</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -2706,7 +2090,7 @@ e
  <bsbObject type="BSBDisplay" version="2">
   <objectName>indb4</objectName>
   <x>128</x>
-  <y>279</y>
+  <y>246</y>
   <width>36</width>
   <height>21</height>
   <uuid>{da01e34b-57da-4892-987b-e7e485337a33}</uuid>
@@ -2723,21 +2107,9 @@ e
   <fontsize>10</fontsize>
   <precision>0</precision>
   <padding>5</padding>
-  <color>
-   <r>85</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#55ff7f</color>
+  <bgcolor mode="background">#31363b</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -2745,7 +2117,7 @@ e
  <bsbObject type="BSBDisplay" version="2">
   <objectName>indb5</objectName>
   <x>167</x>
-  <y>279</y>
+  <y>246</y>
   <width>36</width>
   <height>21</height>
   <uuid>{7f7b5c97-21e7-4d2e-9aae-ae28d9c742bf}</uuid>
@@ -2762,21 +2134,9 @@ e
   <fontsize>10</fontsize>
   <precision>0</precision>
   <padding>5</padding>
-  <color>
-   <r>85</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#55ff7f</color>
+  <bgcolor mode="background">#31363b</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -2784,7 +2144,7 @@ e
  <bsbObject type="BSBDisplay" version="2">
   <objectName>indb6</objectName>
   <x>206</x>
-  <y>279</y>
+  <y>246</y>
   <width>36</width>
   <height>21</height>
   <uuid>{21644b5f-836d-4ce7-9ea3-af25e6fbe72a}</uuid>
@@ -2801,21 +2161,9 @@ e
   <fontsize>10</fontsize>
   <precision>0</precision>
   <padding>5</padding>
-  <color>
-   <r>85</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#55ff7f</color>
+  <bgcolor mode="background">#31363b</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -2823,7 +2171,7 @@ e
  <bsbObject type="BSBDisplay" version="2">
   <objectName>indb7</objectName>
   <x>245</x>
-  <y>279</y>
+  <y>246</y>
   <width>36</width>
   <height>21</height>
   <uuid>{47deccba-ed76-4ecc-8ec3-7dd1025ea175}</uuid>
@@ -2840,21 +2188,9 @@ e
   <fontsize>10</fontsize>
   <precision>0</precision>
   <padding>5</padding>
-  <color>
-   <r>85</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#55ff7f</color>
+  <bgcolor mode="background">#31363b</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -2862,7 +2198,7 @@ e
  <bsbObject type="BSBDisplay" version="2">
   <objectName>indb8</objectName>
   <x>284</x>
-  <y>279</y>
+  <y>246</y>
   <width>36</width>
   <height>21</height>
   <uuid>{880c3f40-c68f-4e45-ad37-c90f82946c9e}</uuid>
@@ -2879,23 +2215,65 @@ e
   <fontsize>10</fontsize>
   <precision>0</precision>
   <padding>5</padding>
-  <color>
-   <r>85</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#55ff7f</color>
+  <bgcolor mode="background">#31363b</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>nchnls</objectName>
+  <x>650</x>
+  <y>20</y>
+  <width>30</width>
+  <height>26</height>
+  <uuid>{86f8803b-048b-41bc-9064-fa11c48d4e79}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description>Set number of channels in Edit|Configuration|Run</description>
+  <label>2</label>
+  <alignment>left</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>18</fontsize>
+  <precision>0</precision>
+  <padding>5</padding>
+  <color>#f57c00</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>636</x>
+  <y>20</y>
+  <width>20</width>
+  <height>26</height>
+  <uuid>{2304a8df-ac5e-4dad-b602-bbae9fc2f372}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>/</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#cdcdcd</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
