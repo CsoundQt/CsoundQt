@@ -23,6 +23,7 @@
 
 #include "dockhelp.h"
 #include "ui_dockhelp.h"
+#include "dockpanelutils.h"
 
 #include <QtWidgets>
 #include <QMainWindow>
@@ -31,6 +32,17 @@
 
 using namespace Qt::StringLiterals;
 
+static QIcon externalBrowserIcon(QWidget *widget)
+{
+    QIcon icon = QIcon::fromTheme(u"internet-web-browser"_s);
+    if (icon.isNull())
+        icon = QIcon::fromTheme(u"web-browser"_s);
+    if (icon.isNull())
+        icon = QIcon::fromTheme(u"applications-internet"_s);
+    if (icon.isNull())
+        icon = widget->style()->standardIcon(QStyle::SP_DialogOpenButton);
+    return icon;
+}
 
 DockHelp::DockHelp(QWidget *parent)
 	: QDockWidget(parent), ui(new Ui::DockHelp)
@@ -39,16 +51,9 @@ DockHelp::DockHelp(QWidget *parent)
     setWindowTitle("Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
 
-	// Hide the dock title bar when docked (it wastes vertical space).
-	// The native title bar is restored when floating, otherwise the
-	// floating window would have no decorations to move/dock with.
-	// Note: setTitleBarWidget(nullptr) removes but does not delete the
-	// custom widget, so m_hiddenTitleBar can be safely reused.
-	m_hiddenTitleBar = new QWidget(this);
-	m_hiddenTitleBar->setFixedHeight(0);
-	connect(this, &QDockWidget::topLevelChanged,
-			this, &DockHelp::updateTitleBar);
-	updateTitleBar(isFloating());
+	// Keep the native title bar when docked alone or floating, but hide it
+	// while this panel is tabified.
+	new DockPanelUtils::TitleBarController(this);
 
 	// LiteHtml viewer replaces the previous QtWebEngine view.
 	m_view = new LiteHtmlView(this);
@@ -56,7 +61,10 @@ DockHelp::DockHelp(QWidget *parent)
 
     ui->backButton->setIcon(QIcon(":/themes/breeze/br_prev.png"));
     ui->forwardButton->setIcon(QIcon(":/themes/breeze/br_next.png"));
+    ui->externalBrowserButton->setIcon(externalBrowserIcon(this));
 
+    connect(ui->externalBrowserButton, &QToolButton::clicked,
+            this, &DockHelp::openCurrentPageExternally);
     connect(ui->toggleFindButton, SIGNAL(toggled(bool)), this, SLOT(toggleFindBarVisible(bool)));
     connect(ui->backButton, SIGNAL(released()), this, SLOT(browseBack()));
 	connect(ui->forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
@@ -80,6 +88,16 @@ DockHelp::DockHelp(QWidget *parent)
 	connect(m_view, &LiteHtmlView::escapePressed, this, [this] { toggleFindBarVisible(false); });
 	connect(m_view, &LiteHtmlView::browseBackRequested, this, &DockHelp::browseBack);
 	connect(m_view, &LiteHtmlView::browseForwardRequested, this, &DockHelp::browseForward);
+
+    auto updateExternalButton = [this]() {
+        const QString path = m_view->currentPath();
+        ui->externalBrowserButton->setEnabled(
+                    !path.isEmpty()
+                    && !path.startsWith(u"csoundqt-inline:"_s));
+    };
+    connect(m_view, &LiteHtmlView::historyChanged,
+            this, updateExternalButton);
+    updateExternalButton();
 }
 
 
@@ -123,7 +141,7 @@ void DockHelp::setIconTheme(QString theme)
     ui->homeToolButton->setIcon(QIcon(QString(":/themes/%1/home.png").arg(theme)));
     ui->toggleFindButton->setIcon(QIcon(QString(":/themes/%1/edit-find.png").arg(theme)));
     ui->searchToolButton->setIcon(QIcon(QString(":/themes/%1/edit-find.png").arg(theme)));
-
+    ui->externalBrowserButton->setIcon(externalBrowserIcon(this));
 }
 
 void DockHelp::changeFontSize(int change)
@@ -186,6 +204,14 @@ void DockHelp::browseForward()
 	m_view->forward();
 }
 
+void DockHelp::openCurrentPageExternally()
+{
+    const QString path = m_view->currentPath();
+    if (path.isEmpty() || path.startsWith(u"csoundqt-inline:"_s))
+        return;
+    emit requestExternalBrowser(QUrl::fromLocalFile(path));
+}
+
 void DockHelp::followLink(QUrl url)
 {
 	m_view->loadFile(url.toLocalFile());
@@ -204,23 +230,8 @@ void DockHelp::resizeEvent(QResizeEvent *e)
 void DockHelp::contextMenuEvent(QContextMenuEvent *event)
 {
 	QMenu menu;
-	QAction *floatAct = menu.addAction(isFloating() ? tr("Dock Panel") : tr("Float Panel"));
-	if (menu.exec(event->globalPos()) == floatAct) {
-		setFloating(!isFloating());
-	}
-}
-
-void DockHelp::updateTitleBar(bool floating)
-{
-	if (floating) {
-		if (titleBarWidget() != nullptr) {
-			setTitleBarWidget(nullptr);
-		}
-	} else {
-		if (titleBarWidget() != m_hiddenTitleBar) {
-			setTitleBarWidget(m_hiddenTitleBar);
-		}
-	}
+	DockPanelUtils::addPanelActions(this, menu);
+	menu.exec(event->globalPos());
 }
 
 

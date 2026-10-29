@@ -96,6 +96,7 @@ public slots:
 
 protected:
 	virtual void closeEvent(QCloseEvent * event);
+	virtual void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
 	Console *text;

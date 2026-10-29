@@ -29,6 +29,7 @@ HEADERS = "src/about.h" \
     "src/csoundoptions.h" \
     "src/curve.h" \
     "src/dockhelp.h" \
+    "src/dockpanelutils.h" \
     "src/litehtmlview.h" \
     "src/litehtmlcontainer.h" \
     "src/searchindex.h" \

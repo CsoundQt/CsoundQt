@@ -22,6 +22,7 @@
 */
 
 #include "console.h"
+#include "dockpanelutils.h"
 
 #include <QDebug>
 #include <QtWidgets>
@@ -211,6 +212,8 @@ void Console::contextMenuEvent(QContextMenuEvent *event)
 {
 	QMenu *menu = createStandardContextMenu();
 	menu->addAction("Clear", this, SLOT(reset()));
+	if (QDockWidget *dock = DockPanelUtils::dockWidgetFor(this))
+		DockPanelUtils::addPanelActions(dock, *menu);
 	menu->exec(event->globalPos());
 	delete menu;
 }
@@ -245,15 +248,8 @@ void Console::keyReleaseEvent(QKeyEvent *event)
 
 DockConsole::DockConsole(QWidget * parent): QDockWidget(parent)
 {
-    setWindowTitle(tr("Output Console"));
-	//  text = new Console(parent);
-	//  text->setReadOnly(true);
-	//  text->setContextMenuPolicy(Qt::NoContextMenu);
-	//  text->document()->setDefaultFont(QFont("Courier", 10));
-	//  setWidget(text);
-	//      QStackedLayout *l = new QStackedLayout(this);
-	//      l->addWidget(text);
-	//      setLayout(l);
+    setWindowTitle(tr("Console"));
+    new DockPanelUtils::TitleBarController(this);
 }
 
 DockConsole::~DockConsole()
@@ -282,6 +278,13 @@ void DockConsole::appendMessage(QString msg)
 	//  static_cast<Console *>(widget())->scrollToEnd();
 }
 
+
+void DockConsole::contextMenuEvent(QContextMenuEvent *event)
+{
+	QMenu menu;
+	DockPanelUtils::addPanelActions(this, menu);
+	menu.exec(event->globalPos());
+}
 
 void DockConsole::closeEvent(QCloseEvent * /*event*/)
 {

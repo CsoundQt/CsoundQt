@@ -35,6 +35,7 @@ set(PROJECT_SOURCES
   "src/csoundoptions.h"
   "src/curve.h"
   "src/dockhelp.h"
+  "src/dockpanelutils.h"
   "src/documentpage.h"
   "src/documentview.h"
   "src/externallauncher.h"

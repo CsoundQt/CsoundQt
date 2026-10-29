@@ -22,6 +22,7 @@
 
 #include "widgetpanel.h"
 #include "widgetlayout.h"
+#include "dockpanelutils.h"
 
 #include "csoundqt.h"
 
@@ -37,16 +38,9 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 	m_stack->show();
 	setWidget(m_stack);
 
-	// Hide the dock title bar when docked (it wastes vertical space).
-	// The native title bar is restored when floating, otherwise the
-	// floating window would have no decorations to move/dock with.
-	// Note: setTitleBarWidget(nullptr) removes but does not delete the
-	// custom widget, so m_hiddenTitleBar can be safely reused.
-	m_hiddenTitleBar = new QWidget(this);
-	m_hiddenTitleBar->setFixedHeight(0);
-	connect(this, &QDockWidget::topLevelChanged,
-			this, &WidgetPanel::updateTitleBar);
-	updateTitleBar(isFloating());
+	// Keep the native title bar when docked alone or floating, but hide it
+	// while this panel is tabified.
+	new DockPanelUtils::TitleBarController(this);
 
 	setMouseTracking(true);
 }
@@ -151,25 +145,10 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 		w->createContextMenu(event);
 		return;
 	}
-	// No layout (e.g. during startup/shutdown): still offer Float/Dock.
+	// No layout (e.g. during startup/shutdown): still offer the panel actions.
 	QMenu menu;
-	QAction *floatAct = menu.addAction(isFloating() ? tr("Dock Panel") : tr("Float Panel"));
-	if (menu.exec(event->globalPos()) == floatAct) {
-		setFloating(!isFloating());
-	}
-}
-
-void WidgetPanel::updateTitleBar(bool floating)
-{
-	if (floating) {
-		if (titleBarWidget() != nullptr) {
-			setTitleBarWidget(nullptr);
-		}
-	} else {
-		if (titleBarWidget() != m_hiddenTitleBar) {
-			setTitleBarWidget(m_hiddenTitleBar);
-		}
-	}
+	DockPanelUtils::addPanelActions(this, menu);
+	menu.exec(event->globalPos());
 }
 
 void WidgetPanel::mousePressEvent(QMouseEvent * event)
