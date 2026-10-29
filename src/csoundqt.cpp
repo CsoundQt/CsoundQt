@@ -4945,6 +4945,10 @@ QPalette CsoundQt::makeAppPalette(bool dark)
         p.setColor(QPalette::LinkVisited,     QColor("#7f8c8d"));
         p.setColor(QPalette::Highlight,       QColor("#3daee9"));
         p.setColor(QPalette::HighlightedText, QColor("#eff0f1"));
+        // Fusion draws the QTabBar base line (and some bevels) with
+        // QPalette::Light. Leaving it at the default white makes a glaring
+        // 1-pixel line under the document tabs in the dark colour scheme.
+        p.setColor(QPalette::Light, p.color(QPalette::Window).lighter(130));
         // Disabled state tweaks
         p.setColor(QPalette::Disabled, QPalette::Text, QColor("#7f8c8d"));
         p.setColor(QPalette::Disabled, QPalette::ButtonText, QColor("#7f8c8d"));
