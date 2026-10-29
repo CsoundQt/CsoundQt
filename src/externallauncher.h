@@ -62,14 +62,26 @@ bool openWithDefaultApplication(const QUrl &url, QString *errorString = nullptr,
 /**
  * Open a directory in the system file manager.
  *
- * On Linux this prefers "gio open", which launches the default handler for
- * inode/directory directly. kde-open (used by xdg-open on KDE) can try to read
- * a directory as a file and fail with "Could not read file", so it is only
- * used as a fallback. On other platforms, and inside AppImage/Flatpak, the
+ * On Linux this asks the running file manager over the session bus
+ * (org.freedesktop.FileManager1.ShowFolders), which avoids kde-open trying to
+ * read a directory as a file. If that is unavailable, or inside Flatpak, the
  * directory URL is handed to QDesktopServices::openUrl().
  */
 bool openFolder(const QString &path, QString *errorString = nullptr,
                 const QString &feature = QStringLiteral("open-folder"));
+
+/**
+ * Open the containing folder in the system file manager and, where the
+ * desktop provides an API for it, select \a path.
+ *
+ * On Linux this uses the freedesktop.org FileManager1 D-Bus interface
+ * (ShowItems), which the common desktop file managers implement. On other
+ * platforms, or when selection is unavailable, the containing folder is opened
+ * with QDesktopServices instead. A file that no longer exists also falls back
+ * to opening its containing folder.
+ */
+bool revealFile(const QString &path, QString *errorString = nullptr,
+                const QString &feature = QStringLiteral("reveal-file"));
 
 /** Return a privacy-conscious target string suitable for diagnostic logs. */
 QString redactUrlForLog(const QUrl &url);

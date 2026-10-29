@@ -1,13 +1,22 @@
+
 #include "externallauncher.h"
 
 #include <QDebug>
 #include <QDesktopServices>
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
 #include <QProcess>
 #include <QElapsedTimer>
 #include <QGuiApplication>
 #include <QSharedPointer>
+
+#if defined(Q_OS_LINUX) && defined(QT_DBUS_LIB)
+#include <QDBusInterface>
+#include <QDBusMessage>
+#include <QDBusUnixFileDescriptor>
+#include <QVariantMap>
+#endif
 
 #if defined(Q_OS_LINUX) && defined(QT_DBUS_LIB)
 #include <QDBusConnection>
@@ -48,11 +57,12 @@ bool relyOnSystemUrlHandler()
 }
 
 #if defined(Q_OS_LINUX) && defined(QT_DBUS_LIB)
-// Ask the running file manager to show the folder. This goes through the
-// session bus, so no child inherits our library paths. It also works from an
-// AppImage, where launching a host binary directly is fragile, and avoids
-// kde-open's attempt to read a directory as a file.
-bool showFolderWithFileManager1(const QString &path, const QString &feature)
+// Ask the running file manager to show folders or select files. This goes
+// through the session bus, so no child inherits our library paths. It also
+// works from an AppImage, where launching a host binary directly is fragile,
+// and avoids kde-open's attempt to read a directory as a file.
+bool callFileManager1(const QString &method, const QStringList &uris,
+                      const QString &feature)
 {
     QDBusInterface manager(u"org.freedesktop.FileManager1"_s,
                            u"/org/freedesktop/FileManager1"_s,
@@ -62,15 +72,67 @@ bool showFolderWithFileManager1(const QString &path, const QString &feature)
         return false;
     manager.setTimeout(5000);
 
-    const QString uri = QUrl::fromLocalFile(QDir(path).absolutePath()).toString();
     qDebug().noquote() << "External open attempt: feature=" << feature
-                       << "mechanism=filemanager1" << "target=" << uri;
-    const QDBusMessage reply = manager.call(u"ShowFolders"_s,
-                                            QStringList{uri}, QString());
+                       << "mechanism=filemanager1" << "method=" << method
+                       << "target=" << uris;
+    const QDBusMessage reply = manager.call(method, uris, QString());
     const bool ok = reply.type() != QDBusMessage::ErrorMessage;
     qDebug().noquote() << "External open result: feature=" << feature
-                       << "mechanism=filemanager1" << "result=" << ok
+                       << "mechanism=filemanager1" << "method=" << method
+                       << "result=" << ok
                        << (ok ? QString() : reply.errorMessage());
+    return ok;
+}
+
+bool showFolderWithFileManager1(const QString &path, const QString &feature)
+{
+    const QString uri = QUrl::fromLocalFile(QDir(path).absolutePath()).toString();
+    return callFileManager1(u"ShowFolders"_s, QStringList{uri}, feature);
+}
+
+bool showFileWithFileManager1(const QString &path, const QString &feature)
+{
+    const QString uri = QUrl::fromLocalFile(QFileInfo(path).absoluteFilePath()).toString();
+    return callFileManager1(u"ShowItems"_s, QStringList{uri}, feature);
+}
+
+// Ask the desktop portal to open a local file. The portal runs outside this
+// process, so it does not inherit CsoundQt's library path, and it is also the
+// sanctioned way to open files from a Flatpak sandbox. The file is passed as
+// a file descriptor, which works for files outside the sandbox as well.
+bool openLocalFileWithPortal(const QString &path, QString *errorString,
+                             const QString &feature)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly)) {
+        if (errorString)
+            *errorString = file.errorString();
+        return false;
+    }
+
+    QDBusInterface portal(u"org.freedesktop.portal.Desktop"_s,
+                          u"/org/freedesktop/portal/desktop"_s,
+                          u"org.freedesktop.portal.OpenURI"_s,
+                          QDBusConnection::sessionBus());
+    if (!portal.isValid()) {
+        if (errorString)
+            *errorString = portal.lastError().message();
+        return false;
+    }
+
+    QVariantMap options;
+    QDBusUnixFileDescriptor fd(file.handle());
+    qDebug().noquote() << "External open attempt: feature=" << feature
+                       << "mechanism=portal-openfile"
+                       << "target=" << QUrl::fromLocalFile(path).toString();
+    const QDBusMessage reply = portal.call(u"OpenFile"_s, QString(),
+                                           QVariant::fromValue(fd), options);
+    const bool ok = reply.type() != QDBusMessage::ErrorMessage;
+    qDebug().noquote() << "External open result: feature=" << feature
+                       << "mechanism=portal-openfile" << "result=" << ok
+                       << (ok ? QString() : reply.errorMessage());
+    if (!ok && errorString)
+        *errorString = reply.errorMessage();
     return ok;
 }
 #endif
@@ -239,11 +301,33 @@ bool openWithDefaultApplication(const QUrl &url, QString *errorString, const QSt
     }
 
     const QString request = feature.isEmpty() ? u"external"_s : feature;
+
+#if defined(Q_OS_LINUX) && defined(QT_DBUS_LIB)
+    // Prefer the desktop portal for local files. It opens the file in the
+    // user's session rather than spawning a handler as a child of CsoundQt,
+    // so it is unaffected by CsoundQt's environment and works inside Flatpak.
+    if (url.isLocalFile()) {
+        const QFileInfo info(url.toLocalFile());
+        if (!info.isDir() && info.exists()) {
+            QString portalError;
+            if (openLocalFileWithPortal(info.absoluteFilePath(), &portalError,
+                                        request))
+                return true;
+            qDebug().noquote() << "External open fallback: feature=" << request
+                               << "mechanism=QDesktopServices::openUrl"
+                               << "reason=portal-openfile-failed"
+                               << "error=" << portalError;
+        }
+    }
+#endif
+
     qDebug().noquote() << "External open attempt: feature=" << request
                        << "mechanism=QDesktopServices::openUrl"
                        << "target=" << redactUrlForLog(url);
     logEnvironmentContext();
+
     const bool opened = QDesktopServices::openUrl(url);
+
     qDebug().noquote() << "External open result: feature=" << request
                        << "mechanism=QDesktopServices::openUrl"
                        << "target=" << redactUrlForLog(url) << "result=" << opened;
@@ -283,6 +367,33 @@ bool openFolder(const QString &path, QString *errorString, const QString &featur
     if (!folder.endsWith(QLatin1Char('/')))
         folder += QLatin1Char('/');
     return openWithDefaultApplication(QUrl::fromLocalFile(folder), errorString, request);
+}
+
+bool revealFile(const QString &path, QString *errorString, const QString &feature)
+{
+    const QFileInfo info(path);
+    const QString request = feature.isEmpty() ? u"reveal-file"_s : feature;
+
+    // A render history entry can outlive the file it points to. Selecting it
+    // is impossible then, but the containing folder is still useful.
+    if (!info.exists())
+        return openFolder(info.absolutePath(), errorString, request);
+
+#if defined(Q_OS_LINUX)
+    // A Flatpak sandbox must use the portal through QDesktopServices; the
+    // FileManager1 interface is not generally available there.
+    if (!isFlatpakSession()) {
+#if defined(QT_DBUS_LIB)
+        if (showFileWithFileManager1(info.absoluteFilePath(), request))
+            return true;
+#endif
+    }
+#endif
+
+    // Fall back to showing the containing folder when the file manager does
+    // not implement selection or the platform has no desktop-service API for
+    // revealing a file.
+    return openFolder(info.absolutePath(), errorString, request);
 }
 
 bool openBrowser(const QString &configuredBrowser, const QUrl &url, QString *errorString,
