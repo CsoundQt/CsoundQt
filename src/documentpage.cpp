@@ -66,6 +66,12 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 	m_view->setIncludeSearchPathsProvider([this]() {
 		return includeSearchPaths();
 	});
+	m_view->setVariableTypeProvider([this](int line, const QString &name) {
+		return variableTypeAt(line, name);
+	});
+	m_view->setCurrentBlockVariablesProvider([this](int line) {
+		return localVariableTypesAt(line);
+	});
 	connect(m_view, &DocumentView::channelHighlightRequested,
 	        this, [this](const QString &channel) {
 		WidgetLayout *layout = getWidgetLayout();
@@ -1217,6 +1223,35 @@ QStringList DocumentPage::getWidgetChannels() {
     return channels;
 }
 
+QString DocumentPage::variableTypeAt(int line, const QString &name) const
+{
+    if (!m_scan || line < 1 || name.isEmpty())
+        return {};
+    const CodeScan::Definition::Variable *variable =
+            m_scan->variableAt(line, name);
+    if (variable == nullptr)
+        return {};
+    QString type = variable->type;
+    if (variable->array)
+        type += u"[]"_s;
+    return type;
+}
+
+QHash<QString, QString> DocumentPage::localVariableTypesAt(int line) const
+{
+    QHash<QString, QString> types;
+    if (!m_scan)
+        return types;
+    const CodeScan::Definition *block = m_scan->blockAt(line);
+    if (block == nullptr)
+        return types;
+    for (auto it = block->localVariables.cbegin();
+         it != block->localVariables.cend(); ++it) {
+        types.insert(it.key(), it.value().type);
+    }
+    return types;
+}
+
 QList<WidgetPropertyInfo> DocumentPage::getWidgetProperties(
         const QString &channelOrName) {
     if (channelOrName.isEmpty())
@@ -1280,6 +1315,7 @@ CodeScan::Mode DocumentPage::scanMode() const
 void DocumentPage::applyScan(const CodeScan::ResultPtr &scan)
 {
     m_scan = scan;
+    bool needRehighlight = false;
 
     // The highlighter colours calls of the opcodes defined in the document.
     // Re-running it is only necessary when that set changed.
@@ -1290,8 +1326,47 @@ void DocumentPage::applyScan(const CodeScan::ResultPtr &scan)
     if (udos != m_parsedUdos) {
         m_parsedUdos = udos;
         m_view->getHighlighter()->setUDOs(QStringList(udos.begin(), udos.end()));
-        m_view->rehighlightSyntax();
+        needRehighlight = true;
     }
+
+    // Local variables are kept per block so the same name can have different
+    // types in different instruments/opcodes. Included-file blocks are skipped:
+    // their line numbers belong to another document.
+    QVector<Highlighter::VariableScope> scopes;
+    QString variableSignature;
+    const auto collectVariables = [&scopes, &variableSignature](
+            const CodeScan::Definition &definition) {
+        if (!definition.file.isEmpty())
+            return;
+        Highlighter::VariableScope scope;
+        scope.startLine = definition.line;
+        scope.endLine = definition.endLine;
+        QStringList names;
+        for (auto it = definition.localVariables.cbegin();
+             it != definition.localVariables.cend(); ++it) {
+            const CodeScan::Definition::Variable &variable = it.value();
+            scope.variables.insert(it.key(), variable.type);
+            names.append(it.key() + QLatin1Char(':') + variable.type
+                         + (variable.array ? u"[]"_s : QString()));
+        }
+        names.sort();
+        variableSignature += QString::number(scope.startLine) + QLatin1Char('-')
+                + QString::number(scope.endLine) + QLatin1Char(':')
+                + names.join(QLatin1Char(',')) + QLatin1Char('\n');
+        scopes.append(scope);
+    };
+    for (const CodeScan::Definition &instrument : scan->instruments)
+        collectVariables(instrument);
+    for (const CodeScan::Definition &udo : scan->udos)
+        collectVariables(udo);
+
+    if (variableSignature != m_localVariableSignature) {
+        m_localVariableSignature = variableSignature;
+        m_view->getHighlighter()->setLocalVariableScopes(scopes);
+        needRehighlight = true;
+    }
+    if (needRehighlight)
+        m_view->rehighlightSyntax();
 
     setGlobalVariables(scan->globalVariables);
     setGlobalStringVariables(scan->globalStringVariables);
@@ -1363,7 +1438,9 @@ void DocumentPage::goToSourceAtCursor()
         openIncludedFile(includePath);
         return;
     }
-    goToSource(m_view->identifierAtCursor(), m_view->isScheduleArgumentAtCursor());
+    goToSource(m_view->identifierAtCursor(),
+               m_view->isScheduleArgumentAtCursor(),
+               m_view->currentLineNumber());
 }
 
 void DocumentPage::openIncludedFile(const QString &includePath)
@@ -1381,7 +1458,8 @@ void DocumentPage::openIncludedFile(const QString &includePath)
         4000);
 }
 
-void DocumentPage::goToSource(const QString &name, bool isScheduleArgument)
+void DocumentPage::goToSource(const QString &name, bool isScheduleArgument,
+                              int line)
 {
     // Only the current page can be edited, so the applied scan may be older
     // than the text: bring it up to date before looking anything up.
@@ -1393,7 +1471,28 @@ void DocumentPage::goToSource(const QString &name, bool isScheduleArgument)
         qDebug() << "Go to source: there is no name at the cursor";
         return;
     }
+    if (line < 0)
+        line = m_view->currentLineNumber();
+
     const CodeScan::Definition *definition = scan->find(name);
+    // A schedule() argument names an instrument even if a local variable with
+    // the same name exists. In every other position a local variable wins over
+    // the document-level definition index.
+    const bool instrumentTarget = isScheduleArgument && definition != nullptr
+            && definition->kind == CodeScan::Kind::Instrument;
+    if (!instrumentTarget) {
+        if (const CodeScan::Definition::Variable *variable =
+                scan->variableAt(line, name)) {
+            if (!variable->file.isEmpty()) {
+                emit goToSourceFileRequested(variable->file, variable->line,
+                                             variable->column);
+            } else {
+                m_view->jumpToDefinition(variable->line, variable->column);
+            }
+            return;
+        }
+    }
+
     if (definition == nullptr) {
         qDebug() << "Go to source:" << name << "is not defined in this document";
         Notification::showTransient(static_cast<QWidget *>(parent()),

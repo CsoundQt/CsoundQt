@@ -87,6 +87,7 @@ struct Definition
     QString name;
     Kind kind = Kind::Udo;
     int line = -1;   // 1-based line of the definition
+    int endLine = -1; // 1-based line of endin/endop, when one was seen
     int column = 0;  // 0-based column of the name within that line
 
     // One local variable of an instrument or user-defined opcode: its inferred
@@ -171,6 +172,11 @@ struct Result
 
     // The definition of name, or nullptr when the name is not defined here.
     const Definition *find(const QString &name) const;
+    // The instrument/UDO block containing a 1-based editor line in the main
+    // document, or nullptr when the line is outside every block.
+    const Definition *blockAt(int line) const;
+    // The local variable `name` in the block containing line, or nullptr.
+    const Definition::Variable *variableAt(int line, const QString &name) const;
 };
 
 // A shared, immutable result: consumers only read it, so passing it around is

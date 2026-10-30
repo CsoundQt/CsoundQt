@@ -27,6 +27,7 @@ via "@set tablenumber" and it can be updated via "@update"
 gi1 = ftgen(0, 0, 1024, 2, 0)
 gi2 = ftgen(0, 0, 512, 2, 0)
 
+
 chn_k "plot1", "w"
 chn_k "plot2", "w"
 
@@ -62,7 +63,27 @@ instr 10
 
 endin
 
+instr 20
+  if eventcycles() == 0 then
+    chnset gi1, "plot3"
+    outvalue "plot3/setmaxrange", 10
+    outvalue "plot3/setminrange", -10
+    outvalue "plot3/samplerate", kr
+    chnset gi2, "plot4"
+    outvalue "plot4/setmaxrange", 2
+    outvalue "plot4/setminrange", -2
+    outvalue "plot4/samplerate", sr  
+  endif
+  
+  if metro(30) == 1 then
+    outvalue "plot3/update", k(1)
+    outvalue "plot4/update", k(1)
+  endif
+  
+endin
+
 schedule 10, 0, 100
+schedule 20, 0, 100
 
 </CsInstruments>
 <CsScore>
@@ -129,24 +150,28 @@ schedule 10, 0, 100
 
 
 
+
+
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>0</x>
  <y>0</y>
  <width>730</width>
- <height>487</height>
+ <height>662</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>240</r>
-  <g>240</g>
-  <b>240</b>
- </bgcolor>
+ <bgcolor mode="background">#f0f0f0</bgcolor>
  <bsbObject type="BSBTableDisplay" version="2">
   <objectName>plot2</objectName>
   <x>370</x>
-  <y>74</y>
+  <y>139</y>
   <width>360</width>
   <height>220</height>
   <uuid>{0c6062cd-26ee-44ec-8b8c-2e57adfd1916}</uuid>
@@ -156,31 +181,10 @@ schedule 10, 0, 100
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <color>
-   <r>255</r>
-   <g>193</g>
-   <b>3</b>
-  </color>
-  <range>0.00</range>
- </bsbObject>
- <bsbObject type="BSBTableDisplay" version="2">
-  <objectName>plot1</objectName>
-  <x>8</x>
-  <y>74</y>
-  <width>360</width>
-  <height>220</height>
-  <uuid>{de99af7a-d3d5-4e8f-a18a-86c66ec2481b}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>true</enabled>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <color>
-   <r>255</r>
-   <g>153</g>
-   <b>0</b>
-  </color>
+  <foreground>#ffc103</foreground>
+  <background>#181818</background>
+  <gridcolor>#48a0a0a0</gridcolor>
+  <samplerate>1</samplerate>
   <range>0.00</range>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -201,34 +205,21 @@ schedule 10, 0, 100
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>36</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>67</r>
-   <g>67</g>
-   <b>67</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#434343</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>10</x>
-  <y>360</y>
-  <width>460</width>
-  <height>127</height>
+  <x>7</x>
+  <y>71</y>
+  <width>488</width>
+  <height>61</height>
   <uuid>{ce9539a1-5f6f-4a93-8e67-2e45899088cb}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -243,66 +234,103 @@ schedule 10, 0, 100
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>68</r>
-   <g>68</g>
-   <b>68</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#343434</color>
+  <bgcolor mode="nobackground">#444444</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
-  <x>11</x>
-  <y>320</y>
-  <width>121</width>
-  <height>38</height>
-  <uuid>{c9cdfd2b-7f5d-48bf-91c5-c6172252fdc4}</uuid>
+ <bsbObject type="BSBTableDisplay" version="2">
+  <objectName>plot3</objectName>
+  <x>10</x>
+  <y>546</y>
+  <width>360</width>
+  <height>220</height>
+  <uuid>{2d733211-e9d5-4e84-9995-0d0cad55b228}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Description</label>
+  <foreground>#ffc103</foreground>
+  <background>#181818</background>
+  <gridcolor>#48a0a0a0</gridcolor>
+  <samplerate>750</samplerate>
+  <range>0.00</range>
+ </bsbObject>
+ <bsbObject type="BSBTableDisplay" version="2">
+  <objectName>plot4</objectName>
+  <x>378</x>
+  <y>545</y>
+  <width>360</width>
+  <height>220</height>
+  <uuid>{64ef48e6-e480-4140-99be-f360365148d6}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <foreground>#00aaff</foreground>
+  <background>#1d002b</background>
+  <gridcolor>#ff464600</gridcolor>
+  <samplerate>48000</samplerate>
+  <range>0.00</range>
+ </bsbObject>
+ <bsbObject type="BSBTableDisplay" version="2">
+  <objectName>plot1</objectName>
+  <x>8</x>
+  <y>139</y>
+  <width>360</width>
+  <height>220</height>
+  <uuid>{de99af7a-d3d5-4e8f-a18a-86c66ec2481b}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <foreground>#ff9900</foreground>
+  <background>#181818</background>
+  <gridcolor>#48a0a0a0</gridcolor>
+  <samplerate>1</samplerate>
+  <range>0.00</range>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>7</x>
+  <y>370</y>
+  <width>492</width>
+  <height>160</height>
+  <uuid>{7373ad53-744a-4f3a-81bc-6cc116e4c11d}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Table plots can be configured in many ways (background, foreground and grid colors, samplerate, range). The samplerate can be set as 0, then, if the table was read from a soundfile (gen1), the sr of the file will be used for the x axes. 
+
+Tableplots also define useful methods:
+
+1. update: outvalue("&lt;channel>/update, k(1)) to update the plot
+2. setmaxrange, setminrange:  outvalue("&lt;channel>/setmaxrange", 2.) to set the upper y range to 2
+3. samplerate: outvalue("&lt;channel>/samplerate, ...) to set the samplerate of the plot. </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
-  <fontsize>20</fontsize>
-  <precision>3</precision>
+  <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>67</r>
-   <g>67</g>
-   <b>67</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#343434</color>
+  <bgcolor mode="nobackground">#444444</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
-  <borderradius>1</borderradius>
+  <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>

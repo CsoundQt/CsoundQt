@@ -1003,6 +1003,7 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
         if (opcodeIndex >= 0) {
             Definition &opcode = result.udos[opcodeIndex];
             if (statement == u"endop"_s) {
+                opcode.endLine = i + 1;
                 opcodeIndex = -1;
                 continue;
             }
@@ -1040,6 +1041,8 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
         // page. Everything else in the body is skipped.
         if (inInstrument) {
             if (statement == u"endin"_s) {
+                if (instrumentIndex >= 0)
+                    result.instruments[instrumentIndex].endLine = i + 1;
                 inInstrument = false;
                 instrumentIndex = -1;
             }
@@ -1260,6 +1263,40 @@ const Definition *Result::find(const QString &name) const
     if (it == definitions.constEnd())
         return nullptr;
     return &it.value();
+}
+
+const Definition *Result::blockAt(int line) const
+{
+    const Definition *best = nullptr;
+    const auto consider = [&](const QVector<Definition> &definitions) {
+        for (const Definition &definition : definitions) {
+            if (!definition.file.isEmpty()) // included-file block
+                continue;
+            if (definition.line < 1 || line < definition.line)
+                continue;
+            if (definition.endLine >= definition.line
+                    && line > definition.endLine) {
+                continue;
+            }
+            if (best == nullptr || definition.line > best->line)
+                best = &definition;
+        }
+    };
+    consider(instruments);
+    consider(udos);
+    return best;
+}
+
+const Definition::Variable *Result::variableAt(int line,
+                                               const QString &name) const
+{
+    if (name.isEmpty())
+        return nullptr;
+    const Definition *block = blockAt(line);
+    if (block == nullptr)
+        return nullptr;
+    const auto it = block->localVariables.constFind(name);
+    return it == block->localVariables.constEnd() ? nullptr : &it.value();
 }
 
 QString docstringAbstract(const QString &docstring)

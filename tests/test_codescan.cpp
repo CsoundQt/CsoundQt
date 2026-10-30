@@ -61,6 +61,7 @@ private slots:
     void testLocalVariableTypes();
     void testLocalVariableIntroductions();
     void testLocalVariablesInUdos();
+    void testVariableLookup();
     void testInclude();
     void testGlobalInStringIsNotGlobal();
     void testIncludedDefinitions();
@@ -939,6 +940,36 @@ void TestCodeScan::testLocalVariablesInUdos()
     QCOMPARE(classic.localVariables.value("kin").type, QString("k"));
     QCOMPARE(classic.localVariables.value("aout").type, QString("a"));
     QCOMPARE(classic.localVariables.value("kin").line, 5);
+}
+
+void TestCodeScan::testVariableLookup()
+{
+    const QString text =
+        "instr 1\n"                 // 1
+        "  foo:k = 1\n"             // 2
+        "endin\n"                   // 3
+        "\n"                        // 4
+        "instr 2\n"                 // 5
+        "  foo:a = 2\n"             // 6
+        "endin\n";                  // 7
+
+    const Result result = scan(text, Mode::Orc);
+    QCOMPARE(result.blockAt(1)->line, 1);
+    QCOMPARE(result.blockAt(2)->line, 1);
+    QCOMPARE(result.blockAt(4), nullptr);
+    QCOMPARE(result.blockAt(6)->line, 5);
+
+    const auto *firstFoo = result.variableAt(2, "foo");
+    QVERIFY(firstFoo != nullptr);
+    QCOMPARE(firstFoo->type, QString("k"));
+    QCOMPARE(firstFoo->line, 2);
+
+    const auto *secondFoo = result.variableAt(6, "foo");
+    QVERIFY(secondFoo != nullptr);
+    QCOMPARE(secondFoo->type, QString("a"));
+    QCOMPARE(secondFoo->line, 6);
+
+    QCOMPARE(result.variableAt(4, "foo"), nullptr);
 }
 
 void TestCodeScan::testInclude()

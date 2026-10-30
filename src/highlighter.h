@@ -27,6 +27,7 @@
 
 #include <QHash>
 #include <QSet>
+#include <QVector>
 #include <QTextCharFormat>
 #include <QStringList>
 #include <QStringView>
@@ -159,6 +160,16 @@ public:
 	{ return m_formats[construct]; }
 
     void setUDOs(const QStringList &udos);
+    // One instrument/opcode block of local variables, as collected by CodeScan.
+    struct VariableScope
+    {
+        int startLine = -1;   // 1-based
+        int endLine = -1;     // 1-based, or -1 when unterminated
+        QHash<QString, QString> variables; // name -> normalized type
+    };
+    // Local variables collected by CodeScan. Looked up per block so the same
+    // name can have different types in different instruments/opcodes.
+    void setLocalVariableScopes(const QVector<VariableScope> &scopes);
 
 protected:
 	enum State {
@@ -186,6 +197,7 @@ private:
     void applyFormats(const QHash<QString, EditorThemes::FormatSpec> &formats);
     void finishTheme();
     QTextCharFormat *formatForName(const QString &name);
+    QString localVariableType(int line, const QString &name) const;
 
 	struct HighlightingRule
 	{
@@ -363,6 +375,8 @@ private:
     QSet<QString> m_SVariables, m_fVariables, m_bVariables, m_complexVariables;
     QSet<QString> m_instrDefVariables, m_opcodeVariables, m_structVariables;
     QSet<QString> m_userTypeNames;
+    // Local variable scopes supplied by CodeScan, kept across theme changes.
+    QVector<VariableScope> m_localVariableScopes;
     // @global:type — separate global sets so they get girateFormat/gkrateFormat/garateFormat etc.
     QSet<QString> m_giVariables, m_gkVariables, m_gaVariables;
     QSet<QString> m_gSVariables, m_gfVariables;

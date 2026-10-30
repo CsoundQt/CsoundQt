@@ -6443,6 +6443,8 @@ void CsoundQt::connectActions()
 
     connect(doc->getView(), SIGNAL(opcodeSyntaxSignal(QString)),
             this, SLOT(statusBarMessage(QString)));
+    connect(doc->getView(), &DocumentView::statusMessageRequested,
+            this, &CsoundQt::statusBarMessage, Qt::UniqueConnection);
     // The inspector marks the instrument/opcode containing the editor cursor.
     // DocumentView debounces the cursor first; the sender check in the slot
     // ignores a late signal from a page the user has already left.

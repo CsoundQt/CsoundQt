@@ -209,6 +209,14 @@ public:
     // the document's --env:INCDIR options).
     void setIncludeSearchPathsProvider(const std::function<QStringList()> &provider);
     QStringList includeSearchPaths() const;
+    // Type of a local variable on a 1-based editor line, from the scanner.
+    void setVariableTypeProvider(
+            const std::function<QString(int, const QString &)> &provider);
+    QString variableTypeAt(int line, const QString &name) const;
+    // Local variable types of the instrument/opcode containing a 1-based line.
+    void setCurrentBlockVariablesProvider(
+            const std::function<QHash<QString, QString>(int)> &provider);
+    QHash<QString, QString> currentBlockVariables(int line) const;
     Highlighter* getHighlighter() { return &m_highlighter; }
     void gotoLineDialog();
     void markCurrentPosition();
@@ -490,6 +498,8 @@ private:
 	std::function<QList<WidgetPropertyInfo>(const QString &)> m_widgetPropertiesProvider;
 	std::function<QString()> m_documentDirectoryProvider;
 	std::function<QStringList()> m_includeSearchPathsProvider;
+	std::function<QString(int, const QString &)> m_variableTypeProvider;
+	std::function<QHash<QString, QString>(int)> m_currentBlockVariablesProvider;
     int m_lastCursorPosition;
 
     QStringList delimiters = {")", ",", "\"", "'", "]", "}"};
@@ -523,12 +533,15 @@ signals:
     void currentScopeLineChanged(int line);
     // Request a jump to the definition of a name. The flag tells whether the
     // name is the first argument of a schedule() or schedulek() call.
-    void goToSourceRequested(const QString &name, bool isScheduleArgument);
+    void goToSourceRequested(const QString &name, bool isScheduleArgument,
+                             int line);
     // The cursor is inside an #include path: resolve the included file.
     void goToSourceIncludeRequested(const QString &path);
     // Ask the page to outline widgets using this channel. Empty clears any
     // existing outline.
     void channelHighlightRequested(const QString &channel);
+    // Ask the application to show an informational message in the status bar.
+    void statusMessageRequested(const QString &message);
     // The user pressed Escape in the editor; pages use this to clear their
     // pinned widget-channel highlight state as well as the extra selections.
     void editorEscapePressed();

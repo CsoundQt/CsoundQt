@@ -97,10 +97,10 @@ static QChar variableTypeFromToken(QString token)
             ? token.at(index) : QChar();
 }
 
-// Output type expected from what is written before the opcode being completed:
+// Output variable written before the opcode being completed:
 // "asig osci" and "asig = osci" (also with several comma-separated outputs).
-// Returns a null QChar when the prefix does not name a typed output variable.
-static QChar expectedOutputTypeFromPrefix(const QString &beforeWord)
+// Returns an empty string when the prefix does not name an output variable.
+static QString outputVariableFromPrefix(const QString &beforeWord)
 {
     QString prefix = beforeWord.trimmed();
     if (!prefix.endsWith(QLatin1Char('='))) {
@@ -114,9 +114,19 @@ static QChar expectedOutputTypeFromPrefix(const QString &beforeWord)
     }
     const QStringList tokens = prefix.split(
                 QRegularExpression(uR"([,\s]+)"_s), Qt::SkipEmptyParts);
-    if (tokens.isEmpty())
-        return {};
-    return variableTypeFromToken(tokens.last());
+    return tokens.isEmpty() ? QString() : tokens.last();
+}
+
+static QString plainVariableName(QString token)
+{
+    token = token.trimmed();
+    const int colon = token.indexOf(QLatin1Char(':'));
+    if (colon >= 0)
+        token.truncate(colon);
+    const int bracket = token.indexOf(QLatin1Char('['));
+    if (bracket >= 0)
+        token.truncate(bracket);
+    return token;
 }
 
 // True when the selection boundaries do not cut through a longer identifier
@@ -1728,138 +1738,25 @@ QString DocumentView::currentScopeText() const
 
 QStringList DocumentView::getCurrentScopeWords() const
 {
-    const QString scopeText = currentScopeText();
-    if (scopeText.isEmpty())
-        return {};
-
-    // Names with an explicit type suffix take precedence over the classic
-    // prefix convention: "gkfoo:a" is a local audio variable, while "gkfoo"
-    // without a suffix is a global control variable.
-    static const QRegularExpression localAnnotationRx(
-                u"(?<!@)\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
-                               u":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
-    static const QRegularExpression globalAnnotationRx(
-                u"\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
-                               u"@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
-    static const QRegularExpression globalSuffixRx(
-                u"@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
-    static const QRegularExpression localSuffixRx(
-                u":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
-    static const QRegularExpression identifierRx(
-                u"\\b([A-Za-z_][A-Za-z0-9_]*)\\b"_s);
-    // Language words which have a variable-like spelling but are not names.
-    static const QSet<QString> keywords = {
-        u"include"_s, u"endinclude"_s,
-        u"opcode"_s, u"instr"_s,
-        u"endin"_s, u"endop"_s
-    };
-
-    QSet<QString> explicitGlobals;
-    for (auto it = globalAnnotationRx.globalMatch(scopeText); it.hasNext(); )
-        explicitGlobals.insert(it.next().captured(1));
-
-    QSet<QString> explicitLocals;
-    for (auto it = localAnnotationRx.globalMatch(scopeText); it.hasNext(); )
-        explicitLocals.insert(it.next().captured(1));
-
-    const auto typeCharacter = [](QChar c) {
-        static const QString types = u"akiSpfxbw"_s;
-        return types.contains(c);
-    };
-
-    // Remove the type annotations before looking for identifiers, so the type
-    // letter itself ("a" in "dry@global:a") is not mistaken for a variable.
-    QString identifiersText = scopeText;
-    identifiersText.remove(globalSuffixRx);
-    identifiersText.remove(localSuffixRx);
-
-    QSet<QString> seen;
-    for (auto it = identifierRx.globalMatch(identifiersText); it.hasNext(); ) {
-        const QString word = it.next().captured(1);
-        if (keywords.contains(word))
-            continue;
-        if (m_opcodeTree && m_opcodeTree->isOpcode(word))
-            continue;
-        if (explicitGlobals.contains(word))
-            continue; // offered from the global list instead
-        if (explicitLocals.contains(word)) {
-            seen.insert(word);
-            continue;
-        }
-        // No explicit suffix: the first character decides the type, with a
-        // leading g making it global.
-        if (word.size() > 1 && word.at(0) == QLatin1Char('g')
-                && typeCharacter(word.at(1)))
-            continue; // classic global
-        if (typeCharacter(word.at(0)))
-            seen.insert(word);
-    }
-
-    QStringList words = seen.values();
+    const int line = m_mainEditor
+            ? m_mainEditor->textCursor().blockNumber() + 1 : -1;
+    QStringList words = currentBlockVariables(line).keys();
     words.sort(Qt::CaseInsensitive);
     return words;
 }
 
 QStringList DocumentView::getCurrentScopeStringVariables() const
 {
-    const QString scopeText = currentScopeText();
-    if (scopeText.isEmpty())
-        return {};
-
-    static const QRegularExpression localAnnotationRx(
-                u"(?<!@)\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
-                               u":\\s*([akiSpfxbw])\\b(?:\\s*\\[\\])?"_s);
-    static const QRegularExpression globalAnnotationRx(
-                u"\\b([A-Za-z_][A-Za-z0-9_]*)\\s*"
-                               u"@global\\s*:\\s*([akiSpfxbw])\\b(?:\\s*\\[\\])?"_s);
-    static const QRegularExpression globalSuffixRx(
-                u"@global\\s*:\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
-    static const QRegularExpression localSuffixRx(
-                u":\\s*[akiSpfxbw]\\b(?:\\s*\\[\\])?"_s);
-    static const QRegularExpression identifierRx(
-                u"\\b([A-Za-z_][A-Za-z0-9_]*)\\b"_s);
-
-    QSet<QString> globalNames;
-    for (auto it = globalAnnotationRx.globalMatch(scopeText); it.hasNext(); )
-        globalNames.insert(it.next().captured(1));
-
-    QSet<QString> localStrings;
-    QSet<QString> localNonStrings;
-    for (auto it = localAnnotationRx.globalMatch(scopeText); it.hasNext(); ) {
-        const auto match = it.next();
-        if (match.captured(2) == "S"_L1)
-            localStrings.insert(match.captured(1));
-        else
-            localNonStrings.insert(match.captured(1));
+    const int line = m_mainEditor
+            ? m_mainEditor->textCursor().blockNumber() + 1 : -1;
+    QStringList strings;
+    const QHash<QString, QString> variables = currentBlockVariables(line);
+    for (auto it = variables.cbegin(); it != variables.cend(); ++it) {
+        if (it.value() == "S"_L1)
+            strings.append(it.key());
     }
-
-    QString identifiersText = scopeText;
-    identifiersText.remove(globalSuffixRx);
-    identifiersText.remove(localSuffixRx);
-
-    QSet<QString> strings;
-    for (auto it = identifierRx.globalMatch(identifiersText); it.hasNext(); ) {
-        const QString word = it.next().captured(1);
-        if (m_opcodeTree && m_opcodeTree->isOpcode(word))
-            continue;
-        if (globalNames.contains(word))
-            continue; // global string variables come from the Inspector
-        if (localStrings.contains(word)) {
-            strings.insert(word);
-            continue;
-        }
-        if (localNonStrings.contains(word))
-            continue;
-        if (word.size() > 1 && word.at(0) == QLatin1Char('g')
-                && word.at(1) == QLatin1Char('S'))
-            continue; // classic global string variable
-        if (word.startsWith(QLatin1Char('S')))
-            strings.insert(word);
-    }
-
-    QStringList result = strings.values();
-    result.sort(Qt::CaseInsensitive);
-    return result;
+    strings.sort(Qt::CaseInsensitive);
+    return strings;
 }
 
 
@@ -1960,12 +1857,23 @@ void DocumentView::autoCompleteAtCursor(bool force) {
     }
 
     // Only the generic completion path suggests opcodes. If the code before the
-    // current word names a typed output variable, prefer opcodes returning that
-    // type ("asig osci" / "asig = osci").
-    const QChar expectedOutputType =
+    // current word names an output variable, prefer opcodes returning that
+    // type ("asig osci" / "asig = osci"). A variable already known to the
+    // scanner uses its recorded type; otherwise fall back to the name prefix.
+    const QString outputVariable =
             (context.kind == CompletionContext::None && wordStartPosInLine >= 0)
-            ? expectedOutputTypeFromPrefix(line.left(wordStartPosInLine))
-            : QChar();
+            ? outputVariableFromPrefix(line.left(wordStartPosInLine))
+            : QString();
+    QChar expectedOutputType;
+    if (!outputVariable.isEmpty()) {
+        const QString scannerType = currentBlockVariables(
+                    cursor.blockNumber() + 1).value(
+                    plainVariableName(outputVariable));
+        if (scannerType.size() == 1 && isCsoundTypeChar(scannerType.at(0)))
+            expectedOutputType = scannerType.at(0);
+        else
+            expectedOutputType = variableTypeFromToken(outputVariable);
+    }
 
     int lineCommentIndex;
 
@@ -3077,8 +2985,24 @@ void DocumentView::createContextMenu(QPoint pos)
 			emit goToSourceIncludeRequested(includePath);
 		else
 			emit goToSourceRequested(SourceCursor::identifierAt(cursor),
-									 SourceCursor::isScheduleArgument(cursor));
+									 SourceCursor::isScheduleArgument(cursor),
+									 cursor.blockNumber() + 1);
 	});
+	{
+		const QTextCursor cursor = cursorAt(pos);
+		QTextCursor wordCursor = cursor;
+		wordCursor.select(QTextCursor::WordUnderCursor);
+		const QString name = wordCursor.selectedText();
+		const QString type = variableTypeAt(cursor.blockNumber() + 1, name);
+		if (!type.isEmpty()) {
+			QAction *showType = menu->addAction(tr("Show Type"));
+			connect(showType, &QAction::triggered, this,
+			        [this, name, type]() {
+				emit statusMessageRequested(
+				            tr("Type of %1: %2").arg(name, type));
+			});
+		}
+	}
 	menu->addAction(tr("Show/hide line numbers"), this, SLOT(toggleLineArea()));
 	menu->addSeparator();
 	QMenu *opcodeMenu = menu->addMenu("Opcodes");
@@ -3890,6 +3814,26 @@ void DocumentView::setIncludeSearchPathsProvider(
 QStringList DocumentView::includeSearchPaths() const {
     return m_includeSearchPathsProvider
             ? m_includeSearchPathsProvider() : QStringList();
+}
+
+void DocumentView::setVariableTypeProvider(
+        const std::function<QString(int, const QString &)> &provider) {
+    m_variableTypeProvider = provider;
+}
+
+QString DocumentView::variableTypeAt(int line, const QString &name) const {
+    return m_variableTypeProvider
+            ? m_variableTypeProvider(line, name) : QString();
+}
+
+void DocumentView::setCurrentBlockVariablesProvider(
+        const std::function<QHash<QString, QString>(int)> &provider) {
+    m_currentBlockVariablesProvider = provider;
+}
+
+QHash<QString, QString> DocumentView::currentBlockVariables(int line) const {
+    return m_currentBlockVariablesProvider
+            ? m_currentBlockVariablesProvider(line) : QHash<QString, QString>();
 }
 
 void DocumentView::setTheme(const QString &theme)

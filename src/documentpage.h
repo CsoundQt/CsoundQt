@@ -118,6 +118,11 @@ public:
     void showQuickHelpAt(const QString &title, const QString &html,
                          const QPoint &globalAnchor, bool passive = false);
     QStringList getWidgetChannels();
+    // Type of a local variable at the given 1-based editor line, from the last
+    // scan. Empty when the name is not a variable in that instrument/opcode.
+    QString variableTypeAt(int line, const QString &name) const;
+    // Local variable types of the instrument/opcode containing line.
+    QHash<QString, QString> localVariableTypesAt(int line) const;
     QList<WidgetPropertyInfo> getWidgetProperties(const QString &channelOrName);
     void updateWidgetChannels();
     void enableScoreSyntaxHighlighting(bool status);
@@ -263,8 +268,9 @@ public slots:
 	virtual int play(CsoundOptions *options);
 	// Jump to the definition of the given name. isScheduleArgument tells
 	// whether the name is the first argument of a schedule() or schedulek()
-	// call, which is how an instrument is reached.
-	void goToSource(const QString &name, bool isScheduleArgument);
+	// call, which is how an instrument is reached. line is the 1-based line of
+	// the reference and selects the instrument/opcode block for local variables.
+	void goToSource(const QString &name, bool isScheduleArgument, int line = -1);
 	void stop();
 	int record(int format);
 	void perfEnded();
@@ -320,6 +326,9 @@ private:
     // Names of the user-defined opcodes in the last scan, so that the
     // highlighter is only re-run when that set actually changed.
     QSet<QString> m_parsedUdos;
+    // Local variable types from the last scan, used to decide whether the
+    // highlighter needs to run again.
+    QString m_localVariableSignature;
     // The last scan of this document, as applied by the ScanService.
     CodeScan::ResultPtr m_scan = CodeScan::empty();
     ScanService *m_scanService = nullptr;

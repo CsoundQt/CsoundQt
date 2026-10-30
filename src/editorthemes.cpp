@@ -1,5 +1,6 @@
 
 
+
 /***************************************************************************
  *   Copyright (C) 2026 by the CsoundQt developers                          *
  *                                                                         *
@@ -152,7 +153,7 @@ Theme makeDarkTheme()
     const QColor keywordColor(u"#FFad66"_s);
     const QColor opcodeColor(u"#4FC3F7"_s);
     const QColor commentColor(u"#a49fb0"_s);
-    const QColor quotationColor(u"#c5b77d"_s);//(QStringLiteral("#91FF55"));
+    const QColor quotationColor(u"#a8df68"_s);//(QStringLiteral("#91FF55"));
     const QColor nameColor(u"#D298FB"_s);
 
     QHash<QString, FormatSpec> &f = theme.formats;
@@ -170,7 +171,7 @@ Theme makeDarkTheme()
     f[u"pfield"_s] = makeSpec({}, {}, QFont::Bold);
     f[u"krate"_s] = makeSpec(QColor(u"#87f0c8"_s));
     f[u"irate"_s] = makeSpec(QColor(u"#d0caf0"_s));
-    f[u"arate"_s] = makeSpec(QColor(u"#ff6b81"_s));
+    f[u"arate"_s] = makeSpec(QColor(u"#ff6b6b"_s));
     f[u"fsig"_s] = makeSpec(QColor(u"#BD2467"_s), {}, QFont::Bold);
     f[u"boolean"_s] = makeSpec(QColor(u"#D4E157"_s));
     f[u"complex"_s] = makeSpec(QColor(u"#26A69A"_s));
@@ -178,7 +179,7 @@ Theme makeDarkTheme()
     f[u"name"_s] = makeSpec(nameColor, {}, QFont::Bold);
     f[u"quotation"_s] = makeSpec(quotationColor);
     f[u"channelname"_s] = makeSpec(QColor(u"#448fff"_s), QColor(u"#1f273a"_s), QFont::Bold); // makeSpec(channelNameColor);  3180ff
-    f[u"stringVar"_s] = makeSpec(QColor(u"#e5aIf82"_s));// f[QStringLiteral("quotation")];
+    f[u"stringVar"_s] = makeSpec(QColor(u"#50d5e8"_s));
     f[u"multiLineComment"_s] = f[u"singleLineComment"_s];
     f[u"io"_s] = makeSpec(QColor(u"#FFD54F"_s), {}, QFont::Bold);
     f[u"udo"_s] = makeSpec(opcodeColor);

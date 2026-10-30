@@ -191,7 +191,7 @@ bool isPreprocessorDirective(QStringView name)
 
 const QSet<QString> builtinTypes = {
     u"i"_s, u"k"_s, u"a"_s, u"S"_s, u"f"_s, u"b"_s, u"B"_s,
-    u"Complex"_s, u"InstrDef"_s, u"Instr"_s, u"Opcode"_s,
+    u"Complex"_s, u"InstrDef"_s, u"Instr"_s, u"OpcodeDef"_s, u"Opcode"_s,
 };
 
 // Argument position of the channel name for the opcodes that address a named
@@ -628,6 +628,28 @@ void Highlighter::clearTypedVars()
     m_namedInstruments.clear();
 }
 
+QString Highlighter::localVariableType(int line, const QString &name) const
+{
+    const VariableScope *best = nullptr;
+    for (const VariableScope &scope : m_localVariableScopes) {
+        if (line < scope.startLine)
+            continue;
+        if (scope.endLine >= scope.startLine && line > scope.endLine)
+            continue;
+        if (best == nullptr || scope.startLine > best->startLine)
+            best = &scope;
+    }
+    if (best == nullptr)
+        return {};
+    const auto it = best->variables.constFind(name);
+    return it == best->variables.constEnd() ? QString() : it.value();
+}
+
+void Highlighter::setLocalVariableScopes(const QVector<VariableScope> &scopes)
+{
+    m_localVariableScopes = scopes;
+}
+
 QTextCharFormat Highlighter::formatForType(QStringView typeStr) const
 {
     if (typeStr.endsWith(QLatin1StringView("[]")))
@@ -1051,6 +1073,7 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
     // that reaches this function is code only. They are painted afterwards,
     // which keeps their contents from being coloured as opcodes or variables.
     int index = 0;
+    const int lineNumber = currentBlock().blockNumber() + 1;
 
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
 
@@ -1164,7 +1187,6 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
                                   static_cast<int>(name.size()), formatForType(type));
                         setFormat(inputStart + static_cast<int>(param.capturedStart(2)),
                                   static_cast<int>(type.size()), keywordFormat);
-                        registerTypedVar(name, type);
                     }
                     if (signature.capturedLength(2) > 0) {
                         // Output types in parentheses: :(a, k)
@@ -1314,7 +1336,6 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
                             typeBase.chop(2);
                         const QString typeKey = typeBase.toString();
                         if(builtinTypes.contains(typeKey) || m_userTypeNames.contains(typeKey)) {
-                            registerTypedVar(varName, typeName);
                             // varname portion — colour by its type
                             setFormat(wordStart, static_cast<int>(varName.size()),
                                       formatForType(typeName));
@@ -1344,8 +1365,14 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
             else if(colorVariables) {
                 QTextCharFormat variableFormat;
                 bool haveVariableFormat = false;
-                // @global:type sets — these take precedence over local typed sets
-                if(m_gaVariables.contains(wordKey)) {
+                const QString localType = localVariableType(lineNumber, wordKey);
+                if (!localType.isEmpty()) {
+                    variableFormat = formatForType(localType);
+                    haveVariableFormat = true;
+                }
+                // @global:type sets — these take precedence over classic
+                // prefix fallback, but an explicitly local variable wins.
+                else if(m_gaVariables.contains(wordKey)) {
                     variableFormat = garateFormat; haveVariableFormat = true;
                 }
                 else if(m_gkVariables.contains(wordKey)) {
