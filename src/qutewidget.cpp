@@ -679,7 +679,11 @@ QList<WidgetPropertyInfo> QuteWidget::getPropertyInfo() const
 {
     QList<WidgetPropertyInfo> info;
     for (const QString &name : getAvailableProperties()) {
-        info.append({name, propertyType(name), propertyDescription(name)});
+        // A transitory property is an action ("method") rather than a value
+        // that can be stored in the widget file.
+        const WidgetPropertyKind kind = isTransitoryProperty(name)
+                ? WidgetPropertyKind::Method : WidgetPropertyKind::Property;
+        info.append({name, propertyType(name), propertyDescription(name), kind});
     }
     return info;
 }
@@ -704,8 +708,8 @@ void QuteWidget::showAvailableProperties()
 	dialogLayout->addWidget(searchLineEdit);
 
 	QTreeWidget *propertiesList = new QTreeWidget(&propertiesDialog);
-	propertiesList->setColumnCount(3);
-	propertiesList->setHeaderLabels({tr("Property"), tr("Type"),
+	propertiesList->setColumnCount(4);
+	propertiesList->setHeaderLabels({tr("Name"), tr("Kind"), tr("Type"),
 	                                 tr("Description")});
 	propertiesList->setRootIsDecorated(false);
 	propertiesList->setAlternatingRowColors(true);
@@ -713,13 +717,16 @@ void QuteWidget::showAvailableProperties()
 	for (const WidgetPropertyInfo &info : getPropertyInfo()) {
 		auto *item = new QTreeWidgetItem(propertiesList);
 		item->setText(0, info.name);
-		item->setText(1, info.type);
-		item->setText(2, info.description);
-		item->setToolTip(2, info.description);
+		item->setText(1, info.kind == WidgetPropertyKind::Method
+		                 ? tr("method") : tr("property"));
+		item->setText(2, info.type);
+		item->setText(3, info.description);
+		item->setToolTip(3, info.description);
 	}
 	propertiesList->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
 	propertiesList->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-	propertiesList->header()->setSectionResizeMode(2, QHeaderView::Stretch);
+	propertiesList->header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+	propertiesList->header()->setSectionResizeMode(3, QHeaderView::Stretch);
 	dialogLayout->addWidget(propertiesList);
 
 	QPushButton *closeButton = new QPushButton(tr("Close"), &propertiesDialog);
@@ -732,14 +739,15 @@ void QuteWidget::showAvailableProperties()
 			QTreeWidgetItem *item = propertiesList->topLevelItem(i);
 			const bool match = item->text(0).contains(filter, Qt::CaseInsensitive)
 					|| item->text(1).contains(filter, Qt::CaseInsensitive)
-					|| item->text(2).contains(filter, Qt::CaseInsensitive);
+					|| item->text(2).contains(filter, Qt::CaseInsensitive)
+					|| item->text(3).contains(filter, Qt::CaseInsensitive);
 			item->setHidden(!match);
 		}
 	};
 	connect(searchLineEdit, &QLineEdit::textChanged, &propertiesDialog, filterList);
 	connect(closeButton, SIGNAL(released()), &propertiesDialog, SLOT(accept()));
 
-	propertiesDialog.resize(560, 420);
+	propertiesDialog.resize(680, 420);
 	propertiesDialog.exec();
 }
 

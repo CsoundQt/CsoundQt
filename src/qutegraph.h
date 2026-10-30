@@ -28,6 +28,9 @@
 #include "selectcolorbutton.h"
 #include "curve.h"         // necessary for CurveType
 
+#include <QPointer>
+#include <atomic>
+
 class Curve;
 
 enum GraphType { GRAPH_FTABLE=1, GRAPH_AUDIOSIGNAL=2, GRAPH_SPECTRUM=3 };
@@ -247,8 +250,8 @@ public:
         , m_miny(-1.0)
         , m_autorange(true)
         , m_showGrid(true)
-        , gridFont(QFont("Sans", 8))
-        , gridFontMetrics(QFont("Sans", 8))
+        , gridFont(QStringLiteral("JetBrains Mono"), 8)
+        , gridFontMetrics(QFont(QStringLiteral("JetBrains Mono"), 8))
     {}
     virtual ~QuteTableWidget() override;
     void setUserData(CsoundUserData *ud) {
@@ -258,7 +261,38 @@ public:
     int currentTableNumber() { return m_tabnum; }
     void updatePath();
     void setColor(QColor color) { m_color = color; }
+    // Colour of the plot background.
+    void setBackgroundColor(const QColor &color) {
+        if (m_background == color) return;
+        m_background = color;
+        update();
+    }
+    // Colour of the grid and of the zero line.
+    void setGridColor(const QColor &color) {
+        if (m_gridColor == color) return;
+        m_gridColor = color;
+        update();
+    }
+    // Sample rate used to convert the table index to time on the x axis.
+    // Zero selects the auto mode: the table's sample rate if it defines one,
+    // otherwise 1. Any positive value is used as the sample rate.
+    void setSampleRate(double sampleRate) {
+        if (sampleRate < 0.0) sampleRate = 0.0;
+        if (m_sampleRate == sampleRate) return;
+        m_sampleRate = sampleRate;
+        if (m_sampleRate == 0.0)
+            startSampleRateQuery();
+        update();
+    }
+    // Seconds per table index, used to lay out the x axis.
+    double xFactor() const {
+        if (m_sampleRate > 0.0) return 1.0 / m_sampleRate;
+        if (m_tableSampleRate > 0.0) return 1.0 / m_tableSampleRate;
+        return 1.0;
+    }
     void setRange(double maxy=1.0);
+    void setMaxRange(double maxy);
+    void setMinRange(double miny);
     void showGrid(bool show) { m_showGrid = show; }
     void reset();
     void paintGrid(QPainter *painter);
@@ -268,15 +302,52 @@ public:
         reset();
         mutex.unlock();
     }
+    // Called by the engine just before the Csound instance is destroyed, while
+    // the table is still valid, to copy it so the plot can persist after the
+    // performance stops.
+    void persistTable(CSOUND *cs);
 
 protected:
     virtual void paintEvent(QPaintEvent *event) override;
+    virtual void resizeEvent(QResizeEvent *event) override;
 
 private:
+    void buildPath(const cs_float *data, int tabsize);
+    // Redraw the persisted table copy (used when Csound is not running).
+    void showSnapshot();
+
+    // Area used for the curve and the grid, inside the tick labels.
+    QRectF plotRect() const;
+    // Map a data value to a vertical pixel position in the plot area.
+    double valueToY(double value, const QRectF &plot) const;
+    // A "nice" tick interval (1, 2 or 5 times a power of ten).
+    static double niceTickStep(double range, int targetTicks);
+    // Format a tick value with a precision that suits the tick interval.
+    QString formatTickValue(double value, double step) const;
+
+    // Ask Csound for the sample rate of the current table. A table can be
+    // loaded asynchronously, so the query waits for Csound to perform and is
+    // retried a few times (see qutewaveform.cpp).
+    void startSampleRateQuery();
+    void querySampleRate();
+    void finishSampleRateQuery();
+    void retrySampleRateQuery();
+    // Runs on the performance thread; only touches atomics.
+    static void sampleRateQueryCallback(cs_float out, void *userdata);
+
     int m_tabnum;
     CsoundUserData *m_ud;
     bool m_running;
-    QColor m_color;
+    QColor m_color = QColor(255, 193, 3);
+    QColor m_background = QColor(24, 24, 24);
+    QColor m_gridColor = QColor(160, 160, 160, 72);
+    double m_sampleRate = 1.0;
+    double m_tableSampleRate = 0.0;
+    int m_sampleRateTable = -1;          // table whose sample rate is known
+    int m_sampleRateQueryAttempt = 0;
+    bool m_sampleRateQueryActive = false;
+    std::atomic<int> m_detectedSampleRate{0};
+    std::atomic<int> m_sampleRateReady{0};
     cs_float *m_data;
     int m_tabsize;
     int m_margin;
@@ -289,6 +360,10 @@ private:
     bool m_showGrid;
     QFont gridFont;
     QFontMetrics gridFontMetrics;
+
+    QVector<cs_float> m_snapshot;          // table copy kept after stop
+    std::atomic<int> m_snapshotTabnum{0};
+    std::atomic<bool> m_hasSnapshot{false};
 
 // public slot:
 
@@ -308,6 +383,8 @@ public:
     virtual bool applyProperty(const QString &name);
     virtual void createPropertiesDialog();
     virtual void refreshWidget();
+    QStringList transitoryProperties() const override;
+    QHash<QString, QString> propertyDescriptions() const override;
 
     virtual void setCsoundUserData(CsoundUserData *ud);
     virtual void setValue(double value);
@@ -329,11 +406,15 @@ protected:
 
     virtual void applyProperties();
     SelectColorButton *colorButton;
+    SelectColorButton *backgroundColorButton;
+    SelectColorButton *gridColorButton;
+    QDoubleSpinBox *sampleRateSpinBox;
     QCheckBox *rangeCheckBox;
     QDoubleSpinBox *rangeSpinBox;
     QCheckBox *gridCheckBox;
     QMutex mutex;
     bool m_csoundRunning;
+    QPointer<CsoundEngine> m_registeredEngine;  // engine the snapshot callback is registered with
 
 };
 

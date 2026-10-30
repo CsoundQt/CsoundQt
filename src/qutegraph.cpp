@@ -24,12 +24,35 @@
 #include "curve.h"
 #include "src/types.h"
 #include <cmath>
+#include <cstring>
 #include <QPalette>
 #include <QGraphicsOpacityEffect>
 
 
 #include <QColorDialog>
+#include <QTimer>
 using namespace Qt::StringLiterals;
+
+namespace {
+
+// Csound may load f-tables asynchronously (e.g. gen 1 reading an audio file),
+// so wait before asking the table for its sample rate. If it is not available
+// yet, retry with a growing, bounded delay (see qutewaveform.cpp).
+const int tableSampleRateSettleMs = 100;
+const int tableSampleRatePollMs = 100;
+const int tableSampleRateMaxAttempts = 4;
+
+// Colour properties are QColor when they come from the file or the dialog, and
+// an "#RRGGBB" string when they are set from Csound with outvalue.
+QColor colorFromProperty(const QVariant &value)
+{
+    QColor color = value.value<QColor>();
+    if (!color.isValid())
+        color = QColor(value.toString());
+    return color;
+}
+
+} // namespace
 
 
 enum CsoundEngineStatus {
@@ -1656,74 +1679,369 @@ void QuteTableWidget::reset() {
     // This needs to be called with the lock
     m_tabnum = 0;
     m_running = false;
-    m_data = nullptr;
-    m_tabsize = 0;
-    if(m_autorange) {
-        m_maxy = 1.0;
-        m_miny = -1.0;
+    // Forget the table number so a later run cannot persist an unrelated table
+    // (possibly from a fresh Csound instance) into the snapshot.
+    m_snapshotTabnum.store(0, std::memory_order_relaxed);
+    // A later run gets a fresh Csound instance, so its tables must be queried
+    // again. Keep m_tableSampleRate so the snapshot keeps its time axis.
+    m_sampleRateTable = -1;
+    m_sampleRateQueryActive = false;
+    m_sampleRateQueryAttempt = 0;
+    // Keep the table copy (if any) so the last plot survives the stop.
+    showSnapshot();
+}
+
+void QuteTableWidget::startSampleRateQuery()
+{
+    // Only the auto mode (sample rate == 0) needs the table's sample rate, and
+    // only while a table is being performed.
+    if (m_sampleRate > 0.0 || m_sampleRateQueryActive)
+        return;
+    if (!m_running || m_tabnum <= 0)
+        return;
+    if (m_sampleRateTable == m_tabnum)
+        return; // already resolved for this table
+    m_sampleRateQueryActive = true;
+    m_sampleRateQueryAttempt = 0;
+    QTimer::singleShot(tableSampleRateSettleMs, this,
+                       &QuteTableWidget::querySampleRate);
+}
+
+void QuteTableWidget::querySampleRate()
+{
+    if (!m_sampleRateQueryActive || m_sampleRate > 0.0
+            || !m_running || m_tabnum <= 0) {
+        m_sampleRateQueryActive = false;
+        return;
     }
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-    m_path.clear();
-#else
-    m_path = QPainterPath(); // not sure if it works
-#endif
+    CsoundUserData *ud = m_ud;
+    bool issued = false;
+    if (ud != nullptr && ud->perfThread != nullptr && ud->playMutex != nullptr
+            && ud->playMutex->tryLock(1)) {
+        // Do not query while Csound is being torn down or is not performing.
+        if (ud->perfThread->GetStatus() == 0) {
+            m_detectedSampleRate.store(0, std::memory_order_relaxed);
+            m_sampleRateReady.store(0, std::memory_order_relaxed);
+            const QByteArray code =
+                    u"return(ftsr(%1))"_s.arg(m_tabnum).toLatin1();
+            ud->perfThread->EvalCode(code.constData(),
+                                     &QuteTableWidget::sampleRateQueryCallback,
+                                     this);
+            issued = true;
+        }
+        ud->playMutex->unlock();
+    }
+    if (issued) {
+        QTimer::singleShot(tableSampleRatePollMs, this,
+                           &QuteTableWidget::finishSampleRateQuery);
+    } else {
+        retrySampleRateQuery();
+    }
+}
+
+void QuteTableWidget::finishSampleRateQuery()
+{
+    if (!m_sampleRateQueryActive)
+        return;
+    if (m_sampleRateReady.load(std::memory_order_acquire) > 0) {
+        const int sampleRate =
+                m_detectedSampleRate.load(std::memory_order_relaxed);
+        m_sampleRateQueryActive = false;
+        m_sampleRateTable = m_tabnum;
+        const double rate = sampleRate > 0 ? double(sampleRate) : 0.0;
+        if (rate != m_tableSampleRate) {
+            m_tableSampleRate = rate;
+            update();
+        }
+        return;
+    }
+    retrySampleRateQuery();
+}
+
+void QuteTableWidget::retrySampleRateQuery()
+{
+    if (!m_sampleRateQueryActive
+            || ++m_sampleRateQueryAttempt >= tableSampleRateMaxAttempts) {
+        // Give up: the table may not define a sample rate, in which case the
+        // auto mode falls back to 1.
+        m_sampleRateQueryActive = false;
+        m_sampleRateTable = m_tabnum;
+        update();
+        return;
+    }
+    QTimer::singleShot(tableSampleRateSettleMs * (1 << m_sampleRateQueryAttempt),
+                       this, &QuteTableWidget::querySampleRate);
+}
+
+void QuteTableWidget::sampleRateQueryCallback(cs_float out, void *userdata)
+{
+    // Runs on the performance thread; only touch atomics here.
+    auto *widget = static_cast<QuteTableWidget *>(userdata);
+    if (widget == nullptr)
+        return;
+    widget->m_detectedSampleRate.store(int(out), std::memory_order_relaxed);
+    widget->m_sampleRateReady.store(1, std::memory_order_release);
+}
+
+void QuteTableWidget::persistTable(CSOUND *cs) {
+    // Called by the engine on the stopping thread, while the Csound instance is
+    // still alive. Copy the table so the display can survive the teardown.
+    const int tabnum = m_snapshotTabnum.load(std::memory_order_relaxed);
+    if (cs == nullptr || tabnum <= 0) {
+        return;
+    }
+    const int len = csoundTableLength(cs, tabnum);
+    cs_float *data = nullptr;
+    if (len > 0) {
+        csoundGetTable(cs, &data, tabnum);
+    }
+    if (len <= 0 || data == nullptr) {
+        return;
+    }
+    m_snapshot.resize(len);
+    memcpy(m_snapshot.data(), data, size_t(len) * sizeof(cs_float));
+    m_hasSnapshot.store(true, std::memory_order_release);
+}
+
+void QuteTableWidget::showSnapshot() {
+    const bool hasSnapshot = !m_snapshot.isEmpty();
+    m_hasSnapshot.store(hasSnapshot, std::memory_order_release);
+    if (!hasSnapshot) {
+        m_data = nullptr;
+        m_tabsize = 0;
+        m_path.clear();
+        update();
+        return;
+    }
+    m_data = m_snapshot.data();
+    buildPath(m_snapshot.constData(), m_snapshot.size());
+    update();
 }
 
 
+QRectF QuteTableWidget::plotRect() const
+{
+    const QRect r = rect();
+    constexpr int tickLength = 6;
+    constexpr int textGap = 3;
+    // Top margin holds the table size, the bottom one the x tick labels.
+    const int topMargin = gridFontMetrics.height() + 3;
+    const int rightMargin = m_margin;
+    const int bottomMargin = gridFontMetrics.height() + tickLength + textGap + 1;
+
+    const int usableHeight = qMax(1, r.height() - topMargin - bottomMargin);
+    const int targetTicks = qBound(2, usableHeight / 34, 10);
+    const double step = niceTickStep(m_maxy - m_miny, targetTicks);
+
+    // The left margin has to fit the widest tick label.
+    const int labelWidth = qMax(
+                gridFontMetrics.horizontalAdvance(formatTickValue(m_maxy, step)),
+                gridFontMetrics.horizontalAdvance(formatTickValue(m_miny, step)));
+    constexpr int labelGap = 5;
+    int leftMargin = labelWidth + tickLength + labelGap;
+    // Never let the labels eat more than a third of the widget.
+    leftMargin = qBound(m_margin, leftMargin, qMax(m_margin, r.width() / 3));
+
+    return QRectF(r.left() + leftMargin,
+                  r.top() + topMargin,
+                  qMax(0, r.width() - leftMargin - rightMargin),
+                  qMax(0, r.height() - topMargin - bottomMargin));
+}
+
+double QuteTableWidget::valueToY(double value, const QRectF &plot) const
+{
+    const double range = m_maxy - m_miny;
+    if (!(range > 0.0))
+        return plot.center().y();
+    return plot.bottom() - (value - m_miny) / range * plot.height();
+}
+
+double QuteTableWidget::niceTickStep(double range, int targetTicks)
+{
+    if (!(range > 0.0) || !std::isfinite(range) || targetTicks <= 0)
+        return 1.0;
+    const double raw = range / targetTicks;
+    if (!(raw > 0.0) || !std::isfinite(raw))
+        return 1.0;
+    const double magnitude = std::pow(10.0, std::floor(std::log10(raw)));
+    const double fraction = raw / magnitude;
+    double nice = 10.0;
+    if (fraction <= 1.0)
+        nice = 1.0;
+    else if (fraction <= 2.0)
+        nice = 2.0;
+    else if (fraction <= 5.0)
+        nice = 5.0;
+    return nice * magnitude;
+}
+
+QString QuteTableWidget::formatTickValue(double value, double step) const
+{
+    // Avoid displaying "-0".
+    if (qFuzzyIsNull(value) || (step > 0.0 && std::abs(value) < step * 1e-6))
+        value = 0.0;
+    if (!(step > 0.0) || !std::isfinite(step))
+        return QString::number(value, 'g', 4);
+    if (step < 1e-6)
+        return QString::number(value, 'g', 4);
+    if (step >= 1.0)
+        return QString::number(qRound64(value));
+    int decimals = int(std::ceil(-std::log10(step)));
+    decimals = qBound(0, decimals, 6);
+    return QString::number(value, 'f', decimals);
+}
+
 void QuteTableWidget::paintGrid(QPainter *painter) {
-    int margin = m_margin;
-    QString maxystr, minystr;
-    auto rect = this->rect();
+    const QRectF plot = plotRect();
+    if (plot.width() < 4.0 || plot.height() < 4.0)
+        return;
 
-    if(m_maxy >= 10)
-        maxystr = QString::number((int)m_maxy);
-    else if(m_maxy >= 1)
-        maxystr = QString::number(m_maxy, 'f', 1);
-    else
-        maxystr = QString::number(m_maxy, 'f', 2);
-    double absminy = abs(m_miny);
-    if(absminy >= 10)
-        minystr = QString::number((int)m_miny);
-    else if(absminy >= 1)
-        minystr = QString::number(m_miny, 'f', 1);
-    else
-        minystr = QString::number(m_miny, 'f', 2);
-
-    const int yoffset = 0;
-    auto x0 = rect.x() + margin;
-    auto x1 = rect.x() + rect.width() - margin + 1;
-    auto y0 = rect.y() + margin + yoffset;
-    auto y1 = rect.y() + rect.height() - margin + yoffset ;
-    auto height = rect.height() - margin*2;
-    double yscale = -height / (m_maxy - m_miny);
-    auto textcolor = QColor(200, 200, 200);
-    auto tabsizestr = QString::number(m_tabsize);
-    const int textMargin = 4;
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->setFont(gridFont);
     painter->setBrush(Qt::NoBrush);
-    painter->setPen(QPen(QColor(96, 96, 96), 0));
 
-    // upper line
-    painter->drawLine(rect.x() + gridFontMetrics.boundingRect(maxystr).width()+textMargin*2, y0, x1, y0);
-    // lower line
-    painter->drawLine(x0, y1, x1 - gridFontMetrics.boundingRect(tabsizestr).width() - 2, y1);
+    constexpr int tickLength = 6;
+    constexpr int minorTickLength = 3;
+    constexpr int textGap = 3;
 
-    // 0 line
-    if (m_maxy > 0 && m_miny < 0) {
-        int yzero = static_cast<int>(-m_miny * yscale + (y0+height));
-        painter->drawLine(x0, yzero, x1, yzero);
-        painter->setPen(textcolor);
-        painter->drawText(rect.x(), yzero, "0");
+    // On a light background the axis and the labels have to turn dark.
+    const bool lightBackground = m_background.lightness() > 128;
+    const QColor axisColor = lightBackground ? QColor(90, 90, 90)
+                                             : QColor(150, 150, 150);
+    const QColor textColor = lightBackground ? QColor(40, 40, 40)
+                                             : QColor(200, 200, 200);
+    const int fontHeight = gridFontMetrics.height();
+
+    // Frame; all four sides stay inside the widget.
+    painter->setPen(QPen(axisColor, 0));
+    painter->drawRect(plot);
+
+    // ------------------------- y axis -------------------------
+    const int targetTicks = qBound(2, int(plot.height() / 34.0), 10);
+    const double step = niceTickStep(m_maxy - m_miny, targetTicks);
+    const bool zeroVisible = m_miny < 0.0 && m_maxy > 0.0;
+    bool zeroIsTick = false;
+
+    if (step > 0.0) {
+        const long long first = (long long)std::ceil((m_miny - step * 1e-9) / step);
+        const long long last = (long long)std::floor((m_maxy + step * 1e-9) / step);
+        if (last >= first && last - first < 1000) {
+            for (long long i = first; i <= last; ++i) {
+                const double value = double(i) * step;
+                const double y = valueToY(value, plot);
+                const bool isZero = zeroVisible && std::abs(value) < step * 1e-6;
+                if (isZero)
+                    zeroIsTick = true;
+                // Major gridline. The zero line uses the same colour.
+                painter->setPen(QPen(m_gridColor, 0));
+                painter->drawLine(QPointF(plot.left(), y),
+                                  QPointF(plot.right(), y));
+                // Major tick mark.
+                painter->setPen(QPen(axisColor, 0));
+                painter->drawLine(QPointF(plot.left() - tickLength, y),
+                                  QPointF(plot.left(), y));
+                // Tick label, right-aligned in the left margin.
+                const QRectF labelRect(0.0, y - fontHeight / 2.0,
+                                       plot.left() - tickLength - textGap,
+                                       fontHeight);
+                painter->setPen(textColor);
+                painter->drawText(labelRect, Qt::AlignRight | Qt::AlignVCenter,
+                                  formatTickValue(value, step));
+            }
+        }
+
+        // Minor ticks: five sub-intervals per major tick, no text.
+        const int minorDivisions = 5;
+        const double minorStep = step / minorDivisions;
+        const long long firstMinor =
+                (long long)std::ceil((m_miny - minorStep * 1e-9) / minorStep);
+        const long long lastMinor =
+                (long long)std::floor((m_maxy + minorStep * 1e-9) / minorStep);
+        if (lastMinor >= firstMinor && lastMinor - firstMinor < 5000) {
+            painter->setPen(QPen(axisColor, 0));
+            for (long long i = firstMinor; i <= lastMinor; ++i) {
+                if (i % minorDivisions == 0)
+                    continue; // already drawn as a major tick
+                const double y = valueToY(double(i) * minorStep, plot);
+                painter->drawLine(QPointF(plot.left() - minorTickLength, y),
+                                  QPointF(plot.left(), y));
+            }
+        }
     }
 
-    painter->setPen(textcolor);
-    painter->setFont(gridFont);
-    painter->drawText(rect.x()+textMargin, y0+textMargin, maxystr);
-    painter->drawText(rect, Qt::AlignLeft|Qt::AlignBottom, minystr);
+    // Always mark zero when it lies inside the range, even if the tick
+    // selection would not put a major tick there. It is drawn in the same
+    // colour as every other gridline.
+    if (zeroVisible && !zeroIsTick) {
+        const double y = valueToY(0.0, plot);
+        painter->setPen(QPen(m_gridColor, 0));
+        painter->drawLine(QPointF(plot.left(), y), QPointF(plot.right(), y));
+        const QRectF labelRect(0.0, y - fontHeight / 2.0,
+                               plot.left() - tickLength - textGap, fontHeight);
+        painter->setPen(textColor);
+        painter->drawText(labelRect, Qt::AlignRight | Qt::AlignVCenter,
+                          QStringLiteral("0"));
+    }
 
-    // right padding
-    rect.setWidth(rect.width() - textMargin);
-    painter->drawText(rect, Qt::AlignRight|Qt::AlignBottom, tabsizestr);
+    // ------------------------- x axis -------------------------
+    const double xMax = double(m_tabsize) * xFactor();
+    if (xMax > 0.0 && std::isfinite(xMax)) {
+        const int xTargetTicks = qBound(2, int(plot.width() / 80.0), 10);
+        const double xStep = niceTickStep(xMax, xTargetTicks);
+        if (xStep > 0.0) {
+            const long long last =
+                    (long long)std::floor((xMax + xStep * 1e-9) / xStep);
+            const int widgetWidth = rect().width();
+            for (long long i = 0; i <= last && i < 1000; ++i) {
+                const double value = double(i) * xStep;
+                const double x = plot.left() + value / xMax * plot.width();
+                // Major gridline.
+                painter->setPen(QPen(m_gridColor, 0));
+                painter->drawLine(QPointF(x, plot.top()),
+                                  QPointF(x, plot.bottom()));
+                // Major tick mark.
+                painter->setPen(QPen(axisColor, 0));
+                painter->drawLine(QPointF(x, plot.bottom()),
+                                  QPointF(x, plot.bottom() + tickLength));
+                // Label, centred under the tick and kept inside the widget.
+                const QString text = formatTickValue(value, xStep);
+                const int textWidth = gridFontMetrics.horizontalAdvance(text);
+                const double labelLeft = qBound(0.0, x - textWidth / 2.0,
+                                                double(widgetWidth - textWidth));
+                const QRectF labelRect(labelLeft, plot.bottom() + tickLength + textGap,
+                                       textWidth, fontHeight);
+                painter->setPen(textColor);
+                painter->drawText(labelRect, Qt::AlignHCenter | Qt::AlignTop,
+                                  text);
+            }
 
+            // Minor ticks on the x axis, no text.
+            const int minorDivisions = 5;
+            const double minorStep = xStep / minorDivisions;
+            const long long lastMinor =
+                    (long long)std::floor((xMax + minorStep * 1e-9) / minorStep);
+            if (lastMinor < 5000) {
+                painter->setPen(QPen(axisColor, 0));
+                for (long long i = 0; i <= lastMinor; ++i) {
+                    if (i % minorDivisions == 0)
+                        continue; // already drawn as a major tick
+                    const double x = plot.left()
+                            + double(i) * minorStep / xMax * plot.width();
+                    painter->drawLine(QPointF(x, plot.bottom()),
+                                      QPointF(x, plot.bottom() + minorTickLength));
+                }
+            }
+        }
+    }
+
+    // Number of table points, in the free space above the plot.
+    painter->setPen(textColor);
+    const QRectF sizeRect(plot.left(), 0.0, plot.width(), plot.top());
+    painter->drawText(sizeRect, Qt::AlignRight | Qt::AlignBottom,
+                      QString::number(m_tabsize));
+
+    painter->restore();
 }
 
 
@@ -1732,7 +2050,8 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::NoPen);
-    if(!m_running) {
+    const bool hasSnapshot = m_hasSnapshot.load(std::memory_order_acquire);
+    if(!m_running && !hasSnapshot) {
         painter.setBrush(QColor(176, 0, 32));
         painter.drawRect(this->rect());
         painter.setPen(Qt::white);
@@ -1741,7 +2060,7 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
             QuteWidget::paintDisabledOverlay(painter, this->rect());
         return;
     }
-    if(m_tabnum <= 0) {
+    if(m_running && m_tabnum <= 0 && !hasSnapshot) {
         // table not set
         painter.setBrush(QColor(0, 176, 32));
         painter.drawRect(this->rect());
@@ -1751,8 +2070,8 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
             QuteWidget::paintDisabledOverlay(painter, this->rect());
         return;
     }
-    // running OK
-    painter.setBrush(QColor(24, 24, 24));
+    // running OK (or showing the persisted table after stop)
+    painter.setBrush(m_background);
     painter.drawRect(this->rect());
     painter.setBrush(Qt::NoBrush);
     // blockSignals(true);
@@ -1760,12 +2079,26 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
     if(m_showGrid) {
         this->paintGrid(&painter);
     }
+    // Keep the curve inside the plotting area so it cannot run over the tick
+    // labels or outside the widget.
+    painter.save();
+    painter.setClipRect(plotRect());
     painter.setPen(QPen(m_color, 0));
     painter.drawPath(m_path);
+    painter.restore();
     mutex.unlock();
     if (!isEnabled())
         QuteWidget::paintDisabledOverlay(painter, this->rect());
     // blockSignals(false);
+}
+
+void QuteTableWidget::resizeEvent(QResizeEvent *event) {
+    QWidget::resizeEvent(event);
+    if (!m_running && m_hasSnapshot.load(std::memory_order_acquire)
+            && !m_snapshot.isEmpty()) {
+        QMutexLocker locker(&mutex);
+        buildPath(m_snapshot.constData(), m_snapshot.size());
+    }
 }
 
 void QuteTableWidget::setRange(double maxy) {
@@ -1776,6 +2109,32 @@ void QuteTableWidget::setRange(double maxy) {
         m_maxy = maxy;
         m_miny = -maxy;
     }
+}
+
+void QuteTableWidget::setMaxRange(double maxy) {
+    // Fixed upper bound; keep the lower bound non-positive so the zero line
+    // remains visible.
+    m_autorange = false;
+    m_maxy = maxy;
+    m_miny = qMin(m_miny, 0.0);
+    if (m_running)
+        updatePath();
+    else
+        showSnapshot();
+    update();
+}
+
+void QuteTableWidget::setMinRange(double miny) {
+    // Fixed lower bound; keep the upper bound at least 1 so the plot cannot
+    // collapse to a negative range.
+    m_autorange = false;
+    m_miny = miny;
+    m_maxy = qMax(m_maxy, 1.0);
+    if (m_running)
+        updatePath();
+    else
+        showSnapshot();
+    update();
 }
 
 void QuteTableWidget::updatePath() {
@@ -1800,20 +2159,18 @@ void QuteTableWidget::updatePath() {
         return;
     }
 
+    m_data = data;
+    buildPath(data, tabsize);
+}
+
+void QuteTableWidget::buildPath(const cs_float *data, int tabsize) {
+    if (data == nullptr || tabsize <= 0) {
+        m_tabsize = 0;
+        m_path.clear();
+        return;
+    }
+
     m_tabsize = tabsize;
-    int margin = m_margin;
-
-    auto rect = this->rect();
-    auto width = rect.width() - margin*2;
-    auto height = rect.height() - margin*2;
-
-    double xscale = width / (double)tabsize;
-    double y0 = rect.y() + margin;
-    double x0 = rect.x() + margin;
-
-    int step = tabsize / width;
-    if(step == 0)
-        step = 1;
 
     double maxy = m_maxy;
     double miny = m_miny;
@@ -1821,7 +2178,12 @@ void QuteTableWidget::updatePath() {
     if(m_autorange) {
         double newmaxy = m_maxy;
         double newminy = m_miny;
-        for(int i=0; i < tabsize; i += step) {
+        // A rough sampling step; the exact one is computed once the plot area
+        // (and therefore the label width) is known.
+        int scanStep = int(tabsize / qMax(1, rect().width()));
+        if (scanStep < 1)
+            scanStep = 1;
+        for(int i=0; i < tabsize; i+=scanStep) {
             double y = data[i];
             if(y > newmaxy)
                 newmaxy = y;
@@ -1832,14 +2194,33 @@ void QuteTableWidget::updatePath() {
         miny = m_miny = floor(newminy);
     }
 
+    if (maxy - miny < 1.0e-12) {
+        maxy += 0.5;
+        miny -= 0.5;
+    }
+
+    // Keep the curve inside the same area used by the grid and labels.
+    const QRectF plot = plotRect();
+    if (plot.width() <= 0.0 || plot.height() <= 0.0) {
+        m_path.clear();
+        return;
+    }
+
+    double xscale = plot.width() / (double)tabsize;
+    double x0 = plot.left();
+
+    int step = int(tabsize / qMax(1.0, plot.width()));
+    if(step == 0)
+        step = 1;
+
     m_path.clear();
     QPolygonF poly;
     size_t numpoints = tabsize / step;
     poly.reserve(numpoints+1);
-    double yscale = -height / (maxy-miny);
+    double yscale = -plot.height() / (maxy-miny);
     double ydata = data[0];
-    poly.append(QPoint(x0, (ydata-miny)*yscale+y0+height));
-    double ytop = y0 + height;
+    poly.append(QPointF(x0, (ydata-miny)*yscale + plot.bottom()));
+    double ytop = plot.bottom();
     for(int i=1; i < tabsize; i+=step) {
         ydata = data[i];
         double x2 = i*xscale + x0;
@@ -1858,20 +2239,36 @@ void QuteTableWidget::updateData(int tabnum) {
     }
     if(tabnum >= 0 && tabnum != m_tabnum) {
         QDEBUG << "Changing/Setting table number to new/first value";
+        // A new table replaces the persisted copy from the previous run.
+        m_snapshot.clear();
+        m_hasSnapshot.store(false, std::memory_order_release);
         if(m_autorange) {
             m_maxy = 1.0;
             m_miny = 0;
         }
         m_tabnum = tabnum;
+        // The new table may define a different sample rate (or none at all).
+        m_sampleRateTable = -1;
+        m_sampleRateQueryActive = false;
+        m_sampleRateQueryAttempt = 0;
+    }
+    if (m_tabnum > 0) {
+        m_snapshotTabnum.store(m_tabnum, std::memory_order_relaxed);
     }
     this->updatePath();
+    if (m_sampleRate == 0.0)
+        this->startSampleRateQuery();
     this->update();
 }
 
 
 // -------------------------
 
-QuteTable::~QuteTable() {}
+QuteTable::~QuteTable() {
+    if (m_registeredEngine) {
+        m_registeredEngine->removeBeforeCleanupCallback(m_widget);
+    }
+}
 
 // void QuteTable::mousePressEvent(QMouseEvent *event) {};
 // void QuteTable::mouseReleaseEvent(QMouseEvent *event) {};
@@ -1885,8 +2282,17 @@ QuteTable::QuteTable(QWidget *parent) : QuteWidget(parent) {
     m_widget->setContextMenuPolicy(Qt::NoContextMenu);
     m_widget->setMouseTracking(true);
     setProperty("CSQT_range", 0.0);
-    setColor(QColor(255, 193, 3));
+    setProperty("CSQT_foreground", QColor(255, 193, 3));
+    setProperty("CSQT_background", QColor(24, 24, 24));
+    setProperty("CSQT_gridcolor", QColor(160, 160, 160, 72));
+    setProperty("CSQT_samplerate", 1.0);
     setProperty("CSQT_showGrid", true);
+    // Transitory ("method-like") table methods (see transitoryProperties()).
+    // They are created here so that they can be addressed as
+    // "<channel>/<method>"; the values are neither saved nor restored.
+    setProperty("CSQT_update", 0);
+    setProperty("CSQT_setmaxrange", 0.0);
+    setProperty("CSQT_setminrange", 0.0);
 }
 
 
@@ -1894,15 +2300,58 @@ QuteWidgetType QuteTable::getWidgetTypeID() { return QuteWidgetType::TABLEDISPLA
 
 
 void QuteTable::setColor(QColor color) {
-    setProperty("CSQT_color", color);
+    setProperty("CSQT_foreground", color);
     static_cast<QuteTableWidget*>(m_widget)->setColor(color);
+}
+
+QStringList QuteTable::transitoryProperties() const
+{
+    // Table "methods": addressed as "<channel>/<method>", applied immediately
+    // and never written to or read from the file.
+    return { "update", "setmaxrange", "setminrange" };
+}
+
+QHash<QString, QString> QuteTable::propertyDescriptions() const
+{
+    return {
+        { u"update"_s,
+          tr("Method: update the current table plot when the value is non-zero") },
+        { u"setmaxrange"_s,
+          tr("Method: disable auto-range and set the maximum amplitude; the "
+             "minimum stays at or below zero") },
+        { u"setminrange"_s,
+          tr("Method: disable auto-range and set the minimum amplitude; the "
+             "maximum stays at or above 1") },
+        { u"range"_s,
+          tr("Zero enables auto-range, otherwise a fixed symmetric +/- range") },
+        { u"foreground"_s, tr("Colour of the plotted curve") },
+        { u"background"_s, tr("Background colour of the plot") },
+        { u"gridcolor"_s, tr("Colour of the grid and of the zero line") },
+        { u"samplerate"_s,
+          tr("Sample rate used for the x axis (index / sample rate gives "
+             "seconds). Zero selects auto mode: the table's sample rate when "
+             "it defines one, otherwise 1") },
+        { u"showGrid"_s, tr("Show the value grid") }
+    };
 }
 
 bool QuteTable::applyProperty(const QString &name)
 {
 	auto w = static_cast<QuteTableWidget*>(m_widget);
-	if (name == "CSQT_color") {
-		w->setColor(property("CSQT_color").value<QColor>());
+	if (name == "CSQT_foreground") {
+		w->setColor(colorFromProperty(property("CSQT_foreground")));
+		return true;
+	}
+	if (name == "CSQT_background") {
+		w->setBackgroundColor(colorFromProperty(property("CSQT_background")));
+		return true;
+	}
+	if (name == "CSQT_gridcolor") {
+		w->setGridColor(colorFromProperty(property("CSQT_gridcolor")));
+		return true;
+	}
+	if (name == "CSQT_samplerate") {
+		w->setSampleRate(property("CSQT_samplerate").toDouble());
 		return true;
 	}
 	if (name == "CSQT_range") {
@@ -1913,14 +2362,31 @@ bool QuteTable::applyProperty(const QString &name)
 		w->showGrid(property("CSQT_showGrid").toBool());
 		return true;
 	}
+	if (name == "CSQT_update") {
+		// A non-zero value requests an update of the current table, exactly like
+		// sending -1 to the widget channel.
+		if (property("CSQT_update").toInt() != 0 && m_tabnum > 0)
+			m_valueChanged = true;
+		return true;
+	}
+	if (name == "CSQT_setmaxrange") {
+		w->setMaxRange(property("CSQT_setmaxrange").toDouble());
+		return true;
+	}
+	if (name == "CSQT_setminrange") {
+		w->setMinRange(property("CSQT_setminrange").toDouble());
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
 void QuteTable::applyInternalProperties() {
     QuteWidget::applyInternalProperties();
     auto w = static_cast<QuteTableWidget*>(m_widget);
-    auto color = property("CSQT_color").value<QColor>();
-    w->setColor(color);
+    w->setColor(colorFromProperty(property("CSQT_foreground")));
+    w->setBackgroundColor(colorFromProperty(property("CSQT_background")));
+    w->setGridColor(colorFromProperty(property("CSQT_gridcolor")));
+    w->setSampleRate(property("CSQT_samplerate").toDouble());
     w->setRange(property("CSQT_range").toDouble());
     w->showGrid(property("CSQT_showGrid").toBool());
 }
@@ -1928,13 +2394,40 @@ void QuteTable::applyInternalProperties() {
 void QuteTable::createPropertiesDialog() {
     QuteWidget::createPropertiesDialog();
     dialog->setWindowTitle("Table Plot");
-    auto label = new QLabel(dialog);
-    label->setText("Color");
+    auto label = new QLabel(tr("Foreground"), dialog);
     layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     colorButton = new SelectColorButton(dialog);
-    colorButton->setColor(property("CSQT_color").value<QColor>());
+    colorButton->setColor(colorFromProperty(property("CSQT_foreground")));
     layout->addWidget(colorButton, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(tr("Background"), dialog);
+    layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    backgroundColorButton = new SelectColorButton(dialog);
+    backgroundColorButton->setColor(colorFromProperty(property("CSQT_background")));
+    layout->addWidget(backgroundColorButton, 5, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(tr("Grid color"), dialog);
+    layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    gridColorButton = new SelectColorButton(dialog);
+    gridColorButton->setColor(colorFromProperty(property("CSQT_gridcolor")));
+    layout->addWidget(gridColorButton, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(tr("Sample rate"), dialog);
+    label->setToolTip(tr("Sample rate used to convert the table index to time on "
+                         "the x axis. Zero selects automatic mode: the table's "
+                         "sample rate when it defines one, otherwise 1."));
+    layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    sampleRateSpinBox = new QDoubleSpinBox(dialog);
+    sampleRateSpinBox->setDecimals(3);
+    sampleRateSpinBox->setRange(0.0, 1000000.0);
+    sampleRateSpinBox->setSingleStep(100.0);
+    sampleRateSpinBox->setToolTip(label->toolTip());
+    sampleRateSpinBox->setValue(property("CSQT_samplerate").toDouble());
+    layout->addWidget(sampleRateSpinBox, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     double range = property("CSQT_range").toDouble();
     rangeCheckBox = new QCheckBox("Fixed Range", dialog);
@@ -1942,7 +2435,7 @@ void QuteTable::createPropertiesDialog() {
                               "If the table has values outside this range these will not be"
                               "displayed");
     rangeCheckBox->setChecked(range > 0.0);
-    layout->addWidget(rangeCheckBox, 5, 1, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(rangeCheckBox, 8, 1, Qt::AlignRight|Qt::AlignVCenter);
 
     rangeSpinBox = new QDoubleSpinBox(dialog);
     rangeSpinBox->setRange(0.1, 999999.0);
@@ -1951,12 +2444,12 @@ void QuteTable::createPropertiesDialog() {
                              "With a fixed range, values outside the range will not be "
                              "visible");
     rangeSpinBox->setValue(range > 0 ? range : 1.0);
-    layout->addWidget(rangeSpinBox, 5, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(rangeSpinBox, 8, 2, Qt::AlignLeft|Qt::AlignVCenter);
     connect(rangeCheckBox, SIGNAL(toggled(bool)), rangeSpinBox, SLOT(setEnabled(bool)));
 
     gridCheckBox = new QCheckBox("Show Grid", dialog);
     gridCheckBox->setChecked(property("CSQT_showGrid").toBool());
-    layout->addWidget(gridCheckBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(gridCheckBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
 }
 
@@ -1964,7 +2457,10 @@ void QuteTable::applyProperties() {
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.lockForWrite();
 #endif
-    setProperty("CSQT_color", colorButton->getColor());
+    setProperty("CSQT_foreground", colorButton->getColor());
+    setProperty("CSQT_background", backgroundColorButton->getColor());
+    setProperty("CSQT_gridcolor", gridColorButton->getColor());
+    setProperty("CSQT_samplerate", sampleRateSpinBox->value());
     bool fixedrange = rangeCheckBox->isChecked();
     double range = rangeSpinBox->value();
     if(fixedrange) {
@@ -2000,9 +2496,19 @@ QString QuteTable::getWidgetXmlText() {
     QXmlStreamWriter s(&xmlText);
     createXmlWriter(s);        // --------- start
 
-    QColor color = property("CSQT_color").value<QColor>();
-    writeColorElement(s, "color", color);
+    // The curve colour used to be stored as <color>; it is now <foreground>
+    // (the old name is still read back by WidgetLayout).
+    writeColorElement(s, "foreground",
+                      colorFromProperty(property("CSQT_foreground")));
+    writeColorElement(s, "background",
+                      colorFromProperty(property("CSQT_background")));
+    // Keep the alpha channel of the default (translucent) grid colour.
+    s.writeTextElement("gridcolor",
+                       colorFromProperty(property("CSQT_gridcolor"))
+                       .name(QColor::HexArgb));
 
+    s.writeTextElement("samplerate",
+                       QString::number(property("CSQT_samplerate").toDouble(), 'g', 12));
     auto range = property("CSQT_range").toDouble();
     s.writeTextElement("range", QString::number(range, 'f', 2));
 
@@ -2035,7 +2541,20 @@ void QuteTable::setCsoundUserData(CsoundUserData *ud) {
         return;
     }
     w->setUserData(ud);
-    connect(ud->csEngine, SIGNAL(stopSignal()), this, SLOT(onStop()));
+    if (ud->csEngine) {
+        connect(ud->csEngine, SIGNAL(stopSignal()), this, SLOT(onStop()), Qt::UniqueConnection);
+        // Copy the table out of Csound just before the instance is destroyed so
+        // the plot survives the stop.
+        if (m_registeredEngine != ud->csEngine) {
+            if (m_registeredEngine) {
+                m_registeredEngine->removeBeforeCleanupCallback(m_widget);
+            }
+            m_registeredEngine = ud->csEngine;
+            ud->csEngine->addBeforeCleanupCallback(m_widget, [w](CSOUND *cs) {
+                w->persistTable(cs);
+            });
+        }
+    }
 }
 
 /*
