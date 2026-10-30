@@ -52,6 +52,217 @@ bool isTypeChar(QChar c)
     }
 }
 
+bool startsWithKeyword(QStringView text, QStringView keyword);
+
+// Types that Csound 7 recognises without a struct declaration. User-defined
+// structs are added by the scanner as it meets them.
+bool isBuiltinVariableType(const QString &type)
+{
+    static const QSet<QString> builtins = {
+        u"i"_s, u"k"_s, u"a"_s, u"S"_s, u"p"_s, u"f"_s,
+        u"b"_s, u"B"_s, u"Complex"_s, u"InstrDef"_s, u"Instr"_s,
+        u"OpcodeDef"_s, u"Opcode"_s
+    };
+    return builtins.contains(type);
+}
+
+bool isKnownVariableType(const QString &type, const QSet<QString> &userTypes)
+{
+    return isBuiltinVariableType(type) || userTypes.contains(type);
+}
+
+// A typed declaration in the body: "var:k", "array:k[]", "myop:OpcodeDef".
+// A label at the beginning of a line ("loop: ...") is not a declaration.
+const QRegularExpression typedVariableRx(
+            uR"((?<![@\w])([A-Za-z_]\w*)\s*:\s*([A-Za-z_]\w*(?:\[\])?))"_s);
+const QRegularExpression assignmentRx(
+            uR"((?<![=!<>+\-*/])=(?!=))"_s);
+
+void addLocalVariable(Definition &definition, const QString &name,
+                      const QString &type, bool array, int line, int column,
+                      const QString &file)
+{
+    if (name.isEmpty() || type.isEmpty()
+            || definition.localVariables.contains(name)) {
+        return; // keep the first introduction
+    }
+    Definition::Variable variable;
+    variable.name = name;
+    variable.type = type;
+    variable.array = array;
+    variable.line = line;
+    variable.column = column;
+    variable.file = file;
+    definition.localVariables.insert(name, variable);
+}
+
+void collectTypedVariables(QStringView statement, int indent,
+                           const CsoundLex::Line &lex, int lineIndex,
+                           const QString &file, Definition &definition,
+                           const QSet<QString> &userTypes)
+{
+    for (auto it = typedVariableRx.globalMatchView(statement); it.hasNext(); ) {
+        const QRegularExpressionMatch match = it.next();
+        const int nameStart = static_cast<int>(match.capturedStart(1));
+        if (!CsoundLex::isCode(lex, indent + nameStart))
+            continue;
+        QString type = match.captured(2);
+        bool array = type.endsWith(u"[]"_s);
+        if (array)
+            type.chop(2);
+        if (!isKnownVariableType(type, userTypes))
+            continue;
+        // "label: statement" is a label, not a typed variable. Typed
+        // declarations are written without a space after the colon.
+        const int colon = static_cast<int>(statement.indexOf(
+                    QLatin1Char(':'), match.capturedEnd(1)));
+        if (nameStart == 0 && colon >= 0 && colon + 1 < statement.size()
+                && statement.at(colon + 1).isSpace()) {
+            continue;
+        }
+        addLocalVariable(definition, match.captured(1), type, array,
+                         lineIndex + 1, indent + nameStart, file);
+    }
+}
+
+// A legacy typed name: the type follows the first character, or the g of a
+// global name. Globals are not tracked per block.
+bool addLegacyVariable(QStringView token, int column, int lineIndex,
+                       const QString &file, Definition &definition)
+{
+    QString name = token.toString().trimmed();
+    if (name.isEmpty() || name.contains(QLatin1Char(':')))
+        return false;
+    bool array = name.endsWith(u"[]"_s);
+    if (array)
+        name.chop(2);
+    if (name.isEmpty() || !isNameStart(name.at(0)))
+        return false;
+    for (const QChar c : name) {
+        if (!isNameChar(c))
+            return false;
+    }
+    int typeIndex = 0;
+    if (name.size() > 1 && name.at(0) == QLatin1Char('g')
+            && isTypeChar(name.at(1))) {
+        typeIndex = 1;
+    }
+    else if (name.size() > 1 && name.at(0) == QLatin1Char('g')) {
+        // An untyped g-prefixed name is not a variable, but might be a UDO.
+        return false;
+    }
+    if (!isTypeChar(name.at(typeIndex)))
+        return false;
+    // A legacy g-prefixed variable is global, even inside a block.
+    if (typeIndex == 1)
+        return false;
+    addLocalVariable(definition, name, QString(name.at(0)), array,
+                     lineIndex + 1, column, file);
+    return true;
+}
+
+void addLegacyTokensSequentially(const QStringList &tokens, QStringView statement,
+                                 int indent, int lineIndex, const QString &file,
+                                 Definition &definition, bool stopAtFirstToken)
+{
+    int searchFrom = 0;
+    const QString text = statement.toString();
+    for (const QString &token : tokens) {
+        const int position = text.indexOf(token, searchFrom);
+        if (position < 0)
+            break;
+        searchFrom = position + token.size();
+        if (!addLegacyVariable(token, indent + position, lineIndex, file,
+                               definition)) {
+            if (stopAtFirstToken)
+                break;
+        }
+    }
+}
+
+void collectClassicOutputs(QStringView statement, int indent, int lineIndex,
+                           const QString &file, Definition &definition)
+{
+    const QString text = statement.toString();
+    int position = 0;
+    while (position < text.size()) {
+        while (position < text.size() && text.at(position).isSpace())
+            ++position;
+        if (position >= text.size())
+            break;
+        const int start = position;
+        while (position < text.size() && !text.at(position).isSpace()
+               && text.at(position) != QLatin1Char(',')) {
+            ++position;
+        }
+        const QString token = text.mid(start, position - start);
+        if (!addLegacyVariable(token, indent + start, lineIndex, file,
+                               definition)) {
+            break;
+        }
+        while (position < text.size() && text.at(position).isSpace())
+            ++position;
+        // Further output variables have to be separated by a comma. Once only
+        // whitespace follows, the next word is the opcode, not another output.
+        if (position < text.size() && text.at(position) == QLatin1Char(','))
+            ++position;
+        else
+            break;
+    }
+}
+
+void collectLegacyVariables(QStringView statement, int indent, int lineIndex,
+                            const QString &file, Definition &definition)
+{
+    const QString code = statement.toString();
+    const QRegularExpressionMatch assignment = assignmentRx.match(code);
+    if (assignment.hasMatch()) {
+        const QString lhs = code.left(assignment.capturedStart());
+        const QStringList targets = lhs.split(QLatin1Char(','));
+        for (QString target : targets) {
+            target = target.trimmed();
+            const QStringList words = target.split(
+                        QRegularExpression(uR"(\s+)"_s), Qt::SkipEmptyParts);
+            if (words.isEmpty())
+                continue;
+            const QString token = words.last();
+            // The column of the target is not at the start of the whole left
+            // side; find its position so the recorded location points at it.
+            const int position = code.lastIndexOf(token, assignment.capturedStart());
+            addLegacyVariable(token, indent + qMax(0, position), lineIndex,
+                              file, definition);
+        }
+        return;
+    }
+
+    if (startsWithKeyword(statement, u"xin"_s)
+            || startsWithKeyword(statement, u"xout"_s)) {
+        const QStringList tokens = code.split(
+                    QRegularExpression(uR"([,\s]+)"_s), Qt::SkipEmptyParts);
+        if (tokens.size() > 1) {
+            // Skip the xin/xout keyword itself.
+            const QString rest = code.mid(code.indexOf(tokens.at(0))
+                                          + tokens.at(0).size());
+            addLegacyTokensSequentially(tokens.mid(1), rest, indent,
+                                        lineIndex, file, definition, false);
+        }
+        return;
+    }
+
+    // Classic opcode syntax: the output names come before the opcode name.
+    collectClassicOutputs(statement, indent, lineIndex, file, definition);
+}
+
+void collectLocalVariables(QStringView statement, int indent,
+                           const CsoundLex::Line &lex, int lineIndex,
+                           const QString &file, Definition &definition,
+                           const QSet<QString> &userTypes)
+{
+    collectTypedVariables(statement, indent, lex, lineIndex, file, definition,
+                          userTypes);
+    collectLegacyVariables(statement, indent, lineIndex, file, definition);
+}
+
 // The line with a trailing comment (";" or "//") removed, trimmed. Used where
 // only the code part of a line matters, for example for the name of an
 // instrument or an opcode declaration.
@@ -525,6 +736,7 @@ struct Accumulator
     QSet<QString> explicitLocals;
     QSet<QString> instrumentNames;
     QSet<QString> udoNames;
+    QSet<QString> userTypeNames;
 };
 
 // The definition that starts this line, if any: the keyword, then a name.
@@ -718,6 +930,8 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
                 uR"RX(^\s*opcode\s+[A-Za-z_]\w*\s*\(([^)]*)\)\s*(?::\s*(?:\(([^)]*)\)|([A-Za-z_]\w*(?:\[\])?)))?)RX"_s);
     static const QRegularExpression instrNameRx(uR"(^([^\s(,;]+))"_s);
     static const QRegularExpression ftableRx(uR"(^\w*\s*ftgen\b)"_s);
+    static const QRegularExpression structDeclRx(
+                uR"(^struct\s+([A-Za-z_]\w*)\b)"_s);
     static const QRegularExpression xinRx(uR"(\bxin\b)"_s);
     static const QRegularExpression xoutRx(uR"(\bxout\s+)"_s);
 
@@ -788,11 +1002,12 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
         // line, and nothing else in the body is of interest.
         if (opcodeIndex >= 0) {
             Definition &opcode = result.udos[opcodeIndex];
-            QRegularExpressionMatch match;
             if (statement == u"endop"_s) {
                 opcodeIndex = -1;
+                continue;
             }
-            else if (!opcode.newStyle) {
+            QRegularExpressionMatch match;
+            if (!opcode.newStyle) {
                 if (opcode.inArgs.isEmpty()
                         && (match = xinRx.matchView(statement)).hasMatch()) {
                     opcode.inArgs = statement.left(match.capturedStart())
@@ -814,6 +1029,9 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
                 opcode.outVars = statement.mid(match.capturedEnd())
                         .toString().simplified();
             }
+            collectLocalVariables(statement, static_cast<int>(firstCode), lex,
+                                  i, definitionFile, opcode,
+                                  accumulator.userTypeNames);
             continue;
         }
 
@@ -838,6 +1056,9 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
                     if (!known)
                         instrument.pFields.append(field);
                 }
+                collectLocalVariables(statement, static_cast<int>(firstCode),
+                                      lex, i, definitionFile, instrument,
+                                      accumulator.userTypeNames);
             }
             continue;
         }
@@ -961,6 +1182,10 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
             }
             definition.docstring = readDocstring(lines, i);
             result.udos.append(definition);
+            // Csound 7 declares its parameters in the signature: a:i, b:k.
+            collectLocalVariables(statement, static_cast<int>(firstCode), lex,
+                                  i, definitionFile, result.udos.last(),
+                                  accumulator.userTypeNames);
             opcodeIndex = result.udos.size() - 1;
             accumulator.udoNames.insert(definition.name);
         }
@@ -987,6 +1212,12 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
             definition.text = statement.toString();
             definition.file = definitionFile;
             result.ftables.append(definition);
+        }
+        else if (startsWithKeyword(statement, u"struct"_s)) {
+            const QRegularExpressionMatch structMatch =
+                    structDeclRx.matchView(statement);
+            if (structMatch.hasMatch())
+                accumulator.userTypeNames.insert(structMatch.captured(1));
         }
 
         // An include pulls the file in at this point, so that "last definition

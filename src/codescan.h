@@ -88,6 +88,21 @@ struct Definition
     Kind kind = Kind::Udo;
     int line = -1;   // 1-based line of the definition
     int column = 0;  // 0-based column of the name within that line
+
+    // One local variable of an instrument or user-defined opcode: its inferred
+    // type and the place it was first introduced in the block.
+    struct Variable
+    {
+        QString name;
+        QString type;      // normalized type, e.g. "k", "a", "OpcodeDef"
+        bool array = false;
+        int line = -1;     // 1-based
+        int column = 0;    // 0-based
+        QString file;      // empty for the scanned document
+    };
+    // Instruments and UDOs only. Insertion keeps the first introduction; later
+    // uses or repeated typed declarations do not replace it.
+    QHash<QString, Variable> localVariables;
     // The line as shown in the inspector tree. Only the entries of the tree
     // lists (udos, instruments, preprocessor, ftables) fill it.
     QString text;

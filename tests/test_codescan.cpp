@@ -58,6 +58,9 @@ private slots:
     void testInstrumentDocstring();
     void testInstrumentSignature();
     void testInstrumentMultiAssignment();
+    void testLocalVariableTypes();
+    void testLocalVariableIntroductions();
+    void testLocalVariablesInUdos();
     void testInclude();
     void testGlobalInStringIsNotGlobal();
     void testIncludedDefinitions();
@@ -806,6 +809,136 @@ void TestCodeScan::testInstrumentMultiAssignment()
                      "inote:i(p9), ivel:i(p10), ipan:i(p11), "
                      "idepth:i(p12), ifoo:i(p13), ifoo2:i(p14), "
                      "ibare:i(p16)"));
+}
+
+void TestCodeScan::testLocalVariableTypes()
+{
+    const QString text =
+        "struct MyStruct value:i\n"          // 1
+        "instr 1\n"                          // 2
+        "  asig oscili 0.5, 440\n"           // 3
+        "  kval = 0.5\n"                     // 4
+        "  iarr[] init 4\n"                  // 5
+        "  newk:k = 1\n"                     // 6
+        "  newa:a[] = newk\n"                // 7
+        "  myop:OpcodeDef = newk\n"          // 8
+        "  gkglobal = 1\n"                   // 9
+        "  thing:MyStruct = 0\n"             // 10
+        "  ; comment:k = 1\n"                // 11
+        "  Sx = \"string:k\"\n"              // 12
+        "  unknown:q = 1\n"                  // 13
+        "endin\n"                            // 14
+        "instr 2\n"                          // 15
+        "  asig = 1\n"                       // 16
+        "endin\n";                           // 17
+
+    const Result result = scan(text, Mode::Orc);
+    QCOMPARE(result.instruments.size(), 2);
+
+    const Definition &first = result.instruments.at(0);
+    QCOMPARE(first.localVariables.size(), 8);
+
+    const auto asig = first.localVariables.value("asig");
+    QCOMPARE(asig.type, QString("a"));
+    QCOMPARE(asig.array, false);
+    QCOMPARE(asig.line, 3);
+    QCOMPARE(asig.column, 2);
+
+    QCOMPARE(first.localVariables.value("kval").type, QString("k"));
+    QCOMPARE(first.localVariables.value("iarr").type, QString("i"));
+    QCOMPARE(first.localVariables.value("iarr").array, true);
+    QCOMPARE(first.localVariables.value("newk").type, QString("k"));
+    QCOMPARE(first.localVariables.value("newk").line, 6);
+    QCOMPARE(first.localVariables.value("newa").type, QString("a"));
+    QCOMPARE(first.localVariables.value("newa").array, true);
+    QCOMPARE(first.localVariables.value("myop").type, QString("OpcodeDef"));
+    QCOMPARE(first.localVariables.value("thing").type, QString("MyStruct"));
+    QCOMPARE(first.localVariables.value("Sx").type, QString("S"));
+    QVERIFY(!first.localVariables.contains("gkglobal"));
+    QVERIFY(!first.localVariables.contains("unknown"));
+
+    const Definition &second = result.instruments.at(1);
+    QCOMPARE(second.localVariables.size(), 1);
+    QCOMPARE(second.localVariables.value("asig").type, QString("a"));
+    QCOMPARE(second.localVariables.value("asig").line, 16);
+}
+
+void TestCodeScan::testLocalVariableIntroductions()
+{
+    const QString text =
+        "instr 1\n"                          // 1
+        "  kvar = 10\n"                      // 2
+        "  other:k = 20\n"                   // 3
+        "  ifoo init 10\n"                   // 4
+        "  kfoo init 10\n"                   // 5
+        "  karr[] init 10\n"                 // 6
+        "  karr = 20\n"                      // 7
+        "  aarr[] = oscili(0.5, 440)\n"      // 8
+        "  ifoo2, ivar = 20, 30\n"           // 9
+        "  kfreq, kamp = oscili(1, 440)\n"   // 10
+        "  foo:k, bar:k = oscili(1, 440)\n"  // 11
+        "endin\n";                           // 12
+
+    const Result result = scan(text, Mode::Orc);
+    const Definition &block = result.instruments.first();
+
+    QCOMPARE(block.localVariables.value("kvar").type, QString("k"));
+    QCOMPARE(block.localVariables.value("kvar").line, 2);
+    QCOMPARE(block.localVariables.value("other").type, QString("k"));
+    QCOMPARE(block.localVariables.value("other").line, 3);
+
+    QCOMPARE(block.localVariables.value("ifoo").type, QString("i"));
+    QCOMPARE(block.localVariables.value("ifoo").line, 4);
+    QCOMPARE(block.localVariables.value("kfoo").type, QString("k"));
+    QCOMPARE(block.localVariables.value("kfoo").line, 5);
+
+    const auto array = block.localVariables.value("karr");
+    QCOMPARE(array.type, QString("k"));
+    QCOMPARE(array.array, true);
+    QCOMPARE(array.line, 6); // the later "karr = 20" must not replace it
+
+    QCOMPARE(block.localVariables.value("aarr").type, QString("a"));
+    QCOMPARE(block.localVariables.value("aarr").array, true);
+    QCOMPARE(block.localVariables.value("aarr").line, 8);
+
+    QCOMPARE(block.localVariables.value("ifoo2").type, QString("i"));
+    QCOMPARE(block.localVariables.value("ivar").type, QString("i"));
+    QCOMPARE(block.localVariables.value("ifoo2").line, 9);
+    QCOMPARE(block.localVariables.value("ivar").line, 9);
+
+    QCOMPARE(block.localVariables.value("kfreq").type, QString("k"));
+    QCOMPARE(block.localVariables.value("kamp").type, QString("k"));
+    QCOMPARE(block.localVariables.value("foo").type, QString("k"));
+    QCOMPARE(block.localVariables.value("bar").type, QString("k"));
+    QCOMPARE(block.localVariables.value("foo").line, 11);
+    QCOMPARE(block.localVariables.value("bar").line, 11);
+}
+
+void TestCodeScan::testLocalVariablesInUdos()
+{
+    const QString text =
+        "opcode MyOp(a:i, b:k):a\n"          // 1
+        "  xout asig\n"                      // 2
+        "endop\n"                            // 3
+        "opcode Old, a, k\n"                 // 4
+        "  kin xin\n"                        // 5
+        "  aout xout\n"                      // 6
+        "endop\n";                           // 7
+
+    const Result result = scan(text, Mode::Orc);
+    QCOMPARE(result.udos.size(), 2);
+
+    const Definition &modern = result.udos.at(0);
+    QCOMPARE(modern.localVariables.value("a").type, QString("i"));
+    QCOMPARE(modern.localVariables.value("b").type, QString("k"));
+    QCOMPARE(modern.localVariables.value("a").line, 1);
+    QCOMPARE(modern.localVariables.value("asig").type, QString("a"));
+    QCOMPARE(modern.localVariables.value("asig").line, 2);
+
+    const Definition &classic = result.udos.at(1);
+    QCOMPARE(classic.localVariables.value("kin").type, QString("k"));
+    QCOMPARE(classic.localVariables.value("aout").type, QString("a"));
+    QCOMPARE(classic.localVariables.value("kin").line, 5);
 }
 
 void TestCodeScan::testInclude()

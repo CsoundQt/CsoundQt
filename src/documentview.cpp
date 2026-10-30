@@ -66,6 +66,59 @@ static bool isIdentifierText(const QString &text)
     return identifierRx.match(text).hasMatch();
 }
 
+static bool isCsoundTypeChar(QChar c)
+{
+    static const QString types = u"akiSpfxbw"_s;
+    return types.contains(c);
+}
+
+// Type of the variable named in an assignment target: explicit "name:type",
+// or the classic prefix (including the g of a global, as in gkfoo).
+static QChar variableTypeFromToken(QString token)
+{
+    token = token.trimmed();
+    const int array = token.indexOf(QLatin1Char('['));
+    if (array >= 0)
+        token.truncate(array);
+    const int colon = token.indexOf(QLatin1Char(':'));
+    if (colon >= 0) {
+        QString type = token.mid(colon + 1).trimmed();
+        if (type.endsWith(u"[]"_s))
+            type.chop(2);
+        return type.size() == 1 && isCsoundTypeChar(type.at(0))
+                ? type.at(0) : QChar();
+    }
+    int index = 0;
+    if (token.size() > 1 && token.at(0) == QLatin1Char('g')
+            && isCsoundTypeChar(token.at(1))) {
+        index = 1;
+    }
+    return token.size() > index && isCsoundTypeChar(token.at(index))
+            ? token.at(index) : QChar();
+}
+
+// Output type expected from what is written before the opcode being completed:
+// "asig osci" and "asig = osci" (also with several comma-separated outputs).
+// Returns a null QChar when the prefix does not name a typed output variable.
+static QChar expectedOutputTypeFromPrefix(const QString &beforeWord)
+{
+    QString prefix = beforeWord.trimmed();
+    if (!prefix.endsWith(QLatin1Char('='))) {
+        // In the classic form the output variable comes immediately before the
+        // opcode. With an incomplete assignment such as "k = 1 + osci" the last
+        // token is an operator/operand, not an output variable.
+        if (prefix.contains(QLatin1Char('=')))
+            return {};
+    } else {
+        prefix.chop(1);
+    }
+    const QStringList tokens = prefix.split(
+                QRegularExpression(uR"([,\s]+)"_s), Qt::SkipEmptyParts);
+    if (tokens.isEmpty())
+        return {};
+    return variableTypeFromToken(tokens.last());
+}
+
 // True when the selection boundaries do not cut through a longer identifier
 // (so a double-clicked word qualifies, a partial drag-selection does not).
 static bool selectionCoversWholeWord(const QTextCursor &cursor)
@@ -1906,6 +1959,14 @@ void DocumentView::autoCompleteAtCursor(bool force) {
         selectionCursor.setPosition(wordEndPosInDoc, QTextCursor::KeepAnchor);
     }
 
+    // Only the generic completion path suggests opcodes. If the code before the
+    // current word names a typed output variable, prefer opcodes returning that
+    // type ("asig osci" / "asig = osci").
+    const QChar expectedOutputType =
+            (context.kind == CompletionContext::None && wordStartPosInLine >= 0)
+            ? expectedOutputTypeFromPrefix(line.left(wordStartPosInLine))
+            : QChar();
+
     int lineCommentIndex;
 
     if((lineCommentIndex = line.indexOf(";")) >= 0) {
@@ -2251,8 +2312,13 @@ void DocumentView::autoCompleteAtCursor(bool force) {
                         }
                     }
                 }
-                syntaxMenu->addCompletion(text, syntaxText, syntaxText, 0, this,
-                                          SLOT(insertAutoCompleteText()));
+                QAction *action = syntaxMenu->addCompletion(
+                            text, syntaxText, syntaxText, 0, this,
+                            SLOT(insertAutoCompleteText()));
+                if (!expectedOutputType.isNull() && !opcodedefs[i].outArgs.isEmpty()
+                        && opcodedefs[i].outArgs.at(0) == expectedOutputType) {
+                    action->setProperty("autocompleteRank", 100);
+                }
                 showSyntaxMenu = true;
                 menuWordsSeen.insert(opcodeName);
             }
@@ -3981,8 +4047,14 @@ void MySyntaxMenu::refreshCompletions(int maxVisibleLines, int widthCharacters)
 
     std::stable_sort(m_completionActions.begin(), m_completionActions.end(),
                      [](const QAction *a, const QAction *b) {
-        return a->property("autocompletePriority").toInt()
-                < b->property("autocompletePriority").toInt();
+        const int priorityA = a->property("autocompletePriority").toInt();
+        const int priorityB = b->property("autocompletePriority").toInt();
+        if (priorityA != priorityB)
+            return priorityA < priorityB;
+        // Higher rank first within a priority group (e.g. opcodes whose output
+        // type matches the typed output variable).
+        return a->property("autocompleteRank").toInt()
+                > b->property("autocompleteRank").toInt();
     });
 
     bool haveOpcode = false;
