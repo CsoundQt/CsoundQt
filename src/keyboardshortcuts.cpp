@@ -22,6 +22,8 @@
 
 #include "keyboardshortcuts.h"
 #include <QAction>
+#include <QCoreApplication>
+using namespace Qt::StringLiterals;
 
 namespace {
 // Qt fires the shorter shortcut immediately when one sequence is a prefix of
@@ -48,6 +50,36 @@ QString shortcutName(QAction *action)
 	const QVariant custom = action->property("shortcutName");
 	return custom.isValid() ? custom.toString() : action->text().remove("&");
 }
+
+// Scope metadata lives in the "shortcutScope" property: actions registered on
+// the editor (see DocumentView::applyEditorActions) are "editor", actions
+// registered on the widget layout are "widgetPanel"; everything else is
+// application-wide ("global").
+QString shortcutScope(QAction *action)
+{
+	const QVariant scope = action != nullptr ? action->property("shortcutScope")
+											 : QVariant();
+	return scope.isValid() ? scope.toString() : QStringLiteral("global");
+}
+
+QString shortcutScopeLabel(const QString &scope)
+{
+	const auto tr = [](const char *text) {
+		return QCoreApplication::translate("KeyboardShortcutsWidget", text);
+	};
+	if (scope == "editor"_L1)
+		return tr("Editor only");
+	if (scope == "widgetPanel"_L1)
+		return tr("Widget panel only");
+	return tr("Global");
+}
+
+bool scopesConflict(const QString &a, const QString &b)
+{
+	// A global shortcut applies everywhere and therefore conflicts with every
+	// scope. Editor-only and widget-panel-only shortcuts can reuse a key.
+	return a == "global"_L1 || b == "global"_L1 || a == b;
+}
 }
 
 KeyboardShortcutsWidget::KeyboardShortcutsWidget(QWidget *parent,
@@ -61,7 +93,7 @@ KeyboardShortcutsWidget::KeyboardShortcutsWidget(QWidget *parent,
 	tableWidget->verticalHeader()->setVisible(false);
 	// The .ui leaves the header texts empty, and Qt then numbers the columns.
 	tableWidget->setHorizontalHeaderLabels(QStringList{
-			tr("Action"), tr("Shortcut")});
+			tr("Action"), tr("Shortcut"), tr("Scope")});
 	connect(restorePushButton, SIGNAL(released()), this, SLOT(restoreDefaults()));
 	connect(tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(assignShortcut(int, int)));
 	// Incremental filter: hide rows that match neither action nor shortcut text,
@@ -72,12 +104,15 @@ KeyboardShortcutsWidget::KeyboardShortcutsWidget(QWidget *parent,
 
 void KeyboardShortcutsWidget::refreshTable()
 {
-	tableWidget->setColumnWidth(0, 320);
-	tableWidget->setColumnWidth(1, 170);
+	tableWidget->setColumnCount(3);
+	tableWidget->setColumnWidth(0, 300);
+	tableWidget->setColumnWidth(1, 150);
+	tableWidget->setColumnWidth(2, 120);
 	tableWidget->setRowCount(m_keyActions.size());
 	for (int i = 0; i < m_keyActions.size(); i++) {
 		QTableWidgetItem *name = tableWidget->item(i, 0);
 		QTableWidgetItem *key = tableWidget->item(i, 1);
+		QTableWidgetItem *scope = tableWidget->item(i, 2);
 		if (name == 0) {
 			name = new QTableWidgetItem();
 			tableWidget->setItem(i,0, name);
@@ -86,8 +121,13 @@ void KeyboardShortcutsWidget::refreshTable()
 			key = new QTableWidgetItem();
 			tableWidget->setItem(i,1, key);
 		}
+		if (scope == 0) {
+			scope = new QTableWidgetItem();
+			tableWidget->setItem(i,2, scope);
+		}
 		name->setText(shortcutName(m_keyActions[i]));
 		key->setText(m_keyActions[i]->shortcut().toString());
+		scope->setText(shortcutScopeLabel(shortcutScope(m_keyActions[i])));
 		formatShortcutItem(i, m_keyActions[i]);
 	}
     tableWidget->sortItems(0);
@@ -99,10 +139,13 @@ void KeyboardShortcutsWidget::filterTable(const QString &filter)
 	for (int row = 0; row < tableWidget->rowCount(); row++) {
 		QTableWidgetItem *name = tableWidget->item(row, 0);
 		QTableWidgetItem *key = tableWidget->item(row, 1);
+		QTableWidgetItem *scope = tableWidget->item(row, 2);
 		const QString nameText = name != nullptr ? name->text() : QString();
 		const QString keyText = key != nullptr ? key->text() : QString();
+		const QString scopeText = scope != nullptr ? scope->text() : QString();
 		const bool match = nameText.contains(filter, Qt::CaseInsensitive)
-			|| keyText.contains(filter, Qt::CaseInsensitive);
+			|| keyText.contains(filter, Qt::CaseInsensitive)
+			|| scopeText.contains(filter, Qt::CaseInsensitive);
 		tableWidget->setRowHidden(row, !match);
 	}
 }
@@ -110,20 +153,26 @@ void KeyboardShortcutsWidget::filterTable(const QString &filter)
 // The rows whose shortcut cannot coexist with this one: the same sequence, or
 // one that is a prefix of the other (Qt would fire the shorter one at once).
 QList<int> KeyboardShortcutsWidget::conflictingRows(const QString &shortcut,
+											  QAction *candidate,
 											  int excludeRow) const
 {
 	QList<int> rows;
-	const QKeySequence candidate(shortcut);
-	if (candidate.isEmpty()) {
+	const QKeySequence candidateSequence(shortcut);
+	if (candidateSequence.isEmpty()) {
 		return rows; // An empty shortcut clears the assignment
 	}
+	const QString candidateScope = shortcutScope(candidate);
 	for (int i = 0; i < tableWidget->rowCount(); i++) {
 		if (i == excludeRow) {
 			continue;
 		}
+		QAction *other = actionForRow(i);
+		if (!scopesConflict(candidateScope, shortcutScope(other))) {
+			continue; // Editor-only and widget-panel-only keys may be reused
+		}
 		QTableWidgetItem *key = tableWidget->item(i, 1);
 		if (key != 0 && !key->text().isEmpty()
-				&& sequencesConflict(candidate, QKeySequence(key->text()))) {
+				&& sequencesConflict(candidateSequence, QKeySequence(key->text()))) {
 			rows.append(i);
 		}
 	}
@@ -211,16 +260,25 @@ void KeyboardShortcutsWidget::assignShortcut(int row, int /*column*/)
 			? m_defaultShortcuts.value(action) : QKeySequence();
 	KeySelector dialog(this, name, key, defaultShortcut, hasDefault);
 	if (dialog.exec() == QDialog::Accepted) {
-		// A shortcut belongs to one action. Rather than refuse the assignment,
-		// name the actions that hold it and let the user take it over.
-		const QList<int> conflicts = conflictingRows(dialog.newShortcut, row);
+		// A shortcut belongs to one action within its scope. Rather than refuse
+		// the assignment, name the actions that hold it and let the user take it
+		// over. Editor-only and widget-panel-only shortcuts may reuse the same
+		// key, so only same-scope (or global) actions conflict.
+		const QList<int> conflicts = conflictingRows(dialog.newShortcut, action, row);
 		if (!conflicts.isEmpty()) {
 			QStringList usedBy;
+			bool crossScope = false;
+			const QString candidateScope = shortcutScope(action);
 			for (int conflictRow : conflicts) {
 				QTableWidgetItem *conflictName = tableWidget->item(conflictRow, 0);
-				usedBy.append(QStringLiteral("\"%1\"").arg(
+				const QString conflictScope = shortcutScope(actionForRow(conflictRow));
+				if (conflictScope != candidateScope) {
+					crossScope = true;
+				}
+				usedBy.append(QStringLiteral("\"%1\" (%2)").arg(
 						conflictName != nullptr
-						? conflictName->text().toHtmlEscaped() : QString()));
+						? conflictName->text().toHtmlEscaped() : QString(),
+						shortcutScopeLabel(conflictScope)));
 			}
 			const QString shortcut = QKeySequence(dialog.newShortcut).toString()
 					.toHtmlEscaped();
@@ -234,8 +292,15 @@ void KeyboardShortcutsWidget::assignShortcut(int row, int /*column*/)
 				box.setText(tr("The shortcut <b>%1</b> is already used by:<br>%2")
 							.arg(shortcut, usedBy.join(QStringLiteral("<br>"))));
 			}
-			box.setInformativeText(tr("Overwrite it and assign the shortcut to \"%1\"?")
-								   .arg(name.toHtmlEscaped()));
+			box.setInformativeText(crossScope
+					? tr("The existing action has a different scope. Global shortcuts "
+						 "apply everywhere, editor-only shortcuts only while the editor "
+						 "has focus, and widget-panel-only shortcuts only while the widget "
+						 "panel has focus.\n\n"
+						 "Overwrite it and assign the shortcut to \"%1\"?")
+					  .arg(name.toHtmlEscaped())
+					: tr("Overwrite it and assign the shortcut to \"%1\"?")
+					  .arg(name.toHtmlEscaped()));
 			QPushButton *overwrite = box.addButton(tr("Overwrite"),
 												   QMessageBox::AcceptRole);
 			QPushButton *cancel = box.addButton(QMessageBox::Cancel);

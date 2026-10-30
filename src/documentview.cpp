@@ -35,7 +35,6 @@
 #include <QDir>
 #include <QCursor>
 #include <QFileInfo>
-#include <QFontDatabase>
 #include <QGuiApplication>
 #include <QListWidget>
 #include <QPainter>
@@ -59,6 +58,36 @@ static constexpr int COMPLETION_UPDATE_DELAY_MS = 100;
 // with the syntax of the opcode under it. Without this, holding an arrow key
 // or dragging the cursor makes the status bar flicker through every opcode.
 static constexpr int OPCODE_SYNTAX_DEBOUNCE_MS = 100;
+
+// A word selected for "show occurrences" must be a plain Csound identifier.
+static bool isIdentifierText(const QString &text)
+{
+    static const QRegularExpression identifierRx(uR"(^[A-Za-z_][A-Za-z0-9_]*$)"_s);
+    return identifierRx.match(text).hasMatch();
+}
+
+// True when the selection boundaries do not cut through a longer identifier
+// (so a double-clicked word qualifies, a partial drag-selection does not).
+static bool selectionCoversWholeWord(const QTextCursor &cursor)
+{
+    if (!cursor.hasSelection())
+        return false;
+    QTextDocument *document = cursor.document();
+    if (document == nullptr)
+        return false;
+    const auto isWordChar = [](QChar c) {
+        return c.isLetterOrNumber() || c == QLatin1Char('_');
+    };
+    const int start = cursor.selectionStart();
+    const int end = cursor.selectionEnd();
+    if (start > 0 && isWordChar(document->characterAt(start - 1)))
+        return false;
+    if (end < document->characterCount() - 1
+            && isWordChar(document->characterAt(end))) {
+        return false;
+    }
+    return true;
+}
 
 // The inspector highlight follows the cursor much more slowly: it only needs
 // to tell the user which instrument or opcode they are working in.
@@ -410,6 +439,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
     //        this, SLOT(updateContext()));
     connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
             this, SLOT(syntaxCheck()));
+	connect(m_mainEditor, &QTextEdit::cursorPositionChanged,
+	        this, &DocumentView::updateOccurrencesFromSelection);
 	connect(m_mainEditor, SIGNAL(escapePressed()),
 			this, SLOT(escapePressed()));
 	connect(m_mainEditor, SIGNAL(newLine()),
@@ -468,6 +499,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 
 	m_oldCursorPosition = -1; // 0 or positive, if cursor needs to be moved there
     markCurrentPosition();
+    updateCompletionFont();
 
 }
 
@@ -744,6 +776,25 @@ void DocumentView::setAutoComplete(bool autoComplete, int delay)
         m_autoCompleteDelay = delay;
 }
 
+void DocumentView::setFont(QFont font)
+{
+    BaseView::setFont(font);
+    updateCompletionFont();
+}
+
+void DocumentView::updateCompletionFont()
+{
+    if (syntaxMenu == nullptr || m_mainEditor == nullptr)
+        return;
+    QFont font = m_mainEditor->font();
+    if (font.pointSizeF() > 0.0) {
+        font.setPointSizeF(qMax(1.0, font.pointSizeF() - 1.0));
+    } else if (font.pixelSize() > 0) {
+        font.setPixelSize(qMax(1, font.pixelSize() - 1));
+    }
+    syntaxMenu->setCompletionFont(font);
+}
+
 void DocumentView::setAutoCompleteMenuWidth(int width)
 {
     if (width > 0)
@@ -888,8 +939,10 @@ QList<QTextEdit::ExtraSelection> DocumentView::extraSelectionsFor(
 		TextEditor *editor) const
 {
 	QList<QTextEdit::ExtraSelection> selections;
-	if (editor == m_mainEditor)
-		selections = m_findSelections;
+	if (editor == m_mainEditor) {
+		selections = m_occurrenceSelections;
+		selections.append(m_findSelections);
+	}
 	if (editor == m_widgetChannelEditor)
 		selections.append(m_widgetChannelSelections);
 
@@ -1432,6 +1485,144 @@ int DocumentView::currentScopeLine() const
     return block.isValid() ? block.blockNumber() + 1 : -1;
 }
 
+QTextBlock DocumentView::currentScopeEndBlock(const QTextBlock &startBlock) const
+{
+    if (!startBlock.isValid() || m_mainEditor == nullptr)
+        return {};
+
+    static const QRegularExpression startRx(uR"(^\s*(instr|opcode)\b)"_s);
+    const QRegularExpressionMatch match = startRx.match(startBlock.text().trimmed());
+    if (!match.hasMatch())
+        return {};
+    const QString endKeyword = match.captured(1) == "instr"_L1
+            ? u"endin"_s : u"endop"_s;
+
+    for (QTextBlock block = startBlock.next(); block.isValid(); block = block.next()) {
+        if (block.text().trimmed().startsWith(endKeyword))
+            return block;
+    }
+    return m_mainEditor->document()->lastBlock();
+}
+
+void DocumentView::setShowVariableOccurrences(bool enabled)
+{
+    m_showVariableOccurrences = enabled;
+    if (enabled)
+        updateOccurrencesFromSelection();
+    else
+        clearOccurrences();
+}
+
+void DocumentView::showWordOccurrences()
+{
+    if (m_mainEditor == nullptr)
+        return;
+
+    QTextCursor cursor = m_mainEditor->textCursor();
+    QString word;
+    if (cursor.hasSelection()) {
+        const QString selected = cursor.selectedText();
+        if (isIdentifierText(selected) && selectionCoversWholeWord(cursor))
+            word = selected;
+    }
+    if (word.isEmpty()) {
+        QTextCursor wordCursor = cursor;
+        wordCursor.select(QTextCursor::WordUnderCursor);
+        const QString underCursor = wordCursor.selectedText();
+        if (isIdentifierText(underCursor))
+            word = underCursor;
+    }
+
+    if (word.isEmpty()) {
+        clearOccurrences();
+        return;
+    }
+    showOccurrences(word);
+}
+
+void DocumentView::showOccurrences(const QString &word)
+{
+    m_occurrenceSelections.clear();
+    m_occurrenceWord.clear();
+    if (m_mainEditor == nullptr || word.isEmpty()) {
+        applyOccurrenceSelections();
+        return;
+    }
+
+    const QTextBlock start = currentScopeStartBlock();
+    if (!start.isValid()) {
+        applyOccurrenceSelections();
+        return;
+    }
+    const QTextBlock end = currentScopeEndBlock(start);
+    QTextDocument *document = m_mainEditor->document();
+    const int startPosition = start.position();
+    const int endPosition = end.isValid()
+            ? end.position() + end.length()
+            : document->characterCount();
+
+    const QRegularExpression wordRx(
+                uR"((?<![A-Za-z0-9_])%1(?![A-Za-z0-9_]))"_s.arg(
+                    QRegularExpression::escape(word)));
+    QColor background = m_mainEditor->palette().color(QPalette::Highlight);
+    background.setAlpha(70);
+    QTextCharFormat format;
+    format.setBackground(background);
+
+    QTextCursor search(document);
+    search.setPosition(startPosition);
+    while (true) {
+        const QTextCursor match = document->find(
+                    wordRx, search, QTextDocument::FindCaseSensitively);
+        if (match.isNull() || match.selectionStart() >= endPosition)
+            break;
+        if (match.selectionEnd() <= endPosition) {
+            QTextEdit::ExtraSelection selection;
+            selection.cursor = match;
+            selection.format = format;
+            m_occurrenceSelections.append(selection);
+        }
+        search.setPosition(match.selectionEnd());
+    }
+
+    m_occurrenceWord = word;
+    applyOccurrenceSelections();
+}
+
+void DocumentView::applyOccurrenceSelections()
+{
+    if (m_mainEditor != nullptr)
+        m_mainEditor->setExtraSelections(extraSelectionsFor(m_mainEditor));
+}
+
+void DocumentView::clearOccurrences()
+{
+    m_occurrenceWord.clear();
+    if (m_occurrenceSelections.isEmpty())
+        return;
+    m_occurrenceSelections.clear();
+    applyOccurrenceSelections();
+}
+
+void DocumentView::updateOccurrencesFromSelection()
+{
+    if (!m_showVariableOccurrences || m_mainEditor == nullptr)
+        return;
+
+    const QTextCursor cursor = m_mainEditor->textCursor();
+    QString word;
+    if (cursor.hasSelection()) {
+        const QString selected = cursor.selectedText();
+        if (isIdentifierText(selected) && selectionCoversWholeWord(cursor))
+            word = selected;
+    }
+    if (word.isEmpty()) {
+        clearOccurrences();
+        return;
+    }
+    showOccurrences(word);
+}
+
 QString DocumentView::currentScopeText() const
 {
     TextEditor *editor = m_mainEditor;
@@ -1625,7 +1816,7 @@ void DocumentView::scheduleAutoComplete(int delay)
         m_autoCompleteTimer = new QTimer(this);
         m_autoCompleteTimer->setSingleShot(true);
         connect(m_autoCompleteTimer, &QTimer::timeout,
-                this, &DocumentView::autoCompleteAtCursor);
+                this, [this]() { autoCompleteAtCursor(false); });
     }
     m_autoCompleteTimer->stop();
     m_autoCompleteTimer->setInterval(delay);
@@ -1641,7 +1832,7 @@ void DocumentView::scheduleAutoComplete(int delay)
 }
 
 
-void DocumentView::autoCompleteAtCursor() {
+void DocumentView::autoCompleteAtCursor(bool force) {
     // While the popup is open the focus is on its list, so use the editor the
     // popup belongs to rather than the current focus widget.
     TextEditor *editor = (syntaxMenu->isVisible() && m_autocompleteEditor != nullptr)
@@ -1697,8 +1888,11 @@ void DocumentView::autoCompleteAtCursor() {
         return; // No word found, exit
     }
 
-    if (context.kind == CompletionContext::None && word.size() < 3) {
-        // only start completion after three characters
+    if (context.kind == CompletionContext::None
+            && word.size() < (force ? 1 : 3)) {
+        // Automatic completion starts after three characters. Invoking it
+        // explicitly (Ctrl+M or the menu) also works for a single character,
+        // but never for an empty word.
         destroySyntaxMenu();
         return;
     }
@@ -1943,7 +2137,7 @@ void DocumentView::autoCompleteAtCursor() {
         else
             completionWidth = qMax(completionWidth, contextMaxLength + 2);
     }
-    else if (selectionCursor.position() > selectionCursor.anchor() && word.size() > 2 /* && !word.startsWith("\"") */ ) { // Only at the end of the word
+    else if (selectionCursor.position() > selectionCursor.anchor()) { // Only at the end of the word
         syntaxMenu->clearCompletions();
         // Only variables used in the current instrument/opcode block. Do not
         // scan the whole document: names from other instruments are not in
@@ -2189,6 +2383,9 @@ void DocumentView::textChanged() {
 		return;
 	}
 
+    // Any edit invalidates the positions of the occurrence highlights.
+    clearOccurrences();
+
     //test: seems to do the trick and solve "always modified bug
     bool modified = m_mainEditor->document()->isModified();
     setModified(modified);
@@ -2273,6 +2470,10 @@ void DocumentView::escapePressed()
 		// if (m_docstringPopup != nullptr)
         //     m_docstringPopup->hide();
 		stopHoverHelpTracking();
+		return;
+	}
+	if (!m_occurrenceSelections.isEmpty()) {
+		clearOccurrences();
 		return;
 	}
 	emit editorEscapePressed();
@@ -2694,7 +2895,7 @@ void DocumentView::insertAutoCompleteText()
 			// again (Ctrl+M). Queued, because this runs from the triggered()
 			// signal of an action the new completion will delete.
 			if (insert.endsWith(QLatin1Char('/')))
-				QTimer::singleShot(0, this, &DocumentView::autoCompleteAtCursor);
+				QTimer::singleShot(0, this, [this]() { autoCompleteAtCursor(true); });
 			return;
 		}
 
@@ -3206,6 +3407,9 @@ void DocumentView::applyEditorActions(const QList<QAction *> &actions)
         }
         // Widget-scoped so the shortcut only fires with the editor focused.
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        // Shown in Settings -> Shortcuts so the user knows the key only applies
+        // while the editor has focus.
+        action->setProperty("shortcutScope", "editor");
         if (editor != nullptr)
             editor->addAction(action);
     }
@@ -3700,9 +3904,6 @@ MySyntaxMenu::MySyntaxMenu(QWidget *parent) : QFrame(parent)
     m_completionList->setFocusPolicy(Qt::StrongFocus);
     m_completionList->setUniformItemSizes(false);
     m_completionList->setWordWrap(false);
-    QFont completionFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-    completionFont.setPixelSize(12);
-    m_completionList->setFont(completionFont);
     m_completionList->setItemDelegate(new CompletionSeparatorDelegate(m_completionList));
     m_completionList->installEventFilter(this);
     layout->addWidget(m_completionList);
@@ -3712,6 +3913,11 @@ MySyntaxMenu::MySyntaxMenu(QWidget *parent) : QFrame(parent)
             [this](QListWidgetItem *item) { activateItem(item, false); });
 
     applyStyle();
+}
+
+void MySyntaxMenu::setCompletionFont(const QFont &font)
+{
+    m_completionList->setFont(font);
 }
 
 void MySyntaxMenu::showEvent(QShowEvent *event)

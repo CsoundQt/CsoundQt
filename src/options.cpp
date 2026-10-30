@@ -38,6 +38,7 @@ Options::Options(ConfigLists *configlists) :
     // Default widget style: Fusion on Linux (consistent look everywhere), and
     // the native Qt style elsewhere (macOS, windows11/windowsvista on Windows).
     widgetStyle = defaultWidgetStyleName();
+    tabFontSizeOffset = 0;
     fontPointSize = 10;
     showLineNumberArea = true;
     lineNumberContrast = 50;
@@ -72,6 +73,7 @@ Options::Options(ConfigLists *configlists) :
     autoComplete = true;
     quickHelpOnHover = true;
     quickHelpHoverDelay = 500;
+    showVariableOccurrences = true;
     // The width the autocomplete menu had before it became configurable: the
     // entries are 42 characters wide.
     autocompleteMenuWidth = 42;

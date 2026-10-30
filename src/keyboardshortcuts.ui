@@ -14,6 +14,16 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="scopeHintLabel">
+     <property name="text">
+      <string>Scope: Global shortcuts work everywhere. Editor-only shortcuts work only while the editor has focus; Widget panel only shortcuts work only while the widget panel has focus. Different scopes may share the same key.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QTableWidget" name="tableWidget">
      <property name="minimumSize">
       <size>
@@ -31,8 +41,9 @@
       <number>0</number>
      </property>
      <property name="columnCount">
-      <number>2</number>
+      <number>3</number>
      </property>
+     <column/>
      <column/>
      <column/>
     </widget>

@@ -241,16 +241,18 @@ void FrameWidget::mousePressEvent ( QMouseEvent * event )
 		starty = event->y();
 		oldx = event->x();
 		oldy = event->y();
-        // Ctrl forces a move, never a resize. Selection is resolved later (see
-        // mouseMoveEvent/mouseReleaseEvent) so that a Ctrl-drag does not unselect.
+        // Ctrl-drag works like a normal drag outside the resize corners, and
+        // constrains a resize to one axis on them. Selection is resolved later
+        // (see mouseMoveEvent/mouseReleaseEvent) so that a Ctrl-drag does not
+        // unselect.
         const bool ctrl = event->modifiers() & Qt::ControlModifier;
         m_ctrlPress = ctrl;
         m_dragStarted = false;
-        if (!ctrl && inResizeHitZoneBR(this, startx, starty)) {
+        if (inResizeHitZoneBR(this, startx, starty)) {
 			m_resize = true;
 			m_resizeTopLeft = false;
 		}
-		else if (!ctrl && inResizeHitZoneTL(this, startx, starty)) {
+		else if (inResizeHitZoneTL(this, startx, starty)) {
 			m_resize = true;
 			m_resizeTopLeft = true;
 		}
@@ -260,6 +262,8 @@ void FrameWidget::mousePressEvent ( QMouseEvent * event )
 		}
         m_moving = !m_resize;
         m_lastGlobal = event->globalPosition().toPoint();
+        m_resizeStartGlobal = m_lastGlobal;
+        m_resizeAxis = ResizeAxis::None;
         if (!ctrl && !isSelected()) {
             emit deselectAllSignal();
             this->select();
@@ -277,7 +281,7 @@ void FrameWidget::mouseReleaseEvent ( QMouseEvent * event )
 		return;
 	}
 	QFrame::mouseReleaseEvent(event);
-	if (m_ctrlPress && !m_dragStarted) {
+	if (m_ctrlPress && !m_dragStarted && !m_resize) {
 		// Plain Ctrl-click: toggle this widget, leaving the others untouched.
 		this->setSelected(!this->isSelected());
 	}
@@ -309,14 +313,29 @@ void FrameWidget::mouseMoveEvent (QMouseEvent* event)
     if (m_resize) {
         // Use global coordinates: when resizing from the top-left the frame
         // itself moves, so frame-local deltas would cancel out.
-        QPoint d = event->globalPosition().toPoint() - m_lastGlobal;
-        if (event->modifiers() & Qt::ShiftModifier) {
-            if (qAbs(d.x()) > qAbs(d.y()))
+        const QPoint global = event->globalPosition().toPoint();
+        const QPoint total = global - m_resizeStartGlobal;
+        // Fix the constrained axis as soon as the drag has a direction. Once
+        // chosen it stays fixed for the rest of the gesture, so the resize
+        // cannot flip between axes while the mouse jitters.
+        if (m_resizeAxis == ResizeAxis::None && (total.x() != 0 || total.y() != 0)) {
+            if (total.x() != 0 && total.y() != 0) {
+                m_resizeAxis = qAbs(total.x()) >= qAbs(total.y())
+                        ? ResizeAxis::Horizontal : ResizeAxis::Vertical;
+            } else if (total.x() != 0) {
+                m_resizeAxis = ResizeAxis::Horizontal;
+            } else {
+                m_resizeAxis = ResizeAxis::Vertical;
+            }
+        }
+        QPoint d = global - m_lastGlobal;
+        if (event->modifiers() & Qt::ControlModifier) {
+            if (m_resizeAxis == ResizeAxis::Horizontal)
                 d.setY(0);
-            else
+            else if (m_resizeAxis == ResizeAxis::Vertical)
                 d.setX(0);
         }
-        m_lastGlobal = event->globalPosition().toPoint();
+        m_lastGlobal = global;
         const QPair<int, int> pair(d.x(), d.y());
         if (m_resizeTopLeft)
             emit resizedTopLeft(pair);

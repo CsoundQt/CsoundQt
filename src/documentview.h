@@ -54,6 +54,8 @@ public:
 	void clearCompletions();
 	void refreshCompletions(int maxVisibleLines, int widthCharacters);
 	void setAvailableHeight(int height);
+	// Use the editor font (already reduced by DocumentView) for the rows.
+	void setCompletionFont(const QFont &font);
 	bool hasCompletions() const;
 	// The editor that receives keys typed while the popup has the focus.
 	void setKeyTarget(QWidget *target) { m_keyTarget = target; }
@@ -118,6 +120,8 @@ public:
     void setAutoCompleteMenuWidth(int width);
     void setAutoCompleteMenuMaxLines(int lines);
 	void setAutoParameterMode(bool autoParameterMode);
+	// Keep the completion popup on the editor font, two points smaller.
+	void setFont(QFont font) override;
 
 	// TODO add all text inputs here as below
 
@@ -178,6 +182,13 @@ public:
     // without Ctrl. Ctrl+hover ignores this and shows it at once.
     void setQuickHelpHoverDelay(int milliseconds)
     { m_quickHelpHoverDelay = qMax(0, milliseconds); }
+    // Highlight every occurrence of the selected variable in the current
+    // instrument/opcode. Does not affect the explicit action.
+    void setShowVariableOccurrences(bool enabled);
+    // Highlight every occurrence of the word under the cursor (or of the
+    // selected identifier) in the current instrument/opcode. Cleared by Esc.
+    void showWordOccurrences();
+    void clearOccurrences();
     // Experimental: mark all lines that reference any of these widget channels.
     void highlightWidgetChannels(const QStringList &channels,
                                  bool jumpToFirstReference = false);
@@ -262,7 +273,7 @@ public slots:
 	void hideHoverText();
 	void updateHoverText(int x, int y, QString text);
 	void createContextMenu(QPoint pos);
-    void autoCompleteAtCursor();
+    void autoCompleteAtCursor(bool force = false);
     // (Re)start the debounce timer that runs autoCompleteAtCursor. While the
     // popup is visible it is called with COMPLETION_UPDATE_DELAY_MS so fast
     // typing only filters the list after the user pauses.
@@ -343,10 +354,21 @@ private:
     // First block of that instrument/opcode block, or an invalid block when
     // the cursor is outside one.
     QTextBlock currentScopeStartBlock() const;
+    // Closing endin/endop block for the given start block (or the document's
+    // last block when the block is unterminated).
+    QTextBlock currentScopeEndBlock(const QTextBlock &startBlock) const;
+    // Fill m_occurrenceSelections with every whole-word match of `word` between
+    // the start and end of the current instrument/opcode.
+    void showOccurrences(const QString &word);
+    void applyOccurrenceSelections();
+    // Automatic mode: mirror the current selection (a whole identifier) into
+    // the occurrence highlights, or clear them when the selection is gone.
+    void updateOccurrencesFromSelection();
 
 	void ensureFindBar();
 	void ensureOpcodeInsertBar();
 	void cancelAutoCompleteOnCursorMove();
+	void updateCompletionFont();
 	void collectFindMatches();
 	void updateFindHighlights(bool moveCursor);
 	void updateFindStatus();
@@ -434,6 +456,10 @@ private:
 	QList<QTextEdit::ExtraSelection> m_findSelections;
 	QList<QTextEdit::ExtraSelection> m_widgetChannelSelections;
 	TextEditor *m_widgetChannelEditor = nullptr;
+	// Occurrences of the word/selected variable in the current instr/opcode.
+	QList<QTextEdit::ExtraSelection> m_occurrenceSelections;
+	QString m_occurrenceWord;
+	bool m_showVariableOccurrences = true;
 	QVector<QPair<int, int>> m_findMatches;
 	int m_findCurrent = -1;
 	QString m_findQuery;

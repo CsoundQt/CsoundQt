@@ -21,11 +21,149 @@
 */
 
 #include "qutecheckbox.h"
+#include "selectcolorbutton.h"
+
+#include <QPainter>
+using namespace Qt::StringLiterals;
+
+// ---------------------------------------------------------------------------
+//  QuteFlatCheckBox
+// ---------------------------------------------------------------------------
+
+QuteFlatCheckBox::QuteFlatCheckBox(QWidget *parent) : QCheckBox(parent)
+{
+	m_checkstyle = u"x"_s;
+}
+
+void QuteFlatCheckBox::setCheckStyle(const QString &style)
+{
+	m_checkstyle = (style.compare(u"full"_s, Qt::CaseInsensitive) == 0)
+			? u"full"_s : u"x"_s;
+	update();
+}
+
+// Colour properties are stored as QColor when they come from the XML (the
+// <color> element) and as "#RRGGBB" strings otherwise.
+static QColor colorFromProperty(const QVariant &value)
+{
+	QColor color = value.value<QColor>();
+	if (!color.isValid()) {
+		color = QColor(value.toString());
+	}
+	return color;
+}
+
+// Blend two colours: `amount` is the share of `foreground` (0.1 = 10%).
+static QColor blendColors(const QColor &background, const QColor &foreground,
+						  double amount)
+{
+	amount = qBound(0.0, amount, 1.0);
+	return QColor(qRound(background.red() * (1.0 - amount) + foreground.red() * amount),
+				  qRound(background.green() * (1.0 - amount) + foreground.green() * amount),
+				  qRound(background.blue() * (1.0 - amount) + foreground.blue() * amount),
+				  qRound(background.alpha() * (1.0 - amount) + foreground.alpha() * amount));
+}
+
+// QCheckBox restricts its clickable area to the native style's
+// SE_CheckBoxClickRect (roughly indicator + text). In flat mode the square and
+// label are laid out differently, so make the whole widget clickable.
+bool QuteFlatCheckBox::hitButton(const QPoint &pos) const
+{
+	if (m_flat) {
+		return rect().contains(pos);
+	}
+	return QCheckBox::hitButton(pos);
+}
+
+void QuteFlatCheckBox::paintEvent(QPaintEvent *event)
+{
+	if (!m_flat) {
+		QCheckBox::paintEvent(event);
+		return;
+	}
+
+	QPainter painter(this);
+	painter.setRenderHint(QPainter::Antialiasing, true);
+
+	QColor bg = m_background;
+	if (!bg.isValid()) {
+		bg = palette().color(QPalette::Button);
+	}
+	QColor fg = m_foreground;
+	if (!fg.isValid()) {
+		fg = palette().color(QPalette::ButtonText);
+	}
+	QColor borderColor = m_bordercolor;
+
+	// While the mouse is held down the background darkens slightly. The checked
+	// state itself is not touched here: QAbstractButton resolves it on release.
+	if (isDown()) {
+		bg = blendColors(bg, fg, 0.1);
+	}
+	if (!isEnabled()) {
+		bg = QuteWidget::disabledColor(bg);
+		fg = QuteWidget::disabledColor(fg);
+		borderColor = QuteWidget::disabledColor(borderColor);
+	}
+
+	// The indicator is the largest square that fits. Any remaining horizontal
+	// space holds the label, matching a normal checkbox layout.
+	const int side = qMin(width(), height());
+	QRectF indicatorRect(0, (height() - side) / 2.0, side, side);
+	const double half = m_borderwidth / 2.0;
+	const QRectF square = indicatorRect.adjusted(half, half, -half, -half);
+
+	painter.setBrush(bg);
+	if (m_borderwidth > 0 && borderColor.isValid()) {
+		QPen pen(borderColor, m_borderwidth);
+		if (m_borderwidth == 1) {
+			// Cosmetic pen so a 1px border is not thinned by scaling.
+			pen.setWidth(0);
+			pen.setCosmetic(true);
+		}
+		painter.setPen(pen);
+	} else {
+		painter.setPen(Qt::NoPen);
+	}
+	painter.drawRoundedRect(square, m_borderradius, m_borderradius);
+
+	// Check mark. "full" fills the square, "x" draws a diagonal cross. The
+	// padding keeps the mark away from the inner edge of the border.
+	if (isChecked()) {
+		const qreal inset = qMax(0.0, half) + qMax(0, m_padding);
+		const QRectF fillArea = square.adjusted(inset, inset, -inset, -inset);
+		if (fillArea.width() > 0 && fillArea.height() > 0) {
+			painter.setPen(Qt::NoPen);
+			painter.setBrush(fg);
+			if (m_checkstyle == "full"_L1) {
+				const int radius = qMax(0, m_borderradius - m_borderwidth - m_padding);
+				painter.drawRoundedRect(fillArea, radius, radius);
+			} else {
+				QPen pen(fg, qMax(2.0, double(m_borderwidth)));
+				pen.setCapStyle(Qt::RoundCap);
+				painter.setPen(pen);
+				painter.drawLine(fillArea.topLeft(), fillArea.bottomRight());
+				painter.drawLine(fillArea.topRight(), fillArea.bottomLeft());
+			}
+		}
+	}
+
+	if (!text().isEmpty() && width() > side) {
+		const QRectF textRect(side + 4, 0, width() - side - 4, height());
+		painter.setPen(fg);
+		painter.drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap,
+						 text());
+	}
+}
+
+// ---------------------------------------------------------------------------
+//  QuteCheckBox
+// ---------------------------------------------------------------------------
 
 QuteCheckBox::QuteCheckBox(QWidget *parent) : QuteWidget(parent)
 {
-	m_widget = new QCheckBox(this);
-    auto w = static_cast<QCheckBox *>(m_widget);
+	m_widget = new QuteFlatCheckBox(this);
+	auto w = checkbox();
     // w->setStyleSheet("QCheckBox::indicator { width:50px; height: 50px; }");
 
     // Necessary to pass mouse tracking to widget panel for _MouseX channels
@@ -39,11 +177,24 @@ QuteCheckBox::QuteCheckBox(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_randomizable", false);
 	setProperty("CSQT_randomizableGroup", 0);
 
+	// Flat style. Disabled by default, so existing checkboxes keep the native
+	// look. The colours follow the same light/dark convention as flat buttons.
+	setProperty("CSQT_flatStyle", false);
+	const bool darkPanel = isDarkTheme();
+	auto shade = [darkPanel](int r, int g, int b) {
+		return darkPanel ? QColor(255 - r, 255 - g, 255 - b) : QColor(r, g, b);
+	};
+	setProperty("CSQT_color", shade(0xf3, 0xf3, 0xf3));            // background
+	setProperty("CSQT_borderColor", shade(0xad, 0xad, 0xad).name());
+	setProperty("CSQT_textColor", shade(0x20, 0x20, 0x20).name()); // foreground
+	setProperty("CSQT_borderWidth", 1);
+	setProperty("CSQT_borderRadius", 3);
+	setProperty("CSQT_padding", 0);
+	setProperty("CSQT_checkstyle", "x");
+
 	m_currentValue = 0;
 
-    w->setStyleSheet(QString("QCheckBox::indicator { "
-                             "width:%1px; "
-                             "height: %1px; }").arg(this->height()));
+	updateIndicatorStyleSheet();
 
     connect(w, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
 }
@@ -172,6 +323,14 @@ QString QuteCheckBox::getWidgetXmlText()
 	s.writeAttribute("group", QString::number(property("CSQT_randomizableGroup").toInt()));
 	s.writeCharacters(property("CSQT_randomizable").toBool() ? "true": "false");
 	s.writeEndElement();
+	s.writeTextElement("flatStyle", property("CSQT_flatStyle").toBool() ? "true" : "false");
+	writeColorElement(s, "color", colorFromProperty(property("CSQT_color")));
+	s.writeTextElement("borderColor", property("CSQT_borderColor").toString());
+	s.writeTextElement("textColor", property("CSQT_textColor").toString());
+	s.writeTextElement("borderWidth", QString::number(property("CSQT_borderWidth").toInt()));
+	s.writeTextElement("borderRadius", QString::number(property("CSQT_borderRadius").toInt()));
+	s.writeTextElement("padding", QString::number(property("CSQT_padding").toInt()));
+	s.writeTextElement("checkstyle", property("CSQT_checkstyle").toString());
 	s.writeEndElement();
 
 #ifdef  USE_WIDGET_MUTEX
@@ -199,11 +358,22 @@ void QuteCheckBox::refreshWidget()
 }
 
 void QuteCheckBox::resizeEvent(QResizeEvent *event) {
-    int size = qMin(this->height(), this->width());
-    static_cast<QCheckBox*>(m_widget)->setStyleSheet(QString("QCheckBox::indicator { "
-                             "width:%1px; "
-                             "height: %1px; }").arg(size));
+    updateIndicatorStyleSheet();
     QuteWidget::resizeEvent(event);
+}
+
+void QuteCheckBox::updateIndicatorStyleSheet()
+{
+    // The indicator size only matters for the native checkbox. In flat mode we
+    // paint the square ourselves (see QuteFlatCheckBox::paintEvent).
+    if (checkbox()->isFlatStyle()) {
+        checkbox()->setStyleSheet(QString());
+    } else {
+        const int size = qMin(this->height(), this->width());
+        checkbox()->setStyleSheet(QString("QCheckBox::indicator { "
+                                          "width:%1px; "
+                                          "height: %1px; }").arg(size));
+    }
 }
 
 
@@ -221,6 +391,39 @@ bool QuteCheckBox::applyProperty(const QString &name)
 		setLabel(property("CSQT_label").toString());
 		return true;
 	}
+	if (name == "CSQT_flatStyle") {
+		checkbox()->setFlatStyle(property("CSQT_flatStyle").toBool());
+		updateIndicatorStyleSheet();
+		return true;
+	}
+	if (name == "CSQT_color") {
+		checkbox()->setBackgroundColor(colorFromProperty(property("CSQT_color")));
+		return true;
+	}
+	if (name == "CSQT_borderColor") {
+		checkbox()->setBorderColor(colorFromProperty(property("CSQT_borderColor")));
+		return true;
+	}
+	if (name == "CSQT_textColor") {
+		checkbox()->setForegroundColor(colorFromProperty(property("CSQT_textColor")));
+		return true;
+	}
+	if (name == "CSQT_borderWidth") {
+		checkbox()->setBorderWidth(property("CSQT_borderWidth").toInt());
+		return true;
+	}
+	if (name == "CSQT_borderRadius") {
+		checkbox()->setBorderRadius(property("CSQT_borderRadius").toInt());
+		return true;
+	}
+	if (name == "CSQT_padding") {
+		checkbox()->setPadding(property("CSQT_padding").toInt());
+		return true;
+	}
+	if (name == "CSQT_checkstyle") {
+		checkbox()->setCheckStyle(property("CSQT_checkstyle").toString());
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
@@ -233,10 +436,16 @@ void QuteCheckBox::applyInternalProperties()
 	setValue(property("CSQT_selected").toBool() ? 1:0);
     setLabel(property("CSQT_label").toString());
 
-    static_cast<QCheckBox*>(m_widget)->setStyleSheet(QString("QCheckBox::indicator { "
-                             "width:%1px; "
-                             "height: %1px; }").arg(this->height()));
-
+	QuteFlatCheckBox *w = checkbox();
+	w->setBackgroundColor(colorFromProperty(property("CSQT_color")));
+	w->setBorderColor(colorFromProperty(property("CSQT_borderColor")));
+	w->setForegroundColor(colorFromProperty(property("CSQT_textColor")));
+	w->setBorderWidth(property("CSQT_borderWidth").toInt());
+	w->setBorderRadius(property("CSQT_borderRadius").toInt());
+	w->setPadding(property("CSQT_padding").toInt());
+	w->setCheckStyle(property("CSQT_checkstyle").toString());
+	w->setFlatStyle(property("CSQT_flatStyle").toBool());
+	updateIndicatorStyleSheet();
 }
 
 void QuteCheckBox::stateChanged(int state)
@@ -258,6 +467,23 @@ void QuteCheckBox::applyProperties()
 	widgetLock.lockForWrite();
 #endif
 	setProperty("CSQT_pressedValue", valueBox->value());
+	setProperty("CSQT_flatStyle", flatStyleCheckBox->isChecked());
+	QColor flatBg = backgroundColorButton->getColor();
+	if (!flatBg.isValid()) {
+		flatBg = m_widget->palette().color(QPalette::Button);
+	}
+	setProperty("CSQT_color", flatBg);
+	QColor flatBorder = borderColorButton->getColor();
+	setProperty("CSQT_borderColor", flatBorder.isValid() ? flatBorder.name() : QString());
+	QColor flatFg = foregroundColorButton->getColor();
+	if (!flatFg.isValid()) {
+		flatFg = m_widget->palette().color(QPalette::ButtonText);
+	}
+	setProperty("CSQT_textColor", flatFg.name());
+	setProperty("CSQT_borderWidth", borderWidthSpinBox->value());
+	setProperty("CSQT_borderRadius", borderRadiusSpinBox->value());
+	setProperty("CSQT_padding", paddingSpinBox->value());
+	setProperty("CSQT_checkstyle", checkStyleComboBox->currentText());
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -286,4 +512,106 @@ void QuteCheckBox::createPropertiesDialog()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
+
+	// --- Flat style ---
+	m_flatControls.clear();
+	flatStyleCheckBox = new QCheckBox(tr("Flat"), dialog);
+	flatStyleCheckBox->setToolTip(tr("Draw the checkbox with a flat, platform-independent "
+									 "appearance instead of the native style."));
+	flatStyleCheckBox->setChecked(property("CSQT_flatStyle").toBool());
+	layout->addWidget(flatStyleCheckBox, 5, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+	QColor flatBg = colorFromProperty(property("CSQT_color"));
+	if (!flatBg.isValid()) {
+		flatBg = m_widget->palette().color(QPalette::Button);
+	}
+	QColor flatBorder = colorFromProperty(property("CSQT_borderColor"));
+	if (!flatBorder.isValid()) {
+		flatBorder = m_widget->palette().color(QPalette::Mid);
+	}
+	QColor flatFg = colorFromProperty(property("CSQT_textColor"));
+	if (!flatFg.isValid()) {
+		flatFg = m_widget->palette().color(QPalette::ButtonText);
+	}
+
+	label = new QLabel("Background", dialog);
+	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	backgroundColorButton = new SelectColorButton(dialog);
+	backgroundColorButton->setColor(flatBg);
+	layout->addWidget(backgroundColorButton, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << backgroundColorButton;
+
+	label = new QLabel("Border", dialog);
+	layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	borderColorButton = new SelectColorButton(dialog);
+	borderColorButton->setColor(flatBorder);
+	layout->addWidget(borderColorButton, 6, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << borderColorButton;
+
+	label = new QLabel("Foreground", dialog);
+	label->setToolTip(tr("Colour of the check mark and of the label text."));
+	layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	foregroundColorButton = new SelectColorButton(dialog);
+	foregroundColorButton->setColor(flatFg);
+	layout->addWidget(foregroundColorButton, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << foregroundColorButton;
+
+	label = new QLabel("Width", dialog);
+	layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	borderWidthSpinBox = new QSpinBox(dialog);
+	borderWidthSpinBox->unsetLocale();
+	borderWidthSpinBox->setRange(0, 64);
+	borderWidthSpinBox->setValue(property("CSQT_borderWidth").toInt());
+	layout->addWidget(borderWidthSpinBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << borderWidthSpinBox;
+
+	label = new QLabel("Radius", dialog);
+	layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	borderRadiusSpinBox = new QSpinBox(dialog);
+	borderRadiusSpinBox->unsetLocale();
+	borderRadiusSpinBox->setRange(0, 1000);
+	borderRadiusSpinBox->setValue(property("CSQT_borderRadius").toInt());
+	layout->addWidget(borderRadiusSpinBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << borderRadiusSpinBox;
+
+	label = new QLabel("Padding", dialog);
+	label->setToolTip(tr("Space in pixels between the check mark and the border."));
+	layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	paddingSpinBox = new QSpinBox(dialog);
+	paddingSpinBox->unsetLocale();
+	paddingSpinBox->setRange(0, 1000);
+	paddingSpinBox->setValue(property("CSQT_padding").toInt());
+	layout->addWidget(paddingSpinBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << paddingSpinBox;
+
+	label = new QLabel("Check style", dialog);
+	label->setToolTip(tr("How the checked state is drawn: \"x\" is a diagonal cross, "
+						 "\"full\" fills the square with the foreground colour."));
+	layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	checkStyleComboBox = new QComboBox(dialog);
+	checkStyleComboBox->addItem("x");
+	checkStyleComboBox->addItem("full");
+	if (checkStyleComboBox->findText(property("CSQT_checkstyle").toString()) < 0) {
+		checkStyleComboBox->setCurrentIndex(0);
+	} else {
+		checkStyleComboBox->setCurrentText(property("CSQT_checkstyle").toString());
+	}
+	layout->addWidget(checkStyleComboBox, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << checkStyleComboBox;
+
+	auto refreshFlatControls = [this]() {
+		const bool flat = flatStyleCheckBox->isChecked();
+		for (QWidget *w : m_flatControls) {
+			w->setEnabled(flat);
+		}
+	};
+	connect(flatStyleCheckBox, &QCheckBox::toggled, this, refreshFlatControls);
+	refreshFlatControls();
 }

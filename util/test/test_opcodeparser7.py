@@ -148,7 +148,18 @@ class TestNameResolution(unittest.TestCase):
     def test_nested_optional_groups_are_left_alone(self):
         name, out_args, in_args = opcodeparser7.resolve(
             'kres = x(kamp [, iatt [, idec]])', ['x'])
-        self.assertEqual(in_args, '(kamp [, iatt [, idec]])')
+        self.assertEqual(in_args, '(kamp [,iatt [,idec]])')
+
+    def test_ellipsis_is_one_character(self):
+        name, out_args, in_args = opcodeparser7.resolve(
+            'ares = foo(xamp, xcps, ...)', ['foo'])
+        self.assertEqual(in_args, '(xamp, xcps, …)')
+
+    def test_ellipsis_in_out_arguments_is_one_character(self):
+        name, out_args, in_args = opcodeparser7.resolve(
+            'a1, a2, ... = foo(x)', ['foo'])
+        self.assertEqual(out_args, 'a1, a2, … =')
+        self.assertEqual(in_args, '(x)')
 
 
 class TestPage(unittest.TestCase):

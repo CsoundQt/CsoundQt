@@ -194,9 +194,6 @@ LIBS += $${LCSOUND} \
     $${LPTHREAD}
 
 OTHER_FILES += \
-    src/appstyle-dark.css \
-    src/appstyle-green.css \
-    src/appstyle-white.css \
     src/QML/Keyboard.qml \
     src/QML/Key.qml \
     src/QML/VirtualKeyboard.qml \

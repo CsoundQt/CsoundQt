@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>../images/splashscreen.png</file>
-        <file>../images/splashscreen-alt.png</file>
         <file>../images/modIcon.png</file>
         <file>../images/modIcon2.png</file>
         <file>../images/csoundqt.png</file>
@@ -25,9 +24,6 @@
         <file>translations/csoundqt_ru.qm</file>
         <file>translations/csoundqt_fa.qm</file>
         <file>translations/csoundqt_kr.qm</file>
-        <file>appstyle-dark.css</file>
-        <file>appstyle-green.css</file>
-        <file>appstyle-white.css</file>
         <file>../images/html5.png</file>
         <file>../images/tools-wizard.svg</file>
         <file alias="AudioMidiTest.csd">Examples/Audio and MIDI Tests/AudioMidiTest.csd</file>

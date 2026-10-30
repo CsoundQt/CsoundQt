@@ -52,8 +52,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>820</width>
-        <height>704</height>
+        <width>806</width>
+        <height>732</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -84,7 +84,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -1583,6 +1583,38 @@
                 </property>
                </widget>
               </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="tabFontSizeLabel">
+                <property name="text">
+                 <string>Tab font relative size</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QSpinBox" name="tabFontSizeSpinBox">
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Adjust the document tab font size relative to the application font, in points. Negative values make the tabs smaller; 0 uses the application font size.</string>
+                </property>
+                <property name="suffix">
+                 <string> pt</string>
+                </property>
+                <property name="minimum">
+                 <number>-20</number>
+                </property>
+                <property name="maximum">
+                 <number>0</number>
+                </property>
+                <property name="value">
+                 <number>0</number>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
@@ -2020,22 +2052,6 @@
               <string>Behavior</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_24">
-              <item row="10" column="1">
-               <widget class="QSpinBox" name="menusDepthSpinBox">
-                <property name="minimumSize">
-                 <size>
-                  <width>80</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>80</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="0">
                <widget class="QCheckBox" name="toolbarCheckBox">
                 <property name="text">
@@ -2104,9 +2120,6 @@
                 </property>
                 <item>
                  <widget class="QSpinBox" name="quickHelpOnHoverDelaySpinBox">
-                  <property name="toolTip">
-                   <string>How long the pointer must rest on a symbol before the quick reference card appears, in milliseconds</string>
-                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>80</width>
@@ -2118,6 +2131,9 @@
                     <width>80</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>How long the pointer must rest on a symbol before the quick reference card appears, in milliseconds</string>
                   </property>
                   <property name="suffix">
                    <string> ms</string>
@@ -2168,27 +2184,6 @@
                 </property>
                </widget>
               </item>
-              <item row="10" column="3">
-               <widget class="QCheckBox" name="rememberFileCheckBox">
-                <property name="text">
-                 <string>Remember open files from previous session</string>
-                </property>
-               </widget>
-              </item>
-              <item row="10" column="0">
-               <widget class="QLabel" name="label_35">
-                <property name="text">
-                 <string>Examples menu max. depth</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="3">
-               <widget class="QCheckBox" name="autoJoinCheckBox">
-                <property name="text">
-                 <string>Automatically Join orc/sco files</string>
-                </property>
-               </widget>
-              </item>
               <item row="4" column="3">
                <widget class="QCheckBox" name="saveChangesCheckBox">
                 <property name="enabled">
@@ -2222,6 +2217,53 @@
                 </property>
                 <property name="checked">
                  <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QCheckBox" name="showVariableOccurrencesCheckBox">
+                <property name="toolTip">
+                 <string>When a variable is selected, highlight all its occurrences in the current instrument or opcode. Escape clears the highlight.</string>
+                </property>
+                <property name="text">
+                 <string>Show occurrences of selected variable</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="3">
+               <widget class="QCheckBox" name="autoJoinCheckBox">
+                <property name="text">
+                 <string>Automatically Join orc/sco files</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="3">
+               <widget class="QCheckBox" name="rememberFileCheckBox">
+                <property name="text">
+                 <string>Remember open files from previous session</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="label_35">
+                <property name="text">
+                 <string>Examples menu max. depth</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QSpinBox" name="menusDepthSpinBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>80</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>80</width>
+                  <height>16777215</height>
+                 </size>
                 </property>
                </widget>
               </item>

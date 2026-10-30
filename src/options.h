@@ -37,6 +37,9 @@ public:
     QString theme;  // Icon theme name TODO: rename to iconTheme
     QString themeMode; // application theme: "auto", "dark", "light"
     QString widgetStyle; // Qt widget style ("Fusion", "Breeze", ...); empty = default
+    // Adjustment to the document tab font size, in points relative to the
+    // application font (0 keeps the application size).
+    int tabFontSizeOffset;
 	QString font;
 	float fontPointSize;
 	bool showLineNumberArea;
@@ -81,6 +84,9 @@ public:
     bool quickHelpOnHover;
     // Delay before that card appears, in milliseconds; 0 shows it at once.
     int quickHelpHoverDelay;
+    // Highlight all occurrences of the selected variable in the current
+    // instrument/opcode (Settings/Editor/Behavior).
+    bool showVariableOccurrences;
     // Width of the autocomplete menu, in characters of the entries it lists.
     int autocompleteMenuWidth;
     // Maximum number of rows visible in the autocomplete popup; the rest of

@@ -248,6 +248,7 @@ private slots:
 	void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
 	void onFocusChanged(QWidget *old, QWidget *now);
 	void duplicate();
+	void toggleLockedWidgets();
 	void print();
 	void findReplace();  // Direct to current Page
 	void findString();  // Direct to current Page
@@ -539,6 +540,7 @@ private:
 	QAction *copyAct;
 	QAction *pasteAct;
 	QAction *duplicateAct;
+	QAction *toggleLockedWidgetAct;
 	QAction *evaluateAct;
 	QAction *selectInstrOpcodeAct;
 	QAction *scratchPadCsdModeAct;
@@ -619,6 +621,7 @@ private:
 	QAction *resetPreferencesAct;
 	QAction *reportBugAct;
     QAction *lineNumbersAct;
+	QAction *showOccurrencesAct;
 	QAction *parameterModeAct;
     QAction *autocompleteAct;
     QAction *insertOpcodeAct;

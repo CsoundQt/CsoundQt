@@ -146,6 +146,9 @@ public:
 	void setContained(bool contained);
 	void setCurrentPosition(QPoint pos); // To set the mouse position for new widgets
 	void setWidgetsLocked(bool lock);
+	// The action is owned by the application (so it can be configured in the
+	// shortcuts dialog); the layout only reflects its enabled state.
+	void setToggleLockedAction(QAction *action);
     void setUpdateRate(int rate) { m_updateRate = rate; }
 
 	// Experimental channel probe: outline every widget whose channel (or
@@ -255,6 +258,8 @@ public:
 	QAction *selectRightAct;
 	QAction *selectUpAct;
 	QAction *selectDownAct;
+	// Toggle CSQT_locked on the selected widgets (edit mode, Ctrl+L)
+	QAction *toggleLockedAct = nullptr;
 	QAction *distributeHorizontalAct;
 	QAction *distributeVerticalAct;
 	QAction *alignCenterHorizontalAct;
@@ -262,7 +267,6 @@ public:
 
 	// Preset actions
 	QAction *storePresetAct;
-	QAction *newPresetAct;
 	QAction *recallPresetAct;
 
     // Value changes buffer to store all value changes from widgets that
@@ -364,6 +368,7 @@ public slots:
 	void duplicate();
 	void deleteSelected();
     void moveSelected(int horiz, int vert, int grid=1);
+	void toggleSelectedWidgetsLocked();
 	void undo();
 	void redo();
     void reloadWidgets();

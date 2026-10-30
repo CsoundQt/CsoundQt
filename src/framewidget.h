@@ -80,6 +80,13 @@ private:
 	bool m_dragStarted;
 	QPoint m_lastGlobal;
 
+	// Shift-constrained resize: the axis is fixed for the whole drag to the
+	// first coordinate that changed (or the larger one if both changed at once).
+	// Ctrl is used because Shift starts a rubber-band selection on press.
+	enum class ResizeAxis { None, Horizontal, Vertical };
+	QPoint m_resizeStartGlobal;
+	ResizeAxis m_resizeAxis = ResizeAxis::None;
+
 signals:
 	void popUpMenu(QPoint pos);
 	void deselectAllSignal();

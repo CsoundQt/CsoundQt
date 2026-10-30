@@ -693,28 +693,6 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles)
     // them (does it actually work?)
     qApp->processEvents();
 
-    // This is a bad idea, breaks lots of subtle things, like background color
-    // on files loaded from command line
-#ifndef  Q_OS_MACOS // a workaround for showing close buttons on close NB! disable later
-
-    // auto originalStyleSheet = qApp->styleSheet();
-    // QFile file;
-    // if (isDarkPalette) {
-    //     QDEBUG << "Using dark palette";
-    //     file.setFileName(":/appstyle-dark.css");
-    // }
-    // else {
-    //     QDEBUG << "Using light palette, text lightness: " << palette.text().color().lightness() << ", window lightness: " << palette.window().color().lightness();
-    //     file.setFileName(":/appstyle-white.css");
-    // }
-    // file.open(QFile::ReadOnly);
-    // QString styleSheet = QLatin1String(file.readAll());
-    // originalStyleSheet += styleSheet;
-    //qApp->setStyleSheet(originalStyleSheet);
-    // qApp->setStyleSheet(styleSheet);
-
-#endif
-
     m_closing = false;
     // Show the document that is open at startup, if any.
     if (curPage >= 0 && curPage < documentPages.size()
@@ -1598,6 +1576,17 @@ void CsoundQt::duplicate()
 {
     qDebug() << "CsoundQt::duplicate()";
     documentPages[curPage]->duplicateWidgets();
+}
+
+void CsoundQt::toggleLockedWidgets()
+{
+    if (curPage < 0 || curPage >= documentPages.size())
+        return;
+    DocumentPage *doc = documentPages[curPage];
+    if (doc == nullptr)
+        return;
+    if (WidgetLayout *layout = doc->getWidgetLayout())
+        layout->toggleSelectedWidgetsLocked();
 }
 
 void CsoundQt::testAudioSetup()
@@ -4713,6 +4702,21 @@ void CsoundQt::applySettings()
 {
     applyWidgetStyle();
 
+    // Document tabs: use the application font plus the configured relative
+    // adjustment. Always start from qApp->font(), so repeated applySettings()
+    // calls do not accumulate the offset.
+    if (documentTabs != nullptr) {
+        QFont tabFont = qApp->font();
+        if (tabFont.pointSizeF() > 0.0) {
+            tabFont.setPointSizeF(qMax(1.0, tabFont.pointSizeF()
+                                       + m_options->tabFontSizeOffset));
+        } else if (tabFont.pixelSize() > 0) {
+            tabFont.setPixelSize(qMax(1, tabFont.pixelSize()
+                                      + m_options->tabFontSizeOffset));
+        }
+        documentTabs->tabBar()->setFont(tabFont);
+    }
+
     setColors(m_options->themeMode);  // Centralized theme handling
 
     // Apply the debug logging preference (may have been changed in the dialog).
@@ -4887,6 +4891,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setEditorPadding(m_options->editorPadding);
     p->setQuickHelpOnHover(m_options->quickHelpOnHover);
     p->setQuickHelpHoverDelay(m_options->quickHelpHoverDelay);
+    p->setShowVariableOccurrences(m_options->showVariableOccurrences);
 
     p->enableScoreSyntaxHighlighting(m_options->highlightScore);
 
@@ -5345,6 +5350,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     copyAct->setShortcut(tr("Ctrl+C"));
     pasteAct->setShortcut(tr("Ctrl+V"));
     duplicateAct->setShortcut(tr("Ctrl+D"));
+    toggleLockedWidgetAct->setShortcut(tr("Ctrl+L"));
     inToGetAct->setShortcut(tr(""));
     getToInAct->setShortcut(tr(""));
     highlightWidgetChannelAct->setShortcut(tr("Ctrl+Shift+H"));
@@ -5357,7 +5363,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     editAct->setShortcut(tr("CTRL+E"));
     runAct->setShortcut(tr("CTRL+R"));
     runTermAct->setShortcut(QKeySequence(Qt::CTRL|Qt::SHIFT|Qt::Key_T));
-    pauseAct->setShortcut(tr("Ctrl+Shift+M"));
+    pauseAct->setShortcut(tr("Ctrl+Shift+Space"));
 
     stopAct->setShortcut(tr("Ctrl+."));
     stopAllAct->setShortcut(QKeySequence(Qt::CTRL|Qt::SHIFT|Qt::Key_Period));
@@ -5418,6 +5424,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     goToSourceAct->setShortcut(tr("Ctrl+B"));
     reloadDependenciesAct->setShortcut(tr("Ctrl+Shift+B"));
     lineNumbersAct->setShortcut(tr("Shift+Alt+L"));
+    showOccurrencesAct->setShortcut(tr("Ctrl+Shift+A"));
     toggleToolbarAct->setShortcut(tr("Ctrl+T, T"));
     toggleScrollBarAct->setShortcut(tr("Ctrl+T, S"));
     parameterModeAct->setShortcut(tr("Shift+Alt+P"));
@@ -6150,12 +6157,29 @@ void CsoundQt::createActions()
     // Only meaningful while working with the widgets of the panel: it is
     // registered on the widget layout in connectActions().
     duplicateAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    duplicateAct->setProperty("shortcutScope", "widgetPanel");
     connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
+
+    toggleLockedWidgetAct = new QAction(tr("Toggle locked"), this);
+    toggleLockedWidgetAct->setStatusTip(tr("Lock or unlock the selected widgets"));
+    // Widget-panel-only action: registered on the current widget layout in
+    // connectActions(), and enabled there only with a selection in edit mode.
+    toggleLockedWidgetAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    toggleLockedWidgetAct->setProperty("shortcutScope", "widgetPanel");
+    connect(toggleLockedWidgetAct, &QAction::triggered,
+            this, &CsoundQt::toggleLockedWidgets);
 
     lineNumbersAct = new QAction(tr("Toggle line numbers"),this);
     // Editor action: scoped to the editor by applyEditorActions().
     lineNumbersAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(lineNumbersAct,SIGNAL(triggered()), this, SLOT(toggleLineArea()));
+
+    showOccurrencesAct = new QAction(tr("Show all occurrences of word"), this);
+    showOccurrencesAct->setStatusTip(
+                tr("Highlight every occurrence of the word under the cursor in "
+                   "the current instrument or opcode. Escape clears it."));
+    // Connected to the current page and scoped to the editor in connectActions().
+    showOccurrencesAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
     parameterModeAct = new QAction(tr("Toggle parameter mode"),this);
     connect(parameterModeAct,SIGNAL(triggered()), this, SLOT(toggleParameterMode()));
@@ -6234,6 +6258,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(copyAct);
     m_keyActions.append(pasteAct);
     m_keyActions.append(duplicateAct);
+    m_keyActions.append(toggleLockedWidgetAct);
     m_keyActions.append(inToGetAct);
     m_keyActions.append(getToInAct);
     m_keyActions.append(highlightWidgetChannelAct);
@@ -6301,6 +6326,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(evaluateAct);
     m_keyActions.append(selectInstrOpcodeAct);
     m_keyActions.append(lineNumbersAct);
+    m_keyActions.append(showOccurrencesAct);
     m_keyActions.append(toggleToolbarAct);
     m_keyActions.append(toggleScrollBarAct);
     m_keyActions.append(parameterModeAct);
@@ -6320,6 +6346,9 @@ void CsoundQt::connectActions()
     disconnect(moveLineDownAct, 0, 0, 0);
     connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
     //  connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
+    disconnect(showOccurrencesAct, 0, 0, 0);
+    connect(showOccurrencesAct, &QAction::triggered,
+            doc, &DocumentPage::showWordOccurrences);
     connect(tabsToSpacesAct, SIGNAL(triggered()), doc, SLOT(tabsToSpaces()));
     connect(killLineAct, SIGNAL(triggered()), doc, SLOT(killLine()));
     connect(killToEndAct, SIGNAL(triggered()), doc, SLOT(killToEnd()));
@@ -6332,9 +6361,14 @@ void CsoundQt::connectActions()
     // console, the inspector or a widget in the panel. Register them on the
     // page that is becoming current; this also drops them from the editor of
     // the previous page.
+    //
+    // Undo/redo and cut/copy/paste are deliberately NOT in this list: they are
+    // application-level actions whose slots dispatch to the focused panel
+    // (editor or widget layout, see DocumentPage::undo()/cut()/...). Scoping
+    // them to the editor would disable Ctrl+Z and clipboard shortcuts while
+    // the widget panel has focus.
     doc->applyEditorActions({
         // Text editing.
-        undoAct, redoAct, cutAct, copyAct, pasteAct,
         commentAct, tabsToSpacesAct,
         killLineAct, killToEndAct, duplicateLineAct,
         moveLineUpAct, moveLineDownAct,
@@ -6345,21 +6379,27 @@ void CsoundQt::connectActions()
         // Editor modes and highlights.
         parameterModeAct, highlightWidgetChannelAct,
         highlightWidgetChannelsAct,
+        showOccurrencesAct,
         // Document-level editor commands.
         checkSyntaxAct, reloadDependenciesAct, lineNumbersAct, selectInstrOpcodeAct
     });
 
-    // Duplicate Widgets belongs to the widgets panel. Register it on the
-    // page's widget layout: it is the parent of the widgets both when the
-    // panel is docked and when the widgets live in their own window. Take it
-    // back from the layout of the previous page first.
+    // Duplicate Widgets and Toggle locked belong to the widgets panel.
+    // Register them on the page's widget layout: it is the parent of the
+    // widgets both when the panel is docked and when the widgets live in their
+    // own window. Take them back from the layout of the previous page first.
     if (WidgetLayout *layout = doc->getWidgetLayout()) {
-        const QList<QObject *> associated = duplicateAct->associatedObjects();
-        for (QObject *object : associated) {
-            if (auto *oldLayout = qobject_cast<WidgetLayout *>(object))
-                oldLayout->removeAction(duplicateAct);
-        }
-        layout->addAction(duplicateAct);
+        const auto registerWidgetPanelAction = [layout](QAction *action) {
+            const QList<QObject *> associated = action->associatedObjects();
+            for (QObject *object : associated) {
+                if (auto *oldLayout = qobject_cast<WidgetLayout *>(object))
+                    oldLayout->removeAction(action);
+            }
+            layout->addAction(action);
+        };
+        registerWidgetPanelAction(duplicateAct);
+        registerWidgetPanelAction(toggleLockedWidgetAct);
+        layout->setToggleLockedAction(toggleLockedWidgetAct);
     }
 
     // line and column number connection
@@ -6536,6 +6576,7 @@ void CsoundQt::createMenus()
 
     editMenu->addSeparator();
     editMenu->addAction(findAct);
+    editMenu->addAction(showOccurrencesAct);
     editMenu->addAction(gotoLineAct);
     editMenu->addAction(goBackAct);
     editMenu->addAction(goToSourceAct);
@@ -6922,6 +6963,8 @@ void CsoundQt::readSettings()
         m_options->themeMode = "auto";
     m_options->widgetStyle = settings.value("widgetStyle",
                                            defaultWidgetStyleName()).toString();
+    m_options->tabFontSizeOffset =
+            qBound(-20, settings.value("tabFontSizeOffset", 0).toInt(), 0);
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     if(!pos.isNull())
         move(pos);
@@ -6993,6 +7036,16 @@ void CsoundQt::readSettings()
                 }
             }
         }
+    }
+    // "Show all occurrences of word" is new. Older settings still bind Pause
+    // to Ctrl+Shift+M (its former default, which also clashed with MIDI Learn);
+    // move Pause to its new default. MIDI Learn keeps Ctrl+Shift+M. If the
+    // previous development default put MIDI Learn on Ctrl+Shift+L, restore it.
+    if (!actionList.contains(showOccurrencesAct->text().remove("&"))) {
+        if (pauseAct && pauseAct->shortcut() == QKeySequence("Ctrl+Shift+M"))
+            pauseAct->setShortcut(QKeySequence("Ctrl+Shift+Space"));
+        if (midiLearnAct && midiLearnAct->shortcut() == QKeySequence("Ctrl+Shift+L"))
+            midiLearnAct->setShortcut(QKeySequence("Ctrl+Shift+M"));
     }
     // Older versions stored Ctrl+G for Find again. Move that inherited default
     // to F3; an explicitly different user binding is left untouched.
@@ -7089,6 +7142,8 @@ void CsoundQt::readSettings()
     m_options->showScrollBar = settings.value("showScrollBar", true).toBool();
     m_options->autoComplete = settings.value("autoComplete", true).toBool();
     m_options->quickHelpOnHover = settings.value("quickHelpOnHover", true).toBool();
+    m_options->showVariableOccurrences =
+            settings.value("showVariableOccurrences", true).toBool();
     m_options->quickHelpHoverDelay = settings.value("quickHelpHoverDelay", 500).toInt();
     m_options->autoCompleteDelay = settings.value("autoCompleteDelay", 150).toInt();
     m_options->autocompleteMenuWidth = settings.value("autocompleteMenuWidth", 42).toInt();
@@ -7299,6 +7354,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("theme", m_options->theme);
     settings.setValue("themeMode", m_options->themeMode);
     settings.setValue("widgetStyle", m_options->widgetStyle);
+    settings.setValue("tabFontSizeOffset", m_options->tabFontSizeOffset);
     settings.setValue("windowState", saveState());
     settings.setValue("windowGeometry", saveGeometry());
     settings.setValue("editorVisible", showEditorAct->isChecked());
@@ -7339,6 +7395,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("wrapLines", m_options->wrapLines);
     settings.setValue("showScrollBar", m_options->showScrollBar);
     settings.setValue("quickHelpOnHover", m_options->quickHelpOnHover);
+    settings.setValue("showVariableOccurrences", m_options->showVariableOccurrences);
     settings.setValue("quickHelpHoverDelay", m_options->quickHelpHoverDelay);
     settings.setValue("autoComplete", m_options->autoComplete);
     settings.setValue("autoCompleteDelay", m_options->autoCompleteDelay);

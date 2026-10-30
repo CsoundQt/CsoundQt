@@ -162,7 +162,7 @@ unix:!macx {
 
 	# see comments: https://github.com/CsoundQt/CsoundQt/issues/258
         desktop.path=$$SHARE_DIR/applications
-	desktop.files = $$PWD/csoundqt.desktop
+	desktop.files = $$PWD/io.github.CsoundQt.CsoundQt.desktop
 	INSTALLS += desktop
 
 	icon.path=$$SHARE_DIR/icons/hicolor/scalable/apps
@@ -205,14 +205,11 @@ macx {
 # -sign-for-notarization=\"Developer ID Application: Tarmo Johannes (DRQ77GKK9V)\" -dmg
     INSTALLS += first
 
-    #cocoa.path = $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/PlugIns/platforms # fix missing plugins (with qt 5.4.2 at least)
-    #cocoa.files =  $$[QT_INSTALL_PREFIX]/plugins/platforms/libqcocoa.dylib
-
     printsupport.path =  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/PlugIns/printsupport
     printsupport.files =  $$[QT_INSTALL_PREFIX]/plugins/printsupport/libcocoaprintersupport.dylib
 
-    pythonlinks.path= $$PWD
-    pythonlinks.commands = install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+    # pythonlinks.path= $$PWD
+    # pythonlinks.commands = install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
 
     # bundle command: install_name_tool -change /Applications/Csound/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Users/tarmojohannes/Documents/src/build-qcs-Qt_6_5_3_for_macOS-Release/bin/CsoundQt-d-cs7.app/Contents/MacOS/CsoundQt-d-cs7
     # sign with developer cert: codesign -s "Mac Developer: Tarmo Johannes (ND7C9HZ522)" --deep /Users/tarmojohannes/Documents/src/build-cs7-qcsQt_6_5_3_for_macOS-Release/bin/CsoundQt-d-cs7.app

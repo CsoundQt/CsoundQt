@@ -50,7 +50,7 @@ public:
 	void setFullText(QString text, bool goToTop = false);
 	void setBasicText(QString text);
 	void setFileType(editor_mode_t mode); // For higlighting mode
-	void setFont(QFont font);
+	virtual void setFont(QFont font);
 	void setFontPointSize(float size);
 	void setTabSize(int tabSize);
 	void setTabUseSpaces(bool useSpaces);

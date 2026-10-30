@@ -48,6 +48,16 @@ i 2 0 1000
 </CsoundSynthesizer>
 
 
+
+
+
+
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -57,11 +67,7 @@ i 2 0 1000
  <height>491</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>212</r>
-  <g>223</g>
-  <b>230</b>
- </bgcolor>
+ <bgcolor mode="background">#d4dfe6</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>80</x>
@@ -71,6 +77,7 @@ i 2 0 1000
   <uuid>{ad8c5fad-d76a-425a-a10e-4b87d3142e8b}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -79,22 +86,11 @@ i 2 0 1000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>191</r>
-   <g>204</g>
-   <b>234</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#bfccea</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -108,6 +104,7 @@ i 2 0 1000
   <uuid>{35d4a9c6-98b9-4783-aed1-9ad640324b68}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -116,35 +113,25 @@ i 2 0 1000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>184</r>
-   <g>195</g>
-   <b>200</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#b8c3c8</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>49</x>
-  <y>113</y>
+  <x>48</x>
+  <y>114</y>
   <width>80</width>
   <height>25</height>
   <uuid>{c9d833b8-a125-42dc-bddd-fe01cedac125}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -153,35 +140,25 @@ i 2 0 1000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>49</x>
+  <x>48</x>
   <y>138</y>
-  <width>80</width>
-  <height>25</height>
+  <width>105</width>
+  <height>24</height>
   <uuid>{660ba30b-432e-4ba9-aa47-1fc6de0c1e14}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -190,22 +167,11 @@ i 2 0 1000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -213,12 +179,13 @@ i 2 0 1000
  <bsbObject type="BSBGraph" version="2">
   <objectName/>
   <x>15</x>
-  <y>165</y>
+  <y>167</y>
   <width>500</width>
   <height>300</height>
   <uuid>{d4ba5f84-006d-44f5-8ad1-4959acf47abb}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -231,11 +198,11 @@ i 2 0 1000
   <dispy>1.00000000</dispy>
   <modex>lin</modex>
   <modey>lin</modey>
-  <showSelector>true</showSelector>
+  <showSelector>false</showSelector>
   <showGrid>true</showGrid>
-  <showTableInfo>true</showTableInfo>
-  <showScrollbars>true</showScrollbars>
-  <enableTables>true</enableTables>
+  <showTableInfo>false</showTableInfo>
+  <showScrollbars>false</showScrollbars>
+  <enableTables>false</enableTables>
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
@@ -248,6 +215,7 @@ i 2 0 1000
   <uuid>{95f875a7-941b-45b5-b4f9-d353d1f2e483}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -256,22 +224,11 @@ i 2 0 1000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>184</r>
-   <g>195</g>
-   <b>200</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#b8c3c8</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -285,13 +242,22 @@ i 2 0 1000
   <uuid>{4784a930-dd88-408c-b5eb-9c17c28e0b5d}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <selected>true</selected>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -302,6 +268,7 @@ i 2 0 1000
   <uuid>{0cea6f98-f6a5-4bba-9a75-2fb84e817366}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -310,22 +277,11 @@ i 2 0 1000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -339,13 +295,22 @@ i 2 0 1000
   <uuid>{f773da97-1a7b-4950-aa2b-146323c34897}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <selected>true</selected>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -356,6 +321,7 @@ i 2 0 1000
   <uuid>{6e3bc69c-c7b1-4f5e-a83c-73474a679066}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -364,22 +330,11 @@ i 2 0 1000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -393,6 +348,7 @@ i 2 0 1000
   <uuid>{95ffad56-9b0a-4f4d-9698-26fea6b90a73}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -400,6 +356,14 @@ i 2 0 1000
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>lowpass</objectName>
@@ -410,6 +374,7 @@ i 2 0 1000
   <uuid>{b931c42f-6de4-4e79-add7-eb71793915ab}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -417,6 +382,253 @@ i 2 0 1000
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>15</x>
+  <y>580</y>
+  <width>500</width>
+  <height>161</height>
+  <uuid>{797e979d-345b-44d1-950b-b97de2c72d21}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Flat checkboxes</label>
+  <alignment>center</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
+  <padding>5</padding>
+  <locked>true</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#c1a9c8</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>5</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBCheckBox" version="2">
+  <objectName>check2</objectName>
+  <x>25</x>
+  <y>639</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{2bf922b1-d564-4d94-89a9-7b918f73a340}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <selected>true</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <color>#191919</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#cecece</textColor>
+  <borderWidth>0</borderWidth>
+  <borderRadius>0</borderRadius>
+  <padding>2</padding>
+  <checkstyle>full</checkstyle>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>49</x>
+  <y>636</y>
+  <width>300</width>
+  <height>28</height>
+  <uuid>{a6b6ec39-4aaa-4b7b-9ca6-dfa50ad92a3c}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Flat check box with "full" style check</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>11</fontsize>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBCheckBox" version="2">
+  <objectName>check1</objectName>
+  <x>25</x>
+  <y>609</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{19a0bea3-2a25-48d4-9fb2-0f75971c0ac3}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>2</padding>
+  <checkstyle>x</checkstyle>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>49</x>
+  <y>604</y>
+  <width>300</width>
+  <height>27</height>
+  <uuid>{8f09dba5-6641-45a2-8d57-8126615c8c30}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Flat checkbox with x</label>
+  <alignment>left</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>11</fontsize>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBCheckBox" version="2">
+  <objectName>check2</objectName>
+  <x>25</x>
+  <y>700</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{e444bfc3-8ac9-4cb0-9584-ab73b428e143}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <selected>true</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <color>#732600</color>
+  <borderColor>#643119</borderColor>
+  <textColor>#ff6720</textColor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>9</borderRadius>
+  <padding>3</padding>
+  <checkstyle>full</checkstyle>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>49</x>
+  <y>696</y>
+  <width>300</width>
+  <height>28</height>
+  <uuid>{d71d653a-3038-4ff8-9c88-5cd3fa21dcbd}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Flat check box with "full" style check, round</label>
+  <alignment>left</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>11</fontsize>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBCheckBox" version="2">
+  <objectName>check1</objectName>
+  <x>25</x>
+  <y>670</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{72c2a786-018f-47ee-ac6f-70d27a9b6dad}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>0</borderRadius>
+  <padding>4</padding>
+  <checkstyle>x</checkstyle>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>49</x>
+  <y>665</y>
+  <width>300</width>
+  <height>27</height>
+  <uuid>{c00259b3-8b09-4657-b885-f08cfd010ec3}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Flat checkbox with x, more padding, square corners</label>
+  <alignment>left</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>11</fontsize>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -339,6 +339,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     if (styleIndex < 0)
         styleIndex = 0;
     widgetStyleComboBox->setCurrentIndex(styleIndex);
+    tabFontSizeSpinBox->setValue(m_options->tabFontSizeOffset);
 
 
 
@@ -359,6 +360,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	autoCompleteCheckBox->setChecked(m_options->autoComplete);
     quickHelpOnHoverCheckBox->setChecked(m_options->quickHelpOnHover);
     quickHelpOnHoverDelaySpinBox->setValue(m_options->quickHelpHoverDelay);
+    showVariableOccurrencesCheckBox->setChecked(m_options->showVariableOccurrences);
     autoCompleteDelaySpinBox->setValue(m_options->autoCompleteDelay);
     autocompleteMenuWidthSpinBox->setValue(m_options->autocompleteMenuWidth);
     autocompleteMenuMaxLinesSpinBox->setValue(m_options->autocompleteMenuMaxLines);
@@ -741,6 +743,7 @@ void ConfigDialog::apply()
     m_options->themeMode = themeComboBox->currentData().toString();    // to allow to be translated
     m_options->editorTheme = editorThemeComboBox->currentData().toString();
     m_options->widgetStyle = widgetStyleComboBox->currentData().toString();
+    m_options->tabFontSizeOffset = tabFontSizeSpinBox->value();
 
 	m_options->autoJoin = autoJoinCheckBox->isChecked();
 	m_options->menuDepth = menusDepthSpinBox->value();
@@ -762,6 +765,7 @@ void ConfigDialog::apply()
 	// Keep the delay on the spin box grid even when a value was typed in.
 	m_options->quickHelpHoverDelay =
 			(quickHelpOnHoverDelaySpinBox->value() / 10) * 10;
+	m_options->showVariableOccurrences = showVariableOccurrencesCheckBox->isChecked();
     m_options->autoCompleteDelay = autoCompleteDelaySpinBox->value();
     m_options->autocompleteMenuWidth = autocompleteMenuWidthSpinBox->value();
     m_options->autocompleteMenuMaxLines = autocompleteMenuMaxLinesSpinBox->value();

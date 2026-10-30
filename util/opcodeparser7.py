@@ -80,6 +80,17 @@ def merge_optional_groups(in_args):
                    + in_args[match.end():])
 
 
+def tidy_syntax(text):
+    """Tighten the syntax text stored in opcodes.xml.
+
+    The autocomplete menu shows these lines verbatim, so the typographic
+    cleanup belongs in the generated data: a single ellipsis instead of three
+    dots (common for unlimited argument lists), and no space directly after
+    the opening bracket of an optional argument group.
+    """
+    return text.replace('...', '…').replace(' [, ', ' [,')
+
+
 @dataclass
 class OpcodeDef:
     """One opcode, as it is written in the manual."""
@@ -217,16 +228,18 @@ def resolve(line, candidates):
     call = CALL_RE.search(line)
     if call:
         name = call.group(1)
-        return (name, line[:call.start(1)].strip(),
-                merge_optional_groups(line[call.end(1):].strip()))
+        return (name, tidy_syntax(line[:call.start(1)].strip()),
+                tidy_syntax(merge_optional_groups(
+                    line[call.end(1):].strip())))
 
     for candidate in candidates:
         if not candidate:
             continue
         match = re.search(name_pattern(candidate), line)
         if match:
-            return (candidate, line[:match.start()].strip(),
-                    merge_optional_groups(line[match.end():].strip()))
+            return (candidate, tidy_syntax(line[:match.start()].strip()),
+                    tidy_syntax(merge_optional_groups(
+                        line[match.end():].strip())))
     return None
 
 

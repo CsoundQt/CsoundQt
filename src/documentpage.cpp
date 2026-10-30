@@ -1417,7 +1417,7 @@ void DocumentPage::goToSource(const QString &name, bool isScheduleArgument)
 }
 
 void DocumentPage::autocomplete() {
-    m_view->autoCompleteAtCursor();
+    m_view->autoCompleteAtCursor(true);
 }
 
 void DocumentPage::insertOpcode() {
@@ -1434,6 +1434,14 @@ void DocumentPage::setChannelHighlightMode(ChannelHighlightMode mode) {
 
 void DocumentPage::setQuickHelpOnHover(bool enabled) {
     m_view->setQuickHelpOnHover(enabled);
+}
+
+void DocumentPage::setShowVariableOccurrences(bool enabled) {
+    m_view->setShowVariableOccurrences(enabled);
+}
+
+void DocumentPage::showWordOccurrences() {
+    m_view->showWordOccurrences();
 }
 
 void DocumentPage::setQuickHelpHoverDelay(int milliseconds) {

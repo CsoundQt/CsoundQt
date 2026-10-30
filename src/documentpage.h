@@ -223,6 +223,9 @@ public:
 	void setQuickHelpOnHover(bool enabled);
 	// How long, in milliseconds, the pointer must rest before that card shows.
 	void setQuickHelpHoverDelay(int milliseconds);
+	// Highlight all occurrences of the selected variable in the current
+	// instrument/opcode.
+	void setShowVariableOccurrences(bool enabled);
 	// Experimental: mark editor lines that reference the selected widget.
 	void highlightSelectedWidgetChannels();
 	void updateWidgetChannelLineHighlights();
@@ -290,6 +293,9 @@ public slots:
 	void comment();
 	void uncomment();
 	void tabsToSpaces();
+	// Highlight all occurrences of the word at the cursor/selection in the
+	// current instrument or opcode (Edit -> Show all occurrences of word).
+	void showWordOccurrences();
 	void killLine();
 	void killToEnd();
 	void duplicateLine();

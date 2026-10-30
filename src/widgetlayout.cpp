@@ -246,8 +246,6 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 
     storePresetAct = new QAction(tr("Store Preset"), this);
     connect(storePresetAct, SIGNAL(triggered()), this, SLOT(savePreset()));
-    newPresetAct = new QAction(tr("New Preset"), this);
-    connect(newPresetAct, SIGNAL(triggered()), this, SLOT(newPreset()));
     recallPresetAct = new QAction(tr("Recall Preset"), this);
     connect(recallPresetAct, SIGNAL(triggered()), this, SLOT(loadPreset()));
 
@@ -1578,6 +1576,14 @@ void WidgetLayout::setWidgetsLocked(bool lock)
     widgetsMutex.unlock();
 }
 
+void WidgetLayout::setToggleLockedAction(QAction *action)
+{
+    toggleLockedAct = action;
+    if (toggleLockedAct != nullptr) {
+        toggleLockedAct->setEnabled(m_editMode && !getSelectedWidgets().isEmpty());
+    }
+}
+
 void WidgetLayout::appendCurve(WINDAT *windat)
 {
     // Called from the Csound callback, creates a curve and queues it for processing
@@ -1968,6 +1974,11 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
         // Shortcut from the duplicate action is not working from some reason...
         //  menu.addAction(duplicateAct);
         editMenu.addAction(clearAct);
+        editMenu.addSeparator();
+        if (toggleLockedAct != nullptr) {
+            toggleLockedAct->setEnabled(hasSelection);
+            editMenu.addAction(toggleLockedAct);
+        }
         menu.addMenu(&editMenu);
         menu.addSeparator();
     }
@@ -1979,17 +1990,17 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
             this, [this]() { highlightWidgetChannels(nullptr); });
     menu.addSeparator();
 
-    // Presets are also useful while the instrument is running; creating or
-    // updating them is an edit-time operation.
+    // Presets are useful both while editing and during performance: storing and
+    // creating presets works with the live widget values, and recalling one
+    // applies them. A new preset is created from the Store Preset dialog
+    // (its "New Preset" button); Recall is only offered once one exists.
     QMenu presetMenu(tr("Presets", "Preset submenu in widget layout popup"), &menu);
-    storePresetAct->setEnabled(editing);
-    newPresetAct->setEnabled(editing);
-    recallPresetAct->setEnabled(!presets.isEmpty());
-    if (editing) {
-        presetMenu.addAction(storePresetAct);
-        presetMenu.addAction(newPresetAct);
+    storePresetAct->setEnabled(true);
+    presetMenu.addAction(storePresetAct);
+    if (!presets.isEmpty()) {
+        recallPresetAct->setEnabled(true);
+        presetMenu.addAction(recallPresetAct);
     }
-    presetMenu.addAction(recallPresetAct);
     menu.addMenu(&presetMenu);
 
     if (editing) {
@@ -4490,6 +4501,7 @@ void WidgetLayout::newPreset()
 void WidgetLayout::savePreset()
 {
     QDialog d(this);
+    d.setWindowTitle(tr("Presets"));
     QVBoxLayout *l = new QVBoxLayout(&d);
     QLabel *lab= new QLabel(&d);
     QComboBox *box = new QComboBox(&d);
@@ -4733,6 +4745,8 @@ void WidgetLayout::setEditMode(bool active)
     selectRightAct->setEnabled(active);
     selectUpAct->setEnabled(active);
     selectDownAct->setEnabled(active);
+    if (toggleLockedAct != nullptr)
+        toggleLockedAct->setEnabled(active && !getSelectedWidgets().isEmpty());
 }
 
 void WidgetLayout::setDrawingEnabled(bool enabled)
@@ -5144,6 +5158,39 @@ void WidgetLayout::deleteSelected()
     setModified(true);
 }
 
+void WidgetLayout::toggleSelectedWidgetsLocked()
+{
+    if (!m_editMode)
+        return;
+    const QList<QuteWidget *> selected = getSelectedWidgets();
+    if (selected.isEmpty())
+        return;
+
+    bool changed = false;
+    for (QuteWidget *widget : selected) {
+        // Only widgets that expose the property can be locked (currently
+        // labels). Do not create it on widgets that do not support it.
+        if (!widget->property("CSQT_locked").isValid())
+            continue;
+        widget->setProperty("CSQT_locked",
+                            !widget->property("CSQT_locked").toBool());
+        changed = true;
+    }
+    if (!changed)
+        return;
+
+    // Locked/unlocked frames use different border styles (dotted vs solid).
+    widgetsMutex.lock();
+    const int count = qMin(editWidgets.size(), m_widgets.size());
+    for (int i = 0; i < count; i++) {
+        if (editWidgets[i]->isSelected())
+            editWidgets[i]->refreshFrameAppearance();
+    }
+    widgetsMutex.unlock();
+    markHistory();
+    setModified(true);
+}
+
 void WidgetLayout::moveSelected(int horiz, int vert, int grid) {
     widgetsMutex.lock();
 
@@ -5381,10 +5428,14 @@ void WidgetLayout::updateData()
 
 void WidgetLayout::widgetSelected(QuteWidget *widget)
 {
+    if (toggleLockedAct != nullptr)
+        toggleLockedAct->setEnabled(m_editMode && !getSelectedWidgets().isEmpty());
     emit widgetSelectedSignal(widget);
 }
 
 void WidgetLayout::widgetUnselected(QuteWidget *widget)
 {
+    if (toggleLockedAct != nullptr)
+        toggleLockedAct->setEnabled(m_editMode && !getSelectedWidgets().isEmpty());
     emit widgetUnselectedSignal(widget);
 }

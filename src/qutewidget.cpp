@@ -586,6 +586,7 @@ QString QuteWidget::propertyType(const QString &name) const
         {u"latch"_s, u"boolean"_s},
         {u"momentaryMidiButton"_s, u"boolean"_s},
         {u"flatStyle"_s, u"boolean"_s},
+        {u"checkstyle"_s, u"string"_s},
         {u"randomizable"_s, u"boolean"_s},
         {u"randomizableMode"_s, u"integer"_s},
         {u"randomizableGroup"_s, u"integer"_s},
@@ -653,6 +654,7 @@ QString QuteWidget::propertyDescription(const QString &name) const
         {u"borderWidth"_s, u"Border width in pixels"_s},
         {u"borderRadius"_s, u"Corner radius in pixels"_s},
         {u"flatStyle"_s, u"Use a flat, platform-independent style"_s},
+        {u"checkstyle"_s, u"Check mark style: \"x\" or \"full\""_s},
         {u"latch"_s, u"Stays pressed until clicked again"_s},
         {u"latched"_s, u"Current latched state"_s},
         {u"momentaryMidiButton"_s, u"Latching behaviour for MIDI notes/buttons"_s},
@@ -926,50 +928,9 @@ void QuteWidget::popUpMenu(QPoint pos)
         else
             menu.addAction(action);
 	}
-	if (!actionList.isEmpty())
-		menu.addSeparator();
 
     layout->setCurrentPosition(layout->mapFromGlobal(pos));
 
-	if (layout->isEditMode()) {
-		menu.addAction(layout->storePresetAct);
-		menu.addAction(layout->newPresetAct);
-	}
-	menu.addAction(layout->recallPresetAct);
-
-    menu.addSeparator();
-
-    QMenu presetMenu(tr("Presets"), &menu);
-
-	QList<int> list = layout->getPresetNums();
-	for (int i = 0; i < list.size(); i++) {
-		QAction *act = new QAction(layout->getPresetName(list[i]), &menu);
-		act->setData(i);
-		connect(act, SIGNAL(triggered()), layout, SLOT(loadPresetFromAction()));
-		presetMenu.addAction(act);
-	}
-
-    /*
-    menu.addSeparator();
-
-    QMenu createMenu(tr("Create New", "Menu name in widget right-click menu"),&menu);
-    createMenu.addAction(layout->createSliderAct);
-    createMenu.addAction(layout->createLabelAct);
-    createMenu.addAction(layout->createDisplayAct);
-    createMenu.addAction(layout->createScrollNumberAct);
-    createMenu.addAction(layout->createLineEditAct);
-    createMenu.addAction(layout->createSpinBoxAct);
-    createMenu.addAction(layout->createButtonAct);
-    createMenu.addAction(layout->createKnobAct);
-    createMenu.addAction(layout->createCheckBoxAct);
-    createMenu.addAction(layout->createMenuAct);
-    createMenu.addAction(layout->createMeterAct);
-    createMenu.addAction(layout->createConsoleAct);
-    createMenu.addAction(layout->createGraphAct);
-    createMenu.addAction(layout->createScopeAct);
-
-    menu.addMenu(&createMenu);
-    */
 	menu.exec(pos);
 }
 
@@ -1272,6 +1233,21 @@ QList<QAction *> QuteWidget::getParentActionList()
     actionList.append(layout->distributeHorizontalAct);
     actionList.append(layout->distributeVerticalAct);
     actionList.append(nullptr);
+
+    // Locking only exists for widgets that carry the CSQT_locked property.
+    // Show the action when the clicked widget or any selected widget supports it.
+    bool anyLockable = this->property("CSQT_locked").isValid();
+    for (QuteWidget *w : layout->getSelectedWidgets()) {
+        if (w->property("CSQT_locked").isValid()) {
+            anyLockable = true;
+            break;
+        }
+    }
+    if (layout->toggleLockedAct != nullptr && anyLockable) {
+        actionList.append(layout->toggleLockedAct);
+        actionList.append(nullptr);
+    }
+
     actionList.append(layout->copyAct);
     actionList.append(layout->pasteAct);
     actionList.append(layout->cutAct);

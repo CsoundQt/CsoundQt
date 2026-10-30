@@ -53,8 +53,9 @@ private:
 	// the default; plain text otherwise.
 	void formatShortcutItem(int row, QAction *action);
 	// The rows whose shortcut cannot coexist with this one: the same sequence,
-	// or one that is a prefix of the other.
-	QList<int> conflictingRows(const QString &shortcut, int excludeRow = -1) const;
+	// or one that is a prefix of the other, within the same scope.
+	QList<int> conflictingRows(const QString &shortcut, QAction *candidate,
+							   int excludeRow = -1) const;
 
 	QVector<QAction *> m_keyActions;
 	// Built-in shortcuts, before the stored assignments were applied.
