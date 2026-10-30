@@ -973,11 +973,24 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         // in the file must not be restored.
         if (widget->isTransitoryProperty(nodeName))
             continue;
+        // <background> holds a string ("background"/"nobackground") for text
+        // widgets, but a colour for table plots (the plot background).
+        const bool tableBackground =
+                nodeName == "background"
+                && widget->getWidgetTypeID() == QuteWidgetType::TABLEDISPLAY;
         if (nodeName == "color" || nodeName == "bgcolor"
                 || nodeName == "bordercolor"
-                || nodeName == "cursorcolor") {  // COLOR type
+                || nodeName == "cursorcolor"
+                || nodeName == "foreground"
+                || nodeName == "gridcolor"
+                || tableBackground) {  // COLOR type
             if (node.attribute("mode") == "background") {
                 widget->setProperty("CSQT_bgcolormode", true);
+            }
+            // Table plots used to store the curve colour as <color>.
+            if (nodeName == "color"
+                    && widget->getWidgetTypeID() == QuteWidgetType::TABLEDISPLAY) {
+                nodeName = "foreground";
             }
             nodeName.prepend("CSQT_");
             widget->setProperty(nodeName.toLocal8Bit(), getColorFromElement(node));
@@ -987,7 +1000,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         // because the property will be rightly typed, and that can be queried
         else if (nodeName == "value" || nodeName == "resolution"
                  || nodeName == "minimum" || nodeName == "maximum"
-                 || nodeName == "pressedValue") {  // DOUBLE type
+                 || nodeName == "pressedValue"
+                 || nodeName == "samplerate") {  // DOUBLE type
             nodeName.prepend("CSQT_");
             widget->setProperty(nodeName.toLocal8Bit(), node.firstChild().nodeValue().toDouble());
         }
