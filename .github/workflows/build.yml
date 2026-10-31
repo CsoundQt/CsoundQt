@@ -126,7 +126,12 @@ jobs:
             ccache-macos-${{ runner.os }}-
 
       - name: Install ccache
-        run: brew install ccache
+        run: |
+          # A stale Homebrew Backup/ entry can resolve to the same file as the
+          # live link and make brew abort with "same file: ..." while relinking
+          # (see the note where the Homebrew cache step used to be).
+          rm -rf "$(brew --cache)/Backup"
+          brew install ccache
 
       # Single Csound build: static deps, arm64, Release, installed into
       # csound_install. CsoundQt links against this same framework and the
