@@ -4,6 +4,7 @@ on:
     branches-ignore:
       - develop
       - csound7
+      - csoundqt7-qtwebengine
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -413,109 +414,8 @@ jobs:
       - name: unit test opcodes
         run: bash tests/run-tests.sh --only opcodes
 
-  buildjob-htmlsupport-linux:
-    name: Test Build CsoundQt HTML5 GUI (QtWebEngine, html_support)
-    runs-on: ubuntu-24.04
-    continue-on-error: true
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 1
-
-      - name: update submodules
-        run: |
-          git submodule update --init --recursive
-          git submodule status --recursive
-          echo "Finished submodules"
-
-      - name: Checkout Csound
-        uses: actions/checkout@v4
-        with:
-          repository: csound/csound
-          path: csound
-          ref: develop
-          fetch-depth: 1
-
-      - name: Get Csound commit hash
-        id: csound-hash
-        run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Get OS version
-        id: os-version
-        run: |
-          value="unknown"
-          if [ -f /etc/os-release ]; then
-            value="$(. /etc/os-release && echo "${VERSION_ID:-unknown}")"
-          fi
-          echo "value=${value}" >> "$GITHUB_OUTPUT"
-
-      - name: Cache Csound build
-        id: cache-csound
-        uses: actions/cache@v4
-        with:
-          path: csound/build-linux
-          key: csound-${{ runner.os }}-${{ steps.os-version.outputs.value }}-${{ runner.arch }}-${{ steps.csound-hash.outputs.hash }}-v2
-          restore-keys: |
-            csound-${{ runner.os }}-${{ steps.os-version.outputs.value }}-${{ runner.arch }}-
-
-      - name: Setup ccache
-        uses: hendrikmuhs/ccache-action@v1
-        with:
-          key: ${{ runner.os }}-${{ runner.arch }}-htmlsupport
-          max-size: 2G
-
-      - name: Linux build deps
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y \
-            cmake pkg-config libsndfile1-dev libasound2-dev libjack-dev \
-            portaudio19-dev libportmidi-dev default-jdk libpng-dev \
-            libgmm++-dev bison flex libportsmf-dev libeigen3-dev \
-            libcunit1-dev
-
-      - name: linux csound build
-        if: steps.cache-csound.outputs.cache-hit != 'true'
-        run: |
-          cd csound
-          mkdir -p build-linux
-          cd build-linux
-          cmake .. \
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF \
-            -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF \
-            -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF \
-            -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
-          cmake --build . --parallel
-
-      - name: linux csound install
-        run: |
-          cd csound/build-linux
-          sudo cmake --install .
-          sudo ldconfig
-          csound --version
-
-      - name: Install Qt with WebEngine in linux
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: '6.8.3'
-          host: linux
-          target: desktop
-          arch: linux_gcc_64
-          modules: 'qtwebengine qtwebchannel'
-          cache: true
-
-      - name: linux csoundqt7 html_support build
-        run: |
-          qmake --version
-          git submodule update --init --recursive
-          qmake CONFIG+=rtmidi CONFIG+=html_support CONFIG+=release \
-            QMAKE_CC="ccache gcc" \
-            QMAKE_CXX="ccache g++" \
-            qcs.pro
-          make -j$(nproc)
+  # The QtWebEngine/html_support build test lives in html5-testbuild.yml and
+  # only runs on the csoundqt7-qtwebengine branch, where that code still is.
 
   buildjob-arm64-linux:
     name: Test Build CsoundQt on Linux arm64

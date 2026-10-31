@@ -46,20 +46,22 @@ DOWNLOADS_DIR="$WORK_DIR/downloads"
 JOBS="${JOBS:-$(nproc)}"
 
 # --- pinned versions, see util/latest-commits.sh -----------
-LIBLO_VERSION="0.35"
-LIBLO_URL="https://github.com/radarsat1/liblo/releases/download/$LIBLO_VERSION/liblo-$LIBLO_VERSION.tar.gz"
-LIBLO_SHA256="9acc4f7e5a24f33472e9acd7e409b7bd6810a46f0a1f3cfeecea22d60f3aae13"
-
 CSOUND_COMMIT="${CSOUND_COMMIT:-6390905b0ddac316a9f1c58c57e8b367117db4a5}"
-CSOUND_REPO="https://github.com/csound/csound.git"
+CSOUND_PLUGINS_COMMIT="${CSOUND_PLUGINS_COMMIT:-74068d692a9c54b66ec4420b29485d187b6e8f1f}"
 
-CSOUND_PLUGINS_COMMIT="${CSOUND_PLUGINS_COMMIT:-398a8fec767c4d042327c4e5488a11b17a553571}"
+
+CSOUND_REPO="https://github.com/csound/csound.git"
 CSOUND_PLUGINS_REPO="https://github.com/csound-plugins/csound-plugins"
+
 JSUSFX_COMMIT="${JSUSFX_COMMIT:-bcc9cd7b910ee7bba5b4cd2649448ade2ec15712}"
 JSUSFX_REPO="https://github.com/asb2m10/jsusfx"
 
 MANUAL_URL="https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip"
 MANUAL_SHA256="f7dbd58879d22429e0a6f1d3c84c34ab7accf71b582be59f3f6a2f2b312e5e19"
+
+LIBLO_VERSION="0.35"
+LIBLO_URL="https://github.com/radarsat1/liblo/releases/download/$LIBLO_VERSION/liblo-$LIBLO_VERSION.tar.gz"
+LIBLO_SHA256="9acc4f7e5a24f33472e9acd7e409b7bd6810a46f0a1f3cfeecea22d60f3aae13"
 
 # --- Qt ---------------------------------------------------------------------
 QT_VERSION="${QT_VERSION:-6.11.2}"

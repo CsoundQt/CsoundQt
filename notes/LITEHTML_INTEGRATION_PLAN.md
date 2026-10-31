@@ -31,7 +31,8 @@ Last updated: 2026-09-01
   guard fixed to `CSQT_QTHTML`).
 - **Phase 5 done (manifest + CI)**: flatpak no longer uses the qtwebengine base /
   `QTWEBENGINEPROCESS_PATH`; `testbuild-qt6.yml` default jobs drop WebEngine and a
-  new `buildjob-htmlsupport-linux` job keeps the HTML5 GUI compile-tested.
+  new `html5-testbuild.yml` (`buildjob-htmlsupport-linux`, run only on the
+  `csoundqt7-qtwebengine` branch) keeps the HTML5 GUI compile-tested.
 - **Phase 7 partial**: build + no-WebEngine-link + startup verified. Manual
   interaction (find/selection/zoom/search across roots, `.csd`/external links,
   resizing) validated in the spike against the same index files; a final manual
