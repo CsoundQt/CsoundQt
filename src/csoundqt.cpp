@@ -35,6 +35,8 @@
 #include <QSaveFile>
 #include <QShortcut>
 #include <QToolTip>
+#include <QHelpEvent>
+#include <QFontMetrics>
 #include <QScreen>
 #include <QResizeEvent>
 #include <QDateTime>
@@ -61,6 +63,7 @@
 #include "options.h"
 #include "csoundqt.h"
 #include "widgetstyle.h"
+#include "tooltiphelper.h"
 #include "debuglog.h"
 #include "editorthemes.h"
 #include "widgetpanel.h"
@@ -4957,6 +4960,10 @@ QPalette CsoundQt::makeAppPalette(bool dark)
         // Disabled state tweaks
         p.setColor(QPalette::Disabled, QPalette::Text, QColor("#7f8c8d"));
         p.setColor(QPalette::Disabled, QPalette::ButtonText, QColor("#7f8c8d"));
+        // setColor(role, colour) above sets every group, so the disabled text
+        // colour has to be restored explicitly; otherwise disabled labels do
+        // not look disabled.
+        p.setColor(QPalette::Disabled, QPalette::WindowText, QColor("#7f8c8d"));
     }
     else {
         p.setColor(QPalette::Window,          QColor("#eff0f1"));
@@ -4975,6 +4982,7 @@ QPalette CsoundQt::makeAppPalette(bool dark)
         p.setColor(QPalette::HighlightedText, QColor("#fcfcfc"));
         p.setColor(QPalette::Disabled, QPalette::Text, QColor("#7f8c8d"));
         p.setColor(QPalette::Disabled, QPalette::ButtonText, QColor("#7f8c8d"));
+        p.setColor(QPalette::Disabled, QPalette::WindowText, QColor("#7f8c8d"));
     }
 
     // PlaceholderText is not set above, so it would fall back to a default
@@ -4988,6 +4996,42 @@ QPalette CsoundQt::makeAppPalette(bool dark)
     return p;
 }
 
+
+namespace {
+
+// QToolTip text set with QWidget::setToolTip() is displayed by a plain QLabel.
+// Wrap it before Qt shows it so long help texts do not become one very wide
+// line. Rich text already provides its own layout and is left alone.
+class ToolTipWrapFilter : public QObject
+{
+public:
+    using QObject::QObject;
+
+protected:
+    bool eventFilter(QObject *object, QEvent *event) override
+    {
+        if (event->type() != QEvent::ToolTip)
+            return QObject::eventFilter(object, event);
+        auto *widget = qobject_cast<QWidget *>(object);
+        if (widget == nullptr)
+            return QObject::eventFilter(object, event);
+
+        const QString text = widget->toolTip();
+        if (text.isEmpty() || Qt::mightBeRichText(text)
+                || !ToolTipHelper::isTooWide(text, QToolTip::font())) {
+            return QObject::eventFilter(object, event);
+        }
+
+        const auto *helpEvent = static_cast<const QHelpEvent *>(event);
+        QToolTip::showText(helpEvent->globalPos(),
+                           ToolTipHelper::wrappedLines(text, QToolTip::font())
+                                   .join(QLatin1Char('\n')),
+                           widget);
+        return true;
+    }
+};
+
+} // namespace
 
 static void configureNativeToolTips()
 {
@@ -5006,6 +5050,9 @@ static void configureNativeToolTips()
     QFont tipFont = qApp->font();
     tipFont.setPixelSize(11);
     QToolTip::setFont(tipFont);
+
+    // Wrap long plain-text tooltips; Qt itself only wraps them at screen width.
+    new ToolTipWrapFilter(qApp);
 }
 
 

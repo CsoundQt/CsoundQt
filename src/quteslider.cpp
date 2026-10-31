@@ -256,20 +256,22 @@ void QuteSlider::createPropertiesDialog()
 {
 	QuteWidget::createPropertiesDialog();
 	dialog->setWindowTitle("Slider");
+	int row = 2;
 	QLabel *label = new QLabel(dialog);
 	label->setText("Min =");
-	layout->addWidget(label, 2, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	minSpinBox = new QDoubleSpinBox(dialog);
 	minSpinBox->setDecimals(6);
 	minSpinBox->setRange(-99999.0, 99999.0);
-	layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(minSpinBox, row,1, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Max =");
-	layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	maxSpinBox = new QDoubleSpinBox(dialog);
 	maxSpinBox->setDecimals(6);
 	maxSpinBox->setRange(-99999.0, 99999.0);
-	layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(maxSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif

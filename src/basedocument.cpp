@@ -249,6 +249,7 @@ WidgetLayout* BaseDocument::newWidgetLayout()
 	// return wl;
 	
 	WidgetLayout* wl = new WidgetLayout(0);
+    wl->setDocumentFileName(fileName);
     wl->setWindowFlags(Qt::Window | wl->windowFlags());
     // wl->setAttribute(Qt::WA_QuitOnClose, false);
     // Prevent accessibility system from registering this as a top-level window
@@ -449,6 +450,11 @@ void BaseDocument::loadTextString(QString &text)
 void BaseDocument::setFileName(QString name)
 {
 	fileName = name;
+	// Keep the widget panels' notion of the document path in sync, so that
+	// widget properties storing file paths (e.g. button images) can be
+	// resolved relative to the .csd.
+	for (WidgetLayout *layout : m_widgetLayouts)
+		layout->setDocumentFileName(name);
 	if (name.endsWith(".csd") || name.isEmpty()) {
 		m_view->setFileType(EDIT_CSOUND_MODE);
 	}

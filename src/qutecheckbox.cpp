@@ -495,15 +495,16 @@ void QuteCheckBox::createPropertiesDialog()
 {
 	QuteWidget::createPropertiesDialog();
 	dialog->setWindowTitle("Check Box");
+	int row = 4;
 
 	QLabel * label = new QLabel(dialog);
 	label->setText("Pressed Value");
-	layout->addWidget(label, 4, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     valueBox = new QDoubleSpinBox(dialog);
 	valueBox->setDecimals(6);
 	valueBox->setRange(-9999999.0, 9999999.0);
-	layout->addWidget(valueBox, 4, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(valueBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
@@ -512,6 +513,7 @@ void QuteCheckBox::createPropertiesDialog()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
+	++row;
 
 	// --- Flat style ---
 	m_flatControls.clear();
@@ -519,7 +521,8 @@ void QuteCheckBox::createPropertiesDialog()
 	flatStyleCheckBox->setToolTip(tr("Draw the checkbox with a flat, platform-independent "
 									 "appearance instead of the native style."));
 	flatStyleCheckBox->setChecked(property("CSQT_flatStyle").toBool());
-	layout->addWidget(flatStyleCheckBox, 5, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(flatStyleCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
 
 	QColor flatBg = colorFromProperty(property("CSQT_color"));
 	if (!flatBg.isValid()) {
@@ -535,65 +538,56 @@ void QuteCheckBox::createPropertiesDialog()
 	}
 
 	label = new QLabel("Background", dialog);
-	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	backgroundColorButton = new SelectColorButton(dialog);
 	backgroundColorButton->setColor(flatBg);
-	layout->addWidget(backgroundColorButton, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(backgroundColorButton, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << backgroundColorButton;
 
 	label = new QLabel("Border", dialog);
-	layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	borderColorButton = new SelectColorButton(dialog);
 	borderColorButton->setColor(flatBorder);
-	layout->addWidget(borderColorButton, 6, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(borderColorButton, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << borderColorButton;
+	++row;
 
 	label = new QLabel("Foreground", dialog);
 	label->setToolTip(tr("Colour of the check mark and of the label text."));
-	layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	foregroundColorButton = new SelectColorButton(dialog);
 	foregroundColorButton->setColor(flatFg);
-	layout->addWidget(foregroundColorButton, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(foregroundColorButton, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << foregroundColorButton;
 
 	label = new QLabel("Width", dialog);
-	layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	borderWidthSpinBox = new QSpinBox(dialog);
 	borderWidthSpinBox->unsetLocale();
 	borderWidthSpinBox->setRange(0, 64);
 	borderWidthSpinBox->setValue(property("CSQT_borderWidth").toInt());
-	layout->addWidget(borderWidthSpinBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(borderWidthSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << borderWidthSpinBox;
+	++row;
 
 	label = new QLabel("Radius", dialog);
-	layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	borderRadiusSpinBox = new QSpinBox(dialog);
 	borderRadiusSpinBox->unsetLocale();
 	borderRadiusSpinBox->setRange(0, 1000);
 	borderRadiusSpinBox->setValue(property("CSQT_borderRadius").toInt());
-	layout->addWidget(borderRadiusSpinBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(borderRadiusSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << borderRadiusSpinBox;
-
-	label = new QLabel("Padding", dialog);
-	label->setToolTip(tr("Space in pixels between the check mark and the border."));
-	layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
-	m_flatControls << label;
-	paddingSpinBox = new QSpinBox(dialog);
-	paddingSpinBox->unsetLocale();
-	paddingSpinBox->setRange(0, 1000);
-	paddingSpinBox->setValue(property("CSQT_padding").toInt());
-	layout->addWidget(paddingSpinBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	m_flatControls << paddingSpinBox;
 
 	label = new QLabel("Check style", dialog);
 	label->setToolTip(tr("How the checked state is drawn: \"x\" is a diagonal cross, "
 						 "\"full\" fills the square with the foreground colour."));
-	layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	checkStyleComboBox = new QComboBox(dialog);
 	checkStyleComboBox->addItem("x");
@@ -603,8 +597,22 @@ void QuteCheckBox::createPropertiesDialog()
 	} else {
 		checkStyleComboBox->setCurrentText(property("CSQT_checkstyle").toString());
 	}
-	layout->addWidget(checkStyleComboBox, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(checkStyleComboBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << checkStyleComboBox;
+	++row;
+
+	label = new QLabel("Padding", dialog);
+	label->setToolTip(tr("Space in pixels between the check mark and the border."));
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	paddingSpinBox = new QSpinBox(dialog);
+	paddingSpinBox->unsetLocale();
+	paddingSpinBox->setRange(0, 1000);
+	paddingSpinBox->setValue(property("CSQT_padding").toInt());
+	layout->addWidget(paddingSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << paddingSpinBox;
+	++row;
+
 
 	auto refreshFlatControls = [this]() {
 		const bool flat = flatStyleCheckBox->isChecked();

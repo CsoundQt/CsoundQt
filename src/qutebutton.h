@@ -110,6 +110,7 @@ private:
 	QLineEdit *filenameLineEdit;
 	QLineEdit *line;
     QSpinBox  *fontSizeSpinBox;
+    QComboBox *fontComboBox = nullptr;
 	QCheckBox * useMomentaryMidiButtonCheckBox;
 
 	// Flat style controls (only used when flat is selected)
@@ -134,6 +135,12 @@ private:
     void performAction();
 	bool hasIndefiniteDuration();
 	QutePushButton *button() const { return static_cast<QutePushButton *>(m_widget); }
+
+	// Image paths are stored relative to the .csd that owns the widget panel.
+	QString documentFileName() const;
+	QString documentDirectory() const;
+	QString resolvedImagePath(const QString &path) const;
+	QString storedImagePath(const QString &path) const;
 
 private slots:
 	void buttonPressed();

@@ -1077,25 +1077,28 @@ void QuteWaveform::createPropertiesDialog()
 {
 	QuteWidget::createPropertiesDialog();
 	dialog->setWindowTitle("Waveform");
+
+	int row = 4;
 	channelLabel->setText("Table Channel name =");
 
 	QLabel *label = new QLabel("Cursor Channel name =", dialog);
-	layout->addWidget(label, 4, 0, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 	name2LineEdit = new QLineEdit(dialog);
 	name2LineEdit->setText(getChannel2Name());
 	name2LineEdit->setMinimumWidth(320);
-	layout->addWidget(name2LineEdit, 4, 1, 1, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(name2LineEdit, row, 1, 1, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 	label = new QLabel("Table number", dialog);
-	layout->addWidget(label, 5, 0, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 	tableSpinBox = new QSpinBox(dialog);
 	tableSpinBox->unsetLocale();
 	tableSpinBox->setRange(0, 1000000);
 	tableSpinBox->setValue(int(m_value));
-	layout->addWidget(tableSpinBox, 5, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(tableSpinBox, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
 	label = new QLabel("Channels", dialog);
-	layout->addWidget(label, 5, 2, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight | Qt::AlignVCenter);
 	channelsSpinBox = new QSpinBox(dialog);
 	channelsSpinBox->unsetLocale();
 	channelsSpinBox->setRange(0, 64);
@@ -1104,41 +1107,46 @@ void QuteWaveform::createPropertiesDialog()
 								   "Soundfile tables (gen 1) are interleaved; 0 auto-detects\n"
 								   "the count with ftchnls()."));
 	channelsSpinBox->setValue(qMax(0, property("CSQT_channels").toInt()));
-	layout->addWidget(channelsSpinBox, 5, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(channelsSpinBox, row, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 	label = new QLabel("Waveform color", dialog);
-	layout->addWidget(label, 6, 0, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 	colorButton = new SelectColorButton(dialog);
 	colorButton->setColor(property("CSQT_color").value<QColor>());
-	layout->addWidget(colorButton, 6, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(colorButton, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 	label = new QLabel("Cursor color", dialog);
-	layout->addWidget(label, 7, 0, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 	cursorColorButton = new SelectColorButton(dialog);
 	cursorColorButton->setColor(property("CSQT_cursorcolor").value<QColor>());
-	layout->addWidget(cursorColorButton, 7, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(cursorColorButton, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 	label = new QLabel("Background color", dialog);
-	layout->addWidget(label, 8, 0, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 	bgColorButton = new SelectColorButton(dialog);
 	bgColorButton->setColor(property("CSQT_bgcolor").value<QColor>());
-	layout->addWidget(bgColorButton, 8, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(bgColorButton, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
 	bgColorCheckBox = new QCheckBox("Use background color", dialog);
 	bgColorCheckBox->setChecked(property("CSQT_bgcolormode").toBool());
-	layout->addWidget(bgColorCheckBox, 8, 2, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(bgColorCheckBox, row, 2, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 	showGridCheckBox = new QCheckBox("Show grid", dialog);
 	showGridCheckBox->setChecked(property("CSQT_showGrid").toBool());
-	layout->addWidget(showGridCheckBox, 9, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(showGridCheckBox, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
 	showAxesCheckBox = new QCheckBox("Show axes", dialog);
 	showAxesCheckBox->setChecked(property("CSQT_showAxes").toBool());
-	layout->addWidget(showAxesCheckBox, 9, 2, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(showAxesCheckBox, row, 2, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 	autoRangeCheckBox = new QCheckBox("Auto amplitude range", dialog);
 	autoRangeCheckBox->setChecked(property("CSQT_autoRange").toBool());
-	layout->addWidget(autoRangeCheckBox, 10, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(autoRangeCheckBox, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
 	rangeSpinBox = new QDoubleSpinBox(dialog);
 	rangeSpinBox->unsetLocale();
@@ -1147,7 +1155,8 @@ void QuteWaveform::createPropertiesDialog()
 	rangeSpinBox->setValue(property("CSQT_range").toDouble() > 0.0
 						   ? property("CSQT_range").toDouble() : 1.0);
 	rangeSpinBox->setEnabled(!autoRangeCheckBox->isChecked());
-	layout->addWidget(rangeSpinBox, 10, 2, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(rangeSpinBox, row, 2, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 	connect(autoRangeCheckBox, &QCheckBox::toggled, rangeSpinBox, [this](bool on) {
 		rangeSpinBox->setEnabled(!on);
 	});

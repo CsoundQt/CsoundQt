@@ -1,4 +1,5 @@
 
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -498,10 +499,12 @@ void QuteText::createPropertiesDialog()
 	}
 
     labelPtrs.clear();
+    // Each property group is one row; new properties are appended in order.
+    int row = 5;
 
 	QLabel *label = new QLabel(dialog);
 	label->setText(tr("Text:"));
-	layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignTop);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignTop);
     labelPtrs["text"] = label;
 
 	text = new QTextEdit(dialog);
@@ -510,65 +513,14 @@ void QuteText::createPropertiesDialog()
     text->setMinimumWidth(320);
     // text->setMinimumHeight(240);
     text->setMaximumWidth(8192);
-    layout->addWidget(text, 5, 1, 1, -1);
-
-    label = new QLabel(dialog);
-	label->setText(tr("Text Color"));
-	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
-    labelPtrs["textColor"] = label;
-
-    textColor = new SelectColorButton(dialog);
-    textColor->setColor(property("CSQT_color").value<QColor>());
-    layout->addWidget(textColor, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
-    // connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
-
-    bg = new QCheckBox("Background", dialog);
-    layout->addWidget(bg, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
-    bgColor = new SelectColorButton(dialog);
-    bgColor->setColor(property("CSQT_bgcolor").value<QColor>());
-    layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
-
-    // Precision only makes sense for numeric displays; labels are just text.
-    precisionSpinBox = nullptr;
-    if (m_type != "label") {
-        label = new QLabel("Precision", dialog);
-        layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
-        precisionSpinBox = new QSpinBox(dialog);
-        precisionSpinBox->unsetLocale();
-        precisionSpinBox->setValue(property("CSQT_precision").toInt());
-        layout->addWidget(precisionSpinBox, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
-    }
-
-    // Labels have no precision field, so let the border colour use the full row.
-    const bool isLabel = (m_type == "label");
-    label = new QLabel(tr("Border Color"), dialog);
-    label->setToolTip(tr("Color of the border. Defaults to the text color when not set."));
-    layout->addWidget(label, 7, isLabel ? 0 : 2, Qt::AlignRight|Qt::AlignVCenter);
-    labelPtrs["borderColor"] = label;
-    borderColor = new SelectColorButton(dialog);
-    {
-        QColor storedBorder = property("CSQT_bordercolor").value<QColor>();
-        m_borderColorSet = storedBorder.isValid();
-        borderColor->setColor(m_borderColorSet ? storedBorder
-                                               : property("CSQT_color").value<QColor>());
-    }
-    layout->addWidget(borderColor, 7, isLabel ? 1 : 3, Qt::AlignLeft|Qt::AlignVCenter);
-    // While the border color is unset it follows the text color.
-    connect(textColor, &SelectColorButton::clicked, this, [this]() {
-        if (!m_borderColorSet) {
-            borderColor->setColor(textColor->getColor());
-        }
-    });
-    connect(borderColor, &SelectColorButton::clicked, this, [this]() {
-        m_borderColorSet = true;
-    });
-
-    // border = new QCheckBox("Border", dialog);
-    // layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
-
+    layout->addWidget(text, row, 1, 1, -1);
+    
+    // ---------------------------------
+    ++row;
+    
     label = new QLabel(dialog);
 	label->setText(tr("Font"));
-    layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["font"] = label;
 
     font = new QComboBox(dialog);
@@ -606,103 +558,158 @@ void QuteText::createPropertiesDialog()
         }
         font->setFont(preview);
     });
-    layout->addWidget(font, 8, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(font, row, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
 	label->setText(tr("Font Size"));
-    layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["fontSize"] = label;
 
     fontSize = new QSpinBox(dialog);
     fontSize->unsetLocale();
 	fontSize->setMaximum(999); // allow also very big fonts
-    layout->addWidget(fontSize,9, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(fontSize, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    
+    // ---------------------
+    ++row; 
+
+    label = new QLabel(dialog);
+	label->setText(tr("Text Color"));
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+    labelPtrs["textColor"] = label;
+
+    textColor = new SelectColorButton(dialog);
+    textColor->setColor(property("CSQT_color").value<QColor>());
+    layout->addWidget(textColor, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    // connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
+
+    bg = new QCheckBox("Background", dialog);
+    layout->addWidget(bg, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+    bgColor = new SelectColorButton(dialog);
+    bgColor->setColor(property("CSQT_bgcolor").value<QColor>());
+    layout->addWidget(bgColor, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    
+    // -------------------------------------------
+    ++row;
+
+    // Precision only makes sense for numeric displays; labels are just text.
+    precisionSpinBox = nullptr;
+    if (m_type != "label") {
+        label = new QLabel("Precision", dialog);
+        layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+        precisionSpinBox = new QSpinBox(dialog);
+        precisionSpinBox->unsetLocale();
+        precisionSpinBox->setValue(property("CSQT_precision").toInt());
+        layout->addWidget(precisionSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    }
+
+    // Labels have no precision field, so let the border colour use the full row.
+    const bool isLabel = (m_type == "label");
+    label = new QLabel(tr("Border Color"), dialog);
+    label->setToolTip(tr("Color of the border. Defaults to the text color when not set."));
+    layout->addWidget(label, row, isLabel ? 0 : 2, Qt::AlignRight|Qt::AlignVCenter);
+    labelPtrs["borderColor"] = label;
+    borderColor = new SelectColorButton(dialog);
+    {
+        QColor storedBorder = property("CSQT_bordercolor").value<QColor>();
+        m_borderColorSet = storedBorder.isValid();
+        borderColor->setColor(m_borderColorSet ? storedBorder
+                                               : property("CSQT_color").value<QColor>());
+    }
+    layout->addWidget(borderColor, row, isLabel ? 1 : 3, Qt::AlignLeft|Qt::AlignVCenter);
+    // While the border color is unset it follows the text color.
+    connect(textColor, &SelectColorButton::clicked, this, [this]() {
+        if (!m_borderColorSet) {
+            borderColor->setColor(textColor->getColor());
+        }
+    });
+    connect(borderColor, &SelectColorButton::clicked, this, [this]() {
+        m_borderColorSet = true;
+    });
+    
+    // ---------------------------------
+    ++row;
 
     label = new QLabel(dialog);
 	label->setText(tr("Border Radius"));
-    layout->addWidget(label, 9, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["borderRadius"] = label;
 
     borderRadius = new QSpinBox(dialog);
     borderRadius->unsetLocale();
-    layout->addWidget(borderRadius, 9, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(borderRadius, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
 	label->setText(tr("Border Width"));
-    layout->addWidget(label, 10, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["borderWidth"] = label;
 
     borderWidth = new QSpinBox(dialog);
     borderWidth->unsetLocale();
     borderWidth->setMinimum(0);
     borderWidth->setToolTip(tr("Set the width to 0 disable the border"));
-    layout->addWidget(borderWidth, 10, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(borderWidth, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    
+    // ---------------------------------
+    ++row;
 
     label = new QLabel(dialog);
     label->setText(tr("Horiz. Align"));
-    layout->addWidget(label, 10, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["horizAlign"] = label;
 
     alignment = new QComboBox(dialog);
 	alignment->addItem(tr("Left", "Alignment"));
 	alignment->addItem(tr("Center", "Alignment"));
 	alignment->addItem(tr("Right", "Alignment"));
-    layout->addWidget(alignment, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
-
+	alignment->setMinimumWidth(100);
+    layout->addWidget(alignment, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    
     label = new QLabel(dialog);
     label->setText(tr("Vert. Align"));
-    layout->addWidget(label, 11, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["vertAlign"] = label;
 
     vertAlignmentComboBox = new QComboBox(dialog);
     vertAlignmentComboBox->addItem(tr("Top", "Alignment"));
     vertAlignmentComboBox->addItem(tr("Center", "Alignment"));
     vertAlignmentComboBox->addItem(tr("Bottom", "Alignment"));
-    layout->addWidget(vertAlignmentComboBox, 11, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    vertAlignmentComboBox->setMinimumWidth(100);
+    layout->addWidget(vertAlignmentComboBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    
+    // ---------------------------------
+    ++row;
 
     if (m_typeid == QuteWidgetType::LABEL || m_typeid == QuteWidgetType::DISPLAY) {
         label = new QLabel(dialog);
         label->setText(tr("Padding"));
         label->setToolTip(tr("Space between the border and the text, in pixels."));
-        layout->addWidget(label, 12, 0, Qt::AlignRight|Qt::AlignVCenter);
+        layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
         labelPtrs["padding"] = label;
 
         paddingSpinBox = new QSpinBox(dialog);
         paddingSpinBox->unsetLocale();
         paddingSpinBox->setRange(0, 999);
         paddingSpinBox->setValue(property("CSQT_padding").toInt());
-        layout->addWidget(paddingSpinBox, 12, 1, Qt::AlignLeft|Qt::AlignVCenter);
+        layout->addWidget(paddingSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+        ++row;
     }
 
     if (m_type == "label") {
         lockedCheckBox = new QCheckBox(tr("Locked"), dialog);
         lockedCheckBox->setToolTip(tr("Lock the label in place so it cannot be dragged."));
         lockedCheckBox->setChecked(property("CSQT_locked").toBool());
-        layout->addWidget(lockedCheckBox, 13, 0, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
+        layout->addWidget(lockedCheckBox, row, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
+        ++row;
     }
 
     // connect(bgColor, SIGNAL(released()), this, SLOT(selectBgColor()));
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
-    // QPixmap pixmap(64,64);
-    // QPalette palette(property("CSQT_color").value<QColor>());
-    /*
-    pixmap.fill(property("CSQT_color").value<QColor>());
-	textColor->setIcon(pixmap);
-    textColor->setPalette(palette);
-	palette.color(QPalette::Window);
-    */
-    /*
-	pixmap.fill(property("CSQT_bgcolor").value<QColor>());
-	bgColor->setIcon(pixmap);
-	palette = QPalette(property("CSQT_bgcolor").value<QColor>());
-	bgColor->setPalette(palette);
-    palette.color(QPalette::Window);
-    */
+    
     bg->setChecked(property("CSQT_bgcolormode").toBool());
-    // border->setChecked(property("CSQT_bordermode").toString() == "border");
-	font->setCurrentText(BundledFonts::resolveFamily(property("CSQT_font").toString()));
+    font->setCurrentText(BundledFonts::resolveFamily(property("CSQT_font").toString()));
 	fontSize->setValue(property("CSQT_fontsize").toInt());
 	borderRadius->setValue(property("CSQT_borderradius").toInt());
 	borderWidth->setValue(property("CSQT_borderwidth").toInt());
@@ -1100,7 +1107,11 @@ void QuteLineEdit::createPropertiesDialog()
 								   "is pressed; Escape leaves the edited text without "
 								   "applying it."));
 	instantCheckBox->setChecked(property("CSQT_instant").toBool());
-	layout->addWidget(instantCheckBox, 12, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+	// QuteText's last row for a line edit is the vertical alignment (row 11).
+	int row = 12;
+	layout->addWidget(instantCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
 }
 
 void QuteLineEdit::applyProperties()
@@ -1342,26 +1353,33 @@ void QuteScrollNumber::createPropertiesDialog()
 
 	text->setText(QString::number(m_value, 'f', 8));
 	dialog->setWindowTitle("Scroll Number");
+
+	int row = 2; // rows above the shared text widget block
 	QLabel *label = new QLabel(dialog);
-	label->setText("Resolution");
-	layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
-	resolutionSpinBox = new QDoubleSpinBox(dialog);
-	resolutionSpinBox->setDecimals(6);
-	layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
 	label->setText("Min =");
-	layout->addWidget(label, 2, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	minSpinBox = new QDoubleSpinBox(dialog);
 	minSpinBox->setDecimals(6);
 	minSpinBox->setRange(-999999999999.0, 999999999999.0);
-	layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(minSpinBox, row,1, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Max =");
-	layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	maxSpinBox = new QDoubleSpinBox(dialog);
 	maxSpinBox->setDecimals(6);
 	maxSpinBox->setRange(-999999999999.0, 999999999999.0);
-	layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(maxSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
+
+	// Row 3 is the common channel row; continue above the text block.
+	row = 4;
+	label = new QLabel(dialog);
+	label->setText("Resolution");
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+	resolutionSpinBox = new QDoubleSpinBox(dialog);
+	resolutionSpinBox->setDecimals(6);
+	layout->addWidget(resolutionSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif

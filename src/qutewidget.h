@@ -220,6 +220,9 @@ private:
 
 	static bool hasCopiedStyle(QuteWidgetType type);
 	void applyStyleMap(const QVariantMap &style);
+	// Put the properties dialog's focus chain in grid order (left to right,
+	// top to bottom) instead of the widget creation order.
+	void setTabOrderFromGrid();
 
 	QAction *propertiesAct;
 	QAction *copyStyleAct;

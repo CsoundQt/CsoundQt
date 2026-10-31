@@ -250,20 +250,22 @@ void QuteScope::createPropertiesDialog()
 {
 	QuteWidget::createPropertiesDialog();
 	dialog->setWindowTitle("Scope");
+
+	int row = 4;
 	//   channelLabel->hide();
 	//   nameLineEdit->hide();
 	QLabel *label = new QLabel(dialog);
 	label->setText("Type");
-	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	typeComboBox = new QComboBox(dialog);
 	typeComboBox->addItem("Oscilloscope", QVariant(QString("scope")));
 	typeComboBox->addItem("Lissajou curve", QVariant(QString("lissajou")));
 	typeComboBox->addItem("Poincare map", QVariant(QString("poincare")));
 	//   typeComboBox->addItem("Spectrogram", QVariant(QString("fft")));
-	layout->addWidget(typeComboBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(typeComboBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Channel");
-	layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	channelBox = new QComboBox(dialog);
 	channelBox->addItem("all", QVariant((int) -255));
     int maxChannels = 16;
@@ -274,27 +276,30 @@ void QuteScope::createPropertiesDialog()
         channelBox->addItem(QString::number(i), QVariant((int) i));
     }
     channelBox->addItem("none", QVariant((int) 0));
-	layout->addWidget(channelBox, 6, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(channelBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
 	label = new QLabel(tr("Audio Channel"));
 	label->setToolTip(tr("Name of a Csound audio channel (created with e.g. "
 	                     "chnset asignal, \"name\") to monitor instead of the "
 	                     "audio output. Leave empty to scope the output."));
-	layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	name2LineEdit = new QLineEdit(dialog);
 	name2LineEdit->setToolTip(label->toolTip());
-	layout->addWidget(name2LineEdit, 7, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(name2LineEdit, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
 	label = new QLabel(dialog);
 	label->setText("Zoom X");
-	layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	zoomxBox = new QDoubleSpinBox(dialog);
 	zoomxBox->setRange(1, 20);
-	layout->addWidget(zoomxBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(zoomxBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Zoom Y");
-	layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	zoomyBox = new QDoubleSpinBox(dialog);
 	zoomyBox->setRange(1, 20);
-	layout->addWidget(zoomyBox, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(zoomyBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -305,12 +310,13 @@ void QuteScope::createPropertiesDialog()
 	zoomyBox->setValue(zoomy());
 
     label = new QLabel("Trigger");
-    layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
     triggerBox = new QComboBox(dialog);
     triggerBox->addItem("No Trigger", "NoTrigger");
     triggerBox->addItem("Trigger Up", "TriggerUp");
     triggerBox->setCurrentIndex(triggerBox->findData(property("CSQT_triggermode").toString()));
-    layout->addWidget(triggerBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(triggerBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif

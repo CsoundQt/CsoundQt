@@ -1,4 +1,5 @@
 
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -22,8 +23,12 @@
 */
 
 #include "qutebutton.h"
+#include "bundledfonts.h"
 #include "selectcolorbutton.h"
+#include "widgetlayout.h"
 
+#include <QDir>
+#include <QFileInfo>
 #include <QPainter>
 using namespace Qt::StringLiterals;
 
@@ -85,6 +90,40 @@ void QutePushButton::paintEvent(QPaintEvent *event)
 static bool isPictButtonType(const QString &type)
 {
 	return type == "pictevent" || type == "pictvalue" || type == "pict";
+}
+
+// Fill a combo box with the bundled font families, previewing each entry in its
+// own typeface. Mirrors the font selector used by text widgets.
+static void populateFontFamilyComboBox(QComboBox *combo)
+{
+	combo->setMaximumWidth(200);
+	combo->view()->setMinimumWidth(220);
+	auto addFamilyGroup = [combo](const QStringList &families) {
+		if (combo->count() > 0) {
+			combo->insertSeparator(combo->count());
+		}
+		const int baseSize = combo->font().pointSize();
+		const int previewSize = baseSize > 0 ? qMax(14, baseSize + 4) : 14;
+		for (const QString &family : families) {
+			combo->addItem(family);
+			QFont preview(family);
+			preview.setPointSize(previewSize);
+			combo->setItemData(combo->count() - 1, preview, Qt::FontRole);
+		}
+	};
+	addFamilyGroup(BundledFonts::sansFamilies());
+	addFamilyGroup(BundledFonts::serifFamilies());
+	addFamilyGroup(BundledFonts::monoFamilies());
+	QObject::connect(combo, &QComboBox::currentTextChanged, combo, [combo](const QString &family) {
+		if (family.isEmpty()) {
+			return;
+		}
+		QFont preview(family);
+		if (combo->font().pointSize() > 0) {
+			preview.setPointSize(combo->font().pointSize());
+		}
+		combo->setFont(preview);
+	});
 }
 
 // ---------------------------------------------------------------------------
@@ -345,6 +384,7 @@ QString QuteButton::getWidgetXmlText()
 	// s.writeTextElement("latched", property("CSQT_latched").toString());
 	s.writeTextElement("latched", QVariant(m_latched).toString());
     s.writeTextElement("fontsize", QString::number(property("CSQT_fontsize").toInt()));
+	s.writeTextElement("font", property("CSQT_font").toString());
 	s.writeTextElement("flatStyle", property("CSQT_flatStyle").toBool() ? "true" : "false");
 	writeColorElement(s, "color", property("CSQT_color").value<QColor>());
 	s.writeTextElement("pressedColor", property("CSQT_pressedColor").toString());
@@ -375,12 +415,13 @@ void QuteButton::applyProperties()
 	}
 	setProperty("CSQT_eventLine", eventLine);
     setProperty("CSQT_text", text->toPlainText());
-	setProperty("CSQT_image", filenameLineEdit->text());
+	setProperty("CSQT_image", storedImagePath(filenameLineEdit->text()));
 	setProperty("CSQT_type", typeComboBox->currentText());
 	setProperty("CSQT_pressedValue", valueBox->value());
 	setProperty("CSQT_latch", latchCheckBox->isChecked());
 	setProperty("CSQT_momentaryMidiButton", useMomentaryMidiButtonCheckBox->isChecked());
     setProperty("CSQT_fontsize", fontSizeSpinBox->value());
+    setProperty("CSQT_font", fontComboBox->currentText());
 
 	// Flat style
 	setProperty("CSQT_flatStyle", flatStyleCheckBox->isChecked());
@@ -416,9 +457,11 @@ void QuteButton::createPropertiesDialog()
 #endif
 	dialog->setWindowTitle("Button");
 
+	int row = 4;
+
 	QLabel *label = new QLabel(dialog);
 	label->setText("Type");
-	layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	typeComboBox = new QComboBox(dialog);
 	typeComboBox->addItem("event");
 	typeComboBox->addItem("value");
@@ -426,15 +469,11 @@ void QuteButton::createPropertiesDialog()
 	typeComboBox->addItem("pictvalue");
 	typeComboBox->addItem("pict");
 	typeComboBox->setCurrentIndex(typeComboBox->findText(property("CSQT_type").toString()));
-	layout->addWidget(typeComboBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(typeComboBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-	latchCheckBox = new QCheckBox(dialog);
-	latchCheckBox->setText(tr("Latch"));
-	layout->addWidget(latchCheckBox, 5, 1, 1,2, Qt::AlignLeft|Qt::AlignVCenter);
-	latchCheckBox->setChecked(property("CSQT_latch").toBool());
 	label = new QLabel(dialog);
 	label->setText("Value");
-	layout->addWidget(label, 4, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     valueBox = new QDoubleSpinBox(dialog);
 	valueBox->setDecimals(6);
@@ -442,59 +481,84 @@ void QuteButton::createPropertiesDialog()
 	valueBox->setValue(m_value);
 	valueBox->setMaximumWidth(100);
 	valueBox->setDecimals(4);
-	layout->addWidget(valueBox, 4, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(valueBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
 
+	latchCheckBox = new QCheckBox(dialog);
+	latchCheckBox->setText(tr("Latch"));
+	layout->addWidget(latchCheckBox, row, 1, 1,2, Qt::AlignLeft|Qt::AlignVCenter);
+	latchCheckBox->setChecked(property("CSQT_latch").toBool());
+	++row;
 
     label = new QLabel(dialog);
 	label->setText("Text:");
-	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     text = new QTextEdit(dialog);
 	text->setMinimumWidth(320);
 	text->setText(property("CSQT_text").toString());
-    layout->addWidget(text, 6, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(text, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
     label = new QLabel(dialog);
     label->setText(tr("Font Size"));
-    layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     fontSizeSpinBox = new QSpinBox(dialog);
     fontSizeSpinBox->unsetLocale();
     fontSizeSpinBox->setMinimum(6);
     fontSizeSpinBox->setMaximum(999);
     fontSizeSpinBox->setValue(property("CSQT_fontsize").toInt());
-    layout->addWidget(fontSizeSpinBox, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(fontSizeSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    QLabel *fontFamilyLabel = new QLabel(dialog);
+    fontFamilyLabel->setText(tr("Font"));
+    fontFamilyLabel->setToolTip(tr("Font family used by the flat button."));
+    layout->addWidget(fontFamilyLabel, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+
+    fontComboBox = new QComboBox(dialog);
+    populateFontFamilyComboBox(fontComboBox);
+    fontComboBox->setCurrentText(BundledFonts::resolveFamily(property("CSQT_font").toString()));
+    fontComboBox->setToolTip(fontFamilyLabel->toolTip());
+    layout->addWidget(fontComboBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
 	label = new QLabel(dialog);
 	label->setText("Image:");
-    layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	filenameLineEdit = new QLineEdit(dialog);
 	filenameLineEdit->setMinimumWidth(320);
 	filenameLineEdit->setText(property("CSQT_image").toString());
-    layout->addWidget(filenameLineEdit, 8, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(filenameLineEdit, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
 	QPushButton *browseButton = new QPushButton(dialog);
     browseButton->setText("Browse");
-	layout->addWidget(browseButton, 8, 4, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(browseButton, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
 	connect(browseButton, SIGNAL(released()), this, SLOT(browseFile()));
+	++row;
 
 	label = new QLabel(dialog);
 	label->setText("Event:");
-    layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	line = new QLineEdit(dialog);
 	//   text->setText(((QuteLabel *)m_widget)->toPlainText());
-    layout->addWidget(line, 9,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(line, row,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
 	line->setMinimumWidth(320);
 	line->setText(property("CSQT_eventLine").toString());
+	++row;
 
 	// --- Flat style (text buttons only) ---
 	m_flatControls.clear();
+	
+	// The font family only applies to the self-painted (flat) button.
+	m_flatControls << fontFamilyLabel << fontComboBox;
 	flatStyleCheckBox = new QCheckBox(tr("Flat"), dialog);
 	flatStyleCheckBox->setToolTip(tr("Draw the button with a flat, platform-independent "
 									 "appearance instead of the native style."));
 	flatStyleCheckBox->setChecked(property("CSQT_flatStyle").toBool());
-	layout->addWidget(flatStyleCheckBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
-
+	layout->addWidget(flatStyleCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
+	
 	m_pressedColorSet = !property("CSQT_pressedColor").toString().isEmpty();
 	m_pressedTextColorSet = !property("CSQT_pressedTextColor").toString().isEmpty();
 
@@ -512,70 +576,74 @@ void QuteButton::createPropertiesDialog()
 	}
 
 	label = new QLabel("Background", dialog);
-	layout->addWidget(label, 11, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	backgroundColorButton = new SelectColorButton(dialog);
 	backgroundColorButton->setColor(flatBg);
-	layout->addWidget(backgroundColorButton, 11, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(backgroundColorButton, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << backgroundColorButton;
 
 	label = new QLabel("Pressed", dialog);
 	label->setToolTip(tr("Background color while the button is pressed/latched. "
 						 "Defaults to the background color."));
-	layout->addWidget(label, 11, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	pressedColorButton = new SelectColorButton(dialog);
 	pressedColorButton->setColor(m_pressedColorSet
 								 ? QColor(property("CSQT_pressedColor").toString()) : flatBg);
-	layout->addWidget(pressedColorButton, 11, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(pressedColorButton, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << pressedColorButton;
+	++row;
 
 	label = new QLabel("Text", dialog);
-	layout->addWidget(label, 12, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	textColorButton = new SelectColorButton(dialog);
 	textColorButton->setColor(flatText);
-	layout->addWidget(textColorButton, 12, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(textColorButton, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << textColorButton;
 
 	label = new QLabel("Pressed text", dialog);
 	label->setToolTip(tr("Text color while the button is pressed/latched. "
 						 "Defaults to the text color."));
-	layout->addWidget(label, 12, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	pressedTextColorButton = new SelectColorButton(dialog);
 	pressedTextColorButton->setColor(m_pressedTextColorSet
 									 ? QColor(property("CSQT_pressedTextColor").toString()) : flatText);
-	layout->addWidget(pressedTextColorButton, 12, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(pressedTextColorButton, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << pressedTextColorButton;
+	++row;
 
 	label = new QLabel("Border", dialog);
-	layout->addWidget(label, 13, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	borderColorButton = new SelectColorButton(dialog);
 	borderColorButton->setColor(flatBorder);
-	layout->addWidget(borderColorButton, 13, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(borderColorButton, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << borderColorButton;
 
 	label = new QLabel("Width", dialog);
-	layout->addWidget(label, 13, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	borderWidthSpinBox = new QSpinBox(dialog);
 	borderWidthSpinBox->unsetLocale();
 	borderWidthSpinBox->setRange(0, 64);
 	borderWidthSpinBox->setValue(property("CSQT_borderWidth").toInt());
-	layout->addWidget(borderWidthSpinBox, 13, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(borderWidthSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << borderWidthSpinBox;
+	++row;
 
 	label = new QLabel("Radius", dialog);
-	layout->addWidget(label, 14, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	m_flatControls << label;
 	borderRadiusSpinBox = new QSpinBox(dialog);
 	borderRadiusSpinBox->unsetLocale();
 	borderRadiusSpinBox->setRange(0, 1000);
 	borderRadiusSpinBox->setValue(property("CSQT_borderRadius").toInt());
-	layout->addWidget(borderRadiusSpinBox, 14, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(borderRadiusSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << borderRadiusSpinBox;
+	++row;
 
 	auto refreshFlatControls = [this]() {
 		const bool pict = isPictButtonType(typeComboBox->currentText());
@@ -731,8 +799,22 @@ bool QuteButton::applyProperty(const QString &name)
 		return true;
 	}
 	if (name == "CSQT_flatStyle") {
-		button()->setFlatStyle(property("CSQT_flatStyle").toBool()
-							   && !isPictButtonType(property("CSQT_type").toString()));
+		const bool flat = property("CSQT_flatStyle").toBool()
+				&& !isPictButtonType(property("CSQT_type").toString());
+		button()->setFlatStyle(flat);
+		QFont f = button()->font();
+		f.setFamily(flat ? BundledFonts::resolveFamily(property("CSQT_font").toString())
+						 : QApplication::font().family());
+		button()->setFont(f);
+		return true;
+	}
+	if (name == "CSQT_font") {
+		if (property("CSQT_flatStyle").toBool()
+				&& !isPictButtonType(property("CSQT_type").toString())) {
+			QFont f = button()->font();
+			f.setFamily(BundledFonts::resolveFamily(property("CSQT_font").toString()));
+			button()->setFont(f);
+		}
 		return true;
 	}
 	if (name == "CSQT_color") {
@@ -785,6 +867,7 @@ void QuteButton::applyInternalProperties()
 	// Flat style. Only text buttons take over the painting; pictorial buttons
 	// always use the native look.
 	const bool pict = isPictButtonType(type);
+	const bool flat = property("CSQT_flatStyle").toBool() && !pict;
 	QColor bg = property("CSQT_color").value<QColor>();
 	if (!bg.isValid()) {
 		bg = QColor(property("CSQT_color").toString());
@@ -796,11 +879,16 @@ void QuteButton::applyInternalProperties()
 	b->setPressedTextColor(QColor(property("CSQT_pressedTextColor").toString()));
 	b->setBorderWidth(property("CSQT_borderWidth").toInt());
 	b->setBorderRadius(property("CSQT_borderRadius").toInt());
-	b->setFlatStyle(property("CSQT_flatStyle").toBool() && !pict);
+	b->setFlatStyle(flat);
 
     if (type == "event" || type == "value") {
         icon = QIcon();
 		w->setIcon(icon);
+        QFont f = w->font();
+        // A custom family belongs to the self-painted flat style. Native buttons
+        // keep the application font.
+        f.setFamily(flat ? BundledFonts::resolveFamily(property("CSQT_font").toString())
+                         : QApplication::font().family());
         auto fontsizeProperty = property("CSQT_fontsize");
         if(!fontsizeProperty.isValid()) {
             qDebug() << "Button: fontsize invalid / not present. Setting to default";
@@ -808,17 +896,15 @@ void QuteButton::applyInternalProperties()
             int fontsize = fontsizeProperty.toInt();
             if(fontsize <= 0)
                 qDebug() << "Invalid font size for button, skipping";
-            else {
-                QFont f = w->font();
+            else
                 f.setPointSize(fontsize);
-                w->setFont(f);
-            }
         }
+        w->setFont(f);
         w->setText(property("CSQT_text").toString());
 
     } else if (pict) {
         w->setText("");
-		icon = QIcon(QPixmap(property("CSQT_image").toString()));
+		icon = QIcon(QPixmap(resolvedImagePath(property("CSQT_image").toString())));
 		w->setIcon(icon);
 		w->setIconSize(QSize(width(),height()));
     } else {
@@ -958,10 +1044,52 @@ void QuteButton::buttonReleased()
     emit newValue(QPair<QString, double>(m_channel, m_currentValue));
 }
 
+QString QuteButton::documentFileName() const
+{
+	if (auto *widgetLayout = qobject_cast<WidgetLayout *>(parentWidget()))
+		return widgetLayout->documentFileName();
+	return QString();
+}
+
+QString QuteButton::documentDirectory() const
+{
+	if (auto *widgetLayout = qobject_cast<WidgetLayout *>(parentWidget()))
+		return widgetLayout->documentDirectory();
+	return QDir::currentPath();
+}
+
+// A stored path may be relative to the .csd. Absolute paths are kept as-is so
+// older files continue to work.
+QString QuteButton::resolvedImagePath(const QString &path) const
+{
+	if (path.isEmpty() || path.startsWith(QLatin1String(":/")))
+		return path;
+	const QFileInfo info(path);
+	if (info.isAbsolute())
+		return info.filePath();
+	return QDir(documentDirectory()).absoluteFilePath(path);
+}
+
+// Store a selected image relative to the .csd. An unsaved document has no
+// stable directory, so keep the absolute path in that case.
+QString QuteButton::storedImagePath(const QString &path) const
+{
+	if (path.isEmpty() || path.startsWith(QLatin1String(":/"))
+			|| documentFileName().isEmpty()) {
+		return path;
+	}
+	const QFileInfo info(path);
+	const QString absolute = info.isAbsolute()
+			? info.absoluteFilePath()
+			: QDir(documentDirectory()).absoluteFilePath(path);
+	return QDir(documentDirectory()).relativeFilePath(absolute);
+}
+
 void QuteButton::browseFile()
 {
-    QString file =  QFileDialog::getOpenFileName(this,tr("Select File"));
-	if (file!="") {
-		filenameLineEdit->setText(file);
+	QString file = QFileDialog::getOpenFileName(this, tr("Select File"),
+												documentDirectory());
+	if (!file.isEmpty()) {
+		filenameLineEdit->setText(storedImagePath(file));
 	}
 }

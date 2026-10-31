@@ -27,6 +27,7 @@ set(PROJECT_SOURCES
   "src/configlists.h"
   "src/bundledfonts.h"
   "src/widgetstyle.h"
+  "src/tooltiphelper.h"
   "src/notification.h"
   "src/debuglog.h"
   "src/editorthemes.h"

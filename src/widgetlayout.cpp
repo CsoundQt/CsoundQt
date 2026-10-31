@@ -26,6 +26,8 @@
 #include <QSet>
 #include <QThread>
 #include <QDockWidget>
+#include <QDir>
+#include <QFileInfo>
 #include <limits>
 
 #include "widgetlayout.h"
@@ -287,6 +289,15 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     m_widgetNameToType["BSBVUMeter"] = QuteWidgetType::VUMETER;
     m_widgetNameToType["BSBDisplay"] = QuteWidgetType::DISPLAY;
     m_widgetNameToType["BSBLabel"] = QuteWidgetType::LABEL;
+}
+
+QString WidgetLayout::documentDirectory() const
+{
+	if (m_documentFileName.isEmpty()
+			|| m_documentFileName.startsWith(QLatin1String(":/"))) {
+		return QDir::currentPath();
+	}
+	return QFileInfo(m_documentFileName).absolutePath();
 }
 
 WidgetLayout::~WidgetLayout()
@@ -2017,12 +2028,14 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
     }
     menu.addMenu(&presetMenu);
 
-    if (editing) {
-        menu.addSeparator();
-        propertiesAct->setEnabled(hasSelection);
-        menu.addAction(propertiesAct);
+    // Panel properties (background colour and visibility) belong to the panel
+    // itself, not to the selected widgets, so they are available regardless of
+    // the edit mode and selection state.
+    menu.addSeparator();
+    propertiesAct->setEnabled(true);
+    menu.addAction(propertiesAct);
+    if (editing)
         menu.addAction(reloadWidgetsAct);
-    }
 
     // Offer Float/Dock when this layout is contained in a dock widget
     // (the dock title bar is hidden when docked, so this is the way to float it).

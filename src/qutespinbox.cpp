@@ -341,28 +341,35 @@ void QuteSpinBox::createPropertiesDialog()
 	//   qDebug("QuteSpinBox::createPropertiesDialog()");
 	QuteText::createPropertiesDialog();
 	dialog->setWindowTitle("SpinBox");
-	QLabel *label = new QLabel(dialog);
-	label->setText("Resolution");
-	layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
-	resolutionSpinBox = new QDoubleSpinBox(dialog);
-	resolutionSpinBox->setDecimals(6);
-	resolutionSpinBox->setRange(0,999999999999.0);
-	layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-	label = new QLabel(dialog);
+	int row = 2; // rows above the shared text widget block
+	QLabel *label = new QLabel(dialog);
 	label->setText("Min =");
-	layout->addWidget(label, 2, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	minSpinBox = new QDoubleSpinBox(dialog);
 	minSpinBox->setDecimals(6);
 	minSpinBox->setRange(-999999999999.0, 999999999999.0);
-	layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(minSpinBox, row,1, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Max =");
-	layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	maxSpinBox = new QDoubleSpinBox(dialog);
 	maxSpinBox->setDecimals(6);
 	maxSpinBox->setRange(-999999999999.0, 999999999999.0);
-	layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(maxSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
+
+	// Row 3 is the common channel row; continue above the text block.
+	row = 4;
+	label = new QLabel(dialog);
+	label->setText("Resolution");
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+	resolutionSpinBox = new QDoubleSpinBox(dialog);
+	resolutionSpinBox->setDecimals(6);
+	resolutionSpinBox->setRange(0,999999999999.0);
+	layout->addWidget(resolutionSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
+
 	borderRadius->hide();
     labelPtrs["borderRadius"]->hide();
 	borderWidth->hide();

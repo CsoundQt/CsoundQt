@@ -228,20 +228,23 @@ void QuteComboBox::createPropertiesDialog()
 {
 	QuteWidget::createPropertiesDialog();
 	dialog->setWindowTitle("Menu");
+	int row = 4;
+
 	QLabel *label = new QLabel(dialog);
 
     auto spacer = new QSpacerItem(20, 20, QSizePolicy::Expanding);
-    layout->addItem(spacer, 4, 4, Qt::AlignLeft);
+    layout->addItem(spacer, row, 4, Qt::AlignLeft);
+	++row;
 
 	label = new QLabel(dialog);
     label->setText("Items (comma-separated)");
-    layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
 	text = new QLineEdit(dialog);
     text->setToolTip("Items in the menu, separated by commas");
     text->setMinimumWidth(420);
     text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    layout->addWidget(text, 5,1,1,4, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(text, row,1,1,4, Qt::AlignLeft|Qt::AlignVCenter);
     // text->setSizePolicy()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();

@@ -443,32 +443,36 @@ void QuteGraph::createPropertiesDialog()
 	QuteWidget::createPropertiesDialog();
 	dialog->setWindowTitle("Graph");
 
+    int row = 4;
+
 	channelLabel->setText("Index Channel name =");
 	channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 	//  nameLineEdit->setText(getChannelName());
 
     label = new QLabel("F-table Channel name =", dialog);
-    layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	name2LineEdit = new QLineEdit(dialog);
 	name2LineEdit->setText(getChannel2Name());
 	name2LineEdit->setMinimumWidth(320);
-	layout->addWidget(name2LineEdit, 4,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(name2LineEdit, row, 1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
     label = new QLabel("Zoom X", dialog);
-    layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	zoomxBox = new QDoubleSpinBox(dialog);
 	zoomxBox->setRange(0.1, 10.0);
 	zoomxBox->setDecimals(1);
 	zoomxBox->setSingleStep(0.1);
-	layout->addWidget(zoomxBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(zoomxBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel("Zoom Y", dialog);
-    layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	zoomyBox = new QDoubleSpinBox(dialog);
 	zoomyBox->setRange(0.1, 10.0);
 	zoomyBox->setDecimals(1);
 	zoomyBox->setSingleStep(0.1);
-	layout->addWidget(zoomyBox, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(zoomyBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
     acceptTablesCheckBox = new QCheckBox(dialog);
     acceptTablesCheckBox->setText("Enable tables");
@@ -479,7 +483,7 @@ void QuteGraph::createPropertiesDialog()
                                      "NB2: If you plan to use the Graph widget to display"
                                      "spectra or signals, uncheck this option");
     acceptTablesCheckBox->setChecked(property("CSQT_enableTables").toBool());
-    layout->addWidget(acceptTablesCheckBox, 9, 0, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(acceptTablesCheckBox, row, 0, Qt::AlignLeft|Qt::AlignVCenter);
 
     acceptDisplaysCheckBox = new QCheckBox(dialog);
     acceptDisplaysCheckBox->setText("Enable Displays");
@@ -487,26 +491,29 @@ void QuteGraph::createPropertiesDialog()
                                        "if you plan to use the graph widget to display audio"
                                        "signals and spectra using the opcodes display/dispfft");
     acceptDisplaysCheckBox->setChecked(property("CSQT_enableDisplays").toBool());
-    layout->addWidget(acceptDisplaysCheckBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(acceptDisplaysCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
     showSelectorCheckBox = new QCheckBox("Show Selector", dialog);
     showSelectorCheckBox->setChecked(property("CSQT_showSelector").toBool());
-    layout->addWidget(showSelectorCheckBox, 10, 0, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(showSelectorCheckBox, row, 0, Qt::AlignLeft|Qt::AlignVCenter);
 
     showGridCheckBox = new QCheckBox("Show Grid", dialog);
     showGridCheckBox->setChecked(property("CSQT_showGrid").toBool());
     showGridCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
-    layout->addWidget(showGridCheckBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(showGridCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
     showTableInfoCheckBox = new QCheckBox("Show Table Information", dialog);
     showTableInfoCheckBox->setCheckState(
                 property("CSQT_showTableInfo").toBool()?Qt::Checked:Qt::Unchecked);
     showTableInfoCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
-    layout->addWidget(showTableInfoCheckBox, 11, 0, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(showTableInfoCheckBox, row, 0, Qt::AlignLeft|Qt::AlignVCenter);
 
     showScrollbarsCheckBox = new QCheckBox("Show Scrollbars", dialog);
     showScrollbarsCheckBox->setChecked(property("CSQT_showScrollbars").toBool());
-    layout->addWidget(showScrollbarsCheckBox, 11, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(showScrollbarsCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
@@ -2394,48 +2401,67 @@ void QuteTable::applyInternalProperties() {
 void QuteTable::createPropertiesDialog() {
     QuteWidget::createPropertiesDialog();
     dialog->setWindowTitle("Table Plot");
+    int row = 4;
     auto label = new QLabel(tr("Foreground"), dialog);
-    layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     colorButton = new SelectColorButton(dialog);
     colorButton->setColor(colorFromProperty(property("CSQT_foreground")));
-    layout->addWidget(colorButton, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(colorButton, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(tr("Background"), dialog);
-    layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     backgroundColorButton = new SelectColorButton(dialog);
     backgroundColorButton->setColor(colorFromProperty(property("CSQT_background")));
-    layout->addWidget(backgroundColorButton, 5, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(backgroundColorButton, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
+    ++row;
+    
+    gridCheckBox = new QCheckBox("Show Grid", dialog);
+    gridCheckBox->setChecked(property("CSQT_showGrid").toBool());
+    layout->addWidget(gridCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    
     label = new QLabel(tr("Grid color"), dialog);
-    layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     gridColorButton = new SelectColorButton(dialog);
     gridColorButton->setColor(colorFromProperty(property("CSQT_gridcolor")));
-    layout->addWidget(gridColorButton, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(gridColorButton, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
+    // The grid colour only matters while the grid is drawn.
+    label->setEnabled(gridCheckBox->isChecked());
+    gridColorButton->setEnabled(gridCheckBox->isChecked());
+    connect(gridCheckBox, &QCheckBox::toggled, this, [this, label](bool checked) {
+        label->setEnabled(checked);
+        gridColorButton->setEnabled(checked);
+    });
+
+    ++row;
     label = new QLabel(tr("Sample rate"), dialog);
     label->setToolTip(tr("Sample rate used to convert the table index to time on "
                          "the x axis. Zero selects automatic mode: the table's "
                          "sample rate when it defines one, otherwise 1."));
-    layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     sampleRateSpinBox = new QDoubleSpinBox(dialog);
     sampleRateSpinBox->setDecimals(3);
     sampleRateSpinBox->setRange(0.0, 1000000.0);
     sampleRateSpinBox->setSingleStep(100.0);
+    // A sample rate is normally typed or pasted, so the step arrows are just clutter.
+    sampleRateSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
     sampleRateSpinBox->setToolTip(label->toolTip());
     sampleRateSpinBox->setValue(property("CSQT_samplerate").toDouble());
-    layout->addWidget(sampleRateSpinBox, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(sampleRateSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
+    ++row;
     double range = property("CSQT_range").toDouble();
     rangeCheckBox = new QCheckBox("Fixed Range", dialog);
     rangeCheckBox->setToolTip("If checked the range is fixed to the value set on the right."
                               "If the table has values outside this range these will not be"
                               "displayed");
     rangeCheckBox->setChecked(range > 0.0);
-    layout->addWidget(rangeCheckBox, 8, 1, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(rangeCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     rangeSpinBox = new QDoubleSpinBox(dialog);
     rangeSpinBox->setRange(0.1, 999999.0);
@@ -2444,12 +2470,8 @@ void QuteTable::createPropertiesDialog() {
                              "With a fixed range, values outside the range will not be "
                              "visible");
     rangeSpinBox->setValue(range > 0 ? range : 1.0);
-    layout->addWidget(rangeSpinBox, 8, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(rangeSpinBox, row, 2, Qt::AlignLeft|Qt::AlignVCenter);
     connect(rangeCheckBox, SIGNAL(toggled(bool)), rangeSpinBox, SLOT(setEnabled(bool)));
-
-    gridCheckBox = new QCheckBox("Show Grid", dialog);
-    gridCheckBox->setChecked(property("CSQT_showGrid").toBool());
-    layout->addWidget(gridCheckBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
 }
 

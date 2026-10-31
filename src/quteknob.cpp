@@ -458,28 +458,34 @@ void QuteKnob::createPropertiesDialog()
 	widgetLock.lockForRead();
 #endif
 	dialog->setWindowTitle("Knob");
+
+    int row = 2;
     QLabel *label;
 
     label = new QLabel("Min =", dialog);
-	layout->addWidget(label, 2, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
 	minSpinBox = new QDoubleSpinBox(dialog);
     minSpinBox->setDecimals(4);
 	minSpinBox->setRange(-99999.0, 99999.0);
 	minSpinBox->setValue(property("CSQT_minimum").toDouble());
-	layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(minSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel("Max =", dialog);
-    layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     maxSpinBox = new QDoubleSpinBox(dialog);
     maxSpinBox->setDecimals(4);
 	maxSpinBox->setRange(-99999.0, 99999.0);
 	maxSpinBox->setValue(property("CSQT_maximum").toDouble());
-    layout->addWidget(maxSpinBox, 2, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(maxSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
+
+    // Row 3 is the common channel row.
+    row = 4;
 
     label = new QLabel("Exponent =", dialog);
-    layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     exponentSpinBox = new QDoubleSpinBox(dialog);
     exponentSpinBox->setDecimals(4);
@@ -489,63 +495,68 @@ void QuteKnob::createPropertiesDialog()
     exponentSpinBox->setToolTip("Skew of the value curve: 1 is linear, "
                                 "values > 1 give finer control near the minimum, "
                                 "values < 1 finer control near the maximum");
-    layout->addWidget(exponentSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(exponentSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
     // label->setText("Resolution");
-    // layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+    // layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     flatStyleCheckBox = new QCheckBox("Flat style", dialog);
     flatStyleCheckBox->setToolTip("If checked, knob is drawn in a flat style. "
                                   "Otherwise, the native Qt look is used");
     flatStyleCheckBox->setCheckState(
                 property("CSQT_flatstyle").toBool()?Qt::Checked:Qt::Unchecked);
-    layout->addWidget(flatStyleCheckBox, 5, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(flatStyleCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
     displayValueCheckBox = new QCheckBox("Show value", dialog);
     displayValueCheckBox->setToolTip("Show value as text inside the knob");
     displayValueCheckBox->setCheckState(
                 property("CSQT_showvalue").toBool()?Qt::Checked:Qt::Unchecked);
-    layout->addWidget(displayValueCheckBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(displayValueCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     intModeCheckBox = new QCheckBox("Integer", dialog);
     intModeCheckBox->setToolTip("Constrain displayed value to nearest integer");
     intModeCheckBox->setCheckState(
                 property("CSQT_integerMode").toBool()?Qt::Checked:Qt::Unchecked);
-    layout->addWidget(intModeCheckBox, 6, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(intModeCheckBox, row, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
     // Color
     label = new QLabel("Color", dialog);
-    layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     knobColorButton = new SelectColorButton(dialog);
     knobColorButton->setColor(property("CSQT_color").value<QColor>());
-    layout->addWidget(knobColorButton, 7, 1, Qt::AlignLeft | Qt::AlignVCenter);
+    layout->addWidget(knobColorButton, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
     // Text Color
     label = new QLabel("Text Color", dialog);
-    layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     knobTextColorButton = new SelectColorButton(dialog);
     knobTextColorButton->setColor(QColor(property("CSQT_textcolor").toString()));
-    layout->addWidget(knobTextColorButton, 7, 3, Qt::AlignLeft | Qt::AlignVCenter);
+    layout->addWidget(knobTextColorButton, row, 3, Qt::AlignLeft | Qt::AlignVCenter);
+    ++row;
 
     // Border
     label = new QLabel("Border", dialog);
-    layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     borderWidthSpinBox = new QSpinBox(dialog);
     borderWidthSpinBox->unsetLocale();
     borderWidthSpinBox->setValue(property("CSQT_border").toInt());
     borderWidthSpinBox->setRange(0, 8);
     borderWidthSpinBox->setToolTip("Set to 1 or more to draw a border around the knob in flat mode");
-    layout->addWidget(borderWidthSpinBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(borderWidthSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel("Border Color", dialog);
-    layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     borderColorButton = new SelectColorButton(dialog);
     borderColorButton->setColor(property("CSQT_borderColor").value<QColor>());
-    layout->addWidget(borderColorButton, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(borderColorButton, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
     connect(flatStyleCheckBox, SIGNAL(toggled(bool)),
             displayValueCheckBox, SLOT(setEnabled(bool)));

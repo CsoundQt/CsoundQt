@@ -108,6 +108,14 @@ public:
 	bool openMidiPort(int port);
 	void closeMidiPort();
 	QVector<QuteWidget *> getWidgets() {return m_widgets;}
+	// File name of the document that owns this widget panel. It is used to
+	// resolve paths stored in widget properties (e.g. button images) relative
+	// to the .csd instead of the process working directory.
+	void setDocumentFileName(const QString &fileName) { m_documentFileName = fileName; }
+	QString documentFileName() const { return m_documentFileName; }
+	// Directory of the owning document; the current directory when the
+	// document has not been saved yet.
+	QString documentDirectory() const;
 	// Widgets currently selected in the editor (empty when not editing)
 	QList<QuteWidget *> getSelectedWidgets();
 	bool isEditMode() const { return m_editMode; }
@@ -443,6 +451,7 @@ private:
 	// Properties of the panel (saved to xml file)
 	int m_posx, m_posy, m_w, m_h; // Position and size of panel (not this widget)
 	QString m_objectName;
+	QString m_documentFileName; // File name of the document owning this panel
 	QString m_uuid;
 	bool m_visible;
 

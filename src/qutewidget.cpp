@@ -24,10 +24,13 @@
 #include "qutewidget.h"
 #include "widgetlayout.h"
 #include "bundledfonts.h"
+#include "tooltiphelper.h"
 
 #include <QHeaderView>
 #include <QPainter>
 #include <QTreeWidget>
+
+#include <algorithm>
 using namespace Qt::StringLiterals;
 
 // Copied widget styles, keyed by widget type. A copied style holds all dynamic
@@ -731,7 +734,8 @@ void QuteWidget::showAvailableProperties()
 
 	QPushButton *closeButton = new QPushButton(tr("Close"), &propertiesDialog);
 	closeButton->setDefault(true);
-	dialogLayout->addWidget(closeButton);
+	closeButton->setFixedWidth(120);
+	dialogLayout->addWidget(closeButton, 0, Qt::AlignRight);
 
 	// Incremental filter: hide entries that do not contain the typed text
 	auto filterList = [propertiesList](const QString &filter) {
@@ -998,9 +1002,63 @@ void QuteWidget::applyStyle()
 	emit propertiesAccepted();
 }
 
+// QGridLayout does not define the focus chain: by default it follows the
+// creation order, which is not necessarily the visual order. Sort the
+// focusable widgets by grid position and chain them, so Tab moves left to
+// right and top to bottom through the dialog.
+void QuteWidget::setTabOrderFromGrid()
+{
+	if (dialog == nullptr || layout == nullptr)
+		return;
+
+	struct Cell
+	{
+		int row;
+		int column;
+		QWidget *widget;
+	};
+	QList<Cell> cells;
+	cells.reserve(layout->count());
+	for (int i = 0; i < layout->count(); ++i) {
+		QLayoutItem *item = layout->itemAt(i);
+		QWidget *widget = item != nullptr ? item->widget() : nullptr;
+		if (widget == nullptr || widget->isHidden()
+			|| widget->focusPolicy() == Qt::NoFocus) {
+			continue;
+		}
+		int row = 0;
+		int column = 0;
+		int rowSpan = 0;
+		int columnSpan = 0;
+		layout->getItemPosition(i, &row, &column, &rowSpan, &columnSpan);
+		cells.append(Cell{row, column, widget});
+	}
+
+	std::sort(cells.begin(), cells.end(), [](const Cell &a, const Cell &b) {
+		if (a.row != b.row)
+			return a.row < b.row;
+		return a.column < b.column;
+	});
+
+	QWidget *previous = nullptr;
+	for (const Cell &cell : cells) {
+		if (previous != nullptr)
+			QWidget::setTabOrder(previous, cell.widget);
+		previous = cell.widget;
+	}
+}
+
 void QuteWidget::openProperties()
 {
 	createPropertiesDialog();
+
+	// Qt shows plain tooltips as a single line until they exceed the screen
+	// width. Wrap the long property help texts before the dialog is shown.
+	ToolTipHelper::wrapToolTips(dialog);
+
+	// Put the focus chain in visual order. The default chain follows the
+	// creation order, which does not always match the grid.
+	setTabOrderFromGrid();
 
 	connect(acceptButton, SIGNAL(released()), dialog, SLOT(accept()));
 	connect(dialog, SIGNAL(accepted()), this, SLOT(apply()));
@@ -1034,7 +1092,10 @@ void QuteWidget::createPropertiesDialog()
 {
 //    qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n"
 //             << dynamicPropertyNames ();
-	int footerRow = 20;
+	// Rows 2 and 4-14 are reserved for the property rows that widget
+	// subclasses add to this layout. The common rows start below that area.
+	const int firstFooterRow = 15;
+	int row = 0;
 	dialog = new QDialog(this);
     dialog->resize(480, 360);
 	//  dialog->setModal(true);
@@ -1043,49 +1104,59 @@ void QuteWidget::createPropertiesDialog()
 	layout->setColumnStretch(1, 0);
 	layout->setColumnStretch(2, 0);
 	layout->setColumnStretch(5, 1);
-	
+	layout->setVerticalSpacing(10);
 	
     QLabel *label;
 
     label = new QLabel("X =", dialog);
-    layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     xSpinBox = new QSpinBox(dialog);
     xSpinBox->unsetLocale();
 	xSpinBox->setMaximum(9999);
-	layout->addWidget(xSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(xSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel("Y =", dialog);
-    layout->addWidget(label, 0, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     ySpinBox = new QSpinBox(dialog);
     ySpinBox->unsetLocale();
 	ySpinBox->setMaximum(9999);
-	layout->addWidget(ySpinBox, 0, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(ySpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
 
     label = new QLabel(tr("Width ="), dialog);
-    layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     wSpinBox = new QSpinBox(dialog);
     wSpinBox->unsetLocale();
 	wSpinBox->setMaximum(9999);
-	layout->addWidget(wSpinBox, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(wSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(tr("Height ="), dialog);
-    layout->addWidget(label, 1, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     hSpinBox = new QSpinBox(dialog);
     hSpinBox->unsetLocale();
 	hSpinBox->setMaximum(9999);
-	layout->addWidget(hSpinBox, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(hSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
+
+    // Row 2 holds a single property row of some widgets (e.g. knob min/max),
+    // so the channel goes below it.
+    row = 3;
 
     channelLabel = new QLabel(tr("Channel ="), dialog);
-    layout->addWidget(channelLabel, 3, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(channelLabel, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     nameLineEdit = new QLineEdit(dialog);
 	nameLineEdit->setFocus(Qt::OtherFocusReason);
 	nameLineEdit->selectAll();
-    layout->addWidget(nameLineEdit, 3, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(nameLineEdit, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    ++row;
+
+    // Subclasses add their own property rows here, up to row 14.
+    row = firstFooterRow;
 
     enabledCheckBox = new QCheckBox(tr("Enabled"), dialog);
     enabledCheckBox->setToolTip(tr("When unchecked the widget is disabled: it ignores "
@@ -1093,62 +1164,67 @@ void QuteWidget::createPropertiesDialog()
                                    "drawn greyed out. It can also be toggled from Csound "
                                    "with outvalue \"<channel>/enabled\", <0 or 1>."));
     enabledCheckBox->setChecked(property("CSQT_enabled").toBool());
-    layout->addWidget(enabledCheckBox, 15, 0, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(enabledCheckBox, row, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
+
+    // Keep one empty row between the enabled checkbox and the name.
+    row += 2;
 
     label = new QLabel(tr("Name ="), dialog);
-    layout->addWidget(label, footerRow-3, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     widgetNameLineEdit = new QLineEdit(dialog);
     widgetNameLineEdit->setToolTip(tr("Optional unique name to address this widget (must be unique within the file)"));
-    layout->addWidget(widgetNameLineEdit, footerRow-3, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(widgetNameLineEdit, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
     QPushButton *showPropertiesButton = new QPushButton(tr("Show Properties"), dialog);
     showPropertiesButton->setToolTip(tr("List the properties that can be addressed via \"channel/property\""));
-    layout->addWidget(showPropertiesButton, footerRow-3, 4, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(showPropertiesButton, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
     connect(showPropertiesButton, SIGNAL(released()), this, SLOT(showAvailableProperties()));
+    ++row;
 
     label = new QLabel(tr("Description ="), dialog);
-    layout->addWidget(label, footerRow-2, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
     descriptionLabel = label;
 
     descriptionLineEdit = new QLineEdit(dialog);
     descriptionLineEdit->setMinimumWidth(240);
     descriptionLineEdit->setMaximumWidth(960);
     
-    layout->addWidget(descriptionLineEdit, footerRow-2, 1, 1, -1, Qt::AlignVCenter);
+    layout->addWidget(descriptionLineEdit, row, 1, 1, -1, Qt::AlignVCenter);
+    ++row;
 
 
     if (acceptsMidi()) { // only when MIDI-enabled widgets
-        int midiRow = footerRow - 1;
         label = new QLabel("MIDI CC =", dialog);
-        layout->addWidget(label, midiRow, 0, Qt::AlignRight|Qt::AlignVCenter);
+        layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
         midiccSpinBox = new QSpinBox(dialog);
         midiccSpinBox->unsetLocale();
 		midiccSpinBox->setRange(0,119);
-        layout->addWidget(midiccSpinBox, midiRow, 1, Qt::AlignLeft|Qt::AlignVCenter);
+        layout->addWidget(midiccSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
         label = new QLabel("MIDI Channel =", dialog);
-        layout->addWidget(label, midiRow, 2, Qt::AlignRight|Qt::AlignVCenter);
+        layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
         midichanSpinBox = new QSpinBox(dialog);
         midichanSpinBox->unsetLocale();
 		midichanSpinBox->setRange(0,127);
-        layout->addWidget(midichanSpinBox, midiRow,3, Qt::AlignLeft|Qt::AlignVCenter);
+        layout->addWidget(midichanSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
 
         midiLearnButton = new QPushButton(tr("MIDI learn"));
-		layout->addWidget(midiLearnButton, midiRow, 4, Qt::AlignLeft|Qt::AlignVCenter);
+		layout->addWidget(midiLearnButton, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
 	}
+    ++row;
 	
     applyButton = new QPushButton(tr("Apply"));
-    layout->addWidget(applyButton, footerRow, 1, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(applyButton, row, 1, Qt::AlignCenter|Qt::AlignVCenter);
 	
 	cancelButton = new QPushButton(tr("Cancel"));
-    layout->addWidget(cancelButton, footerRow, 2, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(cancelButton, row, 2, Qt::AlignCenter|Qt::AlignVCenter);
     
     acceptButton = new QPushButton(tr("Ok"));
 	acceptButton->setDefault(true);
-    layout->addWidget(acceptButton, footerRow, 3, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(acceptButton, row, 3, Qt::AlignCenter|Qt::AlignVCenter);
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();

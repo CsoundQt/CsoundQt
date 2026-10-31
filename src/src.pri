@@ -22,6 +22,7 @@ HEADERS = "src/about.h" \
     "src/console.h" \
     "src/bundledfonts.h" \
     "src/widgetstyle.h" \
+    "src/tooltiphelper.h" \
     "src/notification.h" \
     "src/debuglog.h" \
     "src/editorthemes.h" \

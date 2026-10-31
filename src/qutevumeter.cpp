@@ -556,24 +556,30 @@ void QuteVUMeter::createPropertiesDialog()
 #endif
 	dialog->setWindowTitle("VU Meter");
 
+	int row = 2;
+
 	QLabel *label = new QLabel("Min (dB) =", dialog);
-	layout->addWidget(label, 2, 0, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 
 	minSpinBox = new QSpinBox(dialog);
 	minSpinBox->setRange(-200, 200);
 	minSpinBox->setValue(qRound(property("CSQT_minimum").toDouble()));
-	layout->addWidget(minSpinBox, 2, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(minSpinBox, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
 	label = new QLabel("Max (dB) =", dialog);
-	layout->addWidget(label, 2, 2, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight | Qt::AlignVCenter);
 
 	maxSpinBox = new QSpinBox(dialog);
 	maxSpinBox->setRange(-200, 200);
 	maxSpinBox->setValue(qRound(property("CSQT_maximum").toDouble()));
-	layout->addWidget(maxSpinBox, 2, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(maxSpinBox, row, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
+
+	// Row 3 is the common channel row.
+	row = 4;
 
 	label = new QLabel(tr("Ruler ="), dialog);
-	layout->addWidget(label, 4, 0, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 
 	rulerComboBox = new QComboBox(dialog);
 	rulerComboBox->addItem(tr("Hide"), u"hide"_s);
@@ -583,10 +589,10 @@ void QuteVUMeter::createPropertiesDialog()
 		const int modeIndex = rulerComboBox->findData(property("CSQT_rulermode").toString());
 		rulerComboBox->setCurrentIndex(modeIndex >= 0 ? modeIndex : 1);
 	}
-	layout->addWidget(rulerComboBox, 4, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(rulerComboBox, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
 	label = new QLabel("Scale exponent =", dialog);
-	layout->addWidget(label, 4, 2, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight | Qt::AlignVCenter);
 
 	exponentSpinBox = new QDoubleSpinBox(dialog);
 	exponentSpinBox->setDecimals(2);
@@ -595,60 +601,65 @@ void QuteVUMeter::createPropertiesDialog()
 	exponentSpinBox->setValue(property("CSQT_exponent").toDouble());
 	exponentSpinBox->setToolTip("Skew of the dB scale: 1 is linear in dB, "
 	                            "0.5 gives the top of the scale more room");
-	layout->addWidget(exponentSpinBox, 4, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(exponentSpinBox, row, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 	label = new QLabel("Ruler color", dialog);
-	layout->addWidget(label, 5, 0, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 
 	rulerColorButton = new SelectColorButton(dialog);
 	rulerColorButton->setColor(QColor(property("CSQT_rulercolor").toString()));
-	layout->addWidget(rulerColorButton, 5, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(rulerColorButton, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
 	label = new QLabel("Background", dialog);
-	layout->addWidget(label, 5, 2, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight | Qt::AlignVCenter);
 
 	bgColorButton = new SelectColorButton(dialog);
 	bgColorButton->setColor(property("CSQT_bgcolor").value<QColor>());
-	layout->addWidget(bgColorButton, 5, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(bgColorButton, row, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 	bgColorCheckBox = new QCheckBox(tr("On"), dialog);
 	bgColorCheckBox->setChecked(property("CSQT_bgcolormode").toBool());
-	layout->addWidget(bgColorCheckBox, 6, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(bgColorCheckBox, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 	connect(bgColorCheckBox, SIGNAL(toggled(bool)), bgColorButton, SLOT(setEnabled(bool)));
 	bgColorButton->setEnabled(bgColorCheckBox->isChecked());
 
 	label = new QLabel("Border color", dialog);
-	layout->addWidget(label, 6, 2, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight | Qt::AlignVCenter);
 
 	borderColorButton = new SelectColorButton(dialog);
 	borderColorButton->setColor(property("CSQT_bordercolor").value<QColor>());
-	layout->addWidget(borderColorButton, 6, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(borderColorButton, row, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 	label = new QLabel("Cursor channel =", dialog);
-	layout->addWidget(label, 7, 0, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 
 	cursorChannelLineEdit = new QLineEdit(dialog);
 	cursorChannelLineEdit->setText(m_channel2);
 	cursorChannelLineEdit->setToolTip("Optional second channel (same dB range) shown as a "
 	                                  "cursor line: horizontal for a vertical meter, "
 	                                  "vertical otherwise");
-	layout->addWidget(cursorChannelLineEdit, 7, 1, 1, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(cursorChannelLineEdit, row, 1, 1, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 	label = new QLabel("Cursor color", dialog);
-	layout->addWidget(label, 8, 0, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 
 	cursorColorButton = new SelectColorButton(dialog);
 	cursorColorButton->setColor(QColor(property("CSQT_cursorcolor").toString()));
-	layout->addWidget(cursorColorButton, 8, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(cursorColorButton, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
 	label = new QLabel("Cursor width =", dialog);
-	layout->addWidget(label, 8, 2, Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, row, 2, Qt::AlignRight | Qt::AlignVCenter);
 
 	cursorWidthSpinBox = new QSpinBox(dialog);
 	cursorWidthSpinBox->unsetLocale();
 	cursorWidthSpinBox->setRange(1, 20);
 	cursorWidthSpinBox->setValue(property("CSQT_cursorwidth").toInt());
-	layout->addWidget(cursorWidthSpinBox, 8, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	layout->addWidget(cursorWidthSpinBox, row, 3, Qt::AlignLeft | Qt::AlignVCenter);
+	++row;
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
