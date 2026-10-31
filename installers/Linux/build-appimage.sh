@@ -6,7 +6,8 @@
 # Like the Flatpak it builds, from source, and bundles:
 #   - liblo            (static, for OSC support)
 #   - csound           (Csound 7 engine + its own plugins)
-#   - csound-plugins   (external plugin collection incl. jsusfx)
+#   - csound-plugins   (external plugin collection incl. jsusfx, only with
+#                       --with-plugins)
 #   - csound-manual    (offline manual)
 #   - CsoundQt
 #
@@ -18,13 +19,24 @@
 # $APPDIR/usr/share/doc/csound-manual/html.
 #
 # Usage:
-#   ./installers/Linux/build-appimage.sh [--install-deps]
+#   ./installers/Linux/build-appimage.sh [--install-deps] [--with-plugins]
+#
+# Options:
+#   --install-deps   install the Debian/Ubuntu build dependencies (needs sudo)
+#   --with-plugins   also build csound-plugins (the external plugin collection,
+#                    incl. jsusfx) and bundle it into the AppImage
+#   -h, --help       show the full option list (and the env overrides)
+#
+# csound-plugins is a separate upstream repository that pins its own Csound
+# submodule and changes independently of CsoundQt, so it is not built by
+# default: a failure there should not break the CsoundQt AppImage.
 #
 # Environment overrides:
 #   QT_INSTALL_PREFIX   Qt 6 install to use (default: downloaded into $WORK_DIR)
 #   QT_VERSION          Qt version to download (default: 6.11.2)
 #   WORK_DIR            working directory (default: <repo>/build-appimage)
 #   JOBS                parallel build jobs (default: nproc)
+#   WITH_PLUGINS        1 to build csound-plugins (same as --with-plugins)
 #
 # glibc requirement: the Qt official binaries used here require glibc >= 2.34
 # (Qt >= 6.9 is built on RHEL 9). Build on a distro with glibc >= 2.34 (e.g.
@@ -46,6 +58,9 @@ DOWNLOADS_DIR="$WORK_DIR/downloads"
 JOBS="${JOBS:-$(nproc)}"
 
 # --- pinned versions, see util/latest-commits.sh -----------
+# Single source of truth for the Csound version: this commit is built as the
+# engine AND (with --with-plugins) checked out as csound-plugins' `csound`
+# submodule, so the plugins always build against the Csound they ship with.
 CSOUND_COMMIT="${CSOUND_COMMIT:-6390905b0ddac316a9f1c58c57e8b367117db4a5}"
 CSOUND_PLUGINS_COMMIT="${CSOUND_PLUGINS_COMMIT:-74068d692a9c54b66ec4420b29485d187b6e8f1f}"
 
@@ -55,6 +70,9 @@ CSOUND_PLUGINS_REPO="https://github.com/csound-plugins/csound-plugins"
 
 JSUSFX_COMMIT="${JSUSFX_COMMIT:-bcc9cd7b910ee7bba5b4cd2649448ade2ec15712}"
 JSUSFX_REPO="https://github.com/asb2m10/jsusfx"
+
+# csound-plugins is optional (--with-plugins): see the note in the usage above.
+WITH_PLUGINS="${WITH_PLUGINS:-0}"
 
 MANUAL_URL="https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip"
 MANUAL_SHA256="f7dbd58879d22429e0a6f1d3c84c34ab7accf71b582be59f3f6a2f2b312e5e19"
@@ -82,9 +100,41 @@ APPIMAGETOOL_URL="https://github.com/AppImage/appimagetool/releases/download/$LI
 log() { printf '\033[1;32m[appimage]\033[0m %s\n' "$*"; }
 die()  { printf '\033[1;31m[appimage] ERROR:\033[0m %s\n' "$*" >&2; exit 1; }
 
+usage() {
+    # Keep in sync with the usage block in the header comment above.
+    cat <<EOF
+Build a self-contained CsoundQt AppImage for x86_64 Linux.
+
+Usage:
+  $(basename "$0") [options]
+
+Options:
+  --install-deps   install the Debian/Ubuntu build dependencies (needs sudo)
+  --with-plugins   also build csound-plugins (the external plugin collection,
+                   incl. jsusfx) and bundle it into the AppImage
+  -h, --help       show this help and exit
+
+Environment overrides:
+  QT_INSTALL_PREFIX   Qt 6 install to use (default: downloaded into WORK_DIR)
+  QT_VERSION          Qt version to download (default: $QT_VERSION)
+  WORK_DIR            working directory (default: <repo>/build-appimage)
+  JOBS                parallel build jobs (default: nproc)
+  WITH_PLUGINS        1 to build csound-plugins (same as --with-plugins)
+  CSOUND_COMMIT       Csound commit to build (default: $CSOUND_COMMIT)
+                      also used as the csound submodule of csound-plugins
+  CSOUND_PLUGINS_COMMIT
+                      csound-plugins commit to build (with --with-plugins)
+  JSUSFX_COMMIT       jsusfx commit to build (with --with-plugins)
+
+The result is written to WORK_DIR/CsoundQt-x86_64.AppImage.
+EOF
+}
+
 git_checkout() { # dir url commit
     local dir="$1" url="$2" commit="$3"
-    if [ ! -d "$dir/.git" ]; then
+    # -e, not -d: inside an initialised submodule .git is a *file*
+    # ("gitdir: ..."), and that checkout must be reused, not cloned over.
+    if [ ! -e "$dir/.git" ]; then
         git clone --quiet "$url" "$dir"
     fi
     git -C "$dir" fetch --quiet --force origin "$commit" 2>/dev/null || true
@@ -228,6 +278,17 @@ build_csound() {
 build_csound_plugins() {
     log "Building csound-plugins @ $CSOUND_PLUGINS_COMMIT"
     git_checkout "$SRC_DIR/csound-plugins" "$CSOUND_PLUGINS_REPO" "$CSOUND_PLUGINS_COMMIT"
+    # csound-plugins' CMakeLists reads csound's own CMakeLists.txt and
+    # include/{version,float-version}.h.in through its `csound` submodule, so
+    # that checkout must exist. Pin it to $CSOUND_COMMIT - the same Csound we
+    # build and bundle above - instead of trusting the commit the submodule
+    # pointer happens to record in csound-plugins, which would let the plugin
+    # version drift from the host engine. Cloning from the local Csound
+    # checkout (already present) avoids downloading the repository twice.
+    if [ ! -e "$SRC_DIR/csound-plugins/csound/.git" ]; then
+        git clone --quiet --local "$SRC_DIR/csound" "$SRC_DIR/csound-plugins/csound"
+    fi
+    git_checkout "$SRC_DIR/csound-plugins/csound" "$CSOUND_REPO" "$CSOUND_COMMIT"
     git_checkout "$SRC_DIR/csound-plugins/src/jsfx/jsusfx" "$JSUSFX_REPO" "$JSUSFX_COMMIT"
     (
         cd "$SRC_DIR/csound-plugins"
@@ -496,7 +557,9 @@ main() {
     for arg in "$@"; do
         case "$arg" in
             --install-deps) INSTALL_DEPS=1 ;;
-            *) die "unknown argument: $arg" ;;
+            --with-plugins) WITH_PLUGINS=1 ;;
+            -h|--help) usage; exit 0 ;;
+            *) die "unknown argument: $arg (try --help)" ;;
         esac
     done
 
@@ -524,7 +587,11 @@ main() {
     fetch_qt
     build_liblo
     build_csound
-    build_csound_plugins
+    if [ "$WITH_PLUGINS" = "1" ]; then
+        build_csound_plugins
+    else
+        log "Skipping csound-plugins (pass --with-plugins to bundle them)"
+    fi
     build_csoundqt
     install_manual
     download_tools
