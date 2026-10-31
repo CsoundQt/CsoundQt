@@ -2,7 +2,7 @@
 Name=CsoundQt
 Comment=A frontend for Csound
 Exec=CsoundQt-d-cs7
-Icon=images/csoundqt.svg
+Icon=csoundqt
 Type=Application
 Categories=AudioVideo;Audio;
 Keywords=csound;synthesis;music;audio;sound;MIDI;editor
