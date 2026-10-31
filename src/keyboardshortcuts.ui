@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>KeyboardShortcuts</class>
  <widget class="QWidget" name="KeyboardShortcuts">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>336</width>
+    <height>377</height>
+   </rect>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QLineEdit" name="filterLineEdit">
@@ -9,16 +17,6 @@
       <string>Filter shortcuts...</string>
      </property>
      <property name="clearButtonEnabled">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="scopeHintLabel">
-     <property name="text">
-      <string>Scope: Global shortcuts work everywhere. Editor-only shortcuts work only while the editor has focus; Widget panel only shortcuts work only while the widget panel has focus. Different scopes may share the same key.</string>
-     </property>
-     <property name="wordWrap">
       <bool>true</bool>
      </property>
     </widget>
@@ -49,11 +47,37 @@
     </widget>
    </item>
    <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QLabel" name="scopeHintLabel">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;• &lt;span style=&quot; font-weight:700;&quot;&gt;Global&lt;/span&gt;: global shortcuts work everywhere&lt;br/&gt;• &lt;span style=&quot; font-weight:700;&quot;&gt;Editor&lt;/span&gt;: shortcuts work only on the editor&lt;br/&gt;• &lt;span style=&quot; font-weight:700;&quot;&gt;Widget panel&lt;/span&gt;: work only on the widget panel. &lt;br/&gt;&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Editor&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;Widget panel&lt;/span&gt; shortcuts may share keys&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout">
      <item>
       <spacer>
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

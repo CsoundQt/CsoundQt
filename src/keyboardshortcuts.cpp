@@ -68,9 +68,9 @@ QString shortcutScopeLabel(const QString &scope)
 		return QCoreApplication::translate("KeyboardShortcutsWidget", text);
 	};
 	if (scope == "editor"_L1)
-		return tr("Editor only");
+		return tr("Editor");
 	if (scope == "widgetPanel"_L1)
-		return tr("Widget panel only");
+		return tr("Widget panel");
 	return tr("Global");
 }
 
