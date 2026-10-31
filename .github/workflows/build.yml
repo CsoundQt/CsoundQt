@@ -108,15 +108,14 @@ jobs:
             csound/liblo_install
           key: csound-installer-${{ runner.os }}-${{ steps.xcode-version.outputs.version }}-${{ steps.csound-hash.outputs.hash }}-${{ hashFiles('.github/workflows/build.yml') }}
 
-      - name: Cache Homebrew downloads
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/Library/Caches/Homebrew
-          key: brew-${{ runner.os }}-${{ hashFiles('.github/workflows/*.yml') }}
-          restore-keys: |
-            brew-${{ runner.os }}-
-
+      # No Homebrew cache here on purpose. Caching ~/Library/Caches/Homebrew
+      # also restores Homebrew's *state* (Backup/ and the cached homebrew-core
+      # api/ metadata), not just bottles. On a newer runner image that makes
+      # brew "downgrade" formulae the image already ships and then abort while
+      # relinking, e.g.:
+      #   ccache: same file: /opt/homebrew/bin/openssl and
+      #                    ~/Library/Caches/Homebrew/Backup/bin/openssl
+      # brew install ccache/bison/flex is fast enough to not be worth it.
       - name: Cache ccache
         uses: actions/cache@v4
         with:
