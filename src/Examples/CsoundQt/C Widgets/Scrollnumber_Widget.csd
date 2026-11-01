@@ -32,6 +32,8 @@ i 1 0 3600
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -41,17 +43,13 @@ i 1 0 3600
  <height>319</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>138</r>
-  <g>149</g>
-  <b>156</b>
- </bgcolor>
+ <bgcolor mode="background">#8a959c</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>21</x>
   <y>7</y>
-  <width>227</width>
-  <height>37</height>
+  <width>228</width>
+  <height>62</height>
   <uuid>{e0d516ac-0bd9-4502-a3a2-9fa4f22f7054}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -64,32 +62,19 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
-  <precision>3</precision>
   <padding>2</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>191</r>
-   <g>204</g>
-   <b>234</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#bfccea</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>9</x>
-  <y>46</y>
+  <x>10</x>
+  <y>70</y>
   <width>250</width>
   <height>108</height>
   <uuid>{1972f251-3570-4dc4-8a87-50de9868eebe}</uuid>
@@ -104,32 +89,19 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>191</r>
-   <g>204</g>
-   <b>234</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="background">#bfccea</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>9</x>
-  <y>223</y>
+  <x>10</x>
+  <y>247</y>
   <width>250</width>
   <height>43</height>
   <uuid>{e42a48e9-9ee1-4337-8488-301faeedb988}</uuid>
@@ -144,32 +116,19 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>6</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>193</r>
-   <g>163</g>
-   <b>142</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="background">#c1a38e</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>a</objectName>
-  <x>15</x>
-  <y>230</y>
+  <x>16</x>
+  <y>254</y>
   <width>55</width>
   <height>26</height>
   <uuid>{d46c4956-ab0b-4024-987f-e277c708d41a}</uuid>
@@ -182,25 +141,13 @@ i 1 0 3600
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <color>
-   <r>30</r>
-   <g>30</g>
-   <b>30</b>
-  </color>
-  <bgcolor mode="background">
-   <r>220</r>
-   <g>220</g>
-   <b>220</b>
-  </bgcolor>
-  <value>3.26900000</value>
+  <color>#1e1e1e</color>
+  <bgcolor mode="background">#dcdcdc</bgcolor>
+  <value>3.28400000</value>
   <resolution>0.00100000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -209,8 +156,8 @@ i 1 0 3600
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>b</objectName>
-  <x>110</x>
-  <y>230</y>
+  <x>111</x>
+  <y>254</y>
   <width>55</width>
   <height>26</height>
   <uuid>{81904718-714a-4157-a559-e688b0c0205c}</uuid>
@@ -223,25 +170,13 @@ i 1 0 3600
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <color>
-   <r>30</r>
-   <g>30</g>
-   <b>30</b>
-  </color>
-  <bgcolor mode="background">
-   <r>220</r>
-   <g>220</g>
-   <b>220</b>
-  </bgcolor>
+  <color>#1e1e1e</color>
+  <bgcolor mode="background">#dcdcdc</bgcolor>
   <value>18.40000000</value>
   <resolution>0.10000000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -250,8 +185,8 @@ i 1 0 3600
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>70</x>
-  <y>230</y>
+  <x>71</x>
+  <y>254</y>
   <width>44</width>
   <height>26</height>
   <uuid>{2ee5bcc9-bff7-4d21-a848-8b2af2c72899}</uuid>
@@ -266,32 +201,19 @@ i 1 0 3600
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>c</objectName>
-  <x>165</x>
-  <y>230</y>
+  <x>166</x>
+  <y>254</y>
   <width>90</width>
   <height>26</height>
   <uuid>{73266aa0-0ae3-4bcd-bbaf-911453733b6c}</uuid>
@@ -301,36 +223,24 @@ i 1 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>is 60.150</label>
+  <label>is 60.426</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <padding>5</padding>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>9</x>
-  <y>161</y>
+  <x>10</x>
+  <y>185</y>
   <width>250</width>
   <height>54</height>
   <uuid>{e0e82cee-79df-4f1c-9011-fd8655d840a5}</uuid>
@@ -345,32 +255,19 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>193</r>
-   <g>163</g>
-   <b>142</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="background">#c1a38e</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>midi</objectName>
-  <x>18</x>
-  <y>169</y>
+  <x>19</x>
+  <y>193</y>
   <width>87</width>
   <height>25</height>
   <uuid>{ae8f1ea4-e737-4ace-ba33-16f1b5c32b32}</uuid>
@@ -383,25 +280,13 @@ i 1 0 3600
   <alignment>center</alignment>
   <font>Liberation Serif</font>
   <fontsize>16</fontsize>
-  <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </color>
-  <bgcolor mode="background">
-   <r>54</r>
-   <g>63</g>
-   <b>69</b>
-  </bgcolor>
-  <value>68.00000000</value>
+  <color>#ffffff</color>
+  <bgcolor mode="background">#363f45</bgcolor>
+  <value>88.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -410,8 +295,8 @@ i 1 0 3600
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>15</x>
-  <y>194</y>
+  <x>16</x>
+  <y>218</y>
   <width>110</width>
   <height>24</height>
   <uuid>{de1f7fcb-de33-4c40-a4fa-2c9aed935b86}</uuid>
@@ -426,32 +311,19 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>107</x>
-  <y>170</y>
+  <x>108</x>
+  <y>194</y>
   <width>38</width>
   <height>23</height>
   <uuid>{658fc00b-9195-42be-9887-1a49b2734e83}</uuid>
@@ -466,32 +338,19 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>2</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>hertz</objectName>
-  <x>150</x>
-  <y>169</y>
+  <x>151</x>
+  <y>193</y>
   <width>97</width>
   <height>25</height>
   <uuid>{566a8d25-ee1d-4705-ba26-c36c772cd35f}</uuid>
@@ -501,28 +360,16 @@ i 1 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>417.2 Hz.</label>
+  <label>1324.5 Hz.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>1</precision>
   <padding>3</padding>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>206</r>
-   <g>214</g>
-   <b>169</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="background">#ced6a9</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
