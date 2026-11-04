@@ -6,6 +6,7 @@
 sr          =           44100
 ksmps       =           1
 nchnls      =           2
+0dbfs       =           32768
 ;--------------------------------------------------------
 ;Instrument 1 : plucked strings chorused left/right and
 ;       pitch-shifted and delayed taps thru exponential

@@ -27,10 +27,10 @@
 <CsOptions>
 </CsOptions>
 <CsInstruments>
-sr		= 44100
+sr	= 44100
 ksmps	= 1024
 nchnls	= 2
-
+0dbfs   = 32768
 		zakinit	20, 1
 
 
