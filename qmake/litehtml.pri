@@ -3,7 +3,7 @@
 
 # litehtml compiles against its src/, include/ and include/litehtml/ dirs.
 LITEHTML_INCLUDEPATH = $$PWD/../third_party/litehtml/src $$PWD/../third_party/litehtml/include $$PWD/../third_party/litehtml/include/litehtml \
-    $$PWD/../third_party/litehtml/src/gumbo/include $$PWD/../third_party/litehtml/src/gumbo/include/gumbo
+    $$PWD/../third_party/litehtml/src/gumbo/src
 
 INCLUDEPATH += $$LITEHTML_INCLUDEPATH
 
@@ -65,6 +65,7 @@ LITEHTML_SOURCES = \
     $$PWD/../third_party/litehtml/src/render_inline_context.cpp \
     $$PWD/../third_party/litehtml/src/render_item.cpp \
     $$PWD/../third_party/litehtml/src/render_table.cpp \
+    $$PWD/../third_party/litehtml/src/render_text.cpp \
     $$PWD/../third_party/litehtml/src/string_id.cpp \
     $$PWD/../third_party/litehtml/src/strtod.cpp \
     $$PWD/../third_party/litehtml/src/style.cpp \
@@ -76,16 +77,17 @@ LITEHTML_SOURCES = \
     $$PWD/../third_party/litehtml/src/web_color.cpp \
 
 LITEHTML_GUMBO_SOURCES = \
-    $$PWD/../third_party/litehtml/src/gumbo/attribute.c \
-    $$PWD/../third_party/litehtml/src/gumbo/char_ref.c \
-    $$PWD/../third_party/litehtml/src/gumbo/error.c \
-    $$PWD/../third_party/litehtml/src/gumbo/parser.c \
-    $$PWD/../third_party/litehtml/src/gumbo/string_buffer.c \
-    $$PWD/../third_party/litehtml/src/gumbo/string_piece.c \
-    $$PWD/../third_party/litehtml/src/gumbo/tag.c \
-    $$PWD/../third_party/litehtml/src/gumbo/tokenizer.c \
-    $$PWD/../third_party/litehtml/src/gumbo/utf8.c \
-    $$PWD/../third_party/litehtml/src/gumbo/util.c \
-    $$PWD/../third_party/litehtml/src/gumbo/vector.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/attribute.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/char_ref.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/char_ref_gperf.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/error.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/parser.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/string_buffer.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/string_piece.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/tag.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/tokenizer.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/utf8.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/util.c \
+    $$PWD/../third_party/litehtml/src/gumbo/src/vector.c \
 
 SOURCES += $$LITEHTML_SOURCES $$LITEHTML_GUMBO_SOURCES
