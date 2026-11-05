@@ -27,8 +27,8 @@
 <CsOptions>
 </CsOptions>
 <CsInstruments>
-sr		 = 44100
-ksmps	 = 1024
+sr     = 44100
+ksmps  = 1024
 nchnls = 2
 0dbfs  = 32768
 
