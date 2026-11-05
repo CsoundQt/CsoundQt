@@ -2022,9 +2022,8 @@ void CsoundQt::ensureAudioMidiDiscovery()
         return;
     m_audioMidiDiscovered = true;
 
-    // The settings dialog also refreshes the module lists. If it has already
-    // run (e.g. the user opened Settings before the deferred timer fired), reuse
-    // those lists instead of enumerating the modules a second time.
+    // Csound's module list cannot change while the process is running, so it
+    // is queried once for the session.
     if (m_configlists.rtAudioNames.isEmpty())
         m_configlists.refreshModules();
 
@@ -2065,6 +2064,20 @@ void CsoundQt::ensureAudioMidiDiscovery()
                 m_options->rtAudioModule, m_options->rtInputDevice, false, &audioGroups.first);
     m_options->deviceNumChannels = outputChannels >= 0 ? outputChannels : 2;
     m_options->deviceNumInputChannels = inputChannels >= 0 ? inputChannels : 2;
+
+    // Fixed-rate backends need their current server rate when a performance
+    // starts. Query it with the rest of discovery so that Ctrl+R does not have
+    // to probe it on the first run.
+    if (m_configlists.isFixedSamplerateBackend(m_options->rtAudioModule)) {
+        if (ConfigLists::isPerDeviceSamplerateBackend(m_options->rtAudioModule)) {
+            if (!m_options->rtOutputDevice.isEmpty()) {
+                m_configlists.deviceSamplerate(m_options->rtAudioModule,
+                                               m_options->rtOutputDevice, true);
+            }
+        } else {
+            m_configlists.backendSamplerate(m_options->rtAudioModule);
+        }
+    }
 
     updatePlayRenderStatusTips();
 }
@@ -2760,23 +2773,10 @@ void CsoundQt::setCurrentAudioFile(const QString fileName)
     currentAudioFile = fileName;
 }
 
-// Sample rate set in the orchestra header, or -1 when it cannot be read.
-static int orchestraSampleRate(const QString &text)
-{
-    static const QRegularExpression srRx(
-                QStringLiteral(R"(^\s*sr\s*=\s*([0-9]+(?:\.[0-9]+)?))"),
-                QRegularExpression::MultilineOption);
-    const QRegularExpressionMatch match = srRx.match(text);
-    if (!match.hasMatch())
-        return -1;
-    bool ok = false;
-    const double sr = match.captured(1).toDouble(&ok);
-    return ok ? int(sr + 0.5) : -1;
-}
-
-QString CsoundQt::validateRealtimeAudioSettings(DocumentPage *page)
+QString CsoundQt::validateRealtimeAudioSettings()
 {
     const QString module = m_options->rtAudioModule;
+    const QString outputDevice = m_options->rtOutputDevice;
     if (module == "null")
         return QString();
     if (module.isEmpty())
@@ -2786,19 +2786,22 @@ QString CsoundQt::validateRealtimeAudioSettings(DocumentPage *page)
         return tr("The audio module \"%1\" is not available in this Csound build.")
                 .arg(module);
 
-    const QList<QPair<QString, QString> > outputs = m_configlists.getAudioOutputDevices(module);
+    // Reuse the per-module snapshot from discovery or Settings. This
+    // potentially blocking enumeration is needed once per audio-settings
+    // snapshot, not before every performance.
+    const auto deviceGroups = m_configlists.audioDeviceGroups(module);
+    const QList<AudioDeviceInfo> &outputs = deviceGroups.second;
     if (outputs.isEmpty())
         return tr("No audio output devices are available for module \"%1\".")
                 .arg(module);
 
-    const QString outputDevice = m_options->rtOutputDevice;
     bool outputFound = outputDevice.isEmpty()
             || outputDevice == "dac"_L1
             || outputDevice == "dac:null"_L1
             || outputDevice == "dac:system:playback_"_L1
             || outputDevice.contains(QLatin1Char('*'));
-    for (const QPair<QString, QString> &device : outputs) {
-        if (device.second == outputDevice) {
+    for (const AudioDeviceInfo &device : outputs) {
+        if (device.id == outputDevice || device.name == outputDevice) {
             outputFound = true;
             break;
         }
@@ -2814,10 +2817,10 @@ QString CsoundQt::validateRealtimeAudioSettings(DocumentPage *page)
             && inputDevice != "adc:null"_L1
             && inputDevice != "adc:system:capture_"_L1
             && !inputDevice.contains(QLatin1Char('*'))) {
-        const QList<QPair<QString, QString> > inputs = m_configlists.getAudioInputDevices(module);
+        const QList<AudioDeviceInfo> &inputs = deviceGroups.first;
         bool inputFound = false;
-        for (const QPair<QString, QString> &device : inputs) {
-            if (device.second == inputDevice) {
+        for (const AudioDeviceInfo &device : inputs) {
+            if (device.id == inputDevice || device.name == inputDevice) {
                 inputFound = true;
                 break;
             }
@@ -2825,26 +2828,6 @@ QString CsoundQt::validateRealtimeAudioSettings(DocumentPage *page)
         if (!inputFound) {
             return tr("The selected audio input device \"%1\" is not available "
                       "for module \"%2\".").arg(inputDevice, module);
-        }
-    }
-
-    if (m_configlists.isFixedSamplerateBackend(module)) {
-        int expectedSr = -1;
-        if (ConfigLists::isPerDeviceSamplerateBackend(module)) {
-            if (!outputDevice.isEmpty())
-                expectedSr = m_configlists.deviceSamplerate(module, outputDevice, true);
-        } else {
-            expectedSr = m_configlists.backendSamplerate(module);
-        }
-        if (expectedSr > 0) {
-            int requestedSr = m_options->samplerate;
-            if (requestedSr <= 0 && page != nullptr)
-                requestedSr = orchestraSampleRate(page->getBasicText());
-            if (requestedSr > 0 && requestedSr != expectedSr) {
-                return tr("The sample rate %1 Hz does not match the fixed sample "
-                          "rate %2 Hz of audio module \"%3\".")
-                        .arg(requestedSr).arg(expectedSr).arg(module);
-            }
         }
     }
     return QString();
@@ -2895,13 +2878,19 @@ void CsoundQt::play(bool realtime, int index)
 
     if (realtime && !m_options->checkSyntaxOnly) {
         ensureAudioMidiDiscovery();
-        const QString problem = validateRealtimeAudioSettings(page);
-        if (!problem.isEmpty()) {
-            showInvalidAudioSettings(problem);
-            if (curPage == oldPage)
-                runAct->setChecked(false);
-            curPage = oldPage;
-            return;
+        // Device discovery/validation can be slow on some backends. Check the
+        // selected module/device once against the startup snapshot, then trust
+        // that snapshot until Settings is opened.
+        if (!m_realtimeAudioValidated) {
+            const QString problem = validateRealtimeAudioSettings();
+            if (!problem.isEmpty()) {
+                showInvalidAudioSettings(problem);
+                if (curPage == oldPage)
+                    runAct->setChecked(false);
+                curPage = oldPage;
+                return;
+            }
+            m_realtimeAudioValidated = true;
         }
     }
 
@@ -5111,7 +5100,14 @@ void CsoundQt::configure()
 {
     // The dialog needs the current module/device lists and, on first use, the
     // resolved default module and device channel counts.
+    const bool discoveryAlreadyRan = m_audioMidiDiscovered;
     ensureAudioMidiDiscovery();
+    m_realtimeAudioValidated = false;
+    // Settings is an explicit request to inspect devices, so refresh the
+    // device snapshot there. ConfigDialog will query it once and the next
+    // performance can reuse that fresh result instead of querying on Ctrl+R.
+    if (discoveryAlreadyRan)
+        m_configlists.clearAudioDeviceCache();
     ConfigDialog dialog(this,  m_options, &m_configlists, m_keyActions,
                         m_defaultShortcuts);
     dialog.setCurrentTab(configureTab);
@@ -5195,6 +5191,7 @@ void CsoundQt::applyPaletteToChrome()
 
 void CsoundQt::applySettings()
 {
+    m_realtimeAudioValidated = false;
     applyWidgetStyle();
 
     // Document tabs: use the application font plus the configured relative

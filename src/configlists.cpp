@@ -416,12 +416,17 @@ QList<AudioDeviceInfo> ConfigLists::audioDevicesFromCsound(CSOUND *cs,
 QList<AudioDeviceInfo> ConfigLists::audioDeviceGroups(const QString &module,
                                                       bool isOutput)
 {
-    return audioDevicesForDirection(module, isOutput, false);
+    const auto groups = audioDeviceGroups(module);
+    return isOutput ? groups.second : groups.first;
 }
 
 QPair<QList<AudioDeviceInfo>, QList<AudioDeviceInfo>>
 ConfigLists::audioDeviceGroups(const QString &module)
 {
+    const auto cached = m_audioDeviceGroupCache.constFind(module);
+    if (cached != m_audioDeviceGroupCache.constEnd())
+        return cached.value();
+
     CSOUND *cs = csoundCreate(&m_messages, nullptr);
     csoundSetMessageCallback(cs, msgCallback);
     csoundSetRTAudioModule(cs, module.toLocal8Bit().constData());
@@ -430,7 +435,20 @@ ConfigLists::audioDeviceGroups(const QString &module)
     const QList<AudioDeviceInfo> outputs =
             audioDevicesFromCsound(cs, module, true, false);
     csoundDestroy(cs);
-    return qMakePair(inputs, outputs);
+    const auto groups = qMakePair(inputs, outputs);
+    m_audioDeviceGroupCache.insert(module, groups);
+    return groups;
+}
+
+void ConfigLists::clearAudioDeviceCache()
+{
+    m_audioDeviceGroupCache.clear();
+    // Device presence, backend system rate, per-device rates and the PipeWire
+    // native rate can all change while CsoundQt is running. A Settings refresh
+    // must invalidate all of them, not just the device lists.
+    m_backendSamplerates.clear();
+    m_deviceSamplerates.clear();
+    m_pipeWireSamplerate = -1;
 }
 
 int ConfigLists::audioDeviceChannels(const QString &module, const QString &device,
@@ -942,14 +960,10 @@ QString ConfigLists::audioDeviceDisplayName(const QString &module, bool isOutput
 {
     if (id.isEmpty())
         return id;
-    const QList<QStringPair> ports = isOutput ? getAudioOutputDevices(module)
-                                              : getAudioInputDevices(module);
-    for (const QStringPair &port : ports) {
-        if (port.second == id) {
-            if (module == "jack"_L1)
-                return jackAggregateKey(port.first);
-            return port.first;
-        }
+    const QList<AudioDeviceInfo> devices = audioDeviceGroups(module, isOutput);
+    for (const AudioDeviceInfo &device : devices) {
+        if (device.id == id || device.name == id)
+            return device.name;
     }
     // Default tokens ("dac", "adc", "dac:null", regexes, ...) stay as they are.
     return id;
@@ -960,19 +974,10 @@ QString ConfigLists::audioDeviceIdForDisplay(const QString &module, bool isOutpu
 {
     if (text.isEmpty())
         return text;
-    if (module == "jack"_L1) {
-        const QList<AudioDeviceInfo> groups = audioDeviceGroups(module, isOutput);
-        for (const AudioDeviceInfo &group : groups) {
-            if (group.name == text)
-                return group.id;
-        }
-        return text;
-    }
-    const QList<QStringPair> ports = isOutput ? getAudioOutputDevices(module)
-                                              : getAudioInputDevices(module);
-    for (const QStringPair &port : ports) {
-        if (port.first == text)
-            return port.second;
+    const QList<AudioDeviceInfo> devices = audioDeviceGroups(module, isOutput);
+    for (const AudioDeviceInfo &device : devices) {
+        if (device.name == text || device.id == text)
+            return device.id;
     }
     return text;
 }

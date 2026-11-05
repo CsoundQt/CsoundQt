@@ -112,6 +112,9 @@ public:
     // Reads inputs and outputs together with one Csound instance.
     QPair<QList<AudioDeviceInfo>, QList<AudioDeviceInfo>>
     audioDeviceGroups(const QString &module);
+    // Forget the audio device snapshot so the next query re-enumerates the
+    // backend. Used when opening Audio settings to pick up device changes.
+    void clearAudioDeviceCache();
     // Channel count for a selected device token. Returns 0 for "no device",
     // -1 when the backend cannot tell. If devices is null, the device list is
     // queried.
@@ -142,6 +145,8 @@ public:
 
 private:
 	QString m_messages;
+	QHash<QString, QPair<QList<AudioDeviceInfo>, QList<AudioDeviceInfo>>>
+	        m_audioDeviceGroupCache;
 	QHash<QString, int> m_backendSamplerates;
 	QHash<QString, int> m_deviceSamplerates;
 	int m_pipeWireSamplerate = -1;

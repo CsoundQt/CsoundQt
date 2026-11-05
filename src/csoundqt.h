@@ -324,7 +324,7 @@ private slots:
 	void setCurrentOptionsForPage(DocumentPage *p);
 	// Checks the realtime audio settings before a performance and returns a
 	// user-facing description, or an empty string when they are usable.
-	QString validateRealtimeAudioSettings(DocumentPage *page);
+	QString validateRealtimeAudioSettings();
 	void showInvalidAudioSettings(const QString &message);
 	void applyDefaultDockLayout(); // initial dock arrangement when there is no saved layout
 	void ensurePanelTabOrder(); // Widgets before Help in the right-hand tab group
@@ -697,6 +697,7 @@ private:
     bool m_rissetInitialized = false;
     bool m_rissetReady = false;
     bool m_audioMidiDiscovered = false;
+    bool m_realtimeAudioValidated = false;
     QString m_helpStartPage;
     QString m_appliedCsdocdir; // csdocdir value currently applied to the help panel
     bool m_helpLoaded = false;

@@ -934,8 +934,6 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 
 	connect(m_csEngine, SIGNAL(errorLines(QList<QPair<int, QString> >)),
 			m_view, SLOT(markErrorLines(QList<QPair<int, QString> >)));
-	connect(m_csEngine, SIGNAL(sampleRateMismatch(int, int, QString)),
-			this, SLOT(sampleRateMismatch(int, int, QString)), Qt::QueuedConnection);
 	connect(m_csEngine, SIGNAL(stopSignal()),
 			this, SLOT(perfEnded()));
 
@@ -1005,15 +1003,6 @@ void DocumentPage::perfEnded()
 	emit stopSignal();
 	// The performance state affects whether channel references may be shown.
 	updateWidgetChannelLineHighlights();
-}
-
-void DocumentPage::sampleRateMismatch(int orchestraSr, int backendSr, const QString &backendName)
-{
-	Notification::showTransient(static_cast<QWidget *>(parent()),
-		tr("Orchestra <b>%1 Hz</b> != audio backend <b>%2 Hz</b>. "
-		   "Backend (%3) has a fixed sample rate &mdash; set the orchestra's <b>sr</b> to %2 "
-		   "or choose <b>System</b> as the sample rate.")
-		.arg(orchestraSr).arg(backendSr).arg(backendName), tr("Sample rate mismatch"), 30000, true, Notification::Horizontal::Center);
 }
 
 void DocumentPage::setHelp()

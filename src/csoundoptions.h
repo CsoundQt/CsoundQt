@@ -48,9 +48,6 @@ public:
 
 	void setJackNameSize(int size);
 
-	bool hasFixedSamplerateBackend() const;
-	int backendSamplerate() const;
-
     // this is used to identify a document indenpendently of its filename (which might
     // be a temporary name)
     QString docName;

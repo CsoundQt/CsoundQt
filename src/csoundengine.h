@@ -303,7 +303,6 @@ private slots:
 
 signals:
 	void errorLines(QList<QPair<int, QString> >);
-	void sampleRateMismatch(int orchestraSr, int backendSr, const QString &backendName);
 	void passMessages(QString msg);
 	void stopSignal(); // Sent when performance has stopped internally to inform others.playFromParent()
 	void breakpointReached();

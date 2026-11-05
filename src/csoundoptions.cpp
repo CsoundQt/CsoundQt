@@ -178,8 +178,25 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 			if (rtMidiOutputDevice != "")
                 opts << "-Q" + rtMidiOutputDevice;
 		}
-        if(samplerate > 0) {
-            opts << "--sample-rate=" + QString::number(samplerate);
+        // Fixed-rate backends (JACK, PipeWire, ...) derive the rate from their
+        // server. Pass that rate explicitly so Csound does not fall back to the
+        // orchestra's sr; ignore any stale value saved in the settings.
+        int effectiveSamplerate = samplerate;
+        if (m_configlists->isFixedSamplerateBackend(rtAudioModule)) {
+            int backendRate = -1;
+            if (ConfigLists::isPerDeviceSamplerateBackend(rtAudioModule)) {
+                if (!rtOutputDevice.isEmpty()) {
+                    backendRate = m_configlists->deviceSamplerate(
+                                rtAudioModule, rtOutputDevice, true);
+                }
+            } else {
+                backendRate = m_configlists->backendSamplerate(rtAudioModule);
+            }
+            if (backendRate > 0)
+                effectiveSamplerate = backendRate;
+        }
+        if (effectiveSamplerate > 0) {
+            opts << "--sample-rate=" + QString::number(effectiveSamplerate);
         }
         const bool fixedKsmps = ConfigLists::isFixedKsmpsModule(rtAudioModule);
         const bool selectableKsmps = ConfigLists::isSelectableKsmpsModule(rtAudioModule);
@@ -277,16 +294,4 @@ int CsoundOptions::generateCmdLine(char **argv)
 void CsoundOptions::setJackNameSize(int size)
 {
 	m_jackNameSize = size;
-}
-
-bool CsoundOptions::hasFixedSamplerateBackend() const
-{
-	return m_configlists && m_configlists->isFixedSamplerateBackend(rtAudioModule);
-}
-
-int CsoundOptions::backendSamplerate() const
-{
-	if (!m_configlists)
-		return -1;
-	return m_configlists->backendSamplerate(rtAudioModule);
 }

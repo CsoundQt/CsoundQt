@@ -1010,15 +1010,6 @@ int CsoundEngine::runCsound()
             return -3;
         }
 
-        if (m_options.rt
-                && m_options.samplerate == 0
-                && m_options.hasFixedSamplerateBackend()) {
-            const int orchestraSr = int(csoundGetSr(ud->csound) + 0.5);
-            const int backendSr = m_options.backendSamplerate();
-            if (orchestraSr > 0 && backendSr > 0 && orchestraSr != backendSr)
-                emit sampleRateMismatch(orchestraSr, backendSr, m_options.rtAudioModule);
-        }
-
         int startResult = csoundStart(ud->csound); // must be after compilation check, otherwise unneeded messages are printed to console
         if (startResult != CSOUND_SUCCESS) {
             //just for testing to see, if it ever comes out

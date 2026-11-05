@@ -273,7 +273,6 @@ public slots:
 	void stop();
 	int record(int format);
 	void perfEnded();
-	void sampleRateMismatch(int orchestraSr, int backendSr, const QString &backendName);
 	void setHelp();
 	void showWidgets(bool show = true);
 	void hideWidgets();

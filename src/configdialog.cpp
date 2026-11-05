@@ -116,8 +116,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     // (The main window connects its applySettings() slot to the same signal.)
     connect(applyButton, &QPushButton::released, this, &ConfigDialog::apply);
 
-	m_configlists->refreshModules();
-
 	if(m_configlists->rtAudioNames.size() == 1) {
 		QMessageBox::warning(this, tr("No Audio Modules"),
                              tr("No real-time audio modules were found.\n"
@@ -145,12 +143,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	foreach (QString item, m_configlists->rtMidiNames) {
 		if (item == "virtual"_L1)
 			continue;
-		if (item != "none"_L1) {
-			const bool hasInput = !m_configlists->getMidiInputDevices(item).isEmpty();
-			const bool hasOutput = !m_configlists->getMidiOutputDevices(item).isEmpty();
-			if (!hasInput && !hasOutput)
-				continue;
-		}
+		// Do not probe every MIDI backend while constructing the dialog. Device
+		// enumeration can block (and creates a temporary Csound instance); the
+		// selected backend's devices are queried when its lists are populated.
 		RtMidiModuleComboBox->addItem(item, item);
 	}
 	for (int i = 0; i < m_configlists->languages.size(); i++) {
@@ -459,7 +454,13 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		if (!internalMidiCheckBox->isChecked())
 			updateMidiDeviceLists();
 	});
-	internalMidiCheckBox->setChecked(!m_options->useCsoundMidi);
+	{
+		// This is the initial state, not a user toggle: do not let the
+		// auto-connected toggled() slot query the devices and then query them
+		// again below.
+		const QSignalBlocker blocker(internalMidiCheckBox);
+		internalMidiCheckBox->setChecked(!m_options->useCsoundMidi);
+	}
 	updateMidiDeviceLists();
 	simultaneousCheckBox->setChecked(m_options->simultaneousRun);
 	quitOnLastTabClosedCheckBox->setChecked(m_options->quitOnLastTabClosed);
