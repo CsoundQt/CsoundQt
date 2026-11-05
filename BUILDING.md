@@ -34,7 +34,7 @@ $env:Path = "C:\Qt\6.8.3\msvc2022_64\bin;$env:Path"
 git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
 cd CsoundQt
 
-qmake qcs.pro CONFIG+=rtmidi CONFIG+=release `
+qmake qcs.pro CONFIG+=release `
     "CSOUND_API_INCLUDE_DIR=C:/Program Files/Csound7/include/csound" `
     "CSOUND_INTERFACES_INCLUDE_DIR=C:/Program Files/Csound7/include/csound" `
     "CSOUND_LIBRARY_DIR=C:/Program Files/Csound7/lib"
@@ -98,7 +98,7 @@ export PATH="$HOME/Qt/6.8.3/macos/bin:$PATH"
 git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
 cd CsoundQt
 
-qmake qcs.pro CONFIG+=rtmidi CONFIG+=release
+qmake qcs.pro CONFIG+=release
 make -j$(sysctl -n hw.logicalcpu)
 
 open bin/CsoundQt-d-cs7.app
@@ -143,7 +143,7 @@ sudo apt-get install build-essential git qt6-base-dev qt6-declarative-dev
 git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
 cd CsoundQt
 
-qmake6 qcs.pro CONFIG+=rtmidi CONFIG+=release
+qmake6 qcs.pro CONFIG+=release
 make -j$(nproc)
 ./bin/CsoundQt-d-cs7
 
@@ -165,11 +165,14 @@ Notes:
 
 Pass as `CONFIG+=...`:
 
-- `rtmidi` — MIDI support (recommended)
+- `no_rtmidi` — disable MIDI support (enabled by default). MIDI always uses the
+  bundled `rtmidi` submodule; system RtMidi libraries are not supported.
+- `rtmidi` — deprecated no-op, retained temporarily for compatibility
 - `html_support` — `<html>` GUI element via Qt WebEngine
 - `record_support` — recording support (usually enabled automatically)
 - `debugger` — Csound debugger
-- `no_splash` — no splash screen
+- `splash` — show the splash screen on startup (disabled by default)
+- `no_splash` — deprecated no-op, retained temporarily for compatibility
 - `release` — optimised build
 
 ## Pointing at a custom Csound

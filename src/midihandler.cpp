@@ -153,22 +153,14 @@ void MidiHandler::openMidiInPort(int port)
 	try {
 		closeMidiInPort();
 	}
-#ifdef CSQT_OLD_RTMIDI
-	catch (RtError &error) {
-#else
 	catch (RtMidiError &error) {
-#endif
 		error.printMessage();
 	}
 
 	try {
 		m_midiin->openPort(port, "MIDI in");
 	}
-#ifdef CSQT_OLD_RTMIDI
-	catch (RtError &error) {
-#else
 	catch (RtMidiError &error) {
-#endif
 		qDebug() << "Error opening MIDI port " << port;
 		error.printMessage();
 		return;
@@ -195,22 +187,14 @@ void MidiHandler::openMidiOutPort(int port)
 	try {
 		closeMidiOutPort();
 	}
-#ifdef CSQT_OLD_RTMIDI
-	catch (RtError &error) {
-#else
 	catch (RtMidiError &error) {
-#endif
 		error.printMessage();
 	}
 
 	try {
 		m_midiout->openPort(port, "MIDI out");
 	}
-#ifdef CSQT_OLD_RTMIDI
-	catch (RtError &error) {
-#else
 	catch (RtMidiError &error) {
-#endif
 		qDebug() << "Error opening MIDI out port " << port;
 		error.printMessage();
 		return;

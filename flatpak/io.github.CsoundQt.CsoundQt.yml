@@ -177,7 +177,7 @@ modules:
       - qmake --version  
       # - git submodule update --init --recursive
       - export QMAKEPATH=/app &&
-              /usr/bin/qmake CONFIG+=rtmidi CONFIG+=release CONFIG+=build64 
+              /usr/bin/qmake CONFIG+=release CONFIG+=build64
                 DEFINES+=FLATPAK_BUILD
                 qcs.pro                           
                 CSOUND_API_INCLUDE_DIR=/app/include/csound

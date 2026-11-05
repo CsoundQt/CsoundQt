@@ -4,7 +4,6 @@
 # qmake qcs.pro "CSOUND_INCLUDE_DIR = <path to csound.h>"
 # CSOUND_INCLUDE_DIR
 # CSOUND_LIBRARY_DIR
-# RTMIDI_DIR
 # PYTHONQT_SRC_DIR
 # If the Csound headers and libraries you are using were built from source but
 # not installed, set CSOUND_SOURCE_TREE to the directory containing the Csound
@@ -15,13 +14,15 @@
 ################################################################################
 # BUILD OPTIONS:
 # CONFIG+=build32    To build floats version
-# CONFIG+=rtmidi     To build with RtMidi support
+# RtMidi support is enabled by default; disable it with CONFIG+=no_rtmidi
+# CONFIG+=rtmidi     Deprecated no-op, kept temporarily for compatibility
 # CONFIG+=record_support
 # CONFIG+=debugger
 # To support HTML5 via the <html> element in the csd using the Qt WebEngine
 # (preferably use Qt 5.8 or later):
 # CONFIG+=html_support # NB! before there were options of html_webengine or html_webkit. webkit dropped in v 7.0.0
-# CONFIG+=no_splash    To build without the splash screen
+# Splash screen is disabled by default; CONFIG+=splash enables it
+# CONFIG+=no_splash  Deprecated no-op, kept temporarily for compatibility
 # OS X only OPTIONS:
 # CONFIG+=universal  #  To build i386/ppc version. Default is x86_64
 # CONFIG+=i386  #  To build i386 version. Default is x86_64
@@ -54,6 +55,18 @@ CONFIG += c++23
 DEFINES += CSOUND7
 CONFIG += csound7
 message("Building for Csound 7.")
+
+# RtMidi is enabled by default. CONFIG+=rtmidi is kept temporarily as a
+# deprecated no-op; CONFIG+=no_rtmidi opts out.
+rtmidi {
+    warning("CONFIG+=rtmidi is deprecated and no longer needed. RtMidi is enabled by default; use CONFIG+=no_rtmidi to disable it.")
+}
+
+no_rtmidi {
+    CONFIG -= rtmidi
+} else:!rtmidi {
+    CONFIG += rtmidi
+}
 
 debugger {
     DEFINES += CSQT_DEBUGGER
@@ -116,7 +129,15 @@ QT += network webenginewidgets webchannel
 CONFIG += c++11
 }
 
-# CONFIG+=no_splash disables the splash screen (useful now that startup is fast)
+# The splash screen is disabled by default. CONFIG+=no_splash is kept
+# temporarily as a deprecated no-op; CONFIG+=splash enables it.
+no_splash {
+    warning("CONFIG+=no_splash is deprecated and no longer needed. The splash screen is disabled by default; use CONFIG+=splash to enable it.")
+    CONFIG -= splash
+} else:!splash {
+    CONFIG += no_splash
+}
+
 no_splash {
     DEFINES += CSQT_NO_SPLASH
     message("Building without splash screen.")

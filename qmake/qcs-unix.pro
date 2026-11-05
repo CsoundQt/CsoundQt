@@ -53,12 +53,6 @@ exists(/usr/lib64/libjack.so) | exists(/usr/lib/libjack.so) | exists(/usr/local/
 	}
 }
 
-system_rtmidi {
-    message(System rtmidi in qcs-unix.pro)
-    INCLUDEPATH += $${RTMIDI_DIR}
-    LIBS += -lrtmidi
-}
-
 build32:LCSOUND = -L$${CSOUND_LIBRARY_DIR} -lcsound
 build64:LCSOUND = -L$${CSOUND_LIBRARY_DIR} -lcsound64
 

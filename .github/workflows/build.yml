@@ -233,7 +233,7 @@ jobs:
           CSOUND_LIBRARY_DIR="$PWD/csound/csound_install/CsoundLib64.framework/Versions/7.0"
 
           ccache_args=(QMAKE_CC="$(command -v ccache) clang" QMAKE_CXX="$(command -v ccache) clang++")
-          qmake CONFIG+=rtmidi CONFIG+=no_splash CONFIG+=release \
+          qmake CONFIG+=release \
             "CSOUND_INCLUDE_DIR=$CSOUND_FRAMEWORK_HEADERS" \
             "CSOUND_INTERFACES_INCLUDE_DIR=$CSOUND_FRAMEWORK_HEADERS" \
             "CSOUND_LIBRARY_DIR=$CSOUND_LIBRARY_DIR" \
@@ -495,7 +495,7 @@ jobs:
           # renames it again.
           mkdir -p bin
           cp -f "${CSOUND_DIR}/bin/csound7_64.dll" bin/
-          qmake CONFIG+=rtmidi CONFIG+=no_splash CONFIG+=release qcs.pro \
+          qmake CONFIG+=release qcs.pro \
             "CSOUND_API_INCLUDE_DIR=${CSINC}" \
             "CSOUND_INTERFACES_INCLUDE_DIR=${CSINC}" \
             "CSOUND_LIBRARY_DIR=${CSLIB}"

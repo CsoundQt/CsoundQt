@@ -117,7 +117,7 @@ jobs:
         run: |
           qmake --version
           git submodule update --init --recursive
-          qmake CONFIG+=rtmidi CONFIG+=html_support CONFIG+=release \
+          qmake CONFIG+=html_support CONFIG+=release \
             QMAKE_CC="ccache gcc" \
             QMAKE_CXX="ccache g++" \
             qcs.pro

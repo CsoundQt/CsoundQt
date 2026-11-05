@@ -152,7 +152,7 @@ jobs:
 
           ls -R "$csound_brew_root"
 
-          qmake CONFIG+=rtmidi CONFIG+=release \
+          qmake CONFIG+=release \
             QMAKE_CC="ccache clang" \
             QMAKE_CXX="ccache clang++" \
             qcs.pro
@@ -234,7 +234,7 @@ jobs:
         run: |
           qmake --version
           git submodule update --init --recursive
-          qmake CONFIG+=rtmidi CONFIG+=release \
+          qmake CONFIG+=release \
             QMAKE_CC="ccache gcc" \
             QMAKE_CXX="ccache g++" \
             qcs.pro
@@ -345,7 +345,7 @@ jobs:
           CSLIB=$(cygpath -m "${CSOUND_DIR}/lib")
           mkdir -p bin
           cp -f "${CSOUND_DIR}/bin/csound7_64.dll" bin/
-          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro \
+          qmake CONFIG+=release qcs.pro \
             "CSOUND_API_INCLUDE_DIR=${CSINC}" \
             "CSOUND_INTERFACES_INCLUDE_DIR=${CSINC}" \
             "CSOUND_LIBRARY_DIR=${CSLIB}"
@@ -520,7 +520,7 @@ jobs:
         run: |
           qmake --version
           git submodule update --init --recursive
-          qmake CONFIG+=rtmidi CONFIG+=release \
+          qmake CONFIG+=release \
             QMAKE_CC="ccache gcc" \
             QMAKE_CXX="ccache g++" \
             qcs.pro

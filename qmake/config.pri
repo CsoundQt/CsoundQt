@@ -9,17 +9,6 @@ build64:TMPDIR = build/doubles
 #build64:DEFINES += USE_DOUBLE
 OBJECTS_DIR = "$${TMPDIR}/obj"
 
-DEFAULT_RTMIDI_DIRS = "rtmidi"
-RTMIDI_VERSIONS = "rtmidi-5.0.0" "rtmidi-4.0.0" "rtmidi-3.0.0" "rtmidi-2.1.1" "rtmidi-2.1.0" "rtmidi-2.0.1" "rtmidi-1.0.15"
-for (rtdir, RTMIDI_VERSIONS) {
-    DEFAULT_RTMIDI_DIRNAME=$$rtdir
-    DEFAULT_RTMIDI_DIRS += $${DEFAULT_RTMIDI_DIRNAME} \
-      ../$${DEFAULT_RTMIDI_DIRNAME} \
-      ../../$${DEFAULT_RTMIDI_DIRNAME} \
-      ../../../$${DEFAULT_RTMIDI_DIRNAME}
-}
-
-
 exists($$PWD/../config.user.pri) {
     include($$PWD/../config.user.pri)
 	message(... config.user.pri found)
@@ -91,47 +80,14 @@ isEmpty(CSOUND_LIB) {
 }
 
 rtmidi {
-# Use the rtmidi submodule when it is present. A system copy is only used when
-# the submodule is missing. An explicitly given RTMIDI_DIR always wins, e.g.
-#   qmake qcs.pro CONFIG+=rtmidi RTMIDI_DIR=/usr/include/rtmidi
-unix:!macx:isEmpty(RTMIDI_DIR) {
-    exists("rtmidi/RtMidi.h") {
-        RTMIDI_DIR = "rtmidi"
-        !no_messages:message(Using the rtmidi submodule in $$RTMIDI_DIR)
-    }
-    !equals(RTMIDI_DIR, "rtmidi") {
-        exists("/usr/include/rtmidi")  {
-    		RTMIDI_DIR = "/usr/include/rtmidi"
-    		!no_messages:message(RtMidi found in /usr/include/rtmidi)
-            CONFIG -= rtmidi
-            CONFIG += system_rtmidi
-        }
-        exists("/usr/local/include/rtmidi")  {
-            RTMIDI_DIR = "/usr/local/include/rtmidi"
-            !no_messages:message(RtMidi found in /usr/local/include/rtmidi)
-            CONFIG -= rtmidi
-            CONFIG += system_rtmidi
-        }
-    }
+# Only the bundled rtmidi submodule is supported. System RtMidi libraries are
+# deliberately not used: we cannot control their version or API.
+!exists($$PWD/../rtmidi/RtMidi.h) {
+    error("RtMidi submodule not found. Run 'git submodule update --init --recursive' or build with CONFIG+=no_rtmidi.")
 }
-
-isEmpty(RTMIDI_DIR) {
-    !no_messages:message(RtMidi include directory not specified.)
-    for(dir, DEFAULT_RTMIDI_DIRS) {
-        !no_messages:message(... searching in $${dir})
-        exists($${dir}/RtMidi.h) {
-            !no_messages {
-                message(RTMIDI_DIR set to $${dir})
-                message(" ")
-            }
-			RTMIDI_DIR = $${dir}
-            break()
-        }
-    }
-    message(Building with RtMidi support.)
+!no_messages:message(Using the bundled rtmidi submodule.)
 }
-!rtmidi:!system_rtmidi: message(Not building with RtMidi support.)
-}
+!rtmidi: message(Not building with RtMidi support.)
 win32 {
     CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)
     CSOUND_LIBRARY_DIR = $$replace(CSOUND_LIBRARY_DIR, \\\\, /)
@@ -146,13 +102,9 @@ win32 {
         message(PythonQt source tree directory is $${PYTHONQT_SRC_DIR})
         message(PythonQt lib directory is $${PYTHONQT_LIB_DIR})
     }
-    rtmidi|system_rtmidi {
-        message(RtMidi directory is $${RTMIDI_DIR})
+    rtmidi {
+        message(Using bundled RtMidi)
 		DEFINES += CSQT_RTMIDI
-            exists($${RTMIDI_DIR}/RtError.h): {
-                DEFINES += CSQT_OLD_RTMIDI
-                message("Using RtMidi < 2.1")
-            }
     }
     # message()
 }
@@ -184,11 +136,6 @@ win32 {
     !csoundApiHeaderExists(csound.hpp):error(csound.hpp not found)
     !csoundApiHeaderExists(cwindow.h):error(cwindow.h not found)
     !csoundLibraryExists($${CSOUND_LIB}):error(Csound API library not found)
-}
-
-exists ($$PWD/../src/csPerfThread.hpp) {
-   CONFIG += perfThread_build
-   message(Building csPerfThread sources.)
 }
 
 unix:QMAKE_CXXFLAGS += -g -Wunused-parameter

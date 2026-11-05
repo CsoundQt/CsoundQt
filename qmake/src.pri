@@ -174,9 +174,10 @@ DISTFILES += "src/default.csd" \
     $$PWD/../src/QML/ControlSlider.qml
 
 rtmidi {
-    HEADERS += "src/../$${RTMIDI_DIR}/RtMidi.h"
-    SOURCES += "src/../$${RTMIDI_DIR}/RtMidi.cpp"
-    INCLUDEPATH += src/../$${RTMIDI_DIR}
+    # Only the bundled submodule is supported.
+    HEADERS += $$PWD/../rtmidi/RtMidi.h
+    SOURCES += $$PWD/../rtmidi/RtMidi.cpp
+    INCLUDEPATH += $$PWD/../rtmidi
 }
 
 html_support: {

@@ -1472,11 +1472,7 @@ void ConfigDialog::populateInternalMidiInterfaces()
 			midiInterfaceComboBox->addItem(QString::fromStdString(midiin.getPortName(i)),
 			                               QVariant(i));
 	}
-#ifdef CSQT_OLD_RTMIDI
-	catch (RtError &error) {
-#else
 	catch (RtMidiError &error) {
-#endif
 		error.printMessage();
 	}
 	try {
@@ -1485,11 +1481,7 @@ void ConfigDialog::populateInternalMidiInterfaces()
 			midiOutInterfaceComboBox->addItem(QString::fromStdString(midiout.getPortName(i)),
 			                                  QVariant(i));
 	}
-#ifdef CSQT_OLD_RTMIDI
-	catch (RtError &error) {
-#else
 	catch (RtMidiError &error) {
-#endif
 		error.printMessage();
 	}
 #else
