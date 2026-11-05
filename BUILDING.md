@@ -166,7 +166,7 @@ Notes:
 Pass as `CONFIG+=...`:
 
 - `no_rtmidi` — disable MIDI support (enabled by default). MIDI always uses the
-  bundled `rtmidi` submodule; system RtMidi libraries are not supported.
+  bundled `third_party/rtmidi` submodule; system RtMidi libraries are not supported.
 - `rtmidi` — deprecated no-op, retained temporarily for compatibility
 - `html_support` — `<html>` GUI element via Qt WebEngine
 - `record_support` — deprecated no-op, retained temporarily for compatibility;
@@ -205,6 +205,6 @@ Build the **`csoundqt7`** branch:
 
     $ git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
 
-`--recursive` fetches the required submodules `litehtml` (manual viewer) and
-`rtmidi` (MIDI).
+`--recursive` fetches the required submodules `third_party/litehtml` (manual
+viewer) and `third_party/rtmidi` (MIDI).
 

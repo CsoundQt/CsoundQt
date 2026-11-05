@@ -1,6 +1,6 @@
 [submodule "rtmidi"]
-	path = rtmidi
+	path = third_party/rtmidi
 	url = https://github.com/thestk/rtmidi
 [submodule "third_party/litehtml"]
-	path = litehtml
+	path = third_party/litehtml
 	url = https://github.com/litehtml/litehtml.git

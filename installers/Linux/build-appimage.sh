@@ -61,7 +61,7 @@ JOBS="${JOBS:-$(nproc)}"
 # Single source of truth for the Csound version: this commit is built as the
 # engine AND (with --with-plugins) checked out as csound-plugins' `csound`
 # submodule, so the plugins always build against the Csound they ship with.
-CSOUND_COMMIT="${CSOUND_COMMIT:-6390905b0ddac316a9f1c58c57e8b367117db4a5}"
+CSOUND_COMMIT="${CSOUND_COMMIT:-fcc532383fcb62aee509d83c1c82e6a755e8474e}"
 CSOUND_PLUGINS_COMMIT="${CSOUND_PLUGINS_COMMIT:-74068d692a9c54b66ec4420b29485d187b6e8f1f}"
 
 
@@ -321,8 +321,8 @@ build_csoundqt() {
     local src="$WORK_DIR/csoundqt-src"
     rm -rf "$src" "$WORK_DIR/csoundqt-build"
     mkdir -p "$src"
-    # In-source build (like the Flatpak) so the bundled rtmidi submodule is
-    # found at its usual path by qmake/src.pri.
+    # In-source build (like the Flatpak) so the bundled submodules are found
+    # at their usual paths (third_party/rtmidi, third_party/litehtml) by qmake/src.pri.
     tar -C "$ROOT" --exclude=.git --exclude=.flatpak-builder \
         --exclude=Makefile --exclude=.qmake.stash --exclude='*.pro.user*' \
         --exclude=build --exclude=build-dir --exclude='build-*' \

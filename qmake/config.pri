@@ -82,7 +82,7 @@ isEmpty(CSOUND_LIB) {
 rtmidi {
 # Only the bundled rtmidi submodule is supported. System RtMidi libraries are
 # deliberately not used: we cannot control their version or API.
-!exists($$PWD/../rtmidi/RtMidi.h) {
+!exists($$PWD/../third_party/rtmidi/RtMidi.h) {
     error("RtMidi submodule not found. Run 'git submodule update --init --recursive' or build with CONFIG+=no_rtmidi.")
 }
 !no_messages:message(Using the bundled rtmidi submodule.)

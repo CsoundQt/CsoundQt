@@ -175,9 +175,9 @@ DISTFILES += "src/default.csd" \
 
 rtmidi {
     # Only the bundled submodule is supported.
-    HEADERS += $$PWD/../rtmidi/RtMidi.h
-    SOURCES += $$PWD/../rtmidi/RtMidi.cpp
-    INCLUDEPATH += $$PWD/../rtmidi
+    HEADERS += $$PWD/../third_party/rtmidi/RtMidi.h
+    SOURCES += $$PWD/../third_party/rtmidi/RtMidi.cpp
+    INCLUDEPATH += $$PWD/../third_party/rtmidi
 }
 
 html_support: {
