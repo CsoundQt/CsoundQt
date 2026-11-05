@@ -10,24 +10,13 @@ www.densitygs.com
 
 <CsoundSynthesizer>
 <CsOptions>
-
-;-o dac
-;-+rtmidi=null
-;-+rtaudio=null
-;-d
-;-+msg_color=0
-;--expression-opt
-;-M0
-;-m0
-;-i adc
-
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 64
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1.0
+0dbfs  = 1.0
 
 
 ;define 4 x 4 matrix according to APE_MATRIX.h
