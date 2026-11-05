@@ -24,7 +24,7 @@
 #include "qutewidget.h"
 
 #include <QColor>
-using namespace Qt::StringLiterals;
+#include <QPainter>
 
 // Grab zones at the bottom-right and top-left corners of an edit-mode frame.
 // The zones shrink for very small widgets so that both always fit without
@@ -85,54 +85,13 @@ static inline bool inResizeHitZoneTL(const QWidget *w, int x, int y)
     return z > 0 && x < z && y < z;
 }
 
-static QString unselectedFrameStyleSheet(bool dotted)
-{
-    const QColor border = s_frameColorUnselected;
-    return QString("FrameWidget { color:%1; border:2px %2 rgba(%3, %4, %5, %6); }")
-            .arg(qApp->palette().color(QPalette::WindowText).name(),
-                 dotted ? u"dotted"_s : u"solid"_s)
-            .arg(border.red()).arg(border.green()).arg(border.blue()).arg(border.alpha());
-}
-
-static QString selectedFrameStyleSheet()
-{
-    return QString("FrameWidget { color:%1; border:2px solid %2; }")
-            .arg(qApp->palette().color(QPalette::WindowText).name(),
-                 s_frameColorSelected.name());
-}
-
-static QString resizeHandleStyleSheet(const QString &name)
-{
-    QColor fill = s_frameColorSelected;
-    fill.setAlphaF(kResizeHandleFillOpacity);
-    return QString("QFrame#%1 { background-color: rgba(%2, %3, %4, %5); border: %6px solid %7; }")
-            .arg(name)
-            .arg(fill.red()).arg(fill.green()).arg(fill.blue()).arg(fill.alpha())
-            .arg(kResizeHandleBorder)
-            .arg(s_frameColorSelected.name());
-}
-
 FrameWidget::FrameWidget(QWidget* parent) : QFrame(parent)
 {
 	this->setMinimumSize(2,2);
-	// m_widget is assigned by createEditFrame() (setWidget) after construction;
-	// refreshFrameAppearance() at the end of this constructor must not read it
-	// uninitialised.
+	// m_widget is assigned by createEditFrame() (setWidget) after construction.
 	m_widget = nullptr;
 	m_resize = false;
 	startx = starty = oldx = oldy = 0;
-	// Visible corner squares, shown only while the frame is selected. They must
-	// not swallow mouse events.
-	auto makeHandle = [this](const QString &name) {
-		QFrame *h = new QFrame(this);
-		h->setObjectName(name);
-		h->setStyleSheet(resizeHandleStyleSheet(name));
-		h->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-		h->hide();
-		return h;
-	};
-	m_resizeHandleBR = makeHandle("resizeHandleBR");
-	m_resizeHandleTL = makeHandle("resizeHandleTL");
 	// Invisible children that only provide the resize cursor at the two corners.
 	// They ignore mouse events (the default), so press/move/release propagate to
 	// this frame and drive the resize (see mouseMoveEvent()).
@@ -154,7 +113,6 @@ FrameWidget::FrameWidget(QWidget* parent) : QFrame(parent)
 	m_resizeTopLeft = false;
 	m_ctrlPress = false;
 	m_dragStarted = false;
-    refreshFrameAppearance();
 }
 
 FrameWidget::~FrameWidget()
@@ -167,9 +125,6 @@ void FrameWidget::select()
 		return;
 	m_selected = true;
     refreshFrameAppearance();
-    m_resizeHandleBR->show();
-    m_resizeHandleTL->show();
-
 	emit widgetSelected(m_widget);
 }
 
@@ -186,8 +141,6 @@ void FrameWidget::deselect()
 		return;
 	m_selected = false;
     refreshFrameAppearance();
-    m_resizeHandleBR->hide();
-    m_resizeHandleTL->hide();
 	emit widgetUnselected(m_widget);
 }
 
@@ -198,15 +151,40 @@ bool FrameWidget::isSelected()
 
 void FrameWidget::refreshFrameAppearance()
 {
+    // Locked widgets get a dotted frame so it is obvious they cannot be moved.
+    m_locked = m_widget && m_widget->property("CSQT_locked").toBool();
+    update();
+}
+
+void FrameWidget::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    // Draw the frame directly. A style sheet per frame (or even one inherited
+    // from the panel) makes creating hundreds of frames very slow, because Qt
+    // resolves and applies the sheet for every widget.
+    QPainter painter(this);
+    QPen pen(m_selected ? s_frameColorSelected : s_frameColorUnselected);
+    pen.setWidth(2);
+    if (!m_selected && m_locked)
+        pen.setStyle(Qt::DotLine);
+    painter.setPen(pen);
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRect(rect().adjusted(1, 1, -2, -2));
+
     if (m_selected) {
-        this->setStyleSheet(selectedFrameStyleSheet());
-    } else {
-        // Locked widgets get a dotted frame so it is obvious they cannot be moved.
-        const bool locked = m_widget && m_widget->property("CSQT_locked").toBool();
-        this->setStyleSheet(unselectedFrameStyleSheet(locked));
+        const int size = resizeHandleSize(this);
+        if (size <= 1)
+            return;
+        QColor fill = s_frameColorSelected;
+        fill.setAlphaF(kResizeHandleFillOpacity);
+        QPen borderPen(s_frameColorSelected);
+        borderPen.setWidth(kResizeHandleBorder);
+        painter.setPen(borderPen);
+        painter.setBrush(fill);
+        painter.drawRect(QRect(0, 0, size - 1, size - 1));
+        painter.drawRect(QRect(width() - size, height() - size,
+                               size - 1, size - 1));
     }
-    m_resizeHandleBR->setStyleSheet(resizeHandleStyleSheet("resizeHandleBR"));
-    m_resizeHandleTL->setStyleSheet(resizeHandleStyleSheet("resizeHandleTL"));
 }
 
 void FrameWidget::contextMenuEvent(QContextMenuEvent *event)
@@ -374,10 +352,6 @@ void FrameWidget::mouseDoubleClickEvent (QMouseEvent * event)
 void FrameWidget::resizeEvent (QResizeEvent* event)
 {
 	QWidget::resizeEvent(event);
-	// Visible squares (clamped) at the two corners.
-	const int h = resizeHandleSize(this);
-	m_resizeHandleBR->setGeometry(width()-h, height()-h, h, h);
-	m_resizeHandleTL->setGeometry(0, 0, h, h);
 	// Cursor zones on top: full size normally, scaled down for very small widgets.
 	const int z = resizeZoneSize(this);
 	m_resizeHitBR->setGeometry(width()-z, height()-z, z, z);

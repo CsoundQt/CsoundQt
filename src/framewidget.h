@@ -49,10 +49,11 @@ public:
 	static QColor frameColorUnselected();
 	static QColor frameColorSelected();
 	static void setFrameColors(const QColor &unselected, const QColor &selected);
-	// Re-apply the stylesheet after the colours changed.
+	// Repaint after the selection or lock state changed.
 	void refreshFrameAppearance();
 
 protected:
+	void paintEvent(QPaintEvent *event) override;
 	virtual void contextMenuEvent(QContextMenuEvent *event);
 	virtual void mousePressEvent ( QMouseEvent * event );
 	virtual void mouseReleaseEvent ( QMouseEvent * event );
@@ -67,9 +68,8 @@ private:
 	// still receives press/move/release and drives the resize.
 	QWidget *m_resizeHitBR;
 	QWidget *m_resizeHitTL;
-	QFrame *m_resizeHandleBR;
-	QFrame *m_resizeHandleTL;
 	QuteWidget *m_widget;
+	bool m_locked = false;
 	bool m_resize;
 	bool m_resizeTopLeft;
 	bool m_moving;

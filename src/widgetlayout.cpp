@@ -4801,26 +4801,21 @@ void WidgetLayout::setDrawingEnabled(bool enabled)
 void WidgetLayout::setFrameColors(const QColor &unselected, const QColor &selected)
 {
     FrameWidget::setFrameColors(unselected, selected);
-    for (FrameWidget *frame : editWidgets) {
+    for (FrameWidget *frame : editWidgets)
         frame->refreshFrameAppearance();
-    }
 }
 
 void WidgetLayout::createEditFrame(QuteWidget* widget)
 {
     // This function should be locked from outside always
     FrameWidget * frame = new FrameWidget(this);
-    QPalette palette = QPalette(QColor(Qt::red),QColor(Qt::red));
-    palette.setColor(QPalette::WindowText, QColor(Qt::red));
     frame->setWidget(widget);
     installHoverFilter(this, frame);
-    // The constructor runs before the widget is bound, so apply the frame style
-    // now that the locked flag is known (dotted frame for locked widgets).
+    // The constructor runs before the widget is bound, so refresh now that the
+    // locked flag is known (locked widgets get a dotted frame).
     frame->refreshFrameAppearance();
-    frame->setPalette(palette);
     frame->setFocusProxy(this);
     frame->setGeometry(widget->x(), widget->y(), widget->width(), widget->height());
-    frame->setFrameShape(QFrame::Box);
     //       frame->setMouseTracking(false);  //Only track mouse when buttons are pressed
     frame->show();
     editWidgets.append(frame);
