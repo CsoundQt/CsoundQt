@@ -102,6 +102,7 @@ Options::Options(ConfigLists *configlists) :
     opcodexmldir = "";
     opcodexmldirActive = false;
     examplePath = "";
+	renderFolder = "";
 #ifdef Q_OS_MACOS
     csoundExecutable = "/usr/local/bin/csound ";
 #else

@@ -64,10 +64,15 @@ ConfigLists::ConfigLists()
                        << "pvf" << "Raw (Headerless)" << "Sound Designer II" << "sds"
                        << "svx" << "voc" << "WAVE (w64)" << "WAVE (wavex)";
 
-	fileFormatFlags << "24bit" << "short"<< "uchar"
-					<< "schar"<< "float"<< "long";
-	fileFormatNames << "24 Bit" << "16 Bit (short)" << "unsigned 8-bit"
-					<< "signed 8-bit" << "32 bit float"<< "long (32-bit)";
+    // Offline render formats. The order must match the file type combo and
+    // renderFileTypeNames/renderFileTypeExtensions.
+    renderFileTypeNames      << "wav" << "aiff" << "flac" << "caf" << "w64";
+    renderFileTypeExtensions << "*.wav" << "*.aif;*.aiff" << "*.flac" << "*.caf"
+                             << "*.w64;*.wav";
+    renderFileTypeLongNames  << "wave" << "aiff" << "flac" << "caf" << "wave64 (w64)";
+
+	fileFormatFlags << "24bit" << "short" << "long" << "float";
+	fileFormatNames << "pcm24" << "pcm16" << "pcm32" << "float32";
 
     languages << "English" << "Spanish" << "German" << "French" << "Portuguese"
               << "Italian"  << "Turkish"  << "Finnish" << "Russian" << "Korean"
@@ -81,6 +86,15 @@ ConfigLists::ConfigLists()
 
 ConfigLists::~ConfigLists()
 {
+}
+
+QStringList ConfigLists::sampleFormatFlagsForFileType(const QString &fileType) const
+{
+    // FLAC supports only integer PCM up to 24 bit; the other render formats
+    // expose the same four choices.
+    if (fileType == "flac"_L1)
+        return {u"short"_s, u"24bit"_s}; // pcm16, pcm24
+    return {u"24bit"_s, u"short"_s, u"long"_s, u"float"_s}; // pcm24, pcm16, pcm32, float32
 }
 
 void ConfigLists::msgCallback(CSOUND *csound, int attr, const char *fmt, va_list args)

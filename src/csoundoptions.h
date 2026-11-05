@@ -81,13 +81,10 @@ public:
 	bool fileUseOptions;
 	bool fileOverrideOptions;
 	bool fileAskFilename;
-	bool filePlayFinished;
 	int fileFileType;
-	int fileSampleFormat;
-	bool fileInputFilenameActive;
-	QString fileInputFilename;
-	bool fileOutputFilenameActive;
-	QString fileOutputFilename;
+	QString fileSampleFormat;
+	// Per-render output path, set by CsoundQt::render(). Not persisted.
+	QString renderOutputFilename;
 	// Offline rendering only: pass --nodisplays to Csound. This controls
 	// Csound's own display opcodes, independently of whether CsoundQt draws
 	// its widgets during a render.

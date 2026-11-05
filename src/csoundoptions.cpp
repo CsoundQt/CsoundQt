@@ -58,13 +58,9 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	fileUseOptions = false;
 	fileOverrideOptions = false;
 	fileAskFilename = false;
-	filePlayFinished = false;
 	fileFileType = 0;
-	fileSampleFormat = 0;
-	fileInputFilenameActive = false;
-	fileInputFilename = "";
-	fileOutputFilenameActive = false;
-	fileOutputFilename = "";
+	fileSampleFormat = "short";
+	renderOutputFilename = "";
 	disableDisplaysOnRender = true;
 
 	sampleFormat = 0;
@@ -222,13 +218,15 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
     } else {
         if (!rt && disableDisplaysOnRender)
             opts << "--nodisplays";
-        opts << "--format=" + m_configlists->fileTypeNames[fileFileType]
-				+ ":" + m_configlists->fileFormatFlags[fileSampleFormat];
-		if (fileInputFilenameActive)
-            opts << "-i" + fileInputFilename + "";
-        if (fileOutputFilenameActive || fileAskFilename) {
-            opts << "-o" + fileOutputFilename + "";
-		}
+        if (!rt && fileOverrideOptions)
+            opts << "-+ignore_csopts=1";
+        const QString fileType = m_configlists->renderFileTypeNames.value(
+                    fileFileType, u"wav"_s);
+        const QString sampleFormat = fileSampleFormat.isEmpty()
+                ? u"short"_s : fileSampleFormat;
+        opts << "--format=" + fileType + ":" + sampleFormat;
+		if (!renderOutputFilename.isEmpty())
+            opts << "-o" + renderOutputFilename;
 	}
 	qDebug() << ">>>>> Csound options: " << opts;
     return opts;

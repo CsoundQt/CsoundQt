@@ -133,11 +133,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     } else {
         JackNameLineEdit->setEnabled(false);
     }
-	foreach (QString item, m_configlists->fileTypeLongNames) {
+	foreach (QString item, m_configlists->renderFileTypeLongNames) {
 		FileTypeComboBox->addItem(item);
-	}
-	foreach (QString item, m_configlists->fileFormatNames) {
-		FileFormatComboBox->addItem(item);
 	}
 	foreach (QString item, m_configlists->rtAudioNames) {
 		QString display = ConfigLists::audioModuleDisplayName(item);
@@ -346,15 +343,28 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	FileUseOptionsCheckBox->setChecked(m_options->fileUseOptions);
 	FileOverrideCheckBox->setChecked(m_options->fileOverrideOptions);
 	AskFilenameCheckBox->setChecked(m_options->fileAskFilename);
-	FilePlayFinishedCheckBox->setChecked(m_options->filePlayFinished);
-	FileTypeComboBox->setCurrentIndex(m_options->fileFileType);
-	FileFormatComboBox->setCurrentIndex(m_options->fileSampleFormat);
-	InputFilenameCheckBox->setChecked(m_options->fileInputFilenameActive);
-	InputFilenameLineEdit->setText(m_options->fileInputFilename);
-	InputFilenameLineEdit->setEnabled(m_options->fileInputFilenameActive);
-	OutputFilenameCheckBox->setChecked(m_options->fileOutputFilenameActive);
-	OutputFilenameLineEdit->setText(m_options->fileOutputFilename);
-	OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
+	const int fileTypeIndex = qBound(0, m_options->fileFileType,
+	                                 FileTypeComboBox->count() - 1);
+	FileTypeComboBox->setCurrentIndex(fileTypeIndex);
+	populateSampleFormats(m_options->fileSampleFormat);
+	connect(FileTypeComboBox, &QComboBox::currentIndexChanged,
+	        this, [this](int) { populateSampleFormats(); });
+	// Keep the Recording group's sample-format combo in the same visual
+	// column as the Offline Rendering sample-format combo. The latter's
+	// label column is as wide as its widest widget, so use that width as a
+	// minimum for the Recording label.
+	int offlineLabelColumnWidth = 0;
+	const auto considerLabelWidth = [&offlineLabelColumnWidth](QWidget *widget) {
+		offlineLabelColumnWidth = qMax(offlineLabelColumnWidth,
+		                               widget->sizeHint().width());
+	};
+	considerLabelWidth(FileUseOptionsCheckBox);
+	considerLabelWidth(FileOverrideCheckBox);
+	considerLabelWidth(label_9);
+	considerLabelWidth(label_10);
+	considerLabelWidth(AskFilenameCheckBox);
+	considerLabelWidth(DisableDisplaysCheckBox);
+	recordingSampleFormatLabel->setMinimumWidth(offlineLabelColumnWidth);
 	DisableDisplaysCheckBox->setChecked(m_options->disableDisplaysOnRender);
 	RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
 	int index = RtModuleComboBox->findData(m_options->rtAudioModule);
@@ -473,6 +483,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	//  defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
     examplePathlineEdit->setText(m_options->examplePath);
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
+	RenderFolderLineEdit->setText(m_options->renderFolder);
 	logDebugCheckBox->setChecked(m_options->logDebug);
 
 	TerminalLineEdit->setText(m_options->terminal);
@@ -501,13 +512,12 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	templateTextEdit->setPlainText(m_options->csdTemplate);
 
-    connect(inputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseInputFilename()));
-	connect(outputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseOutputFilename()));
-	connect(csdocdirToolButton, SIGNAL(clicked()), this, SLOT(browseCsdocdir()));
+    connect(csdocdirToolButton, SIGNAL(clicked()), this, SLOT(browseCsdocdir()));
     connect(opcode7dir64ToolButton, SIGNAL(clicked()), this, SLOT(browseOpcode7dir64())); // was commented out - why?
 	connect(sadirToolButton, SIGNAL(clicked()), this, SLOT(browseSadir()));
 	connect(ssdirToolButton, SIGNAL(clicked()), this, SLOT(browseSsdir()));
 	connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
+	connect(renderFolderToolButton, SIGNAL(clicked()), this, SLOT(browseRenderFolder()));
 	//  connect(defaultCsdToolButton, SIGNAL(clicked()), this, SLOT(browseDefaultCsd()));
     connect(examplePathToolButton, SIGNAL(clicked()), this, SLOT(browseExamplePath()) );
     connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
@@ -551,6 +561,28 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 ConfigDialog::~ConfigDialog()
 {
+}
+
+void ConfigDialog::populateSampleFormats(const QString &preferredFlag)
+{
+    const QString previous = preferredFlag.isEmpty()
+            ? FileFormatComboBox->currentData().toString()
+            : preferredFlag;
+    FileFormatComboBox->clear();
+    const QString fileType = m_configlists->renderFileTypeNames.value(
+                FileTypeComboBox->currentIndex());
+    const QStringList flags = m_configlists->sampleFormatFlagsForFileType(fileType);
+    for (const QString &flag : flags) {
+        const int nameIndex = m_configlists->fileFormatFlags.indexOf(flag);
+        const QString name = nameIndex >= 0
+                ? m_configlists->fileFormatNames.value(nameIndex)
+                : flag;
+        FileFormatComboBox->addItem(name, flag);
+    }
+    int index = FileFormatComboBox->findData(previous);
+    if (index < 0)
+        index = 0;
+    FileFormatComboBox->setCurrentIndex(index);
 }
 
 void ConfigDialog::populateEditorThemes()
@@ -853,13 +885,8 @@ void ConfigDialog::apply()
 	m_options->fileUseOptions = FileUseOptionsCheckBox->isChecked();
 	m_options->fileOverrideOptions = FileOverrideCheckBox->isChecked();
 	m_options->fileAskFilename = AskFilenameCheckBox->isChecked();
-	m_options->filePlayFinished = FilePlayFinishedCheckBox->isChecked();
 	m_options->fileFileType = FileTypeComboBox->currentIndex();
-	m_options->fileSampleFormat = FileFormatComboBox->currentIndex();
-	m_options->fileInputFilenameActive = InputFilenameCheckBox->isChecked();
-	m_options->fileInputFilename = InputFilenameLineEdit->text();
-	m_options->fileOutputFilenameActive = OutputFilenameCheckBox->isChecked();
-	m_options->fileOutputFilename = OutputFilenameLineEdit->text();
+	m_options->fileSampleFormat = FileFormatComboBox->currentData().toString();
 	m_options->disableDisplaysOnRender = DisableDisplaysCheckBox->isChecked();
 	m_options->rtOverrideOptions = RtOverrideCheckBox->isChecked();
     m_options->rtAudioModule = RtModuleComboBox->itemData(
@@ -912,6 +939,7 @@ void ConfigDialog::apply()
 	//  m_options->defaultCsd = defaultCsdLineEdit->text();
     m_options->examplePath = examplePathlineEdit->text();
 	m_options->csoundExecutable = csoundExecutableLineEdit->text();
+	m_options->renderFolder = RenderFolderLineEdit->text();
 	m_options->logDebug = logDebugCheckBox->isChecked();
 
 	m_options->terminal = TerminalLineEdit->text();
@@ -927,16 +955,10 @@ void ConfigDialog::apply()
 	//  emit(changeFont());
 }
 
-void ConfigDialog::browseInputFilename()
+void ConfigDialog::browseRenderFolder()
 {
-	browseSaveFile(m_options->fileInputFilename);
-	InputFilenameLineEdit->setText(m_options->fileInputFilename);
-}
-
-void ConfigDialog::browseOutputFilename()
-{
-	browseSaveFile(m_options->fileOutputFilename);
-	OutputFilenameLineEdit->setText(m_options->fileOutputFilename);
+	browseDir(m_options->renderFolder);
+	RenderFolderLineEdit->setText(m_options->renderFolder);
 }
 
 void ConfigDialog::browseCsdocdir()

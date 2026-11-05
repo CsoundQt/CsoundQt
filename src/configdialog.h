@@ -64,6 +64,7 @@ private:
 	void browseSaveFile(QString &destination);
 	void browseDir(QString &destination);
 	void populateEditorThemes();
+	void populateSampleFormats(const QString &preferredFlag = QString());
     int m_selectedOutputDeviceIndex;
 
 private slots:
@@ -71,16 +72,14 @@ private slots:
 	void apply(); // copy the widget values into m_options (OK and Apply)
 	void duplicateEditorTheme();
 	void openThemesFolder();
-	void browseInputFilename();
-	void browseOutputFilename();
 	void browseCsdocdir();
     void browseOpcode7dir64();
 	void browseSadir();
 	void browseSsdir();
 	void browseIncdir();
-	//    void browseDefaultCsd();
-    void browseExamplePath();
+	void browseExamplePath();
 	void browseCsoundExecutable();
+	void browseRenderFolder();
 	void openDebugLog();
 	void updateLogPathLabel();
 	void browseTerminal();

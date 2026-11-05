@@ -135,6 +135,8 @@ public:
 	bool opcodexmldirActive;
     QString examplePath;
 	QString csoundExecutable;
+	// Folder used for rendered audio files when no -o option is given.
+	QString renderFolder;
 	bool logDebug;  // write CsoundQt's own debug output to a log file
 
 	typedef enum {

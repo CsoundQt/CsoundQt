@@ -61,8 +61,14 @@ public:
 	QStringList fileTypeNames;
 	QStringList fileTypeExtensions;
 	QStringList fileTypeLongNames;
+	// Formats offered in the offline render dialog (lowercase display names).
+	QStringList renderFileTypeNames;
+	QStringList renderFileTypeExtensions;
+	QStringList renderFileTypeLongNames;
 	QStringList fileFormatFlags;
 	QStringList fileFormatNames;
+	// Sample-format flags supported for an offline render file type.
+	QStringList sampleFormatFlagsForFileType(const QString &fileType) const;
 	QStringList rtAudioNames;
 	QStringList rtMidiNames;
 	QStringList languages;

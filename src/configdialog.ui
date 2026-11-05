@@ -84,7 +84,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="tab_audio">
           <attribute name="title">
@@ -1236,7 +1236,20 @@
                 <property name="spacing">
                  <number>6</number>
                 </property>
-                <item row="2" column="0">
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="FileUseOptionsCheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Override the file type and sample format below when rendering offline. If &amp;quot;Ignore CsOptions&amp;quot; is not checked, settings are merged and options set here take precedence over the CsOptions tag in the .csd file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Override</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
                  <widget class="QCheckBox" name="DisableDisplaysCheckBox">
                   <property name="toolTip">
                    <string>Pass --nodisplays to Csound when rendering offline. This suppresses Csound's display opcodes. CsoundQt widget drawing is disabled separately during rendering.</string>
@@ -1249,8 +1262,8 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="3">
-                 <widget class="QLabel" name="label_9">
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_10">
                   <property name="maximumSize">
                    <size>
                     <width>200</width>
@@ -1258,11 +1271,34 @@
                    </size>
                   </property>
                   <property name="text">
-                   <string>File type</string>
+                   <string>Sample format</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="4" colspan="2">
+                <item row="0" column="6">
+                 <spacer name="horizontalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QCheckBox" name="AskFilenameCheckBox">
+                  <property name="toolTip">
+                   <string>Ask for a filename when rendering offline</string>
+                  </property>
+                  <property name="text">
+                   <string>Ask for filename</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
                  <widget class="QComboBox" name="FileTypeComboBox">
                   <property name="maximumSize">
                    <size>
@@ -1275,44 +1311,20 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="6">
-                 <widget class="QToolButton" name="outputFilenameToolButton">
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_9">
+                  <property name="maximumSize">
+                   <size>
+                    <width>200</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="text">
-                   <string>...</string>
+                   <string>File type</string>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="0">
-                 <widget class="QCheckBox" name="OutputFilenameCheckBox">
-                  <property name="toolTip">
-                   <string>Select the output file to render to</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>Output  File</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="6">
-                 <widget class="QToolButton" name="inputFilenameToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QCheckBox" name="InputFilenameCheckBox">
-                  <property name="toolTip">
-                   <string>Select an input file to simulate audio input in offline mode</string>
-                  </property>
-                  <property name="text">
-                   <string>Input File</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="4" colspan="2">
+                <item row="3" column="2">
                  <widget class="QComboBox" name="FileFormatComboBox">
                   <property name="minimumSize">
                    <size>
@@ -1331,114 +1343,79 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="2" colspan="4">
-                 <widget class="QLineEdit" name="OutputFilenameLineEdit">
-                  <property name="minimumSize">
-                   <size>
-                    <width>400</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>800</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Select the output file to render to</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="FileUseOptionsCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Override setting in the orchestra with the values below. If &amp;quot;Ignore CsOptions&amp;quot; is not checked, settings are merged and options set here take override any setting within the CsOptions tag in the .csd file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Override</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="2" colspan="4">
-                 <widget class="QLineEdit" name="InputFilenameLineEdit">
-                  <property name="minimumSize">
-                   <size>
-                    <width>400</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>800</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Select an input file to simulate audio input in offline mode</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
+                <item row="1" column="0">
                  <widget class="QCheckBox" name="FileOverrideCheckBox">
                   <property name="toolTip">
-                   <string>Ignore options set in the orchestra when rendering offline</string>
+                   <string>Ignore the CsOptions tag when rendering offline</string>
                   </property>
                   <property name="text">
                    <string>Ignore CsOptions</string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="3">
-                 <widget class="QLabel" name="label_10">
-                  <property name="maximumSize">
-                   <size>
-                    <width>200</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Sample format</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="AskFilenameCheckBox">
-                  <property name="toolTip">
-                   <string>Ask for a filename when rendering offline</string>
-                  </property>
-                  <property name="text">
-                   <string>Ask for filename</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QCheckBox" name="FilePlayFinishedCheckBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Play when finished</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="6">
-                 <spacer name="horizontalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_recording">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>Recording</string>
+             </property>
+             <layout class="QFormLayout" name="recordingFormLayout">
+              <property name="fieldGrowthPolicy">
+               <enum>QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow</enum>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="recordingSampleFormatLabel">
+                <property name="toolTip">
+                 <string>Sample format for WAV files recorded with the record button. This is not the same as offline rendering.</string>
+                </property>
+                <property name="text">
+                 <string>Sample Format</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="sampleFormatComboBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Sample format for WAV files recorded with the record button. This is not the same as offline rendering.</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>pcm16</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>pcm24</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>float32</string>
+                 </property>
+                </item>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -1567,50 +1544,6 @@
                   <height>16777215</height>
                  </size>
                 </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="recordButtonFormatLabel">
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Format of the generated sound file when recording via the recording button in CsoundQT. &lt;span style=&quot; font-weight:600;&quot;&gt;This is NOT the same as offline rendering. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-                <property name="text">
-                 <string>Record Button Format</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QComboBox" name="sampleFormatComboBox">
-                <property name="minimumSize">
-                 <size>
-                  <width>100</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>120</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Format of the generated sound file when recording via the recording button in CsoundQT. &lt;span style=&quot; font-weight:600;&quot;&gt;This is NOT the same as offline rendering. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>16 Bit Int</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>24 Bit Int</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>32 bit float</string>
-                 </property>
-                </item>
                </widget>
               </item>
               <item row="3" column="0">
@@ -2860,7 +2793,7 @@
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>120</width>
+                    <width>180</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2907,9 +2840,15 @@
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="maximumSize">
+                  <property name="minimumSize">
                    <size>
                     <width>120</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>180</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -3387,6 +3326,30 @@
                 <item row="10" column="2">
                  <widget class="QLineEdit" name="examplePathlineEdit"/>
                 </item>
+                <item row="11" column="0">
+                 <widget class="QLabel" name="renderFolderLabel">
+                  <property name="toolTip">
+                   <string>Folder used for rendered audio files when no -o option is given</string>
+                  </property>
+                  <property name="text">
+                   <string>Render Folder</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="11" column="2">
+                 <widget class="QLineEdit" name="RenderFolderLineEdit">
+                  <property name="toolTip">
+                   <string>Folder used for rendered audio files when no -o option is given</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="11" column="3">
+                 <widget class="QToolButton" name="renderFolderToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
              </layout>
@@ -3587,22 +3550,6 @@
   <connection>
    <sender>FileUseOptionsCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>InputFilenameLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>256</x>
-     <y>280</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
    <receiver>FileFormatComboBox</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -3613,134 +3560,6 @@
     <hint type="destinationlabel">
      <x>562</x>
      <y>249</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>outputFilenameToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>600</x>
-     <y>308</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>OutputFilenameCheckBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>125</x>
-     <y>308</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>AskFilenameCheckBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>105</x>
-     <y>219</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>OutputFilenameLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>256</x>
-     <y>309</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>InputFilenameCheckBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>75</x>
-     <y>279</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>InputFilenameCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>InputFilenameLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>279</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>256</x>
-     <y>280</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>OutputFilenameCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>OutputFilenameLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>308</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>256</x>
-     <y>309</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>inputFilenameToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>600</x>
-     <y>279</y>
     </hint>
    </hints>
   </connection>

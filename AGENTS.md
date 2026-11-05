@@ -23,6 +23,10 @@
 ## Building this working copy
 
 - qmake build directory: `build/Desktop_Qt_6_10_2-qt-6.10.2-release` (run `make` there).
+- For quick test builds, reuse a persistent out-of-tree directory under
+  `/tmp/opencode` (e.g. `/tmp/opencode/CsoundQt-build`) and configure with
+  `qmake ... CONFIG+=release CONFIG+=ccache QMAKE_LFLAGS=-fuse-ld=mold`.
+  Do not delete/recreate it between builds; incremental builds are much faster.
 
 ## Csound gotchas (for examples)
 

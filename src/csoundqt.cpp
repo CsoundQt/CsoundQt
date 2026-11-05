@@ -126,6 +126,122 @@ bool isOrcFile(const QString &fileName)
     return fileName.endsWith(".orc"_L1, Qt::CaseInsensitive);
 }
 
+// Return the value of the last -o option in a Csound options string.
+// Handles "-ofile", "-o file", and quoted paths. Comment-only lines are
+// ignored, matching how Csound reads <CsOptions>.
+QString lastOutputOption(const QString &optionsText)
+{
+    static const QRegularExpression re(
+            uR"re((?:^|[\s;])-o[ \t]*(?:"([^"]*)"|'([^']*)'|([^\s;]+)))re"_s,
+            QRegularExpression::MultilineOption);
+    QString value;
+    auto it = re.globalMatch(optionsText);
+    while (it.hasNext()) {
+        const QRegularExpressionMatch match = it.next();
+        QString candidate = match.captured(1);
+        if (candidate.isEmpty())
+            candidate = match.captured(2);
+        if (candidate.isEmpty())
+            candidate = match.captured(3);
+        if (!candidate.isEmpty())
+            value = candidate;
+    }
+    return value;
+}
+
+QString stripOptionComments(const QString &optionsText)
+{
+    QStringList lines;
+    for (const QString &line : optionsText.split(QLatin1Char('\n'))) {
+        const QString trimmed = line.trimmed();
+        if (trimmed.startsWith(QLatin1Char(';')) || trimmed.startsWith(u"//"_s))
+            continue;
+        lines << line;
+    }
+    return lines.join(QLatin1Char('\n'));
+}
+
+// Csound treats these -o values as realtime/stream outputs, not file paths.
+bool isSpecialOutputName(const QString &name)
+{
+    auto deviceName = [](const QString &value, const QString &prefix) {
+        if (!value.startsWith(prefix))
+            return false;
+        const QString rest = value.mid(prefix.size());
+        if (rest.isEmpty() || rest.startsWith(QLatin1Char(':')))
+            return true;
+        for (const QChar c : rest) {
+            if (!c.isDigit())
+                return false;
+        }
+        return true;
+    };
+    return deviceName(name, u"dac"_s)
+            || deviceName(name, u"devaudio"_s)
+            || name == u"stdout"_s
+            || name.startsWith(QLatin1Char('|'));
+}
+
+QString resolveRenderFolder(const QString &folder, const QString &csdDir)
+{
+    if (folder.isEmpty())
+        return {};
+    QString path = folder;
+    if (path == u"~"_s || path.startsWith(u"~/"_s))
+        path = QDir::homePath() + path.mid(1);
+    const QFileInfo info(path);
+    if (info.isAbsolute())
+        return QDir::cleanPath(info.absoluteFilePath());
+    const QString base = csdDir.isEmpty() ? QDir::currentPath() : csdDir;
+    return QDir::cleanPath(QDir(base).filePath(path));
+}
+
+QString resolveRenderOutput(const QString &name, const QString &documentName,
+                            const QString &csdDir)
+{
+    if (name.isEmpty() || isSpecialOutputName(name))
+        return name;
+    QString path = name;
+    if (path == u"~"_s || path.startsWith(u"~/"_s))
+        path = QDir::homePath() + path.mid(1);
+    const QFileInfo info(path);
+    if (info.isAbsolute())
+        return QDir::cleanPath(info.absoluteFilePath());
+    const QString base = (documentName.isEmpty()
+                          || documentName.startsWith(QLatin1Char(':')))
+            ? QDir::currentPath()
+            : csdDir;
+    return QDir::cleanPath(QDir(base).filePath(path));
+}
+
+QStringList fileTypeExtensions(const QString &patterns)
+{
+    QStringList extensions;
+    for (const QString &pattern : patterns.split(QLatin1Char(';'))) {
+        QString extension = pattern.trimmed();
+        if (extension.startsWith(QLatin1Char('*')))
+            extension.remove(0, 1);
+        if (!extension.isEmpty())
+            extensions << extension;
+    }
+    return extensions;
+}
+
+QString firstFileTypeExtension(const QString &patterns)
+{
+    const QStringList extensions = fileTypeExtensions(patterns);
+    return extensions.isEmpty() ? QString() : extensions.first();
+}
+
+bool hasFileTypeExtension(const QString &path, const QString &patterns)
+{
+    for (const QString &extension : fileTypeExtensions(patterns)) {
+        if (path.endsWith(extension, Qt::CaseInsensitive))
+            return true;
+    }
+    return false;
+}
+
 // Read a text file as UTF-8 with normalized newlines. Used by the .orc -> .csd
 // conversion so a Windows-style companion score does not end up in the wrapper.
 QString readUtf8TextFile(const QString &path)
@@ -732,75 +848,117 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles)
 
     QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
 
-    // Open files saved from last session
-    if (!lastFiles.isEmpty() && !noRecentFiles) {
-        // close the first, default page.
-        //qDebug() << " First page: " << documentPages[0]->getFileName() << lastFiles.count();
-        if (documentPages[0]->getFileName().isEmpty() && lastFiles.count()>0) { // first empty page
-            deleteTab(0);
+    // Open files saved from last session. To keep startup responsive, load
+    // only the file that was current first, then restore the remaining files
+    // one at a time after the window has had a chance to appear.
+    bool restoredSession = false;
+    if (m_options->rememberFile && !lastFiles.isEmpty() && !noRecentFiles) {
+        struct SessionFile {
+            int originalIndex;
+            QString path;
+        };
+        QList<SessionFile> sessionFiles;
+        QStringList seenPaths;
+        for (int i = 0; i < lastFiles.size(); ++i) {
+            const QString path = lastFiles.at(i);
+            if (path.isEmpty() || path.startsWith("untitled")
+                    || path.endsWith(".pdf", Qt::CaseInsensitive)
+                    || !QFile::exists(path)) {
+                continue;
+            }
+            const QFileInfo info(path);
+            const QString canonical = info.canonicalFilePath();
+            const QString key = canonical.isEmpty()
+                    ? info.absoluteFilePath() : canonical;
+            if (seenPaths.contains(key))
+                continue;
+            seenPaths << key;
+            sessionFiles.append({i, path});
         }
-        foreach (QString lastFile, lastFiles) {
-            if (lastFile!="" && !lastFile.startsWith("untitled") && QFile::exists(lastFile)) {
-                loadFile(lastFile);
+
+        if (!sessionFiles.isEmpty()) {
+            // The first page is empty unless a file was passed on the command
+            // line. Drop it before restoring the session.
+            if (documentPages.size() > 0
+                    && documentPages[0]->getFileName().isEmpty()) {
+                deleteTab(0);
+            }
+
+            int currentSessionIndex = -1;
+            for (int i = 0; i < sessionFiles.size(); ++i) {
+                if (sessionFiles.at(i).originalIndex == lastTabIndex) {
+                    currentSessionIndex = i;
+                    break;
+                }
+            }
+            if (currentSessionIndex < 0)
+                currentSessionIndex = 0;
+
+            // Load the current session file synchronously. If it cannot be
+            // read, try the others until one loads.
+            int loadedSessionIndex = -1;
+            int anchorIndex = -1;
+            for (int attempt = 0; attempt < sessionFiles.size(); ++attempt) {
+                const int candidate =
+                        (currentSessionIndex + attempt) % sessionFiles.size();
+                const int pagesBefore = documentPages.size();
+                const int insertHint = qBound(0, curPage + 1, pagesBefore);
+                anchorIndex = loadFile(sessionFiles.at(candidate).path);
+                if (anchorIndex >= 0) {
+                    loadedSessionIndex = candidate;
+                    // With a companion score/orchestra the active tab may be
+                    // the companion; keep the session file itself as anchor.
+                    if (documentPages.size() > pagesBefore)
+                        anchorIndex = insertHint;
+                    break;
+                }
+            }
+
+            if (loadedSessionIndex >= 0) {
+                currentSessionIndex = loadedSessionIndex;
+                const int currentOriginalIndex =
+                        sessionFiles.at(currentSessionIndex).originalIndex;
+                m_sessionAnchorPage = documentPages.value(anchorIndex);
+                restoredSession = m_sessionAnchorPage != nullptr;
+
+                if (restoredSession) {
+                    // Switch back to the main session file if loading it also
+                    // activated a companion page.
+                    if (curPage != anchorIndex)
+                        documentTabs->setCurrentIndex(anchorIndex);
+                    for (int i = 0; i < sessionFiles.size(); ++i) {
+                        if (i == currentSessionIndex)
+                            continue;
+                        PendingSessionFile pending;
+                        pending.path = sessionFiles.at(i).path;
+                        pending.beforeAnchor =
+                                sessionFiles.at(i).originalIndex < currentOriginalIndex;
+                        m_pendingSessionFiles.append(pending);
+                    }
+                    if (!m_pendingSessionFiles.isEmpty())
+                        QTimer::singleShot(0, this,
+                                           &CsoundQt::loadPendingSessionFile);
+                }
             }
         }
     }
 
-    // restore last index after opening the documents
-    if (lastTabIndex < documentPages.size() &&
-            documentTabs->currentIndex() != lastTabIndex) {
-        changePage(lastTabIndex);
-        documentTabs->setCurrentIndex(lastTabIndex);
-    }
-    else {
+    // Initialize the current page if no session file was restored.
+    if (!restoredSession && documentTabs->currentIndex() >= 0) {
         changePage(documentTabs->currentIndex());
     }
 
     // Make sure that we do have an open file
-    if(documentPages.size() < 1)
+    if (documentPages.size() < 1)
         newFile();
 
     // is it necessary here? -  probably called from applySettings already
     // setColors(m_options->themeMode.isEmpty() ? "auto" : m_options->themeMode);
 
-    m_configlists.refreshModules(); // must happen after UI is created
-    // Use the platform's preferred realtime audio module when there is no
-    // saved choice or the saved module is not available in this Csound build.
-    if (m_options->rtAudioModule.isEmpty()
-            || !m_configlists.rtAudioNames.contains(m_options->rtAudioModule)) {
-        m_options->rtAudioModule = m_configlists.defaultAudioModule();
-        updatePlayRenderStatusTips();
-    }
-    // Needed for the default "Device" channels setup method even when the
-    // settings dialog is never opened. Also move away from generic "dac"/"adc"
-    // defaults to the first concrete device of the selected backend.
-    const QPair<QList<AudioDeviceInfo>, QList<AudioDeviceInfo>> audioGroups =
-            m_configlists.audioDeviceGroups(m_options->rtAudioModule);
-    auto resolveDevice = [&](QString &device, bool isOutput,
-                             const QList<AudioDeviceInfo> &devices) {
-        if (device.isEmpty())
-            return; // explicit No Input / No Output
-        if (device.contains(QLatin1Char('*'))
-                || device.endsWith(":null"_L1)
-                || device == "dac:system:playback_"_L1
-                || device == "adc:system:capture_"_L1) {
-            return;
-        }
-        for (const AudioDeviceInfo &candidate : devices) {
-            if (candidate.id == device || candidate.name == device)
-                return;
-        }
-        device = ConfigLists::defaultAudioDeviceId(m_options->rtAudioModule,
-                                                   isOutput, devices);
-    };
-    resolveDevice(m_options->rtOutputDevice, true, audioGroups.second);
-    resolveDevice(m_options->rtInputDevice, false, audioGroups.first);
-    const int startupOutputChannels = m_configlists.audioDeviceChannels(
-                m_options->rtAudioModule, m_options->rtOutputDevice, true, &audioGroups.second);
-    const int startupInputChannels = m_configlists.audioDeviceChannels(
-                m_options->rtAudioModule, m_options->rtInputDevice, false, &audioGroups.first);
-    m_options->deviceNumChannels = startupOutputChannels >= 0 ? startupOutputChannels : 2;
-    m_options->deviceNumInputChannels = startupInputChannels >= 0 ? startupInputChannels : 2;
+    // Audio/MIDI module and device discovery starts Csound and can block for a
+    // noticeable time on some systems. It is deferred until after the window is
+    // shown (see showEvent) and also run synchronously before the first realtime
+    // performance or settings dialog (see play() and configure()).
 
 
 /*
@@ -867,7 +1025,12 @@ void CsoundQt::showEvent(QShowEvent *event)
     // Start risset detection only once the window is actually shown, so its
     // external processes never delay startup. initRisset() is idempotent.
     if (!m_rissetInitialized)
-        QTimer::singleShot(1000, this, [this]{ initRisset(); });
+        QTimer::singleShot(2000, this, [this]{ initRisset(); });
+    // Audio/MIDI discovery also starts Csound and can block for a noticeable
+    // time. Defer it until after the window is on screen; play() and configure()
+    // call ensureAudioMidiDiscovery() if they need it earlier.
+    if (!m_audioMidiDiscovered)
+        QTimer::singleShot(1000, this, [this]{ ensureAudioMidiDiscovery(); });
     // If the help panel is already the active dock tab, visibilityChanged never
     // fires, so load the manual here. loadHelpOnce() is idempotent.
     if (!m_helpLoaded && helpPanel->isVisible())
@@ -1853,6 +2016,59 @@ QStringList CsoundQt::configuredIncludePaths() const
     return IncludeCache::splitPathList(m_options->incdir);
 }
 
+void CsoundQt::ensureAudioMidiDiscovery()
+{
+    if (m_audioMidiDiscovered)
+        return;
+    m_audioMidiDiscovered = true;
+
+    // The settings dialog also refreshes the module lists. If it has already
+    // run (e.g. the user opened Settings before the deferred timer fired), reuse
+    // those lists instead of enumerating the modules a second time.
+    if (m_configlists.rtAudioNames.isEmpty())
+        m_configlists.refreshModules();
+
+    // Use the platform's preferred realtime audio module when there is no
+    // saved choice or the saved module is not available in this Csound build.
+    if (m_options->rtAudioModule.isEmpty()
+            || !m_configlists.rtAudioNames.contains(m_options->rtAudioModule)) {
+        m_options->rtAudioModule = m_configlists.defaultAudioModule();
+    }
+
+    // Needed for the default "Device" channels setup method even when the
+    // settings dialog is never opened. Also move away from generic "dac"/"adc"
+    // defaults to the first concrete device of the selected backend.
+    const QPair<QList<AudioDeviceInfo>, QList<AudioDeviceInfo>> audioGroups =
+            m_configlists.audioDeviceGroups(m_options->rtAudioModule);
+    auto resolveDevice = [&](QString &device, bool isOutput,
+                             const QList<AudioDeviceInfo> &devices) {
+        if (device.isEmpty())
+            return; // explicit No Input / No Output
+        if (device.contains(QLatin1Char('*'))
+                || device.endsWith(":null"_L1)
+                || device == "dac:system:playback_"_L1
+                || device == "adc:system:capture_"_L1) {
+            return;
+        }
+        for (const AudioDeviceInfo &candidate : devices) {
+            if (candidate.id == device || candidate.name == device)
+                return;
+        }
+        device = ConfigLists::defaultAudioDeviceId(m_options->rtAudioModule,
+                                                   isOutput, devices);
+    };
+    resolveDevice(m_options->rtOutputDevice, true, audioGroups.second);
+    resolveDevice(m_options->rtInputDevice, false, audioGroups.first);
+    const int outputChannels = m_configlists.audioDeviceChannels(
+                m_options->rtAudioModule, m_options->rtOutputDevice, true, &audioGroups.second);
+    const int inputChannels = m_configlists.audioDeviceChannels(
+                m_options->rtAudioModule, m_options->rtInputDevice, false, &audioGroups.first);
+    m_options->deviceNumChannels = outputChannels >= 0 ? outputChannels : 2;
+    m_options->deviceNumInputChannels = inputChannels >= 0 ? inputChannels : 2;
+
+    updatePlayRenderStatusTips();
+}
+
 void CsoundQt::setupEnvironment()
 {
     if (m_options->sadirActive){
@@ -2678,6 +2894,7 @@ void CsoundQt::play(bool realtime, int index)
     }
 
     if (realtime && !m_options->checkSyntaxOnly) {
+        ensureAudioMidiDiscovery();
         const QString problem = validateRealtimeAudioSettings(page);
         if (!problem.isEmpty()) {
             showInvalidAudioSettings(problem);
@@ -3384,74 +3601,135 @@ void CsoundQt::render()
         showUdoNotRunnable();
         return;
     }
-    if (m_options->fileAskFilename) {
-        QString defaultFile;
-        if (m_options->fileOutputFilenameActive) {
-            defaultFile = m_options->fileOutputFilename;
+
+    DocumentPage *page = documentPages[curPage];
+    const QString documentName = page->getFileName();
+    const bool hasDocumentFile = !documentName.isEmpty()
+            && !documentName.startsWith(QLatin1Char(':'));
+    const QString csdDir = hasDocumentFile
+            ? QFileInfo(documentName).absolutePath()
+            : QString();
+
+    // Find an output file given in the options. Command-line options
+    // ("Additional flags") take precedence over <CsOptions>; the render tab's
+    // "Ignore CsOptions" setting suppresses the latter. As with Csound, the
+    // last -o in a given source wins.
+    QString outputOption;
+    if (m_options->additionalFlagsActive)
+        outputOption = lastOutputOption(m_options->additionalFlags);
+    if (outputOption.isEmpty() && !m_options->fileOverrideOptions)
+        outputOption = lastOutputOption(stripOptionComments(page->getOptionsText()));
+
+    const bool hasOutputOption = !outputOption.isEmpty();
+    const bool outputOptionIsFile = hasOutputOption
+            && !isSpecialOutputName(outputOption);
+    const QString optionPath = outputOptionIsFile
+            ? resolveRenderOutput(outputOption, documentName, csdDir)
+            : outputOption;
+
+    const QString renderFolder = resolveRenderFolder(m_options->renderFolder, csdDir);
+
+    // Default automatic output:
+    // <render folder or csd folder>/<csd basename>.<extension>
+    QString automaticPath;
+    if (hasDocumentFile) {
+        const QString baseName = QFileInfo(documentName).completeBaseName();
+        const QString extension = firstFileTypeExtension(
+                    m_configlists.renderFileTypeExtensions.value(m_options->fileFileType));
+        const QString baseDir = renderFolder.isEmpty() ? csdDir : renderFolder;
+        if (!baseName.isEmpty() && !extension.isEmpty() && !baseDir.isEmpty())
+            automaticPath = QDir(baseDir).filePath(baseName + extension);
+    }
+
+    // Save-dialog start location / prefilled name.
+    QString dialogPath;
+    if (hasOutputOption) {
+        const bool optionHasDir = outputOption.contains(QLatin1Char('/'))
+                || outputOption.contains(QLatin1Char('\\'))
+                || QFileInfo(outputOption).isAbsolute();
+        if (outputOptionIsFile) {
+            const QFileInfo optionInfo(optionPath);
+            if (optionInfo.isDir())
+                dialogPath = optionPath;
+            else if (optionHasDir)
+                dialogPath = optionPath;
+            else
+                dialogPath = QDir(QDir::homePath()).filePath(outputOption);
+        } else {
+            dialogPath = QDir::homePath();
         }
-        else {
-            defaultFile = lastFileDir;
-        }
-        QFileDialog dialog(this,tr("Output Filename"),defaultFile);
+    } else if (!automaticPath.isEmpty()) {
+        dialogPath = automaticPath;
+    } else if (!renderFolder.isEmpty()) {
+        dialogPath = renderFolder;
+    } else if (!csdDir.isEmpty()) {
+        dialogPath = csdDir;
+    } else {
+        dialogPath = QDir::homePath();
+    }
+
+    auto askForOutputPath = [this](const QString &startPath) -> QString {
+        QFileDialog dialog(this, tr("Output Filename"), startPath);
         dialog.setAcceptMode(QFileDialog::AcceptSave);
-        //    dialog.setConfirmOverwrite(false);
-        auto extensions = m_configlists.fileTypeExtensions[m_options->fileFileType];
-        QString filter = QString(m_configlists.fileTypeLongNames[m_options->fileFileType] +
-                " Files (" + extensions + ")");
-        dialog.selectNameFilter(filter);
-        if (dialog.exec() == QDialog::Accepted) {
-            QString extension = extensions.left(extensions.indexOf(";"));
-            // Remove the '*' from the extension
-            extension.remove(0,1);
-            m_options->fileOutputFilename = dialog.selectedFiles()[0];
-            if (!m_options->fileOutputFilename.endsWith(".wav")
-                    && !m_options->fileOutputFilename.endsWith(".aif")
-                    && !m_options->fileOutputFilename.endsWith(extension) ) {
-                m_options->fileOutputFilename += extension;
-            }
-            auto outfile = m_options->fileOutputFilename;
-            if (QFile::exists(outfile)) {
-                int ret = QMessageBox::warning(this, tr("CsoundQt"),
-                            tr("The file %1 already exists.\n Do you want to overwrite it?")
-                               .arg(outfile),
-                            QMessageBox::Save|QMessageBox::Cancel, QMessageBox::Save);
-                if (ret == QMessageBox::Cancel)
-                    return;
-            }
-            lastFileDir = dialog.directory().path();
+        const QString extensions = m_configlists.renderFileTypeExtensions.value(
+                    m_options->fileFileType);
+        const QString longName = m_configlists.renderFileTypeLongNames.value(
+                    m_options->fileFileType);
+        dialog.selectNameFilter(QString("%1 Files (%2)").arg(longName, extensions));
+        if (dialog.exec() != QDialog::Accepted)
+            return {};
+        QString selected = dialog.selectedFiles().value(0);
+        if (selected.isEmpty())
+            return {};
+        if (!hasFileTypeExtension(selected, extensions)) {
+            const QString extension = firstFileTypeExtension(extensions);
+            if (!extension.isEmpty())
+                selected += extension;
         }
-        else {
+        if (QFile::exists(selected)) {
+            const int ret = QMessageBox::warning(
+                        this, tr("CsoundQt"),
+                        tr("The file %1 already exists.\n Do you want to overwrite it?")
+                            .arg(selected),
+                        QMessageBox::Save|QMessageBox::Cancel, QMessageBox::Save);
+            if (ret == QMessageBox::Cancel)
+                return {};
+        }
+        lastFileDir = dialog.directory().path();
+        return selected;
+    };
+
+    QString outputPath;
+    if (m_options->fileAskFilename) {
+        outputPath = askForOutputPath(dialogPath);
+        if (outputPath.isEmpty())
+            return;
+    } else if (hasOutputOption) {
+        outputPath = optionPath;
+    } else if (!automaticPath.isEmpty()) {
+        outputPath = automaticPath;
+    } else {
+        // No -o, no render folder and no known csd folder: ask.
+        outputPath = askForOutputPath(dialogPath);
+        if (outputPath.isEmpty())
+            return;
+    }
+
+    if (outputPath.isEmpty())
+        return;
+    outputPath = QDir::cleanPath(outputPath);
+    if (!isSpecialOutputName(outputPath)) {
+        const QString outputDir = QFileInfo(outputPath).absolutePath();
+        if (!outputDir.isEmpty() && !QDir().mkpath(outputDir)) {
+            QMessageBox::warning(this, tr("Render"),
+                                 tr("Cannot create the render folder:\n%1")
+                                     .arg(outputDir));
             return;
         }
     }
-    QString outName = m_options->fileOutputFilename;
-#ifdef Q_OS_WIN32
-    outName = outName.replace('\\', '/');
-#endif
-    if (outName.isEmpty()) {
-        outName = "test.wav";
-    }
-    DocumentPage *page = documentPages[curPage];
-    // Resolve relative output names against the document, not the process
-    // working directory: rendering should not depend on where the application
-    // happened to be started from.
-    const QString documentName = page->getFileName();
-    const QString outputBaseDir = (documentName.isEmpty()
-                                   || documentName.startsWith(QLatin1Char(':')))
-            ? QDir::currentPath()
-            : QFileInfo(documentName).absolutePath();
-    const QFileInfo outputInfo(outName);
-    const QString absoluteOutName = outputInfo.isAbsolute()
-            ? outputInfo.absoluteFilePath()
-            : QDir(outputBaseDir).filePath(outName);
-    // When CsoundQt's render options override the document, always pass the
-    // output file. Otherwise a "-odac" in <CsOptions> wins and starts a
-    // realtime performance instead of rendering.
-    if (m_options->fileUseOptions) {
-        m_options->fileOutputFilename = absoluteOutName;
-        m_options->fileOutputFilenameActive = true;
-    }
-    setCurrentAudioFile(outName);
+
+    m_options->renderOutputFilename = outputPath;
+    setCurrentAudioFile(outputPath);
 
     if (m_offlineRendering)
         finishRenderStatus();
@@ -3467,8 +3745,11 @@ void CsoundQt::render()
     m_renderStopConnection = connect(page, &DocumentPage::stopSignal,
                                      this, &CsoundQt::finishRenderStatus);
     page->setWidgetDrawingEnabled(false);
-    startRenderStatus(absoluteOutName, estimateScoreDuration(page->getSco()));
+    startRenderStatus(outputPath, estimateScoreDuration(page->getSco()));
     play(false);
+    // The engine copied the options at start; do not leak this transient
+    // render path into later realtime or external runs.
+    m_options->renderOutputFilename.clear();
     // A compile error or an immediately rejected start never reaches the
     // engine's stopSignal; do not leave the progress display running.
     if (m_offlineRendering && !page->isRunning())
@@ -4828,6 +5109,9 @@ void CsoundQt::documentWasModified(bool status)
 
 void CsoundQt::configure()
 {
+    // The dialog needs the current module/device lists and, on first use, the
+    // resolved default module and device channel counts.
+    ensureAudioMidiDiscovery();
     ConfigDialog dialog(this,  m_options, &m_configlists, m_keyActions,
                         m_defaultShortcuts);
     dialog.setCurrentTab(configureTab);
@@ -7421,13 +7705,41 @@ void CsoundQt::readSettings()
     m_options->fileUseOptions = settings.value("fileUseOptions", true).toBool();
     m_options->fileOverrideOptions = settings.value("fileOverrideOptions", false).toBool();
     m_options->fileAskFilename = settings.value("fileAskFilename", false).toBool();
-    m_options->filePlayFinished = settings.value("filePlayFinished", false).toBool();
-    m_options->fileFileType = settings.value("fileFileType", 0).toInt();
-    m_options->fileSampleFormat = settings.value("fileSampleFormat", 1).toInt();
-    m_options->fileInputFilenameActive = settings.value("fileInputFilenameActive", false).toBool();
-    m_options->fileInputFilename = settings.value("fileInputFilename", "").toString();
-    m_options->fileOutputFilenameActive = settings.value("fileOutputFilenameActive", false).toBool();
-    m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
+    if (settings.contains("renderFileType")) {
+        m_options->fileFileType = settings.value("renderFileType", 0).toInt();
+    } else {
+        // Migrate the old render file-type index to the new five-item list:
+        // wav, aiff, flac, caf, w64.
+        switch (settings.value("fileFileType", 0).toInt()) {
+        case 1:  m_options->fileFileType = 1; break; // aiff
+        case 4:  m_options->fileFileType = 3; break; // caf
+        case 5:  m_options->fileFileType = 2; break; // flac
+        case 18: m_options->fileFileType = 4; break; // w64
+        default: m_options->fileFileType = 0; break; // wav
+        }
+    }
+    m_options->fileFileType = qBound(0, m_options->fileFileType, 4);
+    if (settings.contains("renderSampleFormat")) {
+        m_options->fileSampleFormat = settings.value("renderSampleFormat", "short").toString();
+    } else {
+        // Old flags were 24bit, short, uchar, schar, float, long.
+        switch (settings.value("fileSampleFormat", 1).toInt()) {
+        case 0:  m_options->fileSampleFormat = "24bit"; break;
+        case 4:  m_options->fileSampleFormat = "float"; break;
+        case 5:  m_options->fileSampleFormat = "long"; break;
+        default: m_options->fileSampleFormat = "short"; break;
+        }
+    }
+    if (!m_configlists.fileFormatFlags.contains(m_options->fileSampleFormat))
+        m_options->fileSampleFormat = "short";
+    // The flag must also be valid for the selected render file type (FLAC, for
+    // example, has no 32-bit sample format).
+    const QString renderFileType = m_configlists.renderFileTypeNames.value(
+                m_options->fileFileType, u"wav"_s);
+    const QStringList allowedFormats =
+            m_configlists.sampleFormatFlagsForFileType(renderFileType);
+    if (!allowedFormats.contains(m_options->fileSampleFormat))
+        m_options->fileSampleFormat = allowedFormats.value(0, u"short"_s);
     m_options->disableDisplaysOnRender =
             settings.value("disableDisplaysOnRender", true).toBool();
     m_options->rtOverrideOptions = settings.value("rtOverrideOptions", false).toBool();
@@ -7459,6 +7771,7 @@ void CsoundQt::readSettings()
     m_options->defaultCsd = settings.value("defaultCsd","").toString();
     m_options->defaultCsdActive = settings.value("defaultCsdActive","").toBool();
     m_options->examplePath = settings.value("examplePath", "").toString();
+    m_options->renderFolder = settings.value("renderFolder", "").toString();
     m_options->csoundExecutable = settings.value("csoundExecutable","csound").toString();
     m_options->logDebug = settings.value("logDebug", false).toBool();
     m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
@@ -7652,13 +7965,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("fileUseOptions", m_options->fileUseOptions);
     settings.setValue("fileOverrideOptions", m_options->fileOverrideOptions);
     settings.setValue("fileAskFilename", m_options->fileAskFilename);
-    settings.setValue("filePlayFinished", m_options->filePlayFinished);
-    settings.setValue("fileFileType", m_options->fileFileType);
-    settings.setValue("fileSampleFormat", m_options->fileSampleFormat);
-    settings.setValue("fileInputFilenameActive", m_options->fileInputFilenameActive);
-    settings.setValue("fileInputFilename", m_options->fileInputFilename);
-    settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
-    settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
+    settings.setValue("renderFileType", m_options->fileFileType);
+    settings.setValue("renderSampleFormat", m_options->fileSampleFormat);
     settings.setValue("disableDisplaysOnRender", m_options->disableDisplaysOnRender);
     settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
     settings.setValue("rtAudioModule", m_options->rtAudioModule);
@@ -7690,6 +7998,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("defaultCsd",m_options->defaultCsd);
     settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
     settings.setValue("examplePath", m_options->examplePath);
+    settings.setValue("renderFolder", m_options->renderFolder);
     settings.setValue("csoundExecutable", m_options->csoundExecutable);
     settings.setValue("logDebug", m_options->logDebug);
     settings.setValue("opcodexmldir", m_options->opcodexmldir); // TEST can be that this is the reason for crash MacOS -  dir set wrong from corrupted plist file
@@ -7985,7 +8294,26 @@ void fillCompanionOrc(QString &fileName, QString &text) {
     text += "</CsScore>\n</CsoundSynthesizer>\n";
 }
 
-int CsoundQt::loadFile(QString fileName, bool runNow)
+void CsoundQt::loadPendingSessionFile()
+{
+    if (m_pendingSessionFiles.isEmpty())
+        return;
+    const PendingSessionFile pending = m_pendingSessionFiles.takeFirst();
+    int insertAt = documentPages.size();
+    if (pending.beforeAnchor && m_sessionAnchorPage) {
+        const int anchorIndex = documentPages.indexOf(m_sessionAnchorPage);
+        if (anchorIndex >= 0)
+            insertAt = anchorIndex;
+    }
+    loadFile(pending.path, false, false, insertAt);
+    if (m_pendingSessionFiles.isEmpty()) {
+        m_sessionAnchorPage = nullptr;
+    } else {
+        QTimer::singleShot(0, this, &CsoundQt::loadPendingSessionFile);
+    }
+}
+
+int CsoundQt::loadFile(QString fileName, bool runNow, bool activate, int insertAt)
 {
     if (fileName.endsWith(".pdf")) {
         openPdfFile(fileName);
@@ -7994,8 +8322,10 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     int index = isOpen(fileName);
     if (index != -1) {
         QDEBUG << "File " << fileName << "already open, switching to index " << index;
-        documentTabs->setCurrentIndex(index);
-        changePage(index);
+        if (activate) {
+            documentTabs->setCurrentIndex(index);
+            changePage(index);
+        }
         return index;
     }
     // QDEBUG << "loading file" << fileName;
@@ -8007,7 +8337,9 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
                              .arg(file.errorString()));
         return -1;
     }
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    const bool showWaitCursor = activate;
+    if (showWaitCursor)
+        QApplication::setOverrideCursor(Qt::WaitCursor);
 
     QString text;
     QStringList lines;
@@ -8047,8 +8379,10 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         fileName = QString("");
     }
 
-    if (!makeNewPage(fileName, text)) {
-        QApplication::restoreOverrideCursor();
+    const int newPageIndex = makeNewPage(fileName, text, activate, insertAt);
+    if (newPageIndex < 0) {
+        if (showWaitCursor)
+            QApplication::restoreOverrideCursor();
         return -1;
     }
 
@@ -8056,34 +8390,43 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
             (fileName.endsWith(".sco") ||
              fileName.endsWith(".orc")) ) {
         // load companion, when the new page is made, otherwise isOpen works uncorrect
-        loadCompanionFile(fileName);
+        loadCompanionFile(fileName, activate, newPageIndex + 1);
     }
 
     if (m_options->autoJoin &&
             (fileName.endsWith(".sco") || fileName.endsWith(".orc"))) {
         fileName.chop(4);
         fileName +=  ".csd";
-        documentPages[curPage]->setFileName(fileName);  // Must update internal name
-        setCurrentFile(fileName);
-        if (!QFile::exists(fileName))
-            save();
-        else
-            saveAs();
+        documentPages[newPageIndex]->setFileName(fileName);  // Must update internal name
+        if (activate) {
+            setCurrentFile(fileName);
+            if (!QFile::exists(fileName))
+                save();
+            else
+                saveAs();
+        }
     } else {
-        documentPages[curPage]->setModified(false);
-        setWindowModified(false);
-        documentTabs->setTabIcon(curPage, QIcon());
+        documentPages[newPageIndex]->setModified(false);
+        if (activate)
+            setWindowModified(false);
+        documentTabs->setTabIcon(newPageIndex, QIcon());
     }
 
+    // Ensure the tab has its final name even when the page was loaded in the
+    // background (no changePage()/setCurrentFile() call) or the autoJoin path
+    // renamed an .orc/.sco to .csd.
+    setTabTextForPage(newPageIndex, fileName);
+
     if (fileName.startsWith(m_options->csdocdir) && !m_options->csdocdir.isEmpty()) {
-        documentPages[curPage]->readOnly = true;
+        documentPages[newPageIndex]->readOnly = true;
     }
     QString examplePath = getExamplePath("");
     if (fileName.startsWith(examplePath) && !examplePath.isEmpty()) {
-        documentPages[curPage]->readOnly = true;
+        documentPages[newPageIndex]->readOnly = true;
     }
 
-    QApplication::restoreOverrideCursor();
+    if (showWaitCursor)
+        QApplication::restoreOverrideCursor();
 
     // Watch for external changes (skip internal/example files)
     if (!fileName.isEmpty() && !fileName.startsWith(":/") && QFile::exists(fileName)) {
@@ -8092,43 +8435,56 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 
     // FIXME put back
     //  widgetPanel->clearHistory();
-    if (runNow) {
+    if (runNow && activate) {
         play();
     }
     //QDEBUG << "loadFile" << fileName << "finished, curPage:" << curPage;
-    return curPage;
+    return activate ? curPage : newPageIndex;
 }
 
-bool CsoundQt::makeNewPage(QString fileName, QString text)
+int CsoundQt::makeNewPage(QString fileName, QString text, bool activate, int insertAt)
 {
     if (documentPages.size() >= MAX_THREAD_COUNT) {
         QMessageBox::warning(this, tr("Document number limit"),
                              tr("Please close a document before opening another."));
-        return false;
+        return -1;
     }
     // auto t0 = std::chrono::high_resolution_clock::now();
     DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists, m_midiLearn);
     newPage->setScanService(m_scanService);
     newPage->setIncludeSearchPaths(configuredIncludePaths());
-    int insertPoint = curPage + 1;
-    curPage += 1;
-    if (documentPages.size() == 0) {
-        insertPoint = 0;
-        curPage = 0;
+
+    int insertPoint;
+    if (documentPages.isEmpty() || curPage < 0) {
+        insertPoint = documentPages.isEmpty()
+                ? 0 : qBound(0, curPage + 1, documentPages.size());
+        // The first/only page must become visible.
+        activate = true;
+    } else if (insertAt >= 0) {
+        insertPoint = qBound(0, insertAt, documentPages.size());
+    } else {
+        insertPoint = qBound(0, curPage + 1, documentPages.size());
     }
+
     documentPages.insert(insertPoint, newPage);
-    //  documentPages[curPage]->setOpcodeNameList(m_opcodeTree->opcodeNameList());
-    setCurrentOptionsForPage(documentPages[curPage]);
+    if (documentPages.size() == 1) {
+        curPage = 0;
+    } else if (activate) {
+        curPage = insertPoint;
+    } else if (insertPoint <= curPage) {
+        ++curPage;
+    }
 
+    setCurrentOptionsForPage(newPage);
     // Must set before sending text to set highlighting mode
-    documentPages[curPage]->setFileName(fileName);
+    newPage->setFileName(fileName);
 
-    connectActions();
-    auto page = documentPages[curPage];
-    page->loadTextString(text);
+    if (activate)
+        connectActions();
+    newPage->loadTextString(text);
     if (m_options->widgetsIndependent) {
         //		documentPages[curPage]->setWidgetLayoutOuterGeometry(documentPages[curPage]->getWidgetLayoutOuterGeometry());
-        page->getWidgetLayout()->setGeometry(page->getWidgetLayoutOuterGeometry());
+        newPage->getWidgetLayout()->setGeometry(newPage->getWidgetLayoutOuterGeometry());
     }
     //	setWidgetPanelGeometry();
 
@@ -8137,20 +8493,33 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
         lastUsedDir.resize(fileName.lastIndexOf(QRegularExpression(uR"([/])"_s)) + 1);
     }
     addToRecentFiles(fileName);
-    documentTabs->insertTab(curPage, page->getView(),"");
-    documentTabs->setCurrentIndex(curPage);
 
-    midiHandler->addListener(page);
-    page->getEngine()->setMidiHandler(midiHandler);
+    if (activate) {
+        documentTabs->insertTab(insertPoint, newPage->getView(), "");
+        setTabTextForPage(insertPoint, fileName);
+        documentTabs->setCurrentIndex(curPage);
+    } else {
+        // Restoring session files must not steal focus from the current tab.
+        // Block currentChanged so changePage() is not called for this page.
+        const bool signalsBlocked = documentTabs->blockSignals(true);
+        documentTabs->insertTab(insertPoint, newPage->getView(), "");
+        setTabTextForPage(insertPoint, fileName);
+        if (documentTabs->currentIndex() != curPage)
+            documentTabs->setCurrentIndex(curPage);
+        documentTabs->blockSignals(signalsBlocked);
+    }
 
-    setCurrentOptionsForPage(page); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
+    midiHandler->addListener(newPage);
+    newPage->getEngine()->setMidiHandler(midiHandler);
+
+    setCurrentOptionsForPage(newPage); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
     // auto t1 = std::chrono::high_resolution_clock::now();
     // auto elapsed = std::chrono::duration<double, std::milli>(t1-t0).count();
     // QDEBUG << "makeNewPage finished in (ms)" << elapsed;
-    return true;
+    return insertPoint;
 }
 
-bool CsoundQt::loadCompanionFile(const QString &fileName)
+bool CsoundQt::loadCompanionFile(const QString &fileName, bool activate, int insertAt)
 {
     QString companionFileName = fileName;
     if (fileName.endsWith(".orc")) {
@@ -8163,7 +8532,7 @@ bool CsoundQt::loadCompanionFile(const QString &fileName)
         return false;
     }
     if (QFile::exists(companionFileName)) {
-        return (loadFile(companionFileName) != -1);
+        return (loadFile(companionFileName, false, activate, insertAt) != -1);
     }
     return false;
 }
@@ -8437,6 +8806,27 @@ void CsoundQt::convertToCsd()
     }
     Notification::showTransient(this,
             tr("Converted %1 to %2").arg(orcInfo.fileName(), destination), 4000);
+}
+
+void CsoundQt::setTabTextForPage(int index, const QString &fileName)
+{
+    if (index < 0 || index >= documentPages.size())
+        return;
+    QString shownName;
+    if (fileName.isEmpty()) {
+        DocumentPage *page = documentPages.value(index);
+        shownName = (page && !page->getTemporaryName().isEmpty())
+                ? page->getTemporaryName() : u"untitled.csd"_s;
+    } else {
+        shownName = strippedName(fileName);
+    }
+    documentTabs->setTabText(index, shownName);
+    const QString toolTip = fileName.isEmpty()
+            ? QString()
+            : (fileName.startsWith(":/"_L1)
+               ? fileName : QFileInfo(fileName).absoluteFilePath());
+    documentTabs->setTabToolTip(index, toolTip);
+    updateTabText(index);
 }
 
 void CsoundQt::setCurrentFile(const QString &fileName)

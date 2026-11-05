@@ -166,7 +166,8 @@ public:
     void changeFontSize(int change);
 
 public slots:
-	int loadFile(QString fileName, bool runNow = false);
+	int loadFile(QString fileName, bool runNow = false, bool activate = true,
+	             int insertAt = -1);
 	int loadFileFromSystem(QString fileName);
 	void newFile();
 	bool closeTab(bool forceCloseApp = false, int index = -1);
@@ -406,14 +407,18 @@ private:
     void reportExternalLaunchFailure(const QString &tool, const QString &toolPath,
                                      const QUrl &url, const QString &errorString);
     //    bool saveCurrent();
-	bool makeNewPage(QString fileName, QString text);
-	bool loadCompanionFile(const QString &fileName);
+	int makeNewPage(QString fileName, QString text, bool activate = true,
+	                 int insertAt = -1);
+	bool loadCompanionFile(const QString &fileName, bool activate = true,
+	                       int insertAt = -1);
+	void loadPendingSessionFile();
 	// Enable/disable the actions that only make sense for some file types and
 	// install the shortcut guards that explain why a .udo cannot be performed.
 	void updateFileTypeActions();
 	void updateEvaluateAction();
 	void showUdoNotRunnable();
 	void setCurrentFile(const QString &fileName);
+	void setTabTextForPage(int index, const QString &fileName);
 	// Compose the window title from the current file and the
 	// "Include active file in the window title" setting.
 	void updateWindowTitle();
@@ -427,6 +432,10 @@ private:
 	// void createQuickRefPdf();
 	void deleteTab(int index = -1);
 	void setupEnvironment();
+	// Enumerate audio/MIDI modules and the selected backend's devices. This
+	// starts Csound, so it is deferred until after the window is shown and run
+	// synchronously before the first realtime performance or settings dialog.
+	void ensureAudioMidiDiscovery();
 	// The include directories from CsoundQt's settings. The document's own
 	// --env:INCDIR options are added by DocumentPage.
 	QStringList configuredIncludePaths() const;
@@ -451,6 +460,12 @@ private:
     ConfigLists m_configlists;
 	QTabWidget *documentTabs;
 	QVector<DocumentPage *> documentPages;
+	struct PendingSessionFile {
+		QString path;
+		bool beforeAnchor = false;
+	};
+	QList<PendingSessionFile> m_pendingSessionFiles;
+	QPointer<DocumentPage> m_sessionAnchorPage;
 	Options *m_options;
 	DockConsole *m_console;
 	DockHelp *helpPanel;
@@ -681,6 +696,7 @@ private:
     QDir m_rissetDataPath;
     bool m_rissetInitialized = false;
     bool m_rissetReady = false;
+    bool m_audioMidiDiscovered = false;
     QString m_helpStartPage;
     QString m_appliedCsdocdir; // csdocdir value currently applied to the help panel
     bool m_helpLoaded = false;
