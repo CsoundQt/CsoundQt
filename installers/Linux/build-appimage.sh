@@ -18,6 +18,13 @@
 # host's, no bundled foot needed) and the manual is auto-detected under
 # $APPDIR/usr/share/doc/csound-manual/html.
 #
+# Csound is built with its PipeWire I/O module (rtpw). libpipewire and its SPA
+# plugins are intentionally not bundled: the host's PipeWire stack is used at
+# runtime (requires PipeWire >= 0.3.50).
+#
+# Csound is built in Release mode with USE_AVX2=ON, so the AppImage requires an
+# AVX2-capable x86-64 CPU.
+#
 # Usage:
 #   ./installers/Linux/build-appimage.sh [--install-deps] [--with-plugins]
 #
@@ -39,8 +46,9 @@
 #   WITH_PLUGINS        1 to build csound-plugins (same as --with-plugins)
 #
 # glibc requirement: the Qt official binaries used here require glibc >= 2.34
-# (Qt >= 6.9 is built on RHEL 9). Build on a distro with glibc >= 2.34 (e.g.
-# Ubuntu 22.04) so the resulting AppImage runs on any system with glibc >= 2.34.
+# (Qt >= 6.9 is built on RHEL 9), but the AppImage inherits the build host's
+# glibc. The CI build uses Ubuntu 24.04 (glibc 2.39), so release AppImages
+# require glibc >= 2.39. Use an older CsoundQt AppImage for older distributions.
 
 set -euo pipefail
 
@@ -167,6 +175,9 @@ install_deps() {
         build-essential cmake ninja-build pkg-config git curl wget unzip file
         ccache desktop-file-utils flex bison
         libasound2-dev libjack-jackd2-dev libportmidi-dev libsndfile1-dev
+        # Csound's PipeWire I/O module (rtpw). Ubuntu 24.04 ships >= 0.3.50,
+        # which Csound requires for its PipeWire backend.
+        libpipewire-0.3-dev libspa-0.2-dev
         libsamplerate0-dev libcurl4-openssl-dev
         libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
         # xcb/X11 runtime libs needed by libqxcb.so, which linuxdeploy-plugin-qt
@@ -238,6 +249,8 @@ build_csound() {
     git_checkout "$SRC_DIR/csound" "$CSOUND_REPO" "$CSOUND_COMMIT"
     (
         cd "$SRC_DIR/csound"
+        # Release build. USE_AVX2 adds -mavx2, so the resulting binaries
+        # require an AVX2-capable x86-64 CPU (Csound does no runtime dispatch).
         cmake -B build-appimage -S . -G Ninja \
             -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
             -DCMAKE_BUILD_TYPE=Release \
@@ -252,7 +265,8 @@ build_csound() {
             -DUSE_PORTMIDI=ON \
             -DUSE_PORTAUDIO=OFF \
             -DUSE_PULSEAUDIO=OFF \
-            -DUSE_PIPEWIRE=OFF \
+            -DUSE_PIPEWIRE=ON \
+            -DUSE_AVX2=ON \
             -DBUILD_OSC_OPCODES=ON \
             -DUSE_FLTK=OFF \
             -DBUILD_VIRTUAL_KEYBOARD=OFF \
@@ -266,8 +280,14 @@ build_csound() {
             -DBUILD_INSTALLER=OFF \
             -DBUILD_UTILITIES=OFF \
             -DUSE_JACK=ON
+        grep -q '^CMAKE_BUILD_TYPE:STRING=Release$' build-appimage/CMakeCache.txt \
+            || die "Csound was not configured with CMAKE_BUILD_TYPE=Release"
+        grep -q '^USE_AVX2:BOOL=ON$' build-appimage/CMakeCache.txt \
+            || die "Csound was not configured with USE_AVX2=ON"
         cmake --build build-appimage --parallel "$JOBS"
         cmake --install build-appimage
+        test -f "$APPDIR/usr/lib/csound/plugins64-7.0/librtpw.so" \
+            || die "Csound did not build the PipeWire module (librtpw.so)"
     )
 }
 
@@ -537,6 +557,24 @@ EOF
         "$APPDIR/usr/lib/libwayland-egl.so.1" \
         "$APPDIR"/usr/lib/libdrm*.so*
 
+    # PipeWire's client library and SPA plugins are coupled to the host daemon
+    # (ABI, plugin and configuration search paths). Keep them out of the
+    # AppImage so the bundled librtpw.so resolves the host's PipeWire stack.
+    # If PipeWire is absent, only the rtpw module fails to load; ALSA and JACK
+    # remain functional.
+    rm -f "$APPDIR"/usr/lib/libpipewire-0.3.so* \
+        "$APPDIR"/usr/lib/libspa-*.so*
+    rm -rf "$APPDIR/usr/lib/spa-0.2"
+
+    # Sanity checks: the PipeWire module must be present, but the host-coupled
+    # PipeWire/SPA libraries must not have been bundled.
+    test -f "$APPDIR/usr/lib/csound/plugins64-7.0/librtpw.so" \
+        || die "librtpw.so missing from the AppImage"
+    if compgen -G "$APPDIR/usr/lib/libpipewire-*" >/dev/null \
+        || compgen -G "$APPDIR/usr/lib/libspa-*" >/dev/null; then
+        die "PipeWire libraries were bundled; use the host's PipeWire stack"
+    fi
+
     log "Creating final AppImage"
     export ARCH="x86_64"
     (
@@ -569,6 +607,9 @@ main() {
 
     command -v cmake >/dev/null || die "cmake not found (run with --install-deps)"
     command -v ninja  >/dev/null || die "ninja not found (run with --install-deps)"
+    pkg-config --atleast-version=0.3.50 libpipewire-0.3 \
+        || die "PipeWire >= 0.3.50 not found (run with --install-deps)"
+    log "PipeWire $(pkg-config --modversion libpipewire-0.3) for Csound's rtpw backend"
 
     # ccache speeds up rebuilds; used by all three compilers below. Disabled
     # gracefully when ccache is not installed.

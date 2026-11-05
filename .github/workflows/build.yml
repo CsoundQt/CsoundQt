@@ -14,7 +14,7 @@ env:
 jobs:
   appimage:
     name: Build Linux AppImage
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 180
     steps:
       - name: Checkout repository
@@ -29,7 +29,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: build-appimage/qt
-          key: qt-${{ runner.os }}-${{ hashFiles('installers/Linux/build-appimage.sh') }}
+          key: qt-ubuntu-24.04-${{ hashFiles('installers/Linux/build-appimage.sh') }}
 
       - name: Cache source checkouts and downloads
         uses: actions/cache@v4
@@ -37,15 +37,15 @@ jobs:
           path: |
             build-appimage/src
             build-appimage/downloads
-          key: src-${{ runner.os }}-${{ hashFiles('installers/Linux/build-appimage.sh') }}
+          key: src-ubuntu-24.04-${{ hashFiles('installers/Linux/build-appimage.sh') }}
 
       - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: build-appimage/.ccache
-          key: ccache-${{ runner.os }}-${{ github.sha }}
+          key: ccache-ubuntu-24.04-${{ github.sha }}
           restore-keys: |
-            ccache-${{ runner.os }}-
+            ccache-ubuntu-24.04-
 
       - name: Build AppImage
         run: |
