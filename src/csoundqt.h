@@ -249,7 +249,7 @@ private slots:
 	void onFocusChanged(QWidget *old, QWidget *now);
 	void duplicate();
 	void toggleLockedWidgets();
-	void print();
+	void exportPdf();
 	void findReplace();  // Direct to current Page
 	void findString();  // Direct to current Page
 	void findPrevious();  // Direct to current Page
@@ -536,7 +536,7 @@ private:
 	QAction *switchOrcScoAct = nullptr;
 	QAction *convertToCsdAct = nullptr;
 	QAction *closeTabAct;
-	QAction *printAct;
+	QAction *exportPdfAct;
 	QAction *infoAct;
 	QAction *exitAct;
 	QList<QAction *> openRecentAct;

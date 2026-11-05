@@ -23,8 +23,7 @@
 #ifndef DOCUMENTPAGE_H
 #define DOCUMENTPAGE_H
 
-#include <QtPrintSupport/QPrinter>
-#include <QtPrintSupport/QPrintDialog>
+#include <QPagedPaintDevice>
 #include <QRegularExpression>
 #include <QSet>
 #include <QTextEdit>
@@ -201,7 +200,7 @@ public:
 	void setAutoParameterMode(bool autoParameterMode);
 	QString getActiveSection();
 	QString getActiveText();
-	void print(QPrinter *printer);
+	void print(QPagedPaintDevice *device);
 	void findReplace();
 	void findString();  // For find again
 	void findPrevious();

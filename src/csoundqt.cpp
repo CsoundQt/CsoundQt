@@ -30,6 +30,11 @@
 #include <QTemporaryDir>
 #include <QTemporaryFile>
 #include <QStandardPaths>
+#include <QPdfWriter>
+#include <QPageSize>
+#include <QPageLayout>
+#include <QFileDialog>
+#include <QFileInfo>
 #include <QSysInfo>
 #include <QProcess>
 #include <QSaveFile>
@@ -2409,16 +2414,37 @@ bool CsoundQt::closeTab(bool forceCloseApp, int index)
     return true;
 }
 
-void CsoundQt::print()
+void CsoundQt::exportPdf()
 {
-    QPrinter printer;
-    QPrintDialog *dialog = new QPrintDialog(&printer, this);
-    dialog->setWindowTitle(tr("Print Document"));
-    //   if (editor->textCursor().hasSelection())
-    //     dialog->addEnabledOption(QAbstractPrintDialog::PrintSelection);
-    if (dialog->exec() != QDialog::Accepted)
+    if (documentPages.isEmpty())
         return;
-    documentPages[curPage]->print(&printer);
+
+    const QString documentPath = documentPages[curPage]->getFileName();
+    QString suggested;
+    if (!documentPath.isEmpty() && !documentPath.startsWith(":/"_L1)) {
+        const QFileInfo info(documentPath);
+        suggested = info.absolutePath() + QLatin1Char('/')
+                + info.completeBaseName() + ".pdf"_L1;
+    } else {
+        suggested = lastUsedDir + "CsoundQt.pdf"_L1;
+    }
+
+    QString fileName = QFileDialog::getSaveFileName(
+                this, tr("Export to PDF"), suggested, tr("PDF files (*.pdf)"));
+    if (fileName.isEmpty())
+        return;
+    if (!fileName.endsWith(".pdf"_L1, Qt::CaseInsensitive))
+        fileName += ".pdf"_L1;
+
+    QPdfWriter writer(fileName);
+    writer.setPageSize(QPageSize(QPageSize::A4));
+    writer.setPageMargins(QMarginsF(15, 15, 15, 15), QPageLayout::Millimeter);
+    writer.setTitle(QFileInfo(fileName).completeBaseName());
+    writer.setCreator(u"CsoundQt"_s);
+
+    documentPages[curPage]->print(&writer);
+
+    lastUsedDir = QFileInfo(fileName).absolutePath() + QLatin1Char('/');
 }
 
 void CsoundQt::findReplace()
@@ -5502,7 +5528,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     saveAsAct->setShortcut(tr("Shift+Ctrl+S"));
     closeTabAct->setShortcut(tr("Ctrl+W"));
 
-    printAct->setShortcut(tr("Ctrl+P"));
+    exportPdfAct->setShortcut(tr("Ctrl+P"));
     exitAct->setShortcut(tr("Ctrl+Q"));
 
     undoAct->setShortcut(tr("Ctrl+Z"));
@@ -5789,12 +5815,10 @@ void CsoundQt::createActions()
     closeTabAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
 
-    printAct = new QAction(tr("Print"), this);
-    printAct->setStatusTip(tr("Print current document"));
-    //   printAct->setIconText(tr("Print"));
-    //   closeTabAct->setIcon(QIcon(prefix + "gtk-close.png"));
-    printAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(printAct, SIGNAL(triggered()), this, SLOT(print()));
+    exportPdfAct = new QAction(tr("Export to PDF..."), this);
+    exportPdfAct->setStatusTip(tr("Export the current document as a PDF file"));
+    exportPdfAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(exportPdfAct, SIGNAL(triggered()), this, SLOT(exportPdf()));
 
     //  for (int i = 0; i < CSQT_MAX_RECENT_FILES; i++) {
     //    QAction *newAction = new QAction(this);
@@ -6412,7 +6436,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(saveAct);
     m_keyActions.append(saveAsAct);
     m_keyActions.append(closeTabAct);
-    m_keyActions.append(printAct);
+    m_keyActions.append(exportPdfAct);
     m_keyActions.append(exitAct);
     m_keyActions.append(undoAct);
     m_keyActions.append(redoAct);
@@ -6718,7 +6742,7 @@ void CsoundQt::createMenus()
     fileMenu->addAction(switchOrcScoAct);
     fileMenu->addAction(convertToCsdAct);
     fileMenu->addAction(closeTabAct);
-    fileMenu->addAction(printAct);
+    fileMenu->addAction(exportPdfAct);
     fileMenu->addAction(infoAct);
     fileMenu->addSeparator();
     recentMenu = fileMenu->addMenu(tr("Recent files"));

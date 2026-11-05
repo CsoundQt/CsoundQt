@@ -777,9 +777,20 @@ QString DocumentPage::getActiveText()
 	return m_view->getActiveText();
 }
 
-void DocumentPage::print(QPrinter *printer)
+void DocumentPage::print(QPagedPaintDevice *device)
 {
-	m_view->print(printer);
+	// Always render with the built-in light editor theme. A dark theme would
+	// put light text on a dark background, which is unreadable on paper and
+	// wastes a lot of ink.
+	const QString previousTheme = m_colorTheme;
+	const QString lightTheme = QStringLiteral("light");
+	if (previousTheme != lightTheme)
+		setHighlightingTheme(lightTheme);
+
+	m_view->print(device);
+
+	if (previousTheme != lightTheme)
+		setHighlightingTheme(previousTheme);
 }
 
 void DocumentPage::findReplace()

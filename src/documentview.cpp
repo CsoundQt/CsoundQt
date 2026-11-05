@@ -41,10 +41,12 @@
 #include <QScreen>
 #include <QStyle>
 #include <QStyledItemDelegate>
+#include <QTextDocument>
 #include <QTimer>
 #include <QVBoxLayout>
 
 #include <algorithm>
+#include <memory>
 using namespace Qt::StringLiterals;
 
 
@@ -58,6 +60,58 @@ static constexpr int COMPLETION_UPDATE_DELAY_MS = 100;
 // with the syntax of the opcode under it. Without this, holding an arrow key
 // or dragging the cursor makes the status bar flicker through every opcode.
 static constexpr int OPCODE_SYNTAX_DEBOUNCE_MS = 100;
+
+// The editor gutter is not part of the text document, so a plain
+// QTextDocument::print() would omit it. For PDF export with line numbers
+// enabled, prefix every logical block with a right-aligned line number.
+static void addLineNumbersToDocument(QTextDocument *source,
+                                     QTextDocument *target,
+                                     const QTextCharFormat &editorFormat)
+{
+    const int blockCount = source->blockCount();
+    if (blockCount <= 0)
+        return;
+
+    const int digits = QString::number(blockCount).size();
+    QTextCharFormat numberFormat = editorFormat;
+    numberFormat.setForeground(QColor(118, 118, 118));
+    numberFormat.setFontWeight(QFont::Normal);
+    numberFormat.setFontItalic(false);
+    numberFormat.setFontUnderline(false);
+    numberFormat.setFontStrikeOut(false);
+
+    QTextCursor cursor(target);
+    cursor.beginEditBlock();
+    for (int i = 0; i < blockCount; ++i) {
+        const QTextBlock sourceBlock = source->findBlockByNumber(i);
+        const QTextBlock targetBlock = target->findBlockByNumber(i);
+        const int blockStart = targetBlock.position();
+        const QString number = QStringLiteral("%1  ").arg(i + 1, digits);
+        cursor.setPosition(blockStart);
+        cursor.insertText(number, numberFormat);
+
+        // Syntax highlighting is stored as QTextLayout additional formats.
+        // QTextDocument::clone() keeps the text and block formats but not
+        // those overlays, so copy them across, shifted by the number prefix.
+        QTextLayout *sourceLayout = sourceBlock.layout();
+        if (sourceLayout == nullptr) {
+            source->documentLayout()->blockBoundingRect(sourceBlock);
+            sourceLayout = sourceBlock.layout();
+        }
+        if (sourceLayout == nullptr)
+            continue;
+
+        const int textStart = blockStart + number.size();
+        for (const QTextLayout::FormatRange &range : sourceLayout->formats()) {
+            QTextCursor formatCursor(target);
+            formatCursor.setPosition(textStart + range.start);
+            formatCursor.setPosition(textStart + range.start + range.length,
+                                     QTextCursor::KeepAnchor);
+            formatCursor.mergeCharFormat(range.format);
+        }
+    }
+    cursor.endEditBlock();
+}
 
 // A word selected for "show occurrences" must be a plain Csound identifier.
 static bool isIdentifierText(const QString &text)
@@ -589,9 +643,19 @@ bool DocumentView::childHasFocus()
 	return hasFocus() || m_mainEditor->hasFocus();
 }
 
-void DocumentView::print(QPrinter *printer)
+void DocumentView::print(QPagedPaintDevice *device)
 {
-	m_mainEditor->print(printer);
+    if (!m_mainEditor->lineAreaVisble()) {
+        m_mainEditor->print(device);
+        return;
+    }
+
+    // Work on a copy: inserting the numbers into the live document would
+    // modify the user's text and undo stack.
+    std::unique_ptr<QTextDocument> document(m_mainEditor->document()->clone());
+    addLineNumbersToDocument(m_mainEditor->document(), document.get(),
+                             getDefaultFormat());
+    document->print(device);
 }
 
 void DocumentView::updateContext()

@@ -73,7 +73,7 @@ debugger {
     message("Building debugger.")
 }
 
-QT += concurrent network widgets printsupport quickwidgets quickcontrols2
+QT += concurrent network widgets quickwidgets quickcontrols2
 linux: QT += dbus
 
 
@@ -232,9 +232,6 @@ macx {
 # -sign-for-notarization=\"Developer ID Application: Tarmo Johannes (DRQ77GKK9V)\" -dmg
     INSTALLS += first
 
-    printsupport.path =  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/PlugIns/printsupport
-    printsupport.files =  $$[QT_INSTALL_PREFIX]/plugins/printsupport/libcocoaprintersupport.dylib
-
     # pythonlinks.path= $$PWD
     # pythonlinks.commands = install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
 
@@ -259,7 +256,7 @@ macx {
     final.path = $$PWD
     #final.commands += codesign -s - --deep $$OUT_PWD/$$DESTDIR/$${TARGET}.app ; #try codesigning to eliminate asking for Docuemtns folder permission every time
     #final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg # untested!
-    INSTALLS += printsupport pythonlinks final
+    INSTALLS += pythonlinks final
 
 }
 

@@ -24,8 +24,7 @@
 #define DOCUMENTVIEW_H
 
 #include <QtWidgets>
-#include <QtPrintSupport/QPrinter>
-#include <QtPrintSupport/QPrintDialog>
+#include <QPagedPaintDevice>
 
 #include "baseview.h"
 #include "bracketmatcher.h"
@@ -148,7 +147,7 @@ public:
     int currentScopeLine() const;
 	bool isModified();
 	bool childHasFocus();
-	void print(QPrinter *printer);
+	void print(QPagedPaintDevice *device);
 	// Re-runs the syntax highlighter. Applying formats makes the editors emit
 	// textChanged(), which is not an edit: it is swallowed here.
 	void rehighlightSyntax();
