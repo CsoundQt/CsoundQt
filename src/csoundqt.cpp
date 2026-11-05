@@ -4278,6 +4278,9 @@ void CsoundQt::virtualKeyboardActOff(QObject *parent)
         if (showVirtualKeyboardAct->isChecked()) {
             showVirtualKeyboardAct->setChecked(false);
         }
+        // The keyboard was the active window. Give activation back to the main
+        // window instead of leaving the application without one.
+        activateWindow();
     }
 
 }

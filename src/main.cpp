@@ -155,6 +155,18 @@ int main(int argc, char *argv[])
     QStringList fileNames;
     QApplication qapp(argc, argv);
 
+#if defined(Q_OS_LINUX)
+    // Qt Quick's GPU backend on Wayland slows down the raster QWidget windows
+    // dramatically: as soon as a QQuickWidget is shown, the main window's
+    // repaints are throttled and stay slow even after the QML window is closed.
+    // The QML panels here are simple, so use the software scene graph on
+    // Wayland and keep normal QWidget painting unaffected.
+    if (QGuiApplication::platformName().startsWith(QStringLiteral("wayland"))
+            && !qEnvironmentVariableIsSet("QT_QUICK_BACKEND")) {
+        qputenv("QT_QUICK_BACKEND", "software");
+    }
+#endif
+
     // Start logging as early as possible (before the main window is built) so
     // that startup problems are captured too. The setting is re-applied in
     // CsoundQt::applySettings() when it is changed at runtime.
