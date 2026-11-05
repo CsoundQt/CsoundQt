@@ -224,6 +224,12 @@ yet provide global types; those are still handled by the highlighter itself.
 `Global variables`, UDO names and other lists are also refreshed from the scan.
 A full rehighlight happens only when the relevant sets changed.
 
+`DocumentView::rehighlightSyntax()` suspends the `QTextDocument` layout while
+the highlighter runs and re-enables it afterwards. Without this, every block
+marked dirty triggers a document relayout, so a full rehighlight of a large
+file is quadratic and can take many seconds. With the layout suspended, the
+document is laid out once when it is re-enabled.
+
 ### Autocomplete
 
 Autocomplete consumes:

@@ -2407,7 +2407,18 @@ void DocumentView::autoCompleteAtCursor(bool force) {
 void DocumentView::rehighlightSyntax()
 {
     m_highlightUpdate = true;
+    // Rehighlighting marks every block as dirty. With layout enabled, Qt
+    // relayouts the document after each block, which becomes quadratic in the
+    // number of blocks and is very slow for large files. Suspend the layout
+    // while the formats are applied; enabling it again lays out the document
+    // once.
+    QTextDocument *doc = m_mainEditor->document();
+    const bool layoutWasEnabled = doc->isLayoutEnabled();
+    if (layoutWasEnabled)
+        doc->setLayoutEnabled(false);
     m_highlighter.rehighlight();
+    if (layoutWasEnabled)
+        doc->setLayoutEnabled(true);
     m_highlightUpdate = false;
 }
 
