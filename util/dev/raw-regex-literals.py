@@ -26,9 +26,6 @@ constructor or setPattern() call on the same line. Other string literals are
 ignored. The required Qt::StringLiterals using-directive is added to changed
 files when absent.
 
-    python3 util/raw-regex-literals.py src tests
-    python3 util/raw-regex-literals.py --dry-run src
-
 """
 
 from __future__ import annotations

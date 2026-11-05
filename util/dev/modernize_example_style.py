@@ -28,11 +28,6 @@
 #      The darkening is capped (configurable --max-darken, default 10%)
 #      so vivid colours are muted but never dulled aggressively.
 #      Greys and the already-muted palette above are unaffected.
-#
-# Usage: util/modernize_example_style.py [--dry-run] [--check] <file.csd|dir>...
-#   --dry-run  report what would change, change nothing
-#   --check    like --dry-run but exit 1 when a file needs changes
-#
 # The transformation is idempotent: re-running changes nothing.
 
 import argparse

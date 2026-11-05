@@ -20,9 +20,6 @@
 # Section bodies are copied verbatim apart from surrounding blank lines.
 # The line endings of the input file are preserved, and so is UTF-8 text.
 #
-# Usage: util/split-csd.py [-o DIR] file.csd [file.csd ...]
-#   -o DIR   write the output files into DIR instead of next to each input
-#
 # Missing <CsInstruments> or <CsScore> sections are reported and produce an
 # empty file; an empty <CsOptions> adds no comment block. No .cswidget file
 # is written unless a <bsbPanel> has something inside it.

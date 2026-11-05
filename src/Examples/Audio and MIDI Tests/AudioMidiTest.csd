@@ -1,15 +1,14 @@
 <CsoundSynthesizer>
 <CsInstruments>
+
 nchnls   = 2
 nchnls_i = 2
 
-
 ;; -------------------------------------------------------------
 
-A4 = 442
+A4    = 442
 ksmps = 64
 0dbfs = 1
-
 massign 0, 0
 
 gkSpectrumFFTSize = init(4096)
@@ -109,11 +108,9 @@ instr AudioTest
   koutamp8 maxk aout8, ktrig, 1
   outch 8, aout8
 
-
-
 skipOutput:
 
-  ; ; Audio Input
+  ; Audio Input
 
   imin = db(-irange)
 
@@ -315,6 +312,10 @@ i "Setup"       0.02 -1
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -483,6 +484,7 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>9</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
   <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
@@ -774,6 +776,7 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>24</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
   <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
@@ -785,8 +788,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>582</x>
-  <y>186</y>
+  <x>580</x>
+  <y>180</y>
   <width>80</width>
   <height>25</height>
   <uuid>{a498f284-9d66-4ec8-9c40-07632ace83b4}</uuid>
@@ -829,7 +832,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>-9.38598085</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <exponent>1.00000000</exponent>
@@ -865,6 +868,7 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>24</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
   <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
@@ -893,7 +897,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>-11.46931426</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -929,6 +933,7 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>24</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
   <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
@@ -993,6 +998,7 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>24</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
   <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
@@ -1057,6 +1063,7 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>24</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
   <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
@@ -1121,6 +1128,7 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>24</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
   <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
@@ -1185,6 +1193,7 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>24</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
   <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
@@ -1249,6 +1258,7 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>24</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
   <color>#4a2600</color>
   <pressedColor>#f5943f</pressedColor>
@@ -1435,10 +1445,10 @@ e
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>leveldb</objectName>
-  <x>572</x>
-  <y>83</y>
-  <width>100</width>
-  <height>100</height>
+  <x>575</x>
+  <y>90</y>
+  <width>90</width>
+  <height>90</height>
   <uuid>{f8080f9c-7129-4dca-882f-9a3d2607106b}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1449,22 +1459,22 @@ e
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>0.42000000</exponent>
-  <value>-25.93017618</value>
+  <value>-29.21881661</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>#f57c00</color>
+  <color>#f5943f</color>
   <textcolor>#f57c00</textcolor>
   <border>0</border>
-  <borderColor>#512900</borderColor>
+  <borderColor>#9c4e00</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>samplerate</objectName>
-  <x>470</x>
+  <x>472</x>
   <y>20</y>
   <width>60</width>
   <height>26</height>
@@ -1478,8 +1488,8 @@ e
   <label>48000</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>18</fontsize>
+  <font>JetBrains Mono</font>
+  <fontsize>16</fontsize>
   <precision>0</precision>
   <padding>2</padding>
   <color>#f57c00</color>
@@ -1491,7 +1501,7 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>nchnls_i</objectName>
-  <x>622</x>
+  <x>619</x>
   <y>20</y>
   <width>30</width>
   <height>26</height>
@@ -1503,10 +1513,10 @@ e
   <midicc>-3</midicc>
   <description>Set number of channels in Edit|Configuration|Run</description>
   <label>2</label>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <valignment>center</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>18</fontsize>
+  <font>JetBrains Mono</font>
+  <fontsize>16</fontsize>
   <precision>0</precision>
   <padding>5</padding>
   <color>#f57c00</color>
@@ -1545,7 +1555,7 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>542</x>
+  <x>539</x>
   <y>20</y>
   <width>80</width>
   <height>26</height>
@@ -1583,7 +1593,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>0</value>
+  <value>1</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
@@ -2019,7 +2029,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-26</label>
+  <label>-16</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
@@ -2046,7 +2056,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-24</label>
+  <label>-16</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
@@ -2224,7 +2234,7 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>nchnls</objectName>
-  <x>650</x>
+  <x>651</x>
   <y>20</y>
   <width>30</width>
   <height>26</height>
@@ -2238,8 +2248,8 @@ e
   <label>2</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>18</fontsize>
+  <font>JetBrains Mono</font>
+  <fontsize>16</fontsize>
   <precision>0</precision>
   <padding>5</padding>
   <color>#f57c00</color>
@@ -2251,7 +2261,7 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>636</x>
+  <x>641</x>
   <y>20</y>
   <width>20</width>
   <height>26</height>

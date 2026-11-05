@@ -60,18 +60,6 @@
 #   9. Opt-in (--ksmps N): set the orchestra header assignment to
 #      `ksmps = N`, adding it after the `sr` line when missing.
 #
-# The script is idempotent: re-running it on a formatted file changes
-# nothing.
-#
-# Usage: util/modernize_csd_code.py [--check] [--new-syntax] [--chnget]
-#                                    [--new-udos] [--ksmps N] [path ...]
-#   --check      report files that would change, modify nothing
-#   --new-syntax also rewrite single-output calls in functional syntax
-#   --chnget     replace invalue/outvalue with chnget/chnset
-#   --new-udos   rewrite old `opcode Name, outputs, inputs` declarations
-#   --ksmps N    set `ksmps = N` in the orchestra header
-#   path         file or directory to scan (default: McCurdy Collection)
-
 import argparse
 import os
 import re

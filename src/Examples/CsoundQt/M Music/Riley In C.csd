@@ -27,9 +27,10 @@
 <CsOptions>
 </CsOptions>
 <CsInstruments>
-sr		= 44100
-ksmps	= 1024
-nchnls	= 2
+sr		 = 44100
+ksmps	 = 1024
+nchnls = 2
+0dbfs  = 32768
 
 		zakinit	20, 1
 
@@ -1202,6 +1203,10 @@ i 401	0	$OPEN
 </CsoundSynthesizer>
 
 
+
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="0" y="0" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -1211,11 +1216,7 @@ i 401	0	$OPEN
  <height>200</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>0</r>
-  <g>170</g>
-  <b>255</b>
- </bgcolor>
+ <bgcolor mode="background">#00aaff</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
@@ -1223,24 +1224,22 @@ i 401	0	$OPEN
   <width>530</width>
   <height>60</height>
   <uuid>{da6cfe57-989d-40a9-86f3-f2e86cc76121}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1252,9 +1251,12 @@ i 401	0	$OPEN
   <width>63</width>
   <height>30</height>
   <uuid>{e342b7d4-feb1-41a5-bb7c-6dcca2f000e1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1262,7 +1264,18 @@ i 401	0	$OPEN
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor2</objectName>
@@ -1271,9 +1284,12 @@ i 401	0	$OPEN
   <width>10</width>
   <height>10</height>
   <uuid>{72df9346-a468-4b43-ba73-6b96f03f3ad1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>OnOff1_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1283,19 +1299,15 @@ i 401	0	$OPEN
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>#00ea00</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
+  <bgcolor>#000000</bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Patt_index1</objectName>
@@ -1304,9 +1316,12 @@ i 401	0	$OPEN
   <width>51</width>
   <height>30</height>
   <uuid>{e1f72ed3-3b98-40bf-ad93-03fbbca97031}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>00</name>
@@ -1584,24 +1599,22 @@ i 401	0	$OPEN
   <width>30</width>
   <height>32</height>
   <uuid>{f1785581-04d1-4b06-9cd4-3e62e9edc602}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>72</r>
-   <g>72</g>
-   <b>72</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#484848</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1613,16 +1626,27 @@ i 401	0	$OPEN
   <width>50</width>
   <height>50</height>
   <uuid>{f1cf09b1-0de3-4108-a85d-8a8f587a21f0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Pan1</objectName>
@@ -1631,16 +1655,27 @@ i 401	0	$OPEN
   <width>50</width>
   <height>50</height>
   <uuid>{6b26739f-fc56-4f39-917f-594a65614836}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.01010100</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Timi1</objectName>
@@ -1649,16 +1684,27 @@ i 401	0	$OPEN
   <width>50</width>
   <height>50</height>
   <uuid>{459aefe4-3bef-4fe7-b0bc-a705656c798b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Inte1</objectName>
@@ -1667,16 +1713,27 @@ i 401	0	$OPEN
   <width>50</width>
   <height>50</height>
   <uuid>{f0bc09f5-d132-4323-bed0-6a082f160a88}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.01010100</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1685,27 +1742,25 @@ i 401	0	$OPEN
   <width>61</width>
   <height>30</height>
   <uuid>{8c2e7ea1-87db-46be-8b9a-34959085c98d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>a / q</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1714,24 +1769,22 @@ i 401	0	$OPEN
   <width>530</width>
   <height>45</height>
   <uuid>{0efe3e96-c963-4e12-8833-6592d5935230}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1743,27 +1796,25 @@ i 401	0	$OPEN
   <width>69</width>
   <height>28</height>
   <uuid>{f04060dd-b782-4aaa-bed7-0c3245c74d9d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Volume</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1772,27 +1823,25 @@ i 401	0	$OPEN
   <width>55</width>
   <height>27</height>
   <uuid>{ceb53559-22a7-4361-9400-0e9aa359a383}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Pan</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1801,28 +1850,26 @@ i 401	0	$OPEN
   <width>67</width>
   <height>46</height>
   <uuid>{18ca374c-8881-4d23-8d54-ff8bb1365d7c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Wrong
 Timing</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1831,28 +1878,26 @@ Timing</label>
   <width>77</width>
   <height>45</height>
   <uuid>{34cc17d2-227a-4264-87ab-2d8da8f218f2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Wrong
 Intensity</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1861,27 +1906,25 @@ Intensity</label>
   <width>83</width>
   <height>30</height>
   <uuid>{a888a464-c836-4b7b-bdfe-bd0ec1d45909}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Player</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>72</r>
-   <g>72</g>
-   <b>72</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#484848</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1890,28 +1933,26 @@ Intensity</label>
   <width>91</width>
   <height>46</height>
   <uuid>{c1e0fd56-0e18-466c-868b-8f15b0d92a08}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Keyboard
 Start / Next</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1920,27 +1961,25 @@ Start / Next</label>
   <width>68</width>
   <height>28</height>
   <uuid>{3e4b505a-37be-4ee1-94b0-2d6223aa70be}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Pattern</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1949,24 +1988,22 @@ Start / Next</label>
   <width>530</width>
   <height>60</height>
   <uuid>{f2f516fb-2e80-46a4-b60a-02194799fb6d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1978,9 +2015,12 @@ Start / Next</label>
   <width>63</width>
   <height>30</height>
   <uuid>{f4e4e122-97f5-4cdc-9654-26ea43b71932}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1988,7 +2028,18 @@ Start / Next</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor2</objectName>
@@ -1997,9 +2048,12 @@ Start / Next</label>
   <width>10</width>
   <height>10</height>
   <uuid>{40cc8394-bc6e-4682-bc8a-6639bbb7f8e7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>OnOff2_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -2009,19 +2063,15 @@ Start / Next</label>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>#00ea00</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
+  <bgcolor>#000000</bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Patt_index2</objectName>
@@ -2030,9 +2080,12 @@ Start / Next</label>
   <width>51</width>
   <height>30</height>
   <uuid>{632af272-a979-4681-89cc-72c64f008896}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>00</name>
@@ -2310,24 +2363,22 @@ Start / Next</label>
   <width>30</width>
   <height>32</height>
   <uuid>{203e63b8-085f-4559-bc72-81d419b37ad6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>72</r>
-   <g>72</g>
-   <b>72</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#484848</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -2339,16 +2390,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{9bd629bf-38a6-494f-b1f8-d0d2328d293a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Pan2</objectName>
@@ -2357,16 +2419,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{81e4ddbc-4e90-4e53-9d23-3a842e11b535}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.79798000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Timi2</objectName>
@@ -2375,16 +2448,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{add2323e-059b-4e6f-94c4-31a79c612707}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.01010100</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Inte2</objectName>
@@ -2393,16 +2477,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{d2dd19b3-d6ff-48f8-83fe-3a9e8757161e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2411,27 +2506,25 @@ Start / Next</label>
   <width>61</width>
   <height>30</height>
   <uuid>{23eda8e3-d432-4b45-b613-5917f77ce503}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>z / s</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2440,24 +2533,22 @@ Start / Next</label>
   <width>530</width>
   <height>60</height>
   <uuid>{fbc73574-dd67-486b-936e-6134710bd843}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -2469,9 +2560,12 @@ Start / Next</label>
   <width>63</width>
   <height>30</height>
   <uuid>{84ea3465-6c0b-4113-9dbe-0d3372e6b2d2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -2479,7 +2573,18 @@ Start / Next</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor2</objectName>
@@ -2488,9 +2593,12 @@ Start / Next</label>
   <width>10</width>
   <height>10</height>
   <uuid>{61765893-b147-4bf9-b2d3-9d14f8a94e77}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>OnOff3_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -2500,19 +2608,15 @@ Start / Next</label>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>#00ea00</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
+  <bgcolor>#000000</bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Patt_index3</objectName>
@@ -2521,9 +2625,12 @@ Start / Next</label>
   <width>51</width>
   <height>30</height>
   <uuid>{d38c7936-8c81-4d42-8db2-29c6fa9ce931}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>00</name>
@@ -2801,24 +2908,22 @@ Start / Next</label>
   <width>30</width>
   <height>32</height>
   <uuid>{e4d0a865-91da-4f1a-8593-8348ebbbc9a4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>3</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>72</r>
-   <g>72</g>
-   <b>72</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#484848</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -2830,16 +2935,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{8ecc1d8e-f8b1-4918-8cd7-69d83aabdefb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.81818200</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Pan3</objectName>
@@ -2848,16 +2964,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{629f47ff-be1f-48f1-b10c-1996d5c5a3d4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.07070700</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Timi3</objectName>
@@ -2866,16 +2993,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{3143bd60-7b79-49e7-9e05-aeada113b2a6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Inte3</objectName>
@@ -2884,16 +3022,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{b39e5437-80d2-4cfd-9aae-07ff044c22ab}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2902,27 +3051,25 @@ Start / Next</label>
   <width>61</width>
   <height>30</height>
   <uuid>{b1f10662-d376-40f9-8928-c9455cd8ee44}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>e / d</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2931,24 +3078,22 @@ Start / Next</label>
   <width>530</width>
   <height>60</height>
   <uuid>{acacffa0-1c70-4a57-a7d1-3bc185d295e8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -2960,9 +3105,12 @@ Start / Next</label>
   <width>63</width>
   <height>30</height>
   <uuid>{03949409-c304-4b86-9127-81dc57ffba84}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -2970,7 +3118,18 @@ Start / Next</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor2</objectName>
@@ -2979,9 +3138,12 @@ Start / Next</label>
   <width>10</width>
   <height>10</height>
   <uuid>{9e9d5e91-d736-4c82-bcdc-74d625d959e9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>OnOff4_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -2991,19 +3153,15 @@ Start / Next</label>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>#00ea00</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
+  <bgcolor>#000000</bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Patt_index4</objectName>
@@ -3012,9 +3170,12 @@ Start / Next</label>
   <width>51</width>
   <height>30</height>
   <uuid>{1502138a-1041-4310-bbde-aee93f8a7730}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>00</name>
@@ -3292,24 +3453,22 @@ Start / Next</label>
   <width>30</width>
   <height>32</height>
   <uuid>{d6249f1f-ef21-4abf-be38-857470ebb4a5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>4</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>72</r>
-   <g>72</g>
-   <b>72</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#484848</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -3321,16 +3480,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{51001fd9-810a-4cc2-8e34-1ea1817e702e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Pan4</objectName>
@@ -3339,16 +3509,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{1c4ae11d-a9ee-4848-9247-428db580f8b1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.77777800</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Timi4</objectName>
@@ -3357,16 +3538,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{9e6861ac-dafb-49f5-8c13-9e724bdd0c01}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Inte4</objectName>
@@ -3375,16 +3567,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{35ab4a22-4d1b-4472-9c68-744eff2f61be}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3393,27 +3596,25 @@ Start / Next</label>
   <width>61</width>
   <height>30</height>
   <uuid>{60077f78-df72-480c-bc51-f00989b37ec6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>r / f</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3422,24 +3623,22 @@ Start / Next</label>
   <width>530</width>
   <height>60</height>
   <uuid>{e323fd82-1de3-4abd-8306-f7211c686697}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -3451,9 +3650,12 @@ Start / Next</label>
   <width>63</width>
   <height>30</height>
   <uuid>{74ad1171-4f8c-4035-a3e3-094fe9f91239}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3461,7 +3663,18 @@ Start / Next</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor2</objectName>
@@ -3470,9 +3683,12 @@ Start / Next</label>
   <width>10</width>
   <height>10</height>
   <uuid>{e1962052-5d45-4234-ab7c-982d9abf4a25}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>OnOff5_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -3482,19 +3698,15 @@ Start / Next</label>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>#00ea00</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
+  <bgcolor>#000000</bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Patt_index5</objectName>
@@ -3503,9 +3715,12 @@ Start / Next</label>
   <width>51</width>
   <height>30</height>
   <uuid>{371bc98e-ec25-47e7-85a0-a2e5d7b8312f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>00</name>
@@ -3783,24 +3998,22 @@ Start / Next</label>
   <width>30</width>
   <height>32</height>
   <uuid>{69c5d968-53fc-4e5e-b83b-1ad3c4ac4b6c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>5</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>72</r>
-   <g>72</g>
-   <b>72</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#484848</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -3812,16 +4025,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{7e394781-85da-4048-a870-85ad80f82d1b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Pan5</objectName>
@@ -3830,16 +4054,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{b08a4557-3e87-4e5c-919b-50b0a7b9b10c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Timi5</objectName>
@@ -3848,16 +4083,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{9cce2cc2-d909-46c5-903a-9042d2b8350b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3866,27 +4112,25 @@ Start / Next</label>
   <width>61</width>
   <height>30</height>
   <uuid>{66ad8a76-6522-4d9a-9a07-139f126cf042}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>t / g</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3895,24 +4139,22 @@ Start / Next</label>
   <width>530</width>
   <height>60</height>
   <uuid>{61961c85-a9cf-44a9-82e2-83fc79fdb1a9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -3924,9 +4166,12 @@ Start / Next</label>
   <width>63</width>
   <height>30</height>
   <uuid>{b8ecd0d9-13ca-4360-b7de-3b35914546e7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3934,7 +4179,18 @@ Start / Next</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor2</objectName>
@@ -3943,9 +4199,12 @@ Start / Next</label>
   <width>10</width>
   <height>10</height>
   <uuid>{178fc3be-bc09-4f38-8444-446fe2c9f6bc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>OnOff6_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -3955,19 +4214,15 @@ Start / Next</label>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>#00ea00</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
+  <bgcolor>#000000</bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Patt_index6</objectName>
@@ -3976,9 +4231,12 @@ Start / Next</label>
   <width>51</width>
   <height>30</height>
   <uuid>{50283a56-7e3c-431f-8f8a-884470cb0cee}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>00</name>
@@ -4256,24 +4514,22 @@ Start / Next</label>
   <width>30</width>
   <height>32</height>
   <uuid>{055cb923-d753-47d2-9b4c-98ea3b254327}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>6</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>72</r>
-   <g>72</g>
-   <b>72</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#484848</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -4285,16 +4541,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{d142ea81-f3f6-4bf5-8668-c95abd7e7867}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Pan6</objectName>
@@ -4303,16 +4570,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{6de1a928-bb0b-4bb2-8bdf-49fa7012f1e6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.79798000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Timi6</objectName>
@@ -4321,16 +4599,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{5cf302ae-b433-494b-80e1-d14145e0f87f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Inte6</objectName>
@@ -4339,16 +4628,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{8ff63604-2a4d-444e-99da-25662e945516}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4357,27 +4657,25 @@ Start / Next</label>
   <width>61</width>
   <height>30</height>
   <uuid>{9011a9f4-05f2-4264-a45b-88ff957cc8ff}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>y / h</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4386,24 +4684,22 @@ Start / Next</label>
   <width>530</width>
   <height>60</height>
   <uuid>{a65503aa-eff7-46d5-8b27-0c32e3acb0eb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -4415,9 +4711,12 @@ Start / Next</label>
   <width>63</width>
   <height>30</height>
   <uuid>{837b0528-2fee-4a9d-9536-9655fadb4c4b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -4425,7 +4724,18 @@ Start / Next</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor2</objectName>
@@ -4434,9 +4744,12 @@ Start / Next</label>
   <width>10</width>
   <height>10</height>
   <uuid>{67dbb7d0-c6a5-4495-a5a5-cf1dbb666db9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>OnOff7_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -4446,19 +4759,15 @@ Start / Next</label>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>#00ea00</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
+  <bgcolor>#000000</bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Patt_index7</objectName>
@@ -4467,9 +4776,12 @@ Start / Next</label>
   <width>51</width>
   <height>30</height>
   <uuid>{4bde3add-6ca6-4140-bad0-e7c18172b6e2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>00</name>
@@ -4747,24 +5059,22 @@ Start / Next</label>
   <width>30</width>
   <height>32</height>
   <uuid>{875aedea-78b5-4af4-ad3c-1625a4bfb1ed}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>7</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>72</r>
-   <g>72</g>
-   <b>72</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#484848</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -4776,16 +5086,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{7a2d676a-0656-41a2-b698-3cfef7cb70e2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Pan7</objectName>
@@ -4794,16 +5115,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{b3a6572e-cc44-4333-a8d2-d87f49bdfe92}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.06060600</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Timi7</objectName>
@@ -4812,16 +5144,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{9b1db0e3-42fb-4311-b0f3-6680e86fc202}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Inte7</objectName>
@@ -4830,16 +5173,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{17748e91-832f-42a0-9a41-e3a11a6570cf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4848,27 +5202,25 @@ Start / Next</label>
   <width>61</width>
   <height>30</height>
   <uuid>{b7873f1e-6052-48d8-8b39-3cfaa2d90c98}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>u / j</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4877,24 +5229,22 @@ Start / Next</label>
   <width>530</width>
   <height>60</height>
   <uuid>{d9bf38c8-5f12-4a92-887b-04bb41b87d65}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -4906,9 +5256,12 @@ Start / Next</label>
   <width>63</width>
   <height>30</height>
   <uuid>{544533ae-a7d8-425c-aed4-945932947c12}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -4916,7 +5269,18 @@ Start / Next</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor2</objectName>
@@ -4925,9 +5289,12 @@ Start / Next</label>
   <width>10</width>
   <height>10</height>
   <uuid>{1d330048-214a-486c-b854-0e37adbf6833}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>OnOff8_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -4937,19 +5304,15 @@ Start / Next</label>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>#00ea00</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
+  <bgcolor>#000000</bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Patt_index8</objectName>
@@ -4958,9 +5321,12 @@ Start / Next</label>
   <width>51</width>
   <height>30</height>
   <uuid>{7225b1ea-5aca-4ace-bc2e-2cc86526797e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>00</name>
@@ -5238,24 +5604,22 @@ Start / Next</label>
   <width>30</width>
   <height>32</height>
   <uuid>{00bf8145-92f5-454b-aec1-b5bd0b788e33}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>8</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>72</r>
-   <g>72</g>
-   <b>72</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#484848</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -5267,16 +5631,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{0df9dee6-be25-4988-9ca0-e02bc80e4504}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Pan8</objectName>
@@ -5285,16 +5660,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{9f0765b5-78f0-46a9-b099-e2b2c6ed26fc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.79798000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Timi8</objectName>
@@ -5303,16 +5689,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{2085e177-16a7-41d2-b19b-8326a8d34d68}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Inte8</objectName>
@@ -5321,16 +5718,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{8ef04d4d-97d7-4dd9-82c5-6f360d1d95bf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -5339,27 +5747,25 @@ Start / Next</label>
   <width>61</width>
   <height>30</height>
   <uuid>{1e90da32-a4cb-432b-a277-d91512f3bb0a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>i / k</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -5368,24 +5774,22 @@ Start / Next</label>
   <width>530</width>
   <height>60</height>
   <uuid>{e362dd81-a808-480a-aa2b-0ba4cd1117cc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -5397,9 +5801,12 @@ Start / Next</label>
   <width>63</width>
   <height>30</height>
   <uuid>{7914eb6d-b0d0-48a1-929c-c913d2f6e2e7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -5407,7 +5814,18 @@ Start / Next</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor2</objectName>
@@ -5416,9 +5834,12 @@ Start / Next</label>
   <width>10</width>
   <height>10</height>
   <uuid>{ab1ab987-7da0-4ea6-acac-a593b1cb158c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>OnOff9_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -5428,19 +5849,15 @@ Start / Next</label>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>#00ea00</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
+  <bgcolor>#000000</bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Patt_index9</objectName>
@@ -5449,9 +5866,12 @@ Start / Next</label>
   <width>51</width>
   <height>30</height>
   <uuid>{1cbf393c-7eb2-49ab-a76c-fef576604118}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>00</name>
@@ -5729,24 +6149,22 @@ Start / Next</label>
   <width>30</width>
   <height>32</height>
   <uuid>{70e68654-d07b-46f1-8e2d-f3d8294ad585}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>9</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>72</r>
-   <g>72</g>
-   <b>72</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#484848</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -5758,16 +6176,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{f25fed74-4e2e-499b-8755-654e4cb9f0cf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Pan9</objectName>
@@ -5776,16 +6205,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{3b97ea9d-6c37-424c-948f-ea835f98945b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.10101000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Timi9</objectName>
@@ -5794,16 +6234,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{deca2bab-66c1-47ae-95b0-ceea5f7e65df}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.01010100</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Inte9</objectName>
@@ -5812,16 +6263,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{0df386d6-1431-4df1-84ba-25e042b5cd4b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -5830,27 +6292,25 @@ Start / Next</label>
   <width>61</width>
   <height>30</height>
   <uuid>{c2d40d34-0ba8-4f3d-b7e4-fdd47c38ef32}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>o / l</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -5859,24 +6319,22 @@ Start / Next</label>
   <width>262</width>
   <height>518</height>
   <uuid>{e6e0fd35-8b85-4335-a290-a1f57eafa530}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -5888,27 +6346,25 @@ Start / Next</label>
   <width>64</width>
   <height>30</height>
   <uuid>{7b56c126-7fe0-479a-9354-b9523268b8d2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>BMP</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Inte5</objectName>
@@ -5917,16 +6373,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{c12af5af-8d10-477a-b4fa-2d0881797c80}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Pulse_Vol</objectName>
@@ -5935,16 +6402,27 @@ Start / Next</label>
   <width>60</width>
   <height>60</height>
   <uuid>{610e6455-0a27-4405-8c6a-eae5cd952663}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>28000.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>28000.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>BMP</objectName>
@@ -5953,22 +6431,17 @@ Start / Next</label>
   <width>80</width>
   <height>25</height>
   <uuid>{138f11f9-ef71-4bfb-bed3-7d177625adcd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <color>#000000</color>
+  <bgcolor mode="background">#ffffff</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
@@ -5982,16 +6455,27 @@ Start / Next</label>
   <width>60</width>
   <height>60</height>
   <uuid>{c8da2156-e8f8-43e5-8886-4dcc59419a24}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.01000000</minimum>
   <maximum>2.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>2.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Dry-Wet</objectName>
@@ -6000,16 +6484,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{d0edf587-6103-4e10-8604-67df4db17dc6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.79000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Feedback</objectName>
@@ -6018,16 +6513,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{037c187f-6692-4281-ad0a-b27fa5ee5ef3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.51000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Cutoff</objectName>
@@ -6036,16 +6542,27 @@ Start / Next</label>
   <width>50</width>
   <height>50</height>
   <uuid>{680b498f-bbe3-4719-9072-d257b0222fb5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>22050.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>17640.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>#f57c00</color>
+  <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6054,27 +6571,25 @@ Start / Next</label>
   <width>78</width>
   <height>28</height>
   <uuid>{5dc973e4-c4f0-4736-9e58-0ab63c21abc7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Volume</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6083,27 +6598,25 @@ Start / Next</label>
   <width>75</width>
   <height>29</height>
   <uuid>{43bdad06-adef-4c34-a102-7c340e7f2d80}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>REVERB</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6112,27 +6625,25 @@ Start / Next</label>
   <width>66</width>
   <height>24</height>
   <uuid>{6ef6168d-c4cd-469f-b207-2f888a14433d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Dry / Wet</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6141,27 +6652,25 @@ Start / Next</label>
   <width>66</width>
   <height>24</height>
   <uuid>{6282a3d5-09fb-4e14-b54f-112e8828b3ad}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Feedback</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6170,27 +6679,25 @@ Start / Next</label>
   <width>66</width>
   <height>24</height>
   <uuid>{78104eb5-4d22-4c91-8976-fa13d3920a0b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Cutoff</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6199,27 +6706,25 @@ Start / Next</label>
   <width>75</width>
   <height>30</height>
   <uuid>{acb7b198-3258-4931-9746-e6511252c998}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>GLOBAL</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>OnOffAll_B</objectName>
@@ -6228,9 +6733,12 @@ Start / Next</label>
   <width>63</width>
   <height>30</height>
   <uuid>{650c9bc2-086d-412e-a6aa-b2b368240fdc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -6238,7 +6746,18 @@ Start / Next</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor2</objectName>
@@ -6247,9 +6766,12 @@ Start / Next</label>
   <width>10</width>
   <height>10</height>
   <uuid>{958003d4-d371-4f14-99cc-f160f775bd83}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>OnOffAll_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -6259,19 +6781,15 @@ Start / Next</label>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>85</r>
-   <g>255</g>
-   <b>0</b>
-  </color>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>#55ff00</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
+  <bgcolor>#000000</bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6280,29 +6798,27 @@ Start / Next</label>
   <width>109</width>
   <height>56</height>
   <uuid>{ea721a49-3b2c-43a7-ae03-2c05585b79d0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Space Key
 All the players
 together On Off</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6311,27 +6827,25 @@ together On Off</label>
   <width>81</width>
   <height>29</height>
   <uuid>{6fc43ffc-a9a4-4d0d-80ca-41772498bdfc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Volume</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>C1</objectName>
@@ -6340,13 +6854,24 @@ together On Off</label>
   <width>15</width>
   <height>15</height>
   <uuid>{b94af8a0-299a-4f69-86e2-2d626eb1aca4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6355,27 +6880,25 @@ together On Off</label>
   <width>33</width>
   <height>26</height>
   <uuid>{0a500546-7d0d-4c65-9225-77ec46c4322e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>C1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>C3</objectName>
@@ -6384,13 +6907,24 @@ together On Off</label>
   <width>15</width>
   <height>15</height>
   <uuid>{7e4456da-1bb6-4bab-93b0-72e038b0f7b0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>C2</objectName>
@@ -6399,13 +6933,24 @@ together On Off</label>
   <width>15</width>
   <height>15</height>
   <uuid>{b001fca6-198a-4271-94c3-65d4cbf9605e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>C5</objectName>
@@ -6414,13 +6959,24 @@ together On Off</label>
   <width>15</width>
   <height>15</height>
   <uuid>{624e52ce-4d3b-4bcf-bbd3-075203d9a3e9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6429,27 +6985,25 @@ together On Off</label>
   <width>33</width>
   <height>26</height>
   <uuid>{a78bc8d3-36b7-4080-8a80-e47edf3ba76f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>C3</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6458,27 +7012,25 @@ together On Off</label>
   <width>33</width>
   <height>26</height>
   <uuid>{8a1c1411-09a8-4f13-a1a5-7d44dcb015df}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>C2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6487,27 +7039,25 @@ together On Off</label>
   <width>33</width>
   <height>26</height>
   <uuid>{b3c21240-a3f3-43ed-b944-ddf7708d5fe0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>C4</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>C4</objectName>
@@ -6516,13 +7066,24 @@ together On Off</label>
   <width>15</width>
   <height>15</height>
   <uuid>{9673c7f6-9039-40ee-ab97-c7818fbc8cbd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6531,27 +7092,25 @@ together On Off</label>
   <width>33</width>
   <height>26</height>
   <uuid>{939c7723-1858-45ef-a7f9-ec062af5ae4a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>C5</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>C7</objectName>
@@ -6560,13 +7119,24 @@ together On Off</label>
   <width>15</width>
   <height>15</height>
   <uuid>{245e8593-2beb-4875-be06-ac0fab8053cd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>C6</objectName>
@@ -6575,13 +7145,24 @@ together On Off</label>
   <width>15</width>
   <height>15</height>
   <uuid>{01b59770-62c6-4be5-997a-03b07a750565}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>C8</objectName>
@@ -6590,13 +7171,24 @@ together On Off</label>
   <width>15</width>
   <height>15</height>
   <uuid>{4c6875be-177b-4935-bf50-e42f7b81cff2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6605,27 +7197,25 @@ together On Off</label>
   <width>33</width>
   <height>26</height>
   <uuid>{b4fb1cde-41d8-472c-93b2-f3b28e10ae01}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>C7</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6634,27 +7224,25 @@ together On Off</label>
   <width>33</width>
   <height>26</height>
   <uuid>{2380bf0b-9966-4257-93e4-7c600d3f31ae}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>C6</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6663,27 +7251,25 @@ together On Off</label>
   <width>33</width>
   <height>26</height>
   <uuid>{e02db2e0-7bec-44fa-9a7e-830b52d0ee8e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>C8</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6692,25 +7278,23 @@ together On Off</label>
   <width>262</width>
   <height>111</height>
   <uuid>{3a8981d0-fbea-4f20-9f24-055b2e41e49b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>In C Player
 Created by Stefano Valli</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>170</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="background">#aaffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -6722,29 +7306,27 @@ Created by Stefano Valli</label>
   <width>246</width>
   <height>56</height>
   <uuid>{b220eeac-d31e-4ea1-b4c4-8b7173b62817}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>www.triceratupuz.altervista.org
 email: vallste at libero.it
 license: http://creativecommons.org</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -6753,30 +7335,26 @@ license: http://creativecommons.org</label>
   <width>64</width>
   <height>30</height>
   <uuid>{1e37e020-7902-4710-8873-6f156b0b3f74}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>PULSE</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#00007f</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="0" y="0" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

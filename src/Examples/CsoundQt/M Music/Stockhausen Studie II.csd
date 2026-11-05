@@ -1378,7 +1378,7 @@ ift_U2 SS2_Umk ift_R2; inversion of R2
 ift_U3 SS2_Umk ift_R3; inversion of R3 
 ift_U4 SS2_Umk ift_R4; inversion of R4 
 ift_U5 SS2_Umk ift_R5; inversion of R5 
-          prints    "%n%nGENERATING NUMBER SQUARES:\n\n" 
+          prints    "\n\nGENERATING NUMBER SQUARES:\n\n" 
 TableDumpSimpS ift_R1, 0, "\nR1:", 5 
 TableDumpSimpS ift_R2, 0, "R2:", 5 
 TableDumpSimpS ift_R3, 0, "R3:", 5 
@@ -1404,7 +1404,7 @@ ift_Durs TabMultRecurs_i 61, 2.5, ifzwaf; durations in centimeters (1 sec = 76.2
 ift_Durs TabRvrs_i ift_Durs; reverse order 
 ;intensitäties oscillating between -30 and 0 
 ift_Intens SS2_MkGlob_dB_Tab 0, -30 
-          prints    "%n%nGENERATING TABLES OF MATERIAL:\n\n" 
+          prints    "\n\nGENERATING TABLES OF MATERIAL:\n\n" 
 TableDumpSimpS ift_Freqs, 0, "\nFREQUENCIES (Hz):", 5 
 TableDumpSimpS ift_Durs, 2, "\nDURATIONS (cm):", 5 
 TableDumpSimpS ift_Intens, 0, "\nINTENSITIES (dB):", 5 
@@ -1444,7 +1444,7 @@ iftfreqs_1 SS2_MkParamTab_Meth1 ift_Freqs, iftcounts_1, ift_R1, 3, ift_R2, ift_R
 iftdurs_1 SS2_MkParamTab_Meth1 ift_Durs, iftcounts_1, ift_R3, 1, ift_R4, ift_R3, ift_R4, ift_R5, 0; list of durations 
 iftdb_1 SS2_MkParamTab_Meth1 ift_Intens, iftcounts_1, ift_R2, 5, ift_R3, ift_R2, ift_R3, ift_R4, 0; list of intensities 
 iftstarts_1 SS2_Starts_part ift_Durs, iftcounts_1, ift_R4, 1, ift_U5, ift_R4, ift_R5, ift_R1, istart_1; starting times (one per sequence) 
-          prints    "%n%nGENERATING LIST OF EVENTS PART 1 (Events as Part.Set.Sequence.Note):\n\n" 
+          prints    "\n\nGENERATING LIST OF EVENTS PART 1 (Events as Part.Set.Sequence.Note):\n\n" 
           printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 SS2_TrigEvents_1 iftstarts_1, iftcounts_1, iftfreqs_1, iftdurs_1, iftdb_1, iftenv_1, isubinstr, iprintlines 
 
@@ -1472,7 +1472,7 @@ iftdurnorm_2 SS2_MkParamTab_Meth1 ift_Durs, iftcounts_2, ift_R4, 3, ift_R5, ift_
 iftdurs_2 SS2_durs2 iftdurnorm_2, iftcounts_2, iftenv_2; list of modified durations (see above in opcode SS2_durs2) 
 iftdb_2 SS2_MkParamTab_Meth1 ift_Intens, iftcounts_2, ift_R3, 2, ift_R4, ift_R5, ift_R1, ift_R2, 0; list of intensities 
 iftstarts_2 SS2_Starts_part ift_Durs, iftcounts_2, ift_R5, 3, ift_U1, ift_R2, ift_R3, ift_R4, istart_2; starting times (1 per seq) 
-          prints    "%n%nGENERATING LIST OF EVENTS PART 2 (Events as Part.Set.Sequence.Note):\n\n" 
+          prints    "\n\nGENERATING LIST OF EVENTS PART 2 (Events as Part.Set.Sequence.Note):\n\n" 
           printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 SS2_TrigEvents_2 iftstarts_2, iftcounts_2, iftfreqs_2, iftdurs_2, iftdb_2, iftenv_2, isubinstr, iprintlines 
 
@@ -1487,7 +1487,7 @@ iftfreqs_3 SS2_MkParamTab_Meth2 ift_Freqs, iftcounts_3, ift_R3, ift_R4, ift_R2, 
 iftdurs_3 SS2_MkParamTab_Meth1 ift_Durs, iftcounts_3, ift_R5, 4, ift_R1, ift_R4, ift_R5, ift_R1, 0; list of durations 
 iftdb_3 SS2_MkParamTab_Meth2 ift_Intens, iftcounts_3, ift_R4, ift_R5, ift_R4, ift_R5, ift_R1, 0; list of intensities 
 iftstarts_3 SS2_Starts_3 ift_Durs, iftcounts_3, ift_R1, 4, ift_U2, ift_R5, ift_R1, ift_R2, istart_3; starting points (one per note) 
-          prints    "%n%nGENERATING LIST OF EVENTS PART 3 (Events as Part.Set.Sequence.Note):\n\n" 
+          prints    "\n\nGENERATING LIST OF EVENTS PART 3 (Events as Part.Set.Sequence.Note):\n\n" 
           printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 SS2_TrigEvents_3 iftstarts_3, iftcounts_3, iftfreqs_3, iftdurs_3, iftdb_3, isubinstr, iprintlines 
 
@@ -1514,7 +1514,7 @@ iftdurnorm_4 SS2_MkParamTab_Meth1 ift_Durs, iftcounts_4, ift_R1, 2, ift_R2, ift_
 iftdurs_4 SS2_durs4 iftdurnorm_4, iftcounts_4, iftenv_4; list of modified durations (see above in opcode SS2_durs2) 
 iftdb_4 SS2_dbtab_4 ift_Intens, iftcounts_4, ift_R5, 1, ift_R1, ift_R1, ift_R2, ift_R3, iftenv_4; list of intensities 
 iftstarts_4 SS2_Starts_part ift_Durs, iftcounts_4, ift_R2, 2, ift_U3, ift_R3, ift_R4, ift_R5, istart_4; starting times (1 per seq) 
-          prints    "%n%nGENERATING LIST OF EVENTS PART 4 (Events as Part.Set.Sequence.Note):\n\n" 
+          prints    "\n\nGENERATING LIST OF EVENTS PART 4 (Events as Part.Set.Sequence.Note):\n\n" 
           printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 SS2_TrigEvents_4 iftstarts_4, iftcounts_4, iftfreqs_4, iftdurs_4, iftdb_4, iftenv_4, isubinstr, iprintlines 
 
@@ -1609,8 +1609,8 @@ iftdbs_5b SS2_dbtab_5b iftdbs_5a, iftkorrdbs_5
 iftdbs_5 SS2_dbs_5 iftdbs_5b, iftcounts_5, ifteventtyps_5, iftenv_5_typ1, iftenv_5_typ2, iftdurs_5 
 
 ;;TRIGGERING EVENTS
-          prints    "%n%nGENERATING LIST OF EVENTS PART 5 (Events as Part.Set.Sequence.Note):\n\n" 
-          printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
+          prints    "\n\nGENERATING LIST OF EVENTS PART 5 (Events as Part.Set.Sequence.Note):\n\n" 
+          prints    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 SS2_TrigEvents_5 iftstarts_5, iftfreqs_5, iftdurs_5, iftdbs_5, iftcounts_5, isubinstr, iprintlines 
 
 
@@ -1619,8 +1619,8 @@ SS2_TrigEvents_5 iftstarts_5, iftfreqs_5, iftdurs_5, iftdbs_5, iftcounts_5, isub
 ;============================================================================;
 
 istart_coda tab_i   ftlen(iftstarts_5) - 1, iftstarts_5 
-          prints    "%n%nGENERATING LIST OF EVENTS CODA (Events as Part.Set.Sequence.Note):\n\n" 
-          printf_i    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", 1, "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
+          prints    "\n\nGENERATING LIST OF EVENTS CODA (Events as Part.Set.Sequence.Note):\n\n" 
+          prints    "%-10s%-10s%-12s%-14s%-14s%-13s%-13s%-7s%-7s\n", "Event","Start(cm)", "Start(sec)", "Duration(cm)", "Duration(sec)", "FreqInf(Hz)", "FreqSup(Hz)", "dB1", "dB2" 
 iend SS2_TrigEvents_Coda ift_Durs, ift_Freqs, ift_Intens, iReihe, istart_coda, isubinstr, iprintlines 
 
 
@@ -1689,6 +1689,8 @@ e
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -1698,11 +1700,7 @@ e
  <height>28</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>221</r>
-  <g>224</g>
-  <b>230</b>
- </bgcolor>
+ <bgcolor mode="background">#dde0e6</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>34</x>
@@ -1710,7 +1708,9 @@ e
   <width>365</width>
   <height>236</height>
   <uuid>{72785e28-4949-4951-914a-271d451bb95c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1719,17 +1719,11 @@ e
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>27</r>
-   <g>30</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#1b1e20</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1741,7 +1735,9 @@ e
   <width>365</width>
   <height>180</height>
   <uuid>{260f807c-d005-4341-a7f3-40283e311525}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1750,17 +1746,11 @@ e
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>27</r>
-   <g>30</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#1b1e20</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1772,13 +1762,15 @@ e
   <width>250</width>
   <height>29</height>
   <uuid>{b002a247-cbf6-449f-b26e-bb76be745fed}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.39000000</value>
+  <value>0.45800000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1791,7 +1783,9 @@ e
   <width>97</width>
   <height>32</height>
   <uuid>{18898af5-3ec2-40d7-be22-a2b59edc0ebf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1800,17 +1794,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1822,7 +1810,9 @@ e
   <width>336</width>
   <height>22</height>
   <uuid>{1b7e298c-e58f-4d03-b5b0-19d2f60779d1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1831,25 +1821,18 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.68365745</xValue>
+  <xValue>0.71985822</xValue>
   <yValue>0.36363600</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>border</bordermode>
   <borderColor>#407824</borderColor>
-  <color>
-   <r>135</r>
-   <g>255</g>
-   <b>75</b>
-  </color>
+  <color>#87ff4b</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>42</r>
-   <g>46</g>
-   <b>50</b>
-  </bgcolor>
+  <bgcolor>#2a2e32</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1859,7 +1842,9 @@ e
   <width>27</width>
   <height>22</height>
   <uuid>{d06eab2e-2b7a-4833-9be3-c1a0953c9471}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1872,21 +1857,14 @@ e
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>196</r>
-   <g>14</g>
-   <b>12</b>
-  </color>
+  <color>#c40e0c</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>42</r>
-   <g>46</g>
-   <b>50</b>
-  </bgcolor>
+  <bgcolor>#2a2e32</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1896,7 +1874,9 @@ e
   <width>336</width>
   <height>22</height>
   <uuid>{52af599b-1c21-42f6-90bb-27868a8949ea}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1905,25 +1885,18 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.73474905</xValue>
+  <xValue>0.76572478</xValue>
   <yValue>0.52631600</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>border</bordermode>
   <borderColor>#3c6e20</borderColor>
-  <color>
-   <r>111</r>
-   <g>210</g>
-   <b>62</b>
-  </color>
+  <color>#6fd23e</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>42</r>
-   <g>46</g>
-   <b>50</b>
-  </bgcolor>
+  <bgcolor>#2a2e32</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1933,7 +1906,9 @@ e
   <width>27</width>
   <height>22</height>
   <uuid>{e95cbdad-921b-47b3-915d-779e9f95166c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1946,21 +1921,14 @@ e
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>196</r>
-   <g>14</g>
-   <b>12</b>
-  </color>
+  <color>#c40e0c</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>42</r>
-   <g>46</g>
-   <b>50</b>
-  </bgcolor>
+  <bgcolor>#2a2e32</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
@@ -1970,13 +1938,15 @@ e
   <width>160</width>
   <height>31</height>
   <uuid>{2f6d8ddb-fd7b-42a9-b828-aee5d9c53ff5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.88750000</value>
+  <value>0.98125000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1989,7 +1959,9 @@ e
   <width>97</width>
   <height>32</height>
   <uuid>{bb44acb7-8651-49a1-b7ac-8cdff92bc2b9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1998,17 +1970,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2020,7 +1986,9 @@ e
   <width>97</width>
   <height>31</height>
   <uuid>{47733370-0329-446e-a1a8-78bffe84858b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2029,17 +1997,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2051,7 +2013,9 @@ e
   <width>110</width>
   <height>29</height>
   <uuid>{d9fa6050-ff89-4450-a203-bf10a0430e42}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2060,17 +2024,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2082,13 +2040,15 @@ e
   <width>160</width>
   <height>31</height>
   <uuid>{ecada93e-b277-4c9b-81d6-455ed6828f22}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.91875000</value>
+  <value>0.98750000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2101,7 +2061,9 @@ e
   <width>97</width>
   <height>32</height>
   <uuid>{9534b63d-04f1-4a11-a575-eeda51182d48}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2110,17 +2072,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2132,7 +2088,9 @@ e
   <width>97</width>
   <height>31</height>
   <uuid>{2ced57ec-9073-4b77-8d59-1709ff869d8b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2141,17 +2099,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2163,7 +2115,9 @@ e
   <width>110</width>
   <height>30</height>
   <uuid>{78dd9204-9d75-493b-9731-fe6289f96beb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2172,17 +2126,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2194,13 +2142,15 @@ e
   <width>160</width>
   <height>31</height>
   <uuid>{51e59ddd-21ea-4d61-bad6-8102d654fa73}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.45625000</value>
+  <value>0.19375000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2213,7 +2163,9 @@ e
   <width>97</width>
   <height>32</height>
   <uuid>{4ca1d8ea-cbc3-4c05-8b54-94c9862a2327}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2222,17 +2174,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2244,7 +2190,9 @@ e
   <width>97</width>
   <height>31</height>
   <uuid>{e17cdf38-ef69-4aa2-bcef-8c0977b7ebe4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2253,17 +2201,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2275,7 +2217,9 @@ e
   <width>352</width>
   <height>31</height>
   <uuid>{947171f3-9246-48cf-9909-aaab43e6b552}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2284,17 +2228,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2306,13 +2244,15 @@ e
   <width>132</width>
   <height>32</height>
   <uuid>{9d7c85e1-713d-4792-8945-d358c061e243}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.86363636</value>
+  <value>0.95454545</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2325,7 +2265,9 @@ e
   <width>122</width>
   <height>32</height>
   <uuid>{101f3de4-f72e-41e3-9372-fba17f7b62a1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2334,17 +2276,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2356,7 +2292,9 @@ e
   <width>97</width>
   <height>31</height>
   <uuid>{03b0ed7c-3773-4470-9684-52a74e2a1a52}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2365,17 +2303,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2387,7 +2319,9 @@ e
   <width>352</width>
   <height>31</height>
   <uuid>{bb612343-f865-45a8-8fac-4741b62472a2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2396,17 +2330,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2418,26 +2346,22 @@ e
   <width>98</width>
   <height>31</height>
   <uuid>{cdf98770-bdd8-4da7-984c-cb277dcbe92c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.390</label>
+  <label>0.458</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2449,7 +2373,9 @@ e
   <width>366</width>
   <height>78</height>
   <uuid>{4e1ffe54-a79a-4e5f-a3e8-801a242859c1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2460,17 +2386,11 @@ Version 1, November 2009</label>
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2482,7 +2402,9 @@ Version 1, November 2009</label>
   <width>20</width>
   <height>20</height>
   <uuid>{f218a6e0-8bf8-4b6f-8343-f1086a0793cd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2490,6 +2412,14 @@ Version 1, November 2009</label>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2498,7 +2428,9 @@ Version 1, November 2009</label>
   <width>352</width>
   <height>31</height>
   <uuid>{3c17bd1d-fa39-4243-a33d-6cbac8d32645}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2507,17 +2439,11 @@ Version 1, November 2009</label>
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2529,23 +2455,17 @@ Version 1, November 2009</label>
   <width>80</width>
   <height>25</height>
   <uuid>{a1e3b8b3-2521-4219-8d07-cb75f4a77209}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
   <font>Noto Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>42</r>
-   <g>46</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="background">
-   <r>184</r>
-   <g>195</g>
-   <b>200</b>
-  </bgcolor>
+  <color>#2a2e32</color>
+  <bgcolor mode="background">#b8c3c8</bgcolor>
   <resolution>0.10000000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
@@ -2559,7 +2479,9 @@ Version 1, November 2009</label>
   <width>80</width>
   <height>26</height>
   <uuid>{b5273f63-f970-43cc-a5d9-c1295e5d65d1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2568,17 +2490,11 @@ Version 1, November 2009</label>
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2590,7 +2506,9 @@ Version 1, November 2009</label>
   <width>91</width>
   <height>25</height>
   <uuid>{4b23238c-0c60-41f1-ab3d-f214b66ed011}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2599,17 +2517,11 @@ Version 1, November 2009</label>
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2621,7 +2533,9 @@ Version 1, November 2009</label>
   <width>109</width>
   <height>26</height>
   <uuid>{a5006aaa-aa2b-412c-bcdb-7c6d640e4a65}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>

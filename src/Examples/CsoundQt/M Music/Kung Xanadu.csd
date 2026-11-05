@@ -3,9 +3,10 @@
 ;csound -R -W -s -o Xanadu.wav temp.orc temp.sco
 </CsOptions>
 <CsInstruments>
-sr          =           44100
-ksmps       =           1
-nchnls      =           2
+sr     = 44100
+ksmps  = 1
+nchnls = 2
+0dbfs  = 32768
 ;--------------------------------------------------------
 ;Instrument 1 : plucked strings chorused left/right and
 ;       pitch-shifted and delayed taps thru exponential
@@ -228,6 +229,8 @@ e
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -237,11 +240,7 @@ e
  <height>477</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="nobackground">
-  <r>230</r>
-  <g>221</g>
-  <b>213</b>
- </bgcolor>
+ <bgcolor mode="nobackground">#e6ddd5</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
@@ -249,7 +248,9 @@ e
   <width>431</width>
   <height>381</height>
   <uuid>{4db41777-5f89-4859-b4bd-8cbf0be5c649}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -279,17 +280,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>4</borderwidth>
@@ -301,7 +296,9 @@ e
   <width>100</width>
   <height>30</height>
   <uuid>{192c01d7-a5de-4662-b202-1603730eb47c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -312,8 +309,18 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Pause</objectName>
@@ -322,7 +329,9 @@ e
   <width>158</width>
   <height>32</height>
   <uuid>{c4002dba-d687-4354-b91a-67822e7777c7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -333,8 +342,18 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

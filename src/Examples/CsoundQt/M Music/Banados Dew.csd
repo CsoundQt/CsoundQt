@@ -4,11 +4,13 @@
 </CsOptions>
 <CsInstruments>
 
-sr = 48000
-ksmps = 32
-nchnls = 2 // currently supports 2, 4 and 5 channel setups, but can easily be adaptaed for more
-//you can also set nchnls to 9 to output second order b-format signals directly
-0dbfs = 1
+sr     = 48000
+ksmps  = 32
+nchnls = 2 // currently supports 2, 4 and 5 channel setups, but can easily 
+           // be adaptaed for more. you can also set nchnls to 9 to output 
+           // second order b-format signals directly
+0dbfs  = 1
+
 //////////////////////////////////
 // Dew - Tom Banados Russell   //
 // GNU General Public Liscence //
@@ -305,6 +307,8 @@ i "Main"		0		1
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -314,11 +318,7 @@ i "Main"		0		1
  <height>181</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>240</r>
-  <g>240</g>
-  <b>240</b>
- </bgcolor>
+ <bgcolor mode="background">#f0f0f0</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>31</x>
@@ -326,7 +326,9 @@ i "Main"		0		1
   <width>64</width>
   <height>34</height>
   <uuid>{569d07ea-3540-4242-9095-e9c06a553e52}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -335,17 +337,11 @@ i "Main"		0		1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -357,7 +353,9 @@ i "Main"		0		1
   <width>137</width>
   <height>25</height>
   <uuid>{eb9259fb-dff4-408b-a53e-06a98bce227c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -366,17 +364,11 @@ i "Main"		0		1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -388,7 +380,9 @@ i "Main"		0		1
   <width>201</width>
   <height>69</height>
   <uuid>{38190ade-1d18-4644-a81b-888441528757}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -397,17 +391,11 @@ i "Main"		0		1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -419,7 +407,9 @@ i "Main"		0		1
   <width>105</width>
   <height>41</height>
   <uuid>{d9dbac87-a40e-4258-8e4b-e2c0fbde18f9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -433,6 +423,15 @@ i "Main"		0		1
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>20</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

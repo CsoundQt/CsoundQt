@@ -24,10 +24,11 @@
 ;============================================================================;
 ;=================================== HEADER =================================;
 ;============================================================================;
-sr     =        44100
-kr     =        4410
-ksmps  =        10
-nchnls =        2
+sr     = 44100
+kr     = 4410
+ksmps  = 10
+nchnls = 2
+0dbfs  = 32768
 ;============================================================================;
 ;=============================== INITIALIZATION =============================;
 ;============================================================================;
@@ -678,6 +679,8 @@ e
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -687,11 +690,7 @@ e
  <height>363</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="nobackground">
-  <r>230</r>
-  <g>221</g>
-  <b>213</b>
- </bgcolor>
+ <bgcolor mode="nobackground">#e6ddd5</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
@@ -699,7 +698,9 @@ e
   <width>362</width>
   <height>262</height>
   <uuid>{27322e7e-4690-4757-ae3e-5cfb788f78b6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -723,17 +724,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#000000</color>
+  <bgcolor mode="background">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -745,7 +740,9 @@ e
   <width>100</width>
   <height>30</height>
   <uuid>{192c01d7-a5de-4662-b202-1603730eb47c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -756,8 +753,18 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Pause</objectName>
@@ -766,7 +773,9 @@ e
   <width>100</width>
   <height>30</height>
   <uuid>{c4002dba-d687-4354-b91a-67822e7777c7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -777,8 +786,18 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <pressedColor>#3c3c3c</pressedColor>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <pressedTextColor/>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
