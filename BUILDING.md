@@ -169,7 +169,8 @@ Pass as `CONFIG+=...`:
   bundled `rtmidi` submodule; system RtMidi libraries are not supported.
 - `rtmidi` — deprecated no-op, retained temporarily for compatibility
 - `html_support` — `<html>` GUI element via Qt WebEngine
-- `record_support` — recording support (usually enabled automatically)
+- `record_support` — deprecated no-op, retained temporarily for compatibility;
+  recording is always enabled
 - `debugger` — Csound debugger
 - `splash` — show the splash screen on startup (disabled by default)
 - `no_splash` — deprecated no-op, retained temporarily for compatibility
@@ -192,6 +193,13 @@ CSOUND_INCLUDE_DIR = ~/.local/include/csound
 CSOUND_INTERFACES_INCLUDE_DIR = ~/.local/include/csound
 CSOUND_LIBRARY_DIR = ~/.local/lib
 ```
+
+> **Custom Csound builds:** CsoundQt uses the C++ `CsoundPerformanceThread`
+> class for playback and recording. A Csound library built with
+> `BUILD_PERFTHREAD_CLASS=OFF` omits the implementation of that class, so
+> CsoundQt fails to link with undefined `CsoundPerformanceThread` symbols, even
+> though `csPerfThread.hpp` is still installed. Always build Csound with
+> `-DBUILD_PERFTHREAD_CLASS=ON` (the CMake default).
 
 Build the **`csoundqt7`** branch:
 

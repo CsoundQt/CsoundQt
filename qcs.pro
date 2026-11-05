@@ -16,7 +16,7 @@
 # CONFIG+=build32    To build floats version
 # RtMidi support is enabled by default; disable it with CONFIG+=no_rtmidi
 # CONFIG+=rtmidi     Deprecated no-op, kept temporarily for compatibility
-# CONFIG+=record_support
+# CONFIG+=record_support  Deprecated no-op; recording is always enabled
 # CONFIG+=debugger
 # To support HTML5 via the <html> element in the csd using the Qt WebEngine
 # (preferably use Qt 5.8 or later):
@@ -93,9 +93,15 @@ win32-msvc2015:include (qmake/qcs-win32.pro)
 win32-msvc2017:include (qmake/qcs-win32.pro)
 win32-msvc:include (qmake/qcs-win32.pro)
 
-record_support|perfThread_build {
-    DEFINES += PERFTHREAD_RECORD
-    message("Building recording support.")
+# Recording is always enabled. It uses CsoundPerformanceThread::Record() and
+# StopRecord(), which require a Csound library built with
+# BUILD_PERFTHREAD_CLASS=ON (the Csound default).
+DEFINES += PERFTHREAD_RECORD
+message("Recording support enabled (requires Csound built with BUILD_PERFTHREAD_CLASS=ON).")
+
+# CONFIG+=record_support is no longer needed; kept as a deprecated no-op.
+record_support {
+    warning("CONFIG+=record_support is deprecated and no longer needed. Recording support is always enabled.")
 }
 
 
