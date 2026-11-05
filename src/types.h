@@ -59,14 +59,12 @@
 #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
-#define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_SOLARIS
 #define DEFAULT_TERM_EXECUTABLE ""
 #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
-#define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_MAC
 // Terminal.app is always present, and there is no desktop-default equivalent
@@ -75,7 +73,6 @@
 #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
-#define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_WIN32
 // cmd.exe is always present; everything else uses the system default.
@@ -83,21 +80,18 @@
 #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
-#define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_HAIKU
 #define DEFAULT_TERM_EXECUTABLE ""
 #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
-#define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_OPENBSD
 #define DEFAULT_TERM_EXECUTABLE ""
 #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
-#define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #endif
 
 #define CSQT_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 64\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"

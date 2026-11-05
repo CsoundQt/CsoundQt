@@ -43,7 +43,7 @@ Options::Options(ConfigLists *configlists) :
     showLineNumberArea = true;
     lineNumberContrast = 50;
     consoleFont = "JetBrains Mono";
-    consoleFontPointSize = 9;
+    consoleFontPointSize = 8;
     // Dark text on a light background. In dark theme the console colours are
     // swapped (see CsoundQt::setColors/applyThemeToPage).
     consoleFontColor = QColor("#1e1e1e");
@@ -84,7 +84,6 @@ Options::Options(ConfigLists *configlists) :
     openProperties = true;  // Open properties automatically when creating a widget
     graphUpdateRate = 30;
 
-    useAPI = true;
     enableWidgets = true;
     widgetsIndependent = false;  // Widget layouts in Separate Window (instead of Dock Widget)
     keyRepeat = true;
@@ -120,7 +119,6 @@ Options::Options(ConfigLists *configlists) :
     browser = "";
     waveeditor = "";
     waveplayer = "";
-    pdfviewer = "";
     language = 0;  // Interface language
 
     csdTemplate = CSQT_DEFAULT_TEMPLATE ; // was: ""

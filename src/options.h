@@ -108,11 +108,10 @@ public:
 	QColor widgetFrameColorUnselected;
 	QColor widgetFrameColorSelected;
 
-	bool useAPI;
 	bool enableWidgets;
 	bool widgetsIndependent;  // Widget layouts in Separate Window (instead of Dock Widget)
 	ChannelHighlightMode channelHighlightMode = ChannelHighlightMode::CursorOnly;
-	ChannelReferenceHighlightMode channelReferenceHighlightMode = ChannelReferenceHighlightMode::Always;
+	ChannelReferenceHighlightMode channelReferenceHighlightMode = ChannelReferenceHighlightMode::NotPerforming;
 	bool useInvalue; // If false use chnget
 	bool keyRepeat;
 	bool debugLiveEvents;
@@ -152,7 +151,6 @@ public:
 	QString browser;
 	QString waveeditor;
 	QString waveplayer;
-	QString pdfviewer;
 	int language;  // Interface language
 
 	QString csdTemplate;

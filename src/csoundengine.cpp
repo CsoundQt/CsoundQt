@@ -877,6 +877,23 @@ int CsoundEngine::checkSyntax() {
     return out;
 }
 
+int CsoundEngine::currentSampleRate() const
+{
+    return ud ? ud->sampleRate : 0;
+}
+
+int CsoundEngine::currentKsmps() const
+{
+    return ud ? int(ud->outputBufferSize) : 0;
+}
+
+int CsoundEngine::currentChannels(bool input) const
+{
+    if (!ud || !ud->perfThread || !ud->csound)
+        return 0;
+    return int(csoundGetChannels(ud->csound, input ? 1 : 0));
+}
+
 
 int CsoundEngine::runCsound()
 {
@@ -979,8 +996,8 @@ int CsoundEngine::runCsound()
             return -3;
         }
 
-        if (m_options.rt && m_options.rtUseOptions
-                && !m_options.useSystemSamplerate && m_options.samplerate == 0
+        if (m_options.rt
+                && m_options.samplerate == 0
                 && m_options.hasFixedSamplerateBackend()) {
             const int orchestraSr = int(csoundGetSr(ud->csound) + 0.5);
             const int backendSr = m_options.backendSamplerate();

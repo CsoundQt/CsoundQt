@@ -24,15 +24,12 @@
 #define CONFIGDIALOG_H
 
 #include "ui_configdialog.h"
+#include "configlists.h"
 
 class CsoundQt;
 class Options;
-class ConfigLists;
 class QAction;
 class KeyboardShortcutsWidget;
-
-constexpr int ORCHESTRA = 0; // instead of macros
-constexpr int SYSTEM = 1;  // and lazy for using enum...
 
 class ConfigDialog : public QDialog, public Ui::ConfigDialog
 {
@@ -60,6 +57,9 @@ private:
 	Options *m_options;
 	ConfigLists *m_configlists;
 	KeyboardShortcutsWidget *m_shortcutsWidget = nullptr;
+	QHash<QString, QList<AudioDeviceInfo>> m_audioDeviceCache;
+	int m_overrideOutputChannels = 2;
+	int m_overrideInputChannels = 2;
 	void browseFile(QString &destination);
 	void browseSaveFile(QString &destination);
 	void browseDir(QString &destination);
@@ -77,9 +77,7 @@ private slots:
     void browseOpcode7dir64();
 	void browseSadir();
 	void browseSsdir();
-	void browseSfdir();
 	void browseIncdir();
-	void browseRawWaveDir();
 	//    void browseDefaultCsd();
     void browseExamplePath();
 	void browseCsoundExecutable();
@@ -89,11 +87,10 @@ private slots:
 	void browseBrowser();
 	void browseWaveEditor();
 	void browseWavePlayer();
-	void browsePdfViewer();
 	void selectAudioInput();
 	void selectAudioOutput();
-	void selectMidiInput();
-	void selectMidiOutput();
+	// Cached per module and direction for the lifetime of this dialog.
+	QList<AudioDeviceInfo> cachedAudioDeviceGroups(bool isOutput);
 	void selectTextColor();
 	void selectBgColor();
 	void selectEditorBgColor();
@@ -102,12 +99,22 @@ private slots:
 	void clearTemplate();
 	void defaultTemplate();
 
-	void on_csoundMidiCheckBox_toggled(bool checked);
-	void checkRtMidiModule(QString module);
+	void on_internalMidiCheckBox_toggled(bool checked);
+	void updateMidiControls(bool internalMidi);
+	void updateAudioDeviceControls();
+	void updateChannelControls();
+	void resetChannelsMethodForBackend();
+	void updateKsmpsControls();
+	void selectDefaultAudioDeviceIfNeeded(bool isOutput);
+	int selectedDeviceChannels(bool isOutput);
+	void populateInternalMidiInterfaces();
+	void populateCsoundMidiDevices();
+	void updateMidiDeviceLists();
     void testAudioSetup();
     void recommendEnvironmentSettings();
 
     void onRtModuleComboBoxChanged(int index);
+    void updateSamplerateComboBox();
 
 
 

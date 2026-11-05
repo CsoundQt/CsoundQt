@@ -69,18 +69,20 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 
 	sampleFormat = 0;
 
-	rtUseOptions = true;
 	rtOverrideOptions = false;
 	rtAudioModule = "";
 	rtInputDevice = "adc";
 	rtOutputDevice = "dac";
-	connectSuccessiveJackPorts = true;
 	rtJackName = "*";
 	rtMidiModule = "";
 	rtMidiInputDevice = "0";
 	rtMidiOutputDevice = "0";
-    useSystemSamplerate = false;
-    overrideNumChannels = false;
+    samplerate = 0;
+    ksmps = 64;
+    ksmpsUseOrchestra = false;
+    channelsSetupMethod = ChannelsSetupMethod::Device;
+    deviceNumChannels = -1;
+    deviceNumInputChannels = -1;
     numChannels = 2;
     numInputChannels = 2;
 
@@ -99,8 +101,6 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	sadirActive = false;
 	ssdir = "";
 	ssdirActive = false;
-	sfdir = "";
-	sfdirActive = false;
 	incdir = "";
 	incdirActive = false;
 }
@@ -140,10 +140,10 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
     if (checkSyntaxOnly)
         opts << "--syntax-check-only";
     // test:
-    QDEBUG << "rt: " << rt << " reUserOptions" << rtUseOptions << " audioNames: " << m_configlists->rtAudioNames
+    QDEBUG << "rt: " << rt << " audioNames: " << m_configlists->rtAudioNames
            << " input, output " << rtInputDevice << rtOutputDevice;
 
-    if (rt && rtUseOptions) {
+    if (rt) {
 		if (rtOverrideOptions)
             opts << "-+ignore_csopts=1";
 		if (m_configlists->rtAudioNames.indexOf(rtAudioModule) >= 0
@@ -152,10 +152,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
             QString inputDevice = rtInputDevice;
             QString outputDevice = rtOutputDevice;
             if (rtAudioModule == "jack") {
-                inputDevice = m_configlists->resolveJackDevice(inputDevice, false,
-                                                               connectSuccessiveJackPorts);
-                outputDevice = m_configlists->resolveJackDevice(outputDevice, true,
-                                                                connectSuccessiveJackPorts);
+                inputDevice = m_configlists->resolveJackDevice(inputDevice, false);
+                outputDevice = m_configlists->resolveJackDevice(outputDevice, true);
             }
 			if (inputDevice != "") {
                 opts << "-i" + inputDevice;
@@ -184,12 +182,22 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 			if (rtMidiOutputDevice != "")
                 opts << "-Q" + rtMidiOutputDevice;
 		}
-        if (useSystemSamplerate)
-            opts << "--use-system-sr";
-        else if(samplerate > 0) {
+        if(samplerate > 0) {
             opts << "--sample-rate=" + QString::number(samplerate);
         }
-        if (overrideNumChannels) {
+        const bool fixedKsmps = ConfigLists::isFixedKsmpsModule(rtAudioModule);
+        const bool selectableKsmps = ConfigLists::isSelectableKsmpsModule(rtAudioModule);
+        if (fixedKsmps || (selectableKsmps && !ksmpsUseOrchestra))
+            opts << ("--ksmps=" + QString::number(qMax(1, ksmps)));
+        if (channelsSetupMethod == ChannelsSetupMethod::Device
+                && rtAudioModule != "null"_L1) {
+            if (deviceNumChannels > 0)
+                opts << ("--nchnls=" + QString::number(deviceNumChannels));
+            if (deviceNumInputChannels >= 0) {
+                QDEBUG << "nchnls_i (device)" << deviceNumInputChannels;
+                opts << ("--nchnls_i=" + QString::number(deviceNumInputChannels));
+            }
+        } else if (channelsSetupMethod == ChannelsSetupMethod::Override) {
             if(numChannels <= 0) {
                 qDebug("Setting nchnls, but numChannels is invalid: %d", numChannels);
             } else
@@ -200,7 +208,6 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
                 QDEBUG << "nchnls_i" << numInputChannels;
                 opts << ("--nchnls_i=" + QString::number(numInputChannels));
             }
-
         }
         if (useLimiter) {
             opts << "--limiter="+QString::number(limitValue);

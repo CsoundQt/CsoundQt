@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>826</width>
-    <height>746</height>
+    <width>740</width>
+    <height>680</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,8 +52,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>806</width>
-        <height>732</height>
+        <width>734</width>
+        <height>638</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -69,7 +69,7 @@
        <property name="spacing">
         <number>2</number>
        </property>
-       <item row="0" column="1">
+       <item row="0" column="0">
         <widget class="QTabWidget" name="editorTabWidget">
          <property name="enabled">
           <bool>true</bool>
@@ -84,11 +84,11 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>5</number>
+          <number>0</number>
          </property>
-         <widget class="QWidget" name="tab_2">
+         <widget class="QWidget" name="tab_audio">
           <attribute name="title">
-           <string>Run</string>
+           <string>Audio</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_10">
            <item>
@@ -108,321 +108,64 @@
                 <property name="verticalSpacing">
                  <number>6</number>
                 </property>
-                <item row="4" column="5">
-                 <widget class="QLabel" name="label_41">
-                  <property name="text">
-                   <string>Output</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="6">
-                 <widget class="QSpinBox" name="numInputChannelsSpinBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>40</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>60</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, overrides the number of input channels (corresponds to the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls_i &lt;/span&gt;variable). To use 0 input channels, set input device to &amp;quot;No Input&amp;quot;. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="frame">
-                   <bool>true</bool>
-                  </property>
-                  <property name="buttonSymbols">
-                   <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
-                  </property>
-                  <property name="showGroupSeparator" stdset="0">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QLineEdit" name="RtOutputLineEdit">
-                  <property name="minimumSize">
-                   <size>
-                    <width>200</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>600</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="RtUseOptionsCheckBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>150</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Override</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="2">
-                 <widget class="QToolButton" name="audioOutputToolButton">
-                  <property name="toolTip">
-                   <string>Select from a list of output devices</string>
-                  </property>
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_3">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Backend used for realtime audio&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;* portaudio&lt;/span&gt;: if in doubt, &lt;span style=&quot; font-weight:600;&quot;&gt;use the callback version&lt;/span&gt;. It performs much better, allowing lower latency.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">padding-right: 6</string>
-                  </property>
-                  <property name="text">
-                   <string>RT Audio Module</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1" colspan="3">
-                 <widget class="QComboBox" name="RtModuleComboBox">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>150</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Backend used for realtime audio&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;* portaudio&lt;/span&gt;: if in doubt, &lt;span style=&quot; font-weight:600;&quot;&gt;use the callback version&lt;/span&gt;. It performs much better, allowing lower latency.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="label_5">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">padding-right: 6</string>
-                  </property>
-                  <property name="text">
-                   <string>Output device (-o)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="4">
+                <item row="3" column="0">
                  <widget class="QLabel" name="samplerateLabel">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>100</width>
-                    <height>16777215</height>
-                   </size>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
                   <property name="text">
                    <string>Samplerate</string>
                   </property>
-                 </widget>
-                </item>
-                <item row="0" column="1" colspan="2">
-                 <widget class="QCheckBox" name="RtOverrideCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ignore the options set within &lt;span style=&quot; font-weight:600;&quot;&gt;CsOptions&lt;/span&gt; in the .csd file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Ignore CsOptions</string>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="7">
-                 <spacer name="horizontalSpacer_16">
+                <item row="4" column="6">
+                 <spacer name="horizontalSpacer_4">
                   <property name="orientation">
                    <enum>Qt::Orientation::Horizontal</enum>
                   </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Policy::Expanding</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
-                    <width>40</width>
+                    <width>10</width>
                     <height>20</height>
                    </size>
                   </property>
                  </spacer>
                 </item>
-                <item row="2" column="5" colspan="2">
-                 <widget class="QComboBox" name="samplerateComboBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the sample rate. &lt;br/&gt;* &lt;span style=&quot; font-weight:600;&quot;&gt;Orchestra &lt;/span&gt;(default): uses the samplerate as defined in the orchestra via the &lt;span style=&quot; font-weight:600;&quot;&gt;sr&lt;/span&gt; variable, If the backend selected does not allow to change the samplerate (jack, coreaudio), then the value of the &lt;span style=&quot; font-weight:600;&quot;&gt;sr&lt;/span&gt; variable cannot differ from the system sr. In such a case, either change the sr value to match the system  or use the &amp;quot;System&amp;quot; setting in this menu&lt;br/&gt;* &lt;span style=&quot; font-weight:600;&quot;&gt;System&lt;/span&gt;: use the samplerate of the system, overriding the value of the sr variable in the orchestra. Not all backends have a system samplerate (jack, coreaudio do, portaudio does not)&lt;br/&gt;* 44100, 48000, etc: Use this as the samplerate, overriding any value set in the orchestra &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Orchestra</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>System</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>22050</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>44100</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>48000</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>88200</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>96000</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>192000</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="3" column="4">
-                 <widget class="QCheckBox" name="numChannelsCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, overrides the number of channels set in the orchestra via the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls &lt;/span&gt;variable. To set a different number of input channels, set the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls_i &lt;/span&gt;variable in the orchestra, or use the &lt;span style=&quot; font-weight:600;&quot;&gt;--nchnls_i&lt;/span&gt; flag&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Channels</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_4">
+                <item row="5" column="0">
+                 <widget class="QLabel" name="outputDeviceLabel">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for input. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;p&gt;This is equivalent to the &lt;span style=&quot; font-weight:600;&quot;&gt;-i&lt;/span&gt; flag&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">padding-right: 6</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
-                   <string>Input device (-i)</string>
+                   <string>Output Device</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="2">
-                 <widget class="QToolButton" name="audioInputToolButton">
-                  <property name="toolTip">
-                   <string>Browse a list of input devices</string>
-                  </property>
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="5">
-                 <widget class="QLabel" name="numInputChannelsLabel">
-                  <property name="text">
-                   <string>Input</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="6">
+                <item row="5" column="5">
                  <widget class="QSpinBox" name="numChannelsSpinBox">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -444,76 +187,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1">
-                 <widget class="QLineEdit" name="RtInputLineEdit">
-                  <property name="minimumSize">
-                   <size>
-                    <width>200</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>600</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for input. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <spacer name="horizontalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Policy::Fixed</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="5" column="0" colspan="7">
-                 <widget class="QCheckBox" name="connectSuccessivePortsCheckBox">
-                  <property name="toolTip">
-                   <string>For the JACK backend: when a specific port is selected, connect the output and input channels to that port and the following ports of the same device (alphabetically ordered), instead of only the selected port.</string>
-                  </property>
-                  <property name="text">
-                   <string>Connect to successive channels</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="4" colspan="3">
-                 <widget class="QPushButton" name="testAudioSetupButton">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Test the current audio/midi setup</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>▶  Test Audio Setup</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="1" column="4">
                  <spacer name="verticalSpacer_8">
                   <property name="orientation">
@@ -529,6 +202,375 @@
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item row="5" column="2">
+                 <widget class="QToolButton" name="audioOutputToolButton">
+                  <property name="toolTip">
+                   <string>Select from a list of output devices</string>
+                  </property>
+                  <property name="text">
+                   <string>▾</string>
+                  </property>
+                  <property name="arrowType">
+                   <enum>Qt::ArrowType::DownArrow</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLineEdit" name="RtOutputLineEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>300</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>480</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the button to select one of the audio devices available&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="5">
+                 <widget class="QSpinBox" name="numInputChannelsSpinBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>30</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, overrides the number of input channels (corresponds to the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls_i &lt;/span&gt;variable). To use 0 input channels, set input device to &amp;quot;Disabled&amp;quot;. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="frame">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buttonSymbols">
+                   <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
+                  </property>
+                  <property name="showGroupSeparator" stdset="0">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0" colspan="2">
+                 <widget class="QPushButton" name="testAudioSetupButton">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Test the current audio/midi setup</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>▶  Test Audio Setup</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="audioDriverLabel">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Backend used for realtime audio&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;* portaudio&lt;/span&gt;: if in doubt, &lt;span style=&quot; font-weight:600;&quot;&gt;use the callback version&lt;/span&gt;. It performs much better, allowing lower latency.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Audio Driver</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <layout class="QHBoxLayout" name="samplerateLayout">
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QComboBox" name="samplerateComboBox">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>120</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>120</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sample rate used for realtime audio. If the selected audio module fixes the sample rate (JACK, PipeWire, CoreAudio), the value is detected automatically and cannot be changed. ALSA under PipeWire is a resampling interface: multiple rates can be chosen, and the native PipeWire rate is marked. For other modules, choose &lt;span style=&quot; font-weight:600;&quot;&gt;Orchestra&lt;/span&gt; to use the sr defined in the orchestra, or a fixed rate to override it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="samplerateValueLineEdit">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>120</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>120</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="focusPolicy">
+                     <enum>Qt::FocusPolicy::NoFocus</enum>
+                    </property>
+                    <property name="visible">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="samplerateSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Orientation::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item row="2" column="1" colspan="3">
+                 <widget class="QComboBox" name="RtModuleComboBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>120</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>120</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Backend used for realtime audio&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2">
+                 <widget class="QToolButton" name="audioInputToolButton">
+                  <property name="toolTip">
+                   <string>Browse a list of input devices</string>
+                  </property>
+                  <property name="text">
+                   <string>▾</string>
+                  </property>
+                  <property name="arrowType">
+                   <enum>Qt::ArrowType::DownArrow</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLineEdit" name="RtInputLineEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>300</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>480</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for input. Use the button to select one of the audio devices available&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="inputDeviceLabel">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for input. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;p&gt;This is equivalent to the &lt;span style=&quot; font-weight:600;&quot;&gt;-i&lt;/span&gt; flag&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Input Device</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="ksmpsLabel">
+                  <property name="text">
+                   <string>Samples per cycle</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1" colspan="4">
+                 <layout class="QHBoxLayout" name="ksmpsLayout">
+                  <property name="spacing">
+                   <number>6</number>
+                  </property>
+                  <item>
+                   <widget class="QComboBox" name="ksmpsComboBox">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="ksmpsSpinBox">
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>65536</number>
+                    </property>
+                    <property name="value">
+                     <number>64</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="ksmpsOrchestraCheckBox">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the &lt;span style=&quot; font-style:italic;&quot;&gt;ksmps&lt;/span&gt; value defined in the orchestra&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Orchestra</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="ksmpsSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Orientation::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item row="2" column="5">
+                 <widget class="QLabel" name="label_8">
+                  <property name="text">
+                   <string>Channels</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="5">
+                 <widget class="QComboBox" name="channelsSetupMethod">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set I/O channels (&lt;span style=&quot; font-style:italic;&quot;&gt;nchnls_i&lt;/span&gt;/&lt;span style=&quot; font-style:italic;&quot;&gt;nchnls&lt;/span&gt;). &lt;br/&gt;• &lt;span style=&quot; font-weight:700;&quot;&gt;Device&lt;/span&gt;: use the device's channel count (recommended)&lt;br/&gt;• &lt;span style=&quot; font-weight:700;&quot;&gt;Override&lt;/span&gt;: set channels manually&lt;br/&gt;• &lt;span style=&quot; font-weight:700;&quot;&gt;Orchestra&lt;/span&gt;: use values in the orchestra&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -583,166 +625,7 @@
                 <property name="spacing">
                  <number>6</number>
                 </property>
-                <item row="3" column="2">
-                 <widget class="QComboBox" name="midiInterfaceComboBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>120</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI input interface. Controls widgets and MIDI input for Csound if Csound MIDI module usage is disabled. MIDI learn functionality is only available when using the internal MIDI input&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="7">
-                 <spacer name="horizontalSpacer_8">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="8" column="4">
-                 <spacer name="horizontalSpacer_14">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Vertical</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Policy::Fixed</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>24</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="9" column="3">
-                 <widget class="QToolButton" name="midiOutputToolButton">
-                  <property name="toolTip">
-                   <string>Select output device from a list of available devices</string>
-                  </property>
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="3">
-                 <widget class="QToolButton" name="midiInputToolButton">
-                  <property name="toolTip">
-                   <string>Select input device from a list of available devices</string>
-                  </property>
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="1">
-                 <widget class="QLabel" name="label_12">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Csound MIDI input device &lt;/p&gt;&lt;p&gt;(corresponds to parameter &amp;quot;-M&amp;quot;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">padding-right: 6</string>
-                  </property>
-                  <property name="text">
-                   <string>Input device</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="1">
-                 <widget class="QCheckBox" name="csoundMidiCheckBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>150</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Csound's own MIDI implementation. All MIDI input/output is performed by csound directly. If this is selected, the internal MIDI interface is not used.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Csound MIDI Module</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QLabel" name="label_37">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>100</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI input
-                 interface. Controls widgets and MIDI input for Csound if Csound MIDI module
-                 usage is disabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Internal Input </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="2">
-                 <widget class="QLineEdit" name="RtMidiInputLineEdit">
-                  <property name="minimumSize">
-                   <size>
-                    <width>200</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>800</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the &amp;quot;...&amp;quot; button to select a MIDI input device from a list of available devices (select the Csound MIDI Module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="9" column="2">
-                 <widget class="QLineEdit" name="RtMidiOutputLineEdit">
-                  <property name="minimumSize">
-                   <size>
-                    <width>200</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>800</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the &amp;quot;...&amp;quot; button to select a MIDI output device from a list of available devices (select the Csound MIDI Module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="2" colspan="2">
+                <item row="7" column="2" colspan="2">
                  <widget class="QComboBox" name="RtMidiModuleComboBox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -761,36 +644,72 @@
                   </property>
                  </widget>
                 </item>
-                <item row="9" column="1">
-                 <widget class="QLabel" name="label_8">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Csound MIDI output device &lt;/p&gt;&lt;p&gt;(corresponds to parameter &amp;quot;-Q&amp;quot;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>Output device</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="2">
-                 <widget class="QComboBox" name="midiOutInterfaceComboBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
+                <item row="3" column="1" colspan="2">
+                 <widget class="QCheckBox" name="internalMidiCheckBox">
                   <property name="minimumSize">
                    <size>
-                    <width>100</width>
+                    <width>150</width>
                     <height>0</height>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI output interface.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use CsoundQt's internal MIDI implementation (RtMidi) for MIDI input and widget control. When unchecked, Csound's own MIDI module is used instead.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Internal MIDI (enable MIDI controls)</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="1">
+                <item row="4" column="1">
+                 <widget class="QLabel" name="label_37">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MIDI input interface used by the internal MIDI
+                 implementation. Controls widgets and MIDI input when Internal MIDI is enabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Input</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QLabel" name="label_14">
+                  <property name="text">
+                   <string>MIDI Driver</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="4">
+                 <spacer name="horizontalSpacer_14">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Vertical</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Policy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>24</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="6" column="1">
                  <widget class="QLabel" name="label_38">
                   <property name="enabled">
                    <bool>false</bool>
@@ -802,9 +721,78 @@
                    </sizepolicy>
                   </property>
                   <property name="text">
-                   <string>Internal Output</string>
+                   <string>Output</string>
                   </property>
                  </widget>
+                </item>
+                <item row="6" column="2" colspan="2">
+                 <widget class="QComboBox" name="midiOutInterfaceComboBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>300</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>400</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MIDI output. With Internal MIDI enabled this is the RtMidi output interface; otherwise it lists Csound's MIDI output devices.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2" colspan="2">
+                 <widget class="QComboBox" name="midiInterfaceComboBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>300</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>400</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MIDI input. With Internal MIDI enabled this is the RtMidi input interface used for widgets; otherwise it lists Csound's MIDI input devices. MIDI learn is only available with the internal MIDI input.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="4">
+                 <spacer name="horizontalSpacer_5">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                </layout>
               </item>
@@ -812,21 +800,407 @@
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer_6">
+            <spacer name="verticalSpacer_audio">
              <property name="orientation">
               <enum>Qt::Orientation::Vertical</enum>
              </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Policy::Minimum</enum>
-             </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>40</width>
-               <height>12</height>
+               <width>20</width>
+               <height>40</height>
               </size>
              </property>
             </spacer>
            </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_14">
+          <attribute name="title">
+           <string>Advanced</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_advanced">
+           <item>
+            <widget class="QFrame" name="frame">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_10">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <item row="0" column="0" colspan="3">
+               <widget class="QCheckBox" name="RtOverrideCheckBox">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ignore the options set within &lt;span style=&quot; font-weight:600;&quot;&gt;CsOptions&lt;/span&gt; in the .csd file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Ignore CsOptions</string>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="0">
+               <widget class="QCheckBox" name="AdditionalFlagsCheckBox">
+                <property name="toolTip">
+                 <string>Extra command line flags passed to Csound</string>
+                </property>
+                <property name="text">
+                 <string>Additional flags</string>
+                </property>
+               </widget>
+              </item>
+              <item row="14" column="0">
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>Jack Client Name</string>
+                </property>
+               </widget>
+              </item>
+              <item row="12" column="0">
+               <widget class="QCheckBox" name="limiterCheckBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="toolTip">
+                 <string extracomment="Requires Csound 6.16 or later"/>
+                </property>
+                <property name="whatsThis">
+                 <string extracomment="Requires Csound 6.16 or later"/>
+                </property>
+                <property name="text">
+                 <string>Use limiter, limit to:</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="12" column="2">
+               <widget class="QDoubleSpinBox" name="limiterSpinBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="minimum">
+                 <double>0.010000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
+                </property>
+                <property name="value">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLineEdit" name="BufferSizeLineEdit">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>256</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QCheckBox" name="multicoreCheckBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="toolTip">
+                 <string>Use multiple cores when running Csound</string>
+                </property>
+                <property name="text">
+                 <string>Multicore</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QLineEdit" name="HwBufferSizeLineEdit">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>512</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="3">
+               <widget class="QCheckBox" name="fallbackDbfsCheckBox">
+                <property name="toolTip">
+                 <string>&lt;div style='max-width:400px;'&gt;Pass --0dbfs=1 to Csound when the csd does not set 0dbfs itself (neither as an orchestra header assignment nor as --0dbfs in the CsOptions tag). This is equivalent to having --0dbfs=1 in a .csound7rc file. Uncheck to let Csound's own default take over&lt;/div&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Fallback 0dBFS = 1.0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QCheckBox" name="BufferSizeCheckBox">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Buffer Size (-b)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="0" colspan="3">
+               <widget class="QCheckBox" name="checkSyntaxBeforeRunCheckBox">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;In some cases csound might crash (and CsoundQt might crash with it) before any debugging information is visible in the CsoundQt console (during compilation). For such cases turn on this option to do a syntax check prior to running csound with full communication with widgets, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Check syntax before running</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QCheckBox" name="realtimeCheckBox">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Realtime priority mode. In this mode all initialization (loading of buffers, etc) is done in a background thread. The scheduled instrument starts executing when these background tasks are finished. This can help to eliminate dropouts (but might have a negative effect in scheduling accuracy). &lt;span style=&quot; font-weight:600;&quot;&gt;NB: in realtime mode all printing is done to stderr&lt;/span&gt;. In order to see the effect of any printing opcodes open CsoundQt from the command line. All printing will be visible at the terminal. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Realtime</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QCheckBox" name="sampleAccurateCheckBox">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable sample-accurate mode. In this mode rendering is not quantized to performance cycles but starts at the specified sample corresponding to the start time of an event. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Sample-accurate</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="QSpinBox" name="numThreadsSpinBox">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Number of threads when using multicore</string>
+                </property>
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>12</number>
+                </property>
+               </widget>
+              </item>
+              <item row="14" column="2">
+               <widget class="QLineEdit" name="JackNameLineEdit">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use * for current filename. &lt;/p&gt;&lt;p&gt;This setting is used only when jack is selected as the RT audio module. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="frame">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="0">
+               <widget class="QCheckBox" name="daemonCheckBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Daemon mode. Do not exit if CSD/orchestra is not given, is empty or does not compile. &lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NB&lt;/span&gt;: use with care. In the case of syntax errors csound will keep execution in at times undefined state, causing crashes and possibly bringing CsoundQt down with it. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NB2&lt;/span&gt;: in the absence of a score or of any events within the &amp;lt;CsScore&amp;gt; tag csound goes into daemon mode by default. &lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Daemon</string>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="2">
+               <widget class="QLineEdit" name="AdditionalFlagsLineEdit">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Useful flags&lt;/span&gt;:&lt;/p&gt;&lt;p&gt;--dither → dither&lt;br/&gt;--ksmps → Override number of samples per cycle&lt;br/&gt;--env:NAME=VALUE → Set environment veriable NAME to VALUE&lt;br/&gt;--omacro:XXX=YYY → set orchestra macro XXX to value YYY&lt;br/&gt;--smacro:XXX=YYY → Set score macro XXX to value YYY&lt;br/&gt;--port=N → liston to UDP port N for code (implies --daemon) &lt;br/&gt;--udp-echo → Echo UDP commands on terminal&lt;br/&gt;--sched → set real-time scheduling priority and lock memory&lt;br/&gt;--messagelevel=N → tty message level (use 0 to hide messages)&lt;br/&gt;--sinesize=N → length of internal sine table&lt;br/&gt;--suppress-version → do not print version details&lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="maxLength">
+                 <number>32760</number>
+                </property>
+                <property name="frame">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QCheckBox" name="HwBufferSizeCheckBox">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>HW Buffer Size (-B)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="15" column="0" colspan="3">
+               <widget class="QGroupBox" name="groupBox_14">
+                <property name="maximumSize">
+                 <size>
+                  <width>400</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>Performance tweaks</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_4">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <item>
+                    <widget class="QCheckBox" name="noMessagesCheckBox">
+                     <property name="maximumSize">
+                      <size>
+                       <width>400</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>No messages to consoles</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="noBufferCheckBox">
+                     <property name="maximumSize">
+                      <size>
+                       <width>400</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Disable recording and scopes</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="noEventsCheckBox">
+                     <property name="maximumSize">
+                      <size>
+                       <width>400</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Disable realtime score events</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_22">
+                     <property name="orientation">
+                      <enum>Qt::Orientation::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>4</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_advanced">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_render">
+          <attribute name="title">
+           <string>Render</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_render">
            <item>
             <widget class="QGroupBox" name="groupBox_tab2">
              <property name="sizePolicy">
@@ -1084,298 +1458,6 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="tab_14">
-          <attribute name="title">
-           <string>Advanced</string>
-          </attribute>
-          <widget class="QFrame" name="frame">
-           <property name="geometry">
-            <rect>
-             <x>20</x>
-             <y>20</y>
-             <width>571</width>
-             <height>340</height>
-            </rect>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_10">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <item row="13" column="0">
-             <widget class="QCheckBox" name="AdditionalFlagsCheckBox">
-              <property name="toolTip">
-               <string>Extra command line flags passed to Csound</string>
-              </property>
-              <property name="text">
-               <string>Additional flags</string>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="0">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Jack Client Name</string>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="0">
-             <widget class="QCheckBox" name="limiterCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="toolTip">
-               <string extracomment="Requires Csound 6.16 or later"/>
-              </property>
-              <property name="whatsThis">
-               <string extracomment="Requires Csound 6.16 or later"/>
-              </property>
-              <property name="text">
-               <string>Use limiter, limit to:</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="2">
-             <widget class="QDoubleSpinBox" name="limiterSpinBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="minimum">
-               <double>0.010000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.010000000000000</double>
-              </property>
-              <property name="value">
-               <double>1.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="BufferSizeLineEdit">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>256</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QCheckBox" name="multicoreCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="toolTip">
-               <string>Use multiple cores when running Csound</string>
-              </property>
-              <property name="text">
-               <string>Multicore</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QLineEdit" name="HwBufferSizeLineEdit">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>512</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0" colspan="3">
-             <widget class="QCheckBox" name="fallbackDbfsCheckBox">
-              <property name="toolTip">
-               <string>&lt;div style='max-width:400px;'&gt;Pass --0dbfs=1 to Csound when the csd does not set 0dbfs itself (neither as an orchestra header assignment nor as --0dbfs in the CsOptions tag). This is equivalent to having --0dbfs=1 in a .csound7rc file. Uncheck to let Csound's own default take over&lt;/div&gt;</string>
-              </property>
-              <property name="text">
-               <string>Fallback 0dBFS = 1.0</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QCheckBox" name="BufferSizeCheckBox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Buffer Size (-b)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0" colspan="3">
-             <widget class="QCheckBox" name="checkSyntaxBeforeRunCheckBox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;In some cases csound might crash (and CsoundQt might crash with it) before any debugging information is visible in the CsoundQt console (during compilation). For such cases turn on this option to do a syntax check prior to running csound with full communication with widgets, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Check syntax before running</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0">
-             <widget class="QCheckBox" name="realtimeCheckBox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Realtime priority mode. In this mode all initialization (loading of buffers, etc) is done in a background thread. The scheduled instrument starts executing when these background tasks are finished. This can help to eliminate dropouts (but might have a negative effect in scheduling accuracy). &lt;span style=&quot; font-weight:600;&quot;&gt;NB: in realtime mode all printing is done to stderr&lt;/span&gt;. In order to see the effect of any printing opcodes open CsoundQt from the command line. All printing will be visible at the terminal. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Realtime</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QCheckBox" name="sampleAccurateCheckBox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable sample-accurate mode. In this mode rendering is not quantized to performance cycles but starts at the specified sample corresponding to the start time of an event. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Sample-accurate</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QSpinBox" name="numThreadsSpinBox">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Number of threads when using multicore</string>
-              </property>
-              <property name="buttonSymbols">
-               <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
-              </property>
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>12</number>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="2">
-             <widget class="QLineEdit" name="JackNameLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use * for current filename. &lt;/p&gt;&lt;p&gt;This setting is used only when jack is selected as the RT audio module. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="frame">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="0">
-             <widget class="QCheckBox" name="daemonCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Daemon mode. Do not exit if CSD/orchestra is not given, is empty or does not compile. &lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NB&lt;/span&gt;: use with care. In the case of syntax errors csound will keep execution in at times undefined state, causing crashes and possibly bringing CsoundQt down with it. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NB2&lt;/span&gt;: in the absence of a score or of any events within the &amp;lt;CsScore&amp;gt; tag csound goes into daemon mode by default. &lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Daemon</string>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="2">
-             <widget class="QLineEdit" name="AdditionalFlagsLineEdit">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Useful flags&lt;/span&gt;:&lt;/p&gt;&lt;p&gt;--dither → dither&lt;br/&gt;--ksmps → Override number of samples per cycle&lt;br/&gt;--env:NAME=VALUE → Set environment veriable NAME to VALUE&lt;br/&gt;--omacro:XXX=YYY → set orchestra macro XXX to value YYY&lt;br/&gt;--smacro:XXX=YYY → Set score macro XXX to value YYY&lt;br/&gt;--port=N → liston to UDP port N for code (implies --daemon) &lt;br/&gt;--udp-echo → Echo UDP commands on terminal&lt;br/&gt;--sched → set real-time scheduling priority and lock memory&lt;br/&gt;--messagelevel=N → tty message level (use 0 to hide messages)&lt;br/&gt;--sinesize=N → length of internal sine table&lt;br/&gt;--suppress-version → do not print version details&lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="maxLength">
-               <number>32760</number>
-              </property>
-              <property name="frame">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QCheckBox" name="HwBufferSizeCheckBox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>HW Buffer Size (-B)</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </widget>
          <widget class="QWidget" name="tab">
           <attribute name="title">
            <string>General</string>
@@ -1455,7 +1537,7 @@
              </item>
             </layout>
            </item>
-           <item row="1" column="1" rowspan="5">
+           <item row="1" column="0">
             <widget class="QGroupBox" name="groupBox_interface">
              <property name="title">
               <string>Interface</string>
@@ -1618,77 +1700,6 @@
              </layout>
             </widget>
            </item>
-           <item row="4" column="0" rowspan="2">
-            <widget class="QGroupBox" name="groupBox_14">
-             <property name="maximumSize">
-              <size>
-               <width>400</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="title">
-              <string>Performance tweaks</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_5">
-                <item>
-                 <widget class="QCheckBox" name="noMessagesCheckBox">
-                  <property name="maximumSize">
-                   <size>
-                    <width>400</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>No messages to consoles</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="noBufferCheckBox">
-                  <property name="maximumSize">
-                   <size>
-                    <width>400</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Disable recording and scopes</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="noEventsCheckBox">
-                  <property name="maximumSize">
-                   <size>
-                    <width>400</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Disable realtime score events</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_22">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>4</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
            <item row="7" column="0" colspan="2">
             <widget class="QGroupBox" name="groupBox_6">
              <property name="title">
@@ -1843,81 +1854,31 @@
                  </widget>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QComboBox" name="consoleFontSizeComboBox">
+                 <widget class="QDoubleSpinBox" name="consoleFontSizeSpinBox">
                   <property name="maximumSize">
                    <size>
-                    <width>80</width>
+                    <width>90</width>
                     <height>16777215</height>
                    </size>
                   </property>
-                  <property name="currentIndex">
-                   <number>0</number>
+                  <property name="toolTip">
+                   <string>Console font size in points. Fractional values are allowed.</string>
                   </property>
-                  <item>
-                   <property name="text">
-                    <string>6</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>8</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>9</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>10</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>11</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>12</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>14</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>18</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>20</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>24</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>30</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>36</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>48</string>
-                   </property>
-                  </item>
+                  <property name="decimals">
+                   <number>1</number>
+                  </property>
+                  <property name="minimum">
+                   <double>1.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>1.000000000000000</double>
+                  </property>
+                  <property name="value">
+                   <double>8.000000000000000</double>
+                  </property>
                  </widget>
                 </item>
                 <item row="1" column="5">
@@ -1932,54 +1893,6 @@
                    </size>
                   </property>
                  </spacer>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QGroupBox" name="groupBox_8">
-             <property name="maximumSize">
-              <size>
-               <width>300</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="title">
-              <string>Run Utilities using:</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_6">
-              <item>
-               <layout class="QVBoxLayout" name="layout14">
-                <item>
-                 <widget class="QRadioButton" name="ApiRadioButton">
-                  <property name="maximumSize">
-                   <size>
-                    <width>200</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Csound API</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="ExternalRadioButton">
-                  <property name="maximumSize">
-                   <size>
-                    <width>200</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>External shell</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
                 </item>
                </layout>
               </item>
@@ -2025,19 +1938,6 @@
               </spacer>
              </item>
             </layout>
-           </item>
-           <item row="1" column="2">
-            <spacer name="horizontalSpacer_7">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </widget>
@@ -3014,7 +2914,7 @@
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Highlights lines in the editor which reference a widget's channel. Never: never automatically. Edit Mode: only while the widget layout is in edit mode. Always: whenever a widget is hovered or selected.</string>
+                   <string>Highlights lines in the editor which reference a widget's channel. Never: never automatically. Edit Mode: only while the widget layout is in edit mode, even during performance. When not performing: in all modes while no performance is running; during performance only in edit mode. Always: whenever a widget is hovered or selected, performing or not.</string>
                   </property>
                   <property name="currentIndex">
                    <number>2</number>
@@ -3027,6 +2927,11 @@
                   <item>
                    <property name="text">
                     <string>Edit Mode</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>When not performing</string>
                    </property>
                   </item>
                   <item>
@@ -3119,341 +3024,7 @@
            <string>Environment</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="0">
-            <widget class="QFrame" name="frame_3">
-             <layout class="QGridLayout" name="gridLayout">
-              <item row="0" column="0">
-               <layout class="QGridLayout" name="environLayout" columnstretch="0,0,1,0">
-                <property name="verticalSpacing">
-                 <number>4</number>
-                </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_7">
-                  <property name="toolTip">
-                   <string>Selects the location of the html documentation</string>
-                  </property>
-                  <property name="text">
-                   <string>Html Doc Directory</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="13" column="3">
-                 <widget class="QToolButton" name="csoundExecutableToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QCheckBox" name="SadirCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
-                  </property>
-                  <property name="text">
-                   <string>SADIR</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="0">
-                 <widget class="QCheckBox" name="SfdirCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>
-Default directory for sound files. Used if no full path is given for sound files. </string>
-                  </property>
-                  <property name="text">
-                   <string>SFDIR</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="3">
-                 <widget class="QToolButton" name="rawWaveToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="10" column="0">
-                 <widget class="QLabel" name="label_42">
-                  <property name="text">
-                   <string>Examples dir</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QLineEdit" name="Opcode7dir64LineEdit">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines the location of csound plugins for the 64-bit precision version.&lt;/p&gt;&lt;p&gt;External plugins should be installed in this folder&lt;/p&gt;&lt;p&gt;Use the button &amp;quot;Recommend&amp;quot; to set this value to an appropriate default for your platform&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="Opcode7dir64CheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines the location of csound opcode plugins for the double precision (64-bit) version. &lt;span style=&quot; font-weight:600;&quot;&gt;WARNING&lt;/span&gt;: use only for the case were multiple installations of csound coexist. Otherwise csound should be able to find its own builtin plugins without this variable being set. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>OPCODE7DIR64</string>
-                  </property>
-                  <property name="checked">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QToolButton" name="opcode7dir64ToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="2">
-                 <widget class="QLineEdit" name="SfdirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Default directory for sound files. Used if no full path is given for sound files. </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="0">
-                 <widget class="QCheckBox" name="rawWaveCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Used by the STK opcodes to find the raw wave files. Only relevant if you are using STK wrapper opcodes like STKBowed or STKBrass. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>RAWWAVE_PATH</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="3">
-                 <widget class="QToolButton" name="ssdirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="2">
-                 <widget class="QLineEdit" name="SsdirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="13" column="0">
-                 <widget class="QLabel" name="label_36">
-                  <property name="text">
-                   <string>Csound Executable</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QToolButton" name="csdocdirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="3">
-                 <widget class="QToolButton" name="sfdirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="2">
-                 <widget class="QLineEdit" name="IncdirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Include directory. Specifies the location of files used by #include statements. </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QLineEdit" name="CsdocdirLineEdit">
-                  <property name="toolTip">
-                   <string>Path to the html folder with the manual</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QCheckBox" name="IncdirCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Include directory. Specifies the location of files used by #include statements. </string>
-                  </property>
-                  <property name="text">
-                   <string>INCDIR</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="15" column="0">
-                 <spacer name="verticalSpacer_2">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="13" column="2">
-                 <widget class="QLineEdit" name="csoundExecutableLineEdit">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="3">
-                 <widget class="QToolButton" name="sadirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="3">
-                 <widget class="QToolButton" name="incdirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QCheckBox" name="SsdirCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. Please note that MIDI files as well as audio files are also sought inside SSDIR. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>SSDIR</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="10" column="3">
-                 <widget class="QToolButton" name="examplePathToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="2">
-                 <widget class="QLineEdit" name="SadirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="2">
-                 <widget class="QLineEdit" name="rawWaveLineEdit">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Used by the STK opcodes to find the raw wave files. Only relevant if you are using STK wrapper opcodes like STKBowed or STKBrass. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="10" column="2">
-                 <widget class="QLineEdit" name="examplePathlineEdit"/>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QGroupBox" name="debugLogGroupBox">
-             <property name="title">
-              <string>Debug logging</string>
-             </property>
-             <layout class="QHBoxLayout" name="debugLogLayout">
-              <item>
-               <widget class="QCheckBox" name="logDebugCheckBox">
-                <property name="toolTip">
-                 <string>Sends the debug info of CsoundQt itself to a logfile for further debugging or bug reports</string>
-                </property>
-                <property name="text">
-                 <string>Log debug info</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QToolButton" name="openLogToolButton">
-                <property name="toolTip">
-                 <string>Open the log file in the system's default application</string>
-                </property>
-                <property name="text">
-                 <string>Open log</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="logPathLabel">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="textInteractionFlags">
-                 <set>Qt::TextInteractionFlag::TextSelectableByMouse</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="debugLogSpacer">
-                <property name="orientation">
-                 <enum>Qt::Orientation::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="tab_5">
-          <attribute name="title">
-           <string>External</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_11">
-           <item row="0" column="0">
+           <item row="2" column="0">
             <widget class="QGroupBox" name="groupBox_4">
              <property name="title">
               <string>External programs</string>
@@ -3550,26 +3121,271 @@ Default directory for sound files. Used if no full path is given for sound files
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="0">
-                 <widget class="QLabel" name="label_26">
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QGroupBox" name="debugLogGroupBox">
+             <property name="title">
+              <string>Debug logging</string>
+             </property>
+             <layout class="QHBoxLayout" name="debugLogLayout">
+              <item>
+               <widget class="QCheckBox" name="logDebugCheckBox">
+                <property name="toolTip">
+                 <string>Sends the debug info of CsoundQt itself to a logfile for further debugging or bug reports</string>
+                </property>
+                <property name="text">
+                 <string>Log debug info</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QToolButton" name="openLogToolButton">
+                <property name="toolTip">
+                 <string>Open the log file in the system's default application</string>
+                </property>
+                <property name="text">
+                 <string>Open log</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="logPathLabel">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="textInteractionFlags">
+                 <set>Qt::TextInteractionFlag::TextSelectableByMouse</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="debugLogSpacer">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="0">
+            <widget class="QFrame" name="frame_3">
+             <layout class="QGridLayout" name="gridLayout">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="environLayout" columnstretch="0,0,1,0">
+                <property name="verticalSpacing">
+                 <number>4</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_7">
+                  <property name="toolTip">
+                   <string>Selects the location of the Csound manual</string>
+                  </property>
                   <property name="text">
-                   <string>PDF viewer</string>
+                   <string>Csound Manual Path</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="13" column="3">
+                 <widget class="QToolButton" name="csoundExecutableToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QCheckBox" name="SadirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
+                  </property>
+                  <property name="text">
+                   <string>SADIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="0">
+                 <widget class="QLabel" name="label_42">
+                  <property name="text">
+                   <string>Examples dir</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLineEdit" name="Opcode7dir64LineEdit">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines the location of csound plugins for the 64-bit precision version.&lt;/p&gt;&lt;p&gt;External plugins should be installed in this folder&lt;/p&gt;&lt;p&gt;Use the button &amp;quot;Recommend&amp;quot; to set this value to an appropriate default for your platform&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="Opcode7dir64CheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines the location of csound opcode plugins for the double precision (64-bit) version. &lt;span style=&quot; font-weight:600;&quot;&gt;WARNING&lt;/span&gt;: use only for the case were multiple installations of csound coexist. Otherwise csound should be able to find its own builtin plugins without this variable being set. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>OPCODE7DIR64</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QToolButton" name="opcode7dir64ToolButton">
+                  <property name="text">
+                   <string>...</string>
                   </property>
                  </widget>
                 </item>
                 <item row="5" column="3">
-                 <widget class="QToolButton" name="pdfViewerToolButton">
+                 <widget class="QToolButton" name="ssdirToolButton">
                   <property name="text">
                    <string>...</string>
                   </property>
                  </widget>
                 </item>
                 <item row="5" column="2">
-                 <widget class="QLineEdit" name="pdfViewerLineEdit">
+                 <widget class="QLineEdit" name="SsdirLineEdit">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
                  </widget>
+                </item>
+                <item row="13" column="0">
+                 <widget class="QLabel" name="label_36">
+                  <property name="text">
+                   <string>Csound Executable</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QToolButton" name="csdocdirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QLineEdit" name="IncdirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Include directory. Specifies the location of files used by #include statements. </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QLineEdit" name="CsdocdirLineEdit">
+                  <property name="toolTip">
+                   <string>Path to the html folder with the manual</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QCheckBox" name="IncdirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Include directory. Specifies the location of files used by #include statements. </string>
+                  </property>
+                  <property name="text">
+                   <string>INCDIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="13" column="2">
+                 <widget class="QLineEdit" name="csoundExecutableLineEdit">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="3">
+                 <widget class="QToolButton" name="sadirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3">
+                 <widget class="QToolButton" name="incdirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QCheckBox" name="SsdirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. Please note that MIDI files as well as audio files are also sought inside SSDIR. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>SSDIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="3">
+                 <widget class="QToolButton" name="examplePathToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2">
+                 <widget class="QLineEdit" name="SadirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="2">
+                 <widget class="QLineEdit" name="examplePathlineEdit"/>
                 </item>
                </layout>
               </item>
@@ -3581,10 +3397,13 @@ Default directory for sound files. Used if no full path is given for sound files
              <property name="orientation">
               <enum>Qt::Orientation::Vertical</enum>
              </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Policy::Fixed</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>40</height>
+               <height>10</height>
               </size>
              </property>
             </spacer>
@@ -3730,166 +3549,6 @@ Default directory for sound files. Used if no full path is given for sound files
     <hint type="destinationlabel">
      <x>219</x>
      <y>323</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>midiOutInterfaceComboBox</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>189</x>
-     <y>564</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>554</x>
-     <y>533</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_12</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>125</x>
-     <y>600</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtMidiOutputLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>529</x>
-     <y>600</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>midiOutputToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>600</x>
-     <y>599</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_38</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>210</x>
-     <y>561</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>444</x>
-     <y>535</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtMidiModuleComboBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>529</x>
-     <y>571</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_8</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>411</x>
-     <y>600</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>midiInterfaceComboBox</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>106</x>
-     <y>312</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>270</x>
-     <y>280</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtMidiInputLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>234</x>
-     <y>600</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>midiInputToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>305</x>
-     <y>599</y>
     </hint>
    </hints>
   </connection>
@@ -4102,182 +3761,6 @@ Default directory for sound files. Used if no full path is given for sound files
    </hints>
   </connection>
   <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtOutputLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>527</x>
-     <y>438</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_4</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>100</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>108</x>
-     <y>438</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>numChannelsCheckBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>107</x>
-     <y>97</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>442</x>
-     <y>196</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>samplerateComboBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>109</x>
-     <y>130</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>587</x>
-     <y>156</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>audioInputToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>305</x>
-     <y>437</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_5</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>411</x>
-     <y>438</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>samplerateLabel</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>109</x>
-     <y>130</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>449</x>
-     <y>156</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtModuleComboBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>231</x>
-     <y>409</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_3</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>87</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>87</x>
-     <y>409</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtInputLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>231</x>
-     <y>438</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>audioOutputToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>600</x>
-     <y>437</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>BufferSizeCheckBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>BufferSizeLineEdit</receiver>
@@ -4386,86 +3869,6 @@ Default directory for sound files. Used if no full path is given for sound files
     <hint type="destinationlabel">
      <x>281</x>
      <y>422</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>numChannelsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>numInputChannelsSpinBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>440</x>
-     <y>158</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>560</x>
-     <y>159</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>numInputChannelsSpinBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>104</x>
-     <y>94</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>560</x>
-     <y>159</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>numInputChannelsLabel</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>104</x>
-     <y>94</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>509</x>
-     <y>159</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>numChannelsSpinBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>104</x>
-     <y>94</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>559</x>
-     <y>193</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>numChannelsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>numChannelsSpinBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>442</x>
-     <y>196</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>507</x>
-     <y>197</y>
     </hint>
    </hints>
   </connection>

@@ -37,6 +37,7 @@
 #include <QToolTip>
 #include <QHelpEvent>
 #include <QFontMetrics>
+#include <QFontDatabase>
 #include <QScreen>
 #include <QResizeEvent>
 #include <QDateTime>
@@ -340,6 +341,11 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 #endif
 
 #define MAX_THREAD_COUNT 32 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
+
+// Colours for the transient performance summary in the status bar. Kept as
+// named constants so they are easy to find and adjust.
+static const char *PERFORMANCE_INFO_COLOR_LIGHT = "#0b6e99";
+static const char *PERFORMANCE_INFO_COLOR_DARK = "#7fd8ff";
 
 
 
@@ -753,6 +759,43 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles)
     // setColors(m_options->themeMode.isEmpty() ? "auto" : m_options->themeMode);
 
     m_configlists.refreshModules(); // must happen after UI is created
+    // Use the platform's preferred realtime audio module when there is no
+    // saved choice or the saved module is not available in this Csound build.
+    if (m_options->rtAudioModule.isEmpty()
+            || !m_configlists.rtAudioNames.contains(m_options->rtAudioModule)) {
+        m_options->rtAudioModule = m_configlists.defaultAudioModule();
+        updatePlayRenderStatusTips();
+    }
+    // Needed for the default "Device" channels setup method even when the
+    // settings dialog is never opened. Also move away from generic "dac"/"adc"
+    // defaults to the first concrete device of the selected backend.
+    const QPair<QList<AudioDeviceInfo>, QList<AudioDeviceInfo>> audioGroups =
+            m_configlists.audioDeviceGroups(m_options->rtAudioModule);
+    auto resolveDevice = [&](QString &device, bool isOutput,
+                             const QList<AudioDeviceInfo> &devices) {
+        if (device.isEmpty())
+            return; // explicit No Input / No Output
+        if (device.contains(QLatin1Char('*'))
+                || device.endsWith(":null"_L1)
+                || device == "dac:system:playback_"_L1
+                || device == "adc:system:capture_"_L1) {
+            return;
+        }
+        for (const AudioDeviceInfo &candidate : devices) {
+            if (candidate.id == device || candidate.name == device)
+                return;
+        }
+        device = ConfigLists::defaultAudioDeviceId(m_options->rtAudioModule,
+                                                   isOutput, devices);
+    };
+    resolveDevice(m_options->rtOutputDevice, true, audioGroups.second);
+    resolveDevice(m_options->rtInputDevice, false, audioGroups.first);
+    const int startupOutputChannels = m_configlists.audioDeviceChannels(
+                m_options->rtAudioModule, m_options->rtOutputDevice, true, &audioGroups.second);
+    const int startupInputChannels = m_configlists.audioDeviceChannels(
+                m_options->rtAudioModule, m_options->rtInputDevice, false, &audioGroups.first);
+    m_options->deviceNumChannels = startupOutputChannels >= 0 ? startupOutputChannels : 2;
+    m_options->deviceNumInputChannels = startupInputChannels >= 0 ? startupInputChannels : 2;
 
 
 /*
@@ -939,7 +982,7 @@ void CsoundQt::applyManualDirectory(bool reload)
         QWidget *context = QApplication::activeWindow();
         Notification::showTransient(context ? context : this,
             tr("No Csound manual found in %1").arg(configured),
-            tr("Html Doc Directory"), 8000);
+            tr("Csound Manual Path"), 8000);
     }
 
     if (QFile::exists(docDir + "/indexall.html"))
@@ -1081,6 +1124,7 @@ void CsoundQt::changePage(int index)
         }
     }
     curPage = index;
+    updatePerformanceInfo(nullptr);
     if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
         auto page = documentPages[curPage];
         setCurrentFile(page->getFileName());
@@ -1640,6 +1684,57 @@ void CsoundQt::setLineAndColumn(int line, int column)
     lineAndColumnLabel->setText(labelText);
 }
 
+void CsoundQt::updatePerformanceInfo(DocumentPage *page)
+{
+    if (performanceInfoLabel == nullptr)
+        return;
+    if (page == nullptr) {
+        if (curPage < 0 || curPage >= documentPages.size()) {
+            performanceInfoLabel->hide();
+            return;
+        }
+        page = documentPages[curPage];
+    }
+    if (page == nullptr || !page->isRunning()) {
+        performanceInfoLabel->hide();
+        return;
+    }
+    CsoundEngine *engine = page->getEngine();
+    if (engine == nullptr) {
+        performanceInfoLabel->hide();
+        return;
+    }
+    const int sampleRate = engine->currentSampleRate();
+    const int inputChannels = engine->currentChannels(true);
+    const int outputChannels = engine->currentChannels(false);
+    const int ksmps = engine->currentKsmps();
+    if (sampleRate <= 0 || ksmps <= 0) {
+        performanceInfoLabel->hide();
+        return;
+    }
+
+    QString family = m_options->font;
+    if (family.isEmpty())
+        family = QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
+    family.replace(QLatin1Char('&'), u"&amp;"_s);
+    family.replace(QLatin1Char('<'), u"&lt;"_s);
+    family.replace(QLatin1Char('>'), u"&gt;"_s);
+    family.replace(QLatin1Char('\''), u"&#39;"_s);
+    const char *color = isDarkPalette
+            ? PERFORMANCE_INFO_COLOR_DARK : PERFORMANCE_INFO_COLOR_LIGHT;
+    const QString valueStyle = QStringLiteral("font-family:'%1'; color:%2;")
+            .arg(family, QLatin1String(color));
+
+    performanceInfoLabel->setText(
+                QStringLiteral("&nbsp;|&nbsp;sr: <span style=\"%1\">%2</span>"
+                               "&nbsp;|&nbsp;channels: <span style=\"%1\">%3</span>"
+                               "/<span style=\"%1\">%4</span>"
+                               "&nbsp;|&nbsp;ksmps: <span style=\"%1\">%5</span>")
+                .arg(valueStyle).arg(sampleRate).arg(inputChannels)
+                .arg(outputChannels).arg(ksmps));
+    performanceInfoLabel->show();
+}
+
 QString CsoundQt::getSaveFileName()
 {
     bool widgetsVisible = widgetPanel->isVisible();
@@ -1773,15 +1868,6 @@ void CsoundQt::setupEnvironment()
     else {
         csoundSetGlobalEnv("SSDIR", "");
     }
-    if (m_options->sfdirActive){
-        int ret = csoundSetGlobalEnv("SFDIR", m_options->sfdir.toLocal8Bit().constData());
-        if (ret != 0) {
-            qDebug() << "CsoundEngine::runCsound() Error setting SFDIR";
-        }
-    }
-    else {
-        csoundSetGlobalEnv("SFDIR", "");
-    }
     if (m_options->incdirActive){
         int ret = csoundSetGlobalEnv("INCDIR", m_options->incdir.toLocal8Bit().constData());
         if (ret != 0) {
@@ -1791,22 +1877,6 @@ void CsoundQt::setupEnvironment()
     else {
         csoundSetGlobalEnv("INCDIR", "");
     }
-    // set rawWavePath for stk opcodes
-    QString rawWavePath = m_options->rawWaveActive ? m_options->rawWave : QString(qgetenv("RAWWAVE_PATH"));
-    if (rawWavePath.isNull()) {
-        rawWavePath=QString(""); // NULL string may crash csoundInitilaize
-    }
-    if ( csoundSetGlobalEnv("RAWWAVE_PATH", rawWavePath.toLocal8Bit().constData()) ) {
-        qDebug() << "CsoundEngine::runCsound() Error setting RAWWAVE_PATH";
-    }
-#ifdef Q_OS_UNIX
-    // make sure the the environment variable is set for stk opcodes
-    setenv("RAWWAVE_PATH",rawWavePath.toLocal8Bit(),1);
-#endif
-#ifdef Q_OS_WIN
-    QString envString = "RAWWAVE_PATH="+rawWavePath;
-    _putenv(envString.toLocal8Bit());
-#endif
 
     QString opcodedir = QString();
 
@@ -2448,6 +2518,114 @@ void CsoundQt::setCurrentAudioFile(const QString fileName)
     currentAudioFile = fileName;
 }
 
+// Sample rate set in the orchestra header, or -1 when it cannot be read.
+static int orchestraSampleRate(const QString &text)
+{
+    static const QRegularExpression srRx(
+                QStringLiteral(R"(^\s*sr\s*=\s*([0-9]+(?:\.[0-9]+)?))"),
+                QRegularExpression::MultilineOption);
+    const QRegularExpressionMatch match = srRx.match(text);
+    if (!match.hasMatch())
+        return -1;
+    bool ok = false;
+    const double sr = match.captured(1).toDouble(&ok);
+    return ok ? int(sr + 0.5) : -1;
+}
+
+QString CsoundQt::validateRealtimeAudioSettings(DocumentPage *page)
+{
+    const QString module = m_options->rtAudioModule;
+    if (module == "null")
+        return QString();
+    if (module.isEmpty())
+        return tr("No realtime audio module is selected.");
+
+    if (!m_configlists.rtAudioNames.contains(module))
+        return tr("The audio module \"%1\" is not available in this Csound build.")
+                .arg(module);
+
+    const QList<QPair<QString, QString> > outputs = m_configlists.getAudioOutputDevices(module);
+    if (outputs.isEmpty())
+        return tr("No audio output devices are available for module \"%1\".")
+                .arg(module);
+
+    const QString outputDevice = m_options->rtOutputDevice;
+    bool outputFound = outputDevice.isEmpty()
+            || outputDevice == "dac"_L1
+            || outputDevice == "dac:null"_L1
+            || outputDevice == "dac:system:playback_"_L1
+            || outputDevice.contains(QLatin1Char('*'));
+    for (const QPair<QString, QString> &device : outputs) {
+        if (device.second == outputDevice) {
+            outputFound = true;
+            break;
+        }
+    }
+    if (!outputFound) {
+        return tr("The selected audio output device \"%1\" is not available "
+                  "for module \"%2\".").arg(outputDevice, module);
+    }
+
+    const QString inputDevice = m_options->rtInputDevice;
+    if (!inputDevice.isEmpty()
+            && inputDevice != "adc"_L1
+            && inputDevice != "adc:null"_L1
+            && inputDevice != "adc:system:capture_"_L1
+            && !inputDevice.contains(QLatin1Char('*'))) {
+        const QList<QPair<QString, QString> > inputs = m_configlists.getAudioInputDevices(module);
+        bool inputFound = false;
+        for (const QPair<QString, QString> &device : inputs) {
+            if (device.second == inputDevice) {
+                inputFound = true;
+                break;
+            }
+        }
+        if (!inputFound) {
+            return tr("The selected audio input device \"%1\" is not available "
+                      "for module \"%2\".").arg(inputDevice, module);
+        }
+    }
+
+    if (m_configlists.isFixedSamplerateBackend(module)) {
+        int expectedSr = -1;
+        if (ConfigLists::isPerDeviceSamplerateBackend(module)) {
+            if (!outputDevice.isEmpty())
+                expectedSr = m_configlists.deviceSamplerate(module, outputDevice, true);
+        } else {
+            expectedSr = m_configlists.backendSamplerate(module);
+        }
+        if (expectedSr > 0) {
+            int requestedSr = m_options->samplerate;
+            if (requestedSr <= 0 && page != nullptr)
+                requestedSr = orchestraSampleRate(page->getBasicText());
+            if (requestedSr > 0 && requestedSr != expectedSr) {
+                return tr("The sample rate %1 Hz does not match the fixed sample "
+                          "rate %2 Hz of audio module \"%3\".")
+                        .arg(requestedSr).arg(expectedSr).arg(module);
+            }
+        }
+    }
+    return QString();
+}
+
+void CsoundQt::showInvalidAudioSettings(const QString &message)
+{
+    QMessageBox box(this);
+    box.setIcon(QMessageBox::Warning);
+    box.setWindowTitle(tr("Audio settings need attention"));
+    box.setText(message);
+    box.setInformativeText(tr("The performance was not started."));
+    QPushButton *openButton = box.addButton(tr("Open Audio Settings"),
+                                            QMessageBox::AcceptRole);
+    box.addButton(tr("Cancel"), QMessageBox::RejectRole);
+    box.setDefaultButton(openButton);
+    box.exec();
+    if (box.clickedButton() == openButton) {
+        configureTab = 0; // Audio tab
+        configure();
+    }
+}
+
 void CsoundQt::play(bool realtime, int index)
 {
     qDebug()  << "CsoundQt::play...";
@@ -2471,6 +2649,17 @@ void CsoundQt::play(bool realtime, int index)
             runAct->setChecked(false);
         curPage = oldPage;
         return;
+    }
+
+    if (realtime && !m_options->checkSyntaxOnly) {
+        const QString problem = validateRealtimeAudioSettings(page);
+        if (!problem.isEmpty()) {
+            showInvalidAudioSettings(problem);
+            if (curPage == oldPage)
+                runAct->setChecked(false);
+            curPage = oldPage;
+            return;
+        }
     }
 
     QFileInfo fileInfo(QFileInfo(page->getFileName()).path());
@@ -2608,6 +2797,8 @@ void CsoundQt::play(bool realtime, int index)
             removePlaybackTempFile(page);
             return;
         }
+        if (realtime)
+            updatePerformanceInfo(page);
         if (m_options->enableWidgets && m_options->showWidgetsOnRun && isCsd) {
             if (!m_options->widgetsIndependent) {
                 // Show and raise the panel even when docked: if it was hidden
@@ -3088,6 +3279,7 @@ void CsoundQt::markStopped()
     runAct->setChecked(false);
     recAct->setChecked(false);
     updateEvaluateAction();
+    updatePerformanceInfo(nullptr);
 #ifdef CSQT_DEBUGGER
     m_debugPanel->stopDebug();
 #endif
@@ -3097,6 +3289,7 @@ void CsoundQt::perfEnded()
 {
     runAct->setChecked(false);
     updateEvaluateAction();
+    updatePerformanceInfo(nullptr);
 }
 
 void CsoundQt::record(bool rec) {
@@ -3543,7 +3736,7 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
     if (external && (dir.isEmpty() || !QFile::exists(dir + "/index.html"))) {
         QMessageBox::critical(this, tr("Error"),
                               tr("HTML Documentation directory is not set or does not contain index.html.\n"
-                                 "Please set it in Settings → Environment → Html Doc Directory."));
+                                 "Please set it in Settings → Environment → Csound Manual Path."));
         return;
     }
     if (entry.startsWith("https://")) {
@@ -4232,7 +4425,9 @@ void CsoundQt::changeFontSize(int change)
         helpPanel->changeFontSize(change);
     } else if (m_console->widgetHasFocus()) {
         m_options->consoleFontPointSize += change;
-        documentPages[curPage]->setConsoleFont(QFont(m_options->consoleFont, m_options->consoleFontPointSize));
+        QFont consoleFont(m_options->consoleFont);
+        consoleFont.setPointSizeF(m_options->consoleFontPointSize);
+        documentPages[curPage]->setConsoleFont(consoleFont);
     } else {
         m_options->fontPointSize += change;
         // QDEBUG << "main Editor size" << m_options->fontPointSize;
@@ -4248,23 +4443,7 @@ void CsoundQt::changeFontSize(int change)
 
 void CsoundQt::openPdfFile(QString name)
 {
-    if (!m_options->pdfviewer.isEmpty()) {
-#ifndef Q_OS_MACOS
-        if (!QFile::exists(m_options->pdfviewer)) {
-            QMessageBox::critical(this,
-                                  tr("Error"),
-                                  tr("PDF viewer not found!\n"
-                                     "Please go to Edit->Options->Environment and select directory\n"));
-        }
-#endif
-        //QString arg = "\"" + name + "\"";
-        //execute(m_options->pdfviewer, arg);
-        startProcess(m_options->pdfviewer, QStringList() << name, nullptr,
-                     QStringLiteral("pdfviewer"));
-    }
-    else {
-        openUrlWithDiagnostics(QStringLiteral("pdfviewer-default"), QUrl::fromLocalFile(name));
-    }
+    openUrlWithDiagnostics(QStringLiteral("pdfviewer-default"), QUrl::fromLocalFile(name));
 }
 
 void CsoundQt::openFLOSSManual()
@@ -4459,7 +4638,7 @@ void CsoundQt::downloadManual()
             statusBar()->showMessage(tr("Csound manual downloaded and installed."), 5000);
             QMessageBox::information(this, tr("Download Csound Manual"),
                                      tr("The Csound manual was downloaded and installed.\n"
-                                        "The Html Doc Directory is now set to:\n%1")
+                                        "The Csound Manual Path is now set to:\n%1")
                                          .arg(installedManualPath));
         });
         connect(extractor, &QProcess::errorOccurred, this,
@@ -4762,26 +4941,7 @@ void CsoundQt::applySettings()
     configureToolBar->setMovable(!(m_options->lockToolbar));
     documentTabs->setTabsClosable(m_options->tabShowCloseButton);
 
-    QString currentOptions = (m_options->useAPI ? tr("API") : tr("Console")) + " ";
-    //  if (m_options->useAPI) {
-    //    currentOptions +=  (m_options->thread ? tr("Thread") : tr("NoThread")) + " ";
-    //  }
-
-    // Display a summary of options on the status bar
-    QString playOptions = " (Audio:" + m_options->rtAudioModule + " ";
-    playOptions += "MIDI:" +  m_options->rtMidiModule + ")";
-    playOptions += " (" + (m_options->rtUseOptions ? tr("UseCsoundQtOptions"):
-                                                     tr("DiscardCsoundQtOptions"));
-    playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
-    playOptions += currentOptions;
-    QString renderOptions =
-            " ("
-            + (m_options->fileUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"))
-            + " ";
-    renderOptions +=  "" + (m_options->fileOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
-    renderOptions += currentOptions;
-    runAct->setStatusTip(tr("Play") + playOptions);
-    renderAct->setStatusTip(tr("Render to file") + renderOptions);
+    updatePlayRenderStatusTips();
 
     if (! m_options->useCsoundMidi) {
         QString interfaceNotFoundMessage;
@@ -4844,6 +5004,22 @@ void CsoundQt::applySettings()
 
 }
 
+void CsoundQt::updatePlayRenderStatusTips()
+{
+    // Display a summary of options on the status bar
+    QString playOptions = " (Audio:" + ConfigLists::audioModuleDisplayName(m_options->rtAudioModule) + " ";
+    playOptions += "MIDI:" +  m_options->rtMidiModule + ")";
+    if (m_options->rtOverrideOptions)
+        playOptions += " (" + tr("OverrideCsOptions") + ") ";
+    QString renderOptions =
+            " ("
+            + (m_options->fileUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"))
+            + " ";
+    renderOptions +=  "" + (m_options->fileOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
+    runAct->setStatusTip(tr("Play") + playOptions);
+    renderAct->setStatusTip(tr("Render to file") + renderOptions);
+}
+
 void CsoundQt::applyDefaultDockLayout()
 {
     // First-run default arrangement: the editor and the right-hand dock column
@@ -4885,8 +5061,9 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setGraphUpdateRate(m_options->graphUpdateRate);
     p->setTextFont(QFont(m_options->font,
                          (int) m_options->fontPointSize));
-    p->setConsoleFont(QFont(m_options->consoleFont,
-                            (int) m_options->consoleFontPointSize));
+    QFont consoleFont(m_options->consoleFont);
+    consoleFont.setPointSizeF(m_options->consoleFontPointSize);
+    p->setConsoleFont(consoleFont);
 
     p->setConsoleBufferSize(m_options->consoleBufferSize);
     p->showLineNumbers(m_options->showLineNumberArea);
@@ -5255,126 +5432,64 @@ void CsoundQt::setColors(QString themeMode)
            << "theme:" << m_options->theme
            << "highlighting:" << m_options->highlightingTheme
            << "isDarkPalette:" << isDarkPalette;
+    updatePerformanceInfo(nullptr);
 }
 
 void CsoundQt::runUtility(QString flags)
 {
     qDebug("CsoundQt::runUtility");
-    if (m_options->useAPI) {
 #ifdef MACOSX_PRE_SNOW
-        //Remember menu bar to set it after FLTK grabs it
-        menuBarHandle = GetMenuBar();
+    //Remember menu bar to set it after FLTK grabs it
+    menuBarHandle = GetMenuBar();
 #endif
-        //    m_console->reset();
-        static char *argv[33];
-        QString name = "";
-        QString fileFlags = flags.mid(flags.indexOf("\""));
-        flags.remove(fileFlags);
-        QStringList indFlags= flags.split(" ", SKIP_EMPTY_PARTS);
-        QStringList files = fileFlags.split("\"", SKIP_EMPTY_PARTS);
-        if (indFlags.size() < 2) {
-            qDebug("CsoundQt::runUtility: Error: empty flags");
-            return;
-        }
-        if (indFlags[0] == "-U") {
-            indFlags.removeAt(0);
-            name = indFlags[0];
-            indFlags.removeAt(0);
-        }
-        else {
-            qDebug("CsoundQt::runUtility: Error: unexpected flag!");
-            return;
-        }
-        int index = 0;
-        for (const QString& flag : indFlags) {
-            QByteArray flagBytes = flag.toLocal8Bit();
-            argv[index] = (char *) calloc(flagBytes.size() + 1, sizeof(char));
-            qstrncpy(argv[index], flagBytes.constData(), flagBytes.size() + 1);
-            index++;
-        }
-        argv[index] = (char *) calloc(files[0].size()+1, sizeof(char));
-        QByteArray fileBytes = files[0].toLocal8Bit();
-        qstrncpy(argv[index++], fileBytes.constData(), fileBytes.size() + 1);
-        argv[index] = (char *) calloc(files[2].size()+1, sizeof(char));
-        fileBytes = files[2].toLocal8Bit();
-        qstrncpy(argv[index++], fileBytes.constData(), fileBytes.size() + 1);
-        int argc = index;
-        CSOUND *csoundU;
-        csoundU=csoundCreate(nullptr, nullptr);
-        csoundSetHostData(csoundU, (void *) m_console);
-        csoundSetMessageCallback(csoundU, &CsoundQt::utilitiesMessageCallback);
-        // Utilities always run in the same thread as CsoundQt
-        csoundRunUtility(csoundU, name.toLocal8Bit(), argc, argv);
-        csoundDestroy(csoundU);
-        for (int i = 0; i < argc; i++) {
-            free(argv[i]);
-        }
-#ifdef MACOSX_PRE_SNOW
-        // Put menu bar back
-        SetMenuBar(menuBarHandle);
-#endif
+    //    m_console->reset();
+    static char *argv[33];
+    QString name = "";
+    QString fileFlags = flags.mid(flags.indexOf("\""));
+    flags.remove(fileFlags);
+    QStringList indFlags= flags.split(" ", SKIP_EMPTY_PARTS);
+    QStringList files = fileFlags.split("\"", SKIP_EMPTY_PARTS);
+    if (indFlags.size() < 2) {
+        qDebug("CsoundQt::runUtility: Error: empty flags");
+        return;
+    }
+    if (indFlags[0] == "-U") {
+        indFlags.removeAt(0);
+        name = indFlags[0];
+        indFlags.removeAt(0);
     }
     else {
-        QString script;
-#ifdef Q_OS_WIN32
-        script = "";
-#ifdef USE_DOUBLE
-        if (m_options->opcode7dir64Active)
-            script += "set OPCODE7DIR64=" + m_options->opcode7dir64 + "\n";
-#else
-        if (m_options->opcodedirActive)
-            script += "set OPCODEDIR=" + m_options->opcodedir + "\n";
-#endif
-        // Only OPCODEDIR left here as it must be present before csound initializes
-
-        script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
-        script += "csound " + flags + "\n";
-#else
-        script = "#!/bin/sh\n";
-
-        if (m_options->opcode7dir64Active)
-            script += "set OPCODE7DIR64=" + m_options->opcode7dir64 + "\n";
-
-        // Only OPCODEDIR left here as it must be present before csound initializes
-
-        script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
-#ifdef Q_OS_MACOS
-        script += "/usr/local/bin/csound " + flags + "\n";
-#else
-        script += "csound " + flags + "\n";
-#endif
-        script += "echo \"\nPress return to continue\"\n";
-        script += "dummy_var=\"\"\n";
-        script += "read dummy_var\n";
-        script += "rm $0\n";
-#endif
-        QFile file(SCRIPT_NAME);
-        if (!file.open(QIODevice::WriteOnly))
-            return;
-
-        QTextStream out(&file);
-        out << script;
-        file.flush();
-        file.close();
-        file.setPermissions (QFile::ExeOwner| QFile::WriteOwner| QFile::ReadOwner);
-
-        QString options;
-#ifdef Q_OS_LINUX
-        options = "-e " + SCRIPT_NAME;
-#endif
-#ifdef Q_OS_SOLARIS
-        options = "-e " + SCRIPT_NAME;
-#endif
-#ifdef Q_OS_MACOS
-        options = SCRIPT_NAME;
-#endif
-#ifdef Q_OS_WIN32
-        options = SCRIPT_NAME;
-#endif
-        //execute(m_options->terminal, options);
-        startProcess(m_options->terminal, QStringList() << options, nullptr,
-                     QStringLiteral("terminal"));
+        qDebug("CsoundQt::runUtility: Error: unexpected flag!");
+        return;
     }
+    int index = 0;
+    for (const QString& flag : indFlags) {
+        QByteArray flagBytes = flag.toLocal8Bit();
+        argv[index] = (char *) calloc(flagBytes.size() + 1, sizeof(char));
+        qstrncpy(argv[index], flagBytes.constData(), flagBytes.size() + 1);
+        index++;
+    }
+    argv[index] = (char *) calloc(files[0].size()+1, sizeof(char));
+    QByteArray fileBytes = files[0].toLocal8Bit();
+    qstrncpy(argv[index++], fileBytes.constData(), fileBytes.size() + 1);
+    argv[index] = (char *) calloc(files[2].size()+1, sizeof(char));
+    fileBytes = files[2].toLocal8Bit();
+    qstrncpy(argv[index++], fileBytes.constData(), fileBytes.size() + 1);
+    int argc = index;
+    CSOUND *csoundU;
+    csoundU=csoundCreate(nullptr, nullptr);
+    csoundSetHostData(csoundU, (void *) m_console);
+    csoundSetMessageCallback(csoundU, &CsoundQt::utilitiesMessageCallback);
+    // Utilities always run in the same thread as CsoundQt
+    csoundRunUtility(csoundU, name.toLocal8Bit(), argc, argv);
+    csoundDestroy(csoundU);
+    for (int i = 0; i < argc; i++) {
+        free(argv[i]);
+    }
+#ifdef MACOSX_PRE_SNOW
+    // Put menu bar back
+    SetMenuBar(menuBarHandle);
+#endif
 }
 
 
@@ -6975,6 +7090,11 @@ void CsoundQt::createStatusBar()
     lineAndColumnLabel = new QLabel();
     setLineAndColumn(0,0);
     statusbar->addPermanentWidget(lineAndColumnLabel);
+
+    performanceInfoLabel = new QLabel(statusbar);
+    performanceInfoLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    performanceInfoLabel->hide();
+    statusbar->addPermanentWidget(performanceInfoLabel);
 }
 
 void CsoundQt::readSettings()
@@ -7119,7 +7239,7 @@ void CsoundQt::readSettings()
     m_options->font = settings.value("font", "JetBrains Mono").toString();
     m_options->fontPointSize = settings.value("fontsize", 10).toDouble();
     m_options->consoleFont = settings.value("consolefont", "JetBrains Mono").toString();
-    m_options->consoleFontPointSize = settings.value("consolefontsize", 9).toDouble();
+    m_options->consoleFontPointSize = settings.value("consolefontsize", 8).toDouble();
     m_options->showLineNumberArea = settings.value("showLineNumberArea", true).toBool();
     m_options->lineNumberContrast = settings.value("lineNumberContrast", 50).toInt();
 
@@ -7177,12 +7297,12 @@ void CsoundQt::readSettings()
             ? (oldReferences.toBool()
                ? int(ChannelReferenceHighlightMode::Always)
                : int(ChannelReferenceHighlightMode::Never))
-            : int(ChannelReferenceHighlightMode::Always);
+            : int(ChannelReferenceHighlightMode::NotPerforming);
     const int referenceMode = settings.value("channelReferenceHighlightMode",
                                              defaultReferenceMode).toInt();
     m_options->channelReferenceHighlightMode =
             static_cast<ChannelReferenceHighlightMode>(
-                qBound(0, referenceMode, int(ChannelReferenceHighlightMode::Always)));
+                qBound(0, referenceMode, int(ChannelReferenceHighlightMode::NotPerforming)));
     m_options->iconText = settings.value("iconText", false).toBool();
     m_options->showToolbar = settings.value("showToolbar", true).toBool();
     m_options->lockToolbar = settings.value("lockToolbar", false).toBool();
@@ -7212,7 +7332,6 @@ void CsoundQt::readSettings()
 
     settings.endGroup();
     settings.beginGroup("Run");
-    m_options->useAPI = settings.value("useAPI", true).toBool();
     m_options->keyRepeat = settings.value("keyRepeat", false).toBool();
     m_options->debugLiveEvents = settings.value("debugLiveEvents", false).toBool();
     m_options->consoleBufferSize = settings.value("consoleBufferSize", 1024).toInt();
@@ -7251,9 +7370,18 @@ void CsoundQt::readSettings()
     m_options->multicore = settings.value("multicore", false).toBool();
     m_options->numThreads = settings.value("numThreads", 1).toInt();
     m_options->additionalFlags = settings.value("additionalFlags", "").toString();
-    m_options->useSystemSamplerate = settings.value("useSystemSamplerate", false).toBool();
     m_options->samplerate = settings.value("overrideSamplerate", 0).toInt();
-    m_options->overrideNumChannels = settings.value("overrideNumChannels", false).toBool();
+    m_options->ksmps = settings.value("ksmps", 64).toInt();
+    m_options->ksmpsUseOrchestra = settings.value("ksmpsUseOrchestra", false).toBool();
+    const int defaultChannelsMethod = settings.value("overrideNumChannels", false).toBool()
+            ? int(ChannelsSetupMethod::Override)
+            : int(ChannelsSetupMethod::Device);
+    const int channelsMethod = settings.value("channelsSetupMethod",
+                                              defaultChannelsMethod).toInt();
+    m_options->channelsSetupMethod = static_cast<ChannelsSetupMethod>(
+                qBound(0, channelsMethod, int(ChannelsSetupMethod::Orchestra)));
+    m_options->deviceNumChannels = -1;
+    m_options->deviceNumInputChannels = -1;
     m_options->numChannels = settings.value("numChannels", 2).toInt();
     m_options->numInputChannels = settings.value("numInputChannels", 2).toInt();
 
@@ -7275,13 +7403,10 @@ void CsoundQt::readSettings()
     m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
     m_options->disableDisplaysOnRender =
             settings.value("disableDisplaysOnRender", true).toBool();
-    m_options->rtUseOptions = settings.value("rtUseOptions", true).toBool();
     m_options->rtOverrideOptions = settings.value("rtOverrideOptions", false).toBool();
-    m_options->rtAudioModule = settings.value("rtAudioModule", "pa_cb").toString();
-    if (m_options->rtAudioModule.isEmpty()) { m_options->rtAudioModule = "pa_cb"; }
+    m_options->rtAudioModule = settings.value("rtAudioModule").toString();
     m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
     m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
-    m_options->connectSuccessiveJackPorts = settings.value("connectSuccessiveJackPorts", true).toBool();
     m_options->rtJackName = settings.value("rtJackName", "").toString();
     m_options->rtMidiModule = settings.value("rtMidiModule", "portmidi").toString();
     if (m_options->rtMidiModule.isEmpty()) { m_options->rtMidiModule = "portmidi"; }
@@ -7302,12 +7427,8 @@ void CsoundQt::readSettings()
     m_options->sadirActive = settings.value("sadirActive","").toBool();
     m_options->ssdir = settings.value("ssdir","").toString();
     m_options->ssdirActive = settings.value("ssdirActive","").toBool();
-    m_options->sfdir = settings.value("sfdir","").toString();
-    m_options->sfdirActive = settings.value("sfdirActive","").toBool();
     m_options->incdir = settings.value("incdir","").toString();
     m_options->incdirActive = settings.value("incdirActive","").toBool();
-    m_options->rawWave = settings.value("rawWave","").toString();
-    m_options->rawWaveActive = settings.value("rawWaveActive","").toBool();
     m_options->defaultCsd = settings.value("defaultCsd","").toString();
     m_options->defaultCsdActive = settings.value("defaultCsdActive","").toBool();
     m_options->examplePath = settings.value("examplePath", "").toString();
@@ -7325,14 +7446,11 @@ void CsoundQt::readSettings()
     m_options->waveplayer = settings.value("waveplayer",
                                            DEFAULT_WAVEPLAYER_EXECUTABLE
                                            ).toString();
-    m_options->pdfviewer = settings.value("pdfviewer",
-                                          DEFAULT_PDFVIEWER_EXECUTABLE
-                                          ).toString();
 #ifdef Q_OS_MACOS
     if (QOperatingSystemVersion::current() >  QOperatingSystemVersion::MacOSMojave )  { // fix path change to /System/Applications on MacOS Catalina
 
         QList <QString *> apps;
-        apps << &m_options->terminal << &m_options->browser << &m_options->waveplayer << &m_options->pdfviewer;
+        apps << &m_options->terminal << &m_options->browser << &m_options->waveplayer;
         // not sure about  &m_options->waveeditor (Audacity) -  where is this installed on Catalina
         // no correctrion for waveeditor now
 
@@ -7473,7 +7591,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.endGroup(); // Options/Editor
 
     settings.beginGroup("Run");
-    settings.setValue("useAPI", m_options->useAPI);
     settings.setValue("keyRepeat", m_options->keyRepeat);
     settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
     settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
@@ -7495,9 +7612,10 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("newParser", m_options->newParser);
     settings.setValue("multicore", m_options->multicore);
     settings.setValue("numThreads", m_options->numThreads);
-    settings.setValue("useSystemSamplerate", m_options->useSystemSamplerate);
     settings.setValue("overrideSamplerate", m_options->samplerate);
-    settings.setValue("overrideNumChannels", m_options->overrideNumChannels);
+    settings.setValue("ksmps", m_options->ksmps);
+    settings.setValue("ksmpsUseOrchestra", m_options->ksmpsUseOrchestra);
+    settings.setValue("channelsSetupMethod", int(m_options->channelsSetupMethod));
     settings.setValue("numChannels", m_options->numChannels);
     settings.setValue("numInputChannels", m_options->numInputChannels);
     settings.setValue("useLimiter", m_options->useLimiter);
@@ -7515,12 +7633,10 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
     settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
     settings.setValue("disableDisplaysOnRender", m_options->disableDisplaysOnRender);
-    settings.setValue("rtUseOptions", m_options->rtUseOptions);
     settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
     settings.setValue("rtAudioModule", m_options->rtAudioModule);
     settings.setValue("rtInputDevice", m_options->rtInputDevice);
     settings.setValue("rtOutputDevice", m_options->rtOutputDevice);
-    settings.setValue("connectSuccessiveJackPorts", m_options->connectSuccessiveJackPorts);
     settings.setValue("rtJackName", m_options->rtJackName);
     settings.setValue("rtMidiModule", m_options->rtMidiModule);
     settings.setValue("rtMidiInputDevice", m_options->rtMidiInputDevice);
@@ -7542,12 +7658,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("sadirActive",m_options->sadirActive);
     settings.setValue("ssdir",m_options->ssdir);
     settings.setValue("ssdirActive",m_options->ssdirActive);
-    settings.setValue("sfdir",m_options->sfdir);
-    settings.setValue("sfdirActive",m_options->sfdirActive);
     settings.setValue("incdir",m_options->incdir);
     settings.setValue("incdirActive",m_options->incdirActive);
-    settings.setValue("rawWave",m_options->rawWave);
-    settings.setValue("rawWaveActive",m_options->rawWaveActive);
     settings.setValue("defaultCsd",m_options->defaultCsd);
     settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
     settings.setValue("examplePath", m_options->examplePath);
@@ -7562,7 +7674,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("browser", m_options->browser);
     settings.setValue("waveeditor", m_options->waveeditor);
     settings.setValue("waveplayer", m_options->waveplayer);
-    settings.setValue("pdfviewer", m_options->pdfviewer);
     settings.endGroup(); // options/external
 
     settings.beginGroup("Template");
@@ -8423,8 +8534,7 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
             cmdLine = m_options->csoundExecutable+ " ";
         }
         qDebug()<<"Command line: " << cmdLine;
-        m_options->rt = (realtime && m_options->rtUseOptions)
-                || (!realtime && m_options->fileUseOptions);
+        m_options->rt = realtime || (!realtime && m_options->fileUseOptions);
         const QStringList flags = m_options->generateCmdLineFlagsList();
         for (const QString &flag : flags)
             cmdLine += shellQuoteArg(flag) + " ";
@@ -8451,7 +8561,7 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
     else {
         cmdLine += "\""  + tempFileName + "\" ";
     }
-    //  m_options->rt = (realtime and m_options->rtUseOptions)
+    //  m_options->rt = realtime
     //                  or (!realtime and m_options->fileUseOptions);
     //  cmdLine += m_options->generateCmdLineFlags();
     script += "echo \"" + cmdLine + "\"\n";

@@ -27,6 +27,12 @@
 
 class ConfigLists;
 
+enum class ChannelsSetupMethod {
+    Device = 0,   // take nchnls / nchnls_i from the selected devices
+    Override = 1, // use the values in the spin boxes
+    Orchestra = 2 // leave the orchestra's values untouched
+};
+
 class CsoundOptions
 {
 public:
@@ -89,21 +95,22 @@ public:
 
 	int sampleFormat;
 
-	bool rtUseOptions;
 	bool rtOverrideOptions;
 	QString rtAudioModule;
 	QString rtInputDevice;
 	QString rtOutputDevice;
-	bool connectSuccessiveJackPorts;
 	QString rtJackName;
 	QString rtMidiModule;
 	QString rtMidiInputDevice;
 	QString rtMidiOutputDevice;
-    bool useSystemSamplerate;
     bool checkSyntaxOnly;
     bool checkSyntaxBeforeRun;
     int samplerate;
-    bool overrideNumChannels;
+    int ksmps;
+    bool ksmpsUseOrchestra;
+    ChannelsSetupMethod channelsSetupMethod;
+    int deviceNumChannels;      // channels reported by the selected output device
+    int deviceNumInputChannels; // channels reported by the selected input device
     int numChannels;
     int numInputChannels;
 
@@ -120,12 +127,8 @@ public:
 	bool sadirActive;
 	QString ssdir;
 	bool ssdirActive;
-	QString sfdir;
-	bool sfdirActive;
 	QString incdir;
 	bool incdirActive;
-	QString rawWave;
-	bool rawWaveActive;
 
 private:
 	int m_jackNameSize;

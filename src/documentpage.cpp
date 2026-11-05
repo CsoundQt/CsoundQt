@@ -948,7 +948,10 @@ WidgetLayout* DocumentPage::newWidgetLayout()
 int DocumentPage::play(CsoundOptions *options)
 {
 	m_view->unmarkErrorLines();  // Clear error lines when running
-	return BaseDocument::play(options);
+	const int ret = BaseDocument::play(options);
+	// The performance state affects whether channel references may be shown.
+	updateWidgetChannelLineHighlights();
+	return ret;
 }
 
 void DocumentPage::stop()
@@ -989,6 +992,8 @@ int DocumentPage::record(int format)
 void DocumentPage::perfEnded()
 {
 	emit stopSignal();
+	// The performance state affects whether channel references may be shown.
+	updateWidgetChannelLineHighlights();
 }
 
 void DocumentPage::sampleRateMismatch(int orchestraSr, int backendSr, const QString &backendName)
@@ -1602,10 +1607,19 @@ void DocumentPage::updateWidgetChannelLineHighlights() {
         m_view->clearWidgetChannelHighlights();
         return;
     }
-    if (m_channelReferenceHighlightMode == ChannelReferenceHighlightMode::Never
-            || (m_channelReferenceHighlightMode
-                == ChannelReferenceHighlightMode::EditMode
-                && !layout->isEditMode())) {
+    if (m_channelReferenceHighlightMode == ChannelReferenceHighlightMode::Never) {
+        m_view->clearWidgetChannelHighlights();
+        return;
+    }
+    const bool editMode = layout->isEditMode();
+    if (m_channelReferenceHighlightMode == ChannelReferenceHighlightMode::EditMode
+            && !editMode) {
+        m_view->clearWidgetChannelHighlights();
+        return;
+    }
+    if (m_channelReferenceHighlightMode == ChannelReferenceHighlightMode::NotPerforming
+            && isRunning() && !editMode) {
+        // During performance only edit mode may highlight references.
         m_view->clearWidgetChannelHighlights();
         return;
     }

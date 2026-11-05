@@ -317,9 +317,14 @@ private slots:
     void updateTabText(int index);
     void configure();
 	void applySettings();
+	void updatePlayRenderStatusTips();
 	void applyWidgetStyle();
 	void applyPaletteToChrome(); // re-assert the app palette on tool/menu bars (see setColors)
 	void setCurrentOptionsForPage(DocumentPage *p);
+	// Checks the realtime audio settings before a performance and returns a
+	// user-facing description, or an empty string when they are usable.
+	QString validateRealtimeAudioSettings(DocumentPage *page);
+	void showInvalidAudioSettings(const QString &message);
 	void applyDefaultDockLayout(); // initial dock arrangement when there is no saved layout
 	void ensurePanelTabOrder(); // Widgets before Help in the right-hand tab group
 	void runUtility(QString flags);
@@ -342,6 +347,7 @@ private slots:
     void tabMoved(int to, int from);
     void openExamplesFolder();
     void setLineAndColumn(int line, int column);
+    void updatePerformanceInfo(DocumentPage *page = nullptr);
 
     DocumentPage *getCurrentDocumentPage() {
         if(curPage < 0 || curPage >= documentPages.size())
@@ -697,6 +703,7 @@ private:
         "--format"
     };
     QLabel *lineAndColumnLabel;
+    QLabel *performanceInfoLabel = nullptr;
     QPalette makeAppPalette(bool dark);
     QFileSystemWatcher *m_fileWatcher;
     QSet<QString> m_pendingFileChanges;

@@ -334,7 +334,7 @@ private:
     ScanService *m_scanService = nullptr;
     // The include path from CsoundQt's settings (not the document's own).
     QStringList m_includeSearchPaths;
-	ChannelReferenceHighlightMode m_channelReferenceHighlightMode = ChannelReferenceHighlightMode::Always;
+	ChannelReferenceHighlightMode m_channelReferenceHighlightMode = ChannelReferenceHighlightMode::NotPerforming;
 	bool m_widgetChannelHighlightPinned = false;
 	QStringList m_pinnedWidgetChannels;
 

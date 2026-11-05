@@ -21,10 +21,13 @@ enum class ChannelHighlightMode {
 };
 
 // When to automatically mark editor lines that reference a widget's channels.
+// The enum values are persisted in the settings file, so keep the existing
+// numbering (Always stays 2) and append new modes.
 enum class ChannelReferenceHighlightMode {
     Never = 0,
-    EditMode = 1,
-    Always = 2
+    EditMode = 1,       // only while the widget layout is in edit mode
+    Always = 2,         // in all modes, performing or not
+    NotPerforming = 3   // in all modes, but during performance only in edit mode
 };
 
 #endif // CHANNELHIGHLIGHTMODE_H

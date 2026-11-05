@@ -253,6 +253,10 @@ public:
 	void stopCsound();
 	void cleanupCsound();
     int checkSyntax();
+    // Values of the current performance (valid while the engine is running).
+    int currentSampleRate() const;
+    int currentKsmps() const;
+    int currentChannels(bool input) const;
 
 private:
 	void runBeforeCleanupCallbacks();

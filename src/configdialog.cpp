@@ -22,11 +22,13 @@
 */
 
 #include <QDir>
+#include <algorithm>
 //#include <QOperatingSystemVersion> // not present before Qt 5.9
 #include <QDesktopServices>
 #include <QFile>
 #include <QMessageBox>
 #include <QSysInfo>
+#include <QStandardItemModel>
 #include <QUrl>
 
 #include "csoundqt.h"
@@ -75,7 +77,8 @@ static int channelReferenceHighlightIndex(ChannelReferenceHighlightMode mode)
 	switch (mode) {
 	case ChannelReferenceHighlightMode::Never: return 0;
 	case ChannelReferenceHighlightMode::EditMode: return 1;
-	case ChannelReferenceHighlightMode::Always: return 2;
+	case ChannelReferenceHighlightMode::NotPerforming: return 2;
+	case ChannelReferenceHighlightMode::Always: return 3;
 	}
 	return 2;
 }
@@ -85,9 +88,10 @@ static ChannelReferenceHighlightMode channelReferenceHighlightModeFromIndex(int 
 	switch (index) {
 	case 0: return ChannelReferenceHighlightMode::Never;
 	case 1: return ChannelReferenceHighlightMode::EditMode;
-	case 2: return ChannelReferenceHighlightMode::Always;
+	case 2: return ChannelReferenceHighlightMode::NotPerforming;
+	case 3: return ChannelReferenceHighlightMode::Always;
 	}
-	return ChannelReferenceHighlightMode::Always;
+	return ChannelReferenceHighlightMode::NotPerforming;
 }
 
 ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *configlists,
@@ -120,29 +124,14 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
                                 "Make sure OPCODE7DIR64 is set properly in your system"
                                 "or the configuration dialog."));
 	}
-	QHash<QString, QString> audioModNames;
-    audioModNames["pa_cb"] = "portaudio (callback)";
-    audioModNames["pa_bl"] = "portaudio (blocking)";
-    audioModNames["auhal"] = "coreaudio (auhal)";
-
-    QHash<QString, int> audioPriorities;
-    audioPriorities["jack"] = 0;
-    audioPriorities["pa_cb"] = 1;
-    audioPriorities["auhal"] = 2;
-    std::sort(m_configlists->rtAudioNames.begin(),
-              m_configlists->rtAudioNames.end(),
-              [&audioPriorities](const QString &mod1, const QString &mod2) {
-        return audioPriorities.value(mod1, 10) < audioPriorities.value(mod2, 10);
-    });
+    const bool jackNotRunning = m_configlists->rtAudioNames.contains("jack"_L1)
+            && !m_configlists->isJackRunning();
 
     if(m_configlists->rtAudioNames.contains("jack")) {
-        if(!m_configlists->isJackRunning()) {
-            audioModNames["jack"] = "jack (not running)";
+        if(jackNotRunning)
             JackNameLineEdit->setEnabled(false);
-        }
     } else {
-        if(RtUseOptionsCheckBox->checkState() == Qt::Checked)
-            JackNameLineEdit->setEnabled(false);
+        JackNameLineEdit->setEnabled(false);
     }
 	foreach (QString item, m_configlists->fileTypeLongNames) {
 		FileTypeComboBox->addItem(item);
@@ -151,84 +140,33 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		FileFormatComboBox->addItem(item);
 	}
 	foreach (QString item, m_configlists->rtAudioNames) {
-		if (audioModNames.contains(item)) {
-            RtModuleComboBox->addItem(audioModNames[item], item);
-		} else {
-			RtModuleComboBox->addItem(item, item);
-		}
+		QString display = ConfigLists::audioModuleDisplayName(item);
+		if (item == "jack"_L1 && jackNotRunning)
+			display += tr(" (not running)");
+		RtModuleComboBox->addItem(display, item);
 	}
 	foreach (QString item, m_configlists->rtMidiNames) {
+		if (item == "virtual"_L1)
+			continue;
+		if (item != "none"_L1) {
+			const bool hasInput = !m_configlists->getMidiInputDevices(item).isEmpty();
+			const bool hasOutput = !m_configlists->getMidiOutputDevices(item).isEmpty();
+			if (!hasInput && !hasOutput)
+				continue;
+		}
 		RtMidiModuleComboBox->addItem(item, item);
 	}
 	for (int i = 0; i < m_configlists->languages.size(); i++) {
         languageComboBox->addItem(m_configlists->languages[i],
                                   QVariant(m_configlists->languageCodes[i]));
 	}
-    midiInterfaceComboBox->clear();
-	midiOutInterfaceComboBox->clear();
-
-#ifdef CSQT_RTMIDI
-	try {
-		RtMidiIn midiin((RtMidi::Api) m_options->rtMidiApi); // later: should be possible also with other APIs UNIX_JACK etc
-		for (int i = 0; i < (int) midiin.getPortCount(); i++) {
-			midiInterfaceComboBox->addItem(QString::fromStdString(midiin.getPortName(i)), QVariant(i));
-		}
-	}
-
-#ifdef CSQT_OLD_RTMIDI
-	catch (RtError &error) {
-#else
-	catch (RtMidiError &error) {
-#endif
-		// Handle the exception here
-		error.printMessage();
-	}
-	try {
-		RtMidiOut midiout((RtMidi::Api) m_options->rtMidiApi);
-		for (int i = 0; i < (int) midiout.getPortCount(); i++) {
-			midiOutInterfaceComboBox->addItem(QString::fromStdString(midiout.getPortName(i)), QVariant(i));
-		}
-	}
-
-#ifdef CSQT_OLD_RTMIDI
-	catch (RtError &error) {
-#else
-	catch (RtMidiError &error) {
-#endif
-		// Handle the exception here
-		error.printMessage();
-	}
-#else
-    midiInterfaceComboBox->addItem(tr("No RtMidi support"), QVariant(9999));
-#endif
-
-    midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI In interface")), QVariant(9999));
-	//match interface by nameby name, not by index
-	int ifIndex = midiInterfaceComboBox->findText(m_options->midiInterfaceName);
-	if (ifIndex>=0) {
-		midiInterfaceComboBox->setCurrentIndex(ifIndex);
-	} else {
-        qDebug()<< m_options->midiInterfaceName << "not found. Setting MIDI In to None";
-        // set to none if not found. this deals also with translation.
-        midiInterfaceComboBox->setCurrentIndex(midiInterfaceComboBox->findData(9999));
-	}
-    midiOutInterfaceComboBox->addItem(QString(tr("None", "No MIDI Out interface")), QVariant(9999));
-
-	ifIndex = midiOutInterfaceComboBox->findText(m_options->midiOutInterfaceName);
-	if (ifIndex>=0) {
-		midiOutInterfaceComboBox->setCurrentIndex(ifIndex);
-	} else {
-        qDebug()<< m_options->midiOutInterfaceName << " not found. Setting MIDI Out to None";
-		midiOutInterfaceComboBox->setCurrentIndex(midiOutInterfaceComboBox->findData(9999));
-	}
-
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
 	fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
 	lineNumbersCheckBox->setChecked(m_options->showLineNumberArea);
 	lineNumberContrastSpinBox->setValue(m_options->lineNumberContrast);
 
 	consoleFontComboBox->setCurrentIndex(consoleFontComboBox->findText(m_options->consoleFont) );
-	consoleFontSizeComboBox->setCurrentIndex(consoleFontSizeComboBox->findText(QString::number((int) m_options->consoleFontPointSize)));
+	consoleFontSizeSpinBox->setValue(m_options->consoleFontPointSize);
 	QPixmap pixmap(64,64);
 	pixmap.fill(m_options->consoleFontColor);
 	consoleFontColorPushButton->setIcon(pixmap);
@@ -376,17 +314,11 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     tabCloseButtonCheckBox->setChecked(m_options->tabShowCloseButton);
     highlightScoreCheckBox->setChecked(m_options->highlightScore);
 
-	if (m_options->useAPI)
-		ApiRadioButton->setChecked(true);
-	else
-		ExternalRadioButton->setChecked(true);
-
 	noMessagesCheckBox->setChecked(m_options->noMessages);
 	noBufferCheckBox->setChecked(m_options->noBuffer);
 	noEventsCheckBox->setChecked(m_options->noEvents);
 
 	//  threadCheckBox->setChecked(m_options->thread);
-	//  threadCheckBox->setEnabled(ApiRadioButton->isChecked());
 	keyRepeatCheckBox->setChecked(m_options->keyRepeat);
 	debugLiveEventsCheckBox->setChecked(m_options->debugLiveEvents);
 	int bufferIndex = consoleBufferComboBox->findText(QString::number(m_options->consoleBufferSize));
@@ -424,7 +356,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	OutputFilenameLineEdit->setText(m_options->fileOutputFilename);
 	OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
 	DisableDisplaysCheckBox->setChecked(m_options->disableDisplaysOnRender);
-	RtUseOptionsCheckBox->setChecked(m_options->rtUseOptions);
 	RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
 	int index = RtModuleComboBox->findData(m_options->rtAudioModule);
 	if (index < 0 || index >= RtModuleComboBox->count()) {
@@ -434,35 +365,65 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     connect(RtModuleComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(onRtModuleComboBoxChanged(int)) );
 
-	RtInputLineEdit->setText(m_options->rtInputDevice);
-	RtOutputLineEdit->setText(m_options->rtOutputDevice);
-    // useSystemSamplerateCheckBox->setChecked(m_options->useSystemSamplerate);
+    const QString module = RtModuleComboBox->currentData().toString();
+	RtInputLineEdit->setText(
+	            m_configlists->audioDeviceDisplayName(module, false, m_options->rtInputDevice));
+	RtOutputLineEdit->setText(
+	            m_configlists->audioDeviceDisplayName(module, true, m_options->rtOutputDevice));
+	selectDefaultAudioDeviceIfNeeded(false);
+	selectDefaultAudioDeviceIfNeeded(true);
+	updateAudioDeviceControls();
+	updateSamplerateComboBox();
 
-    if(m_options->useSystemSamplerate) {
-        if(RtModuleComboBox->currentText() == "pulse") {
-            // pulseaudio backend has no system sample rate, so we default to the orchestra
-            samplerateComboBox->setCurrentIndex(ORCHESTRA);
-        } else {
-            samplerateComboBox->setCurrentIndex(SYSTEM);
-        }
-    } else if (m_options->samplerate == 0) {
-        samplerateComboBox->setCurrentIndex(ORCHESTRA);
-    } else {
-        samplerateComboBox->setCurrentText(QString::number(m_options->samplerate));
-    }
+    channelsSetupMethod->clear();
+    channelsSetupMethod->addItem(tr("Device"), int(ChannelsSetupMethod::Device));
+    channelsSetupMethod->addItem(tr("Override"), int(ChannelsSetupMethod::Override));
+    channelsSetupMethod->addItem(tr("Orchestra"), int(ChannelsSetupMethod::Orchestra));
+    int channelsMethodIndex = channelsSetupMethod->findData(int(m_options->channelsSetupMethod));
+    if (channelsMethodIndex < 0)
+        channelsMethodIndex = channelsSetupMethod->findData(int(ChannelsSetupMethod::Device));
+    channelsSetupMethod->setCurrentIndex(channelsMethodIndex);
+    connect(channelsSetupMethod, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int) { updateChannelControls(); });
+    resetChannelsMethodForBackend();
 
-    numChannelsCheckBox->setChecked(m_options->overrideNumChannels);
-    numChannelsSpinBox->setValue(m_options->numChannels);
-    numChannelsSpinBox->setMinimum(1);
+    numChannelsSpinBox->setMinimum(0);
     numChannelsSpinBox->setMaximum(64);
+    m_overrideOutputChannels = m_options->numChannels;
+    numChannelsSpinBox->setValue(m_overrideOutputChannels);
 
-    const bool jackSelected = RtModuleComboBox->currentText() == "jack";
-    connectSuccessivePortsCheckBox->setChecked(m_options->connectSuccessiveJackPorts);
-    connectSuccessivePortsCheckBox->setEnabled(jackSelected);
-
-    numInputChannelsSpinBox->setValue(m_options->numInputChannels);
-    numInputChannelsSpinBox->setMinimum(1);
+    numInputChannelsSpinBox->setMinimum(0);
     numInputChannelsSpinBox->setMaximum(64);
+    m_overrideInputChannels = m_options->numInputChannels;
+    numInputChannelsSpinBox->setValue(m_overrideInputChannels);
+    connect(numChannelsSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, [this](int value) {
+        if (static_cast<ChannelsSetupMethod>(channelsSetupMethod->currentData().toInt())
+                == ChannelsSetupMethod::Override) {
+            m_overrideOutputChannels = value;
+        }
+    });
+    connect(numInputChannelsSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, [this](int value) {
+        if (static_cast<ChannelsSetupMethod>(channelsSetupMethod->currentData().toInt())
+                == ChannelsSetupMethod::Override) {
+            m_overrideInputChannels = value;
+        }
+    });
+    updateChannelControls();
+
+    ksmpsComboBox->clear();
+    for (int value : {16, 32, 64, 128, 256, 512})
+        ksmpsComboBox->addItem(QString::number(value), value);
+    int ksmpsIndex = ksmpsComboBox->findData(m_options->ksmps);
+    if (ksmpsIndex < 0)
+        ksmpsIndex = ksmpsComboBox->findData(64);
+    ksmpsComboBox->setCurrentIndex(ksmpsIndex);
+    ksmpsSpinBox->setValue(m_options->ksmps);
+    ksmpsOrchestraCheckBox->setChecked(m_options->ksmpsUseOrchestra);
+    connect(ksmpsOrchestraCheckBox, &QCheckBox::toggled,
+            this, [this](bool) { updateKsmpsControls(); });
+    updateKsmpsControls();
 
     realtimeCheckBox->setChecked(m_options->realtimeFlag);
     sampleAccurateCheckBox->setChecked(m_options->sampleAccurateFlag);
@@ -477,10 +438,19 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     }
 
 	JackNameLineEdit->setText(m_options->rtJackName);
-	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findData(m_options->rtMidiModule));
-	RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
-	RtMidiOutputLineEdit->setText(m_options->rtMidiOutputDevice);
-	csoundMidiCheckBox->setChecked(m_options->useCsoundMidi);
+	int midiModuleIndex = RtMidiModuleComboBox->findData(m_options->rtMidiModule);
+	if (midiModuleIndex < 0)
+		midiModuleIndex = RtMidiModuleComboBox->findText("none"_L1);
+	if (midiModuleIndex < 0)
+		midiModuleIndex = 0;
+	RtMidiModuleComboBox->setCurrentIndex(midiModuleIndex);
+	connect(RtMidiModuleComboBox, &QComboBox::currentIndexChanged,
+	        this, [this](int) {
+		if (!internalMidiCheckBox->isChecked())
+			updateMidiDeviceLists();
+	});
+	internalMidiCheckBox->setChecked(!m_options->useCsoundMidi);
+	updateMidiDeviceLists();
 	simultaneousCheckBox->setChecked(m_options->simultaneousRun);
 	quitOnLastTabClosedCheckBox->setChecked(m_options->quitOnLastTabClosed);
 	includeActiveFileInTitleCheckBox->setChecked(m_options->includeActiveFileInTitle);
@@ -496,10 +466,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	SadirLineEdit->setText(m_options->sadir);
 	SsdirCheckBox->setChecked(m_options->ssdirActive);
 	SsdirLineEdit->setText(m_options->ssdir);
-	SfdirCheckBox->setChecked(m_options->sfdirActive);
-	SfdirLineEdit->setText(m_options->sfdir);
-	rawWaveCheckBox->setChecked(m_options->rawWaveActive);
-	rawWaveLineEdit->setText(m_options->rawWave);
 	IncdirCheckBox->setChecked(m_options->incdirActive);
 	IncdirLineEdit->setText(m_options->incdir);
 	//  defaultCsdCheckBox->setChecked(m_options->defaultCsdActive);
@@ -531,7 +497,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 #endif
 	WaveEditorLineEdit->setText(m_options->waveeditor);
 	WavePlayerLineEdit->setText(m_options->waveplayer);
-	pdfViewerLineEdit->setText(m_options->pdfviewer);
 	languageComboBox->setCurrentIndex(m_options->language);
 
 	templateTextEdit->setPlainText(m_options->csdTemplate);
@@ -542,16 +507,13 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     connect(opcode7dir64ToolButton, SIGNAL(clicked()), this, SLOT(browseOpcode7dir64())); // was commented out - why?
 	connect(sadirToolButton, SIGNAL(clicked()), this, SLOT(browseSadir()));
 	connect(ssdirToolButton, SIGNAL(clicked()), this, SLOT(browseSsdir()));
-	connect(sfdirToolButton, SIGNAL(clicked()), this, SLOT(browseSfdir()));
 	connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
-	connect(rawWaveToolButton, SIGNAL(clicked()), this, SLOT(browseRawWaveDir()));
 	//  connect(defaultCsdToolButton, SIGNAL(clicked()), this, SLOT(browseDefaultCsd()));
     connect(examplePathToolButton, SIGNAL(clicked()), this, SLOT(browseExamplePath()) );
     connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
 	connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
 	connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
 	connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
-	connect(pdfViewerToolButton, SIGNAL(clicked()), this, SLOT(browsePdfViewer()));
 	connect(logDebugCheckBox, &QCheckBox::toggled, this, &ConfigDialog::updateLogPathLabel);
 	connect(openLogToolButton, &QToolButton::clicked, this, &ConfigDialog::openDebugLog);
 	updateLogPathLabel();
@@ -559,8 +521,12 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	//  connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
 	connect(audioInputToolButton, SIGNAL(released()), this, SLOT(selectAudioInput()));
 	connect(audioOutputToolButton, SIGNAL(released()), this, SLOT(selectAudioOutput()));
-	connect(midiInputToolButton, SIGNAL(released()), this, SLOT(selectMidiInput()));
-	connect(midiOutputToolButton, SIGNAL(released()), this, SLOT(selectMidiOutput()));
+	connect(RtOutputLineEdit, &QLineEdit::editingFinished,
+	        this, &ConfigDialog::updateSamplerateComboBox);
+	connect(RtOutputLineEdit, &QLineEdit::editingFinished,
+	        this, &ConfigDialog::updateChannelControls);
+	connect(RtInputLineEdit, &QLineEdit::editingFinished,
+	        this, &ConfigDialog::updateChannelControls);
 	connect(consoleFontColorPushButton, SIGNAL(released()), this, SLOT(selectTextColor()));
 	connect(consoleBgColorPushButton, SIGNAL(released()), this, SLOT(selectBgColor()));
     // connect(editorBgColorButton, SIGNAL(released()), this, SLOT(selectEditorBgColor()));
@@ -578,8 +544,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
     connect(testAudioSetupButton, SIGNAL(released()), this, SLOT(testAudioSetup()));
     // connect(envirRecommendButton, SIGNAL(clicked()), this, SLOT(recommendEnvironmentSettings()));
-
-	//connect(RtMidiModuleComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(checkRtMidiModule(QString)) );
 
 
     m_selectedOutputDeviceIndex = -1;
@@ -666,32 +630,104 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
     Q_UNUSED(index);
     // Todo: remember the settings for each backend in a hash table, and set it to the last
     // known value when changed back. Otherwise set it to the default adc/dac
-    auto currentText = this->RtModuleComboBox->currentText();
-    const bool jackSelected = currentText == "jack";
-    connectSuccessivePortsCheckBox->setEnabled(jackSelected);
-    //auto currentOperatingSystem = QOperatingSystemVersion::current();
-    //qDebug() << "module: " << currentText << "Op.system type is: " << QSysInfo::productType() ;
-    if(currentText == "null") {
+    const QString module = RtModuleComboBox->currentData().toString();
+    if(module == "null") {
         RtInputLineEdit->setText("");
         RtOutputLineEdit->setText("");
-    } else if (currentText == "jack") {
+    } else if (module == "jack") {
         RtInputLineEdit->setText("adc");
         RtOutputLineEdit->setText("dac");
-    } else if (currentText == "pulse") {
-        RtInputLineEdit->setText("adc");
-        RtOutputLineEdit->setText("dac");
-        if(m_options->useSystemSamplerate || this->samplerateComboBox->currentIndex() == SYSTEM) {
-            this->samplerateComboBox->setCurrentIndex(ORCHESTRA); // pulse has no own sample rate
-            m_options->useSystemSamplerate = false;
-            m_options->samplerate = 0;
-        }
-    } else if (currentText.startsWith("portaudio") && QSysInfo::productType()=="osx" ) { // on newer Mac's the internal microphone has 1 channel and that causes problems for portaudio. Disable input by default
+    } else if ((module == "pa_cb" || module == "pa_bl") && QSysInfo::productType()=="osx" ) { // on newer Mac's the internal microphone has 1 channel and that causes problems for portaudio. Disable input by default
 			qDebug() << "Set audio input to none for portaudio on MacOS";
 			RtInputLineEdit->setText("");
 			RtOutputLineEdit->setText("dac");
 	} else {
         RtInputLineEdit->setText("adc");
         RtOutputLineEdit->setText("dac");
+    }
+    selectDefaultAudioDeviceIfNeeded(false);
+    selectDefaultAudioDeviceIfNeeded(true);
+    resetChannelsMethodForBackend();
+    updateSamplerateComboBox();
+    updateAudioDeviceControls();
+    updateChannelControls();
+    updateKsmpsControls();
+}
+
+void ConfigDialog::updateSamplerateComboBox()
+{
+    const QString module = RtModuleComboBox->currentData().toString();
+    const QSignalBlocker blocker(samplerateComboBox);
+    samplerateComboBox->clear();
+
+    if (m_configlists->isFixedSamplerateBackend(module)) {
+        int sampleRate = -1;
+        if (ConfigLists::isPerDeviceSamplerateBackend(module)) {
+            const QString device = m_configlists->audioDeviceIdForDisplay(
+                        module, true, RtOutputLineEdit->text());
+            if (!device.isEmpty())
+                sampleRate = m_configlists->deviceSamplerate(module, device, true);
+        }
+        if (sampleRate <= 0)
+            sampleRate = m_configlists->backendSamplerate(module);
+        if (sampleRate > 0)
+            samplerateComboBox->addItem(QString::number(sampleRate), sampleRate);
+        else
+            samplerateComboBox->addItem(tr("Fixed by system"), 0);
+        samplerateComboBox->setCurrentIndex(0);
+        samplerateComboBox->setEnabled(false);
+        // Show fixed rates as a non-editable value, visually distinct from the
+        // surrounding static text.
+        QFont fixedFont = samplerateValueLineEdit->font();
+        fixedFont.setBold(true);
+        samplerateValueLineEdit->setFont(fixedFont);
+        samplerateValueLineEdit->setText(samplerateComboBox->itemText(0));
+        samplerateValueLineEdit->setToolTip(samplerateComboBox->toolTip());
+        samplerateValueLineEdit->setMinimumHeight(samplerateComboBox->sizeHint().height());
+        samplerateComboBox->hide();
+        samplerateValueLineEdit->show();
+    } else {
+        const bool isAlsa = module == "alsa"_L1;
+        const bool isPortAudio = module == "pa_cb"_L1
+                || module == "pa_bl"_L1
+                || module == "portaudio"_L1;
+        QList<int> rates = {44100, 48000, 88200, 96000};
+        int nativeRate = -1;
+        if ((isAlsa || isPortAudio) && m_configlists->isPipeWireRunning()) {
+            nativeRate = m_configlists->pipeWireSamplerate();
+            if (nativeRate > 0 && !rates.contains(nativeRate)) {
+                rates.append(nativeRate);
+                std::sort(rates.begin(), rates.end());
+            }
+        }
+        if (!isAlsa)
+            samplerateComboBox->addItem(tr("Orchestra"), 0);
+        for (int sampleRate : rates) {
+            const QString text = sampleRate == nativeRate
+                    ? tr("%1 (native)").arg(sampleRate)
+                    : QString::number(sampleRate);
+            samplerateComboBox->addItem(text, sampleRate);
+        }
+        int index = -1;
+        if (isAlsa) {
+            int preferred = m_options->samplerate;
+            if (preferred <= 0)
+                preferred = nativeRate;
+            if (preferred > 0)
+                index = samplerateComboBox->findData(preferred);
+            if (index < 0 && nativeRate > 0)
+                index = samplerateComboBox->findData(nativeRate);
+            if (index < 0)
+                index = 0;
+        } else {
+            index = samplerateComboBox->findData(m_options->samplerate);
+            if (index < 0)
+                index = 0;
+        }
+        samplerateComboBox->setCurrentIndex(index);
+        samplerateComboBox->setEnabled(true);
+        samplerateValueLineEdit->hide();
+        samplerateComboBox->show();
     }
 }
 
@@ -734,7 +770,7 @@ void ConfigDialog::apply()
 	m_options->showLineNumberArea = lineNumbersCheckBox->isChecked();
 	m_options->lineNumberContrast = lineNumberContrastSpinBox->value();
 	m_options->consoleFont = consoleFontComboBox->currentText();
-	m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
+	m_options->consoleFontPointSize = consoleFontSizeSpinBox->value();
 	m_options->tabUseSpaces = tabUseSpacesCheckBox->isChecked();
 	m_options->tabSpaces = tabSizeSpinBox->value();
 	m_options->editorPadding = editorPaddingSpinBox->value();
@@ -779,15 +815,22 @@ void ConfigDialog::apply()
 	m_options->debugPort = debugPortSpinBox->value();
     m_options->tabShortcutActive = tabShortcutActiveCheckBox->isChecked();
     m_options->tabShowCloseButton = tabCloseButtonCheckBox->isChecked();
-	m_options->useAPI = ApiRadioButton->isChecked();
 	//  m_options->thread = threadCheckBox->isChecked();
 	m_options->keyRepeat = keyRepeatCheckBox->isChecked();
 	m_options->debugLiveEvents = debugLiveEventsCheckBox->isChecked();
 	m_options->consoleBufferSize = consoleBufferComboBox->itemText(consoleBufferComboBox->currentIndex()).toInt();
-	m_options->midiInterface = midiInterfaceComboBox->itemData(midiInterfaceComboBox->currentIndex()).toInt(); // actually not necessary to store thta any more but for any case...
-	m_options->midiInterfaceName = midiInterfaceComboBox->currentText();
-	m_options->midiOutInterface = midiOutInterfaceComboBox->itemData(midiOutInterfaceComboBox->currentIndex()).toInt();
-	m_options->midiOutInterfaceName = midiOutInterfaceComboBox->currentText();
+	const bool internalMidi = internalMidiCheckBox->isChecked();
+	m_options->useCsoundMidi = !internalMidi;
+	m_options->rtMidiModule = RtMidiModuleComboBox->currentData().toString();
+	if (internalMidi) {
+		m_options->midiInterface = midiInterfaceComboBox->currentData().toInt();
+		m_options->midiInterfaceName = midiInterfaceComboBox->currentText();
+		m_options->midiOutInterface = midiOutInterfaceComboBox->currentData().toInt();
+		m_options->midiOutInterfaceName = midiOutInterfaceComboBox->currentText();
+	} else {
+		m_options->rtMidiInputDevice = midiInterfaceComboBox->currentData().toString();
+		m_options->rtMidiOutputDevice = midiOutInterfaceComboBox->currentData().toString();
+	}
 	m_options->noMessages = noMessagesCheckBox->isChecked();
 	m_options->noBuffer = noBufferCheckBox->isChecked();
 	m_options->noEvents = noEventsCheckBox->isChecked();
@@ -818,38 +861,37 @@ void ConfigDialog::apply()
 	m_options->fileOutputFilenameActive = OutputFilenameCheckBox->isChecked();
 	m_options->fileOutputFilename = OutputFilenameLineEdit->text();
 	m_options->disableDisplaysOnRender = DisableDisplaysCheckBox->isChecked();
-	m_options->rtUseOptions = RtUseOptionsCheckBox->isChecked();
 	m_options->rtOverrideOptions = RtOverrideCheckBox->isChecked();
     m_options->rtAudioModule = RtModuleComboBox->itemData(
                 RtModuleComboBox->currentIndex()).toString();
-	m_options->rtInputDevice = RtInputLineEdit->text();
-	m_options->rtOutputDevice = RtOutputLineEdit->text();
-	m_options->connectSuccessiveJackPorts = connectSuccessivePortsCheckBox->isChecked();
+	m_options->rtInputDevice = m_configlists->audioDeviceIdForDisplay(
+	            m_options->rtAudioModule, false, RtInputLineEdit->text());
+	m_options->rtOutputDevice = m_configlists->audioDeviceIdForDisplay(
+	            m_options->rtAudioModule, true, RtOutputLineEdit->text());
 	m_options->rtJackName = JackNameLineEdit->text();
-    // m_options->useSystemSamplerate = useSystemSamplerateCheckBox->isChecked();
-    int srmenu = samplerateComboBox->currentIndex();
-    if(srmenu == SYSTEM) {
-        m_options->useSystemSamplerate = true;
-        m_options->samplerate = 0;
-    } else if (srmenu == ORCHESTRA) {
-        m_options->useSystemSamplerate = false;
-        m_options->samplerate = 0;
-    } else {
-        m_options->useSystemSamplerate = false;
-        m_options->samplerate = samplerateComboBox->currentText().toInt();
+    m_options->samplerate = samplerateComboBox->currentData().toInt();
+    m_options->channelsSetupMethod = static_cast<ChannelsSetupMethod>(
+                channelsSetupMethod->currentData().toInt());
+    const int selectedOutputChannels = selectedDeviceChannels(true);
+    const int selectedInputChannels = selectedDeviceChannels(false);
+    m_options->deviceNumChannels = selectedOutputChannels >= 0 ? selectedOutputChannels : 2;
+    m_options->deviceNumInputChannels = selectedInputChannels >= 0 ? selectedInputChannels : 2;
+    if (m_options->channelsSetupMethod == ChannelsSetupMethod::Override) {
+        m_overrideOutputChannels = numChannelsSpinBox->value();
+        m_overrideInputChannels = numInputChannelsSpinBox->value();
+        m_options->numChannels = m_overrideOutputChannels;
+        m_options->numInputChannels = m_overrideInputChannels;
     }
-    m_options->overrideNumChannels = numChannelsCheckBox->isChecked();
-    m_options->numChannels = numChannelsSpinBox->value();
-
-    m_options->numInputChannels = numInputChannelsSpinBox->value();
+    if (ConfigLists::isFixedKsmpsModule(m_options->rtAudioModule)) {
+        m_options->ksmps = ksmpsComboBox->currentData().toInt();
+        m_options->ksmpsUseOrchestra = false;
+    } else if (ConfigLists::isSelectableKsmpsModule(m_options->rtAudioModule)) {
+        m_options->ksmps = ksmpsSpinBox->value();
+        m_options->ksmpsUseOrchestra = ksmpsOrchestraCheckBox->isChecked();
+    }
     m_options->realtimeFlag = realtimeCheckBox->isChecked();
     m_options->sampleAccurateFlag = sampleAccurateCheckBox->isChecked();
 
-
-	m_options->rtMidiModule = RtMidiModuleComboBox->currentText();
-	m_options->rtMidiInputDevice = RtMidiInputLineEdit->text();
-	m_options->rtMidiOutputDevice = RtMidiOutputLineEdit->text();
-	m_options->useCsoundMidi = csoundMidiCheckBox->isChecked();
 	m_options->simultaneousRun = simultaneousCheckBox->isChecked();
 	m_options->quitOnLastTabClosed = quitOnLastTabClosedCheckBox->isChecked();
 	m_options->includeActiveFileInTitle = includeActiveFileInTitleCheckBox->isChecked();
@@ -864,12 +906,8 @@ void ConfigDialog::apply()
 	m_options->sadir = SadirLineEdit->text();
 	m_options->ssdirActive = SsdirCheckBox->isChecked();
 	m_options->ssdir = SsdirLineEdit->text();
-	m_options->sfdirActive = SfdirCheckBox->isChecked();
-	m_options->sfdir = SfdirLineEdit->text();
 	m_options->incdirActive = IncdirCheckBox->isChecked();
 	m_options->incdir = IncdirLineEdit->text();
-	m_options->rawWaveActive = rawWaveCheckBox->isChecked();
-	m_options->rawWave = rawWaveLineEdit->text();
 	//  m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
 	//  m_options->defaultCsd = defaultCsdLineEdit->text();
     m_options->examplePath = examplePathlineEdit->text();
@@ -880,7 +918,6 @@ void ConfigDialog::apply()
 	m_options->browser = browserLineEdit->text();
 	m_options->waveeditor = WaveEditorLineEdit->text();
 	m_options->waveplayer = WavePlayerLineEdit->text();
-	m_options->pdfviewer = pdfViewerLineEdit->text();
 	m_options->language = languageComboBox->currentIndex();
 
 	m_options->csdTemplate = templateTextEdit->toPlainText();
@@ -927,22 +964,10 @@ void ConfigDialog::browseSsdir()
 	SsdirLineEdit->setText(m_options->ssdir);
 }
 
-void ConfigDialog::browseSfdir()
-{
-	browseDir(m_options->sfdir);
-	SfdirLineEdit->setText(m_options->sfdir);
-}
-
 void ConfigDialog::browseIncdir()
 {
 	browseDir(m_options->incdir);
 	IncdirLineEdit->setText(m_options->incdir);
-}
-
-void ConfigDialog::browseRawWaveDir()
-{
-	browseDir(m_options->rawWave);
-	rawWaveLineEdit->setText(m_options->rawWave);
 }
 
 void ConfigDialog::browseCsoundExecutable()
@@ -992,12 +1017,6 @@ void ConfigDialog::browseWavePlayer()
 	WavePlayerLineEdit->setText(m_options->waveplayer);
 }
 
-void ConfigDialog::browsePdfViewer()
-{
-	browseFile(m_options->pdfviewer);
-	pdfViewerLineEdit->setText(m_options->pdfviewer);
-}
-
 void ConfigDialog::openDebugLog()
 {
 	const QString path = DebugLog::filePath();
@@ -1022,143 +1041,148 @@ void ConfigDialog::updateLogPathLabel()
 	logPathLabel->setToolTip(enabled ? DebugLog::filePath() : QString());
 }
 
+QList<AudioDeviceInfo> ConfigDialog::cachedAudioDeviceGroups(bool isOutput)
+{
+	const QString module = RtModuleComboBox->currentData().toString();
+	const QString inKey = module + u"|in"_s;
+	const QString outKey = module + u"|out"_s;
+	if (!m_audioDeviceCache.contains(inKey)
+	        || !m_audioDeviceCache.contains(outKey)) {
+		const QPair<QList<AudioDeviceInfo>, QList<AudioDeviceInfo>> both =
+		        m_configlists->audioDeviceGroups(module);
+		m_audioDeviceCache.insert(inKey, both.first);
+		m_audioDeviceCache.insert(outKey, both.second);
+	}
+	return m_audioDeviceCache.value(isOutput ? outKey : inKey);
+}
+
 void ConfigDialog::selectAudioInput()
 {
-    QList<QStringPair> deviceList = m_configlists->getAudioInputDevices(
-				RtModuleComboBox->itemData(RtModuleComboBox->currentIndex()).toString());
-    // QMenu menu(this);
-    QMenu menu(audioInputToolButton);
-	QVector<QAction*> actions;
+    const QString module = RtModuleComboBox->currentData().toString();
+    QVector<QStringPair> entries;
 
-    QString module = RtModuleComboBox->currentText();
-    if(module == "jack") {
-        deviceList.prepend(QStringPair("adc", "adc"));
-        deviceList.prepend(QStringPair("Do Not Autoconnect", "adc:null"));
-        if(m_configlists->isPipeWireRunning())
-            deviceList.prepend(QStringPair("All Hardware Inputs", "adc:.*:capture_.*"));
-        else
-            deviceList.prepend(QStringPair("System Inputs", "adc:system:capture_"));
-    } else {
-        deviceList.prepend(QStringPair("Default", "adc"));
+    const QList<AudioDeviceInfo> devices = cachedAudioDeviceGroups(false);
+    for (const AudioDeviceInfo &device : devices) {
+        QStringList details;
+        if (module != "jack"_L1 && !device.id.isEmpty())
+            details.append(device.id);
+        if (device.channels > 0)
+            details.append(tr("%1 ch").arg(device.channels));
+        QString text = device.name;
+        if (!details.isEmpty())
+            text += QStringLiteral("  (") + details.join(QStringLiteral(", "))
+                    + QLatin1Char(')');
+        entries.append(QStringPair(text, device.id));
     }
 
-    deviceList.prepend(QStringPair("No Input", ""));
+    if (module == "jack"_L1) {
+        entries.prepend(QStringPair("Do Not Autoconnect", "adc:null"));
+        if (m_configlists->isPipeWireRunning())
+            entries.prepend(QStringPair("All Hardware Inputs", "adc:.*:capture_.*"));
+        else
+            entries.prepend(QStringPair("System Inputs", "adc:system:capture_"));
+    }
+    entries.prepend(QStringPair("Disabled", ""));
 
-    auto currentSelection = RtInputLineEdit->text();
-	for (int i = 0; i < deviceList.size(); i++) {
-        auto option = !deviceList[i].second.isEmpty() ?
-                    deviceList[i].first + "  (" + deviceList[i].second + ")":
-                    deviceList[i].first;
-        if(currentSelection == deviceList[i].second)
+    QMenu menu(audioInputToolButton);
+    QVector<QAction*> actions;
+    const QString currentText = RtInputLineEdit->text();
+    QString currentSelection;
+    for (const AudioDeviceInfo &device : devices) {
+        if (device.name == currentText) {
+            currentSelection = device.id;
+            break;
+        }
+    }
+    if (currentSelection.isEmpty())
+        currentSelection = currentText;
+    for (const QStringPair &entry : entries) {
+        QString option = entry.first;
+        if (currentSelection == entry.second)
             option.prepend("> ");
-        auto action = menu.addAction(option);
-        actions.append(action);
-	}
+        actions.append(menu.addAction(option));
+    }
 
-    auto pos = audioInputToolButton->mapToGlobal(QPoint(0, audioInputToolButton->height()));
-    int index = actions.indexOf(menu.exec(pos));
-    if (index >= 0)
-        RtInputLineEdit->setText(deviceList[index].second);
+    const QPoint pos = audioInputToolButton->mapToGlobal(
+                QPoint(0, audioInputToolButton->height()));
+    const int index = actions.indexOf(menu.exec(pos));
+    if (index >= 0) {
+        const QString id = entries[index].second;
+        QString display = id;
+        for (const AudioDeviceInfo &device : devices) {
+            if (device.id == id) {
+                display = device.name;
+                break;
+            }
+        }
+        RtInputLineEdit->setText(display);
+        updateChannelControls();
+    }
 }
 
 void ConfigDialog::selectAudioOutput()
 {
-    QList<QStringPair> deviceList = m_configlists->getAudioOutputDevices(
-				RtModuleComboBox->itemData(RtModuleComboBox->currentIndex()).toString());
-	QMenu menu(this);
-	QVector<QAction*> actions;
+    const QString module = RtModuleComboBox->currentData().toString();
+    QVector<QStringPair> entries;
 
+    const QList<AudioDeviceInfo> devices = cachedAudioDeviceGroups(true);
+    for (const AudioDeviceInfo &device : devices) {
+        QStringList details;
+        if (module != "jack"_L1 && !device.id.isEmpty())
+            details.append(device.id);
+        if (device.channels > 0)
+            details.append(tr("%1 ch").arg(device.channels));
+        QString text = device.name;
+        if (!details.isEmpty())
+            text += QStringLiteral("  (") + details.join(QStringLiteral(", "))
+                    + QLatin1Char(')');
+        entries.append(QStringPair(text, device.id));
+    }
 
-    QString module = RtModuleComboBox->currentText();
-    if(module == "jack") {
-        deviceList.prepend(QStringPair("dac", "dac"));
-        deviceList.prepend(QStringPair("Do Not Autoconnect", "dac:null"));
-        if(m_configlists->isPipeWireRunning())
-            deviceList.prepend(QStringPair("All Hardware Outputs", "dac:.*:playback_.*"));
+    if (module == "jack"_L1) {
+        entries.prepend(QStringPair("Do Not Autoconnect", "dac:null"));
+        if (m_configlists->isPipeWireRunning())
+            entries.prepend(QStringPair("All Hardware Outputs", "dac:.*:playback_.*"));
         else
-            deviceList.prepend(QStringPair("System Outputs", "dac:system:playback_"));
-    } else {
-        deviceList.prepend(QStringPair("Default", "dac"));
+            entries.prepend(QStringPair("System Outputs", "dac:system:playback_"));
     }
+    entries.append(QStringPair("Disabled", ""));
 
-    deviceList.append(QStringPair("No Output", ""));
-    auto currentSelection = RtOutputLineEdit->text();
-
-	for (int i = 0; i < deviceList.size(); i++) {
-        auto option = !deviceList[i].second.isEmpty() ?
-                    deviceList[i].first + "  (" + deviceList[i].second + ")" :
-                    deviceList[i].first;
-        if(currentSelection == deviceList[i].second)
-            option.prepend("> ");
-        auto action = menu.addAction(option);
-		actions.append(action);
-	}
-
-    auto pos = audioOutputToolButton->mapToGlobal(QPoint(0, audioOutputToolButton->height()));
-    int index = actions.indexOf(menu.exec(pos));
-    if (index >= 0)
-        RtOutputLineEdit->setText(deviceList[index].second);
-}
-
-void ConfigDialog::selectMidiInput()
-{
-	QString module = RtMidiModuleComboBox->currentText();
-	QHash<QString, QString> deviceList = m_configlists->getMidiInputDevices(module);
-
-	QMenu menu(this);
-
-	if (module == "jack") {
-        deviceList.insert("jack", "jack"); // just to create client in jack
-    }
-
-    deviceList.insert("Disabled", "");
-
-	if (module == "portmidi") {
-		deviceList.insert("all", "a");
-	}
-
-	QHashIterator<QString, QString> i(deviceList);
-	while (i.hasNext()) {
-		i.next();
-		QAction* action =  menu.addAction(i.key() + " (" + i.value() +")");
-		action->setData(i.value());
-	}
-
-    QPoint pos = midiInputToolButton->mapToGlobal(QPoint(0, midiInputToolButton->height()));
-    QAction *selected = menu.exec(pos);
-
-    if (selected) {
-		RtMidiInputLineEdit->setText(selected->data().toString());
-	}
-}
-
-void ConfigDialog::selectMidiOutput()
-{
-	QString module = RtMidiModuleComboBox->currentText();
-    QList<QStringPair> deviceList = m_configlists->getMidiOutputDevices(module);
     QMenu menu(this);
-	QVector<QAction*> actions;
-
-    QStringPair device;
-
-	if (module == "jack") {
-        // since getMidiInputDevices does not return jack clients yet and empty
-        // parametery may crash csound
-        deviceList.prepend(QStringPair("jack", "jack"));
+    QVector<QAction*> actions;
+    const QString currentText = RtOutputLineEdit->text();
+    QString currentSelection;
+    for (const AudioDeviceInfo &device : devices) {
+        if (device.name == currentText) {
+            currentSelection = device.id;
+            break;
+        }
+    }
+    if (currentSelection.isEmpty())
+        currentSelection = currentText;
+    for (const QStringPair &entry : entries) {
+        QString option = entry.first;
+        if (currentSelection == entry.second)
+            option.prepend("> ");
+        actions.append(menu.addAction(option));
     }
 
-    deviceList.append(QStringPair("Disabled", ""));
-
-	for (int i = 0; i < deviceList.size(); i++) {
-		QAction* action =  menu.addAction(deviceList[i].first + " (" + deviceList[i].second +")");
-		actions.append(action);
-	}
-
-    QPoint pos = midiOutputToolButton->mapToGlobal(QPoint(0, midiOutputToolButton->height()));
-    int index = actions.indexOf(menu.exec(pos));
-    // int index = actions.indexOf(menu.exec(this->mapToGlobal(pos)));
-    if (index >= 0)
-		RtMidiOutputLineEdit->setText(deviceList[index].second);
+    const QPoint pos = audioOutputToolButton->mapToGlobal(
+                QPoint(0, audioOutputToolButton->height()));
+    const int index = actions.indexOf(menu.exec(pos));
+    if (index >= 0) {
+        const QString id = entries[index].second;
+        QString display = id;
+        for (const AudioDeviceInfo &device : devices) {
+            if (device.id == id) {
+                display = device.name;
+                break;
+            }
+        }
+        RtOutputLineEdit->setText(display);
+        updateSamplerateComboBox();
+        updateChannelControls();
+    }
 }
 
 void ConfigDialog::browseFile(QString &destination)
@@ -1261,25 +1285,284 @@ void ConfigDialog::defaultTemplate()
 	templateTextEdit->setPlainText(defaultText );
 }
 
-void ConfigDialog::on_csoundMidiCheckBox_toggled(bool checked)
+int ConfigDialog::selectedDeviceChannels(bool isOutput)
 {
-	if (checked) { // close internal rtmidi
-		midiInterfaceComboBox->setEnabled(false);
-		midiOutInterfaceComboBox->setEnabled(false);
-		qDebug()<<Q_FUNC_INFO<<" closing internal rtmidi now.";
-		emit disableInternalRtMidi();
+	const QString module = RtModuleComboBox->currentData().toString();
+	if (module == "null"_L1)
+		return -1;
+	const QList<AudioDeviceInfo> devices = cachedAudioDeviceGroups(isOutput);
+	const QString text = isOutput ? RtOutputLineEdit->text() : RtInputLineEdit->text();
+	QString id = text;
+	for (const AudioDeviceInfo &device : devices) {
+		if (device.name == text || device.id == text) {
+			id = device.id;
+			break;
+		}
+	}
+	return m_configlists->audioDeviceChannels(module, id, isOutput, &devices);
+}
+
+void ConfigDialog::selectDefaultAudioDeviceIfNeeded(bool isOutput)
+{
+	const QString module = RtModuleComboBox->currentData().toString();
+	QLineEdit *edit = isOutput ? RtOutputLineEdit : RtInputLineEdit;
+	if (module == "null"_L1) {
+		edit->clear();
+		return;
+	}
+	const QString text = edit->text();
+	if (text.isEmpty())
+		return; // explicit No Input / No Output
+	if (text.contains(QLatin1Char('*')))
+		return; // expert regex
+
+	static const QStringList inputSpecial = {
+		u"adc:null"_s, u"adc:system:capture_"_s, u"adc:.*:capture_.*"_s
+	};
+	static const QStringList outputSpecial = {
+		u"dac:null"_s, u"dac:system:playback_"_s, u"dac:.*:playback_.*"_s
+	};
+	if ((isOutput ? outputSpecial : inputSpecial).contains(text))
+		return;
+
+	const QList<AudioDeviceInfo> devices = cachedAudioDeviceGroups(isOutput);
+	for (const AudioDeviceInfo &device : devices) {
+		if (device.id == text || device.name == text)
+			return;
+	}
+
+	const QString defaultId = ConfigLists::defaultAudioDeviceId(module, isOutput, devices);
+	if (defaultId.isEmpty()) {
+		edit->clear();
+		return;
+	}
+	QString display = defaultId;
+	for (const AudioDeviceInfo &device : devices) {
+		if (device.id == defaultId) {
+			display = device.name;
+			break;
+		}
+	}
+	edit->setText(display);
+}
+
+void ConfigDialog::resetChannelsMethodForBackend()
+{
+	const QString module = RtModuleComboBox->currentData().toString();
+	if (!ConfigLists::isFixedKsmpsModule(module))
+		return;
+	const int deviceIndex = channelsSetupMethod->findData(
+	            int(ChannelsSetupMethod::Device));
+	if (deviceIndex < 0)
+		return;
+	const QSignalBlocker blocker(channelsSetupMethod);
+	channelsSetupMethod->setCurrentIndex(deviceIndex);
+}
+
+void ConfigDialog::updateChannelControls()
+{
+	const QString module = RtModuleComboBox->currentData().toString();
+	const int inputChannels = selectedDeviceChannels(false);
+	const int outputChannels = selectedDeviceChannels(true);
+	const int effectiveInput = inputChannels >= 0 ? inputChannels : 2;
+	const int effectiveOutput = outputChannels >= 0 ? outputChannels : 2;
+
+	ChannelsSetupMethod method = static_cast<ChannelsSetupMethod>(
+	            channelsSetupMethod->currentData().toInt());
+	const bool driverDisabled = module == "null"_L1;
+	const int deviceIndex = channelsSetupMethod->findData(
+	            int(ChannelsSetupMethod::Device));
+	if (deviceIndex >= 0) {
+		if (auto *model = qobject_cast<QStandardItemModel *>(channelsSetupMethod->model())) {
+			if (QStandardItem *item = model->item(deviceIndex))
+				item->setEnabled(!driverDisabled);
+		}
+	}
+	if (driverDisabled && method == ChannelsSetupMethod::Device) {
+		const int orchestraIndex = channelsSetupMethod->findData(
+		            int(ChannelsSetupMethod::Orchestra));
+		if (orchestraIndex >= 0) {
+			const QSignalBlocker blocker(channelsSetupMethod);
+			channelsSetupMethod->setCurrentIndex(orchestraIndex);
+			method = ChannelsSetupMethod::Orchestra;
+		}
+	}
+
+	const QSignalBlocker outputBlocker(numChannelsSpinBox);
+	const QSignalBlocker inputBlocker(numInputChannelsSpinBox);
+	numChannelsSpinBox->setSpecialValueText(QString());
+	numInputChannelsSpinBox->setSpecialValueText(QString());
+	numChannelsSpinBox->setVisible(true);
+	numInputChannelsSpinBox->setVisible(true);
+	if (method == ChannelsSetupMethod::Override) {
+		numChannelsSpinBox->setValue(m_overrideOutputChannels);
+		numInputChannelsSpinBox->setValue(m_overrideInputChannels);
+		numChannelsSpinBox->setReadOnly(false);
+		numInputChannelsSpinBox->setReadOnly(false);
+		numChannelsSpinBox->setEnabled(true);
+		numInputChannelsSpinBox->setEnabled(true);
+	} else if (method == ChannelsSetupMethod::Device) {
+		// Looks like a normal value field but cannot be changed by the user.
+		numChannelsSpinBox->setValue(effectiveOutput);
+		numInputChannelsSpinBox->setValue(effectiveInput);
+		numChannelsSpinBox->setReadOnly(true);
+		numInputChannelsSpinBox->setReadOnly(true);
+		numChannelsSpinBox->setEnabled(true);
+		numInputChannelsSpinBox->setEnabled(true);
 	} else {
-		midiInterfaceComboBox->setEnabled(true);
-		midiOutInterfaceComboBox->setEnabled(true);
+		// Orchestra: display the device-declared counts, but inactive.
+		numChannelsSpinBox->setValue(effectiveOutput);
+		numInputChannelsSpinBox->setValue(effectiveInput);
+		numChannelsSpinBox->setReadOnly(true);
+		numInputChannelsSpinBox->setReadOnly(true);
+		numChannelsSpinBox->setEnabled(false);
+		numInputChannelsSpinBox->setEnabled(false);
 	}
 }
 
-void ConfigDialog::checkRtMidiModule(QString module)
+void ConfigDialog::updateKsmpsControls()
 {
-	if (module=="jack") { // && there is no lists; but now not connected. later: remove this function!
-		QDEBUG << "Setting dummy input and output for jack midi";
-		RtMidiInputLineEdit->setText("dummy");
-		RtMidiOutputLineEdit->setText("dummy");
+	const QString module = RtModuleComboBox->currentData().toString();
+	const bool fixed = ConfigLists::isFixedKsmpsModule(module);
+	const bool selectable = ConfigLists::isSelectableKsmpsModule(module);
+
+	ksmpsLabel->setVisible(fixed || selectable);
+	ksmpsComboBox->setVisible(fixed);
+	ksmpsSpinBox->setVisible(selectable);
+	ksmpsOrchestraCheckBox->setVisible(selectable);
+	ksmpsComboBox->setEnabled(fixed);
+	ksmpsSpinBox->setEnabled(selectable && !ksmpsOrchestraCheckBox->isChecked());
+}
+
+void ConfigDialog::updateAudioDeviceControls()
+{
+	const bool enabled = RtModuleComboBox->currentData().toString() != "null"_L1;
+	inputDeviceLabel->setEnabled(enabled);
+	RtInputLineEdit->setEnabled(enabled);
+	audioInputToolButton->setEnabled(enabled);
+	outputDeviceLabel->setEnabled(enabled);
+	RtOutputLineEdit->setEnabled(enabled);
+	audioOutputToolButton->setEnabled(enabled);
+}
+
+void ConfigDialog::updateMidiControls(bool internalMidi)
+{
+	// The Input/Output menus are shared by both modes, so they stay enabled.
+	midiInterfaceComboBox->setEnabled(true);
+	midiOutInterfaceComboBox->setEnabled(true);
+	label_37->setEnabled(true);
+	label_38->setEnabled(true);
+
+	// The Csound MIDI backend only applies when internal MIDI is off.
+	RtMidiModuleComboBox->setEnabled(!internalMidi);
+	label_14->setEnabled(!internalMidi);
+}
+
+void ConfigDialog::populateInternalMidiInterfaces()
+{
+	const QSignalBlocker inBlocker(midiInterfaceComboBox);
+	const QSignalBlocker outBlocker(midiOutInterfaceComboBox);
+	midiInterfaceComboBox->clear();
+	midiOutInterfaceComboBox->clear();
+
+#ifdef CSQT_RTMIDI
+	try {
+		RtMidiIn midiin((RtMidi::Api) m_options->rtMidiApi);
+		for (int i = 0; i < (int) midiin.getPortCount(); i++)
+			midiInterfaceComboBox->addItem(QString::fromStdString(midiin.getPortName(i)),
+			                               QVariant(i));
+	}
+#ifdef CSQT_OLD_RTMIDI
+	catch (RtError &error) {
+#else
+	catch (RtMidiError &error) {
+#endif
+		error.printMessage();
+	}
+	try {
+		RtMidiOut midiout((RtMidi::Api) m_options->rtMidiApi);
+		for (int i = 0; i < (int) midiout.getPortCount(); i++)
+			midiOutInterfaceComboBox->addItem(QString::fromStdString(midiout.getPortName(i)),
+			                                  QVariant(i));
+	}
+#ifdef CSQT_OLD_RTMIDI
+	catch (RtError &error) {
+#else
+	catch (RtMidiError &error) {
+#endif
+		error.printMessage();
+	}
+#else
+	midiInterfaceComboBox->addItem(tr("No RtMidi support"), QVariant(9999));
+#endif
+
+	midiInterfaceComboBox->addItem(tr("None", "No MIDI In interface"), QVariant(9999));
+	midiOutInterfaceComboBox->addItem(tr("None", "No MIDI Out interface"), QVariant(9999));
+
+	int index = midiInterfaceComboBox->findText(m_options->midiInterfaceName);
+	if (index < 0)
+		index = midiInterfaceComboBox->findData(9999);
+	midiInterfaceComboBox->setCurrentIndex(index);
+
+	index = midiOutInterfaceComboBox->findText(m_options->midiOutInterfaceName);
+	if (index < 0)
+		index = midiOutInterfaceComboBox->findData(9999);
+	midiOutInterfaceComboBox->setCurrentIndex(index);
+}
+
+void ConfigDialog::populateCsoundMidiDevices()
+{
+	const QString module = RtMidiModuleComboBox->currentData().toString();
+	const QSignalBlocker inBlocker(midiInterfaceComboBox);
+	const QSignalBlocker outBlocker(midiOutInterfaceComboBox);
+	midiInterfaceComboBox->clear();
+	midiOutInterfaceComboBox->clear();
+
+	QHash<QString, QString> inputs = m_configlists->getMidiInputDevices(module);
+	if (module == "jack"_L1)
+		inputs.insert("jack", "jack");
+	inputs.insert(tr("Disabled"), QString());
+	if (module == "portmidi"_L1)
+		inputs.insert("all", "a");
+	QStringList inputNames = inputs.keys();
+	inputNames.sort(Qt::CaseInsensitive);
+	for (const QString &name : inputNames)
+		midiInterfaceComboBox->addItem(name, inputs.value(name));
+
+	QList<QStringPair> outputs = m_configlists->getMidiOutputDevices(module);
+	if (module == "jack"_L1)
+		outputs.prepend(QStringPair("jack", "jack"));
+	outputs.append(QStringPair(tr("Disabled"), QString()));
+	for (const QStringPair &entry : outputs)
+		midiOutInterfaceComboBox->addItem(entry.first, entry.second);
+
+	int index = midiInterfaceComboBox->findData(m_options->rtMidiInputDevice);
+	if (index < 0)
+		index = midiInterfaceComboBox->findText(tr("Disabled"));
+	midiInterfaceComboBox->setCurrentIndex(index);
+
+	index = midiOutInterfaceComboBox->findData(m_options->rtMidiOutputDevice);
+	if (index < 0)
+		index = midiOutInterfaceComboBox->findText(tr("Disabled"));
+	midiOutInterfaceComboBox->setCurrentIndex(index);
+}
+
+void ConfigDialog::updateMidiDeviceLists()
+{
+	const bool internalMidi = internalMidiCheckBox->isChecked();
+	if (internalMidi)
+		populateInternalMidiInterfaces();
+	else
+		populateCsoundMidiDevices();
+	updateMidiControls(internalMidi);
+}
+
+void ConfigDialog::on_internalMidiCheckBox_toggled(bool checked)
+{
+	updateMidiDeviceLists();
+	if (!checked) { // switch to Csound's MIDI, close internal rtmidi
+		qDebug()<<Q_FUNC_INFO<<" closing internal rtmidi now.";
+		emit disableInternalRtMidi();
 	}
 }
 
