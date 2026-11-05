@@ -91,5 +91,5 @@ exists($${CSOUND_FRAMEWORK_ROOT}/$${MAC_LIB}.framework) {
 }
 
 
-QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
-ICON = $${PWD}/images/csoundqt.icns
+QMAKE_INFO_PLIST = $${PWD}/../src/MyInfo.plist
+ICON = $${PWD}/../images/csoundqt.icns

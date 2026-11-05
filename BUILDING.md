@@ -1,7 +1,8 @@
 # Build instructions for CsoundQt
 
 These instructions build the **`csoundqt7`** branch (CsoundQt 7), which requires
-**Csound 7** and **Qt 6**. Report problems at
+**Csound 7** and **Qt 6**. Only qmake is supported on this branch; CMake support
+is developed separately. Report problems at
 <https://github.com/CsoundQt/CsoundQt/issues>.
 
 # Windows
@@ -115,8 +116,8 @@ To rebuild after editing code, run the build and run commands again from the
 
 ## Notes
 
-- `qcs-macx.pro` sets `QMAKE_APPLE_DEVICE_ARCHS = arm64`. Edit that line for
-  `x86_64` or a universal binary.
+- `qmake/qcs-macx.pro` sets `QMAKE_APPLE_DEVICE_ARCHS = arm64`. Edit that line
+  for `x86_64` or a universal binary.
 - To use a Csound in a non-default location, set
   `CSOUND_LIBRARY_DIR=/path/CsoundLib64.framework/Versions/Current` and
   `CSOUND_INCLUDE_DIR=/path/CsoundLib64.framework/Versions/Current/Headers`.

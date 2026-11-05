@@ -6,13 +6,17 @@
 - Do **not** add Qt5 compatibility code. No `#if QT_VERSION >= QT_VERSION_CHECK(5, ...)`
   fallbacks, no `QVariant::convert(int)` / `QVariant::type()`, etc.
 - Use modern Qt6 APIs directly, e.g. `QVariant::convert(QMetaType)` / `QVariant::metaType()`.
-- `qcs.pro` already requires Qt6. The CMake build's version check is stale (see below).
+- `qcs.pro` already requires Qt6.
+
+## Build system
+
+- The `csoundqt7` branch builds with **qmake only**. CMake support lives on the
+  `cmake_support` branch; do not add CMake files or build instructions here.
+- Only `qcs.pro` stays in the repository root. The other qmake project files and
+  all `.pri` files live in `qmake/`.
 
 ## Known stale Qt5 leftovers to clean up
 
-- `CMakeLists.txt` (~line 52): the version guard has an inverted/incorrect message —
-  the `else()` branch (i.e. Qt6) says `FATAL_ERROR "Only Qt5 is currently supported"`.
-  It should require `Qt >= 6.7`.
 - `src/types.h` (~line 112) and `src/qutegraph.cpp` (~line 1516): `QT_VERSION >= 5.14`
   guards for `ENDL`/`SKIP_EMPTY_PARTS` can be removed.
 

@@ -6,7 +6,7 @@
  * and names those functions _stricmp()/_strnicmp() instead.
  *
  * This directory is only added to the include path when building with MSVC
- * (see litehtml.pri); on other platforms the system <strings.h> is used.
+ * (see qmake/litehtml.pri); on other platforms the system <strings.h> is used.
  */
 #if defined(_MSC_VER)
 

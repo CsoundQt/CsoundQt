@@ -322,7 +322,7 @@ build_csoundqt() {
     rm -rf "$src" "$WORK_DIR/csoundqt-build"
     mkdir -p "$src"
     # In-source build (like the Flatpak) so the bundled rtmidi submodule is
-    # found via the relative src/../$RTMIDI_DIR pattern in src.pri.
+    # found via the relative src/../$RTMIDI_DIR pattern in qmake/src.pri.
     tar -C "$ROOT" --exclude=.git --exclude=.flatpak-builder \
         --exclude=Makefile --exclude=.qmake.stash --exclude='*.pro.user*' \
         --exclude=build --exclude=build-dir --exclude='build-*' \

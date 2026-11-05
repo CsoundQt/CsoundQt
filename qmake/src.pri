@@ -84,15 +84,15 @@ HEADERS = "src/about.h" \
     "src/qutesheet.h" \
     "src/basedocument.h" \
     "src/baseview.h" \
-    $$PWD/csound_threaded_csqt.hpp \
-    $$PWD/risset.h \
-    $$PWD/selectcolorbutton.h \
+    $$PWD/../src/csound_threaded_csqt.hpp \
+    $$PWD/../src/risset.h \
+    $$PWD/../src/selectcolorbutton.h \
     src/midihandler.h \
     src/midilearndialog.h \
     src/debugpanel.h \
     src/livecodeeditor.h \
     src/newbreakpointdialog.h \
-    #$$PWD/CsoundHtmlOnlyWrapper.h
+    #$$PWD/../src/CsoundHtmlOnlyWrapper.h
 
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
@@ -156,22 +156,22 @@ SOURCES = "src/about.cpp" \
     "src/qutesheet.cpp" \
     "src/basedocument.cpp" \
     "src/baseview.cpp" \
-    $$PWD/risset.cpp \
-    $$PWD/selectcolorbutton.cpp \
+    $$PWD/../src/risset.cpp \
+    $$PWD/../src/selectcolorbutton.cpp \
     src/midihandler.cpp \
     src/midilearndialog.cpp \
     src/debugpanel.cpp \
     src/livecodeeditor.cpp \
     src/newbreakpointdialog.cpp \
     #src/csoundhtmlview.cpp \
-    #$$PWD/CsoundHtmlOnlyWrapper.cpp
+    #$$PWD/../src/CsoundHtmlOnlyWrapper.cpp
 
 
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
     "src/csoundqt.rc" \
     "src/test.csd" \
-    $$PWD/QML/ControlSlider.qml
+    $$PWD/../src/QML/ControlSlider.qml
 
 rtmidi {
     HEADERS += "src/../$${RTMIDI_DIR}/RtMidi.h"
@@ -202,7 +202,7 @@ OTHER_FILES += \
 
 # Bundled litehtml (HTML/CSS renderer) for the documentation viewer.
 # Included last so its SOURCES += appends after the SOURCES = assignments above.
-include($$PWD/../litehtml.pri)
+include($$PWD/litehtml.pri)
 
 # Needed for correct deployment on OS X
 QML_IMPORT_PATH =src/QML

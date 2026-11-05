@@ -11,7 +11,7 @@
 # source tree.  In this case, the CSOUND_INCLUDE_DIR and CSOUND_LIBRARY_DIR
 # variables do not need to be set explicitly.
 # These variables can also be set in a file named config.user.pri, which is
-# used if it is found in the same directory as this file (config.pri).
+# used if it is found in the same directory as this file (qcs.pro).
 ################################################################################
 # BUILD OPTIONS:
 # CONFIG+=build32    To build floats version
@@ -70,15 +70,15 @@ buildDoubles: message("Doubles is now built by default, no need to specify build
 
 build32:build64:CONFIG -= build32
 unix {
-    macx:include (qcs-macx.pro)
-    # else:haiku-g++ {include (qcs-haiku.pro) }
-    else: include (qcs-unix.pro)
+    macx:include (qmake/qcs-macx.pro)
+    # else:haiku-g++ {include (qmake/qcs-haiku.pro) }
+    else: include (qmake/qcs-unix.pro)
 }
-win32-g++:include (qcs-win32.pro)
-win32-msvc2013:include (qcs-win32.pro)
-win32-msvc2015:include (qcs-win32.pro)
-win32-msvc2017:include (qcs-win32.pro)
-win32-msvc:include (qcs-win32.pro)
+win32-g++:include (qmake/qcs-win32.pro)
+win32-msvc2013:include (qmake/qcs-win32.pro)
+win32-msvc2015:include (qmake/qcs-win32.pro)
+win32-msvc2017:include (qmake/qcs-win32.pro)
+win32-msvc:include (qmake/qcs-win32.pro)
 
 record_support|perfThread_build {
     DEFINES += PERFTHREAD_RECORD
@@ -92,7 +92,7 @@ debugger {
 }
 
 
-include(src/src.pri)
+include(qmake/src.pri)
 TRANSLATIONS = "src/translations/csoundqt_en.ts" \
     "src/translations/csoundqt_es.ts" \
     "src/translations/csoundqt_de.ts" \

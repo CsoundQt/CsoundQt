@@ -20,8 +20,8 @@ for (rtdir, RTMIDI_VERSIONS) {
 }
 
 
-exists(config.user.pri) {
-    include(config.user.pri)
+exists($$PWD/../config.user.pri) {
+    include($$PWD/../config.user.pri)
 	message(... config.user.pri found)
 }
 !no_messages {
@@ -91,9 +91,8 @@ isEmpty(CSOUND_LIB) {
 }
 
 rtmidi {
-# Use the rtmidi submodule when it is present: the CMake build does the same,
-# so both builds link the same RtMidi. A system copy is only used when the
-# submodule is missing. An explicitly given RTMIDI_DIR always wins, e.g.
+# Use the rtmidi submodule when it is present. A system copy is only used when
+# the submodule is missing. An explicitly given RTMIDI_DIR always wins, e.g.
 #   qmake qcs.pro CONFIG+=rtmidi RTMIDI_DIR=/usr/include/rtmidi
 unix:!macx:isEmpty(RTMIDI_DIR) {
     exists("rtmidi/RtMidi.h") {
@@ -187,7 +186,7 @@ win32 {
     !csoundLibraryExists($${CSOUND_LIB}):error(Csound API library not found)
 }
 
-exists (src/csPerfThread.hpp) {
+exists ($$PWD/../src/csPerfThread.hpp) {
    CONFIG += perfThread_build
    message(Building csPerfThread sources.)
 }

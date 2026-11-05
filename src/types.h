@@ -30,7 +30,7 @@
 #include <csound.h>
 
 
-// CSQT_VERSION is added by qmake / cmake, reading the file VERSION
+// CSQT_VERSION is added by qmake, reading the file VERSION
 #ifndef CSQT_VERSION
     #define CSQT_VERSION "unknown"
 #endif

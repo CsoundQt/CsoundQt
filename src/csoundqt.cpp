@@ -6680,7 +6680,7 @@ QString CsoundQt::getExamplePath(QString dir)
     // Shadow builds keep the binary in <repo>/build/<kit>/bin while the
     // examples stay in <repo>/src/Examples. Walk up from the executable
     // instead of hard-coding a particular build layout, so the Examples menu
-    // also works in Qt Creator and CMake builds.
+    // also works in Qt Creator and other shadow builds.
     QDir appDir(qApp->applicationDirPath());
     for (int level = 0; level < 6; ++level) {
         candidateRoots << appDir.absolutePath() + "/Examples"

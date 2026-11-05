@@ -16,14 +16,9 @@ Last updated: 2026-09-01
 - **Phase 3 done**: whole-manual search — roots registered in
   `CsoundQt::setupHelpPanel` (`docDir` + `risset->rissetHtmlDocs`), lazy load,
   two-tier exact/prefix, in-dock panel, deep-link to anchors.
-- **Phase 4 done**: `qcs.pro` default build has **no WebEngine**; `src.pri`
-  includes the new files + `litehtml.pri`; CMake updated (C++17, WebEngine
-  optional, litehtml subdir). **qmake default build verified**: compiles, links,
-  `ldd` shows no WebEngine/WebChannel; app starts.
-  - *CMake caveat (pre-existing):* the top-of-file Qt version gate rejects Qt6
-    (`message(FATAL_ERROR "Only Qt5 is currently supported")`), so a full CMake
-    build cannot run here. The litehtml/WebEngine edits are correct for when that
-    gate is fixed.
+- **Phase 4 done**: `qcs.pro` default build has **no WebEngine**; `qmake/src.pri`
+  includes the new files + `qmake/litehtml.pri`. **qmake default build verified**:
+  compiles, links, `ldd` shows no WebEngine/WebChannel; app starts.
   - *html_support build:* unchanged code path (same `webenginewidgets` in the
     html_support block); not locally verifiable because the Debian Qt package
     ships no qmake webengine mkspecs — covered by the new CI job.
@@ -40,7 +35,6 @@ Last updated: 2026-09-01
 
 ## Remaining / notes
 
-- Full CMake build blocked by the pre-existing Qt6 gate (out of scope here).
 - Flatpak manifest `commit:` is a release commit and was left unchanged; it must
   be bumped when these changes are pushed.
 - Ported selection is run-granularity (not character-precise), a known trade-off.
@@ -99,7 +93,7 @@ A working prototype (`liteviewer` + `qt_container` + `search_index`) proved:
 | File | Change |
 |---|---|
 | `src/dockhelp.h/.cpp` | Host the `LiteView` widget instead of `QWebEngineView`/`HelpPage`; keep the public API used by `csoundqt.cpp`; keep `dockhelp.ui` toolbar + find bar |
-| `qcs.pro`, `CMakeLists.txt`, `src/src.pri` | Build the new files + litehtml; drop `webenginewidgets` from the default build |
+| `qcs.pro`, `qmake/src.pri`, `qmake/litehtml.pri` | Build the new files + litehtml; drop `webenginewidgets` from the default build |
 | `flatpak/io.github.CsoundQt.CsoundQt.yml` | Add a litehtml module; drop the `io.qt.qtwebengine.BaseApp` base and `QTWEBENGINEPROCESS_PATH` (for the non-HTML build) |
 | `.github/workflows/testbuild-qt6.yml` | Build/vendor litehtml; remove `qtwebengine` from the default job (keep for an html_support job if wanted) |
 
@@ -184,28 +178,18 @@ Keep the public API used by `csoundqt.cpp` (verified callers: lines 123, 201, 42
 
 ### Phase 4 — Build system
 
-**qmake (`qcs.pro`, `src/src.pri`, new `litehtml.pri`):**
-- New `litehtml.pri` lists all litehtml + gumbo sources, includes, and `-fPIC`
-  as needed; include it from `src/src.pri` (like the `rtmidi` block).
+**qmake (`qcs.pro`, `qmake/src.pri`, new `qmake/litehtml.pri`):**
+- New `qmake/litehtml.pri` lists all litehtml + gumbo sources, includes, and
+  `-fPIC` as needed; include it from `qmake/src.pri` (like the `rtmidi` block).
 - `qcs.pro`: remove `webenginewidgets` from the unconditional `QT +=` (line 61).
   Leave the `html_support` block (110–115) adding `webenginewidgets webchannel`
   and `CSQT_QTHTML` unchanged (that is the HTML5-GUI-only build).
 - Add the new `src/litehtmlview.cpp`, `src/litehtmlcontainer.cpp`,
-  `src/searchindex.cpp` to `src.pri` (always built).
-
-**CMake (`CMakeLists.txt`):**
-- Bump `CMAKE_CXX_STANDARD` from 11 to **17** (litehtml headers require it).
-- Remove `WebEngineWidgets` from the unconditional `find_package` (lines 46–47)
-  and `target_link_libraries` (line 92); keep them inside
-  `CSQT_BUILD_HTML_SUPPORT` (lines 139–140).
-- `add_subdirectory(litehtml)`; link `litehtml` and `gumbo`
-  (bundled, `EXTERNAL_GUMBO` stays OFF).
-- Add the three new `.cpp` files to `PROJECT_SOURCES`.
-- Add a CMake option (e.g. `CSQT_BUILD_HTML_SUPPORT`) already exists; keep.
+  `src/searchindex.cpp` to `qmake/src.pri` (always built).
 
 ### Phase 5 — Packaging
 
-- **Flatpak:** add a `litehtml` module (cmake-ninja, install lib + headers) before
+- **Flatpak:** add a `litehtml` module before
   CsoundQt; remove `base: io.qt.qtwebengine.BaseApp` and the
   `QTWEBENGINEPROCESS_PATH` env from `finish-args`; CsoundQt qmake build links
   litehtml from `/app`.
@@ -227,7 +211,7 @@ Keep the public API used by `csoundqt.cpp` (verified callers: lines 123, 201, 42
 ### Phase 7 — Verification
 
 Automated:
-- Default build (qmake + CMake) links **no** `QtWebEngine*`.
+- Default build (qmake) links **no** `QtWebEngine*`.
 - `html_support` build still compiles `CsoundHtmlView`.
 - Headless self-tests for: article extraction + tab flattening, fragment capture
   vs painted draw, selection/copy text, in-page find match rects, search over both
@@ -259,8 +243,8 @@ defaults and noted here.
 ## 6. Risks
 
 - **qmake build of litehtml** (no upstream `.pri`): need to hand-write the source
-  list; mitigate by generating it from litehtml's `CMakeLists.txt` SOURCE lists.
-- **C++ standard bump (11 → 17)** in CMake affects the whole target; low risk,
+  list; mitigate by generating it from litehtml's upstream source lists.
+- The **C++ standard bump (11 → 17)** affects the whole target; low risk,
   but verify no old code depends on C++11-only behavior.
 - **litehtml render pathologies** (nav sidebar hang) are avoided by the mandatory
   article extraction; keep the extraction in `LiteView::loadFile` and cover it with
