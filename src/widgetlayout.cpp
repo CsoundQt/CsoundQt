@@ -1132,12 +1132,14 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     return ret;
 }
 
-bool WidgetLayout::enqueueOutputValue(const char *channelName, double value)
+bool WidgetLayout::enqueueOutputValue(const char *channelName, double value,
+                                      bool outvalue)
 {
 	OutputValueUpdate update;
 	strncpy(update.channelName, channelName, sizeof(update.channelName) - 1);
 	update.channelName[sizeof(update.channelName) - 1] = '\0';
 	update.value = value;
+	update.outvalue = outvalue;
 	return m_outputValueQueue.push(update);
 }
 
@@ -1158,8 +1160,14 @@ void WidgetLayout::processCsoundUpdates()
 	// performance thread via enqueueOutputValue()/enqueueOutputString() are applied.
 	OutputValueUpdate valueUpdate;
 	while (m_outputValueQueue.pop(valueUpdate)) {
-		newValue(QPair<QString, double>(QString::fromLocal8Bit(valueUpdate.channelName),
-		                                valueUpdate.value));
+		const QString channel = QString::fromLocal8Bit(valueUpdate.channelName);
+		if (valueUpdate.outvalue) {
+			newValue(QPair<QString, double>(channel, valueUpdate.value));
+		} else {
+			// chnset polling: a plain widget value, without the property-path
+			// handling and chnget feedback of newValue().
+			setValue(channel, valueUpdate.value);
+		}
 	}
 	OutputStringUpdate stringUpdate;
 	while (m_outputStringQueue.pop(stringUpdate)) {

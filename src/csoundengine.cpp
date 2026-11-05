@@ -378,8 +378,12 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
 
 void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 {
-    // This is called at every cycle during performance,
-    // sends values from csound to csoundqt
+    // This is called at every cycle during performance on the Csound
+    // performance thread. Numeric widget values are only enqueued here; the
+    // GUI thread drains the queue and applies them in one batch. Never call
+    // into the widgets (or take their mutex) from this thread: the GUI holds
+    // that mutex while refreshing, so a loop of chnset calls would otherwise
+    // be split across several GUI frames.
     // NB: during a performance there are no changes in the widgetlayout (wl)
     // and also no changes in outputChannelNames or displayChannelNames, etc.
     cs_float* pvalue;
@@ -393,13 +397,23 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
             pvalue = ptr.value();
             cs_float value = *pvalue;
             if(ud->previousOutputValues[i] != value) {
-                ud->wl->setValue(name, value);
-                ud->previousOutputValues[i] = value;
+                // Do not touch widgets or widgetsMutex from the performance
+                // thread. The GUI thread applies all changed values in one
+                // batch before refreshing the widgets, so a loop of chnset
+                // calls in one control cycle becomes one visible update.
+                if (ud->wl->enqueueOutputValue(name.toLocal8Bit().constData(),
+                                               value, false)) {
+                    ud->previousOutputValues[i] = value;
+                }
             }
         } else if(csoundGetChannelPtr(ud->csound, (void**)&pvalue, name.toLocal8Bit().constData(),
                                    CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-            ud->wl->setValue(name, *pvalue);
-            ud->previousOutputValues[i] = *pvalue;
+            const cs_float value = *pvalue;
+            if (ud->previousOutputValues[i] != value
+                    && ud->wl->enqueueOutputValue(name.toLocal8Bit().constData(),
+                                                  value, false)) {
+                ud->previousOutputValues[i] = value;
+            }
             ud->channelPointers.insert(name, pvalue);
         }
         // seenChannels.insert(name);

@@ -180,10 +180,13 @@ public:
 	bool widgetNameFree(const QString &name, QuteWidget *exclude = nullptr); // empty names are always free
 	bool renameWidget(QuteWidget *widget, const QString &newName); // Sets the widget name if free, updates the name->widget map. Returns false if the name is taken by another widget.
 
-	// Called from Csound's performance thread (outvalue callback). These only
-	// copy the raw name/value into a lock free queue; the widgets themselves are
-	// updated later on the GUI thread by processCsoundUpdates() (see updateData()).
-	bool enqueueOutputValue(const char *channelName, double value);
+	// Called from Csound's performance thread. These only copy the raw
+	// name/value into a lock free queue; the widgets themselves are updated
+	// later on the GUI thread by processCsoundUpdates() (see updateData()).
+	// outvalue updates keep the full newValue() semantics (widget properties,
+	// feedback for chnget); values polled from chnset are plain widget values.
+	bool enqueueOutputValue(const char *channelName, double value,
+	                        bool outvalue = true);
 	bool enqueueOutputString(const char *channelName, const char *value);
 	int newXmlWidget(QDomNode node, bool offset = false, bool newId = false);
 	void registerWidget(QuteWidget *widget);
@@ -524,12 +527,15 @@ private:
 	struct OutputValueUpdate {
 		char channelName[CSQT_MAX_CHANNEL_NAME];
 		double value;
+		bool outvalue;
 	};
 	struct OutputStringUpdate {
 		char channelName[CSQT_MAX_CHANNEL_NAME];
 		char value[CSQT_MAX_STRING_VALUE];
 	};
-	CsqtSpscQueue<OutputValueUpdate, 256> m_outputValueQueue;
+	// Big enough for a whole panel of widget values set in one control cycle
+	// (e.g. chnset in a loop) before the GUI drains the queue.
+	CsqtSpscQueue<OutputValueUpdate, 1024> m_outputValueQueue;
 	CsqtSpscQueue<OutputStringUpdate, 32> m_outputStringQueue;
 	void processCsoundUpdates(); // GUI thread: drain the queues into newValue()
 	// These vectors must be used with care since they are not reentrant and will
