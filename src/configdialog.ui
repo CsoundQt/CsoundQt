@@ -2651,6 +2651,238 @@
               <string>Widgets</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_7">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_16">
+                <item row="8" column="1" colspan="2">
+                 <widget class="QComboBox" name="channelHighlightModeComboBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>43000</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Never&lt;/span&gt;: only with keyboard shortcut. &lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cursor only&lt;/span&gt;: highlight channel at the text cursor. &lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Mouse only&lt;/span&gt;: when hovering a channel &lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Full&lt;/span&gt;: both cursor and mouse hover.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="currentIndex">
+                   <number>1</number>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Never</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Cursor only</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Mouse only</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Full</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="9" column="1" colspan="2">
+                 <widget class="QComboBox" name="channelReferenceHighlightModeComboBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>120</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>33333</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Highlights lines in the editor which reference a widget's channel. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Never&lt;/span&gt;: only explicit highlights&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Edit Mode&lt;/span&gt;: in edit mode only &lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;When not performing&lt;/span&gt;: always while stopped, in edit mode if playing&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Always&lt;/span&gt;: if widget is hovered or selected&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="currentIndex">
+                   <number>2</number>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Never</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Edit Mode</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>When not performing</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Always</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <spacer name="horizontalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QCheckBox" name="showWidgetsOnRunCheckBox">
+                  <property name="toolTip">
+                   <string>Make the widget panel visible when a csd is played</string>
+                  </property>
+                  <property name="text">
+                   <string>Show Widgets on Play</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="2">
+                 <widget class="QPushButton" name="frameColorUnselectedButton">
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Border colour of widgets while editing, when not selected. Includes opacity.</string>
+                  </property>
+                  <property name="text">
+                   <string>Unselected</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="1">
+                 <widget class="QPushButton" name="frameColorSelectedButton">
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Border colour of selected widgets while editing. Also used for the resize handles. No opacity.</string>
+                  </property>
+                  <property name="text">
+                   <string>Selected</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="0">
+                 <widget class="QLabel" name="label_frameColorSelected">
+                  <property name="text">
+                   <string>Frame colour</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0" colspan="2">
+                 <widget class="QCheckBox" name="showTooltipsCheckBox">
+                  <property name="text">
+                   <string>Show Tooltips for widgets</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="0">
+                 <widget class="QLabel" name="channelReferenceHighlightLabel">
+                  <property name="text">
+                   <string>Highlight channel in editor</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="0">
+                 <widget class="QLabel" name="channelHighlightLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>300</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Highlight widgets for channel</string>
+                  </property>
+                  <property name="margin">
+                   <number>0</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="4">
+                 <widget class="QCheckBox" name="widgetsCheckBox">
+                  <property name="toolTip">
+                   <string>If unchecked, the engine skips widget channel setup and any interaction with csound</string>
+                  </property>
+                  <property name="text">
+                   <string>Enable Widgets</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QCheckBox" name="midiCcToCurrentPageOnlyCheckBox">
+                  <property name="text">
+                   <string>MIDI CC to current page only</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0" colspan="2">
+                 <widget class="QCheckBox" name="openPropertiesCheckBox">
+                  <property name="toolTip">
+                   <string>Automatically open properties dialog when a new widget is created</string>
+                  </property>
+                  <property name="text">
+                   <string>Open Properties when creating widget</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0" colspan="3">
+                 <widget class="QCheckBox" name="widgetsIndependentCheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Widget panel is shown on its own window&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Widgets are an independent window</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
               <item row="4" column="0">
                <widget class="QGroupBox" name="horizontalGroupBox">
                 <property name="title">
@@ -2701,238 +2933,6 @@
                  </item>
                 </layout>
                </widget>
-              </item>
-              <item row="0" column="0">
-               <layout class="QFormLayout" name="formLayout_6">
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="widgetsCheckBox">
-                  <property name="toolTip">
-                   <string>If unchecked, the engine skips widget channel setup and any interaction with csound</string>
-                  </property>
-                  <property name="text">
-                   <string>Enable Widgets</string>
-                  </property>
-                  <property name="checked">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="midiCcToCurrentPageOnlyCheckBox">
-                  <property name="text">
-                   <string>MIDI CC to current page only</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QCheckBox" name="showWidgetsOnRunCheckBox">
-                  <property name="toolTip">
-                   <string>Make the widget panel visible when a csd is played</string>
-                  </property>
-                  <property name="text">
-                   <string>Show Widgets on Play</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QCheckBox" name="showTooltipsCheckBox">
-                  <property name="text">
-                   <string>Show Tooltips for widgets</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QCheckBox" name="openPropertiesCheckBox">
-                  <property name="toolTip">
-                   <string>Automatically open properties dialog when a new widget is created</string>
-                  </property>
-                  <property name="text">
-                   <string>Open Properties when creating widget</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QCheckBox" name="widgetsIndependentCheckBox">
-                  <property name="toolTip">
-                   <string>Widget panel is shown on its own window (requires restart)</string>
-                  </property>
-                  <property name="text">
-                   <string>Widgets are an independent window (*)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="0">
-                 <widget class="QLabel" name="channelHighlightLabel">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>300</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Highlight widgets for channel:</string>
-                  </property>
-                  <property name="margin">
-                   <number>0</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="1">
-                 <widget class="QComboBox" name="channelHighlightModeComboBox">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>180</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Never: highlight only with the keyboard shortcut. Cursor only: highlight the channel literal at the text cursor. Mouse only: highlight when hovering a channel with the mouse. Full: both cursor and mouse hover.</string>
-                  </property>
-                  <property name="currentIndex">
-                   <number>1</number>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Never</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Cursor only</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Mouse only</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Full</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="7" column="0">
-                 <widget class="QLabel" name="channelReferenceHighlightLabel">
-                  <property name="text">
-                   <string>Highlight channel reference in editor:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="1">
-                 <widget class="QComboBox" name="channelReferenceHighlightModeComboBox">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>120</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>180</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Highlights lines in the editor which reference a widget's channel. Never: never automatically. Edit Mode: only while the widget layout is in edit mode, even during performance. When not performing: in all modes while no performance is running; during performance only in edit mode. Always: whenever a widget is hovered or selected, performing or not.</string>
-                  </property>
-                  <property name="currentIndex">
-                   <number>2</number>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Never</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Edit Mode</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>When not performing</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Always</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="8" column="0">
-                 <widget class="QLabel" name="label_frameColorSelected">
-                  <property name="text">
-                   <string>Frame colour (selected)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="1">
-                 <widget class="QPushButton" name="frameColorSelectedButton">
-                  <property name="maximumSize">
-                   <size>
-                    <width>60</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Border colour of selected widgets while editing. Also used for the resize handles. No opacity.</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="9" column="0">
-                 <widget class="QLabel" name="label_frameColorUnselected">
-                  <property name="maximumSize">
-                   <size>
-                    <width>200</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Frame colour (unselected)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="9" column="1">
-                 <widget class="QPushButton" name="frameColorUnselectedButton">
-                  <property name="maximumSize">
-                   <size>
-                    <width>60</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Border colour of widgets while editing, when not selected. Includes opacity.</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
               </item>
               <item row="3" column="0">
                <spacer name="horizontalSpacer_2">

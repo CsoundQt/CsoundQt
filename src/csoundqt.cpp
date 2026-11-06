@@ -677,6 +677,9 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles)
     // missing theme can fall back to "auto".
     EditorThemes::initialize();
     readSettings();
+    // The widget mode is known now: remember it, so that the applySettings()
+    // call below does not mistake it for a mode change.
+    m_appliedWidgetsIndependent = m_options->widgetsIndependent;
     createMenus(); // creating menu must be after readSettings. probably create Status- and toolbars, too?
     this->setToolbarIconSize(m_options->toolbarIconSize);
 
@@ -831,9 +834,16 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles)
         m_scanService->scanNow(documentPages.at(curPage));
     }
 
-    showWidgetsAct->setChecked(widgetsVisible);
-    if (!m_options->widgetsIndependent) {
+    if (m_options->widgetsIndependent) {
+        // In independent mode every document shows its widgets in its own
+        // top-level window. The docked panel has no layout then, so it must
+        // not stay visible as an empty surface (a saved layout may well have
+        // restored it as visible).
+        widgetPanel->hide();
+        showWidgetsAct->setChecked(false);
+    } else {
         // FIXME: for some reason this produces a move event for widgetlayout with pos (0,0)
+        showWidgetsAct->setChecked(widgetsVisible);
         widgetPanel->setVisible(widgetsVisible);
     }
 
@@ -1808,8 +1818,16 @@ void CsoundQt::testAudioSetup()
 {
     qDebug() << "CsoundQt::testAudioSetup";
     loadFile(":/AudioMidiTest.csd");
-    widgetPanel->setVisible(true);
-    widgetPanel->setFocus();
+    if (m_options->widgetsIndependent) {
+        // The widgets live in their own window: the docked panel would stay
+        // empty.
+        DocumentPage *page = getCurrentDocumentPage();
+        if (page != nullptr)
+            page->showWidgets(true);
+    } else {
+        widgetPanel->setVisible(true);
+        widgetPanel->setFocus();
+    }
     play();
 }
 
@@ -5192,6 +5210,10 @@ void CsoundQt::applyPaletteToChrome()
 void CsoundQt::applySettings()
 {
     m_realtimeAudioValidated = false;
+    // The widget mode may have been changed in the dialog: the layouts then
+    // have to move between the dock panel and their own windows.
+    if (m_options->widgetsIndependent != m_appliedWidgetsIndependent)
+        applyWidgetModeChange();
     applyWidgetStyle();
 
     // Document tabs: use the application font plus the configured relative
@@ -5341,9 +5363,53 @@ void CsoundQt::applyDefaultDockLayout()
     const int consoleHeight = qMax(height() / 3, 1);
     resizeDocks({m_console}, {consoleHeight}, Qt::Vertical);
     // Widgets is the panel people work with; make it the active tab in the
-    // group, keeping Help one click away.
-    widgetPanel->show();
-    widgetPanel->raise();
+    // group, keeping Help one click away. In independent mode the widgets
+    // live in their own windows, so the panel would only be an empty surface.
+    if (!m_options->widgetsIndependent) {
+        widgetPanel->show();
+        widgetPanel->raise();
+    }
+}
+
+void CsoundQt::applyWidgetModeChange()
+{
+    const bool independent = m_options->widgetsIndependent;
+    m_appliedWidgetsIndependent = independent;
+
+    // Hide the windows first: a layout that is re-parented while it is still
+    // visible would flash as a separate window.
+    for (DocumentPage *page : documentPages)
+        page->hideWidgets();
+
+    // The dock panel owns at most one layout: take it out, so that both modes
+    // start from a known state.
+    QRect panelGeometry = widgetPanel->geometry();
+    if (!widgetPanel->isFloating()) {
+        panelGeometry.setX(-1);
+        panelGeometry.setY(-1);
+    }
+    widgetPanel->takeWidgetLayout(panelGeometry);
+
+    DocumentPage *page = getCurrentDocumentPage();
+    WidgetLayout *layout = (page != nullptr) ? page->getWidgetLayout() : nullptr;
+
+    if (independent) {
+        // The widgets live in their own top-level windows: the docked panel
+        // would be an empty surface and must not be shown.
+        widgetPanel->hide();
+        if (layout != nullptr) {
+            layout->setContained(false);
+            if (showWidgetsAct->isChecked())
+                page->showWidgets(true);
+        }
+    } else {
+        // Back into the dock: only the current document's layout is shown.
+        if (layout != nullptr) {
+            layout->setContained(false);
+            widgetPanel->addWidgetLayout(layout);
+        }
+        widgetPanel->setVisible(showWidgetsAct->isChecked());
+    }
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)

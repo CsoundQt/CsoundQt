@@ -328,6 +328,9 @@ private slots:
 	void showInvalidAudioSettings(const QString &message);
 	void applyDefaultDockLayout(); // initial dock arrangement when there is no saved layout
 	void ensurePanelTabOrder(); // Widgets before Help in the right-hand tab group
+	// Move the widget layouts between the dock panel and their own windows
+	// when the widget mode is changed in the settings dialog.
+	void applyWidgetModeChange();
 	void runUtility(QString flags);
 	//     void widgetDockLocationChanged(Qt::DockWidgetArea area);
 	void setDefaultKeyboardShortcuts();
@@ -704,6 +707,7 @@ private:
     bool m_startupShown = false;
     bool m_hasSavedDockState = false;   // a saved dock layout was restored
     bool m_applyDefaultDockLayout = false; // arrange docks on first show (no saved layout)
+    bool m_appliedWidgetsIndependent = false; // widget mode currently in use
     bool m_panelTabsOrdered = false;    // Widgets/Help tab order already enforced
     qreal m_rightDockRatio = -1.0;      // right dock width / window width (<0 = unset)
     int m_lastWindowWidth = 0;          // last window width seen in resizeEvent
