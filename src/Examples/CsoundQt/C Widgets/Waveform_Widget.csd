@@ -68,13 +68,12 @@ instr 10
   imod = 1  ; loop
   iend = nsamp(itab) / ftsr(itab)
 
-
 _reset:
   ipos = chnget("waveCursor")
   ilen = nsamp(giWave)
   kpos = init(ipos)
 
-  asigs[] = loscilx(kamp, kspeed, itab, 4, 1, ipos, imod, ipos, iend)
+  asigs[] = loscilx(kamp, kspeed, itab, 4, 1, ipos, imod)
 
   kcursor = chnget("waveCursor")
   if abs(kcursor - kpos) > ksmps*kspeed*100 then
@@ -83,8 +82,7 @@ _reset:
 
   kpos += ksmps * kspeed
   if kpos > ilen then
-    chnset k(0), "play"
-    turnoff
+    kpos = 0
   endif
 
   if metro:k(30) == 1 then
@@ -115,6 +113,8 @@ schedule 2, 0.5, -1
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -124,11 +124,7 @@ schedule 2, 0.5, -1
  <height>498</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>38</r>
-  <g>38</g>
-  <b>38</b>
- </bgcolor>
+ <bgcolor mode="background">#262626</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
@@ -138,6 +134,7 @@ schedule 2, 0.5, -1
   <uuid>{6f2b2b1e-0001-4a1a-9a10-000000000001}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -146,22 +143,11 @@ schedule 2, 0.5, -1
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>221</r>
-   <g>221</g>
-   <b>221</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#dddddd</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -175,28 +161,17 @@ schedule 2, 0.5, -1
   <uuid>{6f2b2b1e-0002-4a1a-9a10-000000000002}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <value>101</value>
   <objectName2>waveCursor</objectName2>
-  <cursor>302763</cursor>
-  <color>
-   <r>80</r>
-   <g>200</g>
-   <b>255</b>
-  </color>
-  <bgcolor>
-   <r>24</r>
-   <g>24</g>
-   <b>24</b>
-  </bgcolor>
+  <cursor>584856</cursor>
+  <color>#50c8ff</color>
+  <bgcolor>#181818</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <cursorcolor>
-   <r>255</r>
-   <g>150</g>
-   <b>0</b>
-  </cursorcolor>
+  <cursorcolor>#ff9600</cursorcolor>
   <showGrid>false</showGrid>
   <showAxes>true</showAxes>
   <autoRange>true</autoRange>
@@ -214,6 +189,7 @@ schedule 2, 0.5, -1
   <uuid>{6f2b2b1e-0003-4a1a-9a10-000000000003}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -226,22 +202,11 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>221</r>
-   <g>221</g>
-   <b>221</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#dddddd</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -255,6 +220,7 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
   <uuid>{3fe7d589-56e6-4e1d-b83b-71b1ec7731bc}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -263,22 +229,11 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>163</r>
-   <g>163</g>
-   <b>163</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#a3a3a3</color>
+  <bgcolor mode="nobackground">#31363b</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -292,21 +247,19 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
   <uuid>{0b2db20b-536c-4814-9953-153944b006ae}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.10000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>1.55040000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.38665000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
+  <color>#f57c00</color>
   <textcolor>#f57c00</textcolor>
   <border>2</border>
   <borderColor>#f7a34f</borderColor>
@@ -323,6 +276,7 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
   <uuid>{f8d0095d-f980-424a-aded-e5707096f251}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -334,14 +288,11 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
   <eventLine>i 10 0 -1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>33</r>
-   <g>66</g>
-   <b>49</b>
-  </color>
+  <color>#214231</color>
   <pressedColor>#5c9375</pressedColor>
   <borderColor>#5c9375</borderColor>
   <textColor>#ffffff</textColor>
