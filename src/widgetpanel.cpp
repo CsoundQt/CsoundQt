@@ -67,9 +67,14 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	connect(scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)),
 			this, SLOT(scrollBarMoved(int)));
 	w->setContained(true);
-	QRect outer = w->getOuterGeometry();
-	
-	this->setGeometry(outer);
+	// The geometry stored in the document describes a floating panel. A docked
+	// panel is positioned and sized by QMainWindow, so moving it here would
+	// make it jump to the document's saved coordinates (often the top-left of
+	// the main window) until the dock layout snaps it back on the next event
+	// loop pass. That momentary jump is visible as a one-frame flash when
+	// switching document tabs.
+	if (isFloating())
+		this->setGeometry(w->getOuterGeometry());
 	w->blockSignals(true);
 	w->adjustLayoutSize();
 	w->show();

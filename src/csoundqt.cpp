@@ -9064,6 +9064,13 @@ void CsoundQt::getCompanionFileName()
 
 void CsoundQt::setWidgetPanelGeometry()
 {
+    // Only a floating panel owns its geometry. When docked, QMainWindow lays
+    // the panel out; calling setGeometry() here would move it to the document's
+    // saved panel coordinates for one frame before the dock layout snaps it
+    // back, which shows up as a flash at the top-left of the main window when
+    // switching document tabs.
+    if (!widgetPanel->isFloating())
+        return;
     QRect geometry = documentPages[curPage]->getWidgetLayoutOuterGeometry();
     if (geometry.width() <= 0 || geometry.width() > 4096) {
         geometry.setWidth(400);
