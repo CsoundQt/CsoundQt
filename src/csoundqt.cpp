@@ -4965,14 +4965,17 @@ void CsoundQt::changeFontSize(int change)
         consoleFont.setPointSizeF(m_options->consoleFontPointSize);
         documentPages[curPage]->setConsoleFont(consoleFont);
     } else {
-        m_options->fontPointSize += change;
-        // QDEBUG << "main Editor size" << m_options->fontPointSize;
+        m_options->fontPointSize = qBound(MIN_EDITOR_FONT_POINT_SIZE,
+                                          double(m_options->fontPointSize) + change,
+                                          MAX_EDITOR_FONT_POINT_SIZE);
+        QFont editorFont(m_options->font);
+        editorFont.setPointSizeF(m_options->fontPointSize);
         for (int i = 0; i < documentPages.size(); i++) {
-            documentPages[i]->setTextFont(QFont(m_options->font, (int) m_options->fontPointSize));
+            documentPages[i]->setTextFont(editorFont);
         }
         // apply the same size to code pad (maybe should be separate but so far it has used the same size.
         DocumentView *pad = static_cast<LiveCodeEditor*>(m_scratchPad->widget())->getDocumentView();
-        pad->setFont(QFont(m_options->font, (int) m_options->fontPointSize));
+        pad->setFont(editorFont);
     }
     // console live changing not supported now, possible only through Configuration Dialog
 }
@@ -5525,7 +5528,9 @@ void CsoundQt::applySettings()
     }
 
     DocumentView *pad = static_cast<LiveCodeEditor*>(m_scratchPad->widget())->getDocumentView();
-    pad->setFont(QFont(m_options->font, (int) m_options->fontPointSize));
+    QFont editorFont(m_options->font);
+    editorFont.setPointSizeF(m_options->fontPointSize);
+    pad->setFont(editorFont);
     if (csoundGetVersion() < 5140) {
         m_options->newParser = false; // Don't use new parser flags
     }
@@ -5656,8 +5661,9 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setKeyRepeatMode(m_options->keyRepeat);
     p->setOpenProperties(m_options->openProperties);
     p->setGraphUpdateRate(m_options->graphUpdateRate);
-    p->setTextFont(QFont(m_options->font,
-                         (int) m_options->fontPointSize));
+    QFont editorFont(m_options->font);
+    editorFont.setPointSizeF(m_options->fontPointSize);
+    p->setTextFont(editorFont);
     QFont consoleFont(m_options->consoleFont);
     consoleFont.setPointSizeF(m_options->consoleFontPointSize);
     p->setConsoleFont(consoleFont);
@@ -6142,6 +6148,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     raiseConsoleAct->setShortcut(tr("Ctrl+6"));
     autocompleteAct->setShortcut(tr("Ctrl+M"));
     insertOpcodeAct->setShortcut(tr("F2"));
+    increaseFontAction->setShortcut(QKeySequence::ZoomIn);
+    decreaseFontAction->setShortcut(QKeySequence::ZoomOut);
 #ifdef Q_OS_MACOS
     viewFullScreenAct->setShortcut(tr("Ctrl+Shift+F"));
 #else
@@ -6959,6 +6967,10 @@ void CsoundQt::createActions()
     decreaseFontAction = new QAction(tr("Decrease font"), this);
     increaseFontAction->setShortcut(QKeySequence::ZoomIn);
     decreaseFontAction->setShortcut(QKeySequence::ZoomOut);
+    increaseFontAction->setShortcutContext(Qt::ApplicationShortcut);
+    decreaseFontAction->setShortcutContext(Qt::ApplicationShortcut);
+    increaseFontAction->setProperty("shortcutName", tr("Increase font size"));
+    decreaseFontAction->setProperty("shortcutName", tr("Decrease font size"));
     connect(increaseFontAction, &QAction::triggered, this, &CsoundQt::increaseFontSize );
     connect(decreaseFontAction, &QAction::triggered, this, &CsoundQt::decreaseFontSize);
     addAction(increaseFontAction);
@@ -7055,6 +7067,8 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(checkSyntaxAct);
     m_keyActions.append(autocompleteAct);
     m_keyActions.append(insertOpcodeAct);
+    m_keyActions.append(increaseFontAction);
+    m_keyActions.append(decreaseFontAction);
 #if defined(CSQT_QTHTML)
     m_keyActions.append(raiseHtml5Act);
 #endif
@@ -7846,7 +7860,9 @@ void CsoundQt::readSettings()
     // bundledfonts.cpp), so they are available on every platform; default to
     // them unconditionally.
     m_options->font = settings.value("font", "JetBrains Mono").toString();
-    m_options->fontPointSize = settings.value("fontsize", 10).toDouble();
+    m_options->fontPointSize = qBound(MIN_EDITOR_FONT_POINT_SIZE,
+                                      settings.value("fontsize", 10).toDouble(),
+                                      MAX_EDITOR_FONT_POINT_SIZE);
     m_options->consoleFont = settings.value("consolefont", "JetBrains Mono").toString();
     m_options->consoleFontPointSize = settings.value("consolefontsize", 8).toDouble();
     m_options->showLineNumberArea = settings.value("showLineNumberArea", true).toBool();

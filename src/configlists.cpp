@@ -185,7 +185,7 @@ QString ConfigLists::audioModuleDisplayName(const QString &module)
     if (module == "pa_cb"_L1)
         return u"portaudio"_s;
     if (module == "null"_L1)
-        return u"Disabled"_s;
+        return u"disabled"_s;
     if (module == "alsa"_L1)
         return u"ALSA"_s;
     if (module == "auhal"_L1)

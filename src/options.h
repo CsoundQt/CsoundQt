@@ -29,6 +29,10 @@
 #include "csoundoptions.h"
 #include "channelhighlightmode.h"
 
+// Editor font size limits, shared by the settings dialog and the zoom actions.
+constexpr double MIN_EDITOR_FONT_POINT_SIZE = 6.0;
+constexpr double MAX_EDITOR_FONT_POINT_SIZE = 48.0;
+
 class Options: public CsoundOptions{
 public:
 	Options(ConfigLists *configlists);

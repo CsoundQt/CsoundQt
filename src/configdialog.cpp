@@ -46,6 +46,14 @@ using namespace Qt::StringLiterals;
 
 typedef QPair<QString, QString> QStringPair;
 
+// PortAudio does not expose the device channel count reliably enough for the
+// "Device" setup method, so that method is disabled for these modules.
+static bool isPortAudioModule(const QString &module)
+{
+    return module == "pa_cb"_L1 || module == "pa_bl"_L1
+            || module == "portaudio"_L1;
+}
+
 #ifdef CSQT_RTMIDI
 #include "RtMidi.h"
 #endif
@@ -153,7 +161,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
                                   QVariant(m_configlists->languageCodes[i]));
 	}
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
-	fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
+	fontSizeSpinBox->setValue(m_options->fontPointSize);
 	lineNumbersCheckBox->setChecked(m_options->showLineNumberArea);
 	lineNumberContrastSpinBox->setValue(m_options->lineNumberContrast);
 
@@ -799,7 +807,9 @@ void ConfigDialog::accept()
 void ConfigDialog::apply()
 {
 	m_options->font = fontComboBox->currentText();
-	m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
+	m_options->fontPointSize = qBound(MIN_EDITOR_FONT_POINT_SIZE,
+	                                  fontSizeSpinBox->value(),
+	                                  MAX_EDITOR_FONT_POINT_SIZE);
 	m_options->showLineNumberArea = lineNumbersCheckBox->isChecked();
 	m_options->lineNumberContrast = lineNumberContrastSpinBox->value();
 	m_options->consoleFont = consoleFontComboBox->currentText();
@@ -1372,14 +1382,20 @@ void ConfigDialog::selectDefaultAudioDeviceIfNeeded(bool isOutput)
 void ConfigDialog::resetChannelsMethodForBackend()
 {
 	const QString module = RtModuleComboBox->currentData().toString();
-	if (!ConfigLists::isFixedKsmpsModule(module))
+	// Fixed-KSMPS backends take their channel counts from the device;
+	// PortAudio cannot do that reliably, so it defaults to the override values.
+	int target = -1;
+	if (ConfigLists::isFixedKsmpsModule(module))
+		target = int(ChannelsSetupMethod::Device);
+	else if (isPortAudioModule(module))
+		target = int(ChannelsSetupMethod::Override);
+	if (target < 0)
 		return;
-	const int deviceIndex = channelsSetupMethod->findData(
-	            int(ChannelsSetupMethod::Device));
-	if (deviceIndex < 0)
+	const int targetIndex = channelsSetupMethod->findData(target);
+	if (targetIndex < 0)
 		return;
 	const QSignalBlocker blocker(channelsSetupMethod);
-	channelsSetupMethod->setCurrentIndex(deviceIndex);
+	channelsSetupMethod->setCurrentIndex(targetIndex);
 }
 
 void ConfigDialog::updateChannelControls()
@@ -1393,21 +1409,24 @@ void ConfigDialog::updateChannelControls()
 	ChannelsSetupMethod method = static_cast<ChannelsSetupMethod>(
 	            channelsSetupMethod->currentData().toInt());
 	const bool driverDisabled = module == "null"_L1;
+	const bool portAudio = isPortAudioModule(module);
 	const int deviceIndex = channelsSetupMethod->findData(
 	            int(ChannelsSetupMethod::Device));
 	if (deviceIndex >= 0) {
 		if (auto *model = qobject_cast<QStandardItemModel *>(channelsSetupMethod->model())) {
 			if (QStandardItem *item = model->item(deviceIndex))
-				item->setEnabled(!driverDisabled);
+				item->setEnabled(!driverDisabled && !portAudio);
 		}
 	}
-	if (driverDisabled && method == ChannelsSetupMethod::Device) {
-		const int orchestraIndex = channelsSetupMethod->findData(
-		            int(ChannelsSetupMethod::Orchestra));
-		if (orchestraIndex >= 0) {
+	if (method == ChannelsSetupMethod::Device && (driverDisabled || portAudio)) {
+		const ChannelsSetupMethod fallback = driverDisabled
+		        ? ChannelsSetupMethod::Orchestra
+		        : ChannelsSetupMethod::Override;
+		const int fallbackIndex = channelsSetupMethod->findData(int(fallback));
+		if (fallbackIndex >= 0) {
 			const QSignalBlocker blocker(channelsSetupMethod);
-			channelsSetupMethod->setCurrentIndex(orchestraIndex);
-			method = ChannelsSetupMethod::Orchestra;
+			channelsSetupMethod->setCurrentIndex(fallbackIndex);
+			method = fallback;
 		}
 	}
 
