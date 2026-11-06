@@ -138,6 +138,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
 
 
 
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -147,15 +151,11 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <height>691</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>22</r>
-  <g>22</g>
-  <b>22</b>
- </bgcolor>
+ <bgcolor mode="background">#212121</bgcolor>
  <bsbObject type="BSBGraph" version="2">
   <objectName>spectrum</objectName>
   <x>10</x>
-  <y>80</y>
+  <y>58</y>
   <width>1000</width>
   <height>500</height>
   <uuid>{ae3dee92-fc91-44c4-9b0f-b8656a7eb4f3}</uuid>
@@ -184,8 +184,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch1</objectName>
-  <x>10</x>
-  <y>590</y>
+  <x>11</x>
+  <y>570</y>
   <width>30</width>
   <height>30</height>
   <uuid>{5aae7b7e-875a-492f-89cb-dbb779039dbe}</uuid>
@@ -193,17 +193,25 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description>Enable Channel 1</description>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <color>#2f2f2f</color>
+  <borderColor>#4d4d4d</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>0</borderRadius>
+  <padding>5</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch2</objectName>
   <x>40</x>
-  <y>590</y>
+  <y>570</y>
   <width>30</width>
   <height>30</height>
   <uuid>{00c02e40-ab30-4c76-8737-0f1c375df75a}</uuid>
@@ -211,17 +219,25 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description>Enable Channel 2</description>
+  <midicc>0</midicc>
+  <description>Enable Channel 1</description>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <color>#2f2f2f</color>
+  <borderColor>#4d4d4d</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>0</borderRadius>
+  <padding>5</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch3</objectName>
-  <x>70</x>
-  <y>590</y>
+  <x>69</x>
+  <y>570</y>
   <width>30</width>
   <height>30</height>
   <uuid>{cb2805f4-c9ec-4a28-ba5c-459a2e3cec59}</uuid>
@@ -229,17 +245,25 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description>Enable Channel 3</description>
+  <midicc>0</midicc>
+  <description>Enable Channel 1</description>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <color>#2f2f2f</color>
+  <borderColor>#4d4d4d</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>0</borderRadius>
+  <padding>5</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch4</objectName>
-  <x>100</x>
-  <y>590</y>
+  <x>98</x>
+  <y>570</y>
   <width>30</width>
   <height>30</height>
   <uuid>{2192eed2-7818-45d5-8593-200cb766966c}</uuid>
@@ -247,17 +271,25 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description>Enable Channel 4</description>
+  <midicc>0</midicc>
+  <description>Enable Channel 1</description>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <color>#2f2f2f</color>
+  <borderColor>#4d4d4d</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>0</borderRadius>
+  <padding>5</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>fftsize</objectName>
   <x>150</x>
-  <y>590</y>
+  <y>570</y>
   <width>80</width>
   <height>30</height>
   <uuid>{e3a55dea-950a-4c43-a7ef-50f107379f17}</uuid>
@@ -295,7 +327,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>30</x>
-  <y>620</y>
+  <y>600</y>
   <width>80</width>
   <height>25</height>
   <uuid>{342a2cbb-91b5-413b-9de1-aa82f1d74a0d}</uuid>
@@ -312,21 +344,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <fontsize>13</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>239</r>
-   <g>240</g>
-   <b>241</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#eff0f1</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -334,7 +354,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>145</x>
-  <y>620</y>
+  <y>600</y>
   <width>80</width>
   <height>25</height>
   <uuid>{09805d02-0ae6-4f4c-9c39-6b7e61fb1356}</uuid>
@@ -351,21 +371,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <fontsize>13</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>241</r>
-   <g>241</g>
-   <b>241</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#f1f1f1</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -373,7 +381,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>playpeak</objectName>
   <x>460</x>
-  <y>590</y>
+  <y>570</y>
   <width>30</width>
   <height>30</height>
   <uuid>{f8803c6a-6fba-459f-a113-0e33c0ff19d1}</uuid>
@@ -382,16 +390,24 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <description>Play the peak frequency when the mouse is pressed</description>
-  <selected>true</selected>
+  <description>Enable Channel 1</description>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <color>#2f2f2f</color>
+  <borderColor>#4d4d4d</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>0</borderRadius>
+  <padding>5</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>435</x>
-  <y>620</y>
+  <y>600</y>
   <width>80</width>
   <height>25</height>
   <uuid>{67e8666d-183c-491d-b465-61d7a1a218d5}</uuid>
@@ -408,21 +424,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <fontsize>13</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>239</r>
-   <g>240</g>
-   <b>241</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#eff0f1</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -430,7 +434,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBKnob" version="2">
   <objectName>ingain</objectName>
   <x>585</x>
-  <y>585</y>
+  <y>565</y>
   <width>56</width>
   <height>54</height>
   <uuid>{ce2ca6ad-fa91-4b89-a2eb-7c092f529f22}</uuid>
@@ -443,16 +447,12 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <minimum>-24.00000000</minimum>
   <maximum>24.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.00000000</value>
+  <value>2.66400000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
+  <color>#f57c00</color>
   <textcolor>#f57c00</textcolor>
   <border>0</border>
   <borderColor>#000000</borderColor>
@@ -463,7 +463,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>505</x>
-  <y>600</y>
+  <y>580</y>
   <width>80</width>
   <height>25</height>
   <uuid>{8e80da70-b7b1-4f2d-935c-3e78f2730099}</uuid>
@@ -480,21 +480,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <fontsize>13</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>239</r>
-   <g>240</g>
-   <b>241</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#eff0f1</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -502,7 +490,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBKnob" version="2">
   <objectName>peakgain</objectName>
   <x>720</x>
-  <y>585</y>
+  <y>565</y>
   <width>56</width>
   <height>54</height>
   <uuid>{5951dec6-0e29-4eed-a7c9-3438955fabc4}</uuid>
@@ -520,11 +508,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
+  <color>#f57c00</color>
   <textcolor>#f57c00</textcolor>
   <border>0</border>
   <borderColor>#512900</borderColor>
@@ -535,7 +519,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>640</x>
-  <y>600</y>
+  <y>580</y>
   <width>80</width>
   <height>25</height>
   <uuid>{b1e91595-3134-4b62-943e-17e7f17b2058}</uuid>
@@ -552,21 +536,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <fontsize>13</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>239</r>
-   <g>240</g>
-   <b>241</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#eff0f1</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -574,7 +546,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>340</x>
-  <y>620</y>
+  <y>600</y>
   <width>100</width>
   <height>26</height>
   <uuid>{d9b44e66-bfec-4a49-ba48-e52e29d1e889}</uuid>
@@ -591,21 +563,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <fontsize>13</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>239</r>
-   <g>240</g>
-   <b>241</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#eff0f1</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -613,7 +573,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>filterlow</objectName>
   <x>375</x>
-  <y>590</y>
+  <y>570</y>
   <width>30</width>
   <height>30</height>
   <uuid>{761ac268-c49b-4473-a0df-c045ea9fdaa4}</uuid>
@@ -622,16 +582,24 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <description>Filter low frequencies</description>
+  <description>Enable Channel 1</description>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <color>#2f2f2f</color>
+  <borderColor>#4d4d4d</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>0</borderRadius>
+  <padding>5</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>refreshrateidx</objectName>
   <x>250</x>
-  <y>590</y>
+  <y>570</y>
   <width>80</width>
   <height>30</height>
   <uuid>{6aab35af-5577-4c32-a245-d69c50b0dfcd}</uuid>
@@ -684,7 +652,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>250</x>
-  <y>620</y>
+  <y>600</y>
   <width>84</width>
   <height>25</height>
   <uuid>{432a9bd1-1587-40a7-a618-e256a453b4e4}</uuid>
@@ -701,21 +669,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <fontsize>13</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>241</r>
-   <g>241</g>
-   <b>241</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#f1f1f1</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -723,7 +679,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>795</x>
-  <y>590</y>
+  <y>570</y>
   <width>196</width>
   <height>48</height>
   <uuid>{13da7982-27d8-46ae-a425-3aecf9e1c34c}</uuid>
@@ -740,21 +696,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <fontsize>13</fontsize>
   <padding>7</padding>
   <locked>false</locked>
-  <color>
-   <r>239</r>
-   <g>239</g>
-   <b>239</b>
-  </color>
-  <bgcolor mode="background">
-   <r>48</r>
-   <g>53</g>
-   <b>58</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#efefef</color>
+  <bgcolor mode="background">#30353a</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -763,8 +707,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <objectName/>
   <x>10</x>
   <y>10</y>
-  <width>999</width>
-  <height>70</height>
+  <width>1000</width>
+  <height>50</height>
   <uuid>{272ab196-d807-4b5f-a506-2f391cf651f5}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -772,29 +716,16 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Spectrum Analyzer
-Spectral Analysis of Live Input (up to four input channels)</label>
+  <label>Spectrum Analyzer</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
-  <font>Liberation Sans</font>
+  <font>Noto Sans</font>
   <fontsize>20</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>239</r>
-   <g>239</g>
-   <b>239</b>
-  </color>
-  <bgcolor mode="background">
-   <r>48</r>
-   <g>53</g>
-   <b>58</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#efefef</color>
+  <bgcolor mode="background">#30353a</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>

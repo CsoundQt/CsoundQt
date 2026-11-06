@@ -90,6 +90,8 @@ i 1 0 3600  ; gui
 i 3 1 0     ; init
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -99,11 +101,7 @@ i 3 1 0     ; init
  <height>357</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#3d3d3d</bgcolor>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Index1_Attack</objectName>
   <x>9</x>
@@ -111,22 +109,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{911b84a9-9d4c-47f8-afb2-73a92dafe2e0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00100000</minimum>
   <maximum>8.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00200000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -141,7 +138,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{6b68cc2d-5a27-4bb2-8294-dd807cadb857}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -150,17 +149,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -172,7 +165,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{cbd82665-31ad-48a3-aba5-f9fd4e8fae6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -181,17 +176,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -203,22 +192,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{7d3bf49e-7f20-407f-b9a4-99e2fc15392c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>5.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -233,7 +221,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{e6534b2f-b17d-48c8-bde3-8537286a946b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -242,17 +232,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -264,22 +248,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{0517db1e-e2a9-4e21-b131-5237a32eaa84}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -294,7 +277,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{3dc3998c-57d2-4d36-81d3-e08c689275ce}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -303,17 +288,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -325,22 +304,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{642a7b5c-0b16-4551-afd2-d3a781a77c3b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.10000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -355,7 +333,9 @@ i 3 1 0     ; init
   <width>150</width>
   <height>25</height>
   <uuid>{f686f455-5aaa-49fd-a571-cde60bfc3872}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -364,17 +344,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -386,7 +360,9 @@ i 3 1 0     ; init
   <width>460</width>
   <height>38</height>
   <uuid>{7e8a6ff4-5d75-4728-a908-e01319f81f17}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -395,22 +371,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -422,7 +387,9 @@ i 3 1 0     ; init
   <width>150</width>
   <height>25</height>
   <uuid>{9f4dcfc6-d937-4c05-9073-d30c9b94b4f2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -431,17 +398,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -453,22 +414,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{91ea6619-d03f-438c-b70f-a87cfb94dca8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.10000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -483,7 +443,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{a586a41a-3899-439e-886d-06e6c8384382}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -492,17 +454,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -514,22 +470,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{d5b27309-17be-4c40-94d4-bcb8a7c4ad4f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -544,7 +499,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{02684d8b-1e21-4151-8942-1473138f3f9f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -553,17 +510,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -575,22 +526,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{d62880df-b7b3-45d1-93eb-eb7b92b27c53}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>5.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -605,7 +555,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{2c1f61b4-0501-490f-9d4e-683120c04e5c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -614,17 +566,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -636,7 +582,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{cd663376-2b91-47d7-beae-3dc7a197f36a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -645,17 +593,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -667,7 +609,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{91205d89-e687-48e0-9f98-eef3d48d3e9b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -677,16 +621,10 @@ i 3 1 0     ; init
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -698,22 +636,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{e4bf7cef-6d2c-4a47-8feb-f4a9521925b8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00100000</minimum>
   <maximum>4.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00200000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -728,7 +665,9 @@ i 3 1 0     ; init
   <width>150</width>
   <height>25</height>
   <uuid>{c1cc1d68-f38b-45f4-a172-01a875b1db38}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -737,17 +676,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -759,22 +692,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{2de5d575-ae6b-4222-a405-8cf855ca4540}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.10000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -789,7 +721,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{8561dc11-8894-4ffe-869e-6d377242bdcb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -798,17 +732,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -820,22 +748,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{b7e65561-152f-49ba-8648-d736a189ecf1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -850,7 +777,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{3666178b-6c5f-4166-b887-8f1abb7d6f1e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -859,17 +788,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -881,22 +804,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{117d83a7-a0c6-4f6e-8dbe-ea57190fdfce}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>6.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -911,7 +833,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{3f0e5ab2-195f-421e-8384-ab0233a37897}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -920,17 +844,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -942,7 +860,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{e8aded63-c7e3-4ed6-86c2-1711e18ec8e1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -951,17 +871,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -973,7 +887,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{6cf763f2-ac03-4ca4-a54c-a12f86818785}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -983,16 +899,10 @@ i 3 1 0     ; init
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1004,22 +914,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{d5774b21-06c7-4596-b1ff-ec2c7cefbd09}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00100000</minimum>
   <maximum>8.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00200000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -1034,7 +943,9 @@ i 3 1 0     ; init
   <width>240</width>
   <height>2</height>
   <uuid>{216349dc-8199-4b97-8726-efa51e366b5b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1043,17 +954,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="background">#e7ac32</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1065,7 +970,9 @@ i 3 1 0     ; init
   <width>240</width>
   <height>2</height>
   <uuid>{abbe067d-7d44-4497-b795-afbaa2fc4e46}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1074,17 +981,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="background">#e7ac32</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1096,7 +997,9 @@ i 3 1 0     ; init
   <width>240</width>
   <height>2</height>
   <uuid>{51f609fc-d85d-4fd3-93ac-70fa4f2c1d52}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1105,17 +1008,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="background">#e7ac32</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1127,22 +1024,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{7a5e84b3-d6b9-41ed-86e6-430837e87446}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>100.00000000</minimum>
   <maximum>8000.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>6000.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -1157,7 +1053,9 @@ i 3 1 0     ; init
   <width>70</width>
   <height>25</height>
   <uuid>{1586121c-542b-4144-a452-dd4943ac15c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1166,17 +1064,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1188,7 +1080,9 @@ i 3 1 0     ; init
   <width>70</width>
   <height>25</height>
   <uuid>{2c9e9b18-6fe9-4096-bdb8-83fa94effd0e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1197,17 +1091,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1219,22 +1107,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{2ae12c59-ee34-4824-8e24-d2d559fe7210}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>1.00000000</minimum>
   <maximum>100.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -1249,7 +1136,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{91b0fe27-5919-44f7-af73-02b24853ccac}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1258,17 +1147,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1280,22 +1163,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{6fd29d18-2365-4e34-ad60-90651072c64e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -1310,7 +1192,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{4ebc3645-81a6-4746-b456-a8d6e3c335e3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1319,17 +1203,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1341,22 +1219,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{3132eb42-d99e-43e9-9957-22c978ba67a9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.33300000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -1371,23 +1248,17 @@ i 3 1 0     ; init
   <width>80</width>
   <height>30</height>
   <uuid>{405f1d03-2d6a-4e08-97aa-76e293f20365}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>199</r>
-   <g>123</g>
-   <b>43</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#c77b2b</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
   <maximum>20</maximum>
@@ -1401,7 +1272,9 @@ i 3 1 0     ; init
   <width>80</width>
   <height>30</height>
   <uuid>{c786fcb1-b6c1-4791-aae2-a61d52ce4522}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1410,17 +1283,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1432,7 +1299,9 @@ i 3 1 0     ; init
   <width>80</width>
   <height>30</height>
   <uuid>{ffb2aada-7789-4921-bca3-0d387e02b975}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1441,17 +1310,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1463,23 +1326,17 @@ i 3 1 0     ; init
   <width>80</width>
   <height>30</height>
   <uuid>{b6126384-8ca2-4857-8e58-f6cf1639ce03}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>203</r>
-   <g>124</g>
-   <b>44</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#cb7c2c</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
   <maximum>20</maximum>
@@ -1493,23 +1350,17 @@ i 3 1 0     ; init
   <width>80</width>
   <height>30</height>
   <uuid>{cbba6841-eb63-48f5-99d3-bd099d39def4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>208</r>
-   <g>128</g>
-   <b>45</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#d0802d</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
   <maximum>20</maximum>
@@ -1523,7 +1374,9 @@ i 3 1 0     ; init
   <width>80</width>
   <height>30</height>
   <uuid>{67fdeb64-4bef-432d-aed8-b1ff29b88655}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1532,17 +1385,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1554,7 +1401,9 @@ i 3 1 0     ; init
   <width>80</width>
   <height>30</height>
   <uuid>{9e37c330-d2f9-40b9-a334-c78719f4a371}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1563,17 +1412,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1585,23 +1428,17 @@ i 3 1 0     ; init
   <width>80</width>
   <height>30</height>
   <uuid>{418766be-98a2-414b-a199-0b726040b63d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>208</r>
-   <g>128</g>
-   <b>45</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#d0802d</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
   <maximum>20</maximum>
@@ -1615,22 +1452,21 @@ i 3 1 0     ; init
   <width>60</width>
   <height>60</height>
   <uuid>{2bda857d-4de6-40eb-8db7-698052bd6bfa}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#d0802d</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -1645,7 +1481,9 @@ i 3 1 0     ; init
   <width>60</width>
   <height>25</height>
   <uuid>{afcf8893-b629-4c34-a82f-aaf46d0a2d72}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1654,17 +1492,11 @@ i 3 1 0     ; init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e7ac32</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1676,10 +1508,13 @@ i 3 1 0     ; init
   <width>745</width>
   <height>90</height>
   <uuid>{076a9f0e-162d-4c3d-91c7-05091e2c7425}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
+  <objectName2/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>

@@ -84,7 +84,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>5</number>
+          <number>4</number>
          </property>
          <widget class="QWidget" name="tab_audio">
           <attribute name="title">
