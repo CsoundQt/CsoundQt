@@ -163,13 +163,28 @@ void FrameWidget::paintEvent(QPaintEvent *event)
     // from the panel) makes creating hundreds of frames very slow, because Qt
     // resolves and applies the sheet for every widget.
     QPainter painter(this);
-    QPen pen(m_selected ? s_frameColorSelected : s_frameColorUnselected);
-    pen.setWidth(2);
-    if (!m_selected && m_locked)
+    const QColor frameColor = m_selected ? s_frameColorSelected : s_frameColorUnselected;
+    if (!m_selected && m_locked) {
+        QPen pen(frameColor);
+        pen.setWidth(2);
         pen.setStyle(Qt::DotLine);
-    painter.setPen(pen);
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRect(rect().adjusted(1, 1, -2, -2));
+        painter.setPen(pen);
+        painter.setBrush(Qt::NoBrush);
+        painter.drawRect(rect().adjusted(1, 1, -1, -1));
+    } else {
+        // Fill non-overlapping strips instead of stroking a thick rectangle:
+        // QPainter's rasterized 2 px pen can omit the lower-left corner pixel.
+        constexpr int borderWidth = 2;
+        const int topHeight = qMin(borderWidth, height());
+        const int bottomY = qMax(topHeight, height() - borderWidth);
+        const int leftWidth = qMin(borderWidth, width());
+        const int rightX = qMax(leftWidth, width() - borderWidth);
+        painter.fillRect(QRect(0, 0, width(), topHeight), frameColor);
+        painter.fillRect(QRect(0, bottomY, width(), height() - bottomY), frameColor);
+        painter.fillRect(QRect(0, topHeight, leftWidth, bottomY - topHeight), frameColor);
+        painter.fillRect(QRect(rightX, topHeight, width() - rightX, bottomY - topHeight),
+                         frameColor);
+    }
 
     if (m_selected) {
         const int size = resizeHandleSize(this);
@@ -181,9 +196,9 @@ void FrameWidget::paintEvent(QPaintEvent *event)
         borderPen.setWidth(kResizeHandleBorder);
         painter.setPen(borderPen);
         painter.setBrush(fill);
-        painter.drawRect(QRect(0, 0, size - 1, size - 1));
+        painter.drawRect(QRect(0, 0, size, size));
         painter.drawRect(QRect(width() - size, height() - size,
-                               size - 1, size - 1));
+                               size, size));
     }
 }
 
