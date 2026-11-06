@@ -69,7 +69,7 @@ JOBS="${JOBS:-$(nproc)}"
 # Single source of truth for the Csound version: this commit is built as the
 # engine AND (with --with-plugins) checked out as csound-plugins' `csound`
 # submodule, so the plugins always build against the Csound they ship with.
-CSOUND_COMMIT="${CSOUND_COMMIT:-fcc532383fcb62aee509d83c1c82e6a755e8474e}"
+CSOUND_COMMIT="${CSOUND_COMMIT:-92b7bd409dbe19c799f07fc17c29b73d8bbed618}"
 CSOUND_PLUGINS_COMMIT="${CSOUND_PLUGINS_COMMIT:-74068d692a9c54b66ec4420b29485d187b6e8f1f}"
 
 
