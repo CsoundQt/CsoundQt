@@ -30,8 +30,7 @@
 #include "scanservice.h"
 #include "includecache.h"
 #include "csoundengine.h"
-#include "csoundqt.h" // For playParent and renderParent functions (called from button
-                        // reserved channels) and for connecting from console to log file
+#include "csoundqt.h" // Application-wide types used around DocumentPage
 #include "opentryparser.h"
 #include "types.h"
 #include "highlighter.h"
@@ -123,6 +122,22 @@ DocumentPage::~DocumentPage()
 void DocumentPage::setCompanionFileName(QString name)
 {
 	companionFile = name;
+}
+
+void DocumentPage::setReadOnly(bool readOnly)
+{
+	this->readOnly = readOnly;
+	m_view->setReadOnly(readOnly);
+	// A read-only document's widget layout cannot be edited either, including
+	// through the widget context menu.
+	foreach (WidgetLayout *wl, m_widgetLayouts) {
+		wl->setEditEnabled(!readOnly);
+	}
+}
+
+bool DocumentPage::isEditorReadOnly() const
+{
+	return m_view != nullptr && m_view->isReadOnly();
 }
 
 void DocumentPage::loadTextString(QString &text)
@@ -877,10 +892,10 @@ void DocumentPage::setWidgetEnabled(bool enabled)
 void DocumentPage::registerButton(QuteButton *b)
 {
 	//  qDebug();
-	connect(b, SIGNAL(play()), static_cast<CsoundQt *>(parent()), SLOT(play()));
-	connect(b, SIGNAL(render()), static_cast<CsoundQt *>(parent()), SLOT(render()));
-	connect(b, SIGNAL(pause()), static_cast<CsoundQt *>(parent()), SLOT(pause()));
-	connect(b, SIGNAL(stop()), static_cast<CsoundQt *>(parent()), SLOT(stop()));
+	connect(b, SIGNAL(play()), this, SIGNAL(playRequested()));
+	connect(b, SIGNAL(render()), this, SIGNAL(renderRequested()));
+	connect(b, SIGNAL(pause()), this, SIGNAL(pauseRequested()));
+	connect(b, SIGNAL(stop()), this, SIGNAL(stopRequested()));
 }
 
 void DocumentPage::queueMidiIn(std::vector< unsigned char > *message)

@@ -142,6 +142,9 @@ public:
         m_sectionType = sectionType;
     }
     void setTheme(const QString &theme);
+    // 100 keeps the theme colours unchanged, 0 removes all saturation.
+    // Re-applies the current theme when the value changes.
+    void setColorSaturation(int percent);
     void enableScoreSyntaxHighlighting(bool status) {
         m_scoreSyntaxHighlighting = status;
     }
@@ -196,6 +199,8 @@ private:
     void applyTheme(const EditorThemes::Theme &theme);
     void applyFormats(const QHash<QString, EditorThemes::FormatSpec> &formats);
     void finishTheme();
+    void applyColorSaturation();
+    QVector<QTextCharFormat *> allFormats();
     QTextCharFormat *formatForName(const QString &name);
     QString localVariableType(int line, const QString &name) const;
 
@@ -361,6 +366,7 @@ private:
     QString m_theme;
     bool m_themeSet = false;
     int m_themeGeneration = -1;
+    int m_colorSaturation = 100;
 
 	// for html
     QTextCharFormat jsKeywordFormat, htmlTagFormat, attrFormat, tagNameFormat;

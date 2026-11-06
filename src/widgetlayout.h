@@ -111,7 +111,7 @@ public:
 	// File name of the document that owns this widget panel. It is used to
 	// resolve paths stored in widget properties (e.g. button images) relative
 	// to the .csd instead of the process working directory.
-	void setDocumentFileName(const QString &fileName) { m_documentFileName = fileName; }
+	void setDocumentFileName(const QString &fileName);
 	QString documentFileName() const { return m_documentFileName; }
 	// Directory of the owning document; the current directory when the
 	// document has not been saved yet.
@@ -438,6 +438,7 @@ protected:
 	bool m_channelHighlightMouseInside = false;
 
 private:
+	void updateWindowTitle();
 
 	QMutex widgetsMutex;
 	QMutex layoutMutex;
@@ -455,6 +456,7 @@ private:
 	int m_posx, m_posy, m_w, m_h; // Position and size of panel (not this widget)
 	QString m_objectName;
 	QString m_documentFileName; // File name of the document owning this panel
+	QString m_label; // Original <label> from the file; the window title is derived from the file name
 	QString m_uuid;
 	bool m_visible;
 

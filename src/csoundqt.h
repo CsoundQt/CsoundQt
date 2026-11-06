@@ -70,6 +70,7 @@ class MidiHandler;
 class MidiLearnDialog;
 class WidgetLayout;
 class ScanService;
+class WidgetWindow;
 
 #if defined(CSQT_QTHTML)
 class CsoundHtmlView;
@@ -81,8 +82,10 @@ class CsoundQt:public QMainWindow
 
 	friend class WidgetPanel; //to pass ud
 	friend class FileOpenEater; //to pass curPage
+	friend class WidgetWindow; // detached widget-only documents
 public:
-    CsoundQt(QStringList fileNames, bool noRecentFiles = false);
+    CsoundQt(QStringList fileNames, bool noRecentFiles = false,
+             bool readOnly = false, bool noEditor = false);
 	~CsoundQt();
 	static void utilitiesMessageCallback(CSOUND *csound,
 										 int /*attr*/,
@@ -167,12 +170,14 @@ public:
 
 public slots:
 	int loadFile(QString fileName, bool runNow = false, bool activate = true,
-	             int insertAt = -1);
+	             int insertAt = -1, bool readOnly = false, bool noEditor = false);
 	int loadFileFromSystem(QString fileName);
 	void newFile();
 	bool closeTab(bool forceCloseApp = false, int index = -1);
 	bool saveFile(const QString &fileName, bool saveWidgets = true);
 	void play(bool realtime = true, int index = -1);
+	// Start every detached widget-only document (used by --play --noeditor).
+	void playWidgetWindows();
 	void runInTerm(bool realtime = true);
 	void pause(int index = -1);
 	void stop(int index = -1);
@@ -225,6 +230,7 @@ protected:
 	bool eventFilter(QObject *obj, QEvent *event) override;
 	int rightDockColumnWidth() const;
 	void recordRightDockRatio();
+	bool currentPageIsReadOnly() const;
 	//    virtual void keyPressEvent(QKeyEvent *event);
 private slots:
 	void open();
@@ -351,6 +357,7 @@ private slots:
     void tabMoved(int to, int from);
     void openExamplesFolder();
     void setLineAndColumn(int line, int column);
+    void updateReadOnlyIndicator();
     void updatePerformanceInfo(DocumentPage *page = nullptr);
 
     DocumentPage *getCurrentDocumentPage() {
@@ -411,9 +418,18 @@ private:
                                      const QUrl &url, const QString &errorString);
     //    bool saveCurrent();
 	int makeNewPage(QString fileName, QString text, bool activate = true,
-	                 int insertAt = -1);
+	                 int insertAt = -1, bool readOnly = false);
 	bool loadCompanionFile(const QString &fileName, bool activate = true,
-	                       int insertAt = -1);
+	                       int insertAt = -1, bool readOnly = false);
+	// Detached widget-only documents (noeditor mode): they live in their own
+	// top-level widget window and are not part of documentPages/tabs.
+	WidgetWindow *openWidgetWindow(const QString &fileName, bool readOnly = false,
+	                               bool autoPlay = false);
+	void removeWidgetWindow(WidgetWindow *window);
+	// The detached widget window that currently has focus, if any.
+	WidgetWindow *activeWidgetWindow() const;
+	bool playDetached(DocumentPage *page);
+	void stopDetached(DocumentPage *page);
 	void loadPendingSessionFile();
 	// Enable/disable the actions that only make sense for some file types and
 	// install the shortcut guards that explain why a .udo cannot be performed.
@@ -685,6 +701,7 @@ private:
 	QHash<QString, Opcode> m_udosMap;
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
     QByteArray m_editorHiddenDockState; // dock layout saved while the editor is hidden
+    QList<WidgetWindow *> m_widgetWindows; // detached widget-only documents
     UtilitiesDialog *utilitiesDialog;
 	QString currentAudioFile;
 	QString initialDir;
@@ -724,6 +741,7 @@ private:
         "--format"
     };
     QLabel *lineAndColumnLabel;
+    QLabel *readonlyLabel = nullptr;
     QLabel *performanceInfoLabel = nullptr;
     QPalette makeAppPalette(bool dark);
     QFileSystemWatcher *m_fileWatcher;

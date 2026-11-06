@@ -80,6 +80,7 @@ HEADERS = "src/about.h" \
     "src/utilitiesdialog.h" \
     "src/widgetlayout.h" \
     "src/widgetpanel.h" \
+    "src/widgetwindow.h" \
     "src/widgetpreset.h" \
     "src/qutesheet.h" \
     "src/basedocument.h" \
@@ -152,6 +153,7 @@ SOURCES = "src/about.cpp" \
     "src/utilitiesdialog.cpp" \
     "src/widgetlayout.cpp" \
     "src/widgetpanel.cpp" \
+    "src/widgetwindow.cpp" \
     "src/widgetpreset.cpp" \
     "src/qutesheet.cpp" \
     "src/basedocument.cpp" \

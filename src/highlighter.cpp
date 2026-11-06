@@ -223,6 +223,36 @@ QColor saturateColor(QColor color, int percent) {
     return QColor::fromHsl(color.hue(), sat, color.lightness());
 }
 
+// Keeps the hue and lightness but scales the saturation. Used to make a
+// read-only editor look visibly disabled while keeping the syntax readable.
+static QColor desaturateColor(const QColor &color, int percent)
+{
+    if (!color.isValid() || percent >= 100
+            || color.hslSaturation() == 0 || color.hslHue() < 0) {
+        return color;
+    }
+    QColor result = QColor::fromHsl(color.hslHue(),
+                                    qRound(color.hslSaturation() * percent / 100.0),
+                                    color.lightness());
+    result.setAlpha(color.alpha());
+    return result;
+}
+
+static void desaturateFormat(QTextCharFormat &format, int percent)
+{
+    auto adjust = [percent](const QBrush &brush) {
+        if (brush.style() == Qt::NoBrush || !brush.color().isValid())
+            return brush;
+        return QBrush(desaturateColor(brush.color(), percent), brush.style());
+    };
+    if (format.hasProperty(QTextFormat::ForegroundBrush))
+        format.setForeground(adjust(format.foreground()));
+    if (format.hasProperty(QTextFormat::BackgroundBrush))
+        format.setBackground(adjust(format.background()));
+    if (format.hasProperty(QTextFormat::TextUnderlineColor))
+        format.setUnderlineColor(desaturateColor(format.underlineColor(), percent));
+}
+
 void Highlighter::finishTheme()
 {
     // --------------------------------------
@@ -354,6 +384,54 @@ QTextCharFormat *Highlighter::formatForName(const QString &name)
     return nullptr;
 }
 
+QVector<QTextCharFormat *> Highlighter::allFormats()
+{
+    QVector<QTextCharFormat *> formats = {
+        &csdtagFormat, &csdtagCloseFormat, &instFormat, &headerFormat,
+        &irateFormat, &krateFormat, &arateFormat,
+        &girateFormat, &gkrateFormat, &garateFormat,
+        &stringVarFormat, &gstringVarFormat, &fsigFormat, &gfsigFormat,
+        &channelnameFormat, &booleanFormat, &complexFormat,
+        &opcodeFormat, &udoFormat, &macroDefineFormat, &pfieldFormat,
+        &singleLineCommentFormat, &importantCommentFormat,
+        &multiLineCommentFormat, &quotationFormat, &functionFormat,
+        &nameFormat, &ioFormat, &deprecatedFormat, &operatorFormat,
+        &scoreLetterFormat, &errorFormat, &labelFormat, &csoundOptionFormat,
+        &defaultFormat, &keywordFormat, &jsKeywordFormat, &htmlTagFormat,
+        &attrFormat, &tagNameFormat
+    };
+    for (int i = 0; i <= LastConstruct; ++i)
+        formats.append(&m_formats[i]);
+    return formats;
+}
+
+void Highlighter::applyColorSaturation()
+{
+    if (m_colorSaturation >= 100)
+        return;
+    for (QTextCharFormat *format : allFormats())
+        desaturateFormat(*format, m_colorSaturation);
+    for (HighlightingRule &rule : highlightingRules)
+        desaturateFormat(rule.format, m_colorSaturation);
+    for (HighlightingRule &rule : lastHighlightingRules)
+        desaturateFormat(rule.format, m_colorSaturation);
+}
+
+void Highlighter::setColorSaturation(int percent)
+{
+    percent = qBound(0, percent, 100);
+    if (percent == m_colorSaturation)
+        return;
+    m_colorSaturation = percent;
+    if (!m_themeSet) {
+        // The theme will apply the new value when it is first set.
+        return;
+    }
+    // Force setTheme() to rebuild the formats from the unmodified theme.
+    m_themeSet = false;
+    setTheme(m_theme);
+}
+
 void Highlighter::applyFormats(const QHash<QString, EditorThemes::FormatSpec> &formats)
 {
     for (auto it = formats.constBegin(); it != formats.constEnd(); ++it) {
@@ -436,6 +514,9 @@ void Highlighter::setTheme(const QString &theme)
             applyFormats(explicitClose);
         }
     }
+    // Derived formats are complete: scale every colour's saturation as the
+    // last step, so derived colours cannot re-introduce saturation.
+    applyColorSaturation();
 
     m_theme = applied;
     m_themeSet = true;

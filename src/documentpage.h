@@ -241,6 +241,9 @@ public:
 	// Member public variables
 	bool askForFile;
 	bool readOnly; // Used for manual files and internal examples
+	// Read-only documents keep their text, but can still be saved elsewhere.
+	void setReadOnly(bool readOnly);
+	bool isEditorReadOnly() const;
 	QVector<QString> widgetHistory;  // Undo/ Redo history
     int widgetHistoryIndex; // Current point in history
     QString getQml();
@@ -346,6 +349,13 @@ signals:
     void unmodified();
     void stopSignal(); // To tell main application that running has stopped
 	void setHelpSignal(); // Propagated from view
+    // Requests from play/render/pause/stop buttons in the widget layout. The
+    // owner decides which document to act on (CsoundQt for tabbed documents,
+    // WidgetWindow for detached widget-only documents).
+    void playRequested();
+    void renderRequested();
+    void pauseRequested();
+    void stopRequested();
     // The definition at line/column is in an included file: the application
     // has to open that file and jump there.
     void goToSourceFileRequested(const QString &file, int line, int column);

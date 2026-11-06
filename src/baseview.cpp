@@ -25,6 +25,10 @@
 
 #include <QRegularExpression>
 
+// Percentage of the original colour saturation kept by a read-only editor.
+// Lower values make the read-only state more obvious.
+static constexpr int READONLY_COLOR_SATURATION_PERCENT = 25;
+
 // Matches a line that starts an instrument or opcode definition.
 static const QRegularExpression &orchestraDefinitionRx()
 {
@@ -170,6 +174,32 @@ void BaseView::setScrollBarVisible(bool visible)
 {
 	m_mainEditor->setVerticalScrollBarPolicy(visible ? Qt::ScrollBarAsNeeded
 	                                                : Qt::ScrollBarAlwaysOff);
+}
+
+void BaseView::setReadOnly(bool readOnly)
+{
+	const bool changed = m_mainEditor->isReadOnly() != readOnly;
+	m_mainEditor->setReadOnly(readOnly);
+	if (!changed)
+		return;
+
+	// Desaturate the syntax colours (and the editor background/text) so the
+	// read-only state is visible at a glance.
+	m_highlighter.setColorSaturation(readOnly ? READONLY_COLOR_SATURATION_PERCENT
+	                                          : 100);
+	const QTextCharFormat defaultFormat =
+	        m_highlighter.getFormat(QStringLiteral("default"));
+	if (defaultFormat.foreground().style() != Qt::NoBrush
+	        && defaultFormat.background().style() != Qt::NoBrush) {
+		setColors(defaultFormat.foreground().color(),
+		          defaultFormat.background().color());
+		updateLineAreaColors();
+	}
+}
+
+bool BaseView::isReadOnly() const
+{
+	return m_mainEditor->isReadOnly();
 }
 
 void BaseView::setColorVariables(bool color)
@@ -388,6 +418,8 @@ static bool cursorIsInsideQuotes(const QTextCursor &cursor)
 
 void BaseView::insertPathAtCursor(const QString &path)
 {
+	if (isReadOnly())
+		return;
 	TextEditor *editor = m_mainEditor;
 	QTextCursor cursor = editor->textCursor();
 	// If the cursor is already inside a quoted string, insert the bare path
@@ -403,6 +435,8 @@ void BaseView::insertPathAtCursor(const QString &path)
 
 void BaseView::insertOrchestraGlobal(QString text)
 {
+	if (isReadOnly())
+		return;
 	// Global orchestra code (the implicit "instr 0") lives after the header and
 	// before the first instr/opcode definition. If the cursor is already in
 	// that region, insert there; otherwise insert just before the first
@@ -446,6 +480,8 @@ void BaseView::insertOrchestraGlobal(QString text)
 
 void BaseView::insertAtScoreStart(QString text)
 {
+	if (isReadOnly())
+		return;
 	QTextCursor cursor = m_mainEditor->textCursor();
 	const QString document = m_mainEditor->toPlainText();
 	const int tagIndex = document.indexOf(QStringLiteral("<CsScore"));

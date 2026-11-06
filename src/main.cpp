@@ -110,7 +110,8 @@ static void addSystemStylePluginPaths()
 // caller whether it should quit. --force-new skips this altogether, so a new
 // instance is started even when one is already running; the files then belong
 // to the new instance.
-static bool handOverToRunningInstance(const QStringList &fileNames)
+static bool handOverToRunningInstance(const QStringList &fileNames,
+                                      bool readOnly, bool noEditor)
 {
     QLocalSocket socket;
     socket.connectToServer("csoundqt");
@@ -120,7 +121,12 @@ static bool handOverToRunningInstance(const QStringList &fileNames)
     }
     if (!fileNames.isEmpty()) {
         qDebug() << "Opening file(s) in already running instance";
-        QString message = "open ***" + fileNames.join("***"); // use a separator that is probably not in the file name
+        QString header = "open";
+        if (readOnly)
+            header += " --readonly";
+        if (noEditor)
+            header += " --noeditor";
+        QString message = header + " ***" + fileNames.join("***"); // use a separator that is probably not in the file name
         socket.write(message.toLocal8Bit());
         socket.waitForBytesWritten(1000);
         socket.close();
@@ -222,6 +228,8 @@ int main(int argc, char *argv[])
     bool autorender = false;
     bool noRecentFiles = false;
     bool forceNew = false;
+    bool readOnly = false;
+    bool noEditor = false;
     QStringList args = qapp.arguments();
     args.removeAt(0); // Remove program name
     for(int i=0; i < args.size(); i++) {
@@ -233,6 +241,8 @@ int main(int argc, char *argv[])
             out << "   --play        Autoplay the last file passed via command line" << Qt::endl;
             out << "   --render      Render the last file passed via command line" << Qt::endl;
             out << "   --no-recent-files  Do not reopen files from the last session" << Qt::endl;
+            out << "   --readonly    Open command-line files in read-only mode" << Qt::endl;
+            out << "   --noeditor    Open command-line files without an editor, in a widget window" << Qt::endl;
             out << "   --force-new   Start a new instance even if one is already running" << Qt::endl;
             out << "   --help        This message" << Qt::endl;
             out << Qt::endl;
@@ -250,6 +260,12 @@ int main(int argc, char *argv[])
         if(arg == "--force-new") {
             forceNew = true;
         }
+        if(arg == "--readonly") {
+            readOnly = true;
+        }
+        if(arg == "--noeditor") {
+            noEditor = true;
+        }
     }
 
     foreach (QString arg, args) {
@@ -260,7 +276,7 @@ int main(int argc, char *argv[])
     // If another instance is already running, hand it the files (or ask before
     // opening a second window) and quit. --force-new skips all that and always
     // starts a new instance.
-    if (!forceNew && handOverToRunningInstance(fileNames)) {
+    if (!forceNew && handOverToRunningInstance(fileNames, readOnly, noEditor)) {
         return 0;
     }
     // forming filenames was here before. now before localSocket
@@ -289,7 +305,7 @@ int main(int argc, char *argv[])
         QDEBUG << "Could load translator";
     }
 
-    CsoundQt *csoundQt = new CsoundQt(fileNames, noRecentFiles);
+    CsoundQt *csoundQt = new CsoundQt(fileNames, noRecentFiles, readOnly, noEditor);
     if (!csoundQt->startServer())
         qDebug()<<"Could not start local server.";
 #ifndef CSQT_NO_SPLASH
@@ -303,8 +319,12 @@ int main(int argc, char *argv[])
     csoundQt->show();
     
     
-    if(autoplay && !fileNames.isEmpty())
-        csoundQt->play();
+    if(autoplay && !fileNames.isEmpty()) {
+        if (noEditor)
+            csoundQt->playWidgetWindows();
+        else
+            csoundQt->play();
+    }
     if(autorender && !fileNames.isEmpty())
         csoundQt->render();
 

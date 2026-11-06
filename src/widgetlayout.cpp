@@ -351,6 +351,7 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     const QHash<QString, RuntimeState> runtimeState = captureRuntimeState();
 
     m_unknownWidgetFonts.clear();
+    m_label.clear();
     clearWidgetLayout();
     QDomDocument doc;
     if (!doc.setContent(xmlWidgets)) {
@@ -414,6 +415,9 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     //		this->resize(m_w, m_h);
     //		//    setOuterGeometry();
     //	}
+    // <label> is not used as the title any more; apply the document-based one
+    // after loading in case the title was changed while parsing.
+    updateWindowTitle();
     qDebug() << "Finished loading xml widgets";
     reportUnknownWidgetFonts();
     publishChannelSnapshot();
@@ -492,7 +496,7 @@ QString WidgetLayout::getWidgetsText()
     // may cause crashing since widgets are not reentrant
     QStringList txts = {"<bsbPanel>\n"};
     layoutMutex.lock();
-    txts << "<label>" << windowTitle() << "</label>\n"
+    txts << "<label>" << m_label << "</label>\n"
          << "<objectName>" << m_objectName << "</objectName>\n"
          << "<x>" << QString::number(m_posx) << "</x>\n"
          << "<y>" << QString::number(m_posy) << "</y>\n"
@@ -1573,6 +1577,25 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
         getEditWidget(widget)->setToolTip(tooltip);
     }
 
+}
+
+void WidgetLayout::setDocumentFileName(const QString &fileName)
+{
+    m_documentFileName = fileName;
+    updateWindowTitle();
+}
+
+void WidgetLayout::updateWindowTitle()
+{
+    // The window title identifies the document's widget window, independent of
+    // any <label> stored in the file (that label is preserved for saving).
+    const QFileInfo info(m_documentFileName);
+    QString base = info.completeBaseName();
+    if (base.isEmpty())
+        base = info.fileName();
+    if (base.isEmpty())
+        base = tr("Untitled");
+    setWindowTitle(tr("%1 - widgets").arg(base));
 }
 
 void WidgetLayout::setContained(bool contained)
@@ -3867,7 +3890,9 @@ int WidgetLayout::parseXmlNode(QDomNode node)
     else if (name == "label") {
         auto child = node.firstChild();
         if(!child.isNull()) {
-            this->setWindowTitle(child.nodeValue());
+            // Keep the stored label for round-tripping, but the visible title
+            // comes from the document file name (see updateWindowTitle()).
+            m_label = child.nodeValue();
         }
     }
     else if (name == "x") {
@@ -4738,8 +4763,11 @@ void WidgetLayout::paste()
 
 void WidgetLayout::setEditEnabled(bool enabled)
 {
-    setEditMode(enabled);
+    // Enabling edit capability must not enter edit mode by itself; disabling it
+    // leaves edit mode if it was active.
     m_enableEdit = enabled;
+    if (!enabled && m_editMode)
+        setEditMode(false);
 }
 
 void WidgetLayout::setEditMode(bool active)

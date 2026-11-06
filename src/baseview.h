@@ -57,6 +57,8 @@ public:
 	void setTabSpaces(int spaces);
 	void setLineWrapMode(QTextEdit::LineWrapMode mode);
 	void setScrollBarVisible(bool visible);
+	void setReadOnly(bool readOnly);
+	bool isReadOnly() const;
 	void setAutoComplete(bool autoComplete);
 	void setColorVariables(bool color);
 	void setBackgroundColor(QColor color);

@@ -44,6 +44,19 @@ TextEditor::TextEditor(QWidget *parent) :
 void TextEditor::keyPressEvent (QKeyEvent * event)
 {
     m_lastkey = event->key();
+    // A read-only editor must not insert text through the custom Tab/Backtab
+    // handling below (QTextEdit's own read-only mode only covers its built-in
+    // editing paths).
+    if (isReadOnly()) {
+        QTextEdit::keyPressEvent(event);
+        if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down
+                || event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) {
+            emit arrowPressed();
+        } else if (event->key() == Qt::Key_Escape) {
+            emit escapePressed();
+        }
+        return;
+    }
 	if (m_commaTyped && event->key() != Qt::Key_Space) {
 		m_commaTyped = false;
 	}
@@ -124,6 +137,8 @@ void TextEditor::insertFromMimeData(const QMimeData *source)
 {
     // All clipboard pastes (Ctrl+V, context menu, paste() API) and
     // drag-and-drop of text funnel through here.
+    if (isReadOnly())
+        return;
     m_pasteHappened = true;
     QTextEdit::insertFromMimeData(source);
 }

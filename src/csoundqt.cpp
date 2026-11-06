@@ -73,6 +73,7 @@
 #include "debuglog.h"
 #include "editorthemes.h"
 #include "widgetpanel.h"
+#include "widgetwindow.h"
 #include "utilitiesdialog.h"
 #include "about.h"
 #include "midihandler.h"
@@ -470,7 +471,8 @@ static const char *PERFORMANCE_INFO_COLOR_DARK = "#7fd8ff";
 
 
 
-CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles)
+CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
+                   bool readOnly, bool noEditor)
 {
     m_closing = false;
     m_resetPrefs = false;
@@ -785,7 +787,7 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles)
     // Open files passed in the command line. Here to make sure they are the active tab.
     foreach (QString fileName, fileNames) {
         if (QFile::exists(fileName)) {
-            loadFile(fileName);
+            loadFile(fileName, false, true, -1, readOnly, noEditor);
         }
         else {
             qDebug() << "CsoundQt::CsoundQt could not open file:" << fileName;
@@ -862,6 +864,20 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles)
     // only the file that was current first, then restore the remaining files
     // one at a time after the window has had a chance to appear.
     bool restoredSession = false;
+    if (noEditor && !fileNames.isEmpty()) {
+        // A command-line noeditor file belongs to its widget window only; do
+        // not restore the same file as a normal editor tab from the session.
+        for (int i = lastFiles.size() - 1; i >= 0; --i) {
+            const QString sessionPath = QFileInfo(lastFiles.at(i)).canonicalFilePath();
+            for (const QString &detached : fileNames) {
+                if (!sessionPath.isEmpty()
+                        && sessionPath == QFileInfo(detached).canonicalFilePath()) {
+                    lastFiles.removeAt(i);
+                    break;
+                }
+            }
+        }
+    }
     if (m_options->rememberFile && !lastFiles.isEmpty() && !noRecentFiles) {
         struct SessionFile {
             int originalIndex;
@@ -1277,6 +1293,7 @@ void CsoundQt::changePage(int index)
     // First thing to do is blank the HTML page to prevent misfired API calls.
     if (index < 0) { // No tabs left
         // qDebug() << "CsoundQt::changePage index < 0";
+        updateReadOnlyIndicator();
         return;
     }
     if (documentPages.size() > curPage
@@ -1357,6 +1374,7 @@ void CsoundQt::changePage(int index)
             documentPages[i]->acceptsMidiCC = true;
         }
     }
+    updateReadOnlyIndicator();
 }
 
 void CsoundQt::pageLeft()
@@ -1445,6 +1463,14 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     }
     foreach (QString tempFile, tempScriptFiles) {
         QDir().remove(tempFile);
+    }
+    // Detached widget-only documents own their engines and widget windows.
+    m_closing = true;
+    while (!m_widgetWindows.isEmpty()) {
+        WidgetWindow *window = m_widgetWindows.takeFirst();
+        removePlaybackTempFile(window->page());
+        window->page()->stop();
+        delete window;
     }
     // A normal quit leaves no playback copies behind.
     cleanupPlaybackTempFiles();
@@ -1657,7 +1683,8 @@ bool CsoundQt::save()
     }
     else if (documentPages[curPage]->readOnly){
         if (saveAs()) {
-            documentPages[curPage]->readOnly = false;
+            documentPages[curPage]->setReadOnly(false);
+            updateReadOnlyIndicator();
             return true;
         }
         else {
@@ -1783,6 +1810,11 @@ void CsoundQt::setScratchPadMode(bool csdMode)
 
 void CsoundQt::setWidgetEditMode(bool active)
 {
+    if (active && currentPageIsReadOnly()) {
+        if (editAct != nullptr)
+            editAct->setChecked(false);
+        return;
+    }
     for (int i = 0; i < documentPages.size(); i++) {
         documentPages[i]->setWidgetEditMode(active);
     }
@@ -1817,18 +1849,146 @@ void CsoundQt::toggleLockedWidgets()
 void CsoundQt::testAudioSetup()
 {
     qDebug() << "CsoundQt::testAudioSetup";
-    loadFile(":/AudioMidiTest.csd");
-    if (m_options->widgetsIndependent) {
-        // The widgets live in their own window: the docked panel would stay
-        // empty.
-        DocumentPage *page = getCurrentDocumentPage();
-        if (page != nullptr)
-            page->showWidgets(true);
-    } else {
-        widgetPanel->setVisible(true);
-        widgetPanel->setFocus();
+    // The audio test runs in its own widget-only window and does not change
+    // the main window's documents or layout.
+    openWidgetWindow(":/AudioMidiTest.csd", false, true);
+}
+
+WidgetWindow *CsoundQt::openWidgetWindow(const QString &fileName, bool readOnly,
+                                         bool autoPlay)
+{
+    // Reuse an already open widget-only document.
+    for (WidgetWindow *existing : m_widgetWindows) {
+        if (existing->fileName() == fileName) {
+            existing->showWidgets();
+            if (autoPlay)
+                playDetached(existing->page());
+            return existing;
+        }
     }
-    play();
+
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly)) {
+        QMessageBox::warning(this, tr("CsoundQt"),
+                             tr("Cannot read file %1:\n%2.")
+                             .arg(fileName, file.errorString()));
+        return nullptr;
+    }
+    QStringDecoder decoder(QStringDecoder::Utf8);
+    QString text = decoder(file.readAll());
+    text.replace("\r\n", "\n");
+    text.replace(QLatin1Char('\r'), QLatin1Char('\n'));
+
+    auto *window = new WidgetWindow(this, fileName, text, readOnly);
+    m_widgetWindows.append(window);
+    connect(window, &WidgetWindow::closed, this, &CsoundQt::removeWidgetWindow);
+    window->showWidgets();
+    if (autoPlay)
+        playDetached(window->page());
+    return window;
+}
+
+WidgetWindow *CsoundQt::activeWidgetWindow() const
+{
+    QWidget *active = QApplication::activeWindow();
+    if (active == nullptr)
+        return nullptr;
+    for (WidgetWindow *window : m_widgetWindows) {
+        if (window == nullptr || window->page() == nullptr)
+            continue;
+        WidgetLayout *layout = window->page()->getWidgetLayout();
+        if (window == active
+                || (layout != nullptr
+                    && (layout == active || layout->isAncestorOf(active)))) {
+            return window;
+        }
+    }
+    return nullptr;
+}
+
+void CsoundQt::removeWidgetWindow(WidgetWindow *window)
+{
+    if (window == nullptr || !m_widgetWindows.contains(window))
+        return;
+    m_widgetWindows.removeAll(window);
+    removePlaybackTempFile(window->page());
+    window->deleteLater();
+}
+
+bool CsoundQt::playDetached(DocumentPage *page)
+{
+    if (page == nullptr)
+        return false;
+
+    ensureAudioMidiDiscovery();
+    if (!m_realtimeAudioValidated) {
+        const QString problem = validateRealtimeAudioSettings();
+        if (!problem.isEmpty()) {
+            showInvalidAudioSettings(problem);
+            return false;
+        }
+        m_realtimeAudioValidated = true;
+    }
+
+    const QString fileName = page->getFileName();
+    if (!fileName.isEmpty() && !fileName.startsWith(QLatin1Char(':'))
+            && fileName.contains(QLatin1Char('/'))) {
+        QDir::setCurrent(QFileInfo(fileName).absolutePath());
+    }
+
+    // A detached page is never saved to its source file by the main window, so
+    // play a session copy of its current text (including widget changes).
+    const QString tempPath = writePlaybackTempFile(page, fileName);
+    if (tempPath.isEmpty()) {
+        QMessageBox::critical(this, tr("CsoundQt"),
+                              tr("Error creating temporary file."),
+                              QMessageBox::Ok);
+        return false;
+    }
+    const QString previousTemp = m_playbackTempFiles.value(page);
+    if (!previousTemp.isEmpty() && previousTemp != tempPath)
+        QFile::remove(previousTemp);
+    m_playbackTempFiles.insert(page, tempPath);
+
+    m_options->docName = fileName.isEmpty() ? tempPath : fileName;
+    m_options->fileName1 = tempPath;
+    m_options->fileName2 = page->getCompanionFileName();
+    m_options->rt = true;
+    m_options->csdSetsDbfs = CsoundOptions::textSetsDbfs(page->getBasicText(),
+                                                         page->getOptionsText());
+
+    if (!m_options->simultaneousRun) {
+        stopAll();
+        for (WidgetWindow *other : m_widgetWindows) {
+            if (other->page() != page) {
+                other->page()->stop();
+                removePlaybackTempFile(other->page());
+            }
+        }
+    }
+
+    const int ret = page->play(m_options);
+    if (ret != 0)
+        removePlaybackTempFile(page);
+    if (runAct != nullptr)
+        runAct->setChecked(ret == 0);
+    return ret == 0;
+}
+
+void CsoundQt::stopDetached(DocumentPage *page)
+{
+    if (page == nullptr)
+        return;
+    page->stop();
+    removePlaybackTempFile(page);
+    if (runAct != nullptr)
+        runAct->setChecked(false);
+}
+
+void CsoundQt::playWidgetWindows()
+{
+    for (WidgetWindow *window : m_widgetWindows)
+        playDetached(window->page());
 }
 
 void CsoundQt::checkSyntaxMenuAction()
@@ -1855,6 +2015,32 @@ void CsoundQt::openExamplesFolder()
 {
     QUrl examplePath = QUrl::fromLocalFile(QFileInfo(getExamplePath("")).absoluteFilePath());
     openUrlWithDiagnostics(QStringLiteral("examples-folder"), examplePath);
+}
+
+bool CsoundQt::currentPageIsReadOnly() const
+{
+    return curPage >= 0 && curPage < documentPages.size()
+            && documentPages.at(curPage) != nullptr
+            && documentPages.at(curPage)->isEditorReadOnly();
+}
+
+void CsoundQt::updateReadOnlyIndicator()
+{
+    if (readonlyLabel == nullptr)
+        return;
+    const bool readOnly = currentPageIsReadOnly();
+    readonlyLabel->setVisible(readOnly);
+    if (editAct != nullptr) {
+        if (readOnly) {
+            if (editAct->isChecked()) {
+                editAct->setChecked(false);
+                setWidgetEditMode(false);
+            }
+            editAct->setEnabled(false);
+        } else {
+            editAct->setEnabled(true);
+        }
+    }
 }
 
 void CsoundQt::setLineAndColumn(int line, int column)
@@ -2185,10 +2371,12 @@ void CsoundQt::onReadyRead()
     else {
         QStringList messageParts = QString(ba).split("***");
         if (messageParts[0].contains("open")) {
-            messageParts.removeAt(0); // other parts should be filenames
+            const QStringList header = messageParts.takeFirst().split(' ');
+            const bool readOnly = header.contains("--readonly");
+            const bool noEditor = header.contains("--noeditor");
             foreach (QString fileName, messageParts) {
                 qDebug() << "Call from other instance. Opening "<<fileName;
-                loadFile(fileName);
+                loadFile(fileName, false, true, -1, readOnly, noEditor);
                 //to bring window to front:
                 this->raise();
                 this->activateWindow();
@@ -2872,6 +3060,15 @@ void CsoundQt::showInvalidAudioSettings(const QString &message)
 void CsoundQt::play(bool realtime, int index)
 {
     qDebug()  << "CsoundQt::play...";
+    // Run/Stop actions and toolbar buttons are application-wide. When a
+    // detached widget-only window is the active performance target, they act
+    // on that document instead of the main window's current tab.
+    if (index == -1) {
+        if (WidgetWindow *window = activeWidgetWindow()) {
+            playDetached(window->page());
+            return;
+        }
+    }
     // TODO make csound pause if it is already running
     int oldPage = curPage;
     if (index == -1) {
@@ -3437,6 +3634,12 @@ void CsoundQt::runInTerm(bool realtime)
 
 void CsoundQt::pause(int index)
 {
+    if (index == -1) {
+        if (WidgetWindow *window = activeWidgetWindow()) {
+            window->page()->pause();
+            return;
+        }
+    }
     int docIndex = index;
     if (docIndex == -1) {
         docIndex = curPage;
@@ -3453,6 +3656,12 @@ void CsoundQt::pause(int index)
 
 void CsoundQt::stop(int index)
 {
+    if (index == -1) {
+        if (WidgetWindow *window = activeWidgetWindow()) {
+            stopDetached(window->page());
+            return;
+        }
+    }
     // Must guarantee that csound has stopped when it returns
     int docIndex = index;
     if (docIndex == -1) {
@@ -3500,6 +3709,10 @@ void CsoundQt::stopAll()
         removePlaybackTempFile(documentPages[i]);
         updateTabIcon(i);
     }
+    for (WidgetWindow *window : m_widgetWindows) {
+        window->page()->stop();
+        removePlaybackTempFile(window->page());
+    }
     markStopped();
 }
 
@@ -3512,6 +3725,12 @@ void CsoundQt::stopAllOthers()
             removePlaybackTempFile(documentPage);
             updateTabIcon(i);
         }
+    }
+    // The main document is being started, so detached widget-only documents
+    // are "others" too.
+    for (WidgetWindow *window : m_widgetWindows) {
+        window->page()->stop();
+        removePlaybackTempFile(window->page());
     }
     //	markStopped();
 }
@@ -5204,6 +5423,8 @@ void CsoundQt::applyPaletteToChrome()
         bar->setPalette(pal);
         bar->setAutoFillBackground(true);
     }
+    for (WidgetWindow *window : m_widgetWindows)
+        window->applyPaletteToChrome();
 #endif
 }
 
@@ -5753,6 +5974,8 @@ void CsoundQt::setColors(QString themeMode)
 
     if (controlToolBar)  controlToolBar->update();
     if (configureToolBar) configureToolBar->update();
+    for (WidgetWindow *window : m_widgetWindows)
+        window->applyTheme();
 
     // Decide console colors:
     // Keep user-set colors for explicit modes; optionally adapt in "auto"
@@ -7388,6 +7611,8 @@ void CsoundQt::setToolbarIconSize(int size) {
     // controlToolBar->setContentsMargins(3, 0, 3, 0); // instead of padding in stylesheet, but seems not needed
     //controlToolBar->setStyleSheet("QToolBar { padding: 0 3px }"); // this does not allow to change light/dark background
     configureToolBar->setIconSize(QSize(size, size));
+    for (WidgetWindow *window : m_widgetWindows)
+        window->setToolbarIconSize(size);
 }
 
 QMenu *CsoundQt::createPopupMenu()
@@ -7460,6 +7685,16 @@ void CsoundQt::createStatusBar()
         if (lineAndColumnLabel != nullptr)
             lineAndColumnLabel->show();
     });
+
+    readonlyLabel = new QLabel(tr("Readonly"), statusbar);
+    readonlyLabel->setToolTip(tr("This document is read-only"));
+    {
+        QFont font = readonlyLabel->font();
+        font.setBold(true);
+        readonlyLabel->setFont(font);
+    }
+    readonlyLabel->hide();
+    statusbar->addPermanentWidget(readonlyLabel);
 
     lineAndColumnLabel = new QLabel();
     setLineAndColumn(0,0);
@@ -8376,15 +8611,26 @@ void CsoundQt::loadPendingSessionFile()
     }
 }
 
-int CsoundQt::loadFile(QString fileName, bool runNow, bool activate, int insertAt)
+int CsoundQt::loadFile(QString fileName, bool runNow, bool activate, int insertAt,
+                       bool readOnly, bool noEditor)
 {
     if (fileName.endsWith(".pdf")) {
         openPdfFile(fileName);
         return 0;
     }
+    if (noEditor) {
+        // Widget-only documents are detached from the editor: they are not
+        // added to the main window's tabs and do not change its layout.
+        return openWidgetWindow(fileName, readOnly) != nullptr ? 0 : -1;
+    }
     int index = isOpen(fileName);
     if (index != -1) {
         QDEBUG << "File " << fileName << "already open, switching to index " << index;
+        if (readOnly) {
+            documentPages[index]->setReadOnly(true);
+            if (index == curPage)
+                updateReadOnlyIndicator();
+        }
         if (activate) {
             documentTabs->setCurrentIndex(index);
             changePage(index);
@@ -8442,7 +8688,8 @@ int CsoundQt::loadFile(QString fileName, bool runNow, bool activate, int insertA
         fileName = QString("");
     }
 
-    const int newPageIndex = makeNewPage(fileName, text, activate, insertAt);
+    const int newPageIndex = makeNewPage(fileName, text, activate, insertAt,
+                                         readOnly);
     if (newPageIndex < 0) {
         if (showWaitCursor)
             QApplication::restoreOverrideCursor();
@@ -8453,7 +8700,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow, bool activate, int insertA
             (fileName.endsWith(".sco") ||
              fileName.endsWith(".orc")) ) {
         // load companion, when the new page is made, otherwise isOpen works uncorrect
-        loadCompanionFile(fileName, activate, newPageIndex + 1);
+        loadCompanionFile(fileName, activate, newPageIndex + 1, readOnly);
     }
 
     if (m_options->autoJoin &&
@@ -8505,7 +8752,8 @@ int CsoundQt::loadFile(QString fileName, bool runNow, bool activate, int insertA
     return activate ? curPage : newPageIndex;
 }
 
-int CsoundQt::makeNewPage(QString fileName, QString text, bool activate, int insertAt)
+int CsoundQt::makeNewPage(QString fileName, QString text, bool activate, int insertAt,
+                          bool readOnly)
 {
     if (documentPages.size() >= MAX_THREAD_COUNT) {
         QMessageBox::warning(this, tr("Document number limit"),
@@ -8516,6 +8764,24 @@ int CsoundQt::makeNewPage(QString fileName, QString text, bool activate, int ins
     DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists, m_midiLearn);
     newPage->setScanService(m_scanService);
     newPage->setIncludeSearchPaths(configuredIncludePaths());
+    // Play/render/pause/stop buttons in the widget layout now report through
+    // DocumentPage; tabbed documents act on their own tab.
+    connect(newPage, &DocumentPage::playRequested, this, [this, newPage]() {
+        const int index = documentPages.indexOf(newPage);
+        if (index >= 0)
+            play(true, index);
+    });
+    connect(newPage, &DocumentPage::pauseRequested, this, [this, newPage]() {
+        const int index = documentPages.indexOf(newPage);
+        if (index >= 0)
+            pause(index);
+    });
+    connect(newPage, &DocumentPage::stopRequested, this, [this, newPage]() {
+        const int index = documentPages.indexOf(newPage);
+        if (index >= 0)
+            stop(index);
+    });
+    connect(newPage, &DocumentPage::renderRequested, this, &CsoundQt::render);
 
     int insertPoint;
     if (documentPages.isEmpty() || curPage < 0) {
@@ -8538,6 +8804,7 @@ int CsoundQt::makeNewPage(QString fileName, QString text, bool activate, int ins
         ++curPage;
     }
 
+    newPage->setReadOnly(readOnly);
     setCurrentOptionsForPage(newPage);
     // Must set before sending text to set highlighting mode
     newPage->setFileName(fileName);
@@ -8582,7 +8849,8 @@ int CsoundQt::makeNewPage(QString fileName, QString text, bool activate, int ins
     return insertPoint;
 }
 
-bool CsoundQt::loadCompanionFile(const QString &fileName, bool activate, int insertAt)
+bool CsoundQt::loadCompanionFile(const QString &fileName, bool activate, int insertAt,
+                                 bool readOnly)
 {
     QString companionFileName = fileName;
     if (fileName.endsWith(".orc")) {
@@ -8595,7 +8863,8 @@ bool CsoundQt::loadCompanionFile(const QString &fileName, bool activate, int ins
         return false;
     }
     if (QFile::exists(companionFileName)) {
-        return (loadFile(companionFileName, false, activate, insertAt) != -1);
+        return (loadFile(companionFileName, false, activate, insertAt,
+                         readOnly) != -1);
     }
     return false;
 }

@@ -887,6 +887,8 @@ void DocumentView::setModified(bool mod)
 
 void DocumentView::insertText(QString text, int section)
 {
+	if (isReadOnly())
+		return;
 	if (section > 0) {
 		qDebug() << "Section " << section << " not implemented.";
 		return;
@@ -2786,6 +2788,8 @@ void DocumentView::findPrevious()
 
 void DocumentView::replaceCurrent()
 {
+	if (isReadOnly())
+		return;
 	if (!m_findBar || m_findQuery.isEmpty())
 		return;
 
@@ -2825,6 +2829,8 @@ void DocumentView::replaceCurrent()
 
 void DocumentView::replaceAll()
 {
+	if (isReadOnly())
+		return;
 	if (!m_findBar || m_findQuery.isEmpty())
 		return;
 
@@ -2904,6 +2910,8 @@ void DocumentView::highlightWidgetChannel()
 
 void DocumentView::getToIn()
 {
+	if (isReadOnly())
+		return;
     // Change chnget/chnset to invalue/outvalue
 	internalChange = true;
 	m_mainEditor->setPlainText(changeToInvalue(m_mainEditor->toPlainText()));
@@ -2912,6 +2920,8 @@ void DocumentView::getToIn()
 
 void DocumentView::inToGet()
 {
+	if (isReadOnly())
+		return;
 	internalChange = true;
 	m_mainEditor->setPlainText(changeToChnget(m_mainEditor->toPlainText()));
 	m_mainEditor->document()->setModified(true);
@@ -2919,6 +2929,8 @@ void DocumentView::inToGet()
 
 void DocumentView::insertAutoCompleteText()
 {
+	if (isReadOnly())
+		return;
     // The popup has the focus by now, so use the editor the completion was
     // opened for, not the current focus widget.
     TextEditor *editor = m_autocompleteEditor != nullptr
@@ -3130,22 +3142,30 @@ void DocumentView::copy()
 
 void DocumentView::paste()
 {
+	if (isReadOnly())
+		return;
 	m_mainEditor->paste();
 }
 
 void DocumentView::undo()
 {
+	if (isReadOnly())
+		return;
 	m_mainEditor->undo();
 	escapePressed();
 }
 
 void DocumentView::redo()
 {
+	if (isReadOnly())
+		return;
 	m_mainEditor->redo();
 }
 
 void DocumentView::comment()
 {
+	if (isReadOnly())
+		return;
 	internalChange = true;
 	QString commentChar = "";
 	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
@@ -3180,6 +3200,8 @@ void DocumentView::comment()
 
 void DocumentView::uncomment()
 {
+	if (isReadOnly())
+		return;
 	internalChange = true;
 	QString commentChar = "";
 	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
@@ -3222,6 +3244,8 @@ QString DocumentView::indentString() const
 
 void DocumentView::indent()
 {
+	if (isReadOnly())
+		return;
 	internalChange = true;
 	QString indentChar = "";
 	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
@@ -3278,6 +3302,8 @@ static QString removeOneIndent(const QString &line, bool useSpaces, int tabSpace
 
 void DocumentView::unindent()
 {
+	if (isReadOnly())
+		return;
 	if (!(m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
 			|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE)) {
 		return;  // nothing is indented in this mode
@@ -3352,6 +3378,8 @@ void DocumentView::unindent()
 
 void DocumentView::tabsToSpaces()
 {
+	if (isReadOnly())
+		return;
 	QTextDocument *document = m_mainEditor->document();
 
 	// A tab only counts as indentation when everything before it on the line
@@ -3412,6 +3440,8 @@ void DocumentView::tabsToSpaces()
 
 void DocumentView::killLine()
 {
+	if (isReadOnly())
+		return;
 	QTextCursor cursor = m_mainEditor->textCursor();
 	if (!cursor.atBlockStart()) {
 		cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
@@ -3422,6 +3452,8 @@ void DocumentView::killLine()
 
 void DocumentView::killToEnd()
 {
+	if (isReadOnly())
+		return;
 	QTextCursor cursor = m_mainEditor->textCursor();
 	if (!cursor.atBlockEnd()) {
 		cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -3431,6 +3463,8 @@ void DocumentView::killToEnd()
 
 void DocumentView::duplicateLine()
 {
+	if (isReadOnly())
+		return;
     QTextCursor cursor = m_mainEditor->textCursor();
     const QTextBlock block = cursor.block();
     const QString line = block.text();
@@ -3487,6 +3521,8 @@ void DocumentView::moveLineDown()
 
 void DocumentView::moveLine(int offset)
 {
+	if (isReadOnly())
+		return;
     QTextCursor cursor = m_mainEditor->textCursor();
     const QTextBlock current = cursor.block();
     const QTextBlock neighbour = offset < 0 ? current.previous() : current.next();
