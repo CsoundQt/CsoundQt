@@ -2327,13 +2327,6 @@ void DocumentView::autoCompleteAtCursor(bool force) {
 
     if(showSyntaxMenu && syntaxMenu->hasCompletions()) {
 
-        // While the same token is being typed, the popup must not follow the
-        // caret: keep its position and let the rebuilt list filter the
-        // entries. A new token (or a different editor) is allowed to move it.
-        const bool keepPosition = syntaxMenu->isVisible()
-                && m_autocompleteAnchor == anchorPos
-                && m_autocompleteAnchorEditor == editor;
-
         // Place the popup next to the start of the token. Near the lower edge
         // of the screen flip it above the token so it does not cover what is
         // being typed. If it cannot fit on either side, use the larger side
@@ -2341,13 +2334,17 @@ void DocumentView::autoCompleteAtCursor(bool force) {
         QTextCursor anchorCursor = editor->textCursor();
         anchorCursor.setPosition(anchorPos);
         const QRect anchorRect = editor->cursorRect(anchorCursor);
+        // Use the *caret's* vertical position, not the token start's: in a
+        // narrow editor (the codepad) a long line wraps, and placing the popup
+        // below the first visual segment can cover the segment being typed.
+        const QRect caretRect = editor->cursorRect();
         const QWidget *viewport = editor->viewport();
         // Leave a small gap so the menu does not sit right against the token.
         const int gap = 4;
         const QPoint anchorBottomLeft =
-                viewport->mapToGlobal(QPoint(anchorRect.left(), anchorRect.bottom() + 1 + gap));
+                viewport->mapToGlobal(QPoint(anchorRect.left(), caretRect.bottom() + 1 + gap));
         const QPoint anchorTopLeft =
-                viewport->mapToGlobal(QPoint(anchorRect.left(), anchorRect.top() - gap));
+                viewport->mapToGlobal(QPoint(anchorRect.left(), caretRect.top() - gap));
 
         QScreen *screen = QGuiApplication::screenAt(anchorBottomLeft);
         if (!screen)
@@ -2355,10 +2352,12 @@ void DocumentView::autoCompleteAtCursor(bool force) {
         const QRect avail = screen ? screen->availableGeometry() : QRect();
 
         const QSize preferred = syntaxMenu->sizeHint();
-        const int spaceBelow = avail.isValid()
-                ? avail.bottom() - anchorBottomLeft.y() + 1 : preferred.height();
-        const int spaceAbove = avail.isValid()
-                ? anchorTopLeft.y() - avail.top() : preferred.height();
+        // Decide above/below from the space inside the editor viewport, not
+        // from the screen: in the codepad (often at the bottom of the window)
+        // the screen may still have room, but a popup extending past the
+        // widget would be pushed back up over the line being written.
+        const int spaceBelow = viewport->height() - caretRect.bottom() - 1 - gap;
+        const int spaceAbove = caretRect.top() - gap;
 
         bool above;
         if (preferred.height() <= spaceBelow)
@@ -2387,22 +2386,20 @@ void DocumentView::autoCompleteAtCursor(bool force) {
         // visible immediately, also while the popup is already open.
         syntaxMenu->resize(width, height);
 
-        if (keepPosition) {
-            // The popup is already on screen for this token: resizing keeps
-            // its top-left corner, so it does not jump while the user types.
-        } else {
-            int x = anchorBottomLeft.x();
-            int y = above ? anchorTopLeft.y() - height : anchorBottomLeft.y();
-            if (avail.isValid()) {
-                x = qBound(avail.left(), x, qMax(avail.left(), avail.right() - width + 1));
-                y = qBound(avail.top(), y, qMax(avail.top(), avail.bottom() - height + 1));
-            }
-
-            syntaxMenu->move(x, y);
-            m_autocompleteAnchor = anchorPos;
-            m_autocompleteAnchorEditor = editor;
-            syntaxMenu->show();
+        // The horizontal position is anchored to the token start so the popup
+        // does not slide sideways while typing; the vertical position follows
+        // the caret, so it moves down when a wrapped line continues and never
+        // covers the text being written.
+        int x = anchorBottomLeft.x();
+        int y = above ? anchorTopLeft.y() - height : anchorBottomLeft.y();
+        if (avail.isValid()) {
+            x = qBound(avail.left(), x, qMax(avail.left(), avail.right() - width + 1));
+            y = qBound(avail.top(), y, qMax(avail.top(), avail.bottom() - height + 1));
         }
+        syntaxMenu->move(x, y);
+        m_autocompleteAnchor = anchorPos;
+        m_autocompleteAnchorEditor = editor;
+        syntaxMenu->show();
     }
 }
 
